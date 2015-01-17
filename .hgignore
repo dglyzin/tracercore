@@ -1,0 +1,8 @@
+syntax: glob
+*.o
+*.so
+*~
+*.bin
+*.dom
+bin/*.o
+bin/pfrost
