@@ -165,6 +165,8 @@ void BlockCpu::courted() {
 	for(int i = 0; i < length; i++)
 		delete tmp[i];
 	delete tmp;
+
+	printf("\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n");
 }
 
 void BlockCpu::print(int locationNode) {

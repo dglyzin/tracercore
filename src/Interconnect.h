@@ -12,7 +12,7 @@
 
 #include <mpi.h>
 
-//enum BLOCK_TYPE { CPU, DEVICE0, DEVICE1, DEVICE2 }
+enum BLOCK_TYPE { CPU, DEVICE0, DEVICE1, DEVICE2 };
 
 class Interconnect {
 public:
@@ -37,6 +37,7 @@ private:
 	double* destinationExternalBorder;
 
 	MPI_Status status;
+	MPI_Request request;
 };
 
 #endif /* SRC_INTERCONNECT_H_ */

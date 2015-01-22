@@ -12,6 +12,7 @@
 
 class BlockNull: public Block {
 public:
+	BlockNull();
 	BlockNull(int _length, int _width);
 	virtual ~BlockNull();
 

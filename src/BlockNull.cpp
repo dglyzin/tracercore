@@ -7,8 +7,9 @@
 
 #include "BlockNull.h"
 
-BlockNull::BlockNull(int _length, int _width) : Block( _length, _width ) {
-}
+BlockNull::BlockNull() : Block() {}
+
+BlockNull::BlockNull(int _length, int _width) : Block( _length, _width ) {}
 
 BlockNull::~BlockNull() {
 	// TODO Auto-generated destructor stub

@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <cmath>
 
+#include "Domain.h"
+
 int main(int argc, char * argv[]) {
 
 	// Initialize the MPI environment
@@ -18,7 +20,16 @@ int main(int argc, char * argv[]) {
 	  int world_rank;
 	  MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
 
-	  int b0_length = 50;
+	  int repeatCount = atoi(argv[1]);
+
+	  Domain *d = new Domain(world_rank, world_size, 4, 3);
+
+	  for (int i = 0; i < repeatCount; ++i) {
+		  d->calc(world_rank, 4, 3);
+	  }
+	  d->print(world_rank);
+
+	  /*int b0_length = 50;
 	  int b0_width = 25;
 
 	  int b1_length = 25;
@@ -400,7 +411,7 @@ int main(int argc, char * argv[]) {
 
 		  for (int i = 0; i < b3_length; ++i)
 			  MPI_Send(resault[i], b3_width, MPI_DOUBLE, 0, 999, MPI_COMM_WORLD);
-	  }
+	  }*/
 
 	  MPI_Finalize();
 }

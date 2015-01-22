@@ -30,12 +30,17 @@ Interconnect::~Interconnect() {
 }
 
 void Interconnect::sendRecv(int locationNode) {
-	//printf("\nnode %d, source %d, dest %d\n", locationNode, sourceLocationNode, destinationLocationNode);
-	if(locationNode == sourceLocationNode && locationNode == destinationLocationNode)
+	printf("\nnode %d, source %d, dest %d\n", locationNode, sourceLocationNode, destinationLocationNode);
+	if(locationNode == sourceLocationNode && locationNode == destinationLocationNode) {
+		MPI_Isend(sourceBlockBorder, lengthBorder, MPI_DOUBLE, destinationLocationNode, 999, MPI_COMM_WORLD, &request);
+		MPI_Recv(destinationExternalBorder, lengthBorder, MPI_DOUBLE, sourceLocationNode, 999, MPI_COMM_WORLD, &status);
+		//printf("\nSEND_RECV comment/ Don't real working!!!\n\n");
 		return;
+	}
 
 	if(locationNode == sourceLocationNode)
 	{
+		printf("\n%d %d %d\n", sourceBlockBorder, lengthBorder, destinationExternalBorder);
 		MPI_Send(sourceBlockBorder, lengthBorder, MPI_DOUBLE, destinationLocationNode, 999, MPI_COMM_WORLD);
 		//printf("\nSEND_RECV comment/ Don't real working!!!\n\n");
 		return;
