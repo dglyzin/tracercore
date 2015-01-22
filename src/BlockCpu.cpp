@@ -108,24 +108,12 @@ void BlockCpu::courted() {
 	double top, left, bottom, right, cur;
 
 	double** newMatrix = new double* [length];
-
 	for(int i = 0; i < length; i++)
 		newMatrix[i] = new double[width];
 
 
-	/*for (int i = 0; i < length; ++i)
-		for (int j = 0; j < width; ++j)
-			newMatrix[i][j] = 0;*/
-
-
 	for (int i = 0; i < length; ++i)
 		for (int j = 0; j < width; ++j) {
-			/*i == 0 ? top = topExternalBoundary[j] : top = matrix[i - 1][j];
-			i == length - 1 ? bottom = bottomExternalBoundary[j] : bottom = matrix[i + 1][j];
-
-			j == 0 ? left = leftExternalBoundary[i] : left = matrix[i][j-1];
-			j == width - 1 ? right = rightExternalBoundary[i] : right = matrix[i][j + 1];*/
-
 			if( i == 0 )
 				if( topBoundaryType[j] == 1 ) {
 					newMatrix[i][j] = topExternalBoundary[j];
@@ -172,19 +160,20 @@ void BlockCpu::courted() {
 
 			cur = matrix[i][j];
 
-			//if(i == 0 || i == length - 1)
-			//	printf("\n\n\ni: %d, j: %d, dx2: %f, dy2: %f, dt: %f, top: %f, left: %f, bottom: %f, right: %f, cur: %f\n\n\n", i, j, dX2, dY2, dT, top, left, bottom, right, cur);
-
 			newMatrix[i][j] = cur + dT * ( ( left - 2*cur + right )/dX2 + ( top - 2*cur + bottom )/dY2  );
 		}
 
-	for (int i = 0; i < length; ++i)
+	/*for (int i = 0; i < length; ++i)
 		for (int j = 0; j < width; ++j)
-			matrix[i][j] = newMatrix[i][j];
+			matrix[i][j] = newMatrix[i][j];*/
+
+	double** tmp = matrix;
+
+	matrix = newMatrix;
 
 	for(int i = 0; i < length; i++)
-			delete newMatrix[i];
-	delete newMatrix;
+			delete tmp[i];
+	delete tmp;
 }
 
 void BlockCpu::print(int locationNode) {
