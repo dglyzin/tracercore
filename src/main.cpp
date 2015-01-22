@@ -3,6 +3,7 @@
 
 #include <mpi.h>
 #include <stdlib.h>
+#include <cmath>
 
 int main(int argc, char * argv[]) {
 
@@ -75,7 +76,7 @@ int main(int argc, char * argv[]) {
 			  topBlockBorder[i] = 0;
 			  bottomBlockBorder[i] = 0;
 
-			  topExternalBorder[i] = 100;
+			  topExternalBorder[i] = 100 * cos( (i - 12) / 9. );
 			  bottomExternalBorder[i] = 10;
 		  }
 
@@ -188,7 +189,7 @@ int main(int argc, char * argv[]) {
 			  topBlockBorder[i] = 0;
 			  bottomBlockBorder[i] = 0;
 
-			  topExternalBorder[i] = 100;
+			  topExternalBorder[i] = 100 * cos( (i - 25) / 20. );
 			  bottomExternalBorder[i] = 10;
 		  }
 
@@ -278,7 +279,7 @@ int main(int argc, char * argv[]) {
 			  bottomBlockBorder[i] = 0;
 
 			  topExternalBorder[i] = 10;
-			  bottomExternalBorder[i] = 100;
+			  bottomExternalBorder[i] = 100 * cos( (i - 25) / 20. );
 		  }
 
 		  for (int i = 0; i < b2_length; ++i) {
@@ -359,7 +360,7 @@ int main(int argc, char * argv[]) {
 			  topBlockBorder[i] = 0;
 			  bottomBlockBorder[i] = 0;
 
-			  topExternalBorder[i] = 100;
+			  topExternalBorder[i] = 100 * cos( (i - 12) / 9. );
 			  bottomExternalBorder[i] = 10;
 		  }
 
