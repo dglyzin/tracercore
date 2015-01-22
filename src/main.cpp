@@ -223,15 +223,15 @@ int main(int argc, char * argv[]) {
 
 			MPI_Barrier( MPI_COMM_WORLD );
 
-			printf("\n\nbefore #1 %d\n\n", i);
+			//printf("\n\nbefore #1 %d\n\n", i);
 			i0->sendRecv(world_rank);
 			i1->sendRecv(world_rank);
 			i2->sendRecv(world_rank);
 			i3->sendRecv(world_rank);
-			printf("\n\nbetween #1\n\n");
+			//printf("\n\nbetween #1\n\n");
 			i4->sendRecv(world_rank);
 			i5->sendRecv(world_rank);
-			printf("\n\nafter #1 %d\n\n", i);
+			//printf("\n\nafter #1 %d\n\n", i);
 
 			MPI_Barrier( MPI_COMM_WORLD );
 		  }

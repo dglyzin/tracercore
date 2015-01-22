@@ -9,3 +9,4 @@ bin/pfrost
 Debug/*
 .cproject
 .project
+res

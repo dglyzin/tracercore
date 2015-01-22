@@ -68,6 +68,16 @@ public:
 	virtual void printMatrix() { return; }
 
 	virtual double** getResault() { return matrix; }
+
+	double* getTopBlockBoundary() { return topBlockBoundary; }
+	double* getLeftBlockBoundary() { return leftBlockBoundary; }
+	double* getBottomBlockBoundary() { return bottomBlockBoundary; }
+	double* getRightBlockBoundary() { return rightBlockBoundary; }
+
+	double* getTopExternalBoundary() { return topExternalBoundary; }
+	double* getLeftExternalBoundary() { return leftExternalBoundary; }
+	double* getBottomExternalBoundary() { return bottomExternalBoundary; }
+	double* getRightExternalBoundary() { return rightExternalBoundary; }
 };
 
 #endif /* SRC_BLOCK_H_ */
