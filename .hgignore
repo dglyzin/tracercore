@@ -6,3 +6,6 @@ syntax: glob
 *.dom
 bin/*.o
 bin/pfrost
+Debug/*
+.cproject
+.project
