@@ -30,7 +30,7 @@ Interconnect::~Interconnect() {
 }
 
 void Interconnect::sendRecv(int locationNode) {
-	printf("\nnode %d, source %d, dest %d\n", locationNode, sourceLocationNode, destinationLocationNode);
+	//printf("\nnode %d, source %d, dest %d\n", locationNode, sourceLocationNode, destinationLocationNode);
 	if(locationNode == sourceLocationNode && locationNode == destinationLocationNode)
 		return;
 

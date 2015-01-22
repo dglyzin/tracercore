@@ -32,21 +32,25 @@ int main(int argc, char * argv[]) {
 	  int repeatCount = atoi(argv[1]);
 
 	  if(world_rank == 0) {
+		  Block* b0 = new BlockCpu(b0_length, b0_width);
+
 		  MPI_Status status;
 		  //printf("\n\n******0-0\n\n");
-		  int* topBoundaryType = new int[b0_width];
+
+		  int* topBoundaryType = b0->getTopBoundaryType();
+		  int* leftBoundaryType = b0->getLeftBoundaryType();
+		  int* bottomBoundaryType = b0->getBottomBoundaryType();
+		  int* rightBoundaryType = b0->getRightBoundaryType();
+
 		  for (int i = 0; i < b0_width; ++i)
 			  topBoundaryType[i] = 1;
 
-		  int* leftBoundaryType = new int[b0_length];
 		  for (int i = 0; i < b0_length; ++i)
 			  leftBoundaryType[i] = 1;
 
-		  int* bottomBoundaryType = new int[b0_width];
 		  for (int i = 0; i < b0_width; ++i)
 			  bottomBoundaryType[i] = 1;
 
-		  int* rightBoundaryType = new int[b0_length];
 		  for (int i = 0; i < 15; ++i)
 			  rightBoundaryType[i] = 1;
 		  for (int i = 15; i < b1_length+15; ++i)
@@ -55,15 +59,15 @@ int main(int argc, char * argv[]) {
 			  rightBoundaryType[i] = 1;
 
 
-		  double* topBlockBoundary = new double[b0_width];
-		  double* leftBlockBoundary = new double[b0_length];
-		  double* bottomBlockBoundary = new double[b0_width];
-		  double* rightBlockBoundary = new double[b0_length];
+		  double* topBlockBoundary = b0->getTopBlockBoundary();
+		  double* leftBlockBoundary = b0->getLeftBlockBoundary();
+		  double* bottomBlockBoundary = b0->getBottomBlockBoundary();
+		  double* rightBlockBoundary = b0->getRightBlockBoundary();
 
-		  double* topExternalBoundary = new double[b0_width];
-		  double* leftExternalBoundary = new double[b0_length];
-		  double* bottomExternalBoundary = new double[b0_width];
-		  double* rightExternalBoundary = new double[b0_length];
+		  double* topExternalBoundary = b0->getTopExternalBoundary();
+		  double* leftExternalBoundary = b0->getLeftExternalBoundary();
+		  double* bottomExternalBoundary = b0->getBottomExternalBoundary();
+		  double* rightExternalBoundary = b0->getRightExternalBoundary();
 
 		  //printf("\n\n******0-1\n\n");
 
@@ -85,12 +89,6 @@ int main(int argc, char * argv[]) {
 
 		  //printf("\n\n******0-2\n\n");
 
-
-		  Block* b0 = new BlockCpu(b0_length, b0_width,
-				  topBoundaryType, leftBoundaryType, bottomBoundaryType, rightBoundaryType,
-				  topBlockBoundary, leftBlockBoundary, bottomBlockBoundary, rightBlockBoundary,
-				  topExternalBoundary, leftExternalBoundary, bottomExternalBoundary, rightExternalBoundary);
-
 		  Interconnect* i2 = new Interconnect(0, 1, 0, 0, b1_length, rightBlockBoundary + 15, NULL);
 		  Interconnect* i3 = new Interconnect(1, 0, 0, 0, b1_length, NULL, rightExternalBoundary + 15);
 
@@ -106,10 +104,10 @@ int main(int argc, char * argv[]) {
 
 			MPI_Barrier( MPI_COMM_WORLD );
 
-			printf("\n\nbefore #0 %d\n\n", i);
+			//printf("\n\nbefore #0 %d\n\n", i);
 			i2->sendRecv(world_rank);
 			i3->sendRecv(world_rank);
-			printf("\n\nafter #0 %d\n\n", i);
+			//printf("\n\nafter #0 %d\n\n", i);
 
 			MPI_Barrier( MPI_COMM_WORLD );
 		  }
@@ -149,7 +147,14 @@ int main(int argc, char * argv[]) {
 	  }
 
 	  if(world_rank == 1) {
-		  int* topBoundaryType = new int[b1_width];
+		  Block* b1 = new BlockCpu(b1_length, b1_width);
+
+		  int* topBoundaryType = b1->getTopBoundaryType();
+		  int* leftBoundaryType = b1->getLeftBoundaryType();
+		  int* bottomBoundaryType = b1->getBottomBoundaryType();
+		  int* rightBoundaryType = b1->getRightBoundaryType();
+
+
 		  for (int i = 0; i < 15; ++i)
 			  topBoundaryType[i] = 1;
 		  for (int i = 15; i < b2_width + 15; ++i)
@@ -157,28 +162,25 @@ int main(int argc, char * argv[]) {
 		  for (int i = b2_width + 15; i < b1_width; ++i)
 			  topBoundaryType[i] = 1;
 
-		  int* leftBoundaryType = new int[b1_length];
 		  for (int i = 0; i < b1_length; ++i)
 			  leftBoundaryType[i] = 0;
 
-		  int* bottomBoundaryType = new int[b1_width];
 		  for (int i = 0; i < b1_width; ++i)
 			  bottomBoundaryType[i] = 1;
 
-		  int* rightBoundaryType = new int[b1_length];
 		  for (int i = 0; i < b1_length; ++i)
 			  rightBoundaryType[i] = 0;
 
 
-		  double* topBlockBoundary = new double[b1_width];
-		  double* leftBlockBoundary = new double[b1_length];
-		  double* bottomBlockBoundary = new double[b1_width];
-		  double* rightBlockBoundary = new double[b1_length];
+		  double* topBlockBoundary = b1->getTopBlockBoundary();
+		  double* leftBlockBoundary = b1->getLeftBlockBoundary();
+		  double* bottomBlockBoundary = b1->getBottomBlockBoundary();
+		  double* rightBlockBoundary = b1->getRightBlockBoundary();
 
-		  double* topExternalBoundary = new double[b1_width];
-		  double* leftExternalBoundary = new double[b1_length];
-		  double* bottomExternalBoundary = new double[b1_width];
-		  double* rightExternalBoundary = new double[b1_length];
+		  double* topExternalBoundary = b1->getTopExternalBoundary();
+		  double* leftExternalBoundary = b1->getLeftExternalBoundary();
+		  double* bottomExternalBoundary = b1->getBottomExternalBoundary();
+		  double* rightExternalBoundary = b1->getRightExternalBoundary();
 
 		  //printf("\n\n******1-1\n\n");
 
@@ -200,11 +202,6 @@ int main(int argc, char * argv[]) {
 
 		  //printf("\n\n******1-2\n\n");
 
-
-		  Block* b1 = new BlockCpu(b1_length, b1_width,
-				  topBoundaryType, leftBoundaryType, bottomBoundaryType, rightBoundaryType,
-				  topBlockBoundary, leftBlockBoundary, bottomBlockBoundary, rightBlockBoundary,
-				  topExternalBoundary, leftExternalBoundary, bottomExternalBoundary, rightExternalBoundary);
 
 		  Interconnect* i0 = new Interconnect(1, 2, 0, 0, b2_width, topBlockBoundary + 15, NULL);
 		  Interconnect* i1 = new Interconnect(2, 1, 0, 0, b2_width, NULL, topExternalBoundary + 15);
@@ -243,33 +240,36 @@ int main(int argc, char * argv[]) {
 	  }
 
 	  if(world_rank == 2) {
+		  Block* b2 = new BlockCpu(b2_length, b2_width);
+
+		  int* topBoundaryType = b2->getTopBoundaryType();
+		  int* leftBoundaryType = b2->getLeftBoundaryType();
+		  int* bottomBoundaryType = b2->getBottomBoundaryType();
+		  int* rightBoundaryType = b2->getRightBoundaryType();
+
 		  //printf("\n\n******2-0\n\n");
-		  int* topBoundaryType = new int[b2_width];
 		  for (int i = 0; i < b2_width; ++i)
 			  topBoundaryType[i] = 1;
 
-		  int* leftBoundaryType = new int[b2_length];
 		  for (int i = 0; i < b2_length; ++i)
 			  leftBoundaryType[i] = 1;
 
-		  int* bottomBoundaryType = new int[b2_width];
 		  for (int i = 0; i < b2_width; ++i)
 			  bottomBoundaryType[i] = 0;
 
-		  int* rightBoundaryType = new int[b2_length];
 		  for (int i = 0; i < b2_length; ++i)
 			  rightBoundaryType[i] = 1;
 
 
-		  double* topBlockBoundary = new double[b2_width];
-		  double* leftBlockBoundary = new double[b2_length];
-		  double* bottomBlockBoundary = new double[b2_width];
-		  double* rightBlockBoundary = new double[b2_length];
+		  double* topBlockBoundary = b2->getTopBlockBoundary();
+		  double* leftBlockBoundary = b2->getLeftBlockBoundary();
+		  double* bottomBlockBoundary = b2->getBottomBlockBoundary();
+		  double* rightBlockBoundary = b2->getRightBlockBoundary();
 
-		  double* topExternalBoundary = new double[b2_width];
-		  double* leftExternalBoundary = new double[b2_length];
-		  double* bottomExternalBoundary = new double[b2_width];
-		  double* rightExternalBoundary = new double[b2_length];
+		  double* topExternalBoundary = b2->getTopExternalBoundary();
+		  double* leftExternalBoundary = b2->getLeftExternalBoundary();
+		  double* bottomExternalBoundary = b2->getBottomExternalBoundary();
+		  double* rightExternalBoundary = b2->getRightExternalBoundary();
 
 		  //printf("\n\n******2-1\n\n");
 
@@ -291,12 +291,6 @@ int main(int argc, char * argv[]) {
 
 		  //printf("\n\n******2-2\n\n");
 
-
-		  Block* b2 = new BlockCpu(b2_length, b2_width,
-				  topBoundaryType, leftBoundaryType, bottomBoundaryType, rightBoundaryType,
-				  topBlockBoundary, leftBlockBoundary, bottomBlockBoundary, rightBlockBoundary,
-				  topExternalBoundary, leftExternalBoundary, bottomExternalBoundary, rightExternalBoundary);
-
 		  Interconnect* i0 = new Interconnect(1, 2, 0, 0, b2_width, NULL, bottomExternalBoundary);
 		  Interconnect* i1 = new Interconnect(2, 1, 0, 0, b2_width, bottomBlockBoundary, NULL);
 
@@ -310,10 +304,10 @@ int main(int argc, char * argv[]) {
 
 			MPI_Barrier( MPI_COMM_WORLD );
 
-			printf("\n\nbefore #2 %d\n\n", i);
+			//printf("\n\nbefore #2 %d\n\n", i);
 			i0->sendRecv(world_rank);
 			i1->sendRecv(world_rank);
-			printf("\n\nafter #2 %d\n\n", i);
+			//printf("\n\nafter #2 %d\n\n", i);
 
 			MPI_Barrier( MPI_COMM_WORLD );
 		  }
@@ -325,11 +319,16 @@ int main(int argc, char * argv[]) {
 	  }
 
 	  if(world_rank == 3) {
-		  int* topBoundaryType = new int[b3_width];
+		  Block* b3 = new BlockCpu(b3_length, b3_width);
+
+		  int* topBoundaryType = b3->getTopBoundaryType();
+		  int* leftBoundaryType = b3->getLeftBoundaryType();
+		  int* bottomBoundaryType = b3->getBottomBoundaryType();
+		  int* rightBoundaryType = b3->getRightBoundaryType();
+
 		  for (int i = 0; i < b3_width; ++i)
 			  topBoundaryType[i] = 1;
 
-		  int* leftBoundaryType = new int[b3_length];
 		  for (int i = 0; i < 15; ++i)
 			  leftBoundaryType[i] = 1;
 		  for (int i = 15; i < b1_length+15; ++i)
@@ -337,24 +336,22 @@ int main(int argc, char * argv[]) {
 		  for (int i = b1_length; i < b3_length; ++i)
 			  leftBoundaryType[i] = 1;
 
-		  int* bottomBoundaryType = new int[b3_width];
 		  for (int i = 0; i < b3_width; ++i)
 			  bottomBoundaryType[i] = 1;
 
-		  int* rightBoundaryType = new int[b3_length];
 		  for (int i = 0; i < b3_length; ++i)
 			  rightBoundaryType[i] = 1;
 
 
-		  double* topBlockBoundary = new double[b3_width];
-		  double* leftBlockBoundary = new double[b3_length];
-		  double* bottomBlockBoundary = new double[b3_width];
-		  double* rightBlockBoundary = new double[b3_length];
+		  double* topBlockBoundary = b3->getTopBlockBoundary();
+		  double* leftBlockBoundary = b3->getLeftBlockBoundary();
+		  double* bottomBlockBoundary = b3->getBottomBlockBoundary();
+		  double* rightBlockBoundary = b3->getRightBlockBoundary();
 
-		  double* topExternalBoundary = new double[b3_width];
-		  double* leftExternalBoundary = new double[b3_length];
-		  double* bottomExternalBoundary = new double[b3_width];
-		  double* rightExternalBoundary = new double[b3_length];
+		  double* topExternalBoundary = b3->getTopExternalBoundary();
+		  double* leftExternalBoundary = b3->getLeftExternalBoundary();
+		  double* bottomExternalBoundary = b3->getBottomExternalBoundary();
+		  double* rightExternalBoundary = b3->getRightExternalBoundary();
 
 		  //printf("\n\n******1-1\n\n");
 
@@ -376,12 +373,6 @@ int main(int argc, char * argv[]) {
 
 		  //printf("\n\n******1-2\n\n");
 
-
-		  Block* b3 = new BlockCpu(b3_length, b3_width,
-				  topBoundaryType, leftBoundaryType, bottomBoundaryType, rightBoundaryType,
-				  topBlockBoundary, leftBlockBoundary, bottomBlockBoundary, rightBlockBoundary,
-				  topExternalBoundary, leftExternalBoundary, bottomExternalBoundary, rightExternalBoundary);
-
 		  Interconnect* i4 = new Interconnect(1, 3, 0, 0, b1_length, NULL, leftExternalBoundary + 15);
 		  Interconnect* i5 = new Interconnect(3, 1, 0, 0, b1_length, leftBlockBoundary + 15, NULL);
 
@@ -395,11 +386,11 @@ int main(int argc, char * argv[]) {
 
 			MPI_Barrier( MPI_COMM_WORLD );
 
-			printf("\n\nbefore #3 %d\n\n", i);
+			//printf("\n\nbefore #3 %d\n\n", i);
 			i4->sendRecv(world_rank);
-			printf("\n\nbetween #3\n\n");
+			//printf("\n\nbetween #3\n\n");
 			i5->sendRecv(world_rank);
-			printf("\n\nafter #3 %d\n\n", i);
+			//printf("\n\nafter #3 %d\n\n", i);
 
 			MPI_Barrier( MPI_COMM_WORLD );
 		  }

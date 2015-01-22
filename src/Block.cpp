@@ -7,19 +7,16 @@
 
 #include "Block.h"
 
-Block::Block(int _length, int _width,
-		int* _topBoundaryType, int* _leftBoundaryType, int* _bottomBoundaryType, int* _rightBoundaryType,
-		double* _topBlockBoundary, double* _leftBlockBoundary, double* _bottomBlockBoundary, double* _rightBlockBoundary,
-		double* _topExternalBoundary, double* _leftExternalBoundary, double* _bottomExternalBoundary, double* _rightExternalBoundary) {
+Block::Block(int _length, int _width) {
 	length = _length;
 	width = _width;
 
-	topBoundaryType = _topBoundaryType;
+	/*topBoundaryType = _topBoundaryType;
 	leftBoundaryType = _leftBoundaryType;
 	bottomBoundaryType = _bottomBoundaryType;
-	rightBoundaryType = _rightBoundaryType;
+	rightBoundaryType = _rightBoundaryType;*/
 
-	topBlockBoundary = _topBlockBoundary;
+	/*topBlockBoundary = _topBlockBoundary;
 	leftBlockBoundary = _leftBlockBoundary;
 	bottomBlockBoundary = _bottomBlockBoundary;
 	rightBlockBoundary = _rightBlockBoundary;
@@ -27,7 +24,11 @@ Block::Block(int _length, int _width,
 	topExternalBoundary = _topExternalBoundary;
 	leftExternalBoundary = _leftExternalBoundary;
 	bottomExternalBoundary = _bottomExternalBoundary;
-	rightExternalBoundary = _rightExternalBoundary;
+	rightExternalBoundary = _rightExternalBoundary;*/
+
+	topBoundaryType = leftBoundaryType = bottomBoundaryType = rightBoundaryType = NULL;
+	topBlockBoundary = leftBlockBoundary = bottomBlockBoundary = rightBlockBoundary = NULL;
+	topExternalBoundary = leftExternalBoundary = bottomExternalBoundary = rightExternalBoundary = NULL;
 
 	matrix = NULL;
 }

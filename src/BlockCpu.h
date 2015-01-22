@@ -12,14 +12,7 @@
 
 class BlockCpu: public Block {
 public:
-	BlockCpu(int _length, int _width,
-			int* _topBoundaryType, int* _leftBoundaryType, int* _bottomBoundaryType, int* _rightBoundaryType,
-			double* _topBlockBoundary, double* _leftBlockBoundary, double* _bottomBlockBoundary, double* _rightBlockBoundary,
-			double* _topExternalBoundary, double* _leftExternalBoundary, double* _bottomExternalBoundary, double* _rightExternalBoundary)/* :
-				Block(_length, _width,
-					_topBoundaryType, _leftBoundaryType, _bottomBoundaryType, _rightBoundaryType,
-					_topBlockBoundary, _leftBlockBoundary, _bottomBlockBoundary, _rightBlockBoundary,
-					_topExternalBoundary, _leftExternalBoundary, _bottomExternalBoundary, _rightExternalBoundary)*/;
+	BlockCpu(int _length, int _width);
 
 
 	virtual ~BlockCpu();

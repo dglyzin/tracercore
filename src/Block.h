@@ -54,10 +54,7 @@ protected:
 
 public:
 	Block();
-	Block(int _length, int _width,
-			int* _topBoundaryType, int* _leftBoundaryType, int* _bottomBoundaryType, int* _rightBoundaryType,
-			double* _topBlockBoundary, double* _leftBlockBoundary, double* _bottomBlockBoundary, double* _rightBlockBoundary,
-			double* _topExternalBoundary, double* _leftExternalBoundary, double* _bottomExternalBoundary, double* _rightExternalBoundary);
+	Block(int _length, int _width);
 	virtual ~Block();
 
 	virtual bool isRealBlock() { return false; }
@@ -68,6 +65,11 @@ public:
 	virtual void printMatrix() { return; }
 
 	virtual double** getResault() { return matrix; }
+
+	int* getTopBoundaryType() { return topBoundaryType; }
+	int* getLeftBoundaryType() { return leftBoundaryType; }
+	int* getBottomBoundaryType() { return bottomBoundaryType; }
+	int* getRightBoundaryType() { return rightBoundaryType; }
 
 	double* getTopBlockBoundary() { return topBlockBoundary; }
 	double* getLeftBlockBoundary() { return leftBlockBoundary; }

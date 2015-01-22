@@ -9,18 +9,7 @@
 
 using namespace std;
 
-BlockCpu::BlockCpu(int _length, int _width,
-			int* _topBoundaryType, int* _leftBoundaryType, int* _bottomBoundaryType, int* _rightBoundaryType,
-			double* _topBlockBoundary, double* _leftBlockBoundary, double* _bottomBlockBoundary, double* _rightBlockBoundary,
-			double* _topExternalBoundary, double* _leftExternalBoundary, double* _bottomExternalBoundary, double* _rightExternalBoundary) :
-				Block(_length, _width,
-					_topBoundaryType, _leftBoundaryType, _bottomBoundaryType, _rightBoundaryType,
-					_topBlockBoundary, _leftBlockBoundary, _bottomBlockBoundary, _rightBlockBoundary,
-					_topExternalBoundary, _leftExternalBoundary, _bottomExternalBoundary, _rightExternalBoundary) {
-	/*this->Block(_length, _width,
-			_topBoundaryType, _leftBoundaryType, _bottomBoundaryType, _rightBoundaryType,
-			_topBlockBoundary, _leftBlockBoundary, _bottomBlockBoundary, _rightBlockBoundary,
-			_topExternalBoundary, _leftExternalBoundary, _bottomExternalBoundary, _rightExternalBoundary);*/
+BlockCpu::BlockCpu(int _length, int _width) : Block( _length, _width ) {
 
 	matrix = new double* [length];
 
@@ -30,6 +19,58 @@ BlockCpu::BlockCpu(int _length, int _width,
 	for (int i = 0; i < length; ++i)
 		for (int j = 0; j < width; ++j)
 			matrix[i][j] = 0;
+
+	/* Типы границ блока. Выделение памяти */
+	topBoundaryType = new int[width];
+	for(int i = 0; i < width; i++)
+		topBoundaryType[i] = 0;
+
+	leftBoundaryType = new int[length];
+	for (int i = 0; i < length; ++i)
+		leftBoundaryType[i] = 0;
+
+	bottomBoundaryType = new int[width];
+	for(int i = 0; i < width; i++)
+		bottomBoundaryType[i] = 0;
+
+	rightBoundaryType = new int[length];
+	for (int i = 0; i < length; ++i)
+		rightBoundaryType[i] = 0;
+
+	/* Границы самого блока. Это он будет отдавать. Выделение памяти. */
+	topBlockBoundary = new double[width];
+	for(int i = 0; i < width; i++)
+		topBlockBoundary[i] = 0;
+
+	leftBlockBoundary = new double[length];
+	for (int i = 0; i < length; ++i)
+		leftBlockBoundary[i] = 0;
+
+	bottomBlockBoundary = new double[width];
+	for(int i = 0; i < width; i++)
+		bottomBlockBoundary[i] = 0;
+
+	rightBlockBoundary = new double[length];
+	for (int i = 0; i < length; ++i)
+		rightBlockBoundary[i] = 0;
+
+	/* Внешние границы блока. Сюда будет приходить информация. */
+	topExternalBoundary = new double[width];
+	for(int i = 0; i < width; i++)
+		topExternalBoundary[i] = 0;
+
+	leftExternalBoundary = new double[length];
+	for (int i = 0; i < length; ++i)
+		leftExternalBoundary[i] = 0;
+
+	bottomExternalBoundary = new double[width];
+	for(int i = 0; i < width; i++)
+		bottomExternalBoundary[i] = 0;
+
+	rightExternalBoundary = new double[length];
+	for (int i = 0; i < length; ++i)
+		rightExternalBoundary[i] = 0;
+
 }
 
 BlockCpu::~BlockCpu() {
