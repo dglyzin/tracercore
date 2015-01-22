@@ -91,10 +91,6 @@ void BlockCpu::prepareData() {
 		rightBlockBorder[i] = matrix[i][width-1];
 }
 
-bool BlockCpu::isRealBlock() {
-	return true;
-}
-
 void BlockCpu::courted() {
 	double dX = 0.5/width;
 	double dY = 1./length;

@@ -18,7 +18,7 @@ public:
 	virtual ~BlockCpu();
 
 	void prepareData();
-	bool isRealBlock();
+	bool isRealBlock() { return true; }
 
 	void courted();
 
