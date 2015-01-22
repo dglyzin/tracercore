@@ -18,8 +18,8 @@ class Interconnect {
 public:
 	Interconnect(int _sourceLocationNode, int _destinationLocationNode,
 			int _sourceType, int _destinationType,
-			int _lengthBoundary,
-			double* _sourceBlockBoundary, double* _destinationExternalBoundary);
+			int _lengthBorder,
+			double* _sourceBlockBorder, double* _destinationExternalBorder);
 	virtual ~Interconnect();
 
 	void sendRecv(int locationNode);
@@ -31,10 +31,10 @@ private:
 	int sourceType;
 	int destinationType;
 
-	int lengthBoundary;
+	int lengthBorder;
 
-	double* sourceBlockBoundary;
-	double* destinationExternalBoundary;
+	double* sourceBlockBorder;
+	double* destinationExternalBorder;
 
 	MPI_Status status;
 };

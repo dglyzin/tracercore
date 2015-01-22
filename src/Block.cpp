@@ -11,24 +11,24 @@ Block::Block(int _length, int _width) {
 	length = _length;
 	width = _width;
 
-	/*topBoundaryType = _topBoundaryType;
-	leftBoundaryType = _leftBoundaryType;
-	bottomBoundaryType = _bottomBoundaryType;
-	rightBoundaryType = _rightBoundaryType;*/
+	/*topBorderType = _topBorderType;
+	leftBorderType = _leftBorderType;
+	bottomBorderType = _bottomBorderType;
+	rightBorderType = _rightBorderType;*/
 
-	/*topBlockBoundary = _topBlockBoundary;
-	leftBlockBoundary = _leftBlockBoundary;
-	bottomBlockBoundary = _bottomBlockBoundary;
-	rightBlockBoundary = _rightBlockBoundary;
+	/*topBlockBorder = _topBlockBorder;
+	leftBlockBorder = _leftBlockBorder;
+	bottomBlockBorder = _bottomBlockBorder;
+	rightBlockBorder = _rightBlockBorder;
 
-	topExternalBoundary = _topExternalBoundary;
-	leftExternalBoundary = _leftExternalBoundary;
-	bottomExternalBoundary = _bottomExternalBoundary;
-	rightExternalBoundary = _rightExternalBoundary;*/
+	topExternalBorder = _topExternalBorder;
+	leftExternalBorder = _leftExternalBorder;
+	bottomExternalBorder = _bottomExternalBorder;
+	rightExternalBorder = _rightExternalBorder;*/
 
-	topBoundaryType = leftBoundaryType = bottomBoundaryType = rightBoundaryType = NULL;
-	topBlockBoundary = leftBlockBoundary = bottomBlockBoundary = rightBlockBoundary = NULL;
-	topExternalBoundary = leftExternalBoundary = bottomExternalBoundary = rightExternalBoundary = NULL;
+	topBorderType = leftBorderType = bottomBorderType = rightBorderType = NULL;
+	topBlockBorder = leftBlockBorder = bottomBlockBorder = rightBlockBorder = NULL;
+	topExternalBorder = leftExternalBorder = bottomExternalBorder = rightExternalBorder = NULL;
 
 	matrix = NULL;
 }

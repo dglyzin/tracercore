@@ -21,56 +21,55 @@ BlockCpu::BlockCpu(int _length, int _width) : Block( _length, _width ) {
 			matrix[i][j] = 0;
 
 	/* Типы границ блока. Выделение памяти */
-	topBoundaryType = new int[width];
+	topBorderType = new int[width];
 	for(int i = 0; i < width; i++)
-		topBoundaryType[i] = 0;
+		topBorderType[i] = 0;
 
-	leftBoundaryType = new int[length];
+	leftBorderType = new int[length];
 	for (int i = 0; i < length; ++i)
-		leftBoundaryType[i] = 0;
+		leftBorderType[i] = 0;
 
-	bottomBoundaryType = new int[width];
+	bottomBorderType = new int[width];
 	for(int i = 0; i < width; i++)
-		bottomBoundaryType[i] = 0;
+		bottomBorderType[i] = 0;
 
-	rightBoundaryType = new int[length];
+	rightBorderType = new int[length];
 	for (int i = 0; i < length; ++i)
-		rightBoundaryType[i] = 0;
+		rightBorderType[i] = 0;
 
 	/* Границы самого блока. Это он будет отдавать. Выделение памяти. */
-	topBlockBoundary = new double[width];
+	topBlockBorder = new double[width];
 	for(int i = 0; i < width; i++)
-		topBlockBoundary[i] = 0;
+		topBlockBorder[i] = 0;
 
-	leftBlockBoundary = new double[length];
+	leftBlockBorder = new double[length];
 	for (int i = 0; i < length; ++i)
-		leftBlockBoundary[i] = 0;
+		leftBlockBorder[i] = 0;
 
-	bottomBlockBoundary = new double[width];
+	bottomBlockBorder = new double[width];
 	for(int i = 0; i < width; i++)
-		bottomBlockBoundary[i] = 0;
+		bottomBlockBorder[i] = 0;
 
-	rightBlockBoundary = new double[length];
+	rightBlockBorder = new double[length];
 	for (int i = 0; i < length; ++i)
-		rightBlockBoundary[i] = 0;
+		rightBlockBorder[i] = 0;
 
 	/* Внешние границы блока. Сюда будет приходить информация. */
-	topExternalBoundary = new double[width];
+	topExternalBorder = new double[width];
 	for(int i = 0; i < width; i++)
-		topExternalBoundary[i] = 0;
+		topExternalBorder[i] = 0;
 
-	leftExternalBoundary = new double[length];
+	leftExternalBorder = new double[length];
 	for (int i = 0; i < length; ++i)
-		leftExternalBoundary[i] = 0;
+		leftExternalBorder[i] = 0;
 
-	bottomExternalBoundary = new double[width];
+	bottomExternalBorder = new double[width];
 	for(int i = 0; i < width; i++)
-		bottomExternalBoundary[i] = 0;
+		bottomExternalBorder[i] = 0;
 
-	rightExternalBoundary = new double[length];
+	rightExternalBorder = new double[length];
 	for (int i = 0; i < length; ++i)
-		rightExternalBoundary[i] = 0;
-
+		rightExternalBorder[i] = 0;
 }
 
 BlockCpu::~BlockCpu() {
@@ -80,16 +79,16 @@ BlockCpu::~BlockCpu() {
 
 void BlockCpu::prepareData() {
 	for (int i = 0; i < width; ++i)
-		topBlockBoundary[i] = matrix[0][i];
+		topBlockBorder[i] = matrix[0][i];
 
 	for (int i = 0; i < length; ++i)
-		leftBlockBoundary[i] = matrix[i][0];
+		leftBlockBorder[i] = matrix[i][0];
 
 	for (int i = 0; i < width; ++i)
-		bottomBlockBoundary[i] = matrix[length-1][i];
+		bottomBlockBorder[i] = matrix[length-1][i];
 
 	for (int i = 0; i < length; ++i)
-		rightBlockBoundary[i] = matrix[i][width-1];
+		rightBlockBorder[i] = matrix[i][width-1];
 }
 
 bool BlockCpu::isRealBlock() {
@@ -115,45 +114,45 @@ void BlockCpu::courted() {
 	for (int i = 0; i < length; ++i)
 		for (int j = 0; j < width; ++j) {
 			if( i == 0 )
-				if( topBoundaryType[j] == 1 ) {
-					newMatrix[i][j] = topExternalBoundary[j];
+				if( topBorderType[j] == BY_FUNCTION ) {
+					newMatrix[i][j] = topExternalBorder[j];
 					continue;
 				}
 				else
-					top = topExternalBoundary[j];
+					top = topExternalBorder[j];
 			else
 				top = matrix[i - 1][j];
 
 
 			if( i == length - 1 )
-				if( bottomBoundaryType[j] == 1 ) {
-					newMatrix[i][j] = bottomExternalBoundary[j];
+				if( bottomBorderType[j] == BY_FUNCTION ) {
+					newMatrix[i][j] = bottomExternalBorder[j];
 					continue;
 				}
 				else
-					bottom = bottomExternalBoundary[j];
+					bottom = bottomExternalBorder[j];
 			else
 				bottom = matrix[i + 1][j];
 
 
 			if( j == 0 )
-				if( leftBoundaryType[i] == 1 ) {
-					newMatrix[i][j] = leftExternalBoundary[i];
+				if( leftBorderType[i] == BY_FUNCTION ) {
+					newMatrix[i][j] = leftExternalBorder[i];
 					continue;
 				}
 				else
-					left = leftExternalBoundary[i];
+					left = leftExternalBorder[i];
 			else
 				left = matrix[i][j - 1];
 
 
 			if( j == width - 1 )
-				if( rightBoundaryType[i] == 1 ) {
-					newMatrix[i][j] = rightExternalBoundary[i];
+				if( rightBorderType[i] == BY_FUNCTION ) {
+					newMatrix[i][j] = rightExternalBorder[i];
 					continue;
 				}
 				else
-					right = rightExternalBoundary[i];
+					right = rightExternalBorder[i];
 			else
 				right = matrix[i][j + 1];
 
@@ -163,16 +162,12 @@ void BlockCpu::courted() {
 			newMatrix[i][j] = cur + dT * ( ( left - 2*cur + right )/dX2 + ( top - 2*cur + bottom )/dY2  );
 		}
 
-	/*for (int i = 0; i < length; ++i)
-		for (int j = 0; j < width; ++j)
-			matrix[i][j] = newMatrix[i][j];*/
-
 	double** tmp = matrix;
 
 	matrix = newMatrix;
 
 	for(int i = 0; i < length; i++)
-			delete tmp[i];
+		delete tmp[i];
 	delete tmp;
 }
 
@@ -187,75 +182,75 @@ void BlockCpu::print(int locationNode) {
 	}
 
 
-	printf("\ntopBoundaryType\n");
+	printf("\ntopBorderType\n");
 	for (int i = 0; i < width; ++i)
-		printf("%4d", topBoundaryType[i]);
+		printf("%4d", topBorderType[i]);
 	printf("\n");
 
 
-	printf("\nleftBoundaryType\n");
+	printf("\nleftBorderType\n");
 	for (int i = 0; i < length; ++i)
-		printf("%4d", leftBoundaryType[i]);
+		printf("%4d", leftBorderType[i]);
 	printf("\n");
 
 
-	printf("\nbottomBoundaryType\n");
+	printf("\nbottomBorderType\n");
 	for (int i = 0; i < width; ++i)
-		printf("%4d", bottomBoundaryType[i]);
+		printf("%4d", bottomBorderType[i]);
 	printf("\n");
 
 
-	printf("\nrightBoundaryType\n");
+	printf("\nrightBorderType\n");
 	for (int i = 0; i < length; ++i)
-		printf("%4d", rightBoundaryType[i]);
+		printf("%4d", rightBorderType[i]);
 	printf("\n");
 
 
-	printf("\ntopBlockBoundary\n");
+	printf("\ntopBlockBorder\n");
 	for (int i = 0; i < width; ++i)
-		printf("%6.1f", topBlockBoundary[i]);
+		printf("%6.1f", topBlockBorder[i]);
 	printf("\n");
 
 
-	printf("\nleftBlockBoundary\n");
+	printf("\nleftBlockBorder\n");
 	for (int i = 0; i < length; ++i)
-		printf("%6.1f", leftBlockBoundary[i]);
+		printf("%6.1f", leftBlockBorder[i]);
 	printf("\n");
 
 
-	printf("\nbottomBlockBoundary\n");
+	printf("\nbottomBlockBorder\n");
 	for (int i = 0; i <width; ++i)
-		printf("%6.1f", bottomBlockBoundary[i]);
+		printf("%6.1f", bottomBlockBorder[i]);
 	printf("\n");
 
 
-	printf("\nrightBlockBoundary\n");
+	printf("\nrightBlockBorder\n");
 	for (int i = 0; i < length; ++i)
-		printf("%6.1f", rightBlockBoundary[i]);
+		printf("%6.1f", rightBlockBorder[i]);
 	printf("\n");
 
 
-	printf("\ntopExternalBoundary\n");
+	printf("\ntopExternalBorder\n");
 	for (int i = 0; i < width; ++i)
-		printf("%6.1f", topExternalBoundary[i]);
+		printf("%6.1f", topExternalBorder[i]);
 	printf("\n");
 
 
-	printf("\nleftExternalBoundary\n");
+	printf("\nleftExternalBorder\n");
 	for (int i = 0; i < length; ++i)
-		printf("%6.1f", leftExternalBoundary[i]);
+		printf("%6.1f", leftExternalBorder[i]);
 	printf("\n");
 
 
-	printf("\nbottomExternalBoundary\n");
+	printf("\nbottomExternalBorder\n");
 	for (int i = 0; i <width; ++i)
-		printf("%6.1f", bottomExternalBoundary[i]);
+		printf("%6.1f", bottomExternalBorder[i]);
 	printf("\n");
 
 
-	printf("\nrightExternalBoundary\n");
+	printf("\nrightExternalBorder\n");
 	for (int i = 0; i < length; ++i)
-		printf("%6.1f", rightExternalBoundary[i]);
+		printf("%6.1f", rightExternalBorder[i]);
 	printf("\n");
 
 

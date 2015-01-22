@@ -11,18 +11,18 @@ using namespace std;
 
 Interconnect::Interconnect(int _sourceLocationNode, int _destinationLocationNode,
 		int _sourceType, int _destinationType,
-		int _lengthBoundary,
-		double* _sourceBlockBoundary, double* _destinationExternalBoundary) {
+		int _lengthBorder,
+		double* _sourceBlockBorder, double* _destinationExternalBorder) {
 	sourceLocationNode = _sourceLocationNode;
 	destinationLocationNode = _destinationLocationNode;
 
 	sourceType = _sourceType;
 	destinationType = _destinationType;
 
-	lengthBoundary = _lengthBoundary;
+	lengthBorder = _lengthBorder;
 
-	sourceBlockBoundary = _sourceBlockBoundary;
-	destinationExternalBoundary = _destinationExternalBoundary;
+	sourceBlockBorder = _sourceBlockBorder;
+	destinationExternalBorder = _destinationExternalBorder;
 }
 
 Interconnect::~Interconnect() {
@@ -36,13 +36,13 @@ void Interconnect::sendRecv(int locationNode) {
 
 	if(locationNode == sourceLocationNode)
 	{
-		MPI_Send(sourceBlockBoundary, lengthBoundary, MPI_DOUBLE, destinationLocationNode, 999, MPI_COMM_WORLD);
+		MPI_Send(sourceBlockBorder, lengthBorder, MPI_DOUBLE, destinationLocationNode, 999, MPI_COMM_WORLD);
 		//printf("\nSEND_RECV comment/ Don't real working!!!\n\n");
 		return;
 	}
 
 	if(locationNode == destinationLocationNode) {
-		MPI_Recv(destinationExternalBoundary, lengthBoundary, MPI_DOUBLE, sourceLocationNode, 999, MPI_COMM_WORLD, &status);
+		MPI_Recv(destinationExternalBorder, lengthBorder, MPI_DOUBLE, sourceLocationNode, 999, MPI_COMM_WORLD, &status);
 		//printf("\nSEND_RECV comment/ Don't real working!!!\n\n");
 		return;
 	}

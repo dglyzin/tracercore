@@ -37,60 +37,60 @@ int main(int argc, char * argv[]) {
 		  MPI_Status status;
 		  //printf("\n\n******0-0\n\n");
 
-		  int* topBoundaryType = b0->getTopBoundaryType();
-		  int* leftBoundaryType = b0->getLeftBoundaryType();
-		  int* bottomBoundaryType = b0->getBottomBoundaryType();
-		  int* rightBoundaryType = b0->getRightBoundaryType();
+		  int* topBorderType = b0->getTopBorderType();
+		  int* leftBorderType = b0->getLeftBorderType();
+		  int* bottomBorderType = b0->getBottomBorderType();
+		  int* rightBorderType = b0->getRightBorderType();
 
 		  for (int i = 0; i < b0_width; ++i)
-			  topBoundaryType[i] = 1;
+			  topBorderType[i] = BY_FUNCTION;
 
 		  for (int i = 0; i < b0_length; ++i)
-			  leftBoundaryType[i] = 1;
+			  leftBorderType[i] = BY_FUNCTION;
 
 		  for (int i = 0; i < b0_width; ++i)
-			  bottomBoundaryType[i] = 1;
+			  bottomBorderType[i] = BY_FUNCTION;
 
 		  for (int i = 0; i < 15; ++i)
-			  rightBoundaryType[i] = 1;
+			  rightBorderType[i] = BY_FUNCTION;
 		  for (int i = 15; i < b1_length+15; ++i)
-			  rightBoundaryType[i] = 0;
+			  rightBorderType[i] = BY_ANOTHER_BLOCK;
 		  for (int i = b1_length+15; i < b0_length; ++i)
-			  rightBoundaryType[i] = 1;
+			  rightBorderType[i] = BY_FUNCTION;
 
 
-		  double* topBlockBoundary = b0->getTopBlockBoundary();
-		  double* leftBlockBoundary = b0->getLeftBlockBoundary();
-		  double* bottomBlockBoundary = b0->getBottomBlockBoundary();
-		  double* rightBlockBoundary = b0->getRightBlockBoundary();
+		  double* topBlockBorder = b0->getTopBlockBorder();
+		  double* leftBlockBorder = b0->getLeftBlockBorder();
+		  double* bottomBlockBorder = b0->getBottomBlockBorder();
+		  double* rightBlockBorder = b0->getRightBlockBorder();
 
-		  double* topExternalBoundary = b0->getTopExternalBoundary();
-		  double* leftExternalBoundary = b0->getLeftExternalBoundary();
-		  double* bottomExternalBoundary = b0->getBottomExternalBoundary();
-		  double* rightExternalBoundary = b0->getRightExternalBoundary();
+		  double* topExternalBorder = b0->getTopExternalBorder();
+		  double* leftExternalBorder = b0->getLeftExternalBorder();
+		  double* bottomExternalBorder = b0->getBottomExternalBorder();
+		  double* rightExternalBorder = b0->getRightExternalBorder();
 
 		  //printf("\n\n******0-1\n\n");
 
 		  for (int i = 0; i < b0_width; ++i) {
-			  topBlockBoundary[i] = 0;
-			  bottomBlockBoundary[i] = 0;
+			  topBlockBorder[i] = 0;
+			  bottomBlockBorder[i] = 0;
 
-			  topExternalBoundary[i] = 100;
-			  bottomExternalBoundary[i] = 10;
+			  topExternalBorder[i] = 100;
+			  bottomExternalBorder[i] = 10;
 		  }
 
 		  for (int i = 0; i < b0_length; ++i) {
-			  leftBlockBoundary[i] = 0;
-			  rightBlockBoundary[i] = 0;
+			  leftBlockBorder[i] = 0;
+			  rightBlockBorder[i] = 0;
 
-			  leftExternalBoundary[i] = 10;
-			  rightExternalBoundary[i] = 10;
+			  leftExternalBorder[i] = 10;
+			  rightExternalBorder[i] = 10;
 		  }
 
 		  //printf("\n\n******0-2\n\n");
 
-		  Interconnect* i2 = new Interconnect(0, 1, 0, 0, b1_length, rightBlockBoundary + 15, NULL);
-		  Interconnect* i3 = new Interconnect(1, 0, 0, 0, b1_length, NULL, rightExternalBoundary + 15);
+		  Interconnect* i2 = new Interconnect(0, 1, 0, 0, b1_length, rightBlockBorder + 15, NULL);
+		  Interconnect* i3 = new Interconnect(1, 0, 0, 0, b1_length, NULL, rightExternalBorder + 15);
 
 		  //printf("\n\n******0-3\n\n");
 
@@ -149,66 +149,66 @@ int main(int argc, char * argv[]) {
 	  if(world_rank == 1) {
 		  Block* b1 = new BlockCpu(b1_length, b1_width);
 
-		  int* topBoundaryType = b1->getTopBoundaryType();
-		  int* leftBoundaryType = b1->getLeftBoundaryType();
-		  int* bottomBoundaryType = b1->getBottomBoundaryType();
-		  int* rightBoundaryType = b1->getRightBoundaryType();
+		  int* topBorderType = b1->getTopBorderType();
+		  int* leftBorderType = b1->getLeftBorderType();
+		  int* bottomBorderType = b1->getBottomBorderType();
+		  int* rightBorderType = b1->getRightBorderType();
 
 
 		  for (int i = 0; i < 15; ++i)
-			  topBoundaryType[i] = 1;
+			  topBorderType[i] = BY_FUNCTION;
 		  for (int i = 15; i < b2_width + 15; ++i)
-			  topBoundaryType[i] = 0;
+			  topBorderType[i] = BY_ANOTHER_BLOCK;
 		  for (int i = b2_width + 15; i < b1_width; ++i)
-			  topBoundaryType[i] = 1;
+			  topBorderType[i] = BY_FUNCTION;
 
 		  for (int i = 0; i < b1_length; ++i)
-			  leftBoundaryType[i] = 0;
+			  leftBorderType[i] = BY_ANOTHER_BLOCK;
 
 		  for (int i = 0; i < b1_width; ++i)
-			  bottomBoundaryType[i] = 1;
+			  bottomBorderType[i] = BY_FUNCTION;
 
 		  for (int i = 0; i < b1_length; ++i)
-			  rightBoundaryType[i] = 0;
+			  rightBorderType[i] = BY_ANOTHER_BLOCK;
 
 
-		  double* topBlockBoundary = b1->getTopBlockBoundary();
-		  double* leftBlockBoundary = b1->getLeftBlockBoundary();
-		  double* bottomBlockBoundary = b1->getBottomBlockBoundary();
-		  double* rightBlockBoundary = b1->getRightBlockBoundary();
+		  double* topBlockBorder = b1->getTopBlockBorder();
+		  double* leftBlockBorder = b1->getLeftBlockBorder();
+		  double* bottomBlockBorder = b1->getBottomBlockBorder();
+		  double* rightBlockBorder = b1->getRightBlockBorder();
 
-		  double* topExternalBoundary = b1->getTopExternalBoundary();
-		  double* leftExternalBoundary = b1->getLeftExternalBoundary();
-		  double* bottomExternalBoundary = b1->getBottomExternalBoundary();
-		  double* rightExternalBoundary = b1->getRightExternalBoundary();
+		  double* topExternalBorder = b1->getTopExternalBorder();
+		  double* leftExternalBorder = b1->getLeftExternalBorder();
+		  double* bottomExternalBorder = b1->getBottomExternalBorder();
+		  double* rightExternalBorder = b1->getRightExternalBorder();
 
 		  //printf("\n\n******1-1\n\n");
 
 		  for (int i = 0; i < b1_width; ++i) {
-			  topBlockBoundary[i] = 0;
-			  bottomBlockBoundary[i] = 0;
+			  topBlockBorder[i] = 0;
+			  bottomBlockBorder[i] = 0;
 
-			  topExternalBoundary[i] = 100;
-			  bottomExternalBoundary[i] = 10;
+			  topExternalBorder[i] = 100;
+			  bottomExternalBorder[i] = 10;
 		  }
 
 		  for (int i = 0; i < b1_length; ++i) {
-			  leftBlockBoundary[i] = 0;
-			  rightBlockBoundary[i] = 0;
+			  leftBlockBorder[i] = 0;
+			  rightBlockBorder[i] = 0;
 
-			  leftExternalBoundary[i] = 10;
-			  rightExternalBoundary[i] = 10;
+			  leftExternalBorder[i] = 10;
+			  rightExternalBorder[i] = 10;
 		  }
 
 		  //printf("\n\n******1-2\n\n");
 
 
-		  Interconnect* i0 = new Interconnect(1, 2, 0, 0, b2_width, topBlockBoundary + 15, NULL);
-		  Interconnect* i1 = new Interconnect(2, 1, 0, 0, b2_width, NULL, topExternalBoundary + 15);
-		  Interconnect* i2 = new Interconnect(0, 1, 0, 0, b1_length, NULL, leftExternalBoundary);
-		  Interconnect* i3 = new Interconnect(1, 0, 0, 0, b1_length, leftBlockBoundary, NULL);
-		  Interconnect* i4 = new Interconnect(1, 3, 0, 0, b1_length, rightBlockBoundary, NULL);
-		  Interconnect* i5 = new Interconnect(3, 1, 0, 0, b1_length, NULL, rightExternalBoundary);
+		  Interconnect* i0 = new Interconnect(1, 2, 0, 0, b2_width, topBlockBorder + 15, NULL);
+		  Interconnect* i1 = new Interconnect(2, 1, 0, 0, b2_width, NULL, topExternalBorder + 15);
+		  Interconnect* i2 = new Interconnect(0, 1, 0, 0, b1_length, NULL, leftExternalBorder);
+		  Interconnect* i3 = new Interconnect(1, 0, 0, 0, b1_length, leftBlockBorder, NULL);
+		  Interconnect* i4 = new Interconnect(1, 3, 0, 0, b1_length, rightBlockBorder, NULL);
+		  Interconnect* i5 = new Interconnect(3, 1, 0, 0, b1_length, NULL, rightExternalBorder);
 
 		  //printf("\n\n******1-3\n\n");
 
@@ -242,57 +242,57 @@ int main(int argc, char * argv[]) {
 	  if(world_rank == 2) {
 		  Block* b2 = new BlockCpu(b2_length, b2_width);
 
-		  int* topBoundaryType = b2->getTopBoundaryType();
-		  int* leftBoundaryType = b2->getLeftBoundaryType();
-		  int* bottomBoundaryType = b2->getBottomBoundaryType();
-		  int* rightBoundaryType = b2->getRightBoundaryType();
+		  int* topBorderType = b2->getTopBorderType();
+		  int* leftBorderType = b2->getLeftBorderType();
+		  int* bottomBorderType = b2->getBottomBorderType();
+		  int* rightBorderType = b2->getRightBorderType();
 
 		  //printf("\n\n******2-0\n\n");
 		  for (int i = 0; i < b2_width; ++i)
-			  topBoundaryType[i] = 1;
+			  topBorderType[i] = BY_FUNCTION;
 
 		  for (int i = 0; i < b2_length; ++i)
-			  leftBoundaryType[i] = 1;
+			  leftBorderType[i] = BY_FUNCTION;
 
 		  for (int i = 0; i < b2_width; ++i)
-			  bottomBoundaryType[i] = 0;
+			  bottomBorderType[i] = BY_ANOTHER_BLOCK;
 
 		  for (int i = 0; i < b2_length; ++i)
-			  rightBoundaryType[i] = 1;
+			  rightBorderType[i] = BY_FUNCTION;
 
 
-		  double* topBlockBoundary = b2->getTopBlockBoundary();
-		  double* leftBlockBoundary = b2->getLeftBlockBoundary();
-		  double* bottomBlockBoundary = b2->getBottomBlockBoundary();
-		  double* rightBlockBoundary = b2->getRightBlockBoundary();
+		  double* topBlockBorder = b2->getTopBlockBorder();
+		  double* leftBlockBorder = b2->getLeftBlockBorder();
+		  double* bottomBlockBorder = b2->getBottomBlockBorder();
+		  double* rightBlockBorder = b2->getRightBlockBorder();
 
-		  double* topExternalBoundary = b2->getTopExternalBoundary();
-		  double* leftExternalBoundary = b2->getLeftExternalBoundary();
-		  double* bottomExternalBoundary = b2->getBottomExternalBoundary();
-		  double* rightExternalBoundary = b2->getRightExternalBoundary();
+		  double* topExternalBorder = b2->getTopExternalBorder();
+		  double* leftExternalBorder = b2->getLeftExternalBorder();
+		  double* bottomExternalBorder = b2->getBottomExternalBorder();
+		  double* rightExternalBorder = b2->getRightExternalBorder();
 
 		  //printf("\n\n******2-1\n\n");
 
 		  for (int i = 0; i < b2_width; ++i) {
-			  topBlockBoundary[i] = 0;
-			  bottomBlockBoundary[i] = 0;
+			  topBlockBorder[i] = 0;
+			  bottomBlockBorder[i] = 0;
 
-			  topExternalBoundary[i] = 10;
-			  bottomExternalBoundary[i] = 100;
+			  topExternalBorder[i] = 10;
+			  bottomExternalBorder[i] = 100;
 		  }
 
 		  for (int i = 0; i < b2_length; ++i) {
-			  leftBlockBoundary[i] = 0;
-			  rightBlockBoundary[i] = 0;
+			  leftBlockBorder[i] = 0;
+			  rightBlockBorder[i] = 0;
 
-			  leftExternalBoundary[i] = 10;
-			  rightExternalBoundary[i] = 10;
+			  leftExternalBorder[i] = 10;
+			  rightExternalBorder[i] = 10;
 		  }
 
 		  //printf("\n\n******2-2\n\n");
 
-		  Interconnect* i0 = new Interconnect(1, 2, 0, 0, b2_width, NULL, bottomExternalBoundary);
-		  Interconnect* i1 = new Interconnect(2, 1, 0, 0, b2_width, bottomBlockBoundary, NULL);
+		  Interconnect* i0 = new Interconnect(1, 2, 0, 0, b2_width, NULL, bottomExternalBorder);
+		  Interconnect* i1 = new Interconnect(2, 1, 0, 0, b2_width, bottomBlockBorder, NULL);
 
 		  //printf("\n\n******1-3\n\n");
 
@@ -321,60 +321,60 @@ int main(int argc, char * argv[]) {
 	  if(world_rank == 3) {
 		  Block* b3 = new BlockCpu(b3_length, b3_width);
 
-		  int* topBoundaryType = b3->getTopBoundaryType();
-		  int* leftBoundaryType = b3->getLeftBoundaryType();
-		  int* bottomBoundaryType = b3->getBottomBoundaryType();
-		  int* rightBoundaryType = b3->getRightBoundaryType();
+		  int* topBorderType = b3->getTopBorderType();
+		  int* leftBorderType = b3->getLeftBorderType();
+		  int* bottomBorderType = b3->getBottomBorderType();
+		  int* rightBorderType = b3->getRightBorderType();
 
 		  for (int i = 0; i < b3_width; ++i)
-			  topBoundaryType[i] = 1;
+			  topBorderType[i] = 1;
 
 		  for (int i = 0; i < 15; ++i)
-			  leftBoundaryType[i] = 1;
+			  leftBorderType[i] = BY_FUNCTION;
 		  for (int i = 15; i < b1_length+15; ++i)
-			  leftBoundaryType[i] = 0;
+			  leftBorderType[i] = BY_ANOTHER_BLOCK;
 		  for (int i = b1_length; i < b3_length; ++i)
-			  leftBoundaryType[i] = 1;
+			  leftBorderType[i] = BY_FUNCTION;
 
 		  for (int i = 0; i < b3_width; ++i)
-			  bottomBoundaryType[i] = 1;
+			  bottomBorderType[i] = BY_FUNCTION;
 
 		  for (int i = 0; i < b3_length; ++i)
-			  rightBoundaryType[i] = 1;
+			  rightBorderType[i] = BY_FUNCTION;
 
 
-		  double* topBlockBoundary = b3->getTopBlockBoundary();
-		  double* leftBlockBoundary = b3->getLeftBlockBoundary();
-		  double* bottomBlockBoundary = b3->getBottomBlockBoundary();
-		  double* rightBlockBoundary = b3->getRightBlockBoundary();
+		  double* topBlockBorder = b3->getTopBlockBorder();
+		  double* leftBlockBorder = b3->getLeftBlockBorder();
+		  double* bottomBlockBorder = b3->getBottomBlockBorder();
+		  double* rightBlockBorder = b3->getRightBlockBorder();
 
-		  double* topExternalBoundary = b3->getTopExternalBoundary();
-		  double* leftExternalBoundary = b3->getLeftExternalBoundary();
-		  double* bottomExternalBoundary = b3->getBottomExternalBoundary();
-		  double* rightExternalBoundary = b3->getRightExternalBoundary();
+		  double* topExternalBorder = b3->getTopExternalBorder();
+		  double* leftExternalBorder = b3->getLeftExternalBorder();
+		  double* bottomExternalBorder = b3->getBottomExternalBorder();
+		  double* rightExternalBorder = b3->getRightExternalBorder();
 
 		  //printf("\n\n******1-1\n\n");
 
 		  for (int i = 0; i < b3_width; ++i) {
-			  topBlockBoundary[i] = 0;
-			  bottomBlockBoundary[i] = 0;
+			  topBlockBorder[i] = 0;
+			  bottomBlockBorder[i] = 0;
 
-			  topExternalBoundary[i] = 100;
-			  bottomExternalBoundary[i] = 10;
+			  topExternalBorder[i] = 100;
+			  bottomExternalBorder[i] = 10;
 		  }
 
 		  for (int i = 0; i < b3_length; ++i) {
-			  leftBlockBoundary[i] = 0;
-			  rightBlockBoundary[i] = 0;
+			  leftBlockBorder[i] = 0;
+			  rightBlockBorder[i] = 0;
 
-			  leftExternalBoundary[i] = 10;
-			  rightExternalBoundary[i] = 10;
+			  leftExternalBorder[i] = 10;
+			  rightExternalBorder[i] = 10;
 		  }
 
 		  //printf("\n\n******1-2\n\n");
 
-		  Interconnect* i4 = new Interconnect(1, 3, 0, 0, b1_length, NULL, leftExternalBoundary + 15);
-		  Interconnect* i5 = new Interconnect(3, 1, 0, 0, b1_length, leftBlockBoundary + 15, NULL);
+		  Interconnect* i4 = new Interconnect(1, 3, 0, 0, b1_length, NULL, leftExternalBorder + 15);
+		  Interconnect* i5 = new Interconnect(3, 1, 0, 0, b1_length, leftBlockBorder + 15, NULL);
 
 		  //printf("\n\n******1-3\n\n");
 

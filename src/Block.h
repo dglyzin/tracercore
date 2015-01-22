@@ -10,15 +10,13 @@
 
 #include <stdio.h>
 
+enum BORDER_TYPE {BY_ANOTHER_BLOCK, BY_FUNCTION};
+//#define BY_ANOTHER_BLOCK 0
+//#define BY_FUNCTION 1
+
 class Block {
 
 protected:
-	// номер узла, на котором расположен данный блок
-	//int numberLocationNode;
-
-	// тип блока. ЦПУ или Видеокарта (+ее номер)
-	//int blockType;
-
 	// матрица для вычислений
 	double** matrix;
 
@@ -29,26 +27,26 @@ protected:
 	// тип границы блока
 	// 0 - граница с другим блоком, работает через Interconnect
 	// 1 - .. - границы с другим блоком нет, значения даются функцией
-	int* topBoundaryType;
-	int* leftBoundaryType;
-	int* bottomBoundaryType;
-	int* rightBoundaryType;
+	int* topBorderType;
+	int* leftBorderType;
+	int* bottomBorderType;
+	int* rightBorderType;
 
 	// граничные условия для других блоков,
 	// сюда блок самостоятельно укладывает свежие данные
 	// после каждой итерации.
 	// Interconnect их забирает (должен знать откуда забирать)
-	double* topBlockBoundary;
-	double* leftBlockBoundary;
-	double* bottomBlockBoundary;
-	double* rightBlockBoundary;
+	double* topBlockBorder;
+	double* leftBlockBorder;
+	double* bottomBlockBorder;
+	double* rightBlockBorder;
 
 	// с помощью Interconnect'а здесь будут находится свежие данные от других блоков,
 	// кроме того, сюда же записывают данные граничные функции
-	double* topExternalBoundary;
-	double* leftExternalBoundary;
-	double* bottomExternalBoundary;
-	double* rightExternalBoundary;
+	double* topExternalBorder;
+	double* leftExternalBorder;
+	double* bottomExternalBorder;
+	double* rightExternalBorder;
 
 	//ФУНКЦИИ!!!!!!!!!!
 
@@ -66,20 +64,20 @@ public:
 
 	virtual double** getResault() { return matrix; }
 
-	int* getTopBoundaryType() { return topBoundaryType; }
-	int* getLeftBoundaryType() { return leftBoundaryType; }
-	int* getBottomBoundaryType() { return bottomBoundaryType; }
-	int* getRightBoundaryType() { return rightBoundaryType; }
+	int* getTopBorderType() { return topBorderType; }
+	int* getLeftBorderType() { return leftBorderType; }
+	int* getBottomBorderType() { return bottomBorderType; }
+	int* getRightBorderType() { return rightBorderType; }
 
-	double* getTopBlockBoundary() { return topBlockBoundary; }
-	double* getLeftBlockBoundary() { return leftBlockBoundary; }
-	double* getBottomBlockBoundary() { return bottomBlockBoundary; }
-	double* getRightBlockBoundary() { return rightBlockBoundary; }
+	double* getTopBlockBorder() { return topBlockBorder; }
+	double* getLeftBlockBorder() { return leftBlockBorder; }
+	double* getBottomBlockBorder() { return bottomBlockBorder; }
+	double* getRightBlockBorder() { return rightBlockBorder; }
 
-	double* getTopExternalBoundary() { return topExternalBoundary; }
-	double* getLeftExternalBoundary() { return leftExternalBoundary; }
-	double* getBottomExternalBoundary() { return bottomExternalBoundary; }
-	double* getRightExternalBoundary() { return rightExternalBoundary; }
+	double* getTopExternalBorder() { return topExternalBorder; }
+	double* getLeftExternalBorder() { return leftExternalBorder; }
+	double* getBottomExternalBorder() { return bottomExternalBorder; }
+	double* getRightExternalBorder() { return rightExternalBorder; }
 };
 
 #endif /* SRC_BLOCK_H_ */
