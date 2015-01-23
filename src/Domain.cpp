@@ -15,11 +15,11 @@ Domain::Domain(int world_rank, int world_size, int blockCount, int borderCount) 
 	mInterconnects = new Interconnect* [borderCount*2];
 
 	for (int i = 0; i < blockCount; ++i)
-		mBlocks[i] = new BlockNull();
+		mBlocks[i] = new BlockNull(world_rank);
 
 	for (int i = countForThread*world_rank; i < countForThread*(world_rank + 1); ++i) {
 		delete mBlocks[i];
-		mBlocks[i] = new BlockCpu(blockLengthSize[i], blockWidthSize[i]);
+		mBlocks[i] = new BlockCpu(blockLengthSize[i], blockWidthSize[i], world_rank);
 	}
 
 	// 1 - 2 node 0/1
@@ -275,9 +275,8 @@ void Domain::print(int world_rank, int blockCount) {
 						resaultAll[j + blockMoveLenght[i]][k + blockMoveWidth[i]] = resault[j][k];
 			}
 			else
-				for (int j = 0; j < blockLengthSize[i]; ++j) {
+				for (int j = 0; j < blockLengthSize[i]; ++j)
 					MPI_Recv(resaultAll[j + blockMoveLenght[i]] + blockMoveWidth[i], blockWidthSize[i], MPI_DOUBLE, i/2, 999, MPI_COMM_WORLD, &status);
-				}
 		}
 
 		FILE* out = fopen("res", "wb");

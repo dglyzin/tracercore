@@ -16,7 +16,7 @@
 
 class BlockCpu: public Block {
 public:
-	BlockCpu(int _length, int _width);
+	BlockCpu(int _length, int _width, int _world_rank);
 
 	virtual ~BlockCpu();
 

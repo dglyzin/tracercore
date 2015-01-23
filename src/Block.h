@@ -38,6 +38,11 @@ protected:
 	int width;
 
 	/*
+	 * Номер потока исполнения, на котором работает этот блок
+	 */
+	int world_rank;
+
+	/*
 	 * Тип границы блока.
 	 * BY_ANOTHER_BLOCK - граница с другим блоком, работает через Interconnect.
 	 * BY_FUNCTION - границы с другим блоком нет, значения даются функцией.
@@ -76,7 +81,8 @@ protected:
 
 public:
 	Block();
-	Block(int _length, int _width);
+	Block(int _world_rank);
+	Block(int _length, int _width, int _world_rank);
 	virtual ~Block();
 
 	/*
@@ -110,6 +116,11 @@ public:
 	virtual void printMatrix() { return; }
 
 	virtual double** getResault() { return matrix; }
+
+	int getLength() { return length; }
+	int getWidth() { return width; }
+
+	int getWorldRank() { return world_rank; }
 
 	int* getTopBorderType() { return topBorderType; }
 	int* getLeftBorderType() { return leftBorderType; }

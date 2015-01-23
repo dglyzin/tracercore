@@ -9,7 +9,7 @@
 
 using namespace std;
 
-BlockCpu::BlockCpu(int _length, int _width) : Block( _length, _width ) {
+BlockCpu::BlockCpu(int _length, int _width, int _world_rank) : Block( _length, _width, _world_rank ) {
 
 	matrix = new double* [length];
 
@@ -180,6 +180,9 @@ void BlockCpu::courted() {
 
 void BlockCpu::print(int locationNode) {
 	printf("FROM NODE #%d", locationNode);
+
+	printf("\nLength: %d, Width: %d, World_Rank: %d\n", length, width, world_rank);
+
 	printf("\nMatrix:\n");
 	for (int i = 0; i < length; ++i)
 	{
