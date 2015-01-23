@@ -16,7 +16,7 @@
 
 #define b0_length 50
 #define b0_width 25
-#define b0_moveL 35
+#define b0_moveL 25
 #define b0_moveW 0
 
 #define b1_length 25
@@ -31,11 +31,11 @@
 
 #define b3_length 50
 #define b3_width 25
-#define b3_moveL 35
+#define b3_moveL 25
 #define b3_moveW 75
 
 
-#define b0_right_border_move 15
+#define b0_right_border_move 25
 
 #define b1_top_border_move 15
 #define b1_left_border_move 0
@@ -43,7 +43,7 @@
 
 #define b2_bottom_border_move 0
 
-#define b3_left_border_move 15
+#define b3_left_border_move 25
 
 
 #define b0_b1_border_length 25
@@ -57,11 +57,13 @@ public:
 
 	void calc(int world_rank, int blockCount, int borderCount);
 
-	void print(int world_rank);
+	void print(int world_rank, int blockCount);
 
 private:
 	Block** mBlocks;
 	Interconnect** mInterconnects;
+
+	MPI_Status status;
 
 	int blockLengthSize[4];
 	int blockWidthSize[4];

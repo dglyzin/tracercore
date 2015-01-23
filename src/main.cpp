@@ -27,7 +27,7 @@ int main(int argc, char * argv[]) {
 	  for (int i = 0; i < repeatCount; ++i) {
 		  d->calc(world_rank, 4, 3);
 	  }
-	  d->print(world_rank);
+	  d->print(world_rank, 4);
 
 	  /*int b0_length = 50;
 	  int b0_width = 25;

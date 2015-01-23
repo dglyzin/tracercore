@@ -14,7 +14,7 @@ Domain::Domain(int world_rank, int world_size, int blockCount, int borderCount) 
 	mBlocks = new Block* [countForThread];
 	mInterconnects = new Interconnect* [borderCount*2];
 
-	printf("\n\ncountForThread = %d\n\n", countForThread);
+	//printf("\n\ncountForThread = %d\n\n", countForThread);
 
 	for (int i = 0; i < blockCount; ++i)
 		mBlocks[i] = new BlockNull();
@@ -262,24 +262,22 @@ Domain::~Domain() {
 void Domain::calc(int world_rank, int blockCount, int borderCount) {
 	for (int i = 0; i < blockCount; ++i)
 		if( mBlocks[i]->isRealBlock() ) {
-			printf("\n\nworld_rank: %d #0 %d\n\n", world_rank, i);
+			//printf("\n\nworld_rank: %d #0 %d\n\n", world_rank, i);
 			mBlocks[i]->courted();
 			mBlocks[i]->prepareData();
 
-			if(world_rank == 1)
-				printf("\n\n*************************\n\n");
+			/*if(world_rank == 1)
+				printf("\n\n*************************\n\n");*/
 		}
 
-	printf("\n\nworld_rank: %d #1\n\n", world_rank);
+	//printf("\n\nworld_rank: %d #1\n\n", world_rank);
 
 	for (int i = 0; i < borderCount*2; ++i)
 		mInterconnects[i]->sendRecv(world_rank);
 }
 
-void Domain::print(int world_rank) {
+void Domain::print(int world_rank, int blockCount) {
 	if(world_rank == 0) {
-		double** resault = mBlocks[0]->getResault();
-
 		double** resaultAll = new double* [85];
 		for (int i = 0; i < 85; ++i)
 			resaultAll[i] = new double[100];
@@ -288,9 +286,19 @@ void Domain::print(int world_rank) {
 			for (int j = 0; j < 100; ++j)
 				resaultAll[i][j] = 0;
 
-		for (int i = 0; i < b0_length; ++i)
-			for (int j = 0; j < b0_width; ++j)
-				resaultAll[i + 35][j] = resault[i][j];
+		for (int i = 0; i < blockCount; ++i) {
+			if(mBlocks[i]->isRealBlock()) {
+				double** resault = mBlocks[i]->getResault();
+
+				for (int j = 0; j < blockLengthSize[i]; ++j)
+					for (int k = 0; k < blockWidthSize[i]; ++k)
+						resaultAll[j + blockMoveLenght[i]][k + blockMoveWidth[i]] = resault[j][k];
+			}
+			else
+				for (int j = 0; j < blockLengthSize[i]; ++j) {
+					MPI_Recv(resaultAll[j + blockMoveLenght[i]] + blockMoveWidth[i], blockWidthSize[i], MPI_DOUBLE, i/2, 999, MPI_COMM_WORLD, &status);
+				}
+		}
 
 		FILE* out = fopen("res", "wb");
 
@@ -301,6 +309,17 @@ void Domain::print(int world_rank) {
 		}
 
 		fclose(out);
+	}
+	else {
+		for (int i = 0; i < blockCount; ++i) {
+			if(mBlocks[i]->isRealBlock()) {
+				mBlocks[i]->print(world_rank);
+				double** resault = mBlocks[i]->getResault();
+
+				for (int j = 0; j < blockLengthSize[i]; ++j)
+					MPI_Send(resault[j], blockWidthSize[i], MPI_DOUBLE, 0, 999, MPI_COMM_WORLD);
+			}
+		}
 	}
 }
 
