@@ -14,8 +14,6 @@ Domain::Domain(int world_rank, int world_size, int blockCount, int borderCount) 
 	mBlocks = new Block* [countForThread];
 	mInterconnects = new Interconnect* [borderCount*2];
 
-	//printf("\n\ncountForThread = %d\n\n", countForThread);
-
 	for (int i = 0; i < blockCount; ++i)
 		mBlocks[i] = new BlockNull();
 
@@ -23,8 +21,6 @@ Domain::Domain(int world_rank, int world_size, int blockCount, int borderCount) 
 		delete mBlocks[i];
 		mBlocks[i] = new BlockCpu(blockLengthSize[i], blockWidthSize[i]);
 	}
-
-	//printf("\n\nworld_rank: %d #1\n\n", world_rank);
 
 	// 1 - 2 node 0/1
 	mInterconnects[0] = new Interconnect(0, 1, CPU, CPU, b1_b2_border_length, mBlocks[1]->getTopBlockBorder() + b1_top_border_move, mBlocks[2]->getBottomExternalBorder() + b2_bottom_border_move);
@@ -39,10 +35,7 @@ Domain::Domain(int world_rank, int world_size, int blockCount, int borderCount) 
 	// 3 - 1 node 1/0
 	mInterconnects[5] = new Interconnect(1, 0, CPU, CPU, b1_b3_border_length, mBlocks[3]->getLeftBlockBorder() + b3_left_border_move, mBlocks[1]->getRightExternalBorder() + b1_right_border_move);
 
-	//printf("\n\nworld_rank: %d #2\n\n", world_rank);
-
 	if( mBlocks[0]->isRealBlock() ) {
-		//printf("\n\nworld_rank: %d #3_0\n\n", world_rank);
 		Block* b = mBlocks[0];
 
 		int* topBorderType = b->getTopBorderType();
@@ -95,7 +88,6 @@ Domain::Domain(int world_rank, int world_size, int blockCount, int borderCount) 
 	}
 
 	if( mBlocks[1]->isRealBlock() ) {
-		//printf("\n\nworld_rank: %d #3_1\n\n", world_rank);
 		Block* b = mBlocks[1];
 
 		int* topBorderType = b->getTopBorderType();
@@ -146,11 +138,9 @@ Domain::Domain(int world_rank, int world_size, int blockCount, int borderCount) 
 			leftExternalBorder[i] = 10;
 			rightExternalBorder[i] = 10;
 		}
-		//printf("\n\nworld_rank: %d #3_1_1\n\n", world_rank);
 	}
 
 	if( mBlocks[2]->isRealBlock() ) {
-		//printf("\n\nworld_rank: %d #3_2\n\n", world_rank);
 		Block* b = mBlocks[2];
 
 		int* topBorderType = b->getTopBorderType();
@@ -185,7 +175,7 @@ Domain::Domain(int world_rank, int world_size, int blockCount, int borderCount) 
 			topBlockBorder[i] = 0;
 			bottomBlockBorder[i] = 0;
 
-			topExternalBorder[i] = 10;
+			topExternalBorder[i] = 100 * cos( (i - 12) / 9. );
 			bottomExternalBorder[i] = 100 * cos( (i - 25) / 20. );
 		}
 
@@ -199,7 +189,6 @@ Domain::Domain(int world_rank, int world_size, int blockCount, int borderCount) 
 	}
 
 	if( mBlocks[3]->isRealBlock() ) {
-		//printf("\n\nworld_rank: %d #3_3\n\n", world_rank);
 		Block* b = mBlocks[3];
 
 		int* topBorderType = b->getTopBorderType();
@@ -249,10 +238,7 @@ Domain::Domain(int world_rank, int world_size, int blockCount, int borderCount) 
 			leftExternalBorder[i] = 10;
 			rightExternalBorder[i] = 10;
 		}
-		//printf("\n\nworld_rank: %d #3_3_1\n\n", world_rank);
 	}
-
-	//printf("\n\nworld_rank: %d #4\n\n", world_rank);
 }
 
 Domain::~Domain() {
@@ -262,15 +248,9 @@ Domain::~Domain() {
 void Domain::calc(int world_rank, int blockCount, int borderCount) {
 	for (int i = 0; i < blockCount; ++i)
 		if( mBlocks[i]->isRealBlock() ) {
-			//printf("\n\nworld_rank: %d #0 %d\n\n", world_rank, i);
 			mBlocks[i]->courted();
 			mBlocks[i]->prepareData();
-
-			/*if(world_rank == 1)
-				printf("\n\n*************************\n\n");*/
 		}
-
-	//printf("\n\nworld_rank: %d #1\n\n", world_rank);
 
 	for (int i = 0; i < borderCount*2; ++i)
 		mInterconnects[i]->sendRecv(world_rank);
@@ -313,7 +293,6 @@ void Domain::print(int world_rank, int blockCount) {
 	else {
 		for (int i = 0; i < blockCount; ++i) {
 			if(mBlocks[i]->isRealBlock()) {
-				mBlocks[i]->print(world_rank);
 				double** resault = mBlocks[i]->getResault();
 
 				for (int j = 0; j < blockLengthSize[i]; ++j)
@@ -343,7 +322,5 @@ void Domain::setDefaultValue() {
 	blockMoveWidth[1] = b1_moveW;
 	blockMoveWidth[2] = b2_moveW;
 	blockMoveWidth[3] = b3_moveW;
-
-	//printf("\n\nworld_rank: %d #0\n\n", -1);
 }
 

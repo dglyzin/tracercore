@@ -10,6 +10,12 @@
 
 #include "Block.h"
 
+/*
+ * Блок - загушка.
+ * Отвечает false на вопрос о своей реальности.
+ * Остальные функции своей предка не переопределяет.
+ */
+
 class BlockNull: public Block {
 public:
 	BlockNull();

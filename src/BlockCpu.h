@@ -10,10 +10,13 @@
 
 #include "Block.h"
 
+/*
+ * Блок работы с данными на центральном процссоре.
+ */
+
 class BlockCpu: public Block {
 public:
 	BlockCpu(int _length, int _width);
-
 
 	virtual ~BlockCpu();
 

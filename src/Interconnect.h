@@ -12,7 +12,15 @@
 
 #include <mpi.h>
 
+/*
+ * Типы блоков.
+ * Центральный процессов или одна их трех видеокарт.
+ */
 enum BLOCK_TYPE { CPU, DEVICE0, DEVICE1, DEVICE2 };
+
+/*
+ * Класс, отвечающий за пересылку данных между блоками.
+ */
 
 class Interconnect {
 public:
@@ -22,20 +30,54 @@ public:
 			double* _sourceBlockBorder, double* _destinationExternalBorder);
 	virtual ~Interconnect();
 
+	/*
+	 * Переслать данные.
+	 * Номера блоков неизвестны.
+	 * Пересылаем по данным в конструкторе указателям и по данным о номере потока MPI.
+	 * Передает информацию о потоке, который вызвал - его номер.
+	 */
 	void sendRecv(int locationNode);
 
 private:
+	/*
+	 * Номер потока с исходными данными
+	 */
 	int sourceLocationNode;
+
+	/*
+	 * Номер потока, которому необходимо прислать данные
+	 */
 	int destinationLocationNode;
 
+	/*
+	 * Тип блока с исходными данными.
+	 */
 	int sourceType;
+
+	/*
+	 * Тип блока, которому данные пересылаются.
+	 */
 	int destinationType;
 
+	/*
+	 * Длина пересылаемого блока.
+	 * Длина границы между блоками.
+	 */
 	int lengthBorder;
 
+	/*
+	 * Указатель на массив с исходными данными.
+	 */
 	double* sourceBlockBorder;
+
+	/*
+	 * Указатель на массив, куда нужно положить данные
+	 */
 	double* destinationExternalBorder;
 
+	/*
+	 * Служебные переменные
+	 */
 	MPI_Status status;
 	MPI_Request request;
 };

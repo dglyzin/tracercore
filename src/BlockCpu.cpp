@@ -20,24 +20,29 @@ BlockCpu::BlockCpu(int _length, int _width) : Block( _length, _width ) {
 		for (int j = 0; j < width; ++j)
 			matrix[i][j] = 0;
 
-	/* Типы границ блока. Выделение памяти */
+	/*
+	 * Типы границ блока. Выделение памяти.
+	 */
 	topBorderType = new int[width];
 	for(int i = 0; i < width; i++)
-		topBorderType[i] = 0;
+		topBorderType[i] = BY_ANOTHER_BLOCK;
 
 	leftBorderType = new int[length];
 	for (int i = 0; i < length; ++i)
-		leftBorderType[i] = 0;
+		leftBorderType[i] = BY_ANOTHER_BLOCK;
 
 	bottomBorderType = new int[width];
 	for(int i = 0; i < width; i++)
-		bottomBorderType[i] = 0;
+		bottomBorderType[i] = BY_ANOTHER_BLOCK;
 
 	rightBorderType = new int[length];
 	for (int i = 0; i < length; ++i)
-		rightBorderType[i] = 0;
+		rightBorderType[i] = BY_ANOTHER_BLOCK;
 
-	/* Границы самого блока. Это он будет отдавать. Выделение памяти. */
+	/*
+	 * Границы самого блока.
+	 * Это он будет отдавать. Выделение памяти.
+	 */
 	topBlockBorder = new double[width];
 	for(int i = 0; i < width; i++)
 		topBlockBorder[i] = 0;
@@ -54,7 +59,10 @@ BlockCpu::BlockCpu(int _length, int _width) : Block( _length, _width ) {
 	for (int i = 0; i < length; ++i)
 		rightBlockBorder[i] = 0;
 
-	/* Внешние границы блока. Сюда будет приходить информация. */
+	/*
+	 * Внешние границы блока.
+	 * Сюда будет приходить информация.
+	 */
 	topExternalBorder = new double[width];
 	for(int i = 0; i < width; i++)
 		topExternalBorder[i] = 0;
@@ -92,6 +100,9 @@ void BlockCpu::prepareData() {
 }
 
 void BlockCpu::courted() {
+	/*
+	 * Теплопроводность
+	 */
 	double dX = 0.5/width;
 	double dY = 1./length;
 
@@ -165,8 +176,6 @@ void BlockCpu::courted() {
 	for(int i = 0; i < length; i++)
 		delete tmp[i];
 	delete tmp;
-
-	//printf("\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n");
 }
 
 void BlockCpu::print(int locationNode) {
