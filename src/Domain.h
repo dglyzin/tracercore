@@ -59,12 +59,12 @@
 
 class Domain {
 public:
-	Domain(int world_rank, int world_size, int blockCount, int borderCount);
+	Domain(int _world_rank, int _world_size, int _blockCount, int _borderCount);
 	virtual ~Domain();
 
-	void calc(int world_rank, int blockCount, int borderCount);
+	void calc();
 
-	void print(int world_rank, int blockCount);
+	void print();
 
 	void readFromFile(std::string path);
 
@@ -86,6 +86,11 @@ private:
 	 * Реальная пересылка произойдет только если вызов пришел с коррекного потока исполения.
 	 */
 	Interconnect** mInterconnects;
+
+	int world_rank;
+	int world_size;
+	int blockCount;
+	int borderCount;
 
 	/*
 	 * Массивы данных о блоках.

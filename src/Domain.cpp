@@ -9,7 +9,12 @@
 
 using namespace std;
 
-Domain::Domain(int world_rank, int world_size, int blockCount, int borderCount) {
+Domain::Domain(int _world_rank, int _world_size, int _blockCount, int _borderCount) {
+	world_rank = _world_rank;
+	world_size = _world_size;
+	blockCount = _blockCount;
+	borderCount = _borderCount;
+
 	setDefaultValue();
 
 	//int countForThread = blockCount / world_size;
@@ -259,7 +264,7 @@ Domain::~Domain() {
 	// TODO Auto-generated destructor stub
 }
 
-void Domain::calc(int world_rank, int blockCount, int borderCount) {
+void Domain::calc() {
 	for (int i = 0; i < blockCount; ++i)
 		if( mBlocks[i]->isRealBlock() ) {
 			mBlocks[i]->courted();
@@ -270,7 +275,7 @@ void Domain::calc(int world_rank, int blockCount, int borderCount) {
 		mInterconnects[i]->sendRecv(world_rank);
 }
 
-void Domain::print(int world_rank, int blockCount) {
+void Domain::print() {
 	if(world_rank == 0) {
 		double** resaultAll = new double* [85];
 		for (int i = 0; i < 85; ++i)
