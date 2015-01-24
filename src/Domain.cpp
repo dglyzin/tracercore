@@ -7,6 +7,8 @@
 
 #include "Domain.h"
 
+using namespace std;
+
 Domain::Domain(int world_rank, int world_size, int blockCount, int borderCount) {
 	setDefaultValue();
 
@@ -299,6 +301,13 @@ void Domain::print(int world_rank, int blockCount) {
 			}
 		}
 	}
+}
+
+void Domain::readFromFile(string path) {
+}
+
+void Domain::readLengthAndWidthArea(ifstream in) {
+
 }
 
 void Domain::setDefaultValue() {

@@ -25,19 +25,19 @@ BlockCpu::BlockCpu(int _length, int _width, int _world_rank) : Block( _length, _
 	 */
 	topBorderType = new int[width];
 	for(int i = 0; i < width; i++)
-		topBorderType[i] = BY_ANOTHER_BLOCK;
+		topBorderType[i] = BY_FUNCTION;
 
 	leftBorderType = new int[length];
 	for (int i = 0; i < length; ++i)
-		leftBorderType[i] = BY_ANOTHER_BLOCK;
+		leftBorderType[i] = BY_FUNCTION;
 
 	bottomBorderType = new int[width];
 	for(int i = 0; i < width; i++)
-		bottomBorderType[i] = BY_ANOTHER_BLOCK;
+		bottomBorderType[i] = BY_FUNCTION;
 
 	rightBorderType = new int[length];
 	for (int i = 0; i < length; ++i)
-		rightBorderType[i] = BY_ANOTHER_BLOCK;
+		rightBorderType[i] = BY_FUNCTION;
 
 	/*
 	 * Границы самого блока.

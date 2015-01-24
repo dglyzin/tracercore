@@ -12,6 +12,8 @@
 #include "BlockCpu.h"
 #include "BlockNull.h"
 
+#include <fstream>
+
 #include <cmath>
 
 #define b0_length 50
@@ -64,6 +66,8 @@ public:
 
 	void print(int world_rank, int blockCount);
 
+	void readFromFile(std::string path);
+
 private:
 	/*
 	 * Массив блоков.
@@ -97,7 +101,15 @@ private:
 
 	MPI_Status status;
 
+	int lengthArea;
+	int widthArea;
+
 	void setDefaultValue();
+
+	void readLengthAndWidthArea(std::ifstream in);
+	Block readBlock(std::ifstream in);
+	void readConnection(std::ifstream in);
+
 };
 
 #endif /* SRC_DOMAIN_H_ */

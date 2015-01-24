@@ -14,6 +14,7 @@
  * Типы границ блока
  */
 enum BORDER_TYPE {BY_ANOTHER_BLOCK, BY_FUNCTION};
+enum BORDER_SIDE {TOP, LEFT, BOTTOM, RIGHT};
 
 /*
  * Класс, отвечающий за обработку данных.
@@ -136,6 +137,11 @@ public:
 	double* getLeftExternalBorder() { return leftExternalBorder; }
 	double* getBottomExternalBorder() { return bottomExternalBorder; }
 	double* getRightExternalBorder() { return rightExternalBorder; }
+
+	virtual void setTopExternalBorder(double* _topExternalBorder) { return; }
+	virtual void setLeftExternalBorder(double* _leftExternalBorder) { return; }
+	virtual void setBottomExternalBorder(double* _borderExternalBorder) { return; }
+	virtual void setRightExternalBorder(double* _rightExternalBorder) { return; }
 };
 
 #endif /* SRC_BLOCK_H_ */
