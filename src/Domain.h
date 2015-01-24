@@ -99,6 +99,8 @@ private:
 	int blockMoveLenght[4];
 	int blockMoveWidth[4];
 
+	int blockThread[4];
+
 	MPI_Status status;
 
 	int lengthArea;

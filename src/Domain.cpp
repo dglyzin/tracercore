@@ -12,30 +12,42 @@ using namespace std;
 Domain::Domain(int world_rank, int world_size, int blockCount, int borderCount) {
 	setDefaultValue();
 
-	int countForThread = blockCount / world_size;
-	mBlocks = new Block* [countForThread];
+	//int countForThread = blockCount / world_size;
+	mBlocks = new Block* [blockCount];
 	mInterconnects = new Interconnect* [borderCount*2];
 
-	for (int i = 0; i < blockCount; ++i)
-		mBlocks[i] = new BlockNull(world_rank);
+	/*for (int i = 0; i < blockCount; ++i)
+		mBlocks[i] = new BlockNull(blockLengthSize[i], blockWidthSize[i], blockMoveLenght[i], blockMoveWidth[i], world_rank);
 
 	for (int i = countForThread*world_rank; i < countForThread*(world_rank + 1); ++i) {
 		delete mBlocks[i];
-		mBlocks[i] = new BlockCpu(blockLengthSize[i], blockWidthSize[i], world_rank);
-	}
+		mBlocks[i] = new BlockCpu(blockLengthSize[i], blockWidthSize[i], blockMoveLenght[i], blockMoveWidth[i], world_rank);
+	}*/
+
+	for (int i = 0; i < blockCount; ++i)
+		if( blockThread[i] == world_rank )
+			mBlocks[i] = new BlockCpu(blockLengthSize[i], blockWidthSize[i], blockMoveLenght[i], blockMoveWidth[i], blockThread[i]);
+		else
+			mBlocks[i] = new BlockNull(blockLengthSize[i], blockWidthSize[i], blockMoveLenght[i], blockMoveWidth[i], blockThread[i]);
 
 	// 1 - 2 node 0/1
-	mInterconnects[0] = new Interconnect(0, 1, CPU, CPU, b1_b2_border_length, mBlocks[1]->getTopBlockBorder() + b1_top_border_move, mBlocks[2]->getBottomExternalBorder() + b2_bottom_border_move);
+	mInterconnects[0] = new Interconnect(mBlocks[1]->getWorldRank(), mBlocks[2]->getWorldRank(), CPU, CPU,
+			b1_b2_border_length, mBlocks[1]->getTopBlockBorder() + b1_top_border_move, mBlocks[2]->getBottomExternalBorder() + b2_bottom_border_move);
 	// 2 - 1 node 1/0
-	mInterconnects[1] = new Interconnect(1, 0, CPU, CPU, b1_b2_border_length, mBlocks[2]->getBottomBlockBorder() + b2_bottom_border_move, mBlocks[1]->getTopExternalBorder() + b1_top_border_move);
+	mInterconnects[1] = new Interconnect(mBlocks[2]->getWorldRank(), mBlocks[1]->getWorldRank(), CPU, CPU,
+			b1_b2_border_length, mBlocks[2]->getBottomBlockBorder() + b2_bottom_border_move, mBlocks[1]->getTopExternalBorder() + b1_top_border_move);
 	// 0 - 1 node 0/0
-	mInterconnects[2] = new Interconnect(0, 0, CPU, CPU, b0_b1_border_length, mBlocks[0]->getRightBlockBorder() + b0_right_border_move, mBlocks[1]->getLeftExternalBorder() + b1_left_border_move);
+	mInterconnects[2] = new Interconnect(mBlocks[0]->getWorldRank(), mBlocks[1]->getWorldRank(), CPU, CPU,
+			b0_b1_border_length, mBlocks[0]->getRightBlockBorder() + b0_right_border_move, mBlocks[1]->getLeftExternalBorder() + b1_left_border_move);
 	// 1 - 0 node 0/0
-	mInterconnects[3] = new Interconnect(0, 0, CPU, CPU, b0_b1_border_length, mBlocks[1]->getLeftBlockBorder() + b1_left_border_move, mBlocks[0]->getRightExternalBorder() + b0_right_border_move);
+	mInterconnects[3] = new Interconnect(mBlocks[1]->getWorldRank(), mBlocks[0]->getWorldRank(), CPU, CPU,
+			b0_b1_border_length, mBlocks[1]->getLeftBlockBorder() + b1_left_border_move, mBlocks[0]->getRightExternalBorder() + b0_right_border_move);
 	// 1 - 3 node 0/1
-	mInterconnects[4] = new Interconnect(0, 1, CPU, CPU, b1_b3_border_length, mBlocks[1]->getRightBlockBorder() + b1_right_border_move, mBlocks[3]->getLeftExternalBorder() + b3_left_border_move);
+	mInterconnects[4] = new Interconnect(mBlocks[1]->getWorldRank(), mBlocks[3]->getWorldRank(), CPU, CPU,
+			b1_b3_border_length, mBlocks[1]->getRightBlockBorder() + b1_right_border_move, mBlocks[3]->getLeftExternalBorder() + b3_left_border_move);
 	// 3 - 1 node 1/0
-	mInterconnects[5] = new Interconnect(1, 0, CPU, CPU, b1_b3_border_length, mBlocks[3]->getLeftBlockBorder() + b3_left_border_move, mBlocks[1]->getRightExternalBorder() + b1_right_border_move);
+	mInterconnects[5] = new Interconnect(mBlocks[3]->getWorldRank(), mBlocks[1]->getWorldRank(), CPU, CPU,
+			b1_b3_border_length, mBlocks[3]->getLeftBlockBorder() + b3_left_border_move, mBlocks[1]->getRightExternalBorder() + b1_right_border_move);
 
 	if( mBlocks[0]->isRealBlock() ) {
 		Block* b = mBlocks[0];
@@ -272,13 +284,13 @@ void Domain::print(int world_rank, int blockCount) {
 			if(mBlocks[i]->isRealBlock()) {
 				double** resault = mBlocks[i]->getResault();
 
-				for (int j = 0; j < blockLengthSize[i]; ++j)
-					for (int k = 0; k < blockWidthSize[i]; ++k)
+				for (int j = 0; j < mBlocks[i]->getLength(); ++j)
+					for (int k = 0; k < mBlocks[i]->getWidth(); ++k)
 						resaultAll[j + blockMoveLenght[i]][k + blockMoveWidth[i]] = resault[j][k];
 			}
 			else
-				for (int j = 0; j < blockLengthSize[i]; ++j)
-					MPI_Recv(resaultAll[j + blockMoveLenght[i]] + blockMoveWidth[i], blockWidthSize[i], MPI_DOUBLE, i/2, 999, MPI_COMM_WORLD, &status);
+				for (int j = 0; j < mBlocks[i]->getLength(); ++j)
+					MPI_Recv(resaultAll[j + mBlocks[i]->getLenghtMove()] + mBlocks[i]->getWidthMove(), mBlocks[i]->getWidth(), MPI_DOUBLE, mBlocks[i]->getWorldRank(), 999, MPI_COMM_WORLD, &status);
 		}
 
 		FILE* out = fopen("res", "wb");
@@ -296,8 +308,8 @@ void Domain::print(int world_rank, int blockCount) {
 			if(mBlocks[i]->isRealBlock()) {
 				double** resault = mBlocks[i]->getResault();
 
-				for (int j = 0; j < blockLengthSize[i]; ++j)
-					MPI_Send(resault[j], blockWidthSize[i], MPI_DOUBLE, 0, 999, MPI_COMM_WORLD);
+				for (int j = 0; j < mBlocks[i]->getLength(); ++j)
+					MPI_Send(resault[j], mBlocks[i]->getWidth(), MPI_DOUBLE, 0, 999, MPI_COMM_WORLD);
 			}
 		}
 	}
@@ -330,5 +342,10 @@ void Domain::setDefaultValue() {
 	blockMoveWidth[1] = b1_moveW;
 	blockMoveWidth[2] = b2_moveW;
 	blockMoveWidth[3] = b3_moveW;
+
+	blockThread[0] = 1;
+	blockThread[1] = 1;
+	blockThread[2] = 0;
+	blockThread[3] = 0;
 }
 

@@ -12,17 +12,7 @@ Block::Block() {
 
 	world_rank = 0;
 
-	topBorderType = leftBorderType = bottomBorderType = rightBorderType = NULL;
-	topBlockBorder = leftBlockBorder = bottomBlockBorder = rightBlockBorder = NULL;
-	topExternalBorder = leftExternalBorder = bottomExternalBorder = rightExternalBorder = NULL;
-
-	matrix = NULL;
-}
-
-Block::Block(int _world_rank) {
-	world_rank = _world_rank;
-
-	length = width = 0;
+	lenghtMove = widthMove = 0;
 
 	topBorderType = leftBorderType = bottomBorderType = rightBorderType = NULL;
 	topBlockBorder = leftBlockBorder = bottomBlockBorder = rightBlockBorder = NULL;
@@ -31,9 +21,12 @@ Block::Block(int _world_rank) {
 	matrix = NULL;
 }
 
-Block::Block(int _length, int _width, int _world_rank) {
+Block::Block(int _length, int _width, int _lengthMove, int _widthMove, int _world_rank) {
 	length = _length;
 	width = _width;
+
+	lenghtMove = _lengthMove;
+	widthMove = _widthMove;
 
 	world_rank = _world_rank;
 

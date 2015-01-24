@@ -9,7 +9,7 @@
 
 using namespace std;
 
-BlockCpu::BlockCpu(int _length, int _width, int _world_rank) : Block( _length, _width, _world_rank ) {
+BlockCpu::BlockCpu(int _length, int _width, int _lengthMove, int _widthMove, int _world_rank) : Block(  _length, _width, _lengthMove, _widthMove, _world_rank  ) {
 
 	matrix = new double* [length];
 

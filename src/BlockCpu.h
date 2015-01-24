@@ -16,7 +16,7 @@
 
 class BlockCpu: public Block {
 public:
-	BlockCpu(int _length, int _width, int _world_rank);
+	BlockCpu(int _length, int _width, int _lengthMove, int _widthMove, int _world_rank);
 
 	virtual ~BlockCpu();
 
@@ -24,6 +24,8 @@ public:
 	bool isRealBlock() { return true; }
 
 	void courted();
+
+	int getBlockType() { return CPU; }
 
 	void print(int locationNode);
 	void printMatrix();

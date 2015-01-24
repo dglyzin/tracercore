@@ -10,11 +10,7 @@
 
 #include <stdio.h>
 
-/*
- * Типы границ блока
- */
-enum BORDER_TYPE {BY_ANOTHER_BLOCK, BY_FUNCTION};
-enum BORDER_SIDE {TOP, LEFT, BOTTOM, RIGHT};
+#include "Enums.h"
 
 /*
  * Класс, отвечающий за обработку данных.
@@ -37,6 +33,12 @@ protected:
 	 */
 	int length;
 	int width;
+
+	/*
+	 * Координаты блока в области
+	 */
+	int lenghtMove;
+	int widthMove;
 
 	/*
 	 * Номер потока исполнения, на котором работает этот блок
@@ -82,8 +84,7 @@ protected:
 
 public:
 	Block();
-	Block(int _world_rank);
-	Block(int _length, int _width, int _world_rank);
+	Block(int _length, int _width, int _lengthMove, int _widthMove, int _world_rank);
 	virtual ~Block();
 
 	/*
@@ -107,6 +108,11 @@ public:
 	virtual void courted() { return; }
 
 	/*
+	 * Возвращает тип блока.
+	 */
+	virtual int getBlockType() { return CPU; }
+
+	/*
 	 * Печатает информацию о блоке на консоль.
 	 */
 	virtual void print(int locationNode) { return; }
@@ -120,6 +126,9 @@ public:
 
 	int getLength() { return length; }
 	int getWidth() { return width; }
+
+	int getLenghtMove() { return lenghtMove; }
+	int getWidthMove() { return widthMove; }
 
 	int getWorldRank() { return world_rank; }
 
@@ -142,6 +151,42 @@ public:
 	virtual void setLeftExternalBorder(double* _leftExternalBorder) { return; }
 	virtual void setBottomExternalBorder(double* _borderExternalBorder) { return; }
 	virtual void setRightExternalBorder(double* _rightExternalBorder) { return; }
+
+	/*virtual void createTopBorderType() { topBorderType = NULL; }
+	virtual void createLeftBorderType() { leftBorderType = NULL; }
+	virtual void createBottomBorderType() { bottomBorderType = NULL; }
+	virtual void createRightBorderType() { rightBorderType = NULL; }
+
+	void createBorderType() {
+		createTopBorderType();
+		createLeftBorderType();
+		createBottomBorderType();
+		createRightBorderType();
+	}*/
+
+	virtual void createTopBlockBorder(int neighborType) { topBlockBorder = NULL; }
+	virtual void createLeftBlockBorder(int neighborType) { leftBlockBorder = NULL; }
+	virtual void createBottomBlockBorder(int neighborType) { bottomBlockBorder = NULL; }
+	virtual void createRightBlockBorder(int neighborType) { rightBlockBorder = NULL; }
+
+	void createBlockBorder( int topNeighborType, int leftNeighborType, int bottonNeighborType, int rightNeighborType ) {
+		createTopBlockBorder(topNeighborType);
+		createLeftBlockBorder(leftNeighborType);
+		createBottomBlockBorder(bottonNeighborType);
+		createRightBlockBorder(rightNeighborType);
+	}
+/*
+	virtual void createTopExteranalBroder() { topExternalBorder = NULL; }
+	virtual void createLeftExternalBorder() { leftExternalBorder = NULL; }
+	virtual void createBottomExternalBorder() { bottomExternalBorder = NULL; }
+	virtual void createRightExternalBorder() { rightExternalBorder = NULL; }
+
+	void createExternalBorder() {
+		createTopExteranalBroder();
+		createLeftExternalBorder();
+		createBottomExternalBorder();
+		createRightExternalBorder();
+	}*/
 };
 
 #endif /* SRC_BLOCK_H_ */
