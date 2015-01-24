@@ -9,17 +9,17 @@
 
 using namespace std;
 
-Domain::Domain(int _world_rank, int _world_size, int _blockCount, int _borderCount) {
+Domain::Domain(int _world_rank, int _world_size, int _blockCount, int _connectionCount) {
 	world_rank = _world_rank;
 	world_size = _world_size;
 	blockCount = _blockCount;
-	borderCount = _borderCount;
+	connectionCount = _connectionCount;
 
 	setDefaultValue();
 
 	//int countForThread = blockCount / world_size;
 	mBlocks = new Block* [blockCount];
-	mInterconnects = new Interconnect* [borderCount*2];
+	mInterconnects = new Interconnect* [connectionCount];
 
 	/*for (int i = 0; i < blockCount; ++i)
 		mBlocks[i] = new BlockNull(blockLengthSize[i], blockWidthSize[i], blockMoveLenght[i], blockMoveWidth[i], world_rank);
@@ -271,18 +271,18 @@ void Domain::calc() {
 			mBlocks[i]->prepareData();
 		}
 
-	for (int i = 0; i < borderCount*2; ++i)
+	for (int i = 0; i < connectionCount; ++i)
 		mInterconnects[i]->sendRecv(world_rank);
 }
 
 void Domain::print() {
 	if(world_rank == 0) {
-		double** resaultAll = new double* [85];
-		for (int i = 0; i < 85; ++i)
-			resaultAll[i] = new double[100];
+		double** resaultAll = new double* [lengthArea];
+		for (int i = 0; i < lengthArea; ++i)
+			resaultAll[i] = new double[widthArea];
 
-		for (int i = 0; i < 85; ++i)
-			for (int j = 0; j < 100; ++j)
+		for (int i = 0; i < lengthArea; ++i)
+			for (int j = 0; j < widthArea; ++j)
 				resaultAll[i][j] = 0;
 
 		for (int i = 0; i < blockCount; ++i) {
@@ -300,8 +300,8 @@ void Domain::print() {
 
 		FILE* out = fopen("res", "wb");
 
-		for (int i = 0; i < 85; ++i) {
-			for (int j = 0; j < 100; ++j)
+		for (int i = 0; i < lengthArea; ++i) {
+			for (int j = 0; j < widthArea; ++j)
 				fprintf(out, "%d %d %f\n", i, j, resaultAll[i][j]);
 			fprintf(out, "\n");
 		}
@@ -320,11 +320,85 @@ void Domain::print() {
 	}
 }
 
-void Domain::readFromFile(string path) {
+void Domain::readFromFile(char* path) {
+	ifstream in;
+	in.open(path);
+
+	readLengthAndWidthArea(in);
+	in >> blockCount;
+
+	mBlocks = new Block* [blockCount];
+
+	for (int i = 0; i < blockCount; ++i)
+		mBlocks[i] = readBlock(in);
+
+	/*for (int i = 0; i < blockCount; ++i)
+		mBlocks[i]->print(world_rank);*/
+
+	in >> connectionCount;
+
+	mInterconnects = new Interconnect* [connectionCount];
+
+	for (int i = 0; i < connectionCount; ++i)
+		readConnection(in);
 }
 
-void Domain::readLengthAndWidthArea(ifstream in) {
+void Domain::readLengthAndWidthArea(ifstream& in) {
+	in >> lengthArea;
+	in >> widthArea;
+}
 
+Block* Domain::readBlock(ifstream& in) {
+	int length;
+	int width;
+
+	int lengthMove;
+	int widthMove;
+
+	int word_rank_creator;
+
+	in >> length;
+	in >> width;
+
+	in >> lengthMove;
+	in >> widthMove;
+
+	in >> word_rank_creator;
+
+	// TODO добавить нужный конструктор классам. реализовать иную схему получения блоков
+	if(word_rank_creator == world_rank)
+		return new BlockCpu(length, width, lengthMove, widthMove, word_rank_creator);
+	else
+		return new BlockNull(length, width, lengthMove, widthMove, word_rank_creator);
+}
+
+Interconnect* Domain::readConnection(ifstream& in) {
+	int source;
+	int destination;
+
+	char borderSide;
+
+	int connectionMove;
+	int borderLength;
+
+	in >> source;
+	in >> destination;
+	in >> borderSide;
+	in >> connectionMove;
+	in >> borderLength;
+
+	int* border;
+
+	/*switch (borderSide) {
+		case 't':
+			border = mBlocks[source]->getTopBorderType();
+			for (int i = 0; i < borderLength; ++i)
+				border[i + connectionMove] = BY_ANOTHER_BLOCK;
+			return new Interconnect(mBlocks[source]->getWorldRank(), mBlocks[destination]->getWorldRank(), mBlocks[source]->getBlockType(), mBlocks[destination]->getBlockType(),
+					borderLength, mBlocks[source]->getTopExternalBorder(), mBlocks[destination]->getBottomBlockBorder());
+		default:
+			break;
+	}*/
 }
 
 void Domain::setDefaultValue() {

@@ -37,17 +37,18 @@ int main(int argc, char * argv[]) {
 	 * Создание основного управляющего класса.
 	 */
 	Domain *d = new Domain(world_rank, world_size, 4, 3);
+	d->readFromFile("test");
 
 	/*
 	 * Вычисления.
 	 */
-	for (int i = 0; i < repeatCount; ++i)
-		d->calc();
+	/*for (int i = 0; i < repeatCount; ++i)
+		d->calc();*/
 
 	/*
 	 * Сбор и вывод результата.
 	 */
-	d->print();
+	/*d->print();*/
 
 	MPI_Finalize();
 }

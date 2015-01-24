@@ -13,6 +13,7 @@
 #include "BlockNull.h"
 
 #include <fstream>
+#include <string.h>
 
 #include <cmath>
 
@@ -52,6 +53,9 @@
 #define b1_b2_border_length 25
 #define b1_b3_border_length 25
 
+#define areaLength 85
+#define areaWidth 100
+
 /*
  * Основной управляющий класс приложения.
  * Создает блоки (BlockCpu, BlockGpu, BlockNull) и их соединения (Interconnect).
@@ -59,14 +63,14 @@
 
 class Domain {
 public:
-	Domain(int _world_rank, int _world_size, int _blockCount, int _borderCount);
+	Domain(int _world_rank, int _world_size, int _blockCount, int _connectionCount);
 	virtual ~Domain();
 
 	void calc();
 
 	void print();
 
-	void readFromFile(std::string path);
+	void readFromFile(char* path);
 
 private:
 	/*
@@ -90,7 +94,7 @@ private:
 	int world_rank;
 	int world_size;
 	int blockCount;
-	int borderCount;
+	int connectionCount;
 
 	/*
 	 * Массивы данных о блоках.
@@ -113,9 +117,9 @@ private:
 
 	void setDefaultValue();
 
-	void readLengthAndWidthArea(std::ifstream in);
-	Block readBlock(std::ifstream in);
-	void readConnection(std::ifstream in);
+	void readLengthAndWidthArea(std::ifstream& in);
+	Block* readBlock(std::ifstream& in);
+	Interconnect* readConnection(std::ifstream& in);
 
 };
 
