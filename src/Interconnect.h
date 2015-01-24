@@ -34,6 +34,8 @@ public:
 	 */
 	void sendRecv(int locationNode);
 
+	void print(int locationNode);
+
 private:
 	/*
 	 * Номер потока с исходными данными

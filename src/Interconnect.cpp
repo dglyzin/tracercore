@@ -53,3 +53,8 @@ void Interconnect::sendRecv(int locationNode) {
 		return;
 	}
 }
+
+void Interconnect::print(int locationNode) {
+	printf("\nInterconnect\n");
+	printf("\nnode %d, source %d, dest %d\n", locationNode, sourceLocationNode, destinationLocationNode);
+}
