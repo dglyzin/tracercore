@@ -65,19 +65,19 @@ BlockCpu::BlockCpu(int _length, int _width, int _lengthMove, int _widthMove, int
 	 */
 	topExternalBorder = new double[width];
 	for(int i = 0; i < width; i++)
-		topExternalBorder[i] = 0;
+		topExternalBorder[i] = 100;
 
 	leftExternalBorder = new double[length];
 	for (int i = 0; i < length; ++i)
-		leftExternalBorder[i] = 0;
+		leftExternalBorder[i] = 10;
 
 	bottomExternalBorder = new double[width];
 	for(int i = 0; i < width; i++)
-		bottomExternalBorder[i] = 0;
+		bottomExternalBorder[i] = 100;
 
 	rightExternalBorder = new double[length];
 	for (int i = 0; i < length; ++i)
-		rightExternalBorder[i] = 0;
+		rightExternalBorder[i] = 10;
 }
 
 BlockCpu::~BlockCpu() {
@@ -181,7 +181,7 @@ void BlockCpu::courted() {
 void BlockCpu::print(int locationNode) {
 	printf("FROM NODE #%d", locationNode);
 
-	printf("\nLength: %d, Width: %d, World_Rank: %d\n", length, width, world_rank);
+	printf("\nLength: %d, Width: %d, World_Rank: %d\n", length, width, nodeNumber);
 
 	printf("\nMatrix:\n");
 	for (int i = 0; i < length; ++i)

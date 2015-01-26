@@ -10,7 +10,7 @@
 Block::Block() {
 	length = width = 0;
 
-	world_rank = 0;
+	nodeNumber = 0;
 
 	lenghtMove = widthMove = 0;
 
@@ -21,14 +21,14 @@ Block::Block() {
 	matrix = NULL;
 }
 
-Block::Block(int _length, int _width, int _lengthMove, int _widthMove, int _world_rank) {
+Block::Block(int _length, int _width, int _lengthMove, int _widthMove, int _nodeNumber) {
 	length = _length;
 	width = _width;
 
 	lenghtMove = _lengthMove;
 	widthMove = _widthMove;
 
-	world_rank = _world_rank;
+	nodeNumber = _nodeNumber;
 
 	topBorderType = leftBorderType = bottomBorderType = rightBorderType = NULL;
 	topBlockBorder = leftBlockBorder = bottomBlockBorder = rightBlockBorder = NULL;

@@ -63,12 +63,12 @@
 
 class Domain {
 public:
-	Domain(int _world_rank, int _world_size, int _blockCount, int _connectionCount);
+	Domain(int _world_rank, int _world_size, char* path);
 	virtual ~Domain();
 
 	void calc();
 
-	void print();
+	void print(char* path);
 
 	void readFromFile(char* path);
 
@@ -102,13 +102,13 @@ private:
 	 * TODO
 	 * Сделать подгрузку с файлов
 	 */
-	int blockLengthSize[4];
+	/*int blockLengthSize[4];
 	int blockWidthSize[4];
 
 	int blockMoveLenght[4];
 	int blockMoveWidth[4];
 
-	int blockThread[4];
+	int blockThread[4];*/
 
 	MPI_Status status;
 

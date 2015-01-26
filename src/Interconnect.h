@@ -22,7 +22,7 @@ class Interconnect {
 public:
 	Interconnect(int _sourceLocationNode, int _destinationLocationNode,
 			int _sourceType, int _destinationType,
-			int _lengthBorder,
+			int _borderLength,
 			double* _sourceBlockBorder, double* _destinationExternalBorder);
 	virtual ~Interconnect();
 
@@ -61,7 +61,7 @@ private:
 	 * Длина пересылаемого блока.
 	 * Длина границы между блоками.
 	 */
-	int lengthBorder;
+	int borderLength;
 
 	/*
 	 * Указатель на массив с исходными данными.

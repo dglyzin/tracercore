@@ -43,7 +43,7 @@ protected:
 	/*
 	 * Номер потока исполнения, на котором работает этот блок
 	 */
-	int world_rank;
+	int nodeNumber;
 
 	/*
 	 * Тип границы блока.
@@ -84,7 +84,7 @@ protected:
 
 public:
 	Block();
-	Block(int _length, int _width, int _lengthMove, int _widthMove, int _world_rank);
+	Block(int _length, int _width, int _lengthMove, int _widthMove, int _nodeNumber);
 	virtual ~Block();
 
 	/*
@@ -130,7 +130,7 @@ public:
 	int getLenghtMove() { return lenghtMove; }
 	int getWidthMove() { return widthMove; }
 
-	int getWorldRank() { return world_rank; }
+	int getNodeNumber() { return nodeNumber; }
 
 	int* getTopBorderType() { return topBorderType; }
 	int* getLeftBorderType() { return leftBorderType; }

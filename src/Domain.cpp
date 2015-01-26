@@ -9,17 +9,21 @@
 
 using namespace std;
 
-Domain::Domain(int _world_rank, int _world_size, int _blockCount, int _connectionCount) {
+Domain::Domain(int _world_rank, int _world_size, char* path) {
 	world_rank = _world_rank;
 	world_size = _world_size;
-	blockCount = _blockCount;
-	connectionCount = _connectionCount;
 
-	setDefaultValue();
+	readFromFile(path);
+	printf("\n************\n");
+
+	/*blockCount = _blockCount;
+	connectionCount = _connectionCount;*/
+
+	//setDefaultValue();
 
 	//int countForThread = blockCount / world_size;
-	mBlocks = new Block* [blockCount];
-	mInterconnects = new Interconnect* [connectionCount];
+	//mBlocks = new Block* [blockCount];
+	//mInterconnects = new Interconnect* [connectionCount];
 
 	/*for (int i = 0; i < blockCount; ++i)
 		mBlocks[i] = new BlockNull(blockLengthSize[i], blockWidthSize[i], blockMoveLenght[i], blockMoveWidth[i], world_rank);
@@ -29,12 +33,12 @@ Domain::Domain(int _world_rank, int _world_size, int _blockCount, int _connectio
 		mBlocks[i] = new BlockCpu(blockLengthSize[i], blockWidthSize[i], blockMoveLenght[i], blockMoveWidth[i], world_rank);
 	}*/
 
-	for (int i = 0; i < blockCount; ++i)
+	/*for (int i = 0; i < blockCount; ++i)
 		if( blockThread[i] == world_rank )
 			mBlocks[i] = new BlockCpu(blockLengthSize[i], blockWidthSize[i], blockMoveLenght[i], blockMoveWidth[i], blockThread[i]);
 		else
-			mBlocks[i] = new BlockNull(blockLengthSize[i], blockWidthSize[i], blockMoveLenght[i], blockMoveWidth[i], blockThread[i]);
-
+			mBlocks[i] = new BlockNull(blockLengthSize[i], blockWidthSize[i], blockMoveLenght[i], blockMoveWidth[i], blockThread[i]);*/
+/*
 	// 1 - 2 node 0/1
 	mInterconnects[0] = new Interconnect(mBlocks[1]->getWorldRank(), mBlocks[2]->getWorldRank(), CPU, CPU,
 			b1_b2_border_length, mBlocks[1]->getTopBlockBorder() + b1_top_border_move, mBlocks[2]->getBottomExternalBorder() + b2_bottom_border_move);
@@ -53,8 +57,9 @@ Domain::Domain(int _world_rank, int _world_size, int _blockCount, int _connectio
 	// 3 - 1 node 1/0
 	mInterconnects[5] = new Interconnect(mBlocks[3]->getWorldRank(), mBlocks[1]->getWorldRank(), CPU, CPU,
 			b1_b3_border_length, mBlocks[3]->getLeftBlockBorder() + b3_left_border_move, mBlocks[1]->getRightExternalBorder() + b1_right_border_move);
+			*/
 
-	if( mBlocks[0]->isRealBlock() ) {
+	/*if( mBlocks[0]->isRealBlock() ) {
 		Block* b = mBlocks[0];
 
 		int* topBorderType = b->getTopBorderType();
@@ -257,7 +262,7 @@ Domain::Domain(int _world_rank, int _world_size, int _blockCount, int _connectio
 			leftExternalBorder[i] = 10;
 			rightExternalBorder[i] = 10;
 		}
-	}
+	}*/
 }
 
 Domain::~Domain() {
@@ -273,9 +278,18 @@ void Domain::calc() {
 
 	for (int i = 0; i < connectionCount; ++i)
 		mInterconnects[i]->sendRecv(world_rank);
+
+	if(world_rank == 0)
+		for (int i = 0; i < blockCount; ++i) {
+			mBlocks[i]->print(world_rank);
+			char c;
+			scanf("%c", &c);
+		}
+
+
 }
 
-void Domain::print() {
+void Domain::print(char* path) {
 	if(world_rank == 0) {
 		double** resaultAll = new double* [lengthArea];
 		for (int i = 0; i < lengthArea; ++i)
@@ -291,14 +305,14 @@ void Domain::print() {
 
 				for (int j = 0; j < mBlocks[i]->getLength(); ++j)
 					for (int k = 0; k < mBlocks[i]->getWidth(); ++k)
-						resaultAll[j + blockMoveLenght[i]][k + blockMoveWidth[i]] = resault[j][k];
+						resaultAll[j + mBlocks[i]->getLenghtMove()][k + mBlocks[i]->getWidthMove()] = resault[j][k];
 			}
 			else
 				for (int j = 0; j < mBlocks[i]->getLength(); ++j)
-					MPI_Recv(resaultAll[j + mBlocks[i]->getLenghtMove()] + mBlocks[i]->getWidthMove(), mBlocks[i]->getWidth(), MPI_DOUBLE, mBlocks[i]->getWorldRank(), 999, MPI_COMM_WORLD, &status);
+					MPI_Recv(resaultAll[j + mBlocks[i]->getLenghtMove()] + mBlocks[i]->getWidthMove(), mBlocks[i]->getWidth(), MPI_DOUBLE, mBlocks[i]->getNodeNumber(), 999, MPI_COMM_WORLD, &status);
 		}
 
-		FILE* out = fopen("res", "wb");
+		FILE* out = fopen(path, "wb");
 
 		for (int i = 0; i < lengthArea; ++i) {
 			for (int j = 0; j < widthArea; ++j)
@@ -332,7 +346,8 @@ void Domain::readFromFile(char* path) {
 	for (int i = 0; i < blockCount; ++i)
 		mBlocks[i] = readBlock(in);
 
-	/*for (int i = 0; i < blockCount; ++i)
+	/*if(world_rank == 0)
+	for (int i = 0; i < blockCount; ++i)
 		mBlocks[i]->print(world_rank);*/
 
 	in >> connectionCount;
@@ -342,8 +357,13 @@ void Domain::readFromFile(char* path) {
 	for (int i = 0; i < connectionCount; ++i)
 		mInterconnects[i] = readConnection(in);
 
+	/*if(world_rank == 1)
 	for (int i = 0; i < connectionCount; ++i)
 		mInterconnects[i]->print(world_rank);
+
+	if(world_rank == 1)
+	for (int i = 0; i < blockCount; ++i)
+		mBlocks[i]->print(world_rank);*/
 }
 
 void Domain::readLengthAndWidthArea(ifstream& in) {
@@ -396,49 +416,66 @@ Interconnect* Domain::readConnection(ifstream& in) {
 	in >> borderLength;
 
 	int* borderType;
-	Block* sourceBlock = mBlocks[source];
-	Block* destinationBlock = mBlocks[destination];
+
+	int sourceNode = mBlocks[source]->getNodeNumber();
+	int destinationNode = mBlocks[destination]->getNodeNumber();
+
+	int sourceType = mBlocks[source]->getBlockType();
+	int destionationType = mBlocks[destination]->getBlockType();
+
+	double* sourceData;
+	double* destinationData;
+
+	//printf("\nsource %d, dest %d, borderSide %c, sMove %d, dMove %d, bL %d\n", source, destination, borderSide, connectionSourceMove, connectionDestinationMove, borderLength);
 
 	switch (borderSide) {
 		case 't':
-			borderType = destinationBlock->getTopBorderType();
-			for (int i = 0; i < borderLength; ++i)
-				borderType[i + connectionDestinationMove] = BY_ANOTHER_BLOCK;
+			borderType = mBlocks[destination]->getTopBorderType();
 
-			return new Interconnect(sourceBlock->getWorldRank(), destinationBlock->getWorldRank(), sourceBlock->getBlockType(), destinationBlock->getBlockType(),
-					borderLength, sourceBlock->getBottomBlockBorder() + connectionSourceMove, destinationBlock->getTopExternalBorder() + connectionDestinationMove);
+			sourceData = mBlocks[source]->getBottomBlockBorder() + connectionSourceMove;
+			destinationData = mBlocks[destination]->getTopExternalBorder() + connectionDestinationMove;
+
+			break;
 
 		case 'l':
-			borderType = destinationBlock->getLeftBorderType();
-			for (int i = 0; i < borderLength; ++i)
-				borderType[i + connectionDestinationMove] = BY_ANOTHER_BLOCK;
+			borderType = mBlocks[destination]->getLeftBorderType();
 
-			return new Interconnect(sourceBlock->getWorldRank(), destinationBlock->getWorldRank(), sourceBlock->getBlockType(), destinationBlock->getBlockType(),
-					borderLength, sourceBlock->getRightBlockBorder() + connectionSourceMove, destinationBlock->getLeftExternalBorder() + connectionDestinationMove);
+			sourceData = mBlocks[source]->getRightBlockBorder() + connectionSourceMove;
+			destinationData = mBlocks[destination]->getLeftExternalBorder() + connectionDestinationMove;
+
+			break;
 
 		case 'b':
-			borderType = destinationBlock->getBottomBorderType();
-			for (int i = 0; i < borderLength; ++i)
-				borderType[i + connectionDestinationMove] = BY_ANOTHER_BLOCK;
+			borderType = mBlocks[destination]->getBottomBorderType();
 
-			return new Interconnect(sourceBlock->getWorldRank(), destinationBlock->getWorldRank(), sourceBlock->getBlockType(), destinationBlock->getBlockType(),
-					borderLength, sourceBlock->getTopBlockBorder() + connectionSourceMove, destinationBlock->getBottomExternalBorder() + connectionDestinationMove);
+			sourceData = mBlocks[source]->getTopBlockBorder() + connectionSourceMove;
+			destinationData = mBlocks[destination]->getBottomExternalBorder() + connectionDestinationMove;
+
+			break;
 
 		case 'r':
-			borderType = destinationBlock->getRightBorderType();
-			for (int i = 0; i < borderLength; ++i)
-				borderType[i + connectionDestinationMove] = BY_ANOTHER_BLOCK;
+			borderType = mBlocks[destination]->getRightBorderType();
 
-			return new Interconnect(sourceBlock->getWorldRank(), destinationBlock->getWorldRank(), sourceBlock->getBlockType(), destinationBlock->getBlockType(),
-					borderLength, sourceBlock->getLeftBlockBorder() + connectionSourceMove, destinationBlock->getRightExternalBorder() + connectionDestinationMove);
+			sourceData = mBlocks[source]->getLeftBlockBorder() + connectionSourceMove;
+			destinationData = mBlocks[destination]->getRightExternalBorder() + connectionDestinationMove;
+
+			break;
+
 		default:
 			// TODO Рассматривать случай?
 			return NULL;
 	}
+
+	// TODO maybe isRealBlock?
+	if(world_rank == mBlocks[destination]->getNodeNumber())
+		for (int i = 0; i < borderLength; ++i)
+			borderType[i + connectionDestinationMove] = BY_ANOTHER_BLOCK;
+
+	return new Interconnect(sourceNode, destinationNode, sourceType, destionationType, borderLength, sourceData, destinationData);
 }
 
 void Domain::setDefaultValue() {
-	blockLengthSize[0] = b0_length;
+	/*blockLengthSize[0] = b0_length;
 	blockLengthSize[1] = b1_length;
 	blockLengthSize[2] = b2_length;
 	blockLengthSize[3] = b3_length;
@@ -461,6 +498,6 @@ void Domain::setDefaultValue() {
 	blockThread[0] = 1;
 	blockThread[1] = 1;
 	blockThread[2] = 0;
-	blockThread[3] = 0;
+	blockThread[3] = 0;*/
 }
 
