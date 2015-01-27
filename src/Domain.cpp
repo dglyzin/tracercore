@@ -20,7 +20,22 @@ Domain::~Domain() {
 	// TODO Auto-generated destructor stub
 }
 
-void Domain::calc() {
+void Domain::count() {
+	double dX = 1./areaWidth;
+	double dY = 1./areaLength;
+
+	double dX2 = dX * dX;
+	double dY2 = dY * dY;
+
+	double dT = ( dX2 * dY2 ) / ( 2 * ( dX2 + dY2 ) );
+
+	int repeatCount = (int)(1 / dT) + 1;
+
+	for (int i = 0; i < repeatCount; ++i)
+		nextStep(dX2, dY2, dT);
+}
+
+void Domain::nextStep(double dX2, double dY2, double dT) {
 	for (int i = 0; i < blockCount; ++i)
 		mBlocks[i]->prepareData();
 
@@ -28,7 +43,7 @@ void Domain::calc() {
 		mInterconnects[i]->sendRecv(world_rank);
 
 	for (int i = 0; i < blockCount; ++i)
-		mBlocks[i]->courted(1./areaWidth, 1./areaLength);
+		mBlocks[i]->courted(dX2, dY2, dT);
 }
 
 void Domain::print(char* path) {

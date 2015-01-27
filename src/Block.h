@@ -9,6 +9,7 @@
 #define SRC_BLOCK_H_
 
 #include <stdio.h>
+#include <cmath>
 
 #include "Enums.h"
 
@@ -105,7 +106,7 @@ public:
 	 * TODO
 	 * Реализовать работу по заданной из вне функции.
 	 */
-	virtual void courted(double dX, double dY) { return; }
+	virtual void courted(double dX2, double dY2, double dT) { return; }
 
 	/*
 	 * Возвращает тип блока.

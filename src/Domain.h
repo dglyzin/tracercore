@@ -15,8 +15,6 @@
 #include <fstream>
 #include <string.h>
 
-#include <cmath>
-
 #define b0_length 50
 #define b0_width 25
 #define b0_moveL 35
@@ -66,7 +64,8 @@ public:
 	Domain(int _world_rank, int _world_size, char* path);
 	virtual ~Domain();
 
-	void calc();
+	void count();
+	void nextStep(double dX, double dY, double dT);
 
 	void print(char* path);
 

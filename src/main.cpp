@@ -31,23 +31,21 @@ int main(int argc, char * argv[]) {
 	 * Количество итераций вычисления.
 	 * В будущем должна стать вычисляемой вличиной.
 	 */
-	int repeatCount = atoi(argv[1]);
 
 	/*
 	 * Создание основного управляющего класса.
 	 */
-	Domain *d = new Domain(world_rank, world_size, argv[2]);
+	Domain *d = new Domain(world_rank, world_size, argv[1]);
 
 	/*
 	 * Вычисления.
 	 */
-	for (int i = 0; i < repeatCount; ++i)
-		d->calc();
+	d->count();
 
 	/*
 	 * Сбор и вывод результата.
 	 */
-	d->print(argv[3]);
+	d->print(argv[2]);
 
 	MPI_Finalize();
 }
