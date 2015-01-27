@@ -271,22 +271,53 @@ Domain::~Domain() {
 
 void Domain::calc() {
 	for (int i = 0; i < blockCount; ++i)
-		if( mBlocks[i]->isRealBlock() ) {
-			mBlocks[i]->courted();
-			mBlocks[i]->prepareData();
-		}
+		mBlocks[i]->prepareData();
 
 	for (int i = 0; i < connectionCount; ++i)
 		mInterconnects[i]->sendRecv(world_rank);
 
-	if(world_rank == 0)
-		for (int i = 0; i < blockCount; ++i) {
+	for (int i = 0; i < blockCount; ++i)
+		mBlocks[i]->courted(1./areaWidth, 1./areaLength);
+
+	char c;
+
+	/*if(world_rank == 0) {
+		for (int i = 0; i < blockCount; ++i)
 			mBlocks[i]->print(world_rank);
-			char c;
-			scanf("%c", &c);
-		}
 
+		scanf("%c", &c);
+	}
+	else
+		scanf("%c", &c);
 
+	if(world_rank == 1) {
+		for (int i = 0; i < blockCount; ++i)
+			mBlocks[i]->print(world_rank);
+
+		scanf("%c", &c);
+	}
+	else
+		scanf("%c", &c);
+
+	if(world_rank == 2) {
+		for (int i = 0; i < blockCount; ++i)
+			mBlocks[i]->print(world_rank);
+
+		scanf("%c", &c);
+	}
+	else
+		scanf("%c", &c);
+
+	if(world_rank == 3) {
+		for (int i = 0; i < blockCount; ++i)
+			mBlocks[i]->print(world_rank);
+
+		scanf("%c", &c);
+	}
+	else
+		scanf("%c", &c);*/
+	//print("");
+	//scanf("%c", &c);
 }
 
 void Domain::print(char* path) {
@@ -315,9 +346,14 @@ void Domain::print(char* path) {
 		FILE* out = fopen(path, "wb");
 
 		for (int i = 0; i < lengthArea; ++i) {
-			for (int j = 0; j < widthArea; ++j)
+			for (int j = 0; j < widthArea; ++j) {
 				fprintf(out, "%d %d %f\n", i, j, resaultAll[i][j]);
+				/*if( j % (widthArea / world_size) == 0)
+					printf("\t");
+				printf("%6.1f", resaultAll[i][j]);*/
+			}
 			fprintf(out, "\n");
+			//printf("\n");
 		}
 
 		fclose(out);

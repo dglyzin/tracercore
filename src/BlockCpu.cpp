@@ -73,7 +73,7 @@ BlockCpu::BlockCpu(int _length, int _width, int _lengthMove, int _widthMove, int
 
 	bottomExternalBorder = new double[width];
 	for(int i = 0; i < width; i++)
-		bottomExternalBorder[i] = 100;
+		bottomExternalBorder[i] = 10;
 
 	rightExternalBorder = new double[length];
 	for (int i = 0; i < length; ++i)
@@ -99,12 +99,10 @@ void BlockCpu::prepareData() {
 		rightBlockBorder[i] = matrix[i][width-1];
 }
 
-void BlockCpu::courted() {
+void BlockCpu::courted(double dX, double dY) {
 	/*
 	 * Теплопроводность
 	 */
-	double dX = 0.5/width;
-	double dY = 1./length;
 
 	double dX2 = dX*dX;
 	double dY2 = dY*dY;

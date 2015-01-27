@@ -105,7 +105,7 @@ public:
 	 * TODO
 	 * Реализовать работу по заданной из вне функции.
 	 */
-	virtual void courted() { return; }
+	virtual void courted(double dX, double dY) { return; }
 
 	/*
 	 * Возвращает тип блока.

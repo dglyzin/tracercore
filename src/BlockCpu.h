@@ -23,7 +23,7 @@ public:
 	void prepareData();
 	bool isRealBlock() { return true; }
 
-	void courted();
+	void courted(double dX, double dY);
 
 	int getBlockType() { return CPU; }
 
