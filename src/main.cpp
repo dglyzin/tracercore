@@ -37,7 +37,6 @@ int main(int argc, char * argv[]) {
 	 * Создание основного управляющего класса.
 	 */
 	Domain *d = new Domain(world_rank, world_size, argv[2]);
-	//d->readFromFile("test");
 
 	/*
 	 * Вычисления.
@@ -48,7 +47,6 @@ int main(int argc, char * argv[]) {
 	/*
 	 * Сбор и вывод результата.
 	 */
-	printf("\nFinal))\n");
 	d->print(argv[3]);
 
 	MPI_Finalize();

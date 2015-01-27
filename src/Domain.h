@@ -96,26 +96,10 @@ private:
 	int blockCount;
 	int connectionCount;
 
-	/*
-	 * Массивы данных о блоках.
-	 * Служебные переменные.
-	 * TODO
-	 * Сделать подгрузку с файлов
-	 */
-	/*int blockLengthSize[4];
-	int blockWidthSize[4];
-
-	int blockMoveLenght[4];
-	int blockMoveWidth[4];
-
-	int blockThread[4];*/
-
-	MPI_Status status;
-
 	int lengthArea;
 	int widthArea;
 
-	void setDefaultValue();
+	MPI_Status status;
 
 	void readLengthAndWidthArea(std::ifstream& in);
 	Block* readBlock(std::ifstream& in);
