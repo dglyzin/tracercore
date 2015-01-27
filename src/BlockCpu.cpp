@@ -104,18 +104,15 @@ void BlockCpu::courted(double dX2, double dY2, double dT) {
 	 * Теплопроводность
 	 */
 
-	/*double dX2 = dX*dX;
-	double dY2 = dY*dY;*/
-
-	//double dT = ( dX2 * dY2 ) / ( 2 * ( dX2 + dY2 ) );
-
-	double top, left, bottom, right, cur;
-
 	double** newMatrix = new double* [length];
 	for(int i = 0; i < length; i++)
 		newMatrix[i] = new double[width];
 
+# pragma omp parallel
+{
+	double top, left, bottom, right, cur;
 
+# pragma omp for
 	for (int i = 0; i < length; ++i)
 		for (int j = 0; j < width; ++j) {
 			if( i == 0 )
@@ -166,6 +163,7 @@ void BlockCpu::courted(double dX2, double dY2, double dT) {
 
 			newMatrix[i][j] = cur + dT * ( ( left - 2*cur + right )/dX2 + ( top - 2*cur + bottom )/dY2  );
 		}
+}
 
 	double** tmp = matrix;
 

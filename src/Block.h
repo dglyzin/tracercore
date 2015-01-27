@@ -11,6 +11,8 @@
 #include <stdio.h>
 #include <cmath>
 
+#include <omp.h>
+
 #include "Enums.h"
 
 /*
