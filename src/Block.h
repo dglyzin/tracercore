@@ -53,10 +53,12 @@ protected:
 	 * BY_ANOTHER_BLOCK - граница с другим блоком, работает через Interconnect.
 	 * BY_FUNCTION - границы с другим блоком нет, значения даются функцией.
 	 */
-	int* topBorderType;
+	/*int* topBorderType;
 	int* leftBorderType;
 	int* bottomBorderType;
-	int* rightBorderType;
+	int* rightBorderType;*/
+
+	int** borderType;
 
 	/*
 	 * Граничные условия для других блоков,
@@ -135,10 +137,10 @@ public:
 
 	int getNodeNumber() { return nodeNumber; }
 
-	int* getTopBorderType() { return topBorderType; }
-	int* getLeftBorderType() { return leftBorderType; }
-	int* getBottomBorderType() { return bottomBorderType; }
-	int* getRightBorderType() { return rightBorderType; }
+	int* getTopBorderType() { return borderType != NULL ? borderType[TOP] : NULL; }
+	int* getLeftBorderType() { return borderType != NULL ? borderType[LEFT] : NULL; }
+	int* getBottomBorderType() { return borderType != NULL ? borderType[BOTTOM] : NULL; }
+	int* getRightBorderType() { return borderType != NULL ? borderType[RIGHT] : NULL; }
 
 	double* getTopBlockBorder() { return topBlockBorder; }
 	double* getLeftBlockBorder() { return leftBlockBorder; }
@@ -167,7 +169,7 @@ public:
 		createRightBorderType();
 	}*/
 
-	virtual void createTopBlockBorder(int neighborType) { topBlockBorder = NULL; }
+	/*virtual void createTopBlockBorder(int neighborType) { topBlockBorder = NULL; }
 	virtual void createLeftBlockBorder(int neighborType) { leftBlockBorder = NULL; }
 	virtual void createBottomBlockBorder(int neighborType) { bottomBlockBorder = NULL; }
 	virtual void createRightBlockBorder(int neighborType) { rightBlockBorder = NULL; }
@@ -177,7 +179,7 @@ public:
 		createLeftBlockBorder(leftNeighborType);
 		createBottomBlockBorder(bottonNeighborType);
 		createRightBlockBorder(rightNeighborType);
-	}
+	}*/
 /*
 	virtual void createTopExteranalBroder() { topExternalBorder = NULL; }
 	virtual void createLeftExternalBorder() { leftExternalBorder = NULL; }

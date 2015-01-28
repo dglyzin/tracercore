@@ -23,7 +23,7 @@ BlockCpu::BlockCpu(int _length, int _width, int _lengthMove, int _widthMove, int
 	/*
 	 * Типы границ блока. Выделение памяти.
 	 */
-	topBorderType = new int[width];
+	/*topBorderType = new int[width];
 	for(int i = 0; i < width; i++)
 		topBorderType[i] = BY_FUNCTION;
 
@@ -37,7 +37,24 @@ BlockCpu::BlockCpu(int _length, int _width, int _lengthMove, int _widthMove, int
 
 	rightBorderType = new int[length];
 	for (int i = 0; i < length; ++i)
-		rightBorderType[i] = BY_FUNCTION;
+		rightBorderType[i] = BY_FUNCTION;*/
+	borderType = new int* [BORDER_COUNT];
+
+	borderType[TOP] = new int[width];
+	for(int i = 0; i < width; i++)
+		borderType[TOP][i] = BY_FUNCTION;
+
+	borderType[LEFT] = new int[length];
+	for (int i = 0; i < length; ++i)
+		borderType[LEFT][i] = BY_FUNCTION;
+
+	borderType[BOTTOM] = new int[width];
+	for(int i = 0; i < width; i++)
+		borderType[BOTTOM][i] = BY_FUNCTION;
+
+	borderType[RIGHT] = new int[length];
+	for (int i = 0; i < length; ++i)
+		borderType[RIGHT][i] = BY_FUNCTION;
 
 	/*
 	 * Границы самого блока.
@@ -116,7 +133,7 @@ void BlockCpu::courted(double dX2, double dY2, double dT) {
 	for (int i = 0; i < length; ++i)
 		for (int j = 0; j < width; ++j) {
 			if( i == 0 )
-				if( topBorderType[j] == BY_FUNCTION ) {
+				if( borderType[TOP][j] == BY_FUNCTION ) {
 					newMatrix[i][j] = topExternalBorder[j];
 					continue;
 				}
@@ -127,7 +144,7 @@ void BlockCpu::courted(double dX2, double dY2, double dT) {
 
 
 			if( i == length - 1 )
-				if( bottomBorderType[j] == BY_FUNCTION ) {
+				if( borderType[BOTTOM][j] == BY_FUNCTION ) {
 					newMatrix[i][j] = bottomExternalBorder[j];
 					continue;
 				}
@@ -138,7 +155,7 @@ void BlockCpu::courted(double dX2, double dY2, double dT) {
 
 
 			if( j == 0 )
-				if( leftBorderType[i] == BY_FUNCTION ) {
+				if( borderType[LEFT][i] == BY_FUNCTION ) {
 					newMatrix[i][j] = leftExternalBorder[i];
 					continue;
 				}
@@ -149,7 +166,7 @@ void BlockCpu::courted(double dX2, double dY2, double dT) {
 
 
 			if( j == width - 1 )
-				if( rightBorderType[i] == BY_FUNCTION ) {
+				if( borderType[RIGHT][i] == BY_FUNCTION ) {
 					newMatrix[i][j] = rightExternalBorder[i];
 					continue;
 				}
@@ -190,25 +207,25 @@ void BlockCpu::print(int locationNode) {
 
 	printf("\ntopBorderType\n");
 	for (int i = 0; i < width; ++i)
-		printf("%4d", topBorderType[i]);
+		printf("%4d", borderType[TOP][i]);
 	printf("\n");
 
 
 	printf("\nleftBorderType\n");
 	for (int i = 0; i < length; ++i)
-		printf("%4d", leftBorderType[i]);
+		printf("%4d", borderType[LEFT][i]);
 	printf("\n");
 
 
 	printf("\nbottomBorderType\n");
 	for (int i = 0; i < width; ++i)
-		printf("%4d", bottomBorderType[i]);
+		printf("%4d", borderType[BOTTOM][i]);
 	printf("\n");
 
 
 	printf("\nrightBorderType\n");
 	for (int i = 0; i < length; ++i)
-		printf("%4d", rightBorderType[i]);
+		printf("%4d", borderType[RIGHT][i]);
 	printf("\n");
 
 

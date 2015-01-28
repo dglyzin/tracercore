@@ -16,7 +16,7 @@ enum BORDER_TYPE {BY_ANOTHER_BLOCK, BY_FUNCTION};
 /*
  * Сторона границы
  */
-enum BORDER_SIDE {TOP, LEFT, BOTTOM, RIGHT};
+enum BORDER_SIDE {TOP, LEFT, BOTTOM, RIGHT, BORDER_COUNT};
 
 /*
  * Типы блоков.
