@@ -216,3 +216,11 @@ Interconnect* Domain::readConnection(ifstream& in) {
 	return new Interconnect(sourceNode, destinationNode, sourceType, destionationType, borderLength, sourceData, destinationData);
 }
 
+int Domain::getCountGridNodes() {
+	int count = 0;
+	for (int i = 0; i < blockCount; ++i)
+		count += mBlocks[i]->getCountGridNodes();
+
+	return count;
+}
+

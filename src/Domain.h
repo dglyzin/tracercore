@@ -71,6 +71,8 @@ public:
 
 	void readFromFile(char* path);
 
+	int getCountGridNodes();
+
 private:
 	/*
 	 * Массив блоков.
