@@ -65,10 +65,12 @@ protected:
 	 * сюда блок самостоятельно укладывает свежие данныепосле каждой итерации.
 	 * Interconnect их забирает (должен знать откуда забирать).
 	 */
-	double* topBlockBorder;
+	/*double* topBlockBorder;
 	double* leftBlockBorder;
 	double* bottomBlockBorder;
-	double* rightBlockBorder;
+	double* rightBlockBorder;*/
+
+	double** blockBorder;
 
 	/*
 	 * С помощью Interconnect'а здесь будут находится свежие данные от других блоков,
@@ -142,10 +144,10 @@ public:
 	int* getBottomBorderType() { return borderType != NULL ? borderType[BOTTOM] : NULL; }
 	int* getRightBorderType() { return borderType != NULL ? borderType[RIGHT] : NULL; }
 
-	double* getTopBlockBorder() { return topBlockBorder; }
-	double* getLeftBlockBorder() { return leftBlockBorder; }
-	double* getBottomBlockBorder() { return bottomBlockBorder; }
-	double* getRightBlockBorder() { return rightBlockBorder; }
+	double* getTopBlockBorder() { return blockBorder != NULL ? blockBorder[TOP] : NULL; }
+	double* getLeftBlockBorder() { return blockBorder != NULL ? blockBorder[LEFT] : NULL; }
+	double* getBottomBlockBorder() { return blockBorder != NULL ? blockBorder[BOTTOM] : NULL; }
+	double* getRightBlockBorder() { return blockBorder != NULL ? blockBorder[RIGHT] : NULL; }
 
 	double* getTopExternalBorder() { return topExternalBorder; }
 	double* getLeftExternalBorder() { return leftExternalBorder; }

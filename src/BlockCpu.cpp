@@ -60,7 +60,7 @@ BlockCpu::BlockCpu(int _length, int _width, int _lengthMove, int _widthMove, int
 	 * Границы самого блока.
 	 * Это он будет отдавать. Выделение памяти.
 	 */
-	topBlockBorder = new double[width];
+	/*topBlockBorder = new double[width];
 	for(int i = 0; i < width; i++)
 		topBlockBorder[i] = 0;
 
@@ -74,7 +74,24 @@ BlockCpu::BlockCpu(int _length, int _width, int _lengthMove, int _widthMove, int
 
 	rightBlockBorder = new double[length];
 	for (int i = 0; i < length; ++i)
-		rightBlockBorder[i] = 0;
+		rightBlockBorder[i] = 0;*/
+	blockBorder = new double* [BORDER_COUNT];
+
+	blockBorder[TOP] = new double[width];
+	for(int i = 0; i < width; i++)
+		blockBorder[TOP][i] = 0;
+
+	blockBorder[LEFT] = new double[length];
+	for (int i = 0; i < length; ++i)
+		blockBorder[LEFT][i] = 0;
+
+	blockBorder[BOTTOM] = new double[width];
+	for(int i = 0; i < width; i++)
+		blockBorder[BOTTOM][i] = 0;
+
+	blockBorder[RIGHT] = new double[length];
+	for (int i = 0; i < length; ++i)
+		blockBorder[RIGHT][i] = 0;
 
 	/*
 	 * Внешние границы блока.
@@ -104,16 +121,16 @@ BlockCpu::~BlockCpu() {
 
 void BlockCpu::prepareData() {
 	for (int i = 0; i < width; ++i)
-		topBlockBorder[i] = matrix[0][i];
+		blockBorder[TOP][i] = matrix[0][i];
 
 	for (int i = 0; i < length; ++i)
-		leftBlockBorder[i] = matrix[i][0];
+		blockBorder[LEFT][i] = matrix[i][0];
 
 	for (int i = 0; i < width; ++i)
-		bottomBlockBorder[i] = matrix[length-1][i];
+		blockBorder[BOTTOM][i] = matrix[length-1][i];
 
 	for (int i = 0; i < length; ++i)
-		rightBlockBorder[i] = matrix[i][width-1];
+		blockBorder[RIGHT][i] = matrix[i][width-1];
 }
 
 void BlockCpu::courted(double dX2, double dY2, double dT) {
@@ -231,25 +248,25 @@ void BlockCpu::print(int locationNode) {
 
 	printf("\ntopBlockBorder\n");
 	for (int i = 0; i < width; ++i)
-		printf("%6.1f", topBlockBorder[i]);
+		printf("%6.1f", blockBorder[TOP][i]);
 	printf("\n");
 
 
 	printf("\nleftBlockBorder\n");
 	for (int i = 0; i < length; ++i)
-		printf("%6.1f", leftBlockBorder[i]);
+		printf("%6.1f", blockBorder[LEFT][i]);
 	printf("\n");
 
 
 	printf("\nbottomBlockBorder\n");
 	for (int i = 0; i <width; ++i)
-		printf("%6.1f", bottomBlockBorder[i]);
+		printf("%6.1f", blockBorder[BOTTOM][i]);
 	printf("\n");
 
 
 	printf("\nrightBlockBorder\n");
 	for (int i = 0; i < length; ++i)
-		printf("%6.1f", rightBlockBorder[i]);
+		printf("%6.1f", blockBorder[RIGHT][i]);
 	printf("\n");
 
 
