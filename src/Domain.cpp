@@ -160,7 +160,7 @@ Interconnect* Domain::readConnection(ifstream& in) {
 
 	in >> borderLength;
 
-	int* borderType;
+	int side;
 
 	int sourceNode = mBlocks[source]->getNodeNumber();
 	int destinationNode = mBlocks[destination]->getNodeNumber();
@@ -173,7 +173,7 @@ Interconnect* Domain::readConnection(ifstream& in) {
 
 	switch (borderSide) {
 		case 't':
-			borderType = mBlocks[destination]->getTopBorderType();
+			side = TOP;
 
 			sourceData = mBlocks[source]->getBottomBlockBorder() + connectionSourceMove;
 			destinationData = mBlocks[destination]->getTopExternalBorder() + connectionDestinationMove;
@@ -181,7 +181,7 @@ Interconnect* Domain::readConnection(ifstream& in) {
 			break;
 
 		case 'l':
-			borderType = mBlocks[destination]->getLeftBorderType();
+			side = LEFT;
 
 			sourceData = mBlocks[source]->getRightBlockBorder() + connectionSourceMove;
 			destinationData = mBlocks[destination]->getLeftExternalBorder() + connectionDestinationMove;
@@ -189,7 +189,7 @@ Interconnect* Domain::readConnection(ifstream& in) {
 			break;
 
 		case 'b':
-			borderType = mBlocks[destination]->getBottomBorderType();
+			side = BOTTOM;
 
 			sourceData = mBlocks[source]->getTopBlockBorder() + connectionSourceMove;
 			destinationData = mBlocks[destination]->getBottomExternalBorder() + connectionDestinationMove;
@@ -197,7 +197,7 @@ Interconnect* Domain::readConnection(ifstream& in) {
 			break;
 
 		case 'r':
-			borderType = mBlocks[destination]->getRightBorderType();
+			side = RIGHT;
 
 			sourceData = mBlocks[source]->getLeftBlockBorder() + connectionSourceMove;
 			destinationData = mBlocks[destination]->getRightExternalBorder() + connectionDestinationMove;
@@ -209,9 +209,11 @@ Interconnect* Domain::readConnection(ifstream& in) {
 			return NULL;
 	}
 
-	if(mBlocks[destination]->isRealBlock())
+	/*if(mBlocks[destination]->isRealBlock())
 		for (int i = 0; i < borderLength; ++i)
-			borderType[i + connectionDestinationMove] = BY_ANOTHER_BLOCK;
+			borderType[i + connectionDestinationMove] = BY_ANOTHER_BLOCK;*/
+	if(mBlocks[destination]->isRealBlock())
+		mBlocks[destination]->setPartBorder(BY_ANOTHER_BLOCK, side, connectionDestinationMove, borderLength);
 
 	return new Interconnect(sourceNode, destinationNode, sourceType, destionationType, borderLength, sourceData, destinationData);
 }

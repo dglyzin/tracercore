@@ -133,6 +133,8 @@ public:
 	int* getBottomBorderType() { return borderType != NULL ? borderType[BOTTOM] : NULL; }
 	int* getRightBorderType() { return borderType != NULL ? borderType[RIGHT] : NULL; }
 
+	void setPartBorder(int type, int side, int move, int borderLength);
+
 	double* getTopBlockBorder() { return blockBorder != NULL ? blockBorder[TOP] : NULL; }
 	double* getLeftBlockBorder() { return blockBorder != NULL ? blockBorder[LEFT] : NULL; }
 	double* getBottomBlockBorder() { return blockBorder != NULL ? blockBorder[BOTTOM] : NULL; }

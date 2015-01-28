@@ -40,3 +40,8 @@ Block::Block(int _length, int _width, int _lengthMove, int _widthMove, int _node
 Block::~Block() {
 
 }
+
+void Block::setPartBorder(int type, int side, int move, int borderLength) {
+	for (int i = 0; i < borderLength; ++i)
+		borderType[side][i + move] = type;
+}
