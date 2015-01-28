@@ -26,6 +26,8 @@ int main(int argc, char * argv[]) {
 	MPI_Comm_size(MPI_COMM_WORLD, &world_size);
 	MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
 
+	double time1, time2;
+
 
 	/*
 	 * Количество итераций вычисления.
@@ -40,7 +42,12 @@ int main(int argc, char * argv[]) {
 	/*
 	 * Вычисления.
 	 */
+	time1 = MPI_Wtime();
 	d->count();
+	time2 = MPI_Wtime();
+
+	if(world_rank == 0)
+		printf("\n\nCount grid nodes: %d, time: %f\n\n\n", d->getCountGridNodes(), time2 - time1);
 
 	/*
 	 * Сбор и вывод результата.

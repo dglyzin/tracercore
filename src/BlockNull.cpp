@@ -14,4 +14,3 @@ BlockNull::BlockNull(int _length, int _width, int _lengthMove, int _widthMove, i
 BlockNull::~BlockNull() {
 	// TODO Auto-generated destructor stub
 }
-
