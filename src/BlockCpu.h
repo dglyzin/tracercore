@@ -29,11 +29,6 @@ public:
 
 	void print(int locationNode);
 	void printMatrix();
-
-	void setTopExternalBorder(double* _topExternalBorder) {
-		if(topExternalBorder) delete topExternalBorder;
-		topExternalBorder = _topExternalBorder;
-	}
 };
 
 #endif /* SRC_BLOCKCPU_H_ */

@@ -77,10 +77,12 @@ protected:
 	 * кроме того, сюда же записывают данные граничные функции.
 	 * Первыми пишут Interconnect'ы, затем функции.
 	 */
-	double* topExternalBorder;
+	/*double* topExternalBorder;
 	double* leftExternalBorder;
 	double* bottomExternalBorder;
-	double* rightExternalBorder;
+	double* rightExternalBorder;*/
+
+	double** externalBorder;
 
 	/*
 	 * TODO
@@ -149,10 +151,10 @@ public:
 	double* getBottomBlockBorder() { return blockBorder != NULL ? blockBorder[BOTTOM] : NULL; }
 	double* getRightBlockBorder() { return blockBorder != NULL ? blockBorder[RIGHT] : NULL; }
 
-	double* getTopExternalBorder() { return topExternalBorder; }
-	double* getLeftExternalBorder() { return leftExternalBorder; }
-	double* getBottomExternalBorder() { return bottomExternalBorder; }
-	double* getRightExternalBorder() { return rightExternalBorder; }
+	double* getTopExternalBorder() { return externalBorder != NULL ? externalBorder[TOP] : NULL; }
+	double* getLeftExternalBorder() { return externalBorder != NULL ? externalBorder[LEFT] : NULL; }
+	double* getBottomExternalBorder() { return externalBorder != NULL ? externalBorder[BOTTOM] : NULL; }
+	double* getRightExternalBorder() { return externalBorder != NULL ? externalBorder[RIGHT] : NULL; }
 
 	virtual void setTopExternalBorder(double* _topExternalBorder) { return; }
 	virtual void setLeftExternalBorder(double* _leftExternalBorder) { return; }

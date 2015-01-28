@@ -18,7 +18,8 @@ Block::Block() {
 	borderType = NULL;
 	//topBlockBorder = leftBlockBorder = bottomBlockBorder = rightBlockBorder = NULL;
 	blockBorder = NULL;
-	topExternalBorder = leftExternalBorder = bottomExternalBorder = rightExternalBorder = NULL;
+	//topExternalBorder = leftExternalBorder = bottomExternalBorder = rightExternalBorder = NULL;
+	externalBorder = NULL;
 
 	matrix = NULL;
 }
@@ -36,7 +37,8 @@ Block::Block(int _length, int _width, int _lengthMove, int _widthMove, int _node
 	borderType = NULL;
 	//topBlockBorder = leftBlockBorder = bottomBlockBorder = rightBlockBorder = NULL;
 	blockBorder = NULL;
-	topExternalBorder = leftExternalBorder = bottomExternalBorder = rightExternalBorder = NULL;
+	//topExternalBorder = leftExternalBorder = bottomExternalBorder = rightExternalBorder = NULL;
+	externalBorder = NULL;
 
 	matrix = NULL;
 }
