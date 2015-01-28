@@ -42,6 +42,42 @@ Block::~Block() {
 }
 
 void Block::setPartBorder(int type, int side, int move, int borderLength) {
+	if( checkValue(side, move + borderLength) ) {
+		printf("\nCritical error!\n");
+		exit(1);
+	}
+
 	for (int i = 0; i < borderLength; ++i)
 		borderType[side][i + move] = type;
+}
+
+double* Block::getBorderBlockData(int side, int move) {
+	if( checkValue(side, move) ) {
+		printf("\nCritical error!\n");
+		exit(1);
+	}
+
+	return blockBorder != NULL ? blockBorder[side] + move : NULL;
+}
+
+double* Block::getExternalBorderData(int side, int move) {
+	if( checkValue(side, move) ) {
+		printf("\nCritical error!\n");
+		exit(1);
+	}
+
+	return externalBorder != NULL ? externalBorder[side] + move : NULL;
+}
+
+bool Block::checkValue(int side, int move) {
+	if( (side == TOP || side == BOTTOM) && move > width )
+		return true;
+
+	if( (side == LEFT || side == RIGHT) && move > length )
+		return true;
+
+	if( side >= BORDER_COUNT )
+		return true;
+
+	return false;
 }

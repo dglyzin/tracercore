@@ -106,6 +106,7 @@ private:
 	Block* readBlock(std::ifstream& in);
 	Interconnect* readConnection(std::ifstream& in);
 
+	int oppositeBorder(int side);
 };
 
 #endif /* SRC_DOMAIN_H_ */

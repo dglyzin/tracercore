@@ -9,6 +9,7 @@
 #define SRC_BLOCK_H_
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <cmath>
 
 #include <omp.h>
@@ -68,6 +69,8 @@ protected:
 	 * Первыми пишут Interconnect'ы, затем функции.
 	 */
 	double** externalBorder;
+
+	bool checkValue(int side, int move);
 
 	/*
 	 * TODO
@@ -134,6 +137,8 @@ public:
 	int* getRightBorderType() { return borderType != NULL ? borderType[RIGHT] : NULL; }
 
 	void setPartBorder(int type, int side, int move, int borderLength);
+	double* getBorderBlockData(int side, int move);
+	double* getExternalBorderData(int side, int move);
 
 	double* getTopBlockBorder() { return blockBorder != NULL ? blockBorder[TOP] : NULL; }
 	double* getLeftBlockBorder() { return blockBorder != NULL ? blockBorder[LEFT] : NULL; }

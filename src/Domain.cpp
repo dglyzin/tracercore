@@ -168,40 +168,21 @@ Interconnect* Domain::readConnection(ifstream& in) {
 	int sourceType = mBlocks[source]->getBlockType();
 	int destionationType = mBlocks[destination]->getBlockType();
 
-	double* sourceData;
-	double* destinationData;
-
 	switch (borderSide) {
 		case 't':
 			side = TOP;
-
-			sourceData = mBlocks[source]->getBottomBlockBorder() + connectionSourceMove;
-			destinationData = mBlocks[destination]->getTopExternalBorder() + connectionDestinationMove;
-
 			break;
 
 		case 'l':
 			side = LEFT;
-
-			sourceData = mBlocks[source]->getRightBlockBorder() + connectionSourceMove;
-			destinationData = mBlocks[destination]->getLeftExternalBorder() + connectionDestinationMove;
-
 			break;
 
 		case 'b':
 			side = BOTTOM;
-
-			sourceData = mBlocks[source]->getTopBlockBorder() + connectionSourceMove;
-			destinationData = mBlocks[destination]->getBottomExternalBorder() + connectionDestinationMove;
-
 			break;
 
 		case 'r':
 			side = RIGHT;
-
-			sourceData = mBlocks[source]->getLeftBlockBorder() + connectionSourceMove;
-			destinationData = mBlocks[destination]->getRightExternalBorder() + connectionDestinationMove;
-
 			break;
 
 		default:
@@ -209,9 +190,9 @@ Interconnect* Domain::readConnection(ifstream& in) {
 			return NULL;
 	}
 
-	/*if(mBlocks[destination]->isRealBlock())
-		for (int i = 0; i < borderLength; ++i)
-			borderType[i + connectionDestinationMove] = BY_ANOTHER_BLOCK;*/
+	double* sourceData = mBlocks[source]->getBorderBlockData( oppositeBorder(side), connectionSourceMove );
+	double* destinationData = mBlocks[destination]->getExternalBorderData(side, connectionDestinationMove);
+
 	if(mBlocks[destination]->isRealBlock())
 		mBlocks[destination]->setPartBorder(BY_ANOTHER_BLOCK, side, connectionDestinationMove, borderLength);
 
@@ -224,5 +205,20 @@ int Domain::getCountGridNodes() {
 		count += mBlocks[i]->getCountGridNodes();
 
 	return count;
+}
+
+int Domain::oppositeBorder(int side) {
+	switch (side) {
+		case TOP:
+			return BOTTOM;
+		case LEFT:
+			return RIGHT;
+		case BOTTOM:
+			return TOP;
+		case RIGHT:
+			return LEFT;
+		default:
+			return TOP;
+	}
 }
 
