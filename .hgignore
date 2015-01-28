@@ -4,7 +4,7 @@ syntax: glob
 *~
 *.bin
 *.dom
-bin/*.o
+bin/*
 bin/pfrost
 Debug/*
 .cproject
@@ -12,3 +12,6 @@ Debug/*
 res*
 test*
 HS
+.ptp-sync
+.settings
+src/.*
