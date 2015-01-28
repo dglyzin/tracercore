@@ -9,5 +9,6 @@ bin/pfrost
 Debug/*
 .cproject
 .project
-res
+res*
+test*
 HS
