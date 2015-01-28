@@ -53,11 +53,6 @@ protected:
 	 * BY_ANOTHER_BLOCK - граница с другим блоком, работает через Interconnect.
 	 * BY_FUNCTION - границы с другим блоком нет, значения даются функцией.
 	 */
-	/*int* topBorderType;
-	int* leftBorderType;
-	int* bottomBorderType;
-	int* rightBorderType;*/
-
 	int** borderType;
 
 	/*
@@ -65,11 +60,6 @@ protected:
 	 * сюда блок самостоятельно укладывает свежие данныепосле каждой итерации.
 	 * Interconnect их забирает (должен знать откуда забирать).
 	 */
-	/*double* topBlockBorder;
-	double* leftBlockBorder;
-	double* bottomBlockBorder;
-	double* rightBlockBorder;*/
-
 	double** blockBorder;
 
 	/*
@@ -77,11 +67,6 @@ protected:
 	 * кроме того, сюда же записывают данные граничные функции.
 	 * Первыми пишут Interconnect'ы, затем функции.
 	 */
-	/*double* topExternalBorder;
-	double* leftExternalBorder;
-	double* bottomExternalBorder;
-	double* rightExternalBorder;*/
-
 	double** externalBorder;
 
 	/*

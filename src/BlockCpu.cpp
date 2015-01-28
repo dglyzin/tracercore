@@ -23,21 +23,6 @@ BlockCpu::BlockCpu(int _length, int _width, int _lengthMove, int _widthMove, int
 	/*
 	 * Типы границ блока. Выделение памяти.
 	 */
-	/*topBorderType = new int[width];
-	for(int i = 0; i < width; i++)
-		topBorderType[i] = BY_FUNCTION;
-
-	leftBorderType = new int[length];
-	for (int i = 0; i < length; ++i)
-		leftBorderType[i] = BY_FUNCTION;
-
-	bottomBorderType = new int[width];
-	for(int i = 0; i < width; i++)
-		bottomBorderType[i] = BY_FUNCTION;
-
-	rightBorderType = new int[length];
-	for (int i = 0; i < length; ++i)
-		rightBorderType[i] = BY_FUNCTION;*/
 	borderType = new int* [BORDER_COUNT];
 
 	borderType[TOP] = new int[width];
@@ -60,21 +45,6 @@ BlockCpu::BlockCpu(int _length, int _width, int _lengthMove, int _widthMove, int
 	 * Границы самого блока.
 	 * Это он будет отдавать. Выделение памяти.
 	 */
-	/*topBlockBorder = new double[width];
-	for(int i = 0; i < width; i++)
-		topBlockBorder[i] = 0;
-
-	leftBlockBorder = new double[length];
-	for (int i = 0; i < length; ++i)
-		leftBlockBorder[i] = 0;
-
-	bottomBlockBorder = new double[width];
-	for(int i = 0; i < width; i++)
-		bottomBlockBorder[i] = 0;
-
-	rightBlockBorder = new double[length];
-	for (int i = 0; i < length; ++i)
-		rightBlockBorder[i] = 0;*/
 	blockBorder = new double* [BORDER_COUNT];
 
 	blockBorder[TOP] = new double[width];
@@ -97,21 +67,6 @@ BlockCpu::BlockCpu(int _length, int _width, int _lengthMove, int _widthMove, int
 	 * Внешние границы блока.
 	 * Сюда будет приходить информация.
 	 */
-	/*topExternalBorder = new double[width];
-	for(int i = 0; i < width; i++)
-		topExternalBorder[i] = 100;//100 * cos( (i - width/2. ) / (width/2.));
-
-	leftExternalBorder = new double[length];
-	for (int i = 0; i < length; ++i)
-		leftExternalBorder[i] = 10;
-
-	bottomExternalBorder = new double[width];
-	for(int i = 0; i < width; i++)
-		bottomExternalBorder[i] = 10;
-
-	rightExternalBorder = new double[length];
-	for (int i = 0; i < length; ++i)
-		rightExternalBorder[i] = 10;*/
 	externalBorder = new double* [BORDER_COUNT];
 
 	externalBorder[TOP] = new double[width];
