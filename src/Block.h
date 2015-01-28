@@ -121,6 +121,8 @@ public:
 	int getLength() { return length; }
 	int getWidth() { return width; }
 
+	int getCountGridNodes() { return length * width; }
+
 	int getLenghtMove() { return lenghtMove; }
 	int getWidthMove() { return widthMove; }
 
