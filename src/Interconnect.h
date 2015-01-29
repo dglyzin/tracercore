@@ -36,6 +36,8 @@ public:
 
 	void print(int locationNode);
 
+	int getDeviceNumber(int blockType);
+
 private:
 	/*
 	 * Номер потока с исходными данными
