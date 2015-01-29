@@ -7,6 +7,71 @@
 
 #include "BlockGpu.h"
 
+__global__ void calc ( double** matrix, double** newMatrix, int length, int width, double dX2, double dY2, double dT, int **borderType, double** externalBorder ) {
+
+	double top, left, bottom, right, cur;
+
+	int bx = blockIdx.x;
+	int by = blockIdx.y;
+
+	int tx = threadIdx.x;
+	int ty = threadIdx.y;
+
+	int j = BLOCK_WIDTH_SIZE * by + ty;
+	int i = BLOCK_LENGHT_SIZE * bx + tx;
+
+	if( i > length || j > width )
+		return;
+
+	if( i == 0 )
+		if( borderType[TOP][j] == BY_FUNCTION ) {
+			newMatrix[i][j] = externalBorder[TOP][j];
+			return;
+		}
+		else
+			top = externalBorder[TOP][j];
+	else
+		top = matrix[i - 1][j];
+
+
+	if( j == 0 )
+		if( borderType[LEFT][i] == BY_FUNCTION ) {
+			newMatrix[i][j] = externalBorder[LEFT][i];
+			return;
+		}
+		else
+			left = externalBorder[LEFT][i];
+	else
+		left = matrix[i][j - 1];
+
+
+	if( i == length - 1 )
+		if( borderType[BOTTOM][j] == BY_FUNCTION ) {
+			newMatrix[i][j] = externalBorder[BOTTOM][j];
+			return;
+		}
+		else
+			bottom = externalBorder[BOTTOM][j];
+	else
+		bottom = matrix[i + 1][j];
+
+
+	if( j == width - 1 )
+		if( borderType[RIGHT][i] == BY_FUNCTION ) {
+			newMatrix[i][j] = externalBorder[RIGHT][i];
+			return;
+		}
+		else
+			right = externalBorder[RIGHT][i];
+	else
+		right = matrix[i][j + 1];
+
+
+	cur = matrix[i][j];
+
+	newMatrix[i][j] = cur + dT * ( ( left - 2*cur + right )/dX2 + ( top - 2*cur + bottom )/dY2  );
+}
+
 BlockGpu::BlockGpu(int _length, int _width, int _lengthMove, int _widthMove, int _world_rank) : Block(  _length, _width, _lengthMove, _widthMove, _world_rank  ) {
 	cudaMalloc ( (void**)&matrix, length * sizeof(double*) );
 	
@@ -91,9 +156,9 @@ void BlockGpu::courted(double dX2, double dY2, double dT) {
 		newMatrix[i] = new double[width];
 
 	dim3 threads ( BLOCK_LENGHT_SIZE, BLOCK_WIDTH_SIZE );
-	dim3 blocks  ( (int)ceil((double)numberElements / threads.x) );
+	dim3 blocks  ( (int)ceil((double)length / threads.x), (int)ceil((double)width / threads.y) );
 
-	copy <<< blocks, threads >>> ( matrix, newMatrix, length, width, dX2, dY2, dT, borderType, externalBorder );
+	calc <<< blocks, threads >>> ( matrix, newMatrix, length, width, dX2, dY2, dT, borderType, externalBorder );
 
 	double** tmp = matrix;
 
@@ -102,69 +167,4 @@ void BlockGpu::courted(double dX2, double dY2, double dT) {
 	for(int i = 0; i < length; i++)
 		delete tmp[i];
 	delete tmp;
-}
-
-__global__ void calc ( double** matrix, double** newMatrix, int length, int width, double dX2, double dY2, double dT, int **borderType, double** externalBorder ) {
-
-	double top, left, bottom, right, cur;
-
-	int bx = blockIdx.x;
-	int by = blockIdx.y;
-
-	int tx = threadIdx.x;
-	int ty = threadIdx.y;
-
-	int i = BLOCK_LENGHT_SIZE * by + ty;
-	int j = BLOCK_WIDTH_SIZE * bx + tx;
-
-	if( i > length || j > width )
-		return;
-
-	if( i == 0 )
-		if( borderType[TOP][j] == BY_FUNCTION ) {
-			newMatrix[i][j] = externalBorder[TOP][j];
-			return;
-		}
-		else
-			top = externalBorder[TOP][j];
-	else
-		top = matrix[i - 1][j];
-
-
-	if( j == 0 )
-		if( borderType[LEFT][i] == BY_FUNCTION ) {
-			newMatrix[i][j] = externalBorder[LEFT][i];
-			return;
-		}
-		else
-			left = externalBorder[LEFT][i];
-	else
-		left = matrix[i][j - 1];
-
-
-	if( i == length - 1 )
-		if( borderType[BOTTOM][j] == BY_FUNCTION ) {
-			newMatrix[i][j] = externalBorder[BOTTOM][j];
-			return;
-		}
-		else
-			bottom = externalBorder[BOTTOM][j];
-	else
-		bottom = matrix[i + 1][j];
-
-
-	if( j == width - 1 )
-		if( borderType[RIGHT][i] == BY_FUNCTION ) {
-			newMatrix[i][j] = externalBorder[RIGHT][i];
-			return;
-		}
-		else
-			right = externalBorder[RIGHT][i];
-	else
-		right = matrix[i][j + 1];
-
-
-	cur = matrix[i][j];
-
-	newMatrix[i][j] = cur + dT * ( ( left - 2*cur + right )/dX2 + ( top - 2*cur + bottom )/dY2  );
 }

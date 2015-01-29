@@ -30,7 +30,6 @@ Interconnect::~Interconnect() {
 }
 
 void Interconnect::sendRecv(int locationNode) {
-	//printf("\nnode %d, source %d, dest %d\n", locationNode, sourceLocationNode, destinationLocationNode);
 	/*
 	 * TODO
 	 * Пересылка для видеокарт и центральным процессоров.
