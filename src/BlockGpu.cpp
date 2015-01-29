@@ -87,26 +87,38 @@ BlockGpu::~BlockGpu() {
 
 void BlockGpu::courted(double dX2, double dY2, double dT) {
 	double** newMatrix = new double* [length];
-		for(int i = 0; i < length; i++)
-			newMatrix[i] = new double[width];
+	for(int i = 0; i < length; i++)
+		newMatrix[i] = new double[width];
 
-		// ВЫЗОВ ЯДРА
+	dim3 threads ( BLOCK_LENGHT_SIZE, BLOCK_WIDTH_SIZE );
+	dim3 blocks  ( (int)ceil((double)numberElements / threads.x) );
 
-		double** tmp = matrix;
+	copy <<< blocks, threads >>> ( matrix, newMatrix, length, width, dX2, dY2, dT, borderType, externalBorder );
 
-		matrix = newMatrix;
+	double** tmp = matrix;
 
-		for(int i = 0; i < length; i++)
-			delete tmp[i];
-		delete tmp;
+	matrix = newMatrix;
+
+	for(int i = 0; i < length; i++)
+		delete tmp[i];
+	delete tmp;
 }
 
-__global__ void copy ( double** matrix, double** newMatrix, int length, int width, double dX2, double dY2, double dT, int **borderType, double** externalBorder ) {
+__global__ void calc ( double** matrix, double** newMatrix, int length, int width, double dX2, double dY2, double dT, int **borderType, double** externalBorder ) {
 
 	double top, left, bottom, right, cur;
 
-	int i;
-	int j;
+	int bx = blockIdx.x;
+	int by = blockIdx.y;
+
+	int tx = threadIdx.x;
+	int ty = threadIdx.y;
+
+	int i = BLOCK_LENGHT_SIZE * by + ty;
+	int j = BLOCK_WIDTH_SIZE * bx + tx;
+
+	if( i > length || j > width )
+		return;
 
 	if( i == 0 )
 		if( borderType[TOP][j] == BY_FUNCTION ) {
