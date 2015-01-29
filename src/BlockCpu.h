@@ -25,9 +25,6 @@ public:
 	void courted(double dX2, double dY2, double dT);
 
 	int getBlockType() { return CPU; }
-
-	void print(int locationNode);
-	void printMatrix();
 };
 
 #endif /* SRC_BLOCKCPU_H_ */

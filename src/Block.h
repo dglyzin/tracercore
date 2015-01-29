@@ -112,12 +112,12 @@ public:
 	/*
 	 * Печатает информацию о блоке на консоль.
 	 */
-	virtual void print(int locationNode) { return; }
+	virtual void print();
 
 	/*
 	 * Печатает только матрицу
 	 */
-	virtual void printMatrix() { return; }
+	virtual void printMatrix();
 
 	virtual double** getResault() { return matrix; }
 
