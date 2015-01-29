@@ -20,7 +20,6 @@ public:
 
 	virtual ~BlockCpu();
 
-	void prepareData();
 	bool isRealBlock() { return true; }
 
 	void courted(double dX2, double dY2, double dT);

@@ -95,7 +95,7 @@ public:
 	 * Выполняет подготовку данных.
 	 * Заполняет массивы границ для пересылки.
 	 */
-	virtual void prepareData() { return; }
+	virtual void prepareData();
 
 	/*
 	 * Выполняет вычисления.

@@ -41,6 +41,22 @@ Block::~Block() {
 
 }
 
+void Block::prepareData() {
+	if(!isRealBlock()) return;
+
+	for (int i = 0; i < width; ++i)
+		blockBorder[TOP][i] = matrix[0][i];
+
+	for (int i = 0; i < length; ++i)
+		blockBorder[LEFT][i] = matrix[i][0];
+
+	for (int i = 0; i < width; ++i)
+		blockBorder[BOTTOM][i] = matrix[length-1][i];
+
+	for (int i = 0; i < length; ++i)
+		blockBorder[RIGHT][i] = matrix[i][width-1];
+}
+
 void Block::setPartBorder(int type, int side, int move, int borderLength) {
 	if( checkValue(side, move + borderLength) ) {
 		printf("\nCritical error!\n");
