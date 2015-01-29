@@ -84,3 +84,75 @@ BlockGpu::BlockGpu(int _length, int _width, int _lengthMove, int _widthMove, int
 BlockGpu::~BlockGpu() {
 	// TODO Auto-generated destructor stub
 }
+
+void BlockGpu::courted(double dX2, double dY2, double dT) {
+	double** newMatrix = new double* [length];
+		for(int i = 0; i < length; i++)
+			newMatrix[i] = new double[width];
+
+		// ВЫЗОВ ЯДРА
+
+		double** tmp = matrix;
+
+		matrix = newMatrix;
+
+		for(int i = 0; i < length; i++)
+			delete tmp[i];
+		delete tmp;
+}
+
+__global__ void copy ( double** matrix, double** newMatrix, int length, int width, double dX2, double dY2, double dT, int **borderType, double** externalBorder ) {
+
+	double top, left, bottom, right, cur;
+
+	int i;
+	int j;
+
+	if( i == 0 )
+		if( borderType[TOP][j] == BY_FUNCTION ) {
+			newMatrix[i][j] = externalBorder[TOP][j];
+			return;
+		}
+		else
+			top = externalBorder[TOP][j];
+	else
+		top = matrix[i - 1][j];
+
+
+	if( j == 0 )
+		if( borderType[LEFT][i] == BY_FUNCTION ) {
+			newMatrix[i][j] = externalBorder[LEFT][i];
+			return;
+		}
+		else
+			left = externalBorder[LEFT][i];
+	else
+		left = matrix[i][j - 1];
+
+
+	if( i == length - 1 )
+		if( borderType[BOTTOM][j] == BY_FUNCTION ) {
+			newMatrix[i][j] = externalBorder[BOTTOM][j];
+			return;
+		}
+		else
+			bottom = externalBorder[BOTTOM][j];
+	else
+		bottom = matrix[i + 1][j];
+
+
+	if( j == width - 1 )
+		if( borderType[RIGHT][i] == BY_FUNCTION ) {
+			newMatrix[i][j] = externalBorder[RIGHT][i];
+			return;
+		}
+		else
+			right = externalBorder[RIGHT][i];
+	else
+		right = matrix[i][j + 1];
+
+
+	cur = matrix[i][j];
+
+	newMatrix[i][j] = cur + dT * ( ( left - 2*cur + right )/dX2 + ( top - 2*cur + bottom )/dY2  );
+}
