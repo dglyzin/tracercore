@@ -13,6 +13,8 @@
 #define BLOCK_LENGHT_SIZE 32
 #define BLOCK_WIDTH_SIZE 16
 
+#define BLOCK_SIZE 512
+
 class BlockGpu: public Block {
 public:
 	BlockGpu(int _length, int _width, int _lengthMove, int _widthMove, int _world_rank);
@@ -22,6 +24,8 @@ public:
 	int getBlockType() { return DEVICE0; }
 
 	void courted(double dX2, double dY2, double dT);
+
+	void setPartBorder(int type, int side, int move, int borderLength);
 };
 
 #endif /* SRC_BLOCKGPU_H_ */

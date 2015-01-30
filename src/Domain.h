@@ -11,6 +11,7 @@
 #include "Interconnect.h"
 #include "BlockCpu.h"
 #include "BlockNull.h"
+#include "BlockGpu.h"
 
 #include <fstream>
 #include <string.h>

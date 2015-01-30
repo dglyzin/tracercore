@@ -22,9 +22,16 @@ public:
 
 	bool isRealBlock() { return true; }
 
+	void prepareData();
+
 	void courted(double dX2, double dY2, double dT);
 
 	int getBlockType() { return CPU; }
+
+	void setPartBorder(int type, int side, int move, int borderLength);
+
+	void print();
+	void printMatrix();
 };
 
 #endif /* SRC_BLOCKCPU_H_ */

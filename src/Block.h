@@ -96,7 +96,7 @@ public:
 	 * Выполняет подготовку данных.
 	 * Заполняет массивы границ для пересылки.
 	 */
-	virtual void prepareData();
+	virtual void prepareData() { return; }
 
 	/*
 	 * Выполняет вычисления.
@@ -113,12 +113,12 @@ public:
 	/*
 	 * Печатает информацию о блоке на консоль.
 	 */
-	virtual void print();
+	virtual void print() { return; }
 
 	/*
 	 * Печатает только матрицу
 	 */
-	virtual void printMatrix();
+	virtual void printMatrix() { return; }
 
 	virtual double** getResault() { return matrix; }
 
@@ -137,7 +137,8 @@ public:
 	int* getBottomBorderType() { return borderType != NULL ? borderType[BOTTOM] : NULL; }
 	int* getRightBorderType() { return borderType != NULL ? borderType[RIGHT] : NULL; }
 
-	void setPartBorder(int type, int side, int move, int borderLength);
+	virtual void setPartBorder(int type, int side, int move, int borderLength) { return; }
+
 	double* getBorderBlockData(int side, int move);
 	double* getExternalBorderData(int side, int move);
 
@@ -151,10 +152,10 @@ public:
 	double* getBottomExternalBorder() { return externalBorder != NULL ? externalBorder[BOTTOM] : NULL; }
 	double* getRightExternalBorder() { return externalBorder != NULL ? externalBorder[RIGHT] : NULL; }
 
-	virtual void setTopExternalBorder(double* _topExternalBorder) { return; }
+	/*virtual void setTopExternalBorder(double* _topExternalBorder) { return; }
 	virtual void setLeftExternalBorder(double* _leftExternalBorder) { return; }
 	virtual void setBottomExternalBorder(double* _borderExternalBorder) { return; }
-	virtual void setRightExternalBorder(double* _rightExternalBorder) { return; }
+	virtual void setRightExternalBorder(double* _rightExternalBorder) { return; }*/
 
 	/*virtual void createTopBorderType() { topBorderType = NULL; }
 	virtual void createLeftBorderType() { leftBorderType = NULL; }
