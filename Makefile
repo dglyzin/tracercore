@@ -9,10 +9,10 @@ CUDAARCH2=
 CUDAARCH=-arch=compute_20 
 BIN=bin
 
-all: pfrost 
+all: HS 
 
-pfrost: main.o Domain.o Block.o BlockCpu.o BlockNull.o Interconnect.o BlockGpu.o
-	$(CUDACC) -O3 -I/usr/mpi/gcc/openmpi-1.8.4/include -L /usr/mpi/gcc/openmpi-1.8.4/lib -lmpi $(BIN)/main.o $(BIN)/Domain.o $(BIN)/Block.o $(BIN)/Interconnect.o $(BIN)/BlockNull.o $(BIN)/BlockGpu.o -o $(BIN)/pfrost -Xcompiler -fopenmp
+HS: main.o Domain.o Block.o BlockCpu.o BlockNull.o Interconnect.o BlockGpu.o
+	$(CUDACC) -O3 -I/usr/mpi/gcc/openmpi-1.8.4/include -L /usr/mpi/gcc/openmpi-1.8.4/lib -lmpi_cxx  $(BIN)/main.o $(BIN)/Domain.o $(BIN)/Block.o $(BIN)/Interconnect.o $(BIN)/BlockCpu.o $(BIN)/BlockNull.o $(BIN)/BlockGpu.o -o $(BIN)/HS -Xcompiler -fopenmp
 	
 main.o: $(SRC)/main.cpp
 	$(CC) $(CFLAGS) $(SRC)/main.cpp -o $(BIN)/main.o
