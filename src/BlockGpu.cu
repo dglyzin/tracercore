@@ -189,3 +189,7 @@ void BlockGpu::setPartBorder(int type, int side, int move, int borderLength) {
 	
 	assignIntArray <<< block, threads >>> ( borderType[side] + move, type, borderLength );
 }
+
+void BlockGpu::prepareData() {
+	
+}

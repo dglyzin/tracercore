@@ -57,16 +57,3 @@ void Interconnect::print(int locationNode) {
 	printf("\nInterconnect\n");
 	printf("\nnode %d, source %d, dest %d\n", locationNode, sourceLocationNode, destinationLocationNode);
 }
-
-int Interconnect::getDeviceNumber(int blockType) {
-	switch (blockType) {
-		case DEVICE0:
-			return 0;
-		case DEVICE1:
-			return 1;
-		case DEVICE2:
-			return 2;
-		default:
-			return 0;
-	}
-}

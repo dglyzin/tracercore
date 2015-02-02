@@ -24,4 +24,7 @@ enum BORDER_SIDE {TOP, LEFT, BOTTOM, RIGHT, BORDER_COUNT};
  */
 enum BLOCK_TYPE { CPU, DEVICE0, DEVICE1, DEVICE2 };
 
+int oppositeBorder(int side);
+int getDeviceNumber(int blockType);
+
 #endif /* SRC_ENUMS_H_ */

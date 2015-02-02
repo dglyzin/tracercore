@@ -26,6 +26,8 @@ public:
 	void courted(double dX2, double dY2, double dT);
 
 	void setPartBorder(int type, int side, int move, int borderLength);
+
+	void prepareData();
 };
 
 #endif /* SRC_BLOCKGPU_H_ */
