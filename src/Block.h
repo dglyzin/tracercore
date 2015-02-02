@@ -47,6 +47,8 @@ protected:
 
 	/*
 	 * Номер потока исполнения, на котором работает этот блок
+	 * Номер потока, который ДОЛЖЕН его создать для работы.
+	 * Номер потока, на котором это блок РЕАЛЬНО сущесвтует.
 	 */
 	int nodeNumber;
 
@@ -71,6 +73,9 @@ protected:
 	 */
 	double** externalBorder;
 
+	/*
+	 * Функция проверяет допустимость значений для данного блока
+	 */
 	bool checkValue(int side, int move);
 
 	/*
@@ -120,11 +125,17 @@ public:
 	 */
 	virtual void printMatrix() { return; }
 
+	/*
+	 * Возвращает результурющую матрицу данного блока.
+	 */
 	virtual double** getResault() { return matrix; }
 
 	int getLength() { return length; }
 	int getWidth() { return width; }
 
+	/*
+	 * Возвращает количество узлов области блока.
+	 */
 	int getCountGridNodes() { return length * width; }
 
 	int getLenghtMove() { return lenghtMove; }
@@ -137,11 +148,21 @@ public:
 	int* getBottomBorderType() { return borderType != NULL ? borderType[BOTTOM] : NULL; }
 	int* getRightBorderType() { return borderType != NULL ? borderType[RIGHT] : NULL; }
 
+	/*
+	 * Устанавливает определенной границе, в опреденных пределах требуемое значение.
+	 */
 	virtual void setPartBorder(int type, int side, int move, int borderLength) { return; }
 
+	/*
+	 * Возвращают указатель на требуемую границу с указанным сдвигомю
+	 */
 	double* getBorderBlockData(int side, int move);
 	double* getExternalBorderData(int side, int move);
 
+	/*
+	 * Вовращаение указателя на определенную границу.
+	 * Выполняется проверка на существование этой границы.
+	 */
 	double* getTopBlockBorder() { return blockBorder != NULL ? blockBorder[TOP] : NULL; }
 	double* getLeftBlockBorder() { return blockBorder != NULL ? blockBorder[LEFT] : NULL; }
 	double* getBottomBlockBorder() { return blockBorder != NULL ? blockBorder[BOTTOM] : NULL; }

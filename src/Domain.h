@@ -65,13 +65,27 @@ public:
 	Domain(int _world_rank, int _world_size, char* path);
 	virtual ~Domain();
 
+	/*
+	 * Полный расчет
+	 */
 	void count();
+
+	/*
+	 * Выполнение одной итерации (одного шага)
+	 */
 	void nextStep(double dX, double dY, double dT);
 
 	void print(char* path);
 
+	/*
+	 * Чтение с файла.
+	 */
 	void readFromFile(char* path);
 
+	/*
+	 * Возвращает суммарное количество узлов области.
+	 * Сумма со всех блоков.
+	 */
 	int getCountGridNodes();
 
 private:
@@ -93,18 +107,48 @@ private:
 	 */
 	Interconnect** mInterconnects;
 
+	/*
+	 * Номер потока
+	 */
 	int world_rank;
+
+	/*
+	 * Количество потоков в целом
+	 */
 	int world_size;
+
+	/*
+	 * Количество блоков
+	 */
 	int blockCount;
+
+	/*
+	 * Количество соединений между блоками
+	 */
 	int connectionCount;
 
+	/*
+	 * Размеры области
+	 * Вся область - прямоугольник, внутри которого гарантирвано размещаются все блоки.
+	 */
 	int lengthArea;
 	int widthArea;
 
 	MPI_Status status;
 
+	/*
+	 * Чтение размеров области
+	 */
 	void readLengthAndWidthArea(std::ifstream& in);
+
+	/*
+	 * Чтение блока
+	 */
 	Block* readBlock(std::ifstream& in);
+
+	/*
+	 * Чтение соединения
+	 */
 	Interconnect* readConnection(std::ifstream& in);
 };
 

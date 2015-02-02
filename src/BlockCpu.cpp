@@ -99,6 +99,9 @@ void BlockCpu::courted(double dX2, double dY2, double dT) {
 	for(int i = 0; i < length; i++)
 		newMatrix[i] = new double[width];
 
+	/*
+	 * Параллельное вычисление на максимально возможном количестве потоков
+	 */
 # pragma omp parallel
 {
 	double top, left, bottom, right, cur;
@@ -155,7 +158,11 @@ void BlockCpu::courted(double dX2, double dY2, double dT) {
 			newMatrix[i][j] = cur + dT * ( ( left - 2*cur + right )/dX2 + ( top - 2*cur + bottom )/dY2  );
 		}
 }
-
+/*
+ * Указатель на старую матрицу запоминается
+ * Новая матрица становится текущей
+ * Память, занимаемая старой матрицей освобождается.
+ */
 	double** tmp = matrix;
 
 	matrix = newMatrix;
@@ -166,8 +173,6 @@ void BlockCpu::courted(double dX2, double dY2, double dT) {
 }
 
 void BlockCpu::prepareData() {
-	if(!isRealBlock()) return;
-
 	for (int i = 0; i < width; ++i)
 		blockBorder[TOP][i] = matrix[0][i];
 
