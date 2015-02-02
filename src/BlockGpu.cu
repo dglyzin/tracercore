@@ -200,7 +200,7 @@ void BlockGpu::courted(double dX2, double dY2, double dT) {
 	matrix = newMatrix;
 
 	for(int i = 0; i < length; i++)
-		delete tmp[i];
+		cudaFree(tmp[i]);
 	delete tmp;
 }
 
