@@ -98,7 +98,7 @@ BlockGpu::BlockGpu(int _length, int _width, int _lengthMove, int _widthMove, int
 	matrix = new double* [length];
 	for (int i = 0; i < length; ++i) {
 		cudaMalloc ( (void**)&matrix[i], width * sizeof(double) );
-		assignDoubleArray <<< blockWidth, threads >>> ( matrix[i], 0, width );
+		assignDoubleArray <<< blocksWidth, threads >>> ( matrix[i], 0, width );
 	}
 
 	/*
@@ -107,16 +107,16 @@ BlockGpu::BlockGpu(int _length, int _width, int _lengthMove, int _widthMove, int
 	borderType = new int* [BORDER_COUNT];
 
 	cudaMalloc ( (void**)&borderType[TOP], width * sizeof(int) );
-	assignIntArray <<< blockWidth, threads >>> ( borderType[TOP], BY_FUNCTION, width ); 
+	assignIntArray <<< blocksWidth, threads >>> ( borderType[TOP], BY_FUNCTION, width ); 
 
 	cudaMalloc ( (void**)&borderType[LEFT], length * sizeof(int) );
-	assignIntArray <<< blockLength, threads >>> ( borderType[LEFT], BY_FUNCTION, length );
+	assignIntArray <<< blocksLength, threads >>> ( borderType[LEFT], BY_FUNCTION, length );
 
 	cudaMalloc ( (void**)&borderType[BOTTOM], width * sizeof(int) );
-	assignIntArray <<< blockWidth, threads >>> ( borderType[BOTTOM], BY_FUNCTION, width ); 
+	assignIntArray <<< blocksWidth, threads >>> ( borderType[BOTTOM], BY_FUNCTION, width ); 
 
 	cudaMalloc ( (void**)&borderType[RIGHT], length * sizeof(int) );
-	assignIntArray <<< blockLength, threads >>> ( borderType[RIGHT], BY_FUNCTION, length );
+	assignIntArray <<< blocksLength, threads >>> ( borderType[RIGHT], BY_FUNCTION, length );
 	
 	/*
 	 * Границы самого блока.
@@ -125,35 +125,35 @@ BlockGpu::BlockGpu(int _length, int _width, int _lengthMove, int _widthMove, int
 	blockBorder = new double* [BORDER_COUNT];
 
 	cudaMalloc ( (void**)&blockBorder[TOP], width * sizeof(double) );
-	assignDoubleArray <<< blockWidth, threads >>> ( blockBorder[TOP], 0, width );
+	assignDoubleArray <<< blocksWidth, threads >>> ( blockBorder[TOP], 0, width );
 
 	cudaMalloc ( (void**)&blockBorder[LEFT], length * sizeof(double) );
-	assignDoubleArray <<< blockLength, threads >>> ( blockBorder[LEFT], 0, length );
+	assignDoubleArray <<< blocksLength, threads >>> ( blockBorder[LEFT], 0, length );
 
 	cudaMalloc ( (void**)&blockBorder[BOTTOM], width * sizeof(double) );
-	assignDoubleArray <<< blockWidth, threads >>> ( blockBorder[BOTTOM], 0, width );
+	assignDoubleArray <<< blocksWidth, threads >>> ( blockBorder[BOTTOM], 0, width );
 
 	cudaMalloc ( (void**)&blockBorder[RIGHT], length * sizeof(double) );
-	assignDoubleArray <<< blockLength, threads >>> ( blockBorder[RIGHT], 0, length );
+	assignDoubleArray <<< blocksLength, threads >>> ( blockBorder[RIGHT], 0, length );
 
 
 	/*
 	 * Внешние границы блока.
 	 * Сюда будет приходить информация.
 	 */
-	externalBorder = new double* [BORDER_SIDE];
+	externalBorder = new double* [BORDER_COUNT];
 
 	cudaMalloc ( (void**)&externalBorder[TOP], width * sizeof(double) );
-	assignDoubleArray <<< blockWidth, threads >>> ( externalBorder[TOP], 100, width );
+	assignDoubleArray <<< blocksWidth, threads >>> ( externalBorder[TOP], 100, width );
 
 	cudaMalloc ( (void**)&externalBorder[LEFT], length * sizeof(double) );
-	assignDoubleArray <<< blockLength, threads >>> ( externalBorder[LEFT], 10, length );
+	assignDoubleArray <<< blocksLength, threads >>> ( externalBorder[LEFT], 10, length );
 
 	cudaMalloc ( (void**)&externalBorder[BOTTOM], width * sizeof(double) );
-	assignDoubleArray <<< blockWidth, threads >>> ( externalBorder[BOTTOM], 10, width );
+	assignDoubleArray <<< blocksWidth, threads >>> ( externalBorder[BOTTOM], 10, width );
 
 	cudaMalloc ( (void**)&externalBorder[RIGHT], length * sizeof(double) );
-	assignDoubleArray <<< blockLength, threads >>> ( externalBorder[RIGHT], 10, length );
+	assignDoubleArray <<< blocksLength, threads >>> ( externalBorder[RIGHT], 10, length );
 }
 
 BlockGpu::~BlockGpu() {
@@ -161,8 +161,8 @@ BlockGpu::~BlockGpu() {
 }
 
 void BlockGpu::courted(double dX2, double dY2, double dT) {
-	newMatrix = new double* [length];
-	for (int i = 0; i < length; ++i) {
+	double** newMatrix = new double* [length];
+	for (int i = 0; i < length; ++i)
 		cudaMalloc ( (void**)&newMatrix[i], width * sizeof(double) );
 
 	dim3 threads ( BLOCK_LENGHT_SIZE, BLOCK_WIDTH_SIZE );
@@ -187,7 +187,7 @@ void BlockGpu::setPartBorder(int type, int side, int move, int borderLength) {
 	dim3 threads ( BLOCK_SIZE );
 	dim3 blocks  ( (int)ceil((double)borderLength / threads.x) );
 	
-	assignIntArray <<< block, threads >>> ( borderType[side] + move, type, borderLength );
+	assignIntArray <<< blocks, threads >>> ( borderType[side] + move, type, borderLength );
 }
 
 void BlockGpu::prepareData() {

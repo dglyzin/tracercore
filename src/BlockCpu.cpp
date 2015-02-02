@@ -165,7 +165,7 @@ void BlockCpu::courted(double dX2, double dY2, double dT) {
 	delete tmp;
 }
 
-void Block::prepareData() {
+void BlockCpu::prepareData() {
 	if(!isRealBlock()) return;
 
 	for (int i = 0; i < width; ++i)
