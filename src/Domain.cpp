@@ -31,14 +31,11 @@ void Domain::count() {
 
 	int repeatCount = (int)(1 / dT) + 1;
 
-	for (int i = 0; i < repeatCount; ++i) {
+	for (int i = 0; i < repeatCount; ++i)
 		nextStep(dX2, dY2, dT);
-		//printf("\n%d\t%d\t%d\n", i, repeatCount, world_rank);
-	}
 }
 
 void Domain::nextStep(double dX2, double dY2, double dT) {
-	//printf("\n### from node %d\n", world_rank);
 	for (int i = 0; i < blockCount; ++i)
 		mBlocks[i]->prepareData();
 
@@ -47,7 +44,6 @@ void Domain::nextStep(double dX2, double dY2, double dT) {
 
 	for (int i = 0; i < blockCount; ++i)
 		mBlocks[i]->courted(dX2, dY2, dT);
-	//printf("\n@@@ from node %d\n", world_rank);
 }
 
 void Domain::print(char* path) {

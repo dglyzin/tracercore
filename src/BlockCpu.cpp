@@ -194,7 +194,8 @@ void BlockCpu::setPartBorder(int type, int side, int move, int borderLength) {
 void BlockCpu::print() {
 	printf("FROM NODE #%d", nodeNumber);
 
-	printf("\nLength: %d, Width: %d, World_Rank: %d\n", length, width, nodeNumber);
+	printf("\nLength: %d, Width: %d\n", length, width);
+	printf("\nlengthMove: %d, widthMove: %d\n", lenghtMove, widthMove);
 
 	printf("\nMatrix:\n");
 	for (int i = 0; i < length; ++i)
