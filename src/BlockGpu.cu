@@ -90,6 +90,31 @@ __global__ void assignDoubleArray (double* arr, double value, int arrayLength) {
 		arr[idx] = value;
 }
 
+__global__ void copyBorderFromMatrix ( double* dest, double** matrix, int side, int borderLength )
+{
+	int bx  = blockIdx.x;
+	int tx  = threadIdx.x;
+	int idx  = BLOCK_SIZE * bx + tx;
+	
+	if(idx < borderLength)
+		switch (side) {
+			case TOP:
+				dest[idx] = matrix[0][idx];
+				break;
+			case LEFT:
+				dest[idx] = matrix[idx][0];
+				break;
+			case BOTTOM:
+				dest[idx] = matrix[borderLength - 1][idx];
+				break;
+			case RIGHT:
+				dest[idx] = matrix[idx][borderLength - 1];
+				break;
+			default:
+				break;
+		}
+}
+
 BlockGpu::BlockGpu(int _length, int _width, int _lengthMove, int _widthMove, int _world_rank) : Block(  _length, _width, _lengthMove, _widthMove, _world_rank  ) {	
 	dim3 threads ( BLOCK_SIZE );
 	dim3 blocksLength  ( (int)ceil((double)length / threads.x) );
@@ -191,5 +216,12 @@ void BlockGpu::setPartBorder(int type, int side, int move, int borderLength) {
 }
 
 void BlockGpu::prepareData() {
+	dim3 threads ( BLOCK_SIZE );
+	dim3 blocksLength  ( (int)ceil((double)length / threads.x) );
+	dim3 blocksWidth  ( (int)ceil((double)width / threads.x) );
 	
+	copyBorderFromMatrix <<< blocksWidth, threads >>> (blockBorder[TOP], matrix, TOP, width);
+	copyBorderFromMatrix <<< blocksLength, threads >>> (blockBorder[LEFT], matrix, LEFT, length);
+	copyBorderFromMatrix <<< blocksWidth, threads >>> (blockBorder[BOTTOM], matrix, BOTTOM, width);
+	copyBorderFromMatrix <<< blocksLength, threads >>> (blockBorder[RIGHT], matrix, RIGHT, length);
 }
