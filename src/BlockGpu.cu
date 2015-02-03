@@ -136,6 +136,8 @@ __global__ void copyBorderFromMatrix ( double* dest, double** matrix, int side, 
 BlockGpu::BlockGpu(int _length, int _width, int _lengthMove, int _widthMove, int _world_rank, int _deviceNumber) : Block(  _length, _width, _lengthMove, _widthMove, _world_rank ) {
 	deviceNumber = _deviceNumber;
 	
+	cudaSetDevice(deviceNumber);
+	
 	dim3 threads ( BLOCK_SIZE );
 	dim3 blocksLength  ( (int)ceil((double)length / threads.x) );
 	dim3 blocksWidth  ( (int)ceil((double)width / threads.x) );
@@ -206,6 +208,8 @@ BlockGpu::~BlockGpu() {
 }
 
 void BlockGpu::courted(double dX2, double dY2, double dT) {
+	cudaSetDevice(deviceNumber);
+	
 	double** newMatrix = new double* [length];
 	for (int i = 0; i < length; ++i)
 		cudaMalloc ( (void**)&newMatrix[i], width * sizeof(double) );
@@ -225,6 +229,8 @@ void BlockGpu::courted(double dX2, double dY2, double dT) {
 }
 
 void BlockGpu::setPartBorder(int type, int side, int move, int borderLength) {
+	cudaSetDevice(deviceNumber);
+	
 	if( checkValue(side, move + borderLength) ) {
 		printf("\nCritical error!\n");
 		exit(1);
@@ -236,6 +242,8 @@ void BlockGpu::setPartBorder(int type, int side, int move, int borderLength) {
 }
 
 void BlockGpu::prepareData() {
+	cudaSetDevice(deviceNumber);
+	
 	dim3 threads ( BLOCK_SIZE );
 	dim3 blocksLength  ( (int)ceil((double)length / threads.x) );
 	dim3 blocksWidth  ( (int)ceil((double)width / threads.x) );
