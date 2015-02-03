@@ -7,6 +7,11 @@
 
 #include "BlockGpu.h"
 
+/*
+ * Функция ядра.
+ * Расчет теплоемкости на видеокарте.
+ * Логика функции аналогична функции для центрального процессора.
+ */
 __global__ void calc ( double** matrix, double** newMatrix, int length, int width, double dX2, double dY2, double dT, int **borderType, double** externalBorder ) {
 
 	double top, left, bottom, right, cur;
@@ -72,6 +77,10 @@ __global__ void calc ( double** matrix, double** newMatrix, int length, int widt
 	newMatrix[i][j] = cur + dT * ( ( left - 2*cur + right )/dX2 + ( top - 2*cur + bottom )/dY2  );
 }
 
+/*
+ * Функция ядра
+ * Заполнение целочисленного массива определенным значением.
+ */
 __global__ void assignIntArray (int* arr, int value, int arrayLength) {
 	int bx  = blockIdx.x;
 	int tx  = threadIdx.x;
@@ -81,6 +90,10 @@ __global__ void assignIntArray (int* arr, int value, int arrayLength) {
 		arr[idx] = value;
 }
 
+/*
+ * Функция ядра
+ * Заполнение вещественного массива определенным значением.
+ */
 __global__ void assignDoubleArray (double* arr, double value, int arrayLength) {
 	int bx  = blockIdx.x;
 	int tx  = threadIdx.x;
@@ -90,6 +103,11 @@ __global__ void assignDoubleArray (double* arr, double value, int arrayLength) {
 		arr[idx] = value;
 }
 
+/*
+ * Функция ядра
+ * Копирование данных из матрицы в массив.
+ * Используется при подготовке пересылаемых данных.
+ */
 __global__ void copyBorderFromMatrix ( double* dest, double** matrix, int side, int borderLength )
 {
 	int bx  = blockIdx.x;
@@ -115,7 +133,9 @@ __global__ void copyBorderFromMatrix ( double* dest, double** matrix, int side, 
 		}
 }
 
-BlockGpu::BlockGpu(int _length, int _width, int _lengthMove, int _widthMove, int _world_rank) : Block(  _length, _width, _lengthMove, _widthMove, _world_rank  ) {	
+BlockGpu::BlockGpu(int _length, int _width, int _lengthMove, int _widthMove, int _world_rank, int _deviceNumber) : Block(  _length, _width, _lengthMove, _widthMove, _world_rank ) {
+	deviceNumber = _deviceNumber;
+	
 	dim3 threads ( BLOCK_SIZE );
 	dim3 blocksLength  ( (int)ceil((double)length / threads.x) );
 	dim3 blocksWidth  ( (int)ceil((double)width / threads.x) );
@@ -224,4 +244,17 @@ void BlockGpu::prepareData() {
 	copyBorderFromMatrix <<< blocksLength, threads >>> (blockBorder[LEFT], matrix, LEFT, length);
 	copyBorderFromMatrix <<< blocksWidth, threads >>> (blockBorder[BOTTOM], matrix, BOTTOM, width);
 	copyBorderFromMatrix <<< blocksLength, threads >>> (blockBorder[RIGHT], matrix, RIGHT, length);
+}
+
+int BlockGpu::getBlockType() {
+	switch (deviceNumber) {
+		case 0:
+			return DEVICE0;
+		case 1:
+			return DEVICE1;
+		case 2:
+			return DEVICE2;
+		default:
+			return DEVICE0;
+	}
 }

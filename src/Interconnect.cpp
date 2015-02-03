@@ -35,22 +35,51 @@ void Interconnect::sendRecv(int locationNode) {
 	 * Пересылка для видеокарт и центральным процессоров.
 	 * Пересылка для блоков внутри одного потока
 	 */
+
+	/*
+	 * Пересылка внутри блока.
+	 * На данный момент реализован не оптимальный способ передачи данных внутри потока.
+	 * Данный передаются с помощью MPI-пересылок.
+	 * В дальнейшем должена быть реализована "склейка" границ.
+	 */
 	if(locationNode == sourceLocationNode && locationNode == destinationLocationNode) {
+		/*
+		 * Использование Isend необходимо.
+		 * Если использовать обычный Send есть возможность блока.
+		 *
+		 * Данная часть кода отвечает за пересылку внутри одного узла.
+		 * Если использовать обычный Send, то есть вероятность, что он не будет выполнен полностью до тех пор, пока не начнентся прием данных.
+		 * Прием не начнентся, так как это следующая команда.
+		 *
+		 * Чтобы ихбежать этой проблемы используется Isend. Он позволяет использнять код дальше, независимо от того началась приемка данных или нет.
+		 */
 		MPI_Isend(sourceBlockBorder, borderLength, MPI_DOUBLE, destinationLocationNode, 999, MPI_COMM_WORLD, &request);
 		MPI_Recv(destinationExternalBorder, borderLength, MPI_DOUBLE, sourceLocationNode, 999, MPI_COMM_WORLD, &status);
 		return;
 	}
 
+	/*
+	 * Если эту пеерсылку вызвал поток, который содержить информацию для пересылки.
+	 * Фактически этот поток РЕАЛЬНО содержить блок имеющий исходную информацию. Блок-источник.
+	 */
 	if(locationNode == sourceLocationNode)
 	{
 		MPI_Send(sourceBlockBorder, borderLength, MPI_DOUBLE, destinationLocationNode, 999, MPI_COMM_WORLD);
 		return;
 	}
 
+	/*
+	 * Есои пересылку вызвол поток, который должен принимать инфомацию от другого потока.
+	 * Это поток РЕАЛЬНО имеет блок, которому необходима информация от другого блока.
+	 */
 	if(locationNode == destinationLocationNode) {
 		MPI_Recv(destinationExternalBorder, borderLength, MPI_DOUBLE, sourceLocationNode, 999, MPI_COMM_WORLD, &status);
 		return;
 	}
+
+	/*
+	 * Если же это соединения вызовет поток, которые фактически не имет к нему отношения, то ничего не произойдет.
+	 */
 }
 
 void Interconnect::print(int locationNode) {
