@@ -23,6 +23,12 @@ class BlockGpu: public Block {
 private:
 	int deviceNumber;
 
+	int** borderTypeOnDevice;
+	double** blockBorderOnDevice;
+	double** externalBorderOnDevice;
+
+	double **matrixOnDevice;
+
 public:
 	BlockGpu(int _length, int _width, int _lengthMove, int _widthMove, int _world_rank, int _deviceNumber);
 	virtual ~BlockGpu();
@@ -33,7 +39,6 @@ public:
 
 	void courted(double dX2, double dY2, double dT);
 
-	// TODO DEvice0,1,2??
 	int getBlockType();
 
 	void setPartBorder(int type, int side, int move, int borderLength);

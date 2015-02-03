@@ -198,7 +198,7 @@ Block* Domain::readBlock(ifstream& in) {
 	 * Предписанный поток - поток, который должен иметь этот блок в качестве реального блока.
 	 */
 	if(world_rank_creator == world_rank)
-		return new BlockGpu(length, width, lengthMove, widthMove, world_rank_creator, 0);
+		return new BlockCpu(length, width, lengthMove, widthMove, world_rank_creator);
 	else
 		return new BlockNull(length, width, lengthMove, widthMove, world_rank_creator);
 }

@@ -147,6 +147,7 @@ BlockGpu::BlockGpu(int _length, int _width, int _lengthMove, int _widthMove, int
 		cudaMalloc ( (void**)&matrix[i], width * sizeof(double) );
 		assignDoubleArray <<< blocksWidth, threads >>> ( matrix[i], 0, width );
 	}
+	cudaMemcpy( matrixOnDevice, matrix, length * sizeof(double*), cudaMemcpyHostToDevice );
 
 	/*
 	 * Типы границ блока. Выделение памяти.
@@ -165,6 +166,8 @@ BlockGpu::BlockGpu(int _length, int _width, int _lengthMove, int _widthMove, int
 	cudaMalloc ( (void**)&borderType[RIGHT], length * sizeof(int) );
 	assignIntArray <<< blocksLength, threads >>> ( borderType[RIGHT], BY_FUNCTION, length );
 	
+	cudaMemcpy( borderTypeOnDevice, borderType, BORDER_COUNT * sizeof(int*), cudaMemcpyHostToDevice );
+	
 	/*
 	 * Границы самого блока.
 	 * Это он будет отдавать. Выделение памяти.
@@ -182,6 +185,8 @@ BlockGpu::BlockGpu(int _length, int _width, int _lengthMove, int _widthMove, int
 
 	cudaMalloc ( (void**)&blockBorder[RIGHT], length * sizeof(double) );
 	assignDoubleArray <<< blocksLength, threads >>> ( blockBorder[RIGHT], 0, length );
+	
+	cudaMemcpy( blockBorderOnDevice, blockBorder, BORDER_COUNT * sizeof(double*), cudaMemcpyHostToDevice );
 
 
 	/*
@@ -201,6 +206,8 @@ BlockGpu::BlockGpu(int _length, int _width, int _lengthMove, int _widthMove, int
 
 	cudaMalloc ( (void**)&externalBorder[RIGHT], length * sizeof(double) );
 	assignDoubleArray <<< blocksLength, threads >>> ( externalBorder[RIGHT], 10, length );
+	
+	cudaMemcpy( externalBorderOnDevice, externalBorder, BORDER_COUNT * sizeof(double*), cudaMemcpyHostToDevice );
 }
 
 BlockGpu::~BlockGpu() {
@@ -217,7 +224,7 @@ void BlockGpu::courted(double dX2, double dY2, double dT) {
 	dim3 threads ( BLOCK_LENGHT_SIZE, BLOCK_WIDTH_SIZE );
 	dim3 blocks  ( (int)ceil((double)length / threads.x), (int)ceil((double)width / threads.y) );
 
-	calc <<< blocks, threads >>> ( matrix, newMatrix, length, width, dX2, dY2, dT, borderType, externalBorder );
+	calc <<< blocks, threads >>> ( matrix, newMatrix, length, width, dX2, dY2, dT, borderTypeOnDevice, externalBorderOnDevice );
 
 	double** tmp = matrix;
 
@@ -238,7 +245,7 @@ void BlockGpu::setPartBorder(int type, int side, int move, int borderLength) {
 	dim3 threads ( BLOCK_SIZE );
 	dim3 blocks  ( (int)ceil((double)borderLength / threads.x) );
 	
-	assignIntArray <<< blocks, threads >>> ( borderType[side] + move, type, borderLength );
+	assignIntArray <<< blocks, threads >>> ( borderTypeOnDevice[side] + move, type, borderLength );
 }
 
 void BlockGpu::prepareData() {
