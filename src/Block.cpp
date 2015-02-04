@@ -18,7 +18,7 @@ Block::Block() {
 	blockBorder = NULL;
 	externalBorder = NULL;
 
-	matrix = NULL;
+	matrix = newMatrix = NULL;
 }
 
 Block::Block(int _length, int _width, int _lengthMove, int _widthMove, int _nodeNumber) {
@@ -34,7 +34,7 @@ Block::Block(int _length, int _width, int _lengthMove, int _widthMove, int _node
 	blockBorder = NULL;
 	externalBorder = NULL;
 
-	matrix = NULL;
+	matrix = newMatrix = NULL;
 }
 
 Block::~Block() {

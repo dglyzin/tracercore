@@ -21,6 +21,7 @@ Domain::~Domain() {
 }
 
 void Domain::count() {
+	printf("\nEnter count!\n");
 	/*
 	 * Вычисление коэффициентов необходимых для расчета теплопроводности
 	 */
@@ -45,6 +46,8 @@ void Domain::count() {
 	 */
 	for (int i = 0; i < repeatCount; ++i)
 		nextStep(dX2, dY2, dT);
+
+	printf("\nExit count!\n");
 }
 
 void Domain::nextStep(double dX2, double dY2, double dT) {
@@ -160,12 +163,16 @@ void Domain::readFromFile(char* path) {
 	for (int i = 0; i < blockCount; ++i)
 		mBlocks[i] = readBlock(in);
 
+	printf("\nRead block done!\n");
+
 	in >> connectionCount;
 
 	mInterconnects = new Interconnect* [connectionCount];
 
 	for (int i = 0; i < connectionCount; ++i)
 		mInterconnects[i] = readConnection(in);
+
+	printf("\nRead connection done!\n");
 }
 
 void Domain::readLengthAndWidthArea(ifstream& in) {

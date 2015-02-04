@@ -12,13 +12,16 @@ using namespace std;
 BlockCpu::BlockCpu(int _length, int _width, int _lengthMove, int _widthMove, int _world_rank) : Block(  _length, _width, _lengthMove, _widthMove, _world_rank  ) {
 
 	matrix = new double* [length];
+	newMatrix = new double* [length];
 
-	for(int i = 0; i < length; i++)
-		matrix[i] = new double[width];
+	for(int i = 0; i < length; i++) {
+		matrix[i] = new double [width];
+		newMatrix[i] = new double [width];
+	}
 
 	for (int i = 0; i < length; ++i)
 		for (int j = 0; j < width; ++j)
-			matrix[i][j] = 0;
+			matrix[i][j] = newMatrix[i][j] = 0;
 
 	/*
 	 * Типы границ блока. Выделение памяти.
@@ -95,10 +98,6 @@ void BlockCpu::courted(double dX2, double dY2, double dT) {
 	/*
 	 * Теплопроводность
 	 */
-
-	double** newMatrix = new double* [length];
-	for(int i = 0; i < length; i++)
-		newMatrix[i] = new double[width];
 
 	/*
 	 * Параллельное вычисление на максимально возможном количестве потоков.
@@ -226,9 +225,7 @@ void BlockCpu::courted(double dX2, double dY2, double dT) {
 
 	matrix = newMatrix;
 
-	for(int i = 0; i < length; i++)
-		delete tmp[i];
-	delete tmp;
+	newMatrix = tmp;
 }
 
 void BlockCpu::prepareData() {

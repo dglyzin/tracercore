@@ -42,6 +42,8 @@ public:
 	int getBlockType();
 
 	void setPartBorder(int type, int side, int move, int borderLength);
+
+	double** getResault();
 };
 
 #endif /* SRC_BLOCKGPU_H_ */

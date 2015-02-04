@@ -147,6 +147,7 @@ BlockGpu::BlockGpu(int _length, int _width, int _lengthMove, int _widthMove, int
 		cudaMalloc ( (void**)&matrix[i], width * sizeof(double) );
 		assignDoubleArray <<< blocksWidth, threads >>> ( matrix[i], 0, width );
 	}
+	cudaMalloc ( (void**)&matrixOnDevice, length * sizeof(double*) );
 	cudaMemcpy( matrixOnDevice, matrix, length * sizeof(double*), cudaMemcpyHostToDevice );
 
 	/*
@@ -166,6 +167,7 @@ BlockGpu::BlockGpu(int _length, int _width, int _lengthMove, int _widthMove, int
 	cudaMalloc ( (void**)&borderType[RIGHT], length * sizeof(int) );
 	assignIntArray <<< blocksLength, threads >>> ( borderType[RIGHT], BY_FUNCTION, length );
 	
+	cudaMalloc ( (void**)&borderTypeOnDevice, BORDER_COUNT * sizeof(int*) );
 	cudaMemcpy( borderTypeOnDevice, borderType, BORDER_COUNT * sizeof(int*), cudaMemcpyHostToDevice );
 	
 	/*
@@ -186,6 +188,7 @@ BlockGpu::BlockGpu(int _length, int _width, int _lengthMove, int _widthMove, int
 	cudaMalloc ( (void**)&blockBorder[RIGHT], length * sizeof(double) );
 	assignDoubleArray <<< blocksLength, threads >>> ( blockBorder[RIGHT], 0, length );
 	
+	cudaMalloc ( (void**)&blockBorderOnDevice, BORDER_COUNT * sizeof(double*) );
 	cudaMemcpy( blockBorderOnDevice, blockBorder, BORDER_COUNT * sizeof(double*), cudaMemcpyHostToDevice );
 
 
@@ -207,6 +210,7 @@ BlockGpu::BlockGpu(int _length, int _width, int _lengthMove, int _widthMove, int
 	cudaMalloc ( (void**)&externalBorder[RIGHT], length * sizeof(double) );
 	assignDoubleArray <<< blocksLength, threads >>> ( externalBorder[RIGHT], 10, length );
 	
+	cudaMalloc ( (void**)&externalBorderOnDevice, BORDER_COUNT * sizeof(double*) );
 	cudaMemcpy( externalBorderOnDevice, externalBorder, BORDER_COUNT * sizeof(double*), cudaMemcpyHostToDevice );
 }
 
@@ -217,14 +221,20 @@ BlockGpu::~BlockGpu() {
 void BlockGpu::courted(double dX2, double dY2, double dT) {
 	cudaSetDevice(deviceNumber);
 	
+	cudaMemcpy( matrixOnDevice, matrix, length * sizeof(double*), cudaMemcpyHostToDevice );
+	
 	double** newMatrix = new double* [length];
 	for (int i = 0; i < length; ++i)
 		cudaMalloc ( (void**)&newMatrix[i], width * sizeof(double) );
+	
+	double** newMatrixOnDevice;
+	cudaMalloc ( (void**)&newMatrixOnDevice, length * sizeof(double*) );
+	cudaMemcpy( newMatrixOnDevice, newMatrix, length * sizeof(double*), cudaMemcpyHostToDevice );
 
 	dim3 threads ( BLOCK_LENGHT_SIZE, BLOCK_WIDTH_SIZE );
 	dim3 blocks  ( (int)ceil((double)length / threads.x), (int)ceil((double)width / threads.y) );
 
-	calc <<< blocks, threads >>> ( matrix, newMatrix, length, width, dX2, dY2, dT, borderTypeOnDevice, externalBorderOnDevice );
+	calc <<< blocks, threads >>> ( matrixOnDevice, newMatrixOnDevice, length, width, dX2, dY2, dT, borderTypeOnDevice, externalBorderOnDevice );
 
 	double** tmp = matrix;
 
@@ -233,6 +243,8 @@ void BlockGpu::courted(double dX2, double dY2, double dT) {
 	for(int i = 0; i < length; i++)
 		cudaFree(tmp[i]);
 	delete tmp;
+	
+	cudaFree(newMatrixOnDevice);
 }
 
 void BlockGpu::setPartBorder(int type, int side, int move, int borderLength) {
@@ -272,4 +284,17 @@ int BlockGpu::getBlockType() {
 		default:
 			return DEVICE0;
 	}
+}
+
+double** BlockGpu::getResault() {
+	double** res;
+	res = new double* [length];
+
+	for(int i = 0; i < length; i++)
+		res[i] = new double[width];
+	
+	for( int i = 0; i < length; i++ )
+		cudaMemcpy( res[i], matrix[i], width * sizeof(double), cudaMemcpyDeviceToHost );
+	
+	return res;
 }
