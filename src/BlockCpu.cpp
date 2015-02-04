@@ -11,17 +11,12 @@ using namespace std;
 
 BlockCpu::BlockCpu(int _length, int _width, int _lengthMove, int _widthMove, int _world_rank) : Block(  _length, _width, _lengthMove, _widthMove, _world_rank  ) {
 
-	matrix = new double* [length];
-	newMatrix = new double* [length];
-
-	for(int i = 0; i < length; i++) {
-		matrix[i] = new double [width];
-		newMatrix[i] = new double [width];
-	}
+	matrix = new double [length * width];
+	newMatrix = new double [length * width];
 
 	for (int i = 0; i < length; ++i)
 		for (int j = 0; j < width; ++j)
-			matrix[i][j] = newMatrix[i][j] = 0;
+			matrix[i * width + j] = newMatrix[i * width + j] = 0;
 
 	/*
 	 * Типы границ блока. Выделение памяти.
@@ -146,7 +141,7 @@ void BlockCpu::courted(double dX2, double dY2, double dT) {
 				 * Но продолжаем расчет.
 				 */
 				if( borderType[TOP][j] == BY_FUNCTION ) {
-					newMatrix[i][j] = externalBorder[TOP][j];
+					newMatrix[i * width + j] = externalBorder[TOP][j];
 					continue;
 				}
 				else
@@ -155,7 +150,7 @@ void BlockCpu::courted(double dX2, double dY2, double dT) {
 				/*
 				 * Если находимся не на верхней границе блока, то есть возможность просто получить значение в ячейке выше данной.
 				 */
-				top = matrix[i - 1][j];
+				top = matrix[(i - 1) * width + j];
 
 
 			/*
@@ -166,13 +161,13 @@ void BlockCpu::courted(double dX2, double dY2, double dT) {
 			 */
 			if( j == 0 )
 				if( borderType[LEFT][i] == BY_FUNCTION ) {
-					newMatrix[i][j] = externalBorder[LEFT][i];
+					newMatrix[i * width + j] = externalBorder[LEFT][i];
 					continue;
 				}
 				else
 					left = externalBorder[LEFT][i];
 			else
-				left = matrix[i][j - 1];
+				left = matrix[i * width + (j - 1)];
 
 
 			/*
@@ -181,13 +176,13 @@ void BlockCpu::courted(double dX2, double dY2, double dT) {
 			 */
 			if( i == length - 1 )
 				if( borderType[BOTTOM][j] == BY_FUNCTION ) {
-					newMatrix[i][j] = externalBorder[BOTTOM][j];
+					newMatrix[i * width + j] = externalBorder[BOTTOM][j];
 					continue;
 				}
 				else
 					bottom = externalBorder[BOTTOM][j];
 			else
-				bottom = matrix[i + 1][j];
+				bottom = matrix[(i + 1) * width + j];
 
 
 			/*
@@ -196,24 +191,24 @@ void BlockCpu::courted(double dX2, double dY2, double dT) {
 			 */
 			if( j == width - 1 )
 				if( borderType[RIGHT][i] == BY_FUNCTION ) {
-					newMatrix[i][j] = externalBorder[RIGHT][i];
+					newMatrix[i * width + j] = externalBorder[RIGHT][i];
 					continue;
 				}
 				else
 					right = externalBorder[RIGHT][i];
 			else
-				right = matrix[i][j + 1];
+				right = matrix[i * width + (j + 1)];
 
 
 			/*
 			 * Текущее значение всегда (если вообще дошли до этого места) можно просто получить из матрицы.
 			 */
-			cur = matrix[i][j];
+			cur = matrix[i * width + j];
 
 			/*
 			 * Формула расчета для конкретной точки.
 			 */
-			newMatrix[i][j] = cur + dT * ( ( left - 2*cur + right )/dX2 + ( top - 2*cur + bottom )/dY2  );
+			newMatrix[i * width + j] = cur + dT * ( ( left - 2*cur + right )/dX2 + ( top - 2*cur + bottom )/dY2  );
 		}
 }
 /*
@@ -221,7 +216,7 @@ void BlockCpu::courted(double dX2, double dY2, double dT) {
  * Новая матрица становится текущей
  * Память, занимаемая старой матрицей освобождается.
  */
-	double** tmp = matrix;
+	double* tmp = matrix;
 
 	matrix = newMatrix;
 
@@ -234,16 +229,20 @@ void BlockCpu::prepareData() {
 	 * В дальнейшем эти массивы (или их части) будет пеесылаться другим блокам.
 	 */
 	for (int i = 0; i < width; ++i)
-		blockBorder[TOP][i] = matrix[0][i];
+		blockBorder[TOP][i] = matrix[0 * width + i];
+
+	//memcpy(blockBorder[TOP], matrix, width);
 
 	for (int i = 0; i < length; ++i)
-		blockBorder[LEFT][i] = matrix[i][0];
+		blockBorder[LEFT][i] = matrix[i * width + 0];
 
 	for (int i = 0; i < width; ++i)
-		blockBorder[BOTTOM][i] = matrix[length-1][i];
+		blockBorder[BOTTOM][i] = matrix[(length - 1) * width + i];
+
+	//memcpy(blockBorder[BOTTOM], matrix + (length - 1) * width, width);
 
 	for (int i = 0; i < length; ++i)
-		blockBorder[RIGHT][i] = matrix[i][width-1];
+		blockBorder[RIGHT][i] = matrix[i * width + (width - 1)];
 }
 
 void BlockCpu::setPartBorder(int type, int side, int move, int borderLength) {
@@ -271,7 +270,7 @@ void BlockCpu::print() {
 	for (int i = 0; i < length; ++i)
 	{
 		for (int j = 0; j < width; ++j)
-			printf("%6.1f ", matrix[i][j]);
+			printf("%6.1f ", matrix[i * width + j]);
 		printf("\n");
 	}
 
@@ -356,7 +355,7 @@ void BlockCpu::printMatrix() {
 	for (int i = 0; i < length; ++i)
 	{
 		for (int j = 0; j < width; ++j)
-			printf("%6.1f ", matrix[i][j]);
+			printf("%6.1f ", matrix[i * width + j]);
 		printf("\n");
 	}
 }

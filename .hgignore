@@ -15,3 +15,4 @@ HS
 .ptp-sync
 .settings
 src/.*
+*.sh

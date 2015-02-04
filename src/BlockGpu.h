@@ -27,7 +27,8 @@ private:
 	double** blockBorderOnDevice;
 	double** externalBorderOnDevice;
 
-	double **matrixOnDevice;
+	double** matrixOnDevice;
+	double** newMatrixOnDevice;
 
 public:
 	BlockGpu(int _length, int _width, int _lengthMove, int _widthMove, int _world_rank, int _deviceNumber);

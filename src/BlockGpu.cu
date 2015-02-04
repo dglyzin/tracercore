@@ -147,6 +147,12 @@ BlockGpu::BlockGpu(int _length, int _width, int _lengthMove, int _widthMove, int
 		cudaMalloc ( (void**)&matrix[i], width * sizeof(double) );
 		assignDoubleArray <<< blocksWidth, threads >>> ( matrix[i], 0, width );
 	}
+	
+	newMatrix = new double* [length];
+	for (int i = 0; i < length; ++i) {
+		cudaMalloc ( (void**)&newMatrix[i], width * sizeof(double) );
+		assignDoubleArray <<< blocksWidth, threads >>> ( newMatrix[i], 0, width );
+	}	
 	cudaMalloc ( (void**)&matrixOnDevice, length * sizeof(double*) );
 	cudaMemcpy( matrixOnDevice, matrix, length * sizeof(double*), cudaMemcpyHostToDevice );
 

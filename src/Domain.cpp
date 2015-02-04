@@ -93,7 +93,7 @@ void Domain::print(char* path) {
 				resaultAll[i][j] = 0;
 
 		/*
-		 * Движемся по массиву блоков и проверяем реальны ли он на жанном потоке исполнения.
+		 * Движемся по массиву блоков и проверяем реальны ли они на данном потоке исполнения.
 		 * Если реальны, то пересылка не нужна - это блоки потока 0.
 		 * Можно просто забрать данные.
 		 *
@@ -104,15 +104,15 @@ void Domain::print(char* path) {
 		 */
 		for (int i = 0; i < blockCount; ++i) {
 			if(mBlocks[i]->isRealBlock()) {
-				double** resault = mBlocks[i]->getResault();
+				double* resault = mBlocks[i]->getResault();
 
 				for (int j = 0; j < mBlocks[i]->getLength(); ++j)
 					for (int k = 0; k < mBlocks[i]->getWidth(); ++k)
-						resaultAll[j + mBlocks[i]->getLenghtMove()][k + mBlocks[i]->getWidthMove()] = resault[j][k];
+						resaultAll[j + mBlocks[i]->getLenghtMove()][k + mBlocks[i]->getWidthMove()] = resault[j * mBlocks[i]->getWidth() + k];
 			}
 			else
 				/*
-				 * Данные получаем построчно
+				 * Данные получаем все сразу
 				 */
 				for (int j = 0; j < mBlocks[i]->getLength(); ++j)
 					MPI_Recv(resaultAll[j + mBlocks[i]->getLenghtMove()] + mBlocks[i]->getWidthMove(), mBlocks[i]->getWidth(), MPI_DOUBLE, mBlocks[i]->getNodeNumber(), 999, MPI_COMM_WORLD, &status);
@@ -142,10 +142,10 @@ void Domain::print(char* path) {
 		 */
 		for (int i = 0; i < blockCount; ++i) {
 			if(mBlocks[i]->isRealBlock()) {
-				double** resault = mBlocks[i]->getResault();
+				double* resault = mBlocks[i]->getResault();
 
 				for (int j = 0; j < mBlocks[i]->getLength(); ++j)
-					MPI_Send(resault[j], mBlocks[i]->getWidth(), MPI_DOUBLE, 0, 999, MPI_COMM_WORLD);
+					MPI_Send(resault + (j * mBlocks[i]->getWidth()), mBlocks[i]->getWidth(), MPI_DOUBLE, 0, 999, MPI_COMM_WORLD);
 			}
 		}
 	}

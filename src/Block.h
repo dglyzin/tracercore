@@ -13,6 +13,8 @@
 #include <cmath>
 #include <math.h>
 
+#include <string.h>
+
 #include <omp.h>
 
 #include "Enums.h"
@@ -31,8 +33,8 @@ protected:
 	 * Хранит текущее значения области.
 	 * Из нее получаются границы блока - для пересылки
 	 */
-	double** matrix;
-	double** newMatrix;
+	double* matrix;
+	double* newMatrix;
 
 	/*
 	 * Длина и ширина матрицы для вычислений.
@@ -129,7 +131,7 @@ public:
 	/*
 	 * Возвращает результурющую матрицу данного блока.
 	 */
-	virtual double** getResault() { return matrix; }
+	virtual double* getResault() { return matrix; }
 
 	int getLength() { return length; }
 	int getWidth() { return width; }
