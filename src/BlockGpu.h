@@ -27,9 +27,6 @@ private:
 	double** blockBorderOnDevice;
 	double** externalBorderOnDevice;
 
-	double** matrixOnDevice;
-	double** newMatrixOnDevice;
-
 public:
 	BlockGpu(int _length, int _width, int _lengthMove, int _widthMove, int _world_rank, int _deviceNumber);
 	virtual ~BlockGpu();
@@ -44,7 +41,9 @@ public:
 
 	void setPartBorder(int type, int side, int move, int borderLength);
 
-	double** getResault();
+	double* getResault();
+
+	void print();
 };
 
 #endif /* SRC_BLOCKGPU_H_ */

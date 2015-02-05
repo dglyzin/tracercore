@@ -21,7 +21,6 @@ Domain::~Domain() {
 }
 
 void Domain::count() {
-	printf("\nEnter count!\n");
 	/*
 	 * Вычисление коэффициентов необходимых для расчета теплопроводности
 	 */
@@ -46,8 +45,6 @@ void Domain::count() {
 	 */
 	for (int i = 0; i < repeatCount; ++i)
 		nextStep(dX2, dY2, dT);
-
-	printf("\nExit count!\n");
 }
 
 void Domain::nextStep(double dX2, double dY2, double dT) {
@@ -163,16 +160,12 @@ void Domain::readFromFile(char* path) {
 	for (int i = 0; i < blockCount; ++i)
 		mBlocks[i] = readBlock(in);
 
-	printf("\nRead block done!\n");
-
 	in >> connectionCount;
 
 	mInterconnects = new Interconnect* [connectionCount];
 
 	for (int i = 0; i < connectionCount; ++i)
 		mInterconnects[i] = readConnection(in);
-
-	printf("\nRead connection done!\n");
 }
 
 void Domain::readLengthAndWidthArea(ifstream& in) {
@@ -205,7 +198,7 @@ Block* Domain::readBlock(ifstream& in) {
 	 * Предписанный поток - поток, который должен иметь этот блок в качестве реального блока.
 	 */
 	if(world_rank_creator == world_rank)
-		return new BlockCpu(length, width, lengthMove, widthMove, world_rank_creator);
+		return new BlockGpu(length, width, lengthMove, widthMove, world_rank_creator, 0);
 	else
 		return new BlockNull(length, width, lengthMove, widthMove, world_rank_creator);
 }
@@ -287,8 +280,11 @@ Interconnect* Domain::readConnection(ifstream& in) {
 	 * Функция oppositeBorder возвращает противоположную сторону.
 	 * Если граница блока назначения правая - значит у блока источника левая и так далее.
 	 */
+
+
 	double* sourceData = mBlocks[source]->getBorderBlockData( oppositeBorder(side), connectionSourceMove );
 	double* destinationData = mBlocks[destination]->getExternalBorderData(side, connectionDestinationMove);
+
 
 	/*
 	 * Если блок назначения реален для данного потока,то тип границы должен быть изменен, чтобы вчисления были корректны.
