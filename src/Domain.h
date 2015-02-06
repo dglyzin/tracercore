@@ -16,45 +16,6 @@
 #include <fstream>
 #include <string.h>
 
-#define b0_length 50
-#define b0_width 25
-#define b0_moveL 35
-#define b0_moveW 0
-
-#define b1_length 25
-#define b1_width 50
-#define b1_moveL 50
-#define b1_moveW 25
-
-#define b2_length 50
-#define b2_width 25
-#define b2_moveL 0
-#define b2_moveW 38
-
-#define b3_length 50
-#define b3_width 25
-#define b3_moveL 35
-#define b3_moveW 75
-
-
-#define b0_right_border_move 15
-
-#define b1_top_border_move 13
-#define b1_left_border_move 0
-#define b1_right_border_move 0
-
-#define b2_bottom_border_move 0
-
-#define b3_left_border_move 15
-
-
-#define b0_b1_border_length 25
-#define b1_b2_border_length 25
-#define b1_b3_border_length 25
-
-#define areaLength 85
-#define areaWidth 100
-
 /*
  * Основной управляющий класс приложения.
  * Создает блоки (BlockCpu, BlockGpu, BlockNull) и их соединения (Interconnect).
@@ -87,6 +48,10 @@ public:
 	 * Сумма со всех блоков.
 	 */
 	int getCountGridNodes();
+	int getRepeatCount();
+
+	int getCountCpuBlocks();
+	int getCountGpuBlocks();
 
 private:
 	/*

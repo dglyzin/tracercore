@@ -50,6 +50,14 @@ int main(int argc, char * argv[]) {
 	 * Номер потока, количество потоков и путь к файлу с данными.
 	 */
 	Domain *d = new Domain(world_rank, world_size, argv[1]);
+	MPI_Barrier(MPI_COMM_WORLD);
+
+	if(world_rank == 0) {
+		printf("\n\n");
+		printf("File:         %s\n", argv[1]);
+		printf("Node count:   %d\n", d->getCountGridNodes());
+		printf("Repeat count: %d\n", d->getRepeatCount());
+	}
 
 	/*
 	 * Вычисления.
@@ -64,8 +72,16 @@ int main(int argc, char * argv[]) {
 	 * Вывод информации о времени работы осуществляет только поток с номером 0.
 	 * Время работы -  разница между двумя отсечками, котрые были сделаны ранее.
 	 */
-	if(world_rank == 0)
-		printf("\n\nCount grid nodes: %d, time: %f\n\n\n", d->getCountGridNodes(), time2 - time1);
+	if(world_rank == 0) {
+		double calcTime = time2 - time1;
+		printf("Time:         %f\n", calcTime);
+		printf("Speed:        %f\n", (double)(d->getCountGridNodes()) * d->getRepeatCount() / calcTime);
+		printf("\n");
+	}
+
+	MPI_Barrier(MPI_COMM_WORLD);
+
+	printf("\nThread #%d CPU blocks: %d, GPU blocks: %d\n", world_rank, d->getCountCpuBlocks(), d->getCountGpuBlocks());
 
 	/*
 	 * Сбор и вывод результата.

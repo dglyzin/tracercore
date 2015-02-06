@@ -23,6 +23,8 @@ public:
 	virtual ~BlockNull();
 
 	bool isRealBlock() { return false; }
+
+	int getBlockType() { return NULL_BLOCK; }
 };
 
 #endif /* SRC_BLOCKNULL_H_ */

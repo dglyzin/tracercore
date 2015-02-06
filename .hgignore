@@ -16,3 +16,4 @@ HS
 .settings
 src/.*
 *.sh
+big*

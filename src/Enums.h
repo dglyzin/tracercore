@@ -22,7 +22,7 @@ enum BORDER_SIDE {TOP, LEFT, BOTTOM, RIGHT, BORDER_COUNT};
  * Типы блоков.
  * Центральный процессов или одна их трех видеокарт.
  */
-enum BLOCK_TYPE { CPU, DEVICE0, DEVICE1, DEVICE2 };
+enum BLOCK_TYPE { NULL_BLOCK, CPU, DEVICE0, DEVICE1, DEVICE2 };
 
 int oppositeBorder(int side);
 int getDeviceNumber(int blockType);

@@ -24,8 +24,8 @@ void Domain::count() {
 	/*
 	 * Вычисление коэффициентов необходимых для расчета теплопроводности
 	 */
-	double dX = 1./areaWidth;
-	double dY = 1./areaLength;
+	double dX = 1./widthArea;
+	double dY = 1./lengthArea;
 
 	/*
 	 * Аналогично вышенаписанному
@@ -198,7 +198,7 @@ Block* Domain::readBlock(ifstream& in) {
 	 * Предписанный поток - поток, который должен иметь этот блок в качестве реального блока.
 	 */
 	if(world_rank_creator == world_rank)
-		return new BlockGpu(length, width, lengthMove, widthMove, world_rank_creator, 0);
+		return new BlockCpu(length, width, lengthMove, widthMove, world_rank_creator);
 	else
 		return new BlockNull(length, width, lengthMove, widthMove, world_rank_creator);
 }
@@ -304,6 +304,36 @@ int Domain::getCountGridNodes() {
 	int count = 0;
 	for (int i = 0; i < blockCount; ++i)
 		count += mBlocks[i]->getCountGridNodes();
+
+	return count;
+}
+
+int Domain::getRepeatCount() {
+	double dX = 1./widthArea;
+	double dY = 1./lengthArea;
+
+	double dX2 = dX * dX;
+	double dY2 = dY * dY;
+
+	double dT = ( dX2 * dY2 ) / ( 2 * ( dX2 + dY2 ) );
+
+	return (int)(1 / dT) + 1;
+}
+
+int Domain::getCountCpuBlocks() {
+	int count = 0;
+	for (int i = 0; i < blockCount; ++i)
+		if(mBlocks[i]->getBlockType() == CPU )
+			count++;
+
+	return count;
+}
+
+int Domain::getCountGpuBlocks() {
+	int count = 0;
+	for (int i = 0; i < blockCount; ++i)
+		if(mBlocks[i]->getBlockType() != CPU && mBlocks[i]->getBlockType() != NULL_BLOCK)
+			count++;
 
 	return count;
 }
