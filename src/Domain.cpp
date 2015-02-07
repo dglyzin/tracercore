@@ -39,6 +39,8 @@ void Domain::count() {
 	 * Вычисление количества необходимых итераций
 	 */
 	int repeatCount = (int)(1 / dT) + 1;
+	//repeatCount = 5000;
+	//printf("\nREPEAT COUNT NOT RIGHT!!!\n");
 
 	/*
 	 * Выполнение
@@ -63,8 +65,12 @@ void Domain::nextStep(double dX2, double dY2, double dT) {
 	/*
 	 * Перерасчет данных
 	 */
-	for (int i = 0; i < blockCount; ++i)
-		mBlocks[i]->courted(dX2, dY2, dT);
+//#pragma omp parallel
+	{
+//#pragma omp for
+		for (int i = 0; i < blockCount; ++i)
+			mBlocks[i]->courted(dX2, dY2, dT);
+	}
 }
 
 void Domain::print(char* path) {
@@ -182,6 +188,8 @@ Block* Domain::readBlock(ifstream& in) {
 
 	int world_rank_creator;
 
+	int type = 0;
+
 	in >> length;
 	in >> width;
 
@@ -189,6 +197,8 @@ Block* Domain::readBlock(ifstream& in) {
 	in >> widthMove;
 
 	in >> world_rank_creator;
+
+	//in >> type;
 
 	/*
 	 * Если номер потока исполнения и номер предписанного потока совпадают, то будет сформирован реальный блок.
@@ -198,7 +208,18 @@ Block* Domain::readBlock(ifstream& in) {
 	 * Предписанный поток - поток, который должен иметь этот блок в качестве реального блока.
 	 */
 	if(world_rank_creator == world_rank)
-		return new BlockCpu(length, width, lengthMove, widthMove, world_rank_creator);
+		switch (type) {
+			case 0:
+				return new BlockCpu(length, width, lengthMove, widthMove, world_rank_creator);
+			case 1:
+				return new BlockGpu(length, width, lengthMove, widthMove, world_rank_creator, 0);
+			case 2:
+				return new BlockGpu(length, width, lengthMove, widthMove, world_rank_creator, 1);
+			case 3:
+				return new BlockGpu(length, width, lengthMove, widthMove, world_rank_creator, 0);
+			default:
+				return new BlockNull(length, width, lengthMove, widthMove, world_rank_creator);
+		}
 	else
 		return new BlockNull(length, width, lengthMove, widthMove, world_rank_creator);
 }

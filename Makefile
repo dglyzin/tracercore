@@ -23,8 +23,8 @@ Domain.o: $(SRC)/Domain.cpp
 Block.o: $(SRC)/Block.cpp  
 	$(CC) $(CFLAGS) $(SRC)/Block.cpp  -fopenmp -o $(BIN)/Block.o
 
-Interconnect.o: $(SRC)/Interconnect.cpp  
-	$(CC) $(CFLAGS) $(SRC)/Interconnect.cpp -o $(BIN)/Interconnect.o
+Interconnect.o: $(SRC)/Interconnect.cu  
+	$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I$(CUDAINC) -I/usr/mpi/gcc/openmpi-1.8.4/include -L /usr/mpi/gcc/openmpi-1.8.4/lib -lmpi -lmpi_cxx $(SRC)/Interconnect.cu -o $(BIN)/Interconnect.o
 	
 BlockCpu.o: $(SRC)/BlockCpu.cpp  
 	$(CC) $(CFLAGS) $(SRC)/BlockCpu.cpp  -fopenmp -o $(BIN)/BlockCpu.o

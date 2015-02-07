@@ -18,7 +18,7 @@ int main(int argc, char * argv[]) {
 	 * TODO Функции расчета для блоков
 	 * TODO Функции расчета в домене для вычисления граничных уловий
 	 * TODO Пересылка между видеокартами и центральными процессора на разных потоках исполения
-	 * TODO Реализовать работу с помощью видеокарт. Класс BlockGpu.
+	 * TODO [Done!]Реализовать работу с помощью видеокарт. Класс BlockGpu.
 	 *
 	 * TODO Реализовать чтение с файла.
 	 * TODO [Done!] Потоки должны знать кто и кого должен был создать.
@@ -50,7 +50,6 @@ int main(int argc, char * argv[]) {
 	 * Номер потока, количество потоков и путь к файлу с данными.
 	 */
 	Domain *d = new Domain(world_rank, world_size, argv[1]);
-	MPI_Barrier(MPI_COMM_WORLD);
 
 	if(world_rank == 0) {
 		printf("\n\n");
@@ -79,7 +78,6 @@ int main(int argc, char * argv[]) {
 		printf("\n");
 	}
 
-	MPI_Barrier(MPI_COMM_WORLD);
 
 	printf("\nThread #%d CPU blocks: %d, GPU blocks: %d\n", world_rank, d->getCountCpuBlocks(), d->getCountGpuBlocks());
 
