@@ -65,9 +65,9 @@ void Domain::nextStep(double dX2, double dY2, double dT) {
 	/*
 	 * Перерасчет данных
 	 */
-//#pragma omp parallel
+#pragma omp parallel
 	{
-//#pragma omp for
+#pragma omp for
 		for (int i = 0; i < blockCount; ++i)
 			mBlocks[i]->courted(dX2, dY2, dT);
 	}
@@ -198,7 +198,7 @@ Block* Domain::readBlock(ifstream& in) {
 
 	in >> world_rank_creator;
 
-	//in >> type;
+	in >> type;
 
 	/*
 	 * Если номер потока исполнения и номер предписанного потока совпадают, то будет сформирован реальный блок.
@@ -216,7 +216,7 @@ Block* Domain::readBlock(ifstream& in) {
 			case 2:
 				return new BlockGpu(length, width, lengthMove, widthMove, world_rank_creator, 1);
 			case 3:
-				return new BlockGpu(length, width, lengthMove, widthMove, world_rank_creator, 0);
+				return new BlockGpu(length, width, lengthMove, widthMove, world_rank_creator, 2);
 			default:
 				return new BlockNull(length, width, lengthMove, widthMove, world_rank_creator);
 		}
