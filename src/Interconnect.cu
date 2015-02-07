@@ -53,14 +53,27 @@ void Interconnect::sendRecv(int locationNode) {
 		 *
 		 * Чтобы ихбежать этой проблемы используется Isend. Он позволяет использнять код дальше, независимо от того началась приемка данных или нет.
 		 */
-		if( sourceType != CPU && destinationType != CPU ) {
+		
+		if( isCPU(sourceType) && isCPU(destinationType) ) {
+			MPI_Isend(sourceBlockBorder, borderLength, MPI_DOUBLE, destinationLocationNode, 999, MPI_COMM_WORLD, &request);
+			MPI_Recv(destinationExternalBorder, borderLength, MPI_DOUBLE, sourceLocationNode, 999, MPI_COMM_WORLD, &status);
+			return;
+		}
+		
+		if( isGPU(sourceType) && isGPU(destinationType) ) {
 			cudaMemcpy( destinationExternalBorder, sourceBlockBorder, borderLength * sizeof(double), cudaMemcpyDeviceToDevice );
 			return;
 		}
-
-		MPI_Isend(sourceBlockBorder, borderLength, MPI_DOUBLE, destinationLocationNode, 999, MPI_COMM_WORLD, &request);
-		MPI_Recv(destinationExternalBorder, borderLength, MPI_DOUBLE, sourceLocationNode, 999, MPI_COMM_WORLD, &status);
-		return;
+		
+		if( isCPU(sourceType) && isGPU(destinationType) ) {
+			cudaMemcpy( destinationExternalBorder, sourceBlockBorder, borderLength * sizeof(double), cudaMemcpyHostToDevice );
+			return;
+		}
+		
+		if( isGPU(sourceType) && isCPU(destinationType) ) {
+			cudaMemcpy( destinationExternalBorder, sourceBlockBorder, borderLength * sizeof(double), cudaMemcpyDeviceToHost );
+			return;
+		}
 	}
 
 	/*
