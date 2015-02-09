@@ -5,7 +5,7 @@
  *      Author: frolov
  */
 
-#include "BlockCpu.h"
+#include "blockcpu.h"
 
 using namespace std;
 
@@ -45,6 +45,10 @@ BlockCpu::BlockCpu(int _length, int _width, int _lengthMove, int _widthMove, int
 	 * Это он будет отдавать. Выделение памяти.
 	 */
 	blockBorder = new double* [BORDER_COUNT];
+	/*blockBorder[TOP] = NULL;
+	blockBorder[LEFT] = NULL;
+	blockBorder[BOTTOM] = NULL;
+	blockBorder[RIGHT] = NULL;*/
 
 	blockBorder[TOP] = new double[width];
 	for(int i = 0; i < width; i++)
@@ -229,21 +233,21 @@ void BlockCpu::prepareData() {
 	 * Копирование данных из матрицы в массивы.
 	 * В дальнейшем эти массивы (или их части) будет пеесылаться другим блокам.
 	 */
-	for (int i = 0; i < width; ++i)
-		blockBorder[TOP][i] = matrix[0 * width + i];
+	if( blockBorder[TOP] != NULL )
+		for (int i = 0; i < width; ++i)
+			blockBorder[TOP][i] = matrix[0 * width + i];
 
-	//memcpy(blockBorder[TOP], matrix, width);
+	if( blockBorder[LEFT] != NULL )
+		for (int i = 0; i < length; ++i)
+			blockBorder[LEFT][i] = matrix[i * width + 0];
 
-	for (int i = 0; i < length; ++i)
-		blockBorder[LEFT][i] = matrix[i * width + 0];
+	if( blockBorder[BOTTOM] != NULL )
+		for (int i = 0; i < width; ++i)
+			blockBorder[BOTTOM][i] = matrix[(length - 1) * width + i];
 
-	for (int i = 0; i < width; ++i)
-		blockBorder[BOTTOM][i] = matrix[(length - 1) * width + i];
-
-	//memcpy(blockBorder[BOTTOM], matrix + (length - 1) * width, width);
-
-	for (int i = 0; i < length; ++i)
-		blockBorder[RIGHT][i] = matrix[i * width + (width - 1)];
+	if( blockBorder[RIGHT] != NULL )
+		for (int i = 0; i < length; ++i)
+			blockBorder[RIGHT][i] = matrix[i * width + (width - 1)];
 }
 
 void BlockCpu::setPartBorder(int type, int side, int move, int borderLength) {
@@ -371,4 +375,12 @@ void BlockCpu::createBlockBorder(int side, int neighborType) {
 
 	if( neighborType == CPU )
 		blockBorder[side] = new double [borderLength];
+	/*else
+		cudaMallocHost ( (void**)&blockBorder[side], borderLength * sizeof(double) );*/
+}
+
+void BlockCpu::setExternalBorder(int side, double* _externalBorder) {
+	delete externalBorder[side];
+	
+	externalBorder[side] = _externalBorder;
 }

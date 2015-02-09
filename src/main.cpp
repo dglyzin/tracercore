@@ -1,11 +1,10 @@
-#include "BlockCpu.h"
-#include "Interconnect.h"
-
 #include <mpi.h>
 #include <stdlib.h>
 #include <cmath>
 
-#include "Domain.h"
+#include "blockcpu.h"
+#include "domain.h"
+#include "interconnect.h"
 
 int main(int argc, char * argv[]) {
 	/*

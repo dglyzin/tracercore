@@ -8,7 +8,7 @@
 #ifndef SRC_BLOCKCPU_H_
 #define SRC_BLOCKCPU_H_
 
-#include "Block.h"
+#include "block.h"
 
 /*
  * Блок работы с данными на центральном процссоре.
@@ -34,6 +34,7 @@ public:
 	void printMatrix();
 
 	void createBlockBorder(int side, int neighborType);
+	void setExternalBorder(int side, double* _externalBorder);
 };
 
 #endif /* SRC_BLOCKCPU_H_ */

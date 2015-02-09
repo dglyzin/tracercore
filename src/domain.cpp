@@ -5,7 +5,7 @@
  *      Author: frolov
  */
 
-#include "Domain.h"
+#include "domain.h"
 
 using namespace std;
 
@@ -39,7 +39,7 @@ void Domain::count() {
 	 * Вычисление количества необходимых итераций
 	 */
 	int repeatCount = (int)(1 / dT) + 1;
-	//repeatCount = 5000;
+	//repeatCount = 1000;
 	//printf("\nREPEAT COUNT NOT RIGHT!!!\n");
 
 	/*
@@ -65,6 +65,7 @@ void Domain::nextStep(double dX2, double dY2, double dT) {
 	/*
 	 * Перерасчет данных
 	 */
+	omp_set_num_threads(realBlockCount());
 #pragma omp parallel
 	{
 #pragma omp for
@@ -354,6 +355,15 @@ int Domain::getCountGpuBlocks() {
 	int count = 0;
 	for (int i = 0; i < blockCount; ++i)
 		if(mBlocks[i]->getBlockType() != CPU && mBlocks[i]->getBlockType() != NULL_BLOCK)
+			count++;
+
+	return count;
+}
+
+int Domain::realBlockCount() {
+	int count = 0;
+	for (int i = 0; i < blockCount; ++i)
+		if( mBlocks[i]->isRealBlock() )
 			count++;
 
 	return count;

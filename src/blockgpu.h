@@ -8,7 +8,7 @@
 #ifndef SRC_BLOCKGPU_H_
 #define SRC_BLOCKGPU_H_
 
-#include "Block.h"
+#include "block.h"
 
 #define BLOCK_LENGHT_SIZE 32
 #define BLOCK_WIDTH_SIZE 16

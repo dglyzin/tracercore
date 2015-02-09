@@ -5,7 +5,7 @@
  *      Author: frolov
  */
 
-#include "Enums.h"
+#include "enums.h"
 
 int getDeviceNumber(int blockType) {
 	switch (blockType) {

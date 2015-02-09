@@ -12,7 +12,7 @@
 
 #include <mpi.h>
 
-#include "Enums.h"
+#include "enums.h"
 
 /*
  * Класс, отвечающий за пересылку данных между блоками.

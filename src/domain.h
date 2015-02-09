@@ -8,13 +8,12 @@
 #ifndef SRC_DOMAIN_H_
 #define SRC_DOMAIN_H_
 
-#include "Interconnect.h"
-#include "BlockCpu.h"
-#include "BlockNull.h"
-#include "BlockGpu.h"
-
 #include <fstream>
 #include <string.h>
+#include "blockcpu.h"
+#include "blockgpu.h"
+#include "blocknull.h"
+#include "interconnect.h"
 
 /*
  * Основной управляющий класс приложения.
@@ -52,6 +51,8 @@ public:
 
 	int getCountCpuBlocks();
 	int getCountGpuBlocks();
+
+	int realBlockCount();
 
 private:
 	/*

@@ -5,7 +5,7 @@
  *      Author: frolov
  */
 
-#include "Interconnect.h"
+#include "interconnect.h"
 
 using namespace std;
 
@@ -43,17 +43,6 @@ void Interconnect::sendRecv(int locationNode) {
 	 * В дальнейшем должена быть реализована "склейка" границ.
 	 */
 	if(locationNode == sourceLocationNode && locationNode == destinationLocationNode) {
-		/*
-		 * Использование Isend необходимо.
-		 * Если использовать обычный Send есть возможность блока.
-		 *
-		 * Данная часть кода отвечает за пересылку внутри одного узла.
-		 * Если использовать обычный Send, то есть вероятность, что он не будет выполнен полностью до тех пор, пока не начнентся прием данных.
-		 * Прием не начнентся, так как это следующая команда.
-		 *
-		 * Чтобы ихбежать этой проблемы используется Isend. Он позволяет использнять код дальше, независимо от того началась приемка данных или нет.
-		 */
-		
 		if( isCPU(sourceType) && isCPU(destinationType) ) {
 			memcpy(destinationExternalBorder, sourceBlockBorder, borderLength * sizeof(double));
 			return;

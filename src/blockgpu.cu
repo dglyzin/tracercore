@@ -5,7 +5,7 @@
  *      Author: frolov
  */
 
-#include "BlockGpu.h"
+#include "blockgpu.h"
 
 /*
  * Функция ядра.

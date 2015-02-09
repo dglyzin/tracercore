@@ -11,32 +11,32 @@ BIN=bin
 
 all: HS 
 
-HS: main.o Domain.o Block.o BlockCpu.o BlockNull.o Interconnect.o Enums.o BlockGpu.o
-	$(CUDACC) -O3 -I/usr/mpi/gcc/openmpi-1.8.4/include -L /usr/mpi/gcc/openmpi-1.8.4/lib -lmpi -lmpi_cxx  $(BIN)/main.o $(BIN)/Domain.o $(BIN)/Block.o $(BIN)/Interconnect.o $(BIN)/BlockGpu.o $(BIN)/BlockCpu.o $(BIN)/BlockNull.o $(BIN)/Enums.o -o $(BIN)/HS -Xcompiler -fopenmp
+HS: main.o domain.o block.o blockcpu.o blocknull.o interconnect.o enums.o blockgpu.o
+	$(CUDACC) -O3 -I/usr/mpi/gcc/openmpi-1.8.4/include -L /usr/mpi/gcc/openmpi-1.8.4/lib -lmpi -lmpi_cxx  $(BIN)/main.o $(BIN)/domain.o $(BIN)/block.o $(BIN)/interconnect.o $(BIN)/blockgpu.o $(BIN)/blockcpu.o $(BIN)/blocknull.o $(BIN)/enums.o -o $(BIN)/HS -Xcompiler -fopenmp
 	
 main.o: $(SRC)/main.cpp
 	$(CC) $(CFLAGS) $(SRC)/main.cpp -o $(BIN)/main.o
 
-Domain.o: $(SRC)/Domain.cpp  
-	$(CC) $(CFLAGS) -I$(CUDAINC) $(SRC)/Domain.cpp  -fopenmp -o $(BIN)/Domain.o
+domain.o: $(SRC)/domain.cpp  
+	$(CC) $(CFLAGS) -I$(CUDAINC) $(SRC)/domain.cpp  -fopenmp -o $(BIN)/domain.o
 
-Block.o: $(SRC)/Block.cpp  
-	$(CC) $(CFLAGS) $(SRC)/Block.cpp  -fopenmp -o $(BIN)/Block.o
+block.o: $(SRC)/block.cpp  
+	$(CC) $(CFLAGS) $(SRC)/block.cpp  -fopenmp -o $(BIN)/block.o
 
-Interconnect.o: $(SRC)/Interconnect.cu  
-	$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I$(CUDAINC) -I/usr/mpi/gcc/openmpi-1.8.4/include -L /usr/mpi/gcc/openmpi-1.8.4/lib -lmpi -lmpi_cxx $(SRC)/Interconnect.cu -o $(BIN)/Interconnect.o
+interconnect.o: $(SRC)/interconnect.cu  
+	$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I$(CUDAINC) -I/usr/mpi/gcc/openmpi-1.8.4/include -L /usr/mpi/gcc/openmpi-1.8.4/lib -lmpi -lmpi_cxx $(SRC)/interconnect.cu -o $(BIN)/interconnect.o
 	
-BlockCpu.o: $(SRC)/BlockCpu.cpp  
-	$(CC) $(CFLAGS) $(SRC)/BlockCpu.cpp  -fopenmp -o $(BIN)/BlockCpu.o
+blockcpu.o: $(SRC)/blockcpu.cpp  
+	$(CC) $(CFLAGS) $(SRC)/blockcpu.cpp  -fopenmp -o $(BIN)/blockcpu.o
 	
-BlockNull.o: $(SRC)/BlockNull.cpp  
-	$(CC) $(CFLAGS) $(SRC)/BlockNull.cpp -o $(BIN)/BlockNull.o
+blocknull.o: $(SRC)/blocknull.cpp  
+	$(CC) $(CFLAGS) $(SRC)/blocknull.cpp -o $(BIN)/blocknull.o
 	
-Enums.o: $(SRC)/Enums.cpp
-	$(CC) $(CFLAGS) $(SRC)/Enums.cpp -o $(BIN)/Enums.o
+enums.o: $(SRC)/enums.cpp
+	$(CC) $(CFLAGS) $(SRC)/enums.cpp -o $(BIN)/enums.o
 	
-BlockGpu.o: $(SRC)/BlockGpu.cu  
-	$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I$(CUDAINC) $(SRC)/BlockGpu.cu -o $(BIN)/BlockGpu.o
+blockgpu.o: $(SRC)/blockgpu.cu  
+	$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I$(CUDAINC) $(SRC)/blockgpu.cu -o $(BIN)/blockgpu.o
 
 clean:
-	rm -rf $(BIN)/*.o $(BIN)/pfrostMC 
+	rm -rf $(BIN)/*.o $(BIN)/HS

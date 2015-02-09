@@ -17,7 +17,7 @@
 
 #include <omp.h>
 
-#include "Enums.h"
+#include "enums.h"
 
 /*
  * Класс, отвечающий за обработку данных.
@@ -176,10 +176,7 @@ public:
 	double* getBottomExternalBorder() { return externalBorder != NULL ? externalBorder[BOTTOM] : NULL; }
 	double* getRightExternalBorder() { return externalBorder != NULL ? externalBorder[RIGHT] : NULL; }
 
-	/*virtual void setTopExternalBorder(double* _topExternalBorder) { return; }
-	virtual void setLeftExternalBorder(double* _leftExternalBorder) { return; }
-	virtual void setBottomExternalBorder(double* _borderExternalBorder) { return; }
-	virtual void setRightExternalBorder(double* _rightExternalBorder) { return; }*/
+	virtual void setExternalBorder(int side, double* _externalBorder) { return; }
 
 	/*virtual void createTopBorderType() { topBorderType = NULL; }
 	virtual void createLeftBorderType() { leftBorderType = NULL; }

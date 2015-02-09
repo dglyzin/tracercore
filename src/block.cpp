@@ -5,7 +5,7 @@
  *      Author: frolov
  */
 
-#include "Block.h"
+#include "block.h"
 
 Block::Block() {
 	length = width = 0;

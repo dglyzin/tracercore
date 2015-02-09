@@ -5,7 +5,7 @@
  *      Author: frolov
  */
 
-#include "BlockNull.h"
+#include "blocknull.h"
 
 BlockNull::BlockNull() : Block() {}
 
