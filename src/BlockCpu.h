@@ -32,6 +32,8 @@ public:
 
 	void print();
 	void printMatrix();
+
+	void createBlockBorder(int side, int neighborType);
 };
 
 #endif /* SRC_BLOCKCPU_H_ */

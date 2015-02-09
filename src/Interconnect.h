@@ -78,9 +78,6 @@ private:
 	 */
 	MPI_Status status;
 	MPI_Request request;
-
-	bool isCPU(int type) { return type == CPU; }
-	bool isGPU(int type) { return (type == DEVICE0 || type == DEVICE1 || type == DEVICE2); }
 };
 
 #endif /* SRC_INTERCONNECT_H_ */

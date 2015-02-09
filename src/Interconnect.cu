@@ -55,8 +55,7 @@ void Interconnect::sendRecv(int locationNode) {
 		 */
 		
 		if( isCPU(sourceType) && isCPU(destinationType) ) {
-			MPI_Isend(sourceBlockBorder, borderLength, MPI_DOUBLE, destinationLocationNode, 999, MPI_COMM_WORLD, &request);
-			MPI_Recv(destinationExternalBorder, borderLength, MPI_DOUBLE, sourceLocationNode, 999, MPI_COMM_WORLD, &status);
+			memcpy(destinationExternalBorder, sourceBlockBorder, borderLength * sizeof(double));
 			return;
 		}
 		

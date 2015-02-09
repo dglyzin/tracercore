@@ -212,11 +212,11 @@ Block* Domain::readBlock(ifstream& in) {
 			case 0:
 				return new BlockCpu(length, width, lengthMove, widthMove, world_rank_creator);
 			case 1:
-				return new BlockGpu(length, width, lengthMove, widthMove, world_rank_creator, 0);
+				return new BlockGpu(length, width, lengthMove, widthMove, world_rank_creator, getDeviceNumber(DEVICE0));
 			case 2:
-				return new BlockGpu(length, width, lengthMove, widthMove, world_rank_creator, 1);
+				return new BlockGpu(length, width, lengthMove, widthMove, world_rank_creator, getDeviceNumber(DEVICE1));
 			case 3:
-				return new BlockGpu(length, width, lengthMove, widthMove, world_rank_creator, 2);
+				return new BlockGpu(length, width, lengthMove, widthMove, world_rank_creator, getDeviceNumber(DEVICE2));
 			default:
 				return new BlockNull(length, width, lengthMove, widthMove, world_rank_creator);
 		}

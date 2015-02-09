@@ -193,12 +193,10 @@ public:
 		createRightBorderType();
 	}*/
 
-	/*virtual void createTopBlockBorder(int neighborType) { topBlockBorder = NULL; }
-	virtual void createLeftBlockBorder(int neighborType) { leftBlockBorder = NULL; }
-	virtual void createBottomBlockBorder(int neighborType) { bottomBlockBorder = NULL; }
-	virtual void createRightBlockBorder(int neighborType) { rightBlockBorder = NULL; }
+	virtual void createBlockBorder(int side, int neighborType) { return; }
 
-	void createBlockBorder( int topNeighborType, int leftNeighborType, int bottonNeighborType, int rightNeighborType ) {
+
+	/*void createBlockBorder( int topNeighborType, int leftNeighborType, int bottonNeighborType, int rightNeighborType ) {
 		createTopBlockBorder(topNeighborType);
 		createLeftBlockBorder(leftNeighborType);
 		createBottomBlockBorder(bottonNeighborType);

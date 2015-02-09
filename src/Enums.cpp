@@ -34,3 +34,11 @@ int oppositeBorder(int side) {
 			return TOP;
 	}
 }
+
+bool isCPU(int type) {
+	return type == CPU;
+}
+
+bool isGPU(int type) {
+	return (type == DEVICE0 || type == DEVICE1 || type == DEVICE2);
+}

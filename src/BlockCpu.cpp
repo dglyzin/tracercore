@@ -360,3 +360,15 @@ void BlockCpu::printMatrix() {
 		printf("\n");
 	}
 }
+
+void BlockCpu::createBlockBorder(int side, int neighborType) {
+	int borderLength = 0;
+
+	if( side == TOP || side == BOTTOM )
+		borderLength = width;
+	if( side == LEFT || side == RIGHT )
+		borderLength = length;
+
+	if( neighborType == CPU )
+		blockBorder[side] = new double [borderLength];
+}

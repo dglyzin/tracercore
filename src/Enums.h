@@ -27,4 +27,7 @@ enum BLOCK_TYPE { NULL_BLOCK, CPU, DEVICE0, DEVICE1, DEVICE2 };
 int oppositeBorder(int side);
 int getDeviceNumber(int blockType);
 
+bool isCPU(int type);
+bool isGPU(int type);
+
 #endif /* SRC_ENUMS_H_ */
