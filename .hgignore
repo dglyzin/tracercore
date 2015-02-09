@@ -10,10 +10,7 @@ Debug/*
 .cproject
 .project
 res*
-test*
 HS
 .ptp-sync
 .settings
 src/.*
-*.sh
-big*
