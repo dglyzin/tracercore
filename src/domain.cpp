@@ -65,17 +65,6 @@ void Domain::nextStep(double dX2, double dY2, double dT) {
 	/*
 	 * Перерасчет данных
 	 */
-
-	/*
-//#pragma omp parallel
-	{
-//#pragma omp for
-		for (int i = 0; i < blockCount; ++i)
-			mBlocks[i]->courted(dX2, dY2, dT);
-	}*/
-
-//#pragma omp parallel sections
-	//{
 #pragma omp task
 	{
 		for (int i = 0; i < blockCount; ++i)
@@ -103,7 +92,6 @@ void Domain::nextStep(double dX2, double dY2, double dT) {
 			if( mBlocks[i]->getBlockType() == CPU )
 				mBlocks[i]->courted(dX2, dY2, dT);
 	}
-	//}
 }
 
 void Domain::print(char* path) {

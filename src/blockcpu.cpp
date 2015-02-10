@@ -351,7 +351,7 @@ void BlockCpu::print() {
 	printf("\n");
 
 
-	printf("\n\n\n\n\n\n\n");
+	printf("\n\n\n");
 }
 
 void BlockCpu::printMatrix() {

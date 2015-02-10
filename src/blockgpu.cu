@@ -408,5 +408,5 @@ void BlockGpu::print() {
 	printf("\n");
 
 
-	printf("\n\n\n\n\n\n\n");
+	printf("\n\n\n");
 }
