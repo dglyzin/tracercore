@@ -113,16 +113,16 @@ void Domain::print(char* path) {
 		 * Сюда должны поместиться все блоки.
 		 * Это должно быть гарантированно.
 		 */
-		double** resaultAll = new double* [lengthArea];
+		double** resultAll = new double* [lengthArea];
 		for (int i = 0; i < lengthArea; ++i)
-			resaultAll[i] = new double[widthArea];
+			resultAll[i] = new double[widthArea];
 
 		/*
 		 * Инициализируется 0. В дальнейшем части области не занятые блоками будут иметь значение 0.
 		 */
 		for (int i = 0; i < lengthArea; ++i)
 			for (int j = 0; j < widthArea; ++j)
-				resaultAll[i][j] = 0;
+				resultAll[i][j] = 0;
 
 		/*
 		 * Движемся по массиву блоков и проверяем реальны ли они на данном потоке исполнения.
@@ -136,18 +136,18 @@ void Domain::print(char* path) {
 		 */
 		for (int i = 0; i < blockCount; ++i) {
 			if(mBlocks[i]->isRealBlock()) {
-				double* resault = mBlocks[i]->getResault();
+				double* result = mBlocks[i]->getResult();
 
 				for (int j = 0; j < mBlocks[i]->getLength(); ++j)
 					for (int k = 0; k < mBlocks[i]->getWidth(); ++k)
-						resaultAll[j + mBlocks[i]->getLenghtMove()][k + mBlocks[i]->getWidthMove()] = resault[j * mBlocks[i]->getWidth() + k];
+						resultAll[j + mBlocks[i]->getLenghtMove()][k + mBlocks[i]->getWidthMove()] = result[j * mBlocks[i]->getWidth() + k];
 			}
 			else
 				/*
 				 * Данные получаем все сразу
 				 */
 				for (int j = 0; j < mBlocks[i]->getLength(); ++j)
-					MPI_Recv(resaultAll[j + mBlocks[i]->getLenghtMove()] + mBlocks[i]->getWidthMove(), mBlocks[i]->getWidth(), MPI_DOUBLE, mBlocks[i]->getNodeNumber(), 999, MPI_COMM_WORLD, &status);
+					MPI_Recv(resultAll[j + mBlocks[i]->getLenghtMove()] + mBlocks[i]->getWidthMove(), mBlocks[i]->getWidth(), MPI_DOUBLE, mBlocks[i]->getNodeNumber(), 999, MPI_COMM_WORLD, &status);
 		}
 
 		/*
@@ -159,7 +159,7 @@ void Domain::print(char* path) {
 
 		for (int i = 0; i < lengthArea; ++i) {
 			for (int j = 0; j < widthArea; ++j)
-				fprintf(out, "%d %d %f\n", i, j, resaultAll[i][j]);
+				fprintf(out, "%d %d %f\n", i, j, resultAll[i][j]);
 			fprintf(out, "\n");
 		}
 
@@ -174,10 +174,10 @@ void Domain::print(char* path) {
 		 */
 		for (int i = 0; i < blockCount; ++i) {
 			if(mBlocks[i]->isRealBlock()) {
-				double* resault = mBlocks[i]->getResault();
+				double* result = mBlocks[i]->getResult();
 
 				for (int j = 0; j < mBlocks[i]->getLength(); ++j)
-					MPI_Send(resault + (j * mBlocks[i]->getWidth()), mBlocks[i]->getWidth(), MPI_DOUBLE, 0, 999, MPI_COMM_WORLD);
+					MPI_Send(result + (j * mBlocks[i]->getWidth()), mBlocks[i]->getWidth(), MPI_DOUBLE, 0, 999, MPI_COMM_WORLD);
 			}
 		}
 	}

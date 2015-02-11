@@ -128,7 +128,7 @@ public:
 	/*
 	 * Возвращает результурющую матрицу данного блока.
 	 */
-	virtual double* getResault() { return matrix; }
+	virtual double* getResult() { return matrix; }
 
 	int getLength() { return length; }
 	int getWidth() { return width; }

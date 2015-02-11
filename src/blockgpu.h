@@ -41,7 +41,7 @@ public:
 
 	void setPartBorder(int type, int side, int move, int borderLength);
 
-	double* getResault();
+	double* getResult();
 
 	void print();
 };

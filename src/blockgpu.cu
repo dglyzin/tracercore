@@ -264,7 +264,7 @@ int BlockGpu::getBlockType() {
 	}
 }
 
-double* BlockGpu::getResault() {
+double* BlockGpu::getResult() {
 	cudaSetDevice(deviceNumber);
 	
 	double* res = new double [length * width];
