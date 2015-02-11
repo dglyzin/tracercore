@@ -121,12 +121,7 @@ public:
 	/*
 	 * Печатает информацию о блоке на консоль.
 	 */
-	virtual void print() { return; }
-
-	/*
-	 * Печатает только матрицу
-	 */
-	virtual void printMatrix() { return; }
+	//virtual void print() { return; }
 
 	/*
 	 * Возвращает результурющую матрицу данного блока.
@@ -176,7 +171,7 @@ public:
 	double* getBottomExternalBorder() { return externalBorder != NULL ? externalBorder[BOTTOM] : NULL; }
 	double* getRightExternalBorder() { return externalBorder != NULL ? externalBorder[RIGHT] : NULL; }
 
-	virtual void setExternalBorder(int side, double* _externalBorder) { return; }
+	//virtual void setExternalBorder(int side, double* _externalBorder) { return; }
 
 	/*virtual void createTopBorderType() { topBorderType = NULL; }
 	virtual void createLeftBorderType() { leftBorderType = NULL; }
@@ -190,7 +185,7 @@ public:
 		createRightBorderType();
 	}*/
 
-	virtual void createBlockBorder(int side, int neighborType) { return; }
+	//virtual void createBlockBorder(int side, int neighborType) { return; }
 
 
 	/*void createBlockBorder( int topNeighborType, int leftNeighborType, int bottonNeighborType, int rightNeighborType ) {

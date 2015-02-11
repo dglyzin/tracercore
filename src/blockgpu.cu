@@ -16,65 +16,58 @@ __global__ void calc ( double* matrix, double* newMatrix, int length, int width,
 
 	double top, left, bottom, right, cur;
 
-	int bx = blockIdx.x;
-	int by = blockIdx.y;
+	int i = BLOCK_LENGHT_SIZE * blockIdx.x + threadIdx.x;
+	int j = BLOCK_WIDTH_SIZE * blockIdx.y + threadIdx.y;
 
-	int tx = threadIdx.x;
-	int ty = threadIdx.y;
-
-	int i = BLOCK_LENGHT_SIZE * bx + tx;
-	int j = BLOCK_WIDTH_SIZE * by + ty;
-
-	if( i >= length || j >= width )
-		return;
-
-	if( i == 0 )
-		if( borderType[TOP][j] == BY_FUNCTION ) {
-			newMatrix[i * width + j] = externalBorder[TOP][j];
-			return;
-		}
+	if( i < length && j < width ) {
+		if( i == 0 )
+			if( borderType[TOP][j] == BY_FUNCTION ) {
+				newMatrix[i * width + j] = externalBorder[TOP][j];
+				return;
+			}
+			else
+				top = externalBorder[TOP][j];
 		else
-			top = externalBorder[TOP][j];
-	else
-		top = matrix[(i - 1) * width + j];
-
-
-	if( j == 0 )
-		if( borderType[LEFT][i] == BY_FUNCTION ) {
-			newMatrix[i * width + j] = externalBorder[LEFT][i];
-			return;
-		}
+			top = matrix[(i - 1) * width + j];
+	
+	
+		if( j == 0 )
+			if( borderType[LEFT][i] == BY_FUNCTION ) {
+				newMatrix[i * width + j] = externalBorder[LEFT][i];
+				return;
+			}
+			else
+				left = externalBorder[LEFT][i];
 		else
-			left = externalBorder[LEFT][i];
-	else
-		left = matrix[i * width + (j - 1)];
-
-
-	if( i == length - 1 )
-		if( borderType[BOTTOM][j] == BY_FUNCTION ) {
-			newMatrix[i * width + j] = externalBorder[BOTTOM][j];
-			return;
-		}
+			left = matrix[i * width + (j - 1)];
+	
+	
+		if( i == length - 1 )
+			if( borderType[BOTTOM][j] == BY_FUNCTION ) {
+				newMatrix[i * width + j] = externalBorder[BOTTOM][j];
+				return;
+			}
+			else
+				bottom = externalBorder[BOTTOM][j];
 		else
-			bottom = externalBorder[BOTTOM][j];
-	else
-		bottom = matrix[(i + 1) * width + j];
-
-
-	if( j == width - 1 )
-		if( borderType[RIGHT][i] == BY_FUNCTION ) {
-			newMatrix[i * width + j] = externalBorder[RIGHT][i];
-			return;
-		}
+			bottom = matrix[(i + 1) * width + j];
+	
+	
+		if( j == width - 1 )
+			if( borderType[RIGHT][i] == BY_FUNCTION ) {
+				newMatrix[i * width + j] = externalBorder[RIGHT][i];
+				return;
+			}
+			else
+				right = externalBorder[RIGHT][i];
 		else
-			right = externalBorder[RIGHT][i];
-	else
-		right = matrix[i * width + (j + 1)];
-
-
-	cur = matrix[i * width + j];
-
-	newMatrix[i * width + j] = cur + dT * ( ( left - 2*cur + right )/dX2 + ( top - 2*cur + bottom )/dY2  );
+			right = matrix[i * width + (j + 1)];
+	
+	
+		cur = matrix[i * width + j];
+	
+		newMatrix[i * width + j] = cur + dT * ( ( left - 2*cur + right )/dX2 + ( top - 2*cur + bottom )/dY2  );
+	}
 }
 
 /*
@@ -82,9 +75,7 @@ __global__ void calc ( double* matrix, double* newMatrix, int length, int width,
  * Заполнение целочисленного массива определенным значением.
  */
 __global__ void assignIntArray (int* arr, int value, int arrayLength) {
-	int bx  = blockIdx.x;
-	int tx  = threadIdx.x;
-	int	idx = BLOCK_SIZE * bx + tx;
+	int	idx = BLOCK_SIZE * blockIdx.x + threadIdx.x;
 	
 	if( idx < arrayLength )
 		arr[idx] = value;
@@ -95,9 +86,7 @@ __global__ void assignIntArray (int* arr, int value, int arrayLength) {
  * Заполнение вещественного массива определенным значением.
  */
 __global__ void assignDoubleArray (double* arr, double value, int arrayLength) {
-	int bx  = blockIdx.x;
-	int tx  = threadIdx.x;
-	int	idx = BLOCK_SIZE * bx + tx;
+	int	idx = BLOCK_SIZE * blockIdx.x + threadIdx.x;
 	
 	if( idx < arrayLength )
 		arr[idx] = value;
@@ -110,9 +99,7 @@ __global__ void assignDoubleArray (double* arr, double value, int arrayLength) {
  */
 __global__ void copyBorderFromMatrix ( double* dest, double* matrix, int side, int length, int width )
 {
-	int bx  = blockIdx.x;
-	int tx  = threadIdx.x;
-	int idx  = BLOCK_SIZE * bx + tx;
+	int idx  = BLOCK_SIZE * blockIdx.x + threadIdx.x;
 	
 	if( (side == TOP || side == BOTTOM) && idx >= width )
 		return;
@@ -244,6 +231,7 @@ void BlockGpu::setPartBorder(int type, int side, int move, int borderLength) {
 		printf("\nCritical error!\n");
 		exit(1);
 	}
+	
 	dim3 threads ( BLOCK_SIZE );
 	dim3 blocks  ( (int)ceil((double)borderLength / threads.x) );
 	
@@ -286,6 +274,8 @@ double* BlockGpu::getResault() {
 }
 
 void BlockGpu::print() {
+	cudaSetDevice(deviceNumber);
+	
 	double* matrixToPrint = new double [length * width];
 	
 	int** borderTypeToPrint = new int* [BORDER_COUNT];

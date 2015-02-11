@@ -39,8 +39,8 @@ void Domain::count() {
 	 * Вычисление количества необходимых итераций
 	 */
 	int repeatCount = (int)(1 / dT) + 1;
-	//repeatCount = 1000;
-	//printf("\nREPEAT COUNT NOT RIGHT!!!\n");
+	repeatCount = 2500;
+	printf("\nREPEAT COUNT NOT RIGHT!!!\n");
 
 	/*
 	 * Выполнение
@@ -53,14 +53,8 @@ void Domain::nextStep(double dX2, double dY2, double dT) {
 	/*
 	 * Все блоки подготавливают данные для пересылки
 	 */
-	for (int i = 0; i < blockCount; ++i)
-		mBlocks[i]->prepareData();
-
-	/*
-	 * Все данные пересылаются
-	 */
-	for (int i = 0; i < connectionCount; ++i)
-		mInterconnects[i]->sendRecv(world_rank);
+	/*for (int i = 0; i < blockCount; ++i)
+		mBlocks[i]->prepareData();*/
 
 	/*
 	 * Перерасчет данных
@@ -68,30 +62,44 @@ void Domain::nextStep(double dX2, double dY2, double dT) {
 #pragma omp task
 	{
 		for (int i = 0; i < blockCount; ++i)
-			if( mBlocks[i]->getBlockType() == DEVICE0 )
+			if( mBlocks[i]->getBlockType() == DEVICE0 ) {
 				mBlocks[i]->courted(dX2, dY2, dT);
+				mBlocks[i]->prepareData();
+			}
 	}
 
 #pragma omp task
 	{
 		for (int i = 0; i < blockCount; ++i)
-			if( mBlocks[i]->getBlockType() == DEVICE1 )
+			if( mBlocks[i]->getBlockType() == DEVICE1 ) {
 				mBlocks[i]->courted(dX2, dY2, dT);
+				mBlocks[i]->prepareData();
+			}
 	}
 
 #pragma omp task
 	{
 		for (int i = 0; i < blockCount; ++i)
-			if( mBlocks[i]->getBlockType() == DEVICE2 )
+			if( mBlocks[i]->getBlockType() == DEVICE2 ) {
 				mBlocks[i]->courted(dX2, dY2, dT);
+				mBlocks[i]->prepareData();
+			}
 	}
 
 #pragma omp task
 	{
 		for (int i = 0; i < blockCount; ++i)
-			if( mBlocks[i]->getBlockType() == CPU )
+			if( mBlocks[i]->getBlockType() == CPU ) {
 				mBlocks[i]->courted(dX2, dY2, dT);
+				mBlocks[i]->prepareData();
+			}
 	}
+
+	/*
+	 * Все данные пересылаются
+	 */
+	for (int i = 0; i < connectionCount; ++i)
+		mInterconnects[i]->sendRecv(world_rank);
 }
 
 void Domain::print(char* path) {

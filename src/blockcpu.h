@@ -18,7 +18,7 @@ class BlockCpu: public Block {
 public:
 	BlockCpu(int _length, int _width, int _lengthMove, int _widthMove, int _world_rank);
 
-	virtual ~BlockCpu();
+	~BlockCpu();
 
 	bool isRealBlock() { return true; }
 
@@ -31,10 +31,6 @@ public:
 	void setPartBorder(int type, int side, int move, int borderLength);
 
 	void print();
-	void printMatrix();
-
-	void createBlockBorder(int side, int neighborType);
-	void setExternalBorder(int side, double* _externalBorder);
 };
 
 #endif /* SRC_BLOCKCPU_H_ */

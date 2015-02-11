@@ -90,7 +90,6 @@ BlockCpu::BlockCpu(int _length, int _width, int _lengthMove, int _widthMove, int
 }
 
 BlockCpu::~BlockCpu() {
-	// TODO Auto-generated destructor stub
 }
 
 void BlockCpu::courted(double dX2, double dY2, double dT) {
@@ -352,34 +351,4 @@ void BlockCpu::print() {
 
 
 	printf("\n\n\n");
-}
-
-void BlockCpu::printMatrix() {
-	printf("\nMatrix:\n");
-	for (int i = 0; i < length; ++i)
-	{
-		for (int j = 0; j < width; ++j)
-			printf("%6.1f ", matrix[i * width + j]);
-		printf("\n");
-	}
-}
-
-void BlockCpu::createBlockBorder(int side, int neighborType) {
-	int borderLength = 0;
-
-	if( side == TOP || side == BOTTOM )
-		borderLength = width;
-	if( side == LEFT || side == RIGHT )
-		borderLength = length;
-
-	if( neighborType == CPU )
-		blockBorder[side] = new double [borderLength];
-	/*else
-		cudaMallocHost ( (void**)&blockBorder[side], borderLength * sizeof(double) );*/
-}
-
-void BlockCpu::setExternalBorder(int side, double* _externalBorder) {
-	delete externalBorder[side];
-	
-	externalBorder[side] = _externalBorder;
 }
