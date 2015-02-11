@@ -205,8 +205,8 @@ void Domain::readFromFile(char* path) {
 	for (int i = 0; i < blockCount; ++i)
 		mBlocks[i]->moveTempExternalBorderVectorToExternalBorderArray();
 
-	/*for (int i = 0; i < blockCount; ++i)
-		mBlocks[i]->print();*/
+	for (int i = 0; i < blockCount; ++i)
+		mBlocks[i]->print();
 }
 
 void Domain::readLengthAndWidthArea(ifstream& in) {

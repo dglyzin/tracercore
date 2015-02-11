@@ -98,7 +98,7 @@ void BlockCpu::courted(double dX2, double dY2, double dT) {
 	 * Максимально возможное количесвто потоков получается из-за самой библиотеки omp
 	 * Если явно не указывать, какое именно количесвто нитей необходимо создать, то будет создано макстимально возможное на данный момент.
 	 */
-//# pragma omp parallel
+# pragma omp parallel
 {
 		/*
 		 * Для решения задачи теплопроводности нам необходимо знать несколько значений.
@@ -113,7 +113,7 @@ void BlockCpu::courted(double dX2, double dY2, double dT) {
 		 */
 	double top, left, bottom, right, cur;
 
-//# pragma omp for
+# pragma omp for
 	// Проходим по всем ячейкам матрицы.
 	// Для каждой из них будет выполнен перерасчет.
 	for (int i = 0; i < length; ++i)
@@ -356,7 +356,7 @@ double* BlockCpu::addNewExternalBorder(int nodeNeighbor, int side, int move, int
 	}
 
 	for (int i = 0; i < borderLength; ++i)
-		borderType[side][i] = tempExternalBorder.size();
+		borderType[side][i + move] = tempExternalBorder.size();
 
 	double* newExternalBorder;
 
