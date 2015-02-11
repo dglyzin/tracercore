@@ -24,7 +24,7 @@ public:
 
 	void prepareData();
 
-	void courted(double dX2, double dY2, double dT);
+	void computeOneStep(double dX2, double dY2, double dT);
 
 	int getBlockType() { return CPU; }
 

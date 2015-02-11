@@ -113,7 +113,7 @@ public:
 	 * TODO
 	 * Реализовать работу по заданной из вне функции.
 	 */
-	virtual void courted(double dX2, double dY2, double dT) { return; }
+	virtual void computeOneStep(double dX2, double dY2, double dT) { return; }
 
 	/*
 	 * Возвращает тип блока.

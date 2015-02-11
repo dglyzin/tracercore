@@ -88,10 +88,17 @@ BlockCpu::BlockCpu(int _length, int _width, int _lengthMove, int _widthMove, int
 BlockCpu::~BlockCpu() {
 }
 
-void BlockCpu::courted(double dX2, double dY2, double dT) {
+void BlockCpu::computeOneStep(double dX2, double dY2, double dT) {
 	/*
 	 * Теплопроводность
 	 */
+
+	/*
+	 * TODO
+	 * Сделать здесь вызов внешней для класса функции вычисления, передавая ей все данные как параметры
+	 */
+
+
 
 	/*
 	 * Параллельное вычисление на максимально возможном количестве потоков.

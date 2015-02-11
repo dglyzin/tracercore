@@ -63,7 +63,7 @@ void Domain::nextStep(double dX2, double dY2, double dT) {
 	{
 		for (int i = 0; i < blockCount; ++i)
 			if( mBlocks[i]->getBlockType() == DEVICE0 ) {
-				mBlocks[i]->courted(dX2, dY2, dT);
+				mBlocks[i]->computeOneStep(dX2, dY2, dT);
 				mBlocks[i]->prepareData();
 			}
 	}
@@ -72,7 +72,7 @@ void Domain::nextStep(double dX2, double dY2, double dT) {
 	{
 		for (int i = 0; i < blockCount; ++i)
 			if( mBlocks[i]->getBlockType() == DEVICE1 ) {
-				mBlocks[i]->courted(dX2, dY2, dT);
+				mBlocks[i]->computeOneStep(dX2, dY2, dT);
 				mBlocks[i]->prepareData();
 			}
 	}
@@ -81,7 +81,7 @@ void Domain::nextStep(double dX2, double dY2, double dT) {
 	{
 		for (int i = 0; i < blockCount; ++i)
 			if( mBlocks[i]->getBlockType() == DEVICE2 ) {
-				mBlocks[i]->courted(dX2, dY2, dT);
+				mBlocks[i]->computeOneStep(dX2, dY2, dT);
 				mBlocks[i]->prepareData();
 			}
 	}
@@ -90,7 +90,7 @@ void Domain::nextStep(double dX2, double dY2, double dT) {
 	{
 		for (int i = 0; i < blockCount; ++i)
 			if( mBlocks[i]->getBlockType() == CPU ) {
-				mBlocks[i]->courted(dX2, dY2, dT);
+				mBlocks[i]->computeOneStep(dX2, dY2, dT);
 				mBlocks[i]->prepareData();
 			}
 	}
