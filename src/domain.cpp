@@ -39,8 +39,8 @@ void Domain::count() {
 	 * Вычисление количества необходимых итераций
 	 */
 	int repeatCount = (int)(1 / dT) + 1;
-	repeatCount = 2500;
-	printf("\nREPEAT COUNT NOT RIGHT!!!\n");
+	//repeatCount = 2500;
+	//printf("\nREPEAT COUNT NOT RIGHT!!!\n");
 
 	/*
 	 * Выполнение
@@ -201,6 +201,12 @@ void Domain::readFromFile(char* path) {
 
 	for (int i = 0; i < connectionCount; ++i)
 		mInterconnects[i] = readConnection(in);
+
+	for (int i = 0; i < blockCount; ++i)
+		mBlocks[i]->moveTempExternalBorderVectorToExternalBorderArray();
+
+	/*for (int i = 0; i < blockCount; ++i)
+		mBlocks[i]->print();*/
 }
 
 void Domain::readLengthAndWidthArea(ifstream& in) {
@@ -241,11 +247,11 @@ Block* Domain::readBlock(ifstream& in) {
 			case 0:
 				return new BlockCpu(length, width, lengthMove, widthMove, world_rank_creator);
 			case 1:
-				return new BlockGpu(length, width, lengthMove, widthMove, world_rank_creator, getDeviceNumber(DEVICE0));
+				//return new BlockGpu(length, width, lengthMove, widthMove, world_rank_creator, getDeviceNumber(DEVICE0));
 			case 2:
-				return new BlockGpu(length, width, lengthMove, widthMove, world_rank_creator, getDeviceNumber(DEVICE1));
+				//return new BlockGpu(length, width, lengthMove, widthMove, world_rank_creator, getDeviceNumber(DEVICE1));
 			case 3:
-				return new BlockGpu(length, width, lengthMove, widthMove, world_rank_creator, getDeviceNumber(DEVICE2));
+				//return new BlockGpu(length, width, lengthMove, widthMove, world_rank_creator, getDeviceNumber(DEVICE2));
 			default:
 				return new BlockNull(length, width, lengthMove, widthMove, world_rank_creator);
 		}
@@ -333,15 +339,15 @@ Interconnect* Domain::readConnection(ifstream& in) {
 
 
 	double* sourceData = mBlocks[source]->getBorderBlockData( oppositeBorder(side), connectionSourceMove );
-	double* destinationData = mBlocks[destination]->getExternalBorderData(side, connectionDestinationMove);
+	double* destinationData = mBlocks[destination]->addNewExternalBorder(mBlocks[source]->getNodeNumber(), side, connectionDestinationMove, borderLength, sourceData);
 
 
 	/*
 	 * Если блок назначения реален для данного потока,то тип границы должен быть изменен, чтобы вчисления были корректны.
 	 * тип границы, сторона, сдвиг и длина границы
 	 */
-	if(mBlocks[destination]->isRealBlock())
-		mBlocks[destination]->setPartBorder(BY_ANOTHER_BLOCK, side, connectionDestinationMove, borderLength);
+	/*if(mBlocks[destination]->isRealBlock())
+		mBlocks[destination]->setPartBorder(BY_ANOTHER_BLOCK, side, connectionDestinationMove, borderLength);*/
 
 	/*
 	 * Формируется соединение.

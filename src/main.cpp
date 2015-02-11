@@ -2,9 +2,7 @@
 #include <stdlib.h>
 #include <cmath>
 
-#include "blockcpu.h"
 #include "domain.h"
-#include "interconnect.h"
 
 int main(int argc, char * argv[]) {
 	/*
@@ -84,8 +82,8 @@ int main(int argc, char * argv[]) {
 	 * Сбор и вывод результата.
 	 * Передается второй аргумент командной строки - путь к файлу, в который будет записан результат.
 	 */
-	//d->print(argv[2]);
-	printf("\nNOT PRINT TO FILE!!!\n");
+	d->print(argv[2]);
+	//printf("\nNOT PRINT TO FILE!!!\n");
 
 	/*
 	 * Завершение MPI

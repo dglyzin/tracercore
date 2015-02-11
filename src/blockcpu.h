@@ -31,6 +31,9 @@ public:
 	void setPartBorder(int type, int side, int move, int borderLength);
 
 	void print();
+
+	double* addNewExternalBorder(int nodeNeighbor, int side, int move, int borderLength, double* border);
+	void moveTempExternalBorderVectorToExternalBorderArray();
 };
 
 #endif /* SRC_BLOCKCPU_H_ */

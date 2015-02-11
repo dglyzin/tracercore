@@ -8,10 +8,7 @@
 #ifndef SRC_ENUMS_H_
 #define SRC_ENUMS_H_
 
-/*
- * Типы границ блока
- */
-enum BORDER_TYPE {BY_ANOTHER_BLOCK, BY_FUNCTION};
+#define BY_FUNCTION -1
 
 /*
  * Сторона границы

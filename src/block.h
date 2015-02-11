@@ -12,8 +12,9 @@
 #include <stdlib.h>
 #include <cmath>
 #include <math.h>
-
 #include <string.h>
+
+#include <vector>
 
 #include <omp.h>
 
@@ -75,6 +76,7 @@ protected:
 	 * Первыми пишут Interconnect'ы, затем функции.
 	 */
 	double** externalBorder;
+	std::vector<double*> tempExternalBorder;
 
 	/*
 	 * Функция проверяет допустимость значений для данного блока
@@ -121,7 +123,7 @@ public:
 	/*
 	 * Печатает информацию о блоке на консоль.
 	 */
-	//virtual void print() { return; }
+	virtual void print() { return; }
 
 	/*
 	 * Возвращает результурющую матрицу данного блока.
@@ -166,10 +168,13 @@ public:
 	double* getBottomBlockBorder() { return blockBorder != NULL ? blockBorder[BOTTOM] : NULL; }
 	double* getRightBlockBorder() { return blockBorder != NULL ? blockBorder[RIGHT] : NULL; }
 
-	double* getTopExternalBorder() { return externalBorder != NULL ? externalBorder[TOP] : NULL; }
+	/*double* getTopExternalBorder() { return externalBorder != NULL ? externalBorder[TOP] : NULL; }
 	double* getLeftExternalBorder() { return externalBorder != NULL ? externalBorder[LEFT] : NULL; }
 	double* getBottomExternalBorder() { return externalBorder != NULL ? externalBorder[BOTTOM] : NULL; }
-	double* getRightExternalBorder() { return externalBorder != NULL ? externalBorder[RIGHT] : NULL; }
+	double* getRightExternalBorder() { return externalBorder != NULL ? externalBorder[RIGHT] : NULL; }*/
+
+	virtual double* addNewExternalBorder(int nodeNeighbor, int side, int move, int borderLength, double* border) { return NULL; }
+	virtual void moveTempExternalBorderVectorToExternalBorderArray() { return; }
 
 	//virtual void setExternalBorder(int side, double* _externalBorder) { return; }
 

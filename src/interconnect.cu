@@ -44,7 +44,7 @@ void Interconnect::sendRecv(int locationNode) {
 	 */
 	if(locationNode == sourceLocationNode && locationNode == destinationLocationNode) {
 		if( isCPU(sourceType) && isCPU(destinationType) ) {
-			memcpy(destinationExternalBorder, sourceBlockBorder, borderLength * sizeof(double));
+			//memcpy(destinationExternalBorder, sourceBlockBorder, borderLength * sizeof(double));
 			return;
 		}
 		

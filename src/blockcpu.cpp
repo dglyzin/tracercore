@@ -45,10 +45,6 @@ BlockCpu::BlockCpu(int _length, int _width, int _lengthMove, int _widthMove, int
 	 * Это он будет отдавать. Выделение памяти.
 	 */
 	blockBorder = new double* [BORDER_COUNT];
-	/*blockBorder[TOP] = NULL;
-	blockBorder[LEFT] = NULL;
-	blockBorder[BOTTOM] = NULL;
-	blockBorder[RIGHT] = NULL;*/
 
 	blockBorder[TOP] = new double[width];
 	for(int i = 0; i < width; i++)
@@ -70,7 +66,7 @@ BlockCpu::BlockCpu(int _length, int _width, int _lengthMove, int _widthMove, int
 	 * Внешние границы блока.
 	 * Сюда будет приходить информация.
 	 */
-	externalBorder = new double* [BORDER_COUNT];
+	/*externalBorder = new double* [BORDER_COUNT];
 
 	externalBorder[TOP] = new double[width];
 	for(int i = 0; i < width; i++)
@@ -86,7 +82,7 @@ BlockCpu::BlockCpu(int _length, int _width, int _lengthMove, int _widthMove, int
 
 	externalBorder[RIGHT] = new double[length];
 	for (int i = 0; i < length; ++i)
-		externalBorder[RIGHT][i] = 10;
+		externalBorder[RIGHT][i] = 10;*/
 }
 
 BlockCpu::~BlockCpu() {
@@ -102,7 +98,7 @@ void BlockCpu::courted(double dX2, double dY2, double dT) {
 	 * Максимально возможное количесвто потоков получается из-за самой библиотеки omp
 	 * Если явно не указывать, какое именно количесвто нитей необходимо создать, то будет создано макстимально возможное на данный момент.
 	 */
-# pragma omp parallel
+//# pragma omp parallel
 {
 		/*
 		 * Для решения задачи теплопроводности нам необходимо знать несколько значений.
@@ -117,7 +113,7 @@ void BlockCpu::courted(double dX2, double dY2, double dT) {
 		 */
 	double top, left, bottom, right, cur;
 
-# pragma omp for
+//# pragma omp for
 	// Проходим по всем ячейкам матрицы.
 	// Для каждой из них будет выполнен перерасчет.
 	for (int i = 0; i < length; ++i)
@@ -144,11 +140,11 @@ void BlockCpu::courted(double dX2, double dY2, double dT) {
 				 * Но продолжаем расчет.
 				 */
 				if( borderType[TOP][j] == BY_FUNCTION ) {
-					newMatrix[i * width + j] = externalBorder[TOP][j];
+					newMatrix[i * width + j] = 100;
 					continue;
 				}
 				else
-					top = externalBorder[TOP][j];
+					top = externalBorder[borderType[TOP][j]][j];
 			else
 				/*
 				 * Если находимся не на верхней границе блока, то есть возможность просто получить значение в ячейке выше данной.
@@ -164,11 +160,11 @@ void BlockCpu::courted(double dX2, double dY2, double dT) {
 			 */
 			if( j == 0 )
 				if( borderType[LEFT][i] == BY_FUNCTION ) {
-					newMatrix[i * width + j] = externalBorder[LEFT][i];
+					newMatrix[i * width + j] = 10;
 					continue;
 				}
 				else
-					left = externalBorder[LEFT][i];
+					left = externalBorder[borderType[LEFT][i]][i];
 			else
 				left = matrix[i * width + (j - 1)];
 
@@ -179,11 +175,11 @@ void BlockCpu::courted(double dX2, double dY2, double dT) {
 			 */
 			if( i == length - 1 )
 				if( borderType[BOTTOM][j] == BY_FUNCTION ) {
-					newMatrix[i * width + j] = externalBorder[BOTTOM][j];
+					newMatrix[i * width + j] = 10;
 					continue;
 				}
 				else
-					bottom = externalBorder[BOTTOM][j];
+					bottom = externalBorder[borderType[BOTTOM][j]][j];
 			else
 				bottom = matrix[(i + 1) * width + j];
 
@@ -194,11 +190,11 @@ void BlockCpu::courted(double dX2, double dY2, double dT) {
 			 */
 			if( j == width - 1 )
 				if( borderType[RIGHT][i] == BY_FUNCTION ) {
-					newMatrix[i * width + j] = externalBorder[RIGHT][i];
+					newMatrix[i * width + j] = 10;
 					continue;
 				}
 				else
-					right = externalBorder[RIGHT][i];
+					right = externalBorder[borderType[RIGHT][i]][i];
 			else
 				right = matrix[i * width + (j + 1)];
 
@@ -326,7 +322,7 @@ void BlockCpu::print() {
 	printf("\n");
 
 
-	printf("\ntopExternalBorder\n");
+	/*printf("\ntopExternalBorder\n");
 	for (int i = 0; i < width; ++i)
 		printf("%6.1f", externalBorder[TOP][i]);
 	printf("\n");
@@ -347,8 +343,38 @@ void BlockCpu::print() {
 	printf("\nrightExternalBorder\n");
 	for (int i = 0; i < length; ++i)
 		printf("%6.1f", externalBorder[RIGHT][i]);
-	printf("\n");
+	printf("\n");*/
 
 
 	printf("\n\n\n");
+}
+
+double* BlockCpu::addNewExternalBorder(int nodeNeighbor, int side, int move, int borderLength, double* border) {
+	if( checkValue(side, move + borderLength) ) {
+		printf("\nCritical error!\n");
+		exit(1);
+	}
+
+	for (int i = 0; i < borderLength; ++i)
+		borderType[side][i] = tempExternalBorder.size();
+
+	double* newExternalBorder;
+
+	if( nodeNumber == nodeNeighbor )
+		newExternalBorder = border;
+	else
+		newExternalBorder = new double [borderLength];
+
+	tempExternalBorder.push_back(newExternalBorder);
+
+	return newExternalBorder;
+}
+
+void BlockCpu::moveTempExternalBorderVectorToExternalBorderArray() {
+	externalBorder = new double* [tempExternalBorder.size()];
+
+	for (int i = 0; i < tempExternalBorder.size(); ++i)
+		externalBorder[i] = tempExternalBorder.at(i);
+
+	tempExternalBorder.clear();
 }
