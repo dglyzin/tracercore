@@ -58,54 +58,6 @@ BlockCpu::BlockCpu(int _length, int _width, int _lengthMove, int _widthMove, int
 	recieveBorderType[RIGHT] = new int[length];
 	for (int i = 0; i < length; ++i)
 		recieveBorderType[RIGHT][i] = BY_FUNCTION;
-
-	/*
-	 * Границы самого блока.
-	 * Это он будет отдавать. Выделение памяти.
-	 */
-	/*blockBorder = new double* [BORDER_COUNT];
-	blockBorder[TOP] = NULL;
-	blockBorder[LEFT] = NULL;
-	blockBorder[BOTTOM] = NULL;
-	blockBorder[RIGHT] = NULL;
-
-	blockBorder[TOP] = new double[width];
-	for(int i = 0; i < width; i++)
-		blockBorder[TOP][i] = 0;
-
-	blockBorder[LEFT] = new double[length];
-	for (int i = 0; i < length; ++i)
-		blockBorder[LEFT][i] = 0;
-
-	blockBorder[BOTTOM] = new double[width];
-	for(int i = 0; i < width; i++)
-		blockBorder[BOTTOM][i] = 0;
-
-	blockBorder[RIGHT] = new double[length];
-	for (int i = 0; i < length; ++i)
-		blockBorder[RIGHT][i] = 0;*/
-
-	/*
-	 * Внешние границы блока.
-	 * Сюда будет приходить информация.
-	 */
-	/*externalBorder = new double* [BORDER_COUNT];
-
-	externalBorder[TOP] = new double[width];
-	for(int i = 0; i < width; i++)
-		externalBorder[TOP][i] = 100;//100 * cos( (i - width/2. ) / (width/2.));
-
-	externalBorder[LEFT] = new double[length];
-	for (int i = 0; i < length; ++i)
-		externalBorder[LEFT][i] = 10;
-
-	externalBorder[BOTTOM] = new double[width];
-	for(int i = 0; i < width; i++)
-		externalBorder[BOTTOM][i] = 10;
-
-	externalBorder[RIGHT] = new double[length];
-	for (int i = 0; i < length; ++i)
-		externalBorder[RIGHT][i] = 10;*/
 }
 
 BlockCpu::~BlockCpu() {
@@ -121,15 +73,13 @@ void BlockCpu::computeOneStep(double dX2, double dY2, double dT) {
 	 * Сделать здесь вызов внешней для класса функции вычисления, передавая ей все данные как параметры
 	 */
 
-
-
 	/*
 	 * Параллельное вычисление на максимально возможном количестве потоков.
 	 * Максимально возможное количесвто потоков получается из-за самой библиотеки omp
 	 * Если явно не указывать, какое именно количесвто нитей необходимо создать, то будет создано макстимально возможное на данный момент.
 	 */
 # pragma omp parallel
-{
+	{
 		/*
 		 * Для решения задачи теплопроводности нам необходимо знать несколько значений.
 		 * Среди них
@@ -239,7 +189,7 @@ void BlockCpu::computeOneStep(double dX2, double dY2, double dT) {
 			 */
 			newMatrix[i * width + j] = cur + dT * ( ( left - 2*cur + right )/dX2 + ( top - 2*cur + bottom )/dY2  );
 		}
-}
+	}
 /*
  * Указатель на старую матрицу запоминается
  * Новая матрица становится текущей
@@ -255,24 +205,8 @@ void BlockCpu::computeOneStep(double dX2, double dY2, double dT) {
 void BlockCpu::prepareData() {
 	/*
 	 * Копирование данных из матрицы в массивы.
-	 * В дальнейшем эти массивы (или их части) будет пеесылаться другим блокам.
+	 * В дальнейшем эти массивы будет пеесылаться другим блокам.
 	 */
-	/*if( blockBorder[TOP] != NULL )
-		for (int i = 0; i < width; ++i)
-			blockBorder[TOP][i] = matrix[0 * width + i];
-
-	if( blockBorder[LEFT] != NULL )
-		for (int i = 0; i < length; ++i)
-			blockBorder[LEFT][i] = matrix[i * width + 0];
-
-	if( blockBorder[BOTTOM] != NULL )
-		for (int i = 0; i < width; ++i)
-			blockBorder[BOTTOM][i] = matrix[(length - 1) * width + i];
-
-	if( blockBorder[RIGHT] != NULL )
-		for (int i = 0; i < length; ++i)
-			blockBorder[RIGHT][i] = matrix[i * width + (width - 1)];*/
-
 	for (int i = 0; i < width; ++i)
 		if( sendBorderType[TOP][i] != BY_FUNCTION )
 			blockBorder[	sendBorderType[TOP][i]	][i - blockBorderMove[	sendBorderType[TOP][i]	]] = matrix[0 * width + i];

@@ -39,8 +39,6 @@ void Domain::count() {
 	 * Вычисление количества необходимых итераций
 	 */
 	int repeatCount = (int)(1 / dT) + 1;
-	//repeatCount = 2500;
-	//printf("\nREPEAT COUNT NOT RIGHT!!!\n");
 
 	/*
 	 * Выполнение
@@ -50,12 +48,6 @@ void Domain::count() {
 }
 
 void Domain::nextStep(double dX2, double dY2, double dT) {
-	/*
-	 * Все блоки подготавливают данные для пересылки
-	 */
-	/*for (int i = 0; i < blockCount; ++i)
-		mBlocks[i]->prepareData();*/
-
 	/*
 	 * Перерасчет данных
 	 */
@@ -204,10 +196,6 @@ void Domain::readFromFile(char* path) {
 
 	for (int i = 0; i < blockCount; ++i)
 		mBlocks[i]->moveTempBorderVectorToBorderArray();
-
-	/*if(world_rank == 3)
-	for (int i = 0; i < blockCount; ++i)
-		mBlocks[i]->print();*/
 }
 
 void Domain::readLengthAndWidthArea(ifstream& in) {
@@ -339,17 +327,8 @@ Interconnect* Domain::readConnection(ifstream& in) {
 	 */
 
 
-	//double* sourceData = mBlocks[source]->getBorderBlockData( oppositeBorder(side), connectionSourceMove );
 	double* sourceData = mBlocks[source]->addNewBlockBorder(mBlocks[destination]->getNodeNumber(), mBlocks[destination]->getBlockType(), oppositeBorder(side), connectionSourceMove, borderLength);
 	double* destinationData = mBlocks[destination]->addNewExternalBorder(mBlocks[source]->getNodeNumber(), side, connectionDestinationMove, borderLength, sourceData);
-
-
-	/*
-	 * Если блок назначения реален для данного потока,то тип границы должен быть изменен, чтобы вчисления были корректны.
-	 * тип границы, сторона, сдвиг и длина границы
-	 */
-	/*if(mBlocks[destination]->isRealBlock())
-		mBlocks[destination]->setPartBorder(BY_ANOTHER_BLOCK, side, connectionDestinationMove, borderLength);*/
 
 	/*
 	 * Формируется соединение.
