@@ -20,6 +20,8 @@ Block::Block() {
 	blockBorder = NULL;
 	externalBorder = NULL;
 
+	externalBorderMove = NULL;
+
 	matrix = newMatrix = NULL;
 }
 
@@ -32,9 +34,13 @@ Block::Block(int _length, int _width, int _lengthMove, int _widthMove, int _node
 
 	nodeNumber = _nodeNumber;
 
+	neighborCount = 0;
+
 	borderType = NULL;
 	blockBorder = NULL;
 	externalBorder = NULL;
+
+	externalBorderMove = NULL;
 
 	matrix = newMatrix = NULL;
 }

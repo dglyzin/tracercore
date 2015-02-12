@@ -45,8 +45,12 @@ BlockCpu::BlockCpu(int _length, int _width, int _lengthMove, int _widthMove, int
 	 * Это он будет отдавать. Выделение памяти.
 	 */
 	blockBorder = new double* [BORDER_COUNT];
+	blockBorder[TOP] = NULL;
+	blockBorder[LEFT] = NULL;
+	blockBorder[BOTTOM] = NULL;
+	blockBorder[RIGHT] = NULL;
 
-	blockBorder[TOP] = new double[width];
+	/*blockBorder[TOP] = new double[width];
 	for(int i = 0; i < width; i++)
 		blockBorder[TOP][i] = 0;
 
@@ -60,7 +64,7 @@ BlockCpu::BlockCpu(int _length, int _width, int _lengthMove, int _widthMove, int
 
 	blockBorder[RIGHT] = new double[length];
 	for (int i = 0; i < length; ++i)
-		blockBorder[RIGHT][i] = 0;
+		blockBorder[RIGHT][i] = 0;*/
 
 	/*
 	 * Внешние границы блока.
@@ -305,7 +309,7 @@ void BlockCpu::print() {
 	printf("\n");
 
 
-	printf("\ntopBlockBorder %d\n", blockBorder[TOP]);
+	/*printf("\ntopBlockBorder %d\n", blockBorder[TOP]);
 	for (int i = 0; i < width; ++i)
 		printf("%6.1f", blockBorder[TOP][i]);
 	printf("\n");
@@ -330,10 +334,26 @@ void BlockCpu::print() {
 
 
 	for (int i = 0; i < neighborCount; ++i)
-		printf("\nexternalBorder #%d : %d\n", i, externalBorder[i]);
+		printf("\nexternalBorder #%d : %d\n", i, externalBorder[i]);*/
 
 
 	printf("\n\n\n");
+}
+
+double* BlockCpu::createBlockBorder(int typeNeighbor, int side, int move) {
+	int borderLength = 0;
+
+	if( side == TOP || side == BOTTOM )
+		borderLength = width;
+	if( side == LEFT || side == RIGHT )
+		borderLength = length;
+
+	if( isCPU(typeNeighbor) )
+		blockBorder[side] = new double [borderLength];
+	if( isGPU(typeNeighbor) )
+		printf("\nMALLOC FOR GPU!!!\n");
+
+	return blockBorder[side] + move;
 }
 
 double* BlockCpu::addNewExternalBorder(int nodeNeighbor, int side, int move, int borderLength, double* border) {

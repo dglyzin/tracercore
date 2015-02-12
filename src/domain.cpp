@@ -338,7 +338,8 @@ Interconnect* Domain::readConnection(ifstream& in) {
 	 */
 
 
-	double* sourceData = mBlocks[source]->getBorderBlockData( oppositeBorder(side), connectionSourceMove );
+	//double* sourceData = mBlocks[source]->getBorderBlockData( oppositeBorder(side), connectionSourceMove );
+	double* sourceData = mBlocks[source]->createBlockBorder(mBlocks[destination]->getBlockType(), side, connectionSourceMove);
 	double* destinationData = mBlocks[destination]->addNewExternalBorder(mBlocks[source]->getNodeNumber(), side, connectionDestinationMove, borderLength, sourceData);
 
 

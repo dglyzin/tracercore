@@ -32,6 +32,8 @@ public:
 
 	void print();
 
+	double* createBlockBorder(int typeNeighbor, int side, int move);
+
 	double* addNewExternalBorder(int nodeNeighbor, int side, int move, int borderLength, double* border);
 	void moveTempExternalBorderVectorToExternalBorderArray();
 };

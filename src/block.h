@@ -177,6 +177,8 @@ public:
 	double* getBottomExternalBorder() { return externalBorder != NULL ? externalBorder[BOTTOM] : NULL; }
 	double* getRightExternalBorder() { return externalBorder != NULL ? externalBorder[RIGHT] : NULL; }*/
 
+	virtual double* createBlockBorder(int typeNeighbor, int side, int move) { return NULL; }
+
 	virtual double* addNewExternalBorder(int nodeNeighbor, int side, int move, int borderLength, double* border) { return NULL; }
 	virtual void moveTempExternalBorderVectorToExternalBorderArray() { return; }
 
