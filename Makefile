@@ -1,6 +1,7 @@
 CC=mpiCC
 CFLAGS=-c -O3 -Wall  
 SRC=src
+SRCSOL=src/solvers
 
 CUDACC=nvcc
 CUFLAGS=-c -O3
@@ -9,7 +10,7 @@ CUDAARCH2=
 CUDAARCH=-arch=sm_20 
 BIN=bin
 
-all: HS 
+all: HS solver
 
 HS: main.o domain.o block.o blockcpu.o blocknull.o interconnect.o enums.o
 	$(CUDACC) -O3 -I/usr/mpi/gcc/openmpi-1.8.4/include -L /usr/mpi/gcc/openmpi-1.8.4/lib -lmpi -lmpi_cxx  $(BIN)/main.o $(BIN)/domain.o $(BIN)/block.o $(BIN)/interconnect.o  $(BIN)/blockcpu.o $(BIN)/blocknull.o $(BIN)/enums.o -o $(BIN)/HS -Xcompiler -fopenmp
@@ -37,6 +38,11 @@ enums.o: $(SRC)/enums.cpp
 	
 #blockgpu.o: $(SRC)/blockgpu.cu  
 #	$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I$(CUDAINC) $(SRC)/blockgpu.cu -o $(BIN)/blockgpu.o
+solver: solver.o
+	echo "hello"
+
+solver.o: $(SRCSOL)/solver.cpp
+	$(CC) $(CFLAGS) $(SRCSOL)/solver.cpp -o $(BIN)/solver.o
 
 clean:
 	rm -rf $(BIN)/*.o $(BIN)/HS
