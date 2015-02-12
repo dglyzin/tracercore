@@ -61,7 +61,8 @@ protected:
 	 * BY_ANOTHER_BLOCK - граница с другим блоком, работает через Interconnect.
 	 * BY_FUNCTION - границы с другим блоком нет, значения даются функцией.
 	 */
-	int** borderType;
+	int** sendBorderType;
+	int** recieveBorderType;
 
 	/*
 	 * Граничные условия для других блоков,
@@ -69,6 +70,9 @@ protected:
 	 * Interconnect их забирает (должен знать откуда забирать).
 	 */
 	double** blockBorder;
+	int* blockBorderMove;
+	std::vector<double*> tempBlockBorder;
+	std::vector<int> tempBlockBorderMove;
 
 	/*
 	 * С помощью Interconnect'а здесь будут находится свежие данные от других блоков,
@@ -80,7 +84,9 @@ protected:
 	std::vector<double*> tempExternalBorder;
 	std::vector<int> tempExternalBorderMove;
 
-	int neighborCount;
+
+	int countSendSegmentBorder;
+	int countRecieveSegmentBorder;
 
 	/*
 	 * Функция проверяет допустимость значений для данного блока
@@ -147,15 +153,11 @@ public:
 
 	int getNodeNumber() { return nodeNumber; }
 
-	int* getTopBorderType() { return borderType != NULL ? borderType[TOP] : NULL; }
+	/*int* getTopBorderType() { return borderType != NULL ? borderType[TOP] : NULL; }
 	int* getLeftBorderType() { return borderType != NULL ? borderType[LEFT] : NULL; }
 	int* getBottomBorderType() { return borderType != NULL ? borderType[BOTTOM] : NULL; }
-	int* getRightBorderType() { return borderType != NULL ? borderType[RIGHT] : NULL; }
+	int* getRightBorderType() { return borderType != NULL ? borderType[RIGHT] : NULL; }*/
 
-	/*
-	 * Устанавливает определенной границе, в опреденных пределах требуемое значение.
-	 */
-	virtual void setPartBorder(int type, int side, int move, int borderLength) { return; }
 
 	/*
 	 * Возвращают указатель на требуемую границу с указанным сдвигомю
@@ -177,10 +179,10 @@ public:
 	double* getBottomExternalBorder() { return externalBorder != NULL ? externalBorder[BOTTOM] : NULL; }
 	double* getRightExternalBorder() { return externalBorder != NULL ? externalBorder[RIGHT] : NULL; }*/
 
-	virtual double* createBlockBorder(int typeNeighbor, int side, int move) { return NULL; }
-
+	virtual double* addNewBlockBorder(int nodeNeighbor, int typeNeighbor, int side, int move, int borderLength) { return NULL; }
 	virtual double* addNewExternalBorder(int nodeNeighbor, int side, int move, int borderLength, double* border) { return NULL; }
-	virtual void moveTempExternalBorderVectorToExternalBorderArray() { return; }
+
+	virtual void moveTempBorderVectorToBorderArray() { return; }
 
 	//virtual void setExternalBorder(int side, double* _externalBorder) { return; }
 

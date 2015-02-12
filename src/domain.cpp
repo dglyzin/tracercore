@@ -203,10 +203,11 @@ void Domain::readFromFile(char* path) {
 		mInterconnects[i] = readConnection(in);
 
 	for (int i = 0; i < blockCount; ++i)
-		mBlocks[i]->moveTempExternalBorderVectorToExternalBorderArray();
+		mBlocks[i]->moveTempBorderVectorToBorderArray();
 
+	/*if(world_rank == 3)
 	for (int i = 0; i < blockCount; ++i)
-		mBlocks[i]->print();
+		mBlocks[i]->print();*/
 }
 
 void Domain::readLengthAndWidthArea(ifstream& in) {
@@ -339,7 +340,7 @@ Interconnect* Domain::readConnection(ifstream& in) {
 
 
 	//double* sourceData = mBlocks[source]->getBorderBlockData( oppositeBorder(side), connectionSourceMove );
-	double* sourceData = mBlocks[source]->createBlockBorder(mBlocks[destination]->getBlockType(), side, connectionSourceMove);
+	double* sourceData = mBlocks[source]->addNewBlockBorder(mBlocks[destination]->getNodeNumber(), mBlocks[destination]->getBlockType(), oppositeBorder(side), connectionSourceMove, borderLength);
 	double* destinationData = mBlocks[destination]->addNewExternalBorder(mBlocks[source]->getNodeNumber(), side, connectionDestinationMove, borderLength, sourceData);
 
 

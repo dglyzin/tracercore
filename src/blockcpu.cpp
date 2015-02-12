@@ -22,35 +22,54 @@ BlockCpu::BlockCpu(int _length, int _width, int _lengthMove, int _widthMove, int
 	 * Типы границ блока. Выделение памяти.
 	 * По умолчанию границы задаются функциями, то есть нет границ между блоками.
 	 */
-	borderType = new int* [BORDER_COUNT];
+	sendBorderType = new int* [BORDER_COUNT];
 
-	borderType[TOP] = new int[width];
+	sendBorderType[TOP] = new int[width];
 	for(int i = 0; i < width; i++)
-		borderType[TOP][i] = BY_FUNCTION;
+		sendBorderType[TOP][i] = BY_FUNCTION;
 
-	borderType[LEFT] = new int[length];
+	sendBorderType[LEFT] = new int[length];
 	for (int i = 0; i < length; ++i)
-		borderType[LEFT][i] = BY_FUNCTION;
+		sendBorderType[LEFT][i] = BY_FUNCTION;
 
-	borderType[BOTTOM] = new int[width];
+	sendBorderType[BOTTOM] = new int[width];
 	for(int i = 0; i < width; i++)
-		borderType[BOTTOM][i] = BY_FUNCTION;
+		sendBorderType[BOTTOM][i] = BY_FUNCTION;
 
-	borderType[RIGHT] = new int[length];
+	sendBorderType[RIGHT] = new int[length];
 	for (int i = 0; i < length; ++i)
-		borderType[RIGHT][i] = BY_FUNCTION;
+		sendBorderType[RIGHT][i] = BY_FUNCTION;
+
+
+	recieveBorderType = new int* [BORDER_COUNT];
+
+	recieveBorderType[TOP] = new int[width];
+	for(int i = 0; i < width; i++)
+		recieveBorderType[TOP][i] = BY_FUNCTION;
+
+	recieveBorderType[LEFT] = new int[length];
+	for (int i = 0; i < length; ++i)
+		recieveBorderType[LEFT][i] = BY_FUNCTION;
+
+	recieveBorderType[BOTTOM] = new int[width];
+	for(int i = 0; i < width; i++)
+		recieveBorderType[BOTTOM][i] = BY_FUNCTION;
+
+	recieveBorderType[RIGHT] = new int[length];
+	for (int i = 0; i < length; ++i)
+		recieveBorderType[RIGHT][i] = BY_FUNCTION;
 
 	/*
 	 * Границы самого блока.
 	 * Это он будет отдавать. Выделение памяти.
 	 */
-	blockBorder = new double* [BORDER_COUNT];
+	/*blockBorder = new double* [BORDER_COUNT];
 	blockBorder[TOP] = NULL;
 	blockBorder[LEFT] = NULL;
 	blockBorder[BOTTOM] = NULL;
 	blockBorder[RIGHT] = NULL;
 
-	/*blockBorder[TOP] = new double[width];
+	blockBorder[TOP] = new double[width];
 	for(int i = 0; i < width; i++)
 		blockBorder[TOP][i] = 0;
 
@@ -150,12 +169,12 @@ void BlockCpu::computeOneStep(double dX2, double dY2, double dT) {
 				 * Если это граница с другим блоком, то в top (значение в ячейке выше данной) записываем информацию с гранцы.
 				 * Но продолжаем расчет.
 				 */
-				if( borderType[TOP][j] == BY_FUNCTION ) {
+				if( recieveBorderType[TOP][j] == BY_FUNCTION ) {
 					newMatrix[i * width + j] = 100;
 					continue;
 				}
 				else
-					top = externalBorder[	borderType[TOP][j]	][j - externalBorderMove[	borderType[TOP][j]	]];
+					top = externalBorder[	recieveBorderType[TOP][j]	][j - externalBorderMove[	recieveBorderType[TOP][j]	]];
 			else
 				/*
 				 * Если находимся не на верхней границе блока, то есть возможность просто получить значение в ячейке выше данной.
@@ -170,12 +189,12 @@ void BlockCpu::computeOneStep(double dX2, double dY2, double dT) {
 			 * Рассуждения полностью совпадают со случаем верхней границы.
 			 */
 			if( j == 0 )
-				if( borderType[LEFT][i] == BY_FUNCTION ) {
+				if( recieveBorderType[LEFT][i] == BY_FUNCTION ) {
 					newMatrix[i * width + j] = 10;
 					continue;
 				}
 				else
-					left = externalBorder[	borderType[LEFT][i]	][i - externalBorderMove[	borderType[LEFT][i]		]];
+					left = externalBorder[	recieveBorderType[LEFT][i]	][i - externalBorderMove[	recieveBorderType[LEFT][i]		]];
 			else
 				left = matrix[i * width + (j - 1)];
 
@@ -185,12 +204,12 @@ void BlockCpu::computeOneStep(double dX2, double dY2, double dT) {
 			 * Граница нижняя.
 			 */
 			if( i == length - 1 )
-				if( borderType[BOTTOM][j] == BY_FUNCTION ) {
+				if( recieveBorderType[BOTTOM][j] == BY_FUNCTION ) {
 					newMatrix[i * width + j] = 10;
 					continue;
 				}
 				else
-					bottom = externalBorder[	borderType[BOTTOM][j]	][j - externalBorderMove[	borderType[BOTTOM][j]	]];
+					bottom = externalBorder[	recieveBorderType[BOTTOM][j]	][j - externalBorderMove[	recieveBorderType[BOTTOM][j]	]];
 			else
 				bottom = matrix[(i + 1) * width + j];
 
@@ -200,12 +219,12 @@ void BlockCpu::computeOneStep(double dX2, double dY2, double dT) {
 			 * Граница правая.
 			 */
 			if( j == width - 1 )
-				if( borderType[RIGHT][i] == BY_FUNCTION ) {
+				if( recieveBorderType[RIGHT][i] == BY_FUNCTION ) {
 					newMatrix[i * width + j] = 10;
 					continue;
 				}
 				else
-					right = externalBorder[	borderType[RIGHT][i]	][i - externalBorderMove[	borderType[RIGHT][i]	]];
+					right = externalBorder[	recieveBorderType[RIGHT][i]	][i - externalBorderMove[	recieveBorderType[RIGHT][i]	]];
 			else
 				right = matrix[i * width + (j + 1)];
 
@@ -238,7 +257,7 @@ void BlockCpu::prepareData() {
 	 * Копирование данных из матрицы в массивы.
 	 * В дальнейшем эти массивы (или их части) будет пеесылаться другим блокам.
 	 */
-	if( blockBorder[TOP] != NULL )
+	/*if( blockBorder[TOP] != NULL )
 		for (int i = 0; i < width; ++i)
 			blockBorder[TOP][i] = matrix[0 * width + i];
 
@@ -252,22 +271,23 @@ void BlockCpu::prepareData() {
 
 	if( blockBorder[RIGHT] != NULL )
 		for (int i = 0; i < length; ++i)
-			blockBorder[RIGHT][i] = matrix[i * width + (width - 1)];
-}
+			blockBorder[RIGHT][i] = matrix[i * width + (width - 1)];*/
 
-void BlockCpu::setPartBorder(int type, int side, int move, int borderLength) {
-	if( checkValue(side, move + borderLength) ) {
-		printf("\nCritical error!\n");
-		exit(1);
-	}
+	for (int i = 0; i < width; ++i)
+		if( sendBorderType[TOP][i] != BY_FUNCTION )
+			blockBorder[	sendBorderType[TOP][i]	][i - blockBorderMove[	sendBorderType[TOP][i]	]] = matrix[0 * width + i];
 
-	/*
-	 * Изначально все границы считаются заданными функциями.
-	 * Здесь присваиваются новые значение. Обычно граница с другим блоком.
-	 * Хотя фактически это не обязательно.
-	 */
-	for (int i = 0; i < borderLength; ++i)
-		borderType[side][i + move] = type;
+	for (int i = 0; i < length; ++i)
+		if( sendBorderType[LEFT][i] != BY_FUNCTION )
+			blockBorder[	sendBorderType[LEFT][i]	][i - blockBorderMove[	sendBorderType[LEFT][i]	]] = matrix[i * width + 0];
+
+	for (int i = 0; i < width; ++i)
+		if( sendBorderType[BOTTOM][i] != BY_FUNCTION )
+			blockBorder[	sendBorderType[BOTTOM][i]	][i - blockBorderMove[	sendBorderType[BOTTOM][i]	]] = matrix[(length - 1) * width + i];
+
+	for (int i = 0; i < length; ++i)
+		if( sendBorderType[RIGHT][i] != BY_FUNCTION )
+			blockBorder[	sendBorderType[RIGHT][i]	][i - blockBorderMove[	sendBorderType[RIGHT][i]	]] = matrix[i * width + (width - 1)];
 }
 
 void BlockCpu::print() {
@@ -284,76 +304,40 @@ void BlockCpu::print() {
 		printf("\n");
 	}
 
+	for (int i = 0; i < countSendSegmentBorder; ++i)
+		printf("\nblockBorder #%d : %d : %d\n", i, blockBorder[i], blockBorderMove[i]);
 
-	printf("\ntopBorderType\n");
-	for (int i = 0; i < width; ++i)
-		printf("%4d", borderType[TOP][i]);
-	printf("\n");
-
-
-	printf("\nleftBorderType\n");
-	for (int i = 0; i < length; ++i)
-		printf("%4d", borderType[LEFT][i]);
-	printf("\n");
-
-
-	printf("\nbottomBorderType\n");
-	for (int i = 0; i < width; ++i)
-		printf("%4d", borderType[BOTTOM][i]);
-	printf("\n");
-
-
-	printf("\nrightBorderType\n");
-	for (int i = 0; i < length; ++i)
-		printf("%4d", borderType[RIGHT][i]);
-	printf("\n");
-
-
-	/*printf("\ntopBlockBorder %d\n", blockBorder[TOP]);
-	for (int i = 0; i < width; ++i)
-		printf("%6.1f", blockBorder[TOP][i]);
-	printf("\n");
-
-
-	printf("\nleftBlockBorder %d\n", blockBorder[LEFT]);
-	for (int i = 0; i < length; ++i)
-		printf("%6.1f", blockBorder[LEFT][i]);
-	printf("\n");
-
-
-	printf("\nbottomBlockBorder %d\n", blockBorder[BOTTOM]);
-	for (int i = 0; i <width; ++i)
-		printf("%6.1f", blockBorder[BOTTOM][i]);
-	printf("\n");
-
-
-	printf("\nrightBlockBorder %d\n", blockBorder[RIGHT]);
-	for (int i = 0; i < length; ++i)
-		printf("%6.1f", blockBorder[RIGHT][i]);
-	printf("\n");
-
-
-	for (int i = 0; i < neighborCount; ++i)
-		printf("\nexternalBorder #%d : %d\n", i, externalBorder[i]);*/
+	for (int i = 0; i < countRecieveSegmentBorder; ++i)
+		printf("\nexternalBorder #%d : %d : %d\n", i, externalBorder[i], externalBorderMove[i]);
 
 
 	printf("\n\n\n");
 }
 
-double* BlockCpu::createBlockBorder(int typeNeighbor, int side, int move) {
-	int borderLength = 0;
+double* BlockCpu::addNewBlockBorder(int nodeNeighbor, int typeNeighbor, int side, int move, int borderLength) {
+	if( checkValue(side, move + borderLength) ) {
+		printf("\nCritical error!\n");
+		exit(1);
+	}
 
-	if( side == TOP || side == BOTTOM )
-		borderLength = width;
-	if( side == LEFT || side == RIGHT )
-		borderLength = length;
+	for (int i = 0; i < borderLength; ++i)
+		sendBorderType[side][i + move] = countSendSegmentBorder;
 
-	if( isCPU(typeNeighbor) )
-		blockBorder[side] = new double [borderLength];
-	if( isGPU(typeNeighbor) )
-		printf("\nMALLOC FOR GPU!!!\n");
+	countSendSegmentBorder++;
 
-	return blockBorder[side] + move;
+	double* newBlockBorder;
+
+	if( (nodeNumber == nodeNeighbor) && isGPU(typeNeighbor) ) {
+		newBlockBorder = NULL;
+		printf("\nNO ALLOC FOR GPU!!!\n");
+	}
+	else
+		newBlockBorder = new double [borderLength];
+
+	tempBlockBorder.push_back(newBlockBorder);
+	tempBlockBorderMove.push_back(move);
+
+	return newBlockBorder;
 }
 
 double* BlockCpu::addNewExternalBorder(int nodeNeighbor, int side, int move, int borderLength, double* border) {
@@ -363,7 +347,9 @@ double* BlockCpu::addNewExternalBorder(int nodeNeighbor, int side, int move, int
 	}
 
 	for (int i = 0; i < borderLength; ++i)
-		borderType[side][i + move] = tempExternalBorder.size();
+		recieveBorderType[side][i + move] = countRecieveSegmentBorder;
+
+	countRecieveSegmentBorder++;
 
 	double* newExternalBorder;
 
@@ -378,17 +364,25 @@ double* BlockCpu::addNewExternalBorder(int nodeNeighbor, int side, int move, int
 	return newExternalBorder;
 }
 
-void BlockCpu::moveTempExternalBorderVectorToExternalBorderArray() {
-	neighborCount = (int)tempExternalBorder.size();
+void BlockCpu::moveTempBorderVectorToBorderArray() {
+	blockBorder = new double* [countSendSegmentBorder];
+	blockBorderMove = new int [countSendSegmentBorder];
 
-	externalBorder = new double* [neighborCount];
-	externalBorderMove = new int [neighborCount];
+	externalBorder = new double* [countRecieveSegmentBorder];
+	externalBorderMove = new int [countRecieveSegmentBorder];
 
-	for (int i = 0; i < neighborCount; ++i) {
+	for (int i = 0; i < countSendSegmentBorder; ++i) {
+		blockBorder[i] = tempBlockBorder.at(i);
+		blockBorderMove[i] = tempBlockBorderMove.at(i);
+	}
+
+	for (int i = 0; i < countRecieveSegmentBorder; ++i) {
 		externalBorder[i] = tempExternalBorder.at(i);
 		externalBorderMove[i] = tempExternalBorderMove.at(i);
 	}
 
+	tempBlockBorder.clear();
+	tempBlockBorderMove.clear();
 	tempExternalBorder.clear();
 	tempExternalBorderMove.clear();
 }

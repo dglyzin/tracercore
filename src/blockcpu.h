@@ -28,14 +28,12 @@ public:
 
 	int getBlockType() { return CPU; }
 
-	void setPartBorder(int type, int side, int move, int borderLength);
-
 	void print();
 
-	double* createBlockBorder(int typeNeighbor, int side, int move);
-
+	double* addNewBlockBorder(int nodeNeighbor, int typeNeighbor, int side, int move, int borderLength);
 	double* addNewExternalBorder(int nodeNeighbor, int side, int move, int borderLength, double* border);
-	void moveTempExternalBorderVectorToExternalBorderArray();
+
+	void moveTempBorderVectorToBorderArray();
 };
 
 #endif /* SRC_BLOCKCPU_H_ */
