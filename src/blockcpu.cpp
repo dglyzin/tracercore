@@ -238,6 +238,49 @@ void BlockCpu::print() {
 		printf("\n");
 	}
 
+	printf("\ntopSendBorderType\n");
+	for (int i = 0; i < width; ++i)
+		printf("%4d", sendBorderType[TOP][i]);
+	printf("\n");
+
+	printf("\nleftSendBorderType\n");
+	for (int i = 0; i < length; ++i)
+		printf("%4d", sendBorderType[LEFT][i]);
+	printf("\n");
+
+	printf("\nbottomSendBorderType\n");
+	for (int i = 0; i < width; ++i)
+		printf("%4d", sendBorderType[BOTTOM][i]);
+	printf("\n");
+
+	printf("\nrightSendBorderType\n");
+	for (int i = 0; i < length; ++i)
+		printf("%4d", sendBorderType[RIGHT][i]);
+	printf("\n");
+
+
+
+	printf("\ntopRecieveBorderType\n");
+	for (int i = 0; i < width; ++i)
+		printf("%4d", recieveBorderType[TOP][i]);
+	printf("\n");
+
+	printf("\nleftRecieveBorderType\n");
+	for (int i = 0; i < length; ++i)
+		printf("%4d", recieveBorderType[LEFT][i]);
+	printf("\n");
+
+	printf("\nbottomRecieveBorderType\n");
+	for (int i = 0; i < width; ++i)
+		printf("%4d", recieveBorderType[BOTTOM][i]);
+	printf("\n");
+
+	printf("\nrightRecieveBorderType\n");
+	for (int i = 0; i < length; ++i)
+		printf("%4d", recieveBorderType[RIGHT][i]);
+	printf("\n");
+
+
 	for (int i = 0; i < countSendSegmentBorder; ++i)
 		printf("\nblockBorder #%d : %d : %d\n", i, blockBorder[i], blockBorderMove[i]);
 

@@ -23,7 +23,9 @@ class BlockGpu: public Block {
 private:
 	int deviceNumber;
 
-	int** borderTypeOnDevice;
+	int** sendBorderTypeOnDevice;
+	int** receiveBorderTypeOnDevice;
+
 	double** blockBorderOnDevice;
 	double** externalBorderOnDevice;
 
@@ -38,8 +40,6 @@ public:
 	void computeOneStep(double dX2, double dY2, double dT);
 
 	int getBlockType();
-
-	void setPartBorder(int type, int side, int move, int borderLength);
 
 	double* getResult();
 

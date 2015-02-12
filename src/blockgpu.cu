@@ -144,28 +144,46 @@ BlockGpu::BlockGpu(int _length, int _width, int _lengthMove, int _widthMove, int
 	/*
 	 * Типы границ блока. Выделение памяти.
 	 */
-	borderType = new int* [BORDER_COUNT];
+	sendBorderType = new int* [BORDER_COUNT];
 
-	cudaMalloc ( (void**)&borderType[TOP], width * sizeof(int) );
-	assignIntArray <<< blocksWidth, threads >>> ( borderType[TOP], BY_FUNCTION, width ); 
+	cudaMalloc ( (void**)&sendBorderType[TOP], width * sizeof(int) );
+	assignIntArray <<< blocksWidth, threads >>> ( sendBorderType[TOP], BY_FUNCTION, width ); 
 
-	cudaMalloc ( (void**)&borderType[LEFT], length * sizeof(int) );
-	assignIntArray <<< blocksLength, threads >>> ( borderType[LEFT], BY_FUNCTION, length );
+	cudaMalloc ( (void**)&sendBorderType[LEFT], length * sizeof(int) );
+	assignIntArray <<< blocksLength, threads >>> ( sendBorderType[LEFT], BY_FUNCTION, length );
 
-	cudaMalloc ( (void**)&borderType[BOTTOM], width * sizeof(int) );
-	assignIntArray <<< blocksWidth, threads >>> ( borderType[BOTTOM], BY_FUNCTION, width ); 
+	cudaMalloc ( (void**)&sendBorderType[BOTTOM], width * sizeof(int) );
+	assignIntArray <<< blocksWidth, threads >>> ( sendBorderType[BOTTOM], BY_FUNCTION, width ); 
 
-	cudaMalloc ( (void**)&borderType[RIGHT], length * sizeof(int) );
-	assignIntArray <<< blocksLength, threads >>> ( borderType[RIGHT], BY_FUNCTION, length );
+	cudaMalloc ( (void**)&sendBorderType[RIGHT], length * sizeof(int) );
+	assignIntArray <<< blocksLength, threads >>> ( sendBorderType[RIGHT], BY_FUNCTION, length );
 	
 	cudaMalloc ( (void**)&borderTypeOnDevice, BORDER_COUNT * sizeof(int*) );
-	cudaMemcpy( borderTypeOnDevice, borderType, BORDER_COUNT * sizeof(int*), cudaMemcpyHostToDevice );
+	cudaMemcpy( sendBorderTypeOnDevice, borderType, BORDER_COUNT * sizeof(int*), cudaMemcpyHostToDevice );
+	
+	
+	recieveBorderType = new int* [BORDER_COUNT];
+
+	cudaMalloc ( (void**)&recieveBorderType[TOP], width * sizeof(int) );
+	assignIntArray <<< blocksWidth, threads >>> ( recieveBorderType[TOP], BY_FUNCTION, width ); 
+
+	cudaMalloc ( (void**)&recieveBorderType[LEFT], length * sizeof(int) );
+	assignIntArray <<< blocksLength, threads >>> ( recieveBorderType[LEFT], BY_FUNCTION, length );
+
+	cudaMalloc ( (void**)&recieveBorderType[BOTTOM], width * sizeof(int) );
+	assignIntArray <<< blocksWidth, threads >>> ( recieveBorderType[BOTTOM], BY_FUNCTION, width ); 
+
+	cudaMalloc ( (void**)&recieveBorderType[RIGHT], length * sizeof(int) );
+	assignIntArray <<< blocksLength, threads >>> ( recieveBorderType[RIGHT], BY_FUNCTION, length );
+	
+	cudaMalloc ( (void**)&receiveBorderTypeOnDevice, BORDER_COUNT * sizeof(int*) );
+	cudaMemcpy( receiveBorderTypeOnDevice, borderType, BORDER_COUNT * sizeof(int*), cudaMemcpyHostToDevice );
 	
 	/*
 	 * Границы самого блока.
 	 * Это он будет отдавать. Выделение памяти.
 	 */
-	blockBorder = new double* [BORDER_COUNT];
+	/*blockBorder = new double* [BORDER_COUNT];
 
 	cudaMalloc ( (void**)&blockBorder[TOP], width * sizeof(double) );
 	assignDoubleArray <<< blocksWidth, threads >>> ( blockBorder[TOP], 0, width );
@@ -180,14 +198,14 @@ BlockGpu::BlockGpu(int _length, int _width, int _lengthMove, int _widthMove, int
 	assignDoubleArray <<< blocksLength, threads >>> ( blockBorder[RIGHT], 0, length );
 	
 	cudaMalloc ( (void**)&blockBorderOnDevice, BORDER_COUNT * sizeof(double*) );
-	cudaMemcpy( blockBorderOnDevice, blockBorder, BORDER_COUNT * sizeof(double*), cudaMemcpyHostToDevice );
+	cudaMemcpy( blockBorderOnDevice, blockBorder, BORDER_COUNT * sizeof(double*), cudaMemcpyHostToDevice );*/
 
 
 	/*
 	 * Внешние границы блока.
 	 * Сюда будет приходить информация.
 	 */
-	externalBorder = new double* [BORDER_COUNT];
+	/*externalBorder = new double* [BORDER_COUNT];
 
 	cudaMalloc ( (void**)&externalBorder[TOP], width * sizeof(double) );
 	assignDoubleArray <<< blocksWidth, threads >>> ( externalBorder[TOP], 100, width );
@@ -202,7 +220,7 @@ BlockGpu::BlockGpu(int _length, int _width, int _lengthMove, int _widthMove, int
 	assignDoubleArray <<< blocksLength, threads >>> ( externalBorder[RIGHT], 10, length );
 	
 	cudaMalloc ( (void**)&externalBorderOnDevice, BORDER_COUNT * sizeof(double*) );
-	cudaMemcpy( externalBorderOnDevice, externalBorder, BORDER_COUNT * sizeof(double*), cudaMemcpyHostToDevice );
+	cudaMemcpy( externalBorderOnDevice, externalBorder, BORDER_COUNT * sizeof(double*), cudaMemcpyHostToDevice );*/
 }
 
 BlockGpu::~BlockGpu() {
@@ -327,7 +345,7 @@ void BlockGpu::print() {
 		printf("\n");
 	}
 	
-	printf("\ntopBorderType\n");
+	/*printf("\ntopBorderType\n");
 	for (int i = 0; i < width; ++i)
 		printf("%4d", borderTypeToPrint[TOP][i]);
 	printf("\n");
@@ -395,7 +413,7 @@ void BlockGpu::print() {
 	printf("\nrightExternalBorder\n");
 	for (int i = 0; i < length; ++i)
 		printf("%6.1f", externalBorderToPrint[RIGHT][i]);
-	printf("\n");
+	printf("\n");*/
 
 
 	printf("\n\n\n");
