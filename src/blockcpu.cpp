@@ -151,7 +151,7 @@ void BlockCpu::computeOneStep(double dX2, double dY2, double dT) {
 					continue;
 				}
 				else
-					top = externalBorder[borderType[TOP][j]][j];
+					top = externalBorder[	borderType[TOP][j]	][j - externalBorderMove[	borderType[TOP][j]	]];
 			else
 				/*
 				 * Если находимся не на верхней границе блока, то есть возможность просто получить значение в ячейке выше данной.
@@ -171,7 +171,7 @@ void BlockCpu::computeOneStep(double dX2, double dY2, double dT) {
 					continue;
 				}
 				else
-					left = externalBorder[borderType[LEFT][i]][i];
+					left = externalBorder[	borderType[LEFT][i]	][i - externalBorderMove[	borderType[LEFT][i]		]];
 			else
 				left = matrix[i * width + (j - 1)];
 
@@ -186,7 +186,7 @@ void BlockCpu::computeOneStep(double dX2, double dY2, double dT) {
 					continue;
 				}
 				else
-					bottom = externalBorder[borderType[BOTTOM][j]][j];
+					bottom = externalBorder[	borderType[BOTTOM][j]	][j - externalBorderMove[	borderType[BOTTOM][j]	]];
 			else
 				bottom = matrix[(i + 1) * width + j];
 
@@ -201,7 +201,7 @@ void BlockCpu::computeOneStep(double dX2, double dY2, double dT) {
 					continue;
 				}
 				else
-					right = externalBorder[borderType[RIGHT][i]][i];
+					right = externalBorder[	borderType[RIGHT][i]	][i - externalBorderMove[	borderType[RIGHT][i]	]];
 			else
 				right = matrix[i * width + (j + 1)];
 
@@ -305,52 +305,32 @@ void BlockCpu::print() {
 	printf("\n");
 
 
-	printf("\ntopBlockBorder\n");
+	printf("\ntopBlockBorder %d\n", blockBorder[TOP]);
 	for (int i = 0; i < width; ++i)
 		printf("%6.1f", blockBorder[TOP][i]);
 	printf("\n");
 
 
-	printf("\nleftBlockBorder\n");
+	printf("\nleftBlockBorder %d\n", blockBorder[LEFT]);
 	for (int i = 0; i < length; ++i)
 		printf("%6.1f", blockBorder[LEFT][i]);
 	printf("\n");
 
 
-	printf("\nbottomBlockBorder\n");
+	printf("\nbottomBlockBorder %d\n", blockBorder[BOTTOM]);
 	for (int i = 0; i <width; ++i)
 		printf("%6.1f", blockBorder[BOTTOM][i]);
 	printf("\n");
 
 
-	printf("\nrightBlockBorder\n");
+	printf("\nrightBlockBorder %d\n", blockBorder[RIGHT]);
 	for (int i = 0; i < length; ++i)
 		printf("%6.1f", blockBorder[RIGHT][i]);
 	printf("\n");
 
 
-	/*printf("\ntopExternalBorder\n");
-	for (int i = 0; i < width; ++i)
-		printf("%6.1f", externalBorder[TOP][i]);
-	printf("\n");
-
-
-	printf("\nleftExternalBorder\n");
-	for (int i = 0; i < length; ++i)
-		printf("%6.1f", externalBorder[LEFT][i]);
-	printf("\n");
-
-
-	printf("\nbottomExternalBorder\n");
-	for (int i = 0; i <width; ++i)
-		printf("%6.1f", externalBorder[BOTTOM][i]);
-	printf("\n");
-
-
-	printf("\nrightExternalBorder\n");
-	for (int i = 0; i < length; ++i)
-		printf("%6.1f", externalBorder[RIGHT][i]);
-	printf("\n");*/
+	for (int i = 0; i < neighborCount; ++i)
+		printf("\nexternalBorder #%d : %d\n", i, externalBorder[i]);
 
 
 	printf("\n\n\n");
@@ -373,15 +353,22 @@ double* BlockCpu::addNewExternalBorder(int nodeNeighbor, int side, int move, int
 		newExternalBorder = new double [borderLength];
 
 	tempExternalBorder.push_back(newExternalBorder);
+	tempExternalBorderMove.push_back(move);
 
 	return newExternalBorder;
 }
 
 void BlockCpu::moveTempExternalBorderVectorToExternalBorderArray() {
-	externalBorder = new double* [tempExternalBorder.size()];
+	neighborCount = (int)tempExternalBorder.size();
 
-	for (int i = 0; i < tempExternalBorder.size(); ++i)
+	externalBorder = new double* [neighborCount];
+	externalBorderMove = new int [neighborCount];
+
+	for (int i = 0; i < neighborCount; ++i) {
 		externalBorder[i] = tempExternalBorder.at(i);
+		externalBorderMove[i] = tempExternalBorderMove.at(i);
+	}
 
 	tempExternalBorder.clear();
+	tempExternalBorderMove.clear();
 }

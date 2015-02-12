@@ -14,6 +14,8 @@ Block::Block() {
 
 	lenghtMove = widthMove = 0;
 
+	neighborCount = 0;
+
 	borderType = NULL;
 	blockBorder = NULL;
 	externalBorder = NULL;

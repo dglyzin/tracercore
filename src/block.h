@@ -76,7 +76,11 @@ protected:
 	 * Первыми пишут Interconnect'ы, затем функции.
 	 */
 	double** externalBorder;
+	int* externalBorderMove;
 	std::vector<double*> tempExternalBorder;
+	std::vector<int> tempExternalBorderMove;
+
+	int neighborCount;
 
 	/*
 	 * Функция проверяет допустимость значений для данного блока
