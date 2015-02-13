@@ -12,8 +12,8 @@ BIN=bin
 
 all: HS solver
 
-HS: main.o domain.o block.o blockcpu.o blocknull.o interconnect.o enums.o
-	$(CUDACC) -O3 -I/usr/mpi/gcc/openmpi-1.8.4/include -L /usr/mpi/gcc/openmpi-1.8.4/lib -lmpi -lmpi_cxx  $(BIN)/main.o $(BIN)/domain.o $(BIN)/block.o $(BIN)/interconnect.o  $(BIN)/blockcpu.o $(BIN)/blocknull.o $(BIN)/enums.o -o $(BIN)/HS -Xcompiler -fopenmp
+HS: main.o domain.o block.o blockcpu.o blocknull.o interconnect.o enums.o blockgpu.o
+	$(CUDACC) -O3 -I/usr/mpi/gcc/openmpi-1.8.4/include -L /usr/mpi/gcc/openmpi-1.8.4/lib -lmpi -lmpi_cxx  $(BIN)/main.o $(BIN)/domain.o $(BIN)/block.o $(BIN)/interconnect.o  $(BIN)/blockcpu.o $(BIN)/blocknull.o $(BIN)/enums.o $(BIN)/blockgpu.o -o $(BIN)/HS -Xcompiler -fopenmp
 	
 main.o: $(SRC)/main.cpp
 	$(CC) $(CFLAGS) $(SRC)/main.cpp -o $(BIN)/main.o
@@ -36,8 +36,8 @@ blocknull.o: $(SRC)/blocknull.cpp
 enums.o: $(SRC)/enums.cpp
 	$(CC) $(CFLAGS) $(SRC)/enums.cpp -o $(BIN)/enums.o
 	
-#blockgpu.o: $(SRC)/blockgpu.cu  
-#	$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I$(CUDAINC) $(SRC)/blockgpu.cu -o $(BIN)/blockgpu.o
+blockgpu.o: $(SRC)/blockgpu.cu  
+	$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I$(CUDAINC) $(SRC)/blockgpu.cu -o $(BIN)/blockgpu.o
 
 solver: solver.o
 	echo "hello"

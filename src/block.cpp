@@ -14,10 +14,10 @@ Block::Block() {
 
 	lenghtMove = widthMove = 0;
 
-	countSendSegmentBorder = countRecieveSegmentBorder = 0;
+	countSendSegmentBorder = countReceiveSegmentBorder = 0;
 
 	sendBorderType = NULL;
-	recieveBorderType = NULL;
+	receiveBorderType = NULL;
 
 	blockBorder = NULL;
 	externalBorder = NULL;
@@ -37,10 +37,10 @@ Block::Block(int _length, int _width, int _lengthMove, int _widthMove, int _node
 
 	nodeNumber = _nodeNumber;
 
-	countSendSegmentBorder = countRecieveSegmentBorder = 0;
+	countSendSegmentBorder = countReceiveSegmentBorder = 0;
 
 	sendBorderType = NULL;
-	recieveBorderType = NULL;
+	receiveBorderType = NULL;
 
 	blockBorder = NULL;
 	externalBorder = NULL;

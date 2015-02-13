@@ -61,7 +61,7 @@ protected:
 	 * BY_FUNCTION - границы с другим блоком нет, значения даются функцией.
 	 */
 	int** sendBorderType;
-	int** recieveBorderType;
+	int** receiveBorderType;
 
 	/*
 	 * Граничные условия для других блоков,
@@ -85,7 +85,7 @@ protected:
 
 
 	int countSendSegmentBorder;
-	int countRecieveSegmentBorder;
+	int countReceiveSegmentBorder;
 
 	/*
 	 * Функция проверяет допустимость значений для данного блока

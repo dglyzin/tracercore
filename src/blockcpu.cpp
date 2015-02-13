@@ -41,23 +41,23 @@ BlockCpu::BlockCpu(int _length, int _width, int _lengthMove, int _widthMove, int
 		sendBorderType[RIGHT][i] = BY_FUNCTION;
 
 
-	recieveBorderType = new int* [BORDER_COUNT];
+	receiveBorderType = new int* [BORDER_COUNT];
 
-	recieveBorderType[TOP] = new int[width];
+	receiveBorderType[TOP] = new int[width];
 	for(int i = 0; i < width; i++)
-		recieveBorderType[TOP][i] = BY_FUNCTION;
+		receiveBorderType[TOP][i] = BY_FUNCTION;
 
-	recieveBorderType[LEFT] = new int[length];
+	receiveBorderType[LEFT] = new int[length];
 	for (int i = 0; i < length; ++i)
-		recieveBorderType[LEFT][i] = BY_FUNCTION;
+		receiveBorderType[LEFT][i] = BY_FUNCTION;
 
-	recieveBorderType[BOTTOM] = new int[width];
+	receiveBorderType[BOTTOM] = new int[width];
 	for(int i = 0; i < width; i++)
-		recieveBorderType[BOTTOM][i] = BY_FUNCTION;
+		receiveBorderType[BOTTOM][i] = BY_FUNCTION;
 
-	recieveBorderType[RIGHT] = new int[length];
+	receiveBorderType[RIGHT] = new int[length];
 	for (int i = 0; i < length; ++i)
-		recieveBorderType[RIGHT][i] = BY_FUNCTION;
+		receiveBorderType[RIGHT][i] = BY_FUNCTION;
 }
 
 BlockCpu::~BlockCpu() {
@@ -119,12 +119,12 @@ void BlockCpu::computeOneStep(double dX2, double dY2, double dT) {
 				 * Если это граница с другим блоком, то в top (значение в ячейке выше данной) записываем информацию с гранцы.
 				 * Но продолжаем расчет.
 				 */
-				if( recieveBorderType[TOP][j] == BY_FUNCTION ) {
+				if( receiveBorderType[TOP][j] == BY_FUNCTION ) {
 					newMatrix[i * width + j] = 100;
 					continue;
 				}
 				else
-					top = externalBorder[	recieveBorderType[TOP][j]	][j - externalBorderMove[	recieveBorderType[TOP][j]	]];
+					top = externalBorder[	receiveBorderType[TOP][j]	][j - externalBorderMove[	receiveBorderType[TOP][j]	]];
 			else
 				/*
 				 * Если находимся не на верхней границе блока, то есть возможность просто получить значение в ячейке выше данной.
@@ -139,12 +139,12 @@ void BlockCpu::computeOneStep(double dX2, double dY2, double dT) {
 			 * Рассуждения полностью совпадают со случаем верхней границы.
 			 */
 			if( j == 0 )
-				if( recieveBorderType[LEFT][i] == BY_FUNCTION ) {
+				if( receiveBorderType[LEFT][i] == BY_FUNCTION ) {
 					newMatrix[i * width + j] = 10;
 					continue;
 				}
 				else
-					left = externalBorder[	recieveBorderType[LEFT][i]	][i - externalBorderMove[	recieveBorderType[LEFT][i]		]];
+					left = externalBorder[	receiveBorderType[LEFT][i]	][i - externalBorderMove[	receiveBorderType[LEFT][i]		]];
 			else
 				left = matrix[i * width + (j - 1)];
 
@@ -154,12 +154,12 @@ void BlockCpu::computeOneStep(double dX2, double dY2, double dT) {
 			 * Граница нижняя.
 			 */
 			if( i == length - 1 )
-				if( recieveBorderType[BOTTOM][j] == BY_FUNCTION ) {
+				if( receiveBorderType[BOTTOM][j] == BY_FUNCTION ) {
 					newMatrix[i * width + j] = 10;
 					continue;
 				}
 				else
-					bottom = externalBorder[	recieveBorderType[BOTTOM][j]	][j - externalBorderMove[	recieveBorderType[BOTTOM][j]	]];
+					bottom = externalBorder[	receiveBorderType[BOTTOM][j]	][j - externalBorderMove[	receiveBorderType[BOTTOM][j]	]];
 			else
 				bottom = matrix[(i + 1) * width + j];
 
@@ -169,12 +169,12 @@ void BlockCpu::computeOneStep(double dX2, double dY2, double dT) {
 			 * Граница правая.
 			 */
 			if( j == width - 1 )
-				if( recieveBorderType[RIGHT][i] == BY_FUNCTION ) {
+				if( receiveBorderType[RIGHT][i] == BY_FUNCTION ) {
 					newMatrix[i * width + j] = 10;
 					continue;
 				}
 				else
-					right = externalBorder[	recieveBorderType[RIGHT][i]	][i - externalBorderMove[	recieveBorderType[RIGHT][i]	]];
+					right = externalBorder[	receiveBorderType[RIGHT][i]	][i - externalBorderMove[	receiveBorderType[RIGHT][i]	]];
 			else
 				right = matrix[i * width + (j + 1)];
 
@@ -256,35 +256,35 @@ void BlockCpu::print() {
 	printf("\nrightSendBorderType\n");
 	for (int i = 0; i < length; ++i)
 		printf("%4d", sendBorderType[RIGHT][i]);
-	printf("\n");
+	printf("\n\n\n");
 
 
 
 	printf("\ntopRecieveBorderType\n");
 	for (int i = 0; i < width; ++i)
-		printf("%4d", recieveBorderType[TOP][i]);
+		printf("%4d", receiveBorderType[TOP][i]);
 	printf("\n");
 
 	printf("\nleftRecieveBorderType\n");
 	for (int i = 0; i < length; ++i)
-		printf("%4d", recieveBorderType[LEFT][i]);
+		printf("%4d", receiveBorderType[LEFT][i]);
 	printf("\n");
 
 	printf("\nbottomRecieveBorderType\n");
 	for (int i = 0; i < width; ++i)
-		printf("%4d", recieveBorderType[BOTTOM][i]);
+		printf("%4d", receiveBorderType[BOTTOM][i]);
 	printf("\n");
 
 	printf("\nrightRecieveBorderType\n");
 	for (int i = 0; i < length; ++i)
-		printf("%4d", recieveBorderType[RIGHT][i]);
+		printf("%4d", receiveBorderType[RIGHT][i]);
 	printf("\n");
 
 
 	for (int i = 0; i < countSendSegmentBorder; ++i)
 		printf("\nblockBorder #%d : %d : %d\n", i, blockBorder[i], blockBorderMove[i]);
 
-	for (int i = 0; i < countRecieveSegmentBorder; ++i)
+	for (int i = 0; i < countReceiveSegmentBorder; ++i)
 		printf("\nexternalBorder #%d : %d : %d\n", i, externalBorder[i], externalBorderMove[i]);
 
 
@@ -324,9 +324,9 @@ double* BlockCpu::addNewExternalBorder(int nodeNeighbor, int side, int move, int
 	}
 
 	for (int i = 0; i < borderLength; ++i)
-		recieveBorderType[side][i + move] = countRecieveSegmentBorder;
+		receiveBorderType[side][i + move] = countReceiveSegmentBorder;
 
-	countRecieveSegmentBorder++;
+	countReceiveSegmentBorder++;
 
 	double* newExternalBorder;
 
@@ -345,15 +345,15 @@ void BlockCpu::moveTempBorderVectorToBorderArray() {
 	blockBorder = new double* [countSendSegmentBorder];
 	blockBorderMove = new int [countSendSegmentBorder];
 
-	externalBorder = new double* [countRecieveSegmentBorder];
-	externalBorderMove = new int [countRecieveSegmentBorder];
+	externalBorder = new double* [countReceiveSegmentBorder];
+	externalBorderMove = new int [countReceiveSegmentBorder];
 
 	for (int i = 0; i < countSendSegmentBorder; ++i) {
 		blockBorder[i] = tempBlockBorder.at(i);
 		blockBorderMove[i] = tempBlockBorderMove.at(i);
 	}
 
-	for (int i = 0; i < countRecieveSegmentBorder; ++i) {
+	for (int i = 0; i < countReceiveSegmentBorder; ++i) {
 		externalBorder[i] = tempExternalBorder.at(i);
 		externalBorderMove[i] = tempExternalBorderMove.at(i);
 	}

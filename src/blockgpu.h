@@ -27,6 +27,7 @@ private:
 	int** receiveBorderTypeOnDevice;
 
 	double** blockBorderOnDevice;
+
 	double** externalBorderOnDevice;
 
 public:
@@ -44,6 +45,11 @@ public:
 	double* getResult();
 
 	void print();
+
+	double* addNewBlockBorder(int nodeNeighbor, int typeNeighbor, int side, int move, int borderLength);
+	double* addNewExternalBorder(int nodeNeighbor, int side, int move, int borderLength, double* border);
+
+	void moveTempBorderVectorToBorderArray();
 };
 
 #endif /* SRC_BLOCKGPU_H_ */

@@ -92,6 +92,13 @@ void Domain::nextStep(double dX2, double dY2, double dT) {
 	 */
 	for (int i = 0; i < connectionCount; ++i)
 		mInterconnects[i]->sendRecv(world_rank);
+
+	/*char c;
+	scanf("%c", &c);
+
+	if(world_rank == 0)
+		for (int i = 0; i < blockCount; ++i)
+			mBlocks[i]->print();*/
 }
 
 void Domain::print(char* path) {
@@ -196,6 +203,10 @@ void Domain::readFromFile(char* path) {
 
 	for (int i = 0; i < blockCount; ++i)
 		mBlocks[i]->moveTempBorderVectorToBorderArray();
+
+	/*if(world_rank == 0)
+		for (int i = 0; i < blockCount; ++i)
+			mBlocks[i]->print();*/
 }
 
 void Domain::readLengthAndWidthArea(ifstream& in) {
@@ -236,11 +247,11 @@ Block* Domain::readBlock(ifstream& in) {
 			case 0:
 				return new BlockCpu(length, width, lengthMove, widthMove, world_rank_creator);
 			case 1:
-				//return new BlockGpu(length, width, lengthMove, widthMove, world_rank_creator, getDeviceNumber(DEVICE0));
+				return new BlockGpu(length, width, lengthMove, widthMove, world_rank_creator, getDeviceNumber(DEVICE0));
 			case 2:
-				//return new BlockGpu(length, width, lengthMove, widthMove, world_rank_creator, getDeviceNumber(DEVICE1));
+				return new BlockGpu(length, width, lengthMove, widthMove, world_rank_creator, getDeviceNumber(DEVICE1));
 			case 3:
-				//return new BlockGpu(length, width, lengthMove, widthMove, world_rank_creator, getDeviceNumber(DEVICE2));
+				return new BlockGpu(length, width, lengthMove, widthMove, world_rank_creator, getDeviceNumber(DEVICE2));
 			default:
 				return new BlockNull(length, width, lengthMove, widthMove, world_rank_creator);
 		}

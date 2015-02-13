@@ -11,7 +11,7 @@
 #include <fstream>
 #include <string.h>
 #include "blockcpu.h"
-//#include "blockgpu.h"
+#include "blockgpu.h"
 #include "blocknull.h"
 #include "interconnect.h"
 
