@@ -81,6 +81,10 @@ __global__ void assignIntArray (int* arr, int value, int arrayLength) {
 		arr[idx] = value;
 }
 
+/*
+ * Функция ядра
+ * Копирование целочесленных массивов.
+ */
 __global__ void copyIntArray (int* dest, int* source, int arrayLength) {
 	int	idx = BLOCK_SIZE * blockIdx.x + threadIdx.x;
 	
@@ -137,7 +141,6 @@ __global__ void copyBorderFromMatrix ( double** blockBorder, double* matrix, int
 	}
 	
 	blockBorder[	sendBorderType[side][idx]	][idx - blockBorderMove[	sendBorderType[side][idx]	]] = value;
-	//printf("\n%d\n", value);
 }
 
 BlockGpu::BlockGpu(int _length, int _width, int _lengthMove, int _widthMove, int _world_rank, int _deviceNumber) : Block(  _length, _width, _lengthMove, _widthMove, _world_rank ) {
@@ -193,49 +196,6 @@ BlockGpu::BlockGpu(int _length, int _width, int _lengthMove, int _widthMove, int
 	
 	cudaMalloc ( (void**)&receiveBorderTypeOnDevice, BORDER_COUNT * sizeof(int*) );
 	cudaMemcpy( receiveBorderTypeOnDevice, receiveBorderType, BORDER_COUNT * sizeof(int*), cudaMemcpyHostToDevice );
-	
-	/*
-	 * Границы самого блока.
-	 * Это он будет отдавать. Выделение памяти.
-	 */
-	/*blockBorder = new double* [BORDER_COUNT];
-
-	cudaMalloc ( (void**)&blockBorder[TOP], width * sizeof(double) );
-	assignDoubleArray <<< blocksWidth, threads >>> ( blockBorder[TOP], 0, width );
-
-	cudaMalloc ( (void**)&blockBorder[LEFT], length * sizeof(double) );
-	assignDoubleArray <<< blocksLength, threads >>> ( blockBorder[LEFT], 0, length );
-
-	cudaMalloc ( (void**)&blockBorder[BOTTOM], width * sizeof(double) );
-	assignDoubleArray <<< blocksWidth, threads >>> ( blockBorder[BOTTOM], 0, width );
-
-	cudaMalloc ( (void**)&blockBorder[RIGHT], length * sizeof(double) );
-	assignDoubleArray <<< blocksLength, threads >>> ( blockBorder[RIGHT], 0, length );
-	
-	cudaMalloc ( (void**)&blockBorderOnDevice, BORDER_COUNT * sizeof(double*) );
-	cudaMemcpy( blockBorderOnDevice, blockBorder, BORDER_COUNT * sizeof(double*), cudaMemcpyHostToDevice );*/
-
-
-	/*
-	 * Внешние границы блока.
-	 * Сюда будет приходить информация.
-	 */
-	/*externalBorder = new double* [BORDER_COUNT];
-
-	cudaMalloc ( (void**)&externalBorder[TOP], width * sizeof(double) );
-	assignDoubleArray <<< blocksWidth, threads >>> ( externalBorder[TOP], 100, width );
-
-	cudaMalloc ( (void**)&externalBorder[LEFT], length * sizeof(double) );
-	assignDoubleArray <<< blocksLength, threads >>> ( externalBorder[LEFT], 10, length );
-
-	cudaMalloc ( (void**)&externalBorder[BOTTOM], width * sizeof(double) );
-	assignDoubleArray <<< blocksWidth, threads >>> ( externalBorder[BOTTOM], 10, width );
-
-	cudaMalloc ( (void**)&externalBorder[RIGHT], length * sizeof(double) );
-	assignDoubleArray <<< blocksLength, threads >>> ( externalBorder[RIGHT], 10, length );
-	
-	cudaMalloc ( (void**)&externalBorderOnDevice, BORDER_COUNT * sizeof(double*) );
-	cudaMemcpy( externalBorderOnDevice, externalBorder, BORDER_COUNT * sizeof(double*), cudaMemcpyHostToDevice );*/
 }
 
 BlockGpu::~BlockGpu() {
@@ -256,20 +216,6 @@ void BlockGpu::computeOneStep(double dX2, double dY2, double dT) {
 
 	newMatrix = tmp;
 }
-
-/*void BlockGpu::setPartBorder(int type, int side, int move, int borderLength) {
-	cudaSetDevice(deviceNumber);
-	
-	if( checkValue(side, move + borderLength) ) {
-		printf("\nCritical error!\n");
-		exit(1);
-	}
-	
-	dim3 threads ( BLOCK_SIZE );
-	dim3 blocks  ( (int)ceil((double)borderLength / threads.x) );
-	
-	assignIntArray <<< blocks, threads >>> ( borderType[side] + move, type, borderLength );
-}*/
 
 void BlockGpu::prepareData() {
 	cudaSetDevice(deviceNumber);
@@ -342,15 +288,6 @@ void BlockGpu::print() {
 	cudaMemcpy( blockBorderMoveToPrint, blockBorderMove, countSendSegmentBorder * sizeof(int), cudaMemcpyDeviceToHost );
 	cudaMemcpy( externalBorderMoveToPrint, externalBorderMove, countReceiveSegmentBorder * sizeof(int), cudaMemcpyDeviceToHost );
 	
-	/*cudaMemcpy( blockBorderToPrint[TOP], blockBorder[TOP], width * sizeof(double), cudaMemcpyDeviceToHost );
-	cudaMemcpy( blockBorderToPrint[LEFT], blockBorder[LEFT], length * sizeof(double), cudaMemcpyDeviceToHost );
-	cudaMemcpy( blockBorderToPrint[BOTTOM], blockBorder[BOTTOM], width * sizeof(double), cudaMemcpyDeviceToHost );
-	cudaMemcpy( blockBorderToPrint[RIGHT], blockBorder[RIGHT], length * sizeof(double), cudaMemcpyDeviceToHost );
-	
-	cudaMemcpy( externalBorderToPrint[TOP], externalBorder[TOP], width * sizeof(double), cudaMemcpyDeviceToHost );
-	cudaMemcpy( externalBorderToPrint[LEFT], externalBorder[LEFT], length * sizeof(double), cudaMemcpyDeviceToHost );
-	cudaMemcpy( externalBorderToPrint[BOTTOM], externalBorder[BOTTOM], width * sizeof(double), cudaMemcpyDeviceToHost );
-	cudaMemcpy( externalBorderToPrint[RIGHT], externalBorder[RIGHT], length * sizeof(double), cudaMemcpyDeviceToHost );*/
 	
 	printf("FROM NODE #%d", nodeNumber);
 
