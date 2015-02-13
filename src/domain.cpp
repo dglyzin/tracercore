@@ -92,13 +92,6 @@ void Domain::nextStep(double dX2, double dY2, double dT) {
 	 */
 	for (int i = 0; i < connectionCount; ++i)
 		mInterconnects[i]->sendRecv(world_rank);
-
-	/*char c;
-	scanf("%c", &c);
-
-	if(world_rank == 0)
-		for (int i = 0; i < blockCount; ++i)
-			mBlocks[i]->print();*/
 }
 
 void Domain::print(char* path) {
@@ -203,10 +196,6 @@ void Domain::readFromFile(char* path) {
 
 	for (int i = 0; i < blockCount; ++i)
 		mBlocks[i]->moveTempBorderVectorToBorderArray();
-
-	/*if(world_rank == 0)
-		for (int i = 0; i < blockCount; ++i)
-			mBlocks[i]->print();*/
 }
 
 void Domain::readLengthAndWidthArea(ifstream& in) {
