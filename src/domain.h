@@ -35,6 +35,9 @@ public:
 	 */
 	void nextStep(double dX, double dY, double dT);
 
+	/*
+	 * Сбор и запись данных в файл.
+	 */
 	void print(char* path);
 
 	/*
@@ -47,11 +50,25 @@ public:
 	 * Сумма со всех блоков.
 	 */
 	int getCountGridNodes();
+
+	/*
+	 * Возвращает количество необходимых итераций.
+	 */
 	int getRepeatCount();
 
+	/*
+	 * Количество реальных блоков типа "центральный процессор"
+	 */
 	int getCountCpuBlocks();
+
+	/*
+	 * Количество реальных блоков типа "видеокарта"
+	 */
 	int getCountGpuBlocks();
 
+	/*
+	 * Количество реальных блоков любого типа.
+	 */
 	int realBlockCount();
 
 private:
