@@ -27,8 +27,8 @@ block.o: $(SRC)/block.cpp
 interconnect.o: $(SRC)/interconnect.cu  
 	$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I$(CUDAINC) -I/usr/mpi/gcc/openmpi-1.8.4/include -L /usr/mpi/gcc/openmpi-1.8.4/lib -lmpi -lmpi_cxx $(SRC)/interconnect.cu -o $(BIN)/interconnect.o
 	
-blockcpu.o: $(SRC)/blockcpu.cpp  
-	$(CC) $(CFLAGS) $(SRC)/blockcpu.cpp  -fopenmp -o $(BIN)/blockcpu.o
+blockcpu.o: $(SRC)/blockcpu.cu  
+	$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I$(CUDAINC) $(SRC)/blockcpu.cu -o $(BIN)/blockcpu.o -Xcompiler -fopenmp
 	
 blocknull.o: $(SRC)/blocknull.cpp  
 	$(CC) $(CFLAGS) $(SRC)/blocknull.cpp -o $(BIN)/blocknull.o
