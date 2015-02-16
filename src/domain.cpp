@@ -109,6 +109,9 @@ void Domain::nextStep(double dX2, double dY2, double dT) {
 }
 
 void Domain::print(char* path) {
+	for (int i = 0; i < blockCount; ++i)
+		if(mBlocks[i]->isRealBlock())
+			printf("\nThread #%d, block type: %s, calc time: %f, prepare time: %f\n", world_rank, blockTypeToString(mBlocks[i]->getBlockType()), mBlocks[i]->getCalcTime(), mBlocks[i]->getPrepareTime());
 	/*
 	 * Считаем поток с номером 0 (так как он всегда есть) главным.
 	 * Он будет собирать со всех результаты вычислений и формировать из них ответ.

@@ -42,3 +42,25 @@ bool isCPU(int type) {
 bool isGPU(int type) {
 	return (type == DEVICE0 || type == DEVICE1 || type == DEVICE2);
 }
+
+char* blockTypeToString(int type) {
+	switch (type) {
+		case NULL_BLOCK:
+			return "NULL";
+
+		case CPU:
+			return "CPU";
+
+		case DEVICE0:
+			return "DEVICE0";
+
+		case DEVICE1:
+			return "DEVICE1";
+
+		case DEVICE2:
+			return "DEVICE2";
+
+		default:
+			return "NULL";
+	}
+}

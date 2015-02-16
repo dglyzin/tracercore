@@ -203,6 +203,7 @@ BlockGpu::~BlockGpu() {
 }
 
 void BlockGpu::computeOneStep(double dX2, double dY2, double dT) {
+	double t1 = omp_get_wtime();
 	cudaSetDevice(deviceNumber);
 	
 	dim3 threads ( BLOCK_LENGHT_SIZE, BLOCK_WIDTH_SIZE );
@@ -215,9 +216,14 @@ void BlockGpu::computeOneStep(double dX2, double dY2, double dT) {
 	matrix = newMatrix;
 
 	newMatrix = tmp;
+	
+	double t2 = omp_get_wtime();
+		
+	calcTime += (t2 - t1);
 }
 
 void BlockGpu::prepareData() {
+	double t1 = omp_get_wtime();
 	cudaSetDevice(deviceNumber);
 	
 	dim3 threads ( BLOCK_SIZE );
@@ -228,6 +234,10 @@ void BlockGpu::prepareData() {
 	copyBorderFromMatrix <<< blocksLength, threads >>> (blockBorderOnDevice, matrix, sendBorderTypeOnDevice, blockBorderMove, LEFT, length, width);
 	copyBorderFromMatrix <<< blocksWidth, threads >>> (blockBorderOnDevice, matrix, sendBorderTypeOnDevice, blockBorderMove, BOTTOM, length, width);
 	copyBorderFromMatrix <<< blocksLength, threads >>> (blockBorderOnDevice, matrix, sendBorderTypeOnDevice, blockBorderMove, RIGHT, length, width);
+	
+	double t2 = omp_get_wtime();
+		
+	prepareTime += (t2 - t1);
 }
 
 int BlockGpu::getBlockType() {

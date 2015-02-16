@@ -37,7 +37,7 @@ enums.o: $(SRC)/enums.cpp
 	$(CC) $(CFLAGS) $(SRC)/enums.cpp -o $(BIN)/enums.o
 	
 blockgpu.o: $(SRC)/blockgpu.cu  
-	$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I$(CUDAINC) $(SRC)/blockgpu.cu -o $(BIN)/blockgpu.o
+	$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I$(CUDAINC) $(SRC)/blockgpu.cu -o $(BIN)/blockgpu.o -Xcompiler -fopenmp
 
 solver: solver.o
 	echo "hello"
