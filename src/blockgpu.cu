@@ -373,12 +373,11 @@ double* BlockGpu::addNewBlockBorder(int nodeNeighbor, int typeNeighbor, int side
 
 	double* newBlockBorder;
 
-	/*if( nodeNumber == nodeNeighbor ) {
-		newBlockBorder = NULL;
-		printf("\nNO ALLOC FOR CPU!!!\n");
-	}
-	else*/
+	if( nodeNumber == nodeNeighbor && this->getBlockType() == typeNeighbor )
 		cudaMalloc ( (void**)&newBlockBorder, borderLength * sizeof(double) );
+	else
+		cudaMallocHost ( (void**)&newBlockBorder, borderLength * sizeof(double) );
+			
 
 	tempBlockBorder.push_back(newBlockBorder);
 	tempBlockBorderMove.push_back(move);
@@ -403,9 +402,9 @@ double* BlockGpu::addNewExternalBorder(int nodeNeighbor, int side, int move, int
 
 	double* newExternalBorder;
 
-	/*if( nodeNumber == nodeNeighbor )
+	if( nodeNumber == nodeNeighbor )
 		newExternalBorder = border;
-	else*/
+	else
 		cudaMalloc ( (void**)&newExternalBorder, borderLength * sizeof(double) );
 
 	tempExternalBorder.push_back(newExternalBorder);

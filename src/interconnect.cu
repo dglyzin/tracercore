@@ -43,7 +43,7 @@ void Interconnect::sendRecv(int locationNode) {
 	 * В дальнейшем должена быть реализована "склейка" границ.
 	 */
 	if(locationNode == sourceLocationNode && locationNode == destinationLocationNode) {
-		if( isCPU(sourceType) && isCPU(destinationType) )
+		/*if( isCPU(sourceType) && isCPU(destinationType) )
 			return;
 		
 		if( isGPU(sourceType) && isGPU(destinationType) ) {
@@ -59,7 +59,8 @@ void Interconnect::sendRecv(int locationNode) {
 		if( isGPU(sourceType) && isCPU(destinationType) ) {
 			cudaMemcpy( destinationExternalBorder, sourceBlockBorder, borderLength * sizeof(double), cudaMemcpyDeviceToHost );
 			return;
-		}
+		}*/
+		return;
 	}
 
 	/*
