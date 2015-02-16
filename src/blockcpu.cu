@@ -304,10 +304,8 @@ double* BlockCpu::addNewBlockBorder(int nodeNeighbor, int typeNeighbor, int side
 
 	double* newBlockBorder;
 
-	if( (nodeNumber == nodeNeighbor) && isGPU(typeNeighbor) ) {
-		newBlockBorder = NULL;
-		printf("\nNO ALLOC FOR GPU!!!\n");
-	}
+	if( (nodeNumber == nodeNeighbor) && isGPU(typeNeighbor) )
+		cudaMallocHost ( (void**)&newBlockBorder, borderLength * sizeof(double) );
 	else
 		newBlockBorder = new double [borderLength];
 

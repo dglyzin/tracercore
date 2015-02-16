@@ -373,11 +373,10 @@ double* BlockGpu::addNewBlockBorder(int nodeNeighbor, int typeNeighbor, int side
 
 	double* newBlockBorder;
 
-	if( nodeNumber == nodeNeighbor && this->getBlockType() == typeNeighbor )
-		cudaMalloc ( (void**)&newBlockBorder, borderLength * sizeof(double) );
-	else
+	if( nodeNumber == nodeNeighbor && this->getBlockType() != typeNeighbor )
 		cudaMallocHost ( (void**)&newBlockBorder, borderLength * sizeof(double) );
-			
+	else
+		cudaMalloc ( (void**)&newBlockBorder, borderLength * sizeof(double) );
 
 	tempBlockBorder.push_back(newBlockBorder);
 	tempBlockBorderMove.push_back(move);
