@@ -117,7 +117,7 @@ __global__ void copyBorderFromMatrix ( double** blockBorder, double* matrix, int
 	
 	if( (side == LEFT || side == RIGHT) && idx >= length )
 		return;
-	
+
 	if( sendBorderType[side][idx] == BY_FUNCTION )
 		return;
 	
@@ -203,7 +203,14 @@ BlockGpu::~BlockGpu() {
 }
 
 void BlockGpu::computeOneStep(double dX2, double dY2, double dT) {
-	double t1 = omp_get_wtime();
+	float t = 0.0f;
+	cudaEvent_t start, stop;
+	
+	cudaEventCreate ( &start );
+	cudaEventCreate ( &stop );
+	
+	cudaEventRecord ( start, 0 );
+	
 	cudaSetDevice(deviceNumber);
 	
 	dim3 threads ( BLOCK_LENGHT_SIZE, BLOCK_WIDTH_SIZE );
@@ -216,14 +223,24 @@ void BlockGpu::computeOneStep(double dX2, double dY2, double dT) {
 	matrix = newMatrix;
 
 	newMatrix = tmp;
-	
-	double t2 = omp_get_wtime();
 		
-	calcTime += (t2 - t1);
+	cudaEventRecord ( stop, 0 );
+	
+	cudaEventSynchronize ( stop );
+	cudaEventElapsedTime ( &t, start, stop );
+		
+	calcTime += t;
 }
 
 void BlockGpu::prepareData() {
-	double t1 = omp_get_wtime();
+	float t = 0.0f;
+	cudaEvent_t start, stop;
+	
+	cudaEventCreate ( &start );
+	cudaEventCreate ( &stop );
+	
+	cudaEventRecord ( start, 0 );
+	
 	cudaSetDevice(deviceNumber);
 	
 	dim3 threads ( BLOCK_SIZE );
@@ -235,9 +252,12 @@ void BlockGpu::prepareData() {
 	copyBorderFromMatrix <<< blocksWidth, threads >>> (blockBorderOnDevice, matrix, sendBorderTypeOnDevice, blockBorderMove, BOTTOM, length, width);
 	copyBorderFromMatrix <<< blocksLength, threads >>> (blockBorderOnDevice, matrix, sendBorderTypeOnDevice, blockBorderMove, RIGHT, length, width);
 	
-	double t2 = omp_get_wtime();
+	cudaEventRecord ( stop, 0 );
+	
+	cudaEventSynchronize ( stop );
+	cudaEventElapsedTime ( &t, start, stop );
 		
-	prepareTime += (t2 - t1);
+	prepareTime += t;
 }
 
 int BlockGpu::getBlockType() {
