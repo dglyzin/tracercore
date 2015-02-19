@@ -64,7 +64,6 @@ BlockCpu::~BlockCpu() {
 }
 
 void BlockCpu::computeOneStep(double dX2, double dY2, double dT) {
-	double t1 = omp_get_wtime();
 	/*
 	 * Теплопроводность
 	 */
@@ -199,14 +198,9 @@ void BlockCpu::computeOneStep(double dX2, double dY2, double dT) {
 	matrix = newMatrix;
 
 	newMatrix = tmp;
-	
-	double t2 = omp_get_wtime();
-		
-	calcTime += (t2 - t1);
 }
 
 void BlockCpu::prepareData() {
-	double t1 = omp_get_wtime();
 	/*
 	 * Копирование данных из матрицы в массивы.
 	 * В дальнейшем эти массивы будет пеесылаться другим блокам.
@@ -226,10 +220,6 @@ void BlockCpu::prepareData() {
 	for (int i = 0; i < length; ++i)
 		if( sendBorderType[RIGHT][i] != BY_FUNCTION )
 			blockBorder[	sendBorderType[RIGHT][i]	][i - blockBorderMove[	sendBorderType[RIGHT][i]	]] = matrix[i * width + (width - 1)];
-	
-	double t2 = omp_get_wtime();
-	
-	prepareTime += (t2 - t1);
 }
 
 void BlockCpu::print() {

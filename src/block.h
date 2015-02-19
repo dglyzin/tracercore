@@ -99,9 +99,6 @@ protected:
 	 * Пока не очень ясно что именно.
 	 */
 
-	double prepareTime;
-	double calcTime;
-
 public:
 	Block();
 	Block(int _length, int _width, int _lengthMove, int _widthMove, int _nodeNumber);
@@ -174,9 +171,6 @@ public:
 	virtual double* addNewExternalBorder(int nodeNeighbor, int side, int move, int borderLength, double* border) { return NULL; }
 
 	virtual void moveTempBorderVectorToBorderArray() { return; }
-
-	double getPrepareTime() { return prepareTime; }
-	double getCalcTime() { return calcTime; }
 };
 
 #endif /* SRC_BLOCK_H_ */

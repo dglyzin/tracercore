@@ -203,14 +203,6 @@ BlockGpu::~BlockGpu() {
 }
 
 void BlockGpu::computeOneStep(double dX2, double dY2, double dT) {
-	float t = 0.0f;
-	cudaEvent_t start, stop;
-	
-	cudaEventCreate ( &start );
-	cudaEventCreate ( &stop );
-	
-	cudaEventRecord ( start, 0 );
-	
 	cudaSetDevice(deviceNumber);
 	
 	dim3 threads ( BLOCK_LENGHT_SIZE, BLOCK_WIDTH_SIZE );
@@ -223,24 +215,9 @@ void BlockGpu::computeOneStep(double dX2, double dY2, double dT) {
 	matrix = newMatrix;
 
 	newMatrix = tmp;
-		
-	cudaEventRecord ( stop, 0 );
-	
-	cudaEventSynchronize ( stop );
-	cudaEventElapsedTime ( &t, start, stop );
-		
-	calcTime += t;
 }
 
 void BlockGpu::prepareData() {
-	float t = 0.0f;
-	cudaEvent_t start, stop;
-	
-	cudaEventCreate ( &start );
-	cudaEventCreate ( &stop );
-	
-	cudaEventRecord ( start, 0 );
-	
 	cudaSetDevice(deviceNumber);
 	
 	dim3 threads ( BLOCK_SIZE );
@@ -251,13 +228,6 @@ void BlockGpu::prepareData() {
 	copyBorderFromMatrix <<< blocksLength, threads >>> (blockBorderOnDevice, matrix, sendBorderTypeOnDevice, blockBorderMove, LEFT, length, width);
 	copyBorderFromMatrix <<< blocksWidth, threads >>> (blockBorderOnDevice, matrix, sendBorderTypeOnDevice, blockBorderMove, BOTTOM, length, width);
 	copyBorderFromMatrix <<< blocksLength, threads >>> (blockBorderOnDevice, matrix, sendBorderTypeOnDevice, blockBorderMove, RIGHT, length, width);
-	
-	cudaEventRecord ( stop, 0 );
-	
-	cudaEventSynchronize ( stop );
-	cudaEventElapsedTime ( &t, start, stop );
-		
-	prepareTime += t;
 }
 
 int BlockGpu::getBlockType() {

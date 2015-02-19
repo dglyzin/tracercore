@@ -49,8 +49,6 @@ Block::Block(int _length, int _width, int _lengthMove, int _widthMove, int _node
 	externalBorderMove = NULL;
 
 	matrix = newMatrix = NULL;
-
-	prepareTime = calcTime = 0;
 }
 
 Block::~Block() {
