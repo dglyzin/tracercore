@@ -50,6 +50,13 @@ protected:
 	int widthMove;
 
 	/*
+	 * Тип устройства.
+	 * Для видеокарт - номер видеокарты.
+	 * Для ЦПУ - предполагается номер сокета.
+	 */
+	int deviceNumber;
+
+	/*
 	 * Номер потока исполнения, на котором работает этот блок
 	 * Номер потока, который ДОЛЖЕН его создать для работы.
 	 * Номер потока, на котором это блок РЕАЛЬНО сущесвтует.
@@ -100,7 +107,7 @@ protected:
 	 */
 
 public:
-	Block(int _length, int _width, int _lengthMove, int _widthMove, int _nodeNumber);
+	Block(int _length, int _width, int _lengthMove, int _widthMove, int _nodeNumber, int _deviceNumber);
 	virtual ~Block();
 
 	/*
@@ -149,6 +156,8 @@ public:
 	int getLenghtMove() { return lenghtMove; }
 	int getWidthMove() { return widthMove; }
 
+	int getDeviceNumber() { return deviceNumber; }
+
 	int getNodeNumber() { return nodeNumber; }
 
 	/*
@@ -166,8 +175,8 @@ public:
 	double* getBottomBlockBorder() { return blockBorder != NULL ? blockBorder[BOTTOM] : NULL; }
 	double* getRightBlockBorder() { return blockBorder != NULL ? blockBorder[RIGHT] : NULL; }
 
-	virtual double* addNewBlockBorder(int nodeNeighbor, int typeNeighbor, int side, int move, int borderLength) { return NULL; }
-	virtual double* addNewExternalBorder(int nodeNeighbor, int side, int move, int borderLength, double* border) { return NULL; }
+	virtual double* addNewBlockBorder(Block* neighbor, int side, int move, int borderLength) { return NULL; }
+	virtual double* addNewExternalBorder(Block* neighbor, int side, int move, int borderLength, double* border) { return NULL; }
 
 	virtual void moveTempBorderVectorToBorderArray() { return; }
 };

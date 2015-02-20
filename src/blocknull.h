@@ -18,7 +18,7 @@
 
 class BlockNull: public Block {
 public:
-	BlockNull(int _length, int _width, int _lengthMove, int _widthMove, int _world_rank);
+	BlockNull(int _length, int _width, int _lengthMove, int _widthMove, int _nodeNumber, int _deviceNumber);
 	virtual ~BlockNull();
 
 	bool isRealBlock() { return false; }

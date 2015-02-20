@@ -7,7 +7,7 @@
 
 #include "block.h"
 
-Block::Block(int _length, int _width, int _lengthMove, int _widthMove, int _nodeNumber) {
+Block::Block(int _length, int _width, int _lengthMove, int _widthMove, int _nodeNumber, int _deviceNumber) {
 	length = _length;
 	width = _width;
 
@@ -15,6 +15,8 @@ Block::Block(int _length, int _width, int _lengthMove, int _widthMove, int _node
 	widthMove = _widthMove;
 
 	nodeNumber = _nodeNumber;
+
+	deviceNumber = _deviceNumber;
 
 	countSendSegmentBorder = countReceiveSegmentBorder = 0;
 

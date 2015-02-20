@@ -67,7 +67,7 @@ void Domain::nextStep(double dX2, double dY2, double dT) {
 #pragma omp task
 	{
 		for (int i = 0; i < blockCount; ++i)
-			if( mBlocks[i]->getBlockType() == DEVICE0 ) {
+			if( mBlocks[i]->getBlockType() == GPU && mBlocks[i]->getDeviceNumber() == 0 ) {
 				mBlocks[i]->computeOneStep(dX2, dY2, dT);
 				mBlocks[i]->prepareData();
 			}
@@ -76,7 +76,7 @@ void Domain::nextStep(double dX2, double dY2, double dT) {
 #pragma omp task
 	{
 		for (int i = 0; i < blockCount; ++i)
-			if( mBlocks[i]->getBlockType() == DEVICE1 ) {
+			if( mBlocks[i]->getBlockType() == GPU && mBlocks[i]->getDeviceNumber() == 1 ) {
 				mBlocks[i]->computeOneStep(dX2, dY2, dT);
 				mBlocks[i]->prepareData();
 			}
@@ -85,7 +85,7 @@ void Domain::nextStep(double dX2, double dY2, double dT) {
 #pragma omp task
 	{
 		for (int i = 0; i < blockCount; ++i)
-			if( mBlocks[i]->getBlockType() == DEVICE2 ) {
+			if( mBlocks[i]->getBlockType() == GPU && mBlocks[i]->getDeviceNumber() == 2 ) {
 				mBlocks[i]->computeOneStep(dX2, dY2, dT);
 				mBlocks[i]->prepareData();
 			}
@@ -394,18 +394,18 @@ Block* Domain::readBlock(ifstream& in) {
 	if(world_rank_creator == world_rank)
 		switch (type) {
 			case 0:
-				return new BlockCpu(length, width, lengthMove, widthMove, world_rank_creator);
+				return new BlockCpu(length, width, lengthMove, widthMove, world_rank_creator, 0);
 			case 1:
-				return new BlockGpu(length, width, lengthMove, widthMove, world_rank_creator, getDeviceNumber(DEVICE0));
+				return new BlockGpu(length, width, lengthMove, widthMove, world_rank_creator, 0);
 			case 2:
-				return new BlockGpu(length, width, lengthMove, widthMove, world_rank_creator, getDeviceNumber(DEVICE1));
+				return new BlockGpu(length, width, lengthMove, widthMove, world_rank_creator, 1);
 			case 3:
-				return new BlockGpu(length, width, lengthMove, widthMove, world_rank_creator, getDeviceNumber(DEVICE2));
+				return new BlockGpu(length, width, lengthMove, widthMove, world_rank_creator, 2);
 			default:
-				return new BlockNull(length, width, lengthMove, widthMove, world_rank_creator);
+				return new BlockNull(length, width, lengthMove, widthMove, world_rank_creator, 0);
 		}
 	else
-		return new BlockNull(length, width, lengthMove, widthMove, world_rank_creator);
+		return new BlockNull(length, width, lengthMove, widthMove, world_rank_creator, 0);
 }
 
 /*
@@ -508,8 +508,8 @@ Interconnect* Domain::readConnection(ifstream& in) {
 	 * Если блоки расположены на одном узле, то область может не выделится.
 	 * Блок будет ссылать прямо на область памяти, в которую блок-источник будет помещать данные.
 	 */
-	double* sourceData = mBlocks[source]->addNewBlockBorder(mBlocks[destination]->getNodeNumber(), mBlocks[destination]->getBlockType(), oppositeBorder(side), connectionSourceMove, borderLength);
-	double* destinationData = mBlocks[destination]->addNewExternalBorder(mBlocks[source]->getNodeNumber(), side, connectionDestinationMove, borderLength, sourceData);
+	double* sourceData = mBlocks[source]->addNewBlockBorder(mBlocks[destination], oppositeBorder(side), connectionSourceMove, borderLength);
+	double* destinationData = mBlocks[destination]->addNewExternalBorder(mBlocks[source], side, connectionDestinationMove, borderLength, sourceData);
 
 	/*
 	 * Формируется соединение.

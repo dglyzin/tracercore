@@ -9,7 +9,7 @@
 
 using namespace std;
 
-BlockCpu::BlockCpu(int _length, int _width, int _lengthMove, int _widthMove, int _world_rank) : Block(  _length, _width, _lengthMove, _widthMove, _world_rank  ) {
+BlockCpu::BlockCpu(int _length, int _width, int _lengthMove, int _widthMove, int _nodeNumber, int _deviceNumber) : Block(  _length, _width, _lengthMove, _widthMove, _nodeNumber, _deviceNumber  ) {
 
 	matrix = new double [length * width];
 	newMatrix = new double [length * width];
@@ -289,7 +289,7 @@ void BlockCpu::print() {
 	printf("\n\n\n");
 }
 
-double* BlockCpu::addNewBlockBorder(int nodeNeighbor, int typeNeighbor, int side, int move, int borderLength) {
+double* BlockCpu::addNewBlockBorder(Block* neighbor, int side, int move, int borderLength) {
 	if( checkValue(side, move + borderLength) ) {
 		printf("\nCritical error!\n");
 		exit(1);
@@ -302,7 +302,7 @@ double* BlockCpu::addNewBlockBorder(int nodeNeighbor, int typeNeighbor, int side
 
 	double* newBlockBorder;
 
-	if( (nodeNumber == nodeNeighbor) && isGPU(typeNeighbor) )
+	if( ( nodeNumber == neighbor->getNodeNumber() ) && isGPU( neighbor->getBlockType() ) )
 		cudaMallocHost ( (void**)&newBlockBorder, borderLength * sizeof(double) );
 	else
 		newBlockBorder = new double [borderLength];
@@ -313,7 +313,7 @@ double* BlockCpu::addNewBlockBorder(int nodeNeighbor, int typeNeighbor, int side
 	return newBlockBorder;
 }
 
-double* BlockCpu::addNewExternalBorder(int nodeNeighbor, int side, int move, int borderLength, double* border) {
+double* BlockCpu::addNewExternalBorder(Block* neighbor, int side, int move, int borderLength, double* border) {
 	if( checkValue(side, move + borderLength) ) {
 		printf("\nCritical error!\n");
 		exit(1);
@@ -326,7 +326,7 @@ double* BlockCpu::addNewExternalBorder(int nodeNeighbor, int side, int move, int
 
 	double* newExternalBorder;
 
-	if( nodeNumber == nodeNeighbor )
+	if( nodeNumber == neighbor->getNodeNumber() )
 		newExternalBorder = border;
 	else
 		newExternalBorder = new double [borderLength];

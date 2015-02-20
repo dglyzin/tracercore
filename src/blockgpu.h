@@ -21,8 +21,6 @@
 
 class BlockGpu: public Block {
 private:
-	int deviceNumber;
-
 	int** sendBorderTypeOnDevice;
 	int** receiveBorderTypeOnDevice;
 
@@ -31,7 +29,7 @@ private:
 	double** externalBorderOnDevice;
 
 public:
-	BlockGpu(int _length, int _width, int _lengthMove, int _widthMove, int _world_rank, int _deviceNumber);
+	BlockGpu(int _length, int _width, int _lengthMove, int _widthMove, int _nodeNumber, int _deviceNumber);
 	virtual ~BlockGpu();
 
 	bool isRealBlock() { return true; }
@@ -40,14 +38,14 @@ public:
 
 	void computeOneStep(double dX2, double dY2, double dT);
 
-	int getBlockType();
+	int getBlockType() { return GPU; }
 
 	double* getResult();
 
 	void print();
 
-	double* addNewBlockBorder(int nodeNeighbor, int typeNeighbor, int side, int move, int borderLength);
-	double* addNewExternalBorder(int nodeNeighbor, int side, int move, int borderLength, double* border);
+	double* addNewBlockBorder(Block* neighbor, int side, int move, int borderLength);
+	double* addNewExternalBorder(Block* neighbor, int side, int move, int borderLength, double* border);
 
 	void moveTempBorderVectorToBorderArray();
 };
