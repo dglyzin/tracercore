@@ -1,4 +1,17 @@
-srun -N1 -n1 bin/HS test_N1_n1 res_N1_n1
-srun -N2 -n2 bin/HS test_N2_n2 res_N2_n2
+#!/bin/bash
 
-srun -N2 -n2 bin/HS test_N2_n2_CPU1_GPU3 res_N2_n2_CPU1_GPU3
+if [ $# -ne 4 ]
+then
+  echo Wrong number of arguments!
+  exit
+fi
+
+if [ $1 == "salloc" ]
+then
+  salloc -N$2 -n$2 mpirun bin/HS $3 $4
+fi
+
+if [ $1 == "srun" ]
+then
+  srun -N$2 -n$2 bin/HS $3 $4
+fi
