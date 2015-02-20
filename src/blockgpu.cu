@@ -199,7 +199,7 @@ BlockGpu::BlockGpu(int _length, int _width, int _lengthMove, int _widthMove, int
 }
 
 BlockGpu::~BlockGpu() {
-	if(matrix != NULL)
+	/*if(matrix != NULL)
 		cudaFree(matrix);
 	
 	if(newMatrix != NULL)
@@ -237,7 +237,7 @@ BlockGpu::~BlockGpu() {
 		
 		cudaFree(receiveBorderTypeOnDevice);
 		delete receiveBorderType;
-	}
+	}*/
 }
 
 void BlockGpu::computeOneStep(double dX2, double dY2, double dT) {
