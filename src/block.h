@@ -102,13 +102,6 @@ protected:
 	 */
 	bool checkValue(int side, int move);
 
-	/*
-	 * TODO
-	 * В этом классе (и в его потомках) необходимо учесть наличие функции расчета,
-	 * которая принимает исходную матрицу и что-то еще.
-	 * Пока не очень ясно что именно.
-	 */
-
 public:
 	Block(int _length, int _width, int _lengthMove, int _widthMove, int _nodeNumber, int _deviceNumber);
 	virtual ~Block();
@@ -128,8 +121,6 @@ public:
 
 	/*
 	 * Выполняет вычисления.
-	 * TODO
-	 * Реализовать работу по заданной из вне функции.
 	 */
 	virtual void computeOneStep(double dX2, double dY2, double dT) { return; }
 

@@ -26,16 +26,9 @@ Interconnect::Interconnect(int _sourceLocationNode, int _destinationLocationNode
 }
 
 Interconnect::~Interconnect() {
-	// TODO Auto-generated destructor stub
 }
 
 void Interconnect::sendRecv(int locationNode) {
-	/*
-	 * TODO
-	 * Пересылка для видеокарт и центральным процессоров.
-	 * Пересылка для блоков внутри одного потока
-	 */
-
 	/*
 	 * Пересылка внутри блока.
 	 * На данный момент реализован не оптимальный способ передачи данных внутри потока.

@@ -17,7 +17,6 @@ Domain::Domain(int _world_rank, int _world_size, char* path) {
 }
 
 Domain::~Domain() {
-	// TODO Auto-generated destructor stub
 }
 
 void Domain::count() {
@@ -492,7 +491,6 @@ Interconnect* Domain::readConnection(ifstream& in) {
 			break;
 
 		default:
-			// TODO Рассматривать случай?
 			return NULL;
 	}
 
