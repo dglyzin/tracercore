@@ -9,6 +9,6 @@
 
 Solver::Solver(){
 
-
+// printf("very strange action\n");
 }
 
