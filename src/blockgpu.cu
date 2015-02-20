@@ -199,7 +199,45 @@ BlockGpu::BlockGpu(int _length, int _width, int _lengthMove, int _widthMove, int
 }
 
 BlockGpu::~BlockGpu() {
-	// TODO Auto-generated destructor stub
+	if(matrix != NULL)
+		cudaFree(matrix);
+	
+	if(newMatrix != NULL)
+		cudaFree(newMatrix);
+	
+	if(sendBorderType != NULL) {
+		if(sendBorderType[TOP] != NULL)
+			cudaFree(sendBorderType[TOP]);
+		
+		if(sendBorderType[LEFT] != NULL)
+			cudaFree(sendBorderType[LEFT]);
+		
+		if(sendBorderType[BOTTOM] != NULL)
+			cudaFree(sendBorderType[BOTTOM]);
+		
+		if(sendBorderType[RIGHT] != NULL)
+			cudaFree(sendBorderType[RIGHT]);
+		
+		cudaFree(sendBorderTypeOnDevice);
+		delete sendBorderType;
+	}
+	
+	if(receiveBorderType != NULL) {
+		if(receiveBorderType[TOP] != NULL)
+			cudaFree(receiveBorderType[TOP]);
+		
+		if(receiveBorderType[LEFT] != NULL)
+			cudaFree(receiveBorderType[LEFT]);
+		
+		if(receiveBorderType[BOTTOM] != NULL)
+			cudaFree(receiveBorderType[BOTTOM]);
+		
+		if(receiveBorderType[RIGHT] != NULL)
+			cudaFree(receiveBorderType[RIGHT]);
+		
+		cudaFree(receiveBorderTypeOnDevice);
+		delete receiveBorderType;
+	}
 }
 
 void BlockGpu::computeOneStep(double dX2, double dY2, double dT) {
@@ -233,10 +271,10 @@ void BlockGpu::prepareData() {
 double* BlockGpu::getResult() {
 	cudaSetDevice(deviceNumber);
 	
-	double* res = new double [length * width];
-	cudaMemcpy( res, matrix, width * length * sizeof(double), cudaMemcpyDeviceToHost );
+	result = new double [length * width];
+	cudaMemcpy( result, matrix, width * length * sizeof(double), cudaMemcpyDeviceToHost );
 	
-	return res;
+	return result;
 }
 
 void BlockGpu::print() {
