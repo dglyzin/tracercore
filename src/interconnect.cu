@@ -42,26 +42,8 @@ void Interconnect::sendRecv(int locationNode) {
 	 * Данный передаются с помощью MPI-пересылок.
 	 * В дальнейшем должена быть реализована "склейка" границ.
 	 */
-	if(locationNode == sourceLocationNode && locationNode == destinationLocationNode) {
-		/*if( isCPU(sourceType) && isCPU(destinationType) )
-			return;
-		
-		if( isGPU(sourceType) && isGPU(destinationType) ) {
-			cudaMemcpy( destinationExternalBorder, sourceBlockBorder, borderLength * sizeof(double), cudaMemcpyDeviceToDevice );
-			return;
-		}
-		
-		if( isCPU(sourceType) && isGPU(destinationType) ) {
-			cudaMemcpy( destinationExternalBorder, sourceBlockBorder, borderLength * sizeof(double), cudaMemcpyHostToDevice );
-			return;
-		}
-		
-		if( isGPU(sourceType) && isCPU(destinationType) ) {
-			cudaMemcpy( destinationExternalBorder, sourceBlockBorder, borderLength * sizeof(double), cudaMemcpyDeviceToHost );
-			return;
-		}*/
+	if(locationNode == sourceLocationNode && locationNode == destinationLocationNode)
 		return;
-	}
 
 	/*
 	 * Если эту пеерсылку вызвал поток, который содержить информацию для пересылки.

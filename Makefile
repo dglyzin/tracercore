@@ -6,7 +6,6 @@ SRCSOL=src/solvers
 CUDACC=nvcc
 CUFLAGS=-c -O3
 CUDAINC=/usr/local/cuda/include
-CUDAARCH2=
 CUDAARCH=-arch=sm_20 
 BIN=bin
 

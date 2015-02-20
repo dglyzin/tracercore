@@ -75,7 +75,6 @@ int main(int argc, char * argv[]) {
 		printf("\n");
 	}
 
-
 	printf("\nThread #%d CPU blocks: %d, GPU blocks: %d\n", world_rank, d->getCountCpuBlocks(), d->getCountGpuBlocks());
 
 	/*
