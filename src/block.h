@@ -126,7 +126,7 @@ public:
 	/*
 	 * Возвращает тип блока.
 	 */
-	virtual int getBlockType() { return CPU; }
+	virtual int getBlockType() { return NULL_BLOCK; }
 
 	/*
 	 * Печатает информацию о блоке на консоль.
