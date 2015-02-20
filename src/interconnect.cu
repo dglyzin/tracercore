@@ -49,8 +49,7 @@ void Interconnect::sendRecv(int locationNode) {
 	 * Если эту пеерсылку вызвал поток, который содержить информацию для пересылки.
 	 * Фактически этот поток РЕАЛЬНО содержить блок имеющий исходную информацию. Блок-источник.
 	 */
-	if(locationNode == sourceLocationNode)
-	{
+	if(locationNode == sourceLocationNode) {
 		MPI_Send(sourceBlockBorder, borderLength, MPI_DOUBLE, destinationLocationNode, 999, MPI_COMM_WORLD);
 		return;
 	}
