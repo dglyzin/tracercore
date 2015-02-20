@@ -18,7 +18,6 @@
 
 class BlockNull: public Block {
 public:
-	BlockNull();
 	BlockNull(int _length, int _width, int _lengthMove, int _widthMove, int _world_rank);
 	virtual ~BlockNull();
 

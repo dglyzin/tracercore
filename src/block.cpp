@@ -7,27 +7,6 @@
 
 #include "block.h"
 
-Block::Block() {
-	length = width = 0;
-
-	nodeNumber = 0;
-
-	lenghtMove = widthMove = 0;
-
-	countSendSegmentBorder = countReceiveSegmentBorder = 0;
-
-	sendBorderType = NULL;
-	receiveBorderType = NULL;
-
-	blockBorder = NULL;
-	externalBorder = NULL;
-
-	blockBorderMove = NULL;
-	externalBorderMove = NULL;
-
-	matrix = newMatrix = NULL;
-}
-
 Block::Block(int _length, int _width, int _lengthMove, int _widthMove, int _nodeNumber) {
 	length = _length;
 	width = _width;

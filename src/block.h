@@ -100,7 +100,6 @@ protected:
 	 */
 
 public:
-	Block();
 	Block(int _length, int _width, int _lengthMove, int _widthMove, int _nodeNumber);
 	virtual ~Block();
 
