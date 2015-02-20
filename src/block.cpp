@@ -36,27 +36,6 @@ Block::~Block() {
 
 }
 
-double* Block::getBorderBlockData(int side, int move) {
-	/*
-	 * Если входные данные является некорректными, то работа будет завершена.
-	 */
-	if( checkValue(side, move) ) {
-		printf("\nCritical error!\n");
-		exit(1);
-	}
-
-	return blockBorder != NULL ? blockBorder[side] + move : NULL;
-}
-
-double* Block::getExternalBorderData(int side, int move) {
-	if( checkValue(side, move) ) {
-		printf("\nCritical error!\n");
-		exit(1);
-	}
-
-	return externalBorder != NULL ? externalBorder[side] + move : NULL;
-}
-
 /*
  * Проверяется, попадает ли сдвиг на границу.
  * Есть возможность выйти за пределы массива границы.

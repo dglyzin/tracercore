@@ -91,6 +91,9 @@ protected:
 	std::vector<int> tempExternalBorderMove;
 
 
+	/*
+	 * Количество частей гранцы для пересылки и для получения
+	 */
 	int countSendSegmentBorder;
 	int countReceiveSegmentBorder;
 
@@ -159,12 +162,6 @@ public:
 	int getDeviceNumber() { return deviceNumber; }
 
 	int getNodeNumber() { return nodeNumber; }
-
-	/*
-	 * Возвращают указатель на требуемую границу с указанным сдвигомю
-	 */
-	double* getBorderBlockData(int side, int move);
-	double* getExternalBorderData(int side, int move);
 
 	/*
 	 * Вовращаение указателя на определенную границу.
