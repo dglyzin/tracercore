@@ -102,6 +102,9 @@ protected:
 	 */
 	bool checkValue(int side, int move);
 
+	void freeMemory(int memory_alloc_type, double* memory);
+	void freeMemory(int memory_alloc_type, int* memory);
+
 public:
 	Block(int _length, int _width, int _lengthMove, int _widthMove, int _nodeNumber, int _deviceNumber);
 	virtual ~Block();

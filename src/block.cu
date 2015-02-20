@@ -58,3 +58,47 @@ bool Block::checkValue(int side, int move) {
 
 	return false;
 }
+
+void Block::freeMemory(int memory_alloc_type, double* memory) {
+	switch(memory_alloc_type) {
+		case NOT_ALLOC:
+			break;
+			
+		case NEW_ALLOC:
+			delete memory;
+			break;
+			
+		case CUDA_ALLOC:
+			cudaFree(memory);
+			break;
+			
+		case CUDA_HOST_ALLOC:
+			cudaFreeHost(memory);
+			break;
+			
+		default:
+			break;
+	}
+}
+
+void Block::freeMemory(int memory_alloc_type, int* memory) {
+	switch(memory_alloc_type) {
+		case NOT_ALLOC:
+			break;
+			
+		case NEW_ALLOC:
+			delete memory;
+			break;
+			
+		case CUDA_ALLOC:
+			cudaFree(memory);
+			break;
+			
+		case CUDA_HOST_ALLOC:
+			cudaFreeHost(memory);
+			break;
+			
+		default:
+			break;
+	}
+}
