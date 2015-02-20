@@ -50,6 +50,13 @@ protected:
 	int widthMove;
 
 	/*
+	 * Тип устройства.
+	 * Для видеокарт - номер видеокарты.
+	 * Для ЦПУ - предполагается номер сокета.
+	 */
+	int deviceNumber;
+
+	/*
 	 * Номер потока исполнения, на котором работает этот блок
 	 * Номер потока, который ДОЛЖЕН его создать для работы.
 	 * Номер потока, на котором это блок РЕАЛЬНО сущесвтует.
@@ -84,6 +91,9 @@ protected:
 	std::vector<int> tempExternalBorderMove;
 
 
+	/*
+	 * Количество частей гранцы для пересылки и для получения
+	 */
 	int countSendSegmentBorder;
 	int countReceiveSegmentBorder;
 
@@ -92,16 +102,11 @@ protected:
 	 */
 	bool checkValue(int side, int move);
 
-	/*
-	 * TODO
-	 * В этом классе (и в его потомках) необходимо учесть наличие функции расчета,
-	 * которая принимает исходную матрицу и что-то еще.
-	 * Пока не очень ясно что именно.
-	 */
+	void freeMemory(int memory_alloc_type, double* memory);
+	void freeMemory(int memory_alloc_type, int* memory);
 
 public:
-	Block();
-	Block(int _length, int _width, int _lengthMove, int _widthMove, int _nodeNumber);
+	Block(int _length, int _width, int _lengthMove, int _widthMove, int _nodeNumber, int _deviceNumber);
 	virtual ~Block();
 
 	/*
@@ -119,15 +124,13 @@ public:
 
 	/*
 	 * Выполняет вычисления.
-	 * TODO
-	 * Реализовать работу по заданной из вне функции.
 	 */
 	virtual void computeOneStep(double dX2, double dY2, double dT) { return; }
 
 	/*
 	 * Возвращает тип блока.
 	 */
-	virtual int getBlockType() { return CPU; }
+	virtual int getBlockType() { return NULL_BLOCK; }
 
 	/*
 	 * Печатает информацию о блоке на консоль.
@@ -150,13 +153,9 @@ public:
 	int getLenghtMove() { return lenghtMove; }
 	int getWidthMove() { return widthMove; }
 
-	int getNodeNumber() { return nodeNumber; }
+	int getDeviceNumber() { return deviceNumber; }
 
-	/*
-	 * Возвращают указатель на требуемую границу с указанным сдвигомю
-	 */
-	double* getBorderBlockData(int side, int move);
-	double* getExternalBorderData(int side, int move);
+	int getNodeNumber() { return nodeNumber; }
 
 	/*
 	 * Вовращаение указателя на определенную границу.
@@ -167,8 +166,8 @@ public:
 	double* getBottomBlockBorder() { return blockBorder != NULL ? blockBorder[BOTTOM] : NULL; }
 	double* getRightBlockBorder() { return blockBorder != NULL ? blockBorder[RIGHT] : NULL; }
 
-	virtual double* addNewBlockBorder(int nodeNeighbor, int typeNeighbor, int side, int move, int borderLength) { return NULL; }
-	virtual double* addNewExternalBorder(int nodeNeighbor, int side, int move, int borderLength, double* border) { return NULL; }
+	virtual double* addNewBlockBorder(Block* neighbor, int side, int move, int borderLength) { return NULL; }
+	virtual double* addNewExternalBorder(Block* neighbor, int side, int move, int borderLength, double* border) { return NULL; }
 
 	virtual void moveTempBorderVectorToBorderArray() { return; }
 };

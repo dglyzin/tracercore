@@ -26,49 +26,23 @@ Interconnect::Interconnect(int _sourceLocationNode, int _destinationLocationNode
 }
 
 Interconnect::~Interconnect() {
-	// TODO Auto-generated destructor stub
 }
 
 void Interconnect::sendRecv(int locationNode) {
-	/*
-	 * TODO
-	 * Пересылка для видеокарт и центральным процессоров.
-	 * Пересылка для блоков внутри одного потока
-	 */
-
 	/*
 	 * Пересылка внутри блока.
 	 * На данный момент реализован не оптимальный способ передачи данных внутри потока.
 	 * Данный передаются с помощью MPI-пересылок.
 	 * В дальнейшем должена быть реализована "склейка" границ.
 	 */
-	if(locationNode == sourceLocationNode && locationNode == destinationLocationNode) {
-		/*if( isCPU(sourceType) && isCPU(destinationType) )
-			return;
-		
-		if( isGPU(sourceType) && isGPU(destinationType) ) {
-			cudaMemcpy( destinationExternalBorder, sourceBlockBorder, borderLength * sizeof(double), cudaMemcpyDeviceToDevice );
-			return;
-		}
-		
-		if( isCPU(sourceType) && isGPU(destinationType) ) {
-			cudaMemcpy( destinationExternalBorder, sourceBlockBorder, borderLength * sizeof(double), cudaMemcpyHostToDevice );
-			return;
-		}
-		
-		if( isGPU(sourceType) && isCPU(destinationType) ) {
-			cudaMemcpy( destinationExternalBorder, sourceBlockBorder, borderLength * sizeof(double), cudaMemcpyDeviceToHost );
-			return;
-		}*/
+	if(locationNode == sourceLocationNode && locationNode == destinationLocationNode)
 		return;
-	}
 
 	/*
 	 * Если эту пеерсылку вызвал поток, который содержить информацию для пересылки.
 	 * Фактически этот поток РЕАЛЬНО содержить блок имеющий исходную информацию. Блок-источник.
 	 */
-	if(locationNode == sourceLocationNode)
-	{
+	if(locationNode == sourceLocationNode) {
 		MPI_Send(sourceBlockBorder, borderLength, MPI_DOUBLE, destinationLocationNode, 999, MPI_COMM_WORLD);
 		return;
 	}

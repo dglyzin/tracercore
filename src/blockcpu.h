@@ -16,7 +16,7 @@
 
 class BlockCpu: public Block {
 public:
-	BlockCpu(int _length, int _width, int _lengthMove, int _widthMove, int _world_rank);
+	BlockCpu(int _length, int _width, int _lengthMove, int _widthMove, int _nodeNumber, int _deviceNumber);
 
 	~BlockCpu();
 
@@ -30,8 +30,8 @@ public:
 
 	void print();
 
-	double* addNewBlockBorder(int nodeNeighbor, int typeNeighbor, int side, int move, int borderLength);
-	double* addNewExternalBorder(int nodeNeighbor, int side, int move, int borderLength, double* border);
+	double* addNewBlockBorder(Block* neighbor, int side, int move, int borderLength);
+	double* addNewExternalBorder(Block* neighbor, int side, int move, int borderLength, double* border);
 
 	void moveTempBorderVectorToBorderArray();
 };

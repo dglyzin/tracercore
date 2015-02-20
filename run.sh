@@ -1,4 +1,29 @@
-srun -N1 -n1 bin/HS test_N1_n1 res_N1_n1
-srun -N2 -n2 bin/HS test_N2_n2 res_N2_n2
+#!/bin/bash
 
-srun -N2 -n2 bin/HS test_N2_n2_CPU1_GPU3 res_N2_n2_CPU1_GPU3
+if [ $# -ne 4 ]
+then
+  echo Неверное количество аргументов.
+  echo Необходимо использовать 4 аргумента для запуска.
+  echo 1. Тип запуска: "salloc" или "srun".
+  echo 2. Количество используемых узлов.
+  echo 3. Имя входного файла.
+  echo 4. Имя выходного файла.
+  exit
+fi
+
+if [ $1 != "salloc" -a $1 != "srun" ]
+then
+  echo Ошибка!
+  echo Первый аргумент может иметь только два значения "(salloc / srun)".
+  exit
+fi
+
+if [ $1 == "salloc" ]
+then
+  salloc -N$2 -n$2 mpirun bin/HS $3 $4
+fi
+
+if [ $1 == "srun" ]
+then
+  srun -N$2 -n$2 bin/HS $3 $4
+fi

@@ -12,20 +12,6 @@ int main(int argc, char * argv[]) {
 	 */
 
 	/*
-	 * TODO Функции расчета для блоков
-	 * TODO Функции расчета в домене для вычисления граничных уловий
-	 * TODO [Done!] Пересылка между видеокартами и центральными процессора на разных потоках исполения
-	 * TODO [Done!]Реализовать работу с помощью видеокарт. Класс BlockGpu.
-	 *
-	 * TODO [Done!] Реализовать чтение с файла.
-	 * TODO [Done!] Потоки должны знать кто и кого должен был создать.
-	 *
-	 * TODO [Done!] Блок должен знать свои координаты!!!
-	 * TODO [Done!] Выделять память на границы блоков после создания соединений
-	 * TODO Дополнительно класс сборщик
-	 */
-
-	/*
 	 * Инициализация MPI
 	 */
 	MPI_Init(NULL, NULL);
@@ -74,7 +60,6 @@ int main(int argc, char * argv[]) {
 		printf("Speed:        %f\n", (double)(d->getCountGridNodes()) * d->getRepeatCount() / calcTime);
 		printf("\n");
 	}
-
 
 	printf("\nThread #%d CPU blocks: %d, GPU blocks: %d\n", world_rank, d->getCountCpuBlocks(), d->getCountGpuBlocks());
 

@@ -11,7 +11,7 @@ Debug/*
 .project
 res*
 HS
-.ptp-sync
+.ptp-sync*
 .settings
 src/.*
 *.out

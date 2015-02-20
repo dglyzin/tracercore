@@ -143,7 +143,7 @@ __global__ void copyBorderFromMatrix ( double** blockBorder, double* matrix, int
 	blockBorder[	sendBorderType[side][idx]	][idx - blockBorderMove[	sendBorderType[side][idx]	]] = value;
 }
 
-BlockGpu::BlockGpu(int _length, int _width, int _lengthMove, int _widthMove, int _world_rank, int _deviceNumber) : Block(  _length, _width, _lengthMove, _widthMove, _world_rank ) {
+BlockGpu::BlockGpu(int _length, int _width, int _lengthMove, int _widthMove, int _nodeNumber, int _deviceNumber) : Block(  _length, _width, _lengthMove, _widthMove, _nodeNumber, _deviceNumber ) {
 	deviceNumber = _deviceNumber;
 	
 	cudaSetDevice(deviceNumber);
@@ -199,7 +199,45 @@ BlockGpu::BlockGpu(int _length, int _width, int _lengthMove, int _widthMove, int
 }
 
 BlockGpu::~BlockGpu() {
-	// TODO Auto-generated destructor stub
+	/*if(matrix != NULL)
+		cudaFree(matrix);
+	
+	if(newMatrix != NULL)
+		cudaFree(newMatrix);
+	
+	if(sendBorderType != NULL) {
+		if(sendBorderType[TOP] != NULL)
+			cudaFree(sendBorderType[TOP]);
+		
+		if(sendBorderType[LEFT] != NULL)
+			cudaFree(sendBorderType[LEFT]);
+		
+		if(sendBorderType[BOTTOM] != NULL)
+			cudaFree(sendBorderType[BOTTOM]);
+		
+		if(sendBorderType[RIGHT] != NULL)
+			cudaFree(sendBorderType[RIGHT]);
+		
+		cudaFree(sendBorderTypeOnDevice);
+		delete sendBorderType;
+	}
+	
+	if(receiveBorderType != NULL) {
+		if(receiveBorderType[TOP] != NULL)
+			cudaFree(receiveBorderType[TOP]);
+		
+		if(receiveBorderType[LEFT] != NULL)
+			cudaFree(receiveBorderType[LEFT]);
+		
+		if(receiveBorderType[BOTTOM] != NULL)
+			cudaFree(receiveBorderType[BOTTOM]);
+		
+		if(receiveBorderType[RIGHT] != NULL)
+			cudaFree(receiveBorderType[RIGHT]);
+		
+		cudaFree(receiveBorderTypeOnDevice);
+		delete receiveBorderType;
+	}*/
 }
 
 void BlockGpu::computeOneStep(double dX2, double dY2, double dT) {
@@ -230,26 +268,13 @@ void BlockGpu::prepareData() {
 	copyBorderFromMatrix <<< blocksLength, threads >>> (blockBorderOnDevice, matrix, sendBorderTypeOnDevice, blockBorderMove, RIGHT, length, width);
 }
 
-int BlockGpu::getBlockType() {
-	switch (deviceNumber) {
-		case 0:
-			return DEVICE0;
-		case 1:
-			return DEVICE1;
-		case 2:
-			return DEVICE2;
-		default:
-			return DEVICE0;
-	}
-}
-
 double* BlockGpu::getResult() {
 	cudaSetDevice(deviceNumber);
 	
-	double* res = new double [length * width];
-	cudaMemcpy( res, matrix, width * length * sizeof(double), cudaMemcpyDeviceToHost );
+	result = new double [length * width];
+	cudaMemcpy( result, matrix, width * length * sizeof(double), cudaMemcpyDeviceToHost );
 	
-	return res;
+	return result;
 }
 
 void BlockGpu::print() {
@@ -356,7 +381,7 @@ void BlockGpu::print() {
 	printf("\n\n\n");
 }
 
-double* BlockGpu::addNewBlockBorder(int nodeNeighbor, int typeNeighbor, int side, int move, int borderLength) {
+double* BlockGpu::addNewBlockBorder(Block* neighbor, int side, int move, int borderLength) {
 	cudaSetDevice(deviceNumber);
 	
 	if( checkValue(side, move + borderLength) ) {
@@ -373,8 +398,13 @@ double* BlockGpu::addNewBlockBorder(int nodeNeighbor, int typeNeighbor, int side
 
 	double* newBlockBorder;
 
-	if( nodeNumber == nodeNeighbor && this->getBlockType() != typeNeighbor )
-		cudaMallocHost ( (void**)&newBlockBorder, borderLength * sizeof(double) );
+	if( nodeNumber == neighbor->getNodeNumber() ) {
+		if( isCPU( neighbor->getBlockType() ) )
+			cudaMallocHost ( (void**)&newBlockBorder, borderLength * sizeof(double) );
+		
+		if( isGPU( neighbor->getBlockType() ) && deviceNumber != neighbor->getDeviceNumber() )
+			cudaMallocHost ( (void**)&newBlockBorder, borderLength * sizeof(double) );
+	}
 	else
 		cudaMalloc ( (void**)&newBlockBorder, borderLength * sizeof(double) );
 
@@ -384,7 +414,7 @@ double* BlockGpu::addNewBlockBorder(int nodeNeighbor, int typeNeighbor, int side
 	return newBlockBorder;
 }
 
-double* BlockGpu::addNewExternalBorder(int nodeNeighbor, int side, int move, int borderLength, double* border) {
+double* BlockGpu::addNewExternalBorder(Block* neighbor, int side, int move, int borderLength, double* border) {
 	cudaSetDevice(deviceNumber);
 	
 	if( checkValue(side, move + borderLength) ) {
@@ -401,7 +431,7 @@ double* BlockGpu::addNewExternalBorder(int nodeNeighbor, int side, int move, int
 
 	double* newExternalBorder;
 
-	if( nodeNumber == nodeNeighbor )
+	if( nodeNumber == neighbor->getNodeNumber() )
 		newExternalBorder = border;
 	else
 		cudaMalloc ( (void**)&newExternalBorder, borderLength * sizeof(double) );

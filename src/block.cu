@@ -7,28 +7,7 @@
 
 #include "block.h"
 
-Block::Block() {
-	length = width = 0;
-
-	nodeNumber = 0;
-
-	lenghtMove = widthMove = 0;
-
-	countSendSegmentBorder = countReceiveSegmentBorder = 0;
-
-	sendBorderType = NULL;
-	receiveBorderType = NULL;
-
-	blockBorder = NULL;
-	externalBorder = NULL;
-
-	blockBorderMove = NULL;
-	externalBorderMove = NULL;
-
-	matrix = newMatrix = NULL;
-}
-
-Block::Block(int _length, int _width, int _lengthMove, int _widthMove, int _nodeNumber) {
+Block::Block(int _length, int _width, int _lengthMove, int _widthMove, int _nodeNumber, int _deviceNumber) {
 	length = _length;
 	width = _width;
 
@@ -36,6 +15,8 @@ Block::Block(int _length, int _width, int _lengthMove, int _widthMove, int _node
 	widthMove = _widthMove;
 
 	nodeNumber = _nodeNumber;
+
+	deviceNumber = _deviceNumber;
 
 	countSendSegmentBorder = countReceiveSegmentBorder = 0;
 
@@ -53,27 +34,6 @@ Block::Block(int _length, int _width, int _lengthMove, int _widthMove, int _node
 
 Block::~Block() {
 
-}
-
-double* Block::getBorderBlockData(int side, int move) {
-	/*
-	 * Если входные данные является некорректными, то работа будет завершена.
-	 */
-	if( checkValue(side, move) ) {
-		printf("\nCritical error!\n");
-		exit(1);
-	}
-
-	return blockBorder != NULL ? blockBorder[side] + move : NULL;
-}
-
-double* Block::getExternalBorderData(int side, int move) {
-	if( checkValue(side, move) ) {
-		printf("\nCritical error!\n");
-		exit(1);
-	}
-
-	return externalBorder != NULL ? externalBorder[side] + move : NULL;
 }
 
 /*
@@ -97,4 +57,48 @@ bool Block::checkValue(int side, int move) {
 		return true;
 
 	return false;
+}
+
+void Block::freeMemory(int memory_alloc_type, double* memory) {
+	switch(memory_alloc_type) {
+		case NOT_ALLOC:
+			break;
+			
+		case NEW_ALLOC:
+			delete memory;
+			break;
+			
+		case CUDA_ALLOC:
+			cudaFree(memory);
+			break;
+			
+		case CUDA_HOST_ALLOC:
+			cudaFreeHost(memory);
+			break;
+			
+		default:
+			break;
+	}
+}
+
+void Block::freeMemory(int memory_alloc_type, int* memory) {
+	switch(memory_alloc_type) {
+		case NOT_ALLOC:
+			break;
+			
+		case NEW_ALLOC:
+			delete memory;
+			break;
+			
+		case CUDA_ALLOC:
+			cudaFree(memory);
+			break;
+			
+		case CUDA_HOST_ALLOC:
+			cudaFreeHost(memory);
+			break;
+			
+		default:
+			break;
+	}
 }
