@@ -2,7 +2,19 @@
 
 if [ $# -ne 4 ]
 then
-  echo Wrong number of arguments!
+  echo Неверное количество аргументов.
+  echo Необходимо использовать 4 аргумента для запуска.
+  echo 1. Тип запуска: "salloc" или "srun".
+  echo 2. Количество используемых узлов.
+  echo 3. Имя входного файла.
+  echo 4. Имя выходного файла.
+  exit
+fi
+
+if [ $1 != "salloc" -a $1 != "srun" ]
+then
+  echo Ошибка!
+  echo Первый аргумент может иметь только два значения "(salloc / srun)".
   exit
 fi
 
