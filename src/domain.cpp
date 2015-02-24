@@ -540,7 +540,7 @@ Interconnect* Domain::readConnection(ifstream& in) {
 	 * Формируется соединение.
 	 * оно же и вовращается.
 	 */
-	return new Interconnect(sourceNode, destinationNode, sourceType, destionationType, borderLength, sourceData, destinationData, borderSide);
+	return new Interconnect(sourceNode, destinationNode, sourceType, destionationType, borderLength, sourceData, destinationData);
 }
 
 /*

@@ -12,8 +12,7 @@ using namespace std;
 Interconnect::Interconnect(int _sourceLocationNode, int _destinationLocationNode,
 		int _sourceType, int _destinationType,
 		int _borderLength,
-		double* _sourceBlockBorder, double* _destinationExternalBorder,
-		char _borderSide) {
+		double* _sourceBlockBorder, double* _destinationExternalBorder) {
 	sourceLocationNode = _sourceLocationNode;
 	destinationLocationNode = _destinationLocationNode;
 
@@ -24,8 +23,6 @@ Interconnect::Interconnect(int _sourceLocationNode, int _destinationLocationNode
 
 	sourceBlockBorder = _sourceBlockBorder;
 	destinationExternalBorder = _destinationExternalBorder;
-	
-	borderSide = _borderSide;
 }
 
 Interconnect::~Interconnect() {
