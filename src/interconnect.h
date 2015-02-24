@@ -23,7 +23,8 @@ public:
 	Interconnect(int _sourceLocationNode, int _destinationLocationNode,
 			int _sourceType, int _destinationType,
 			int _borderLength,
-			double* _sourceBlockBorder, double* _destinationExternalBorder);
+			double* _sourceBlockBorder, double* _destinationExternalBorder,
+			char _borderSide);
 	virtual ~Interconnect();
 
 	/*
@@ -72,6 +73,8 @@ private:
 	 * Указатель на массив, куда нужно положить данные
 	 */
 	double* destinationExternalBorder;
+
+	char borderSide;
 
 	/*
 	 * Служебные переменные
