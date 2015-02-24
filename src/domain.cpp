@@ -19,6 +19,82 @@ Domain::Domain(int _world_rank, int _world_size, char* path) {
 Domain::~Domain() {
 }
 
+double** Domain::collectDataFromNode() {
+	/*
+	 * Считаем поток с номером 0 (так как он всегда есть) главным.
+	 * Он будет собирать со всех результаты вычислений и формировать из них ответ.
+	 */
+	if(world_rank == 0) {
+		/*
+		 * Создается матрица по размерам области вычислений
+		 * Сюда должны поместиться все блоки.
+		 * Это должно быть гарантированно.
+		 */
+		double** resultAll = new double* [lengthArea];
+		for (int i = 0; i < lengthArea; ++i)
+			resultAll[i] = new double[widthArea];
+
+		/*
+		 * Инициализируется 0. В дальнейшем части области не занятые блоками будут иметь значение 0.
+		 */
+		for (int i = 0; i < lengthArea; ++i)
+			for (int j = 0; j < widthArea; ++j)
+				resultAll[i][j] = 0;
+
+		/*
+		 * Движемся по массиву блоков и проверяем реальны ли они на данном потоке исполнения.
+		 * Если реальны, то пересылка не нужна - это блоки потока 0.
+		 * Можно просто забрать данные.
+		 *
+		 * Если это не реальные блоки, то информация по этим блокам существует на других потоках.
+		 * В таком случае ожидается получение информации от потока, который РЕАЛЬНО использовал этот блок.
+		 *
+		 * В обих случаея используются известные данные блока о его размерах и положениях в области для корректного заполнения результирующей матрицы.
+		 */
+		for (int i = 0; i < blockCount; ++i) {
+			if(mBlocks[i]->isRealBlock()) {
+				double* result = mBlocks[i]->getResult();
+
+				for (int j = 0; j < mBlocks[i]->getLength(); ++j)
+					for (int k = 0; k < mBlocks[i]->getWidth(); ++k)
+						resultAll[j + mBlocks[i]->getLenghtMove()][k + mBlocks[i]->getWidthMove()] = result[j * mBlocks[i]->getWidth() + k];
+			}
+			else
+				/*
+				 * Получение данных построчно.
+				 * Такой способ получения необходим, несмотря на то, что матрица в блоке фактически является одномерным массивом.
+				 *
+				 * Любой блок может быть смещен в области на какое-то значение по горизонтали и вертикали.
+				 * Поэтому принять всю матрицу сразу не возможно.
+				 * Каждую строчку нужно отдельно позиционировать в конечной области.
+				 */
+				for (int j = 0; j < mBlocks[i]->getLength(); ++j)
+					MPI_Recv(resultAll[j + mBlocks[i]->getLenghtMove()] + mBlocks[i]->getWidthMove(), mBlocks[i]->getWidth(), MPI_DOUBLE, mBlocks[i]->getNodeNumber(), 999, MPI_COMM_WORLD, &status);
+		}
+
+		return resultAll;
+	}
+	else {
+		/*
+		 * Если это не поток 0, то необходимо переслать данные.
+		 * Выполняется это построчно.
+		 * (см. описание выше)
+		 *
+		 * Выполняется проверка на то, что это реальный блок этого потока.
+		 */
+		for (int i = 0; i < blockCount; ++i) {
+			if(mBlocks[i]->isRealBlock()) {
+				double* result = mBlocks[i]->getResult();
+
+				for (int j = 0; j < mBlocks[i]->getLength(); ++j)
+					MPI_Send(result + (j * mBlocks[i]->getWidth()), mBlocks[i]->getWidth(), MPI_DOUBLE, 0, 999, MPI_COMM_WORLD);
+			}
+		}
+
+		return NULL;
+	}
+}
+
 void Domain::count() {
 	/*
 	 * Вычисление коэффициентов необходимых для расчета теплопроводности
@@ -108,63 +184,15 @@ void Domain::nextStep(double dX2, double dY2, double dT) {
 }
 
 void Domain::print(char* path) {
+	double** resultAll = collectDataFromNode();
+
 	/*
-	 * Считаем поток с номером 0 (так как он всегда есть) главным.
-	 * Он будет собирать со всех результаты вычислений и формировать из них ответ.
+	 * После формирования результирующей матрицы производится вывод в файл.
+	 * Путь к файлу передается параметром этой функции.
+	 * Арумент командной строки.
 	 */
-	if(world_rank == 0) {
-		/*
-		 * Создается матрица по размерам области вычислений
-		 * Сюда должны поместиться все блоки.
-		 * Это должно быть гарантированно.
-		 */
-		double** resultAll = new double* [lengthArea];
-		for (int i = 0; i < lengthArea; ++i)
-			resultAll[i] = new double[widthArea];
 
-		/*
-		 * Инициализируется 0. В дальнейшем части области не занятые блоками будут иметь значение 0.
-		 */
-		for (int i = 0; i < lengthArea; ++i)
-			for (int j = 0; j < widthArea; ++j)
-				resultAll[i][j] = 0;
-
-		/*
-		 * Движемся по массиву блоков и проверяем реальны ли они на данном потоке исполнения.
-		 * Если реальны, то пересылка не нужна - это блоки потока 0.
-		 * Можно просто забрать данные.
-		 *
-		 * Если это не реальные блоки, то информация по этим блокам существует на других потоках.
-		 * В таком случае ожидается получение информации от потока, который РЕАЛЬНО использовал этот блок.
-		 *
-		 * В обих случаея используются известные данные блока о его размерах и положениях в области для корректного заполнения результирующей матрицы.
-		 */
-		for (int i = 0; i < blockCount; ++i) {
-			if(mBlocks[i]->isRealBlock()) {
-				double* result = mBlocks[i]->getResult();
-
-				for (int j = 0; j < mBlocks[i]->getLength(); ++j)
-					for (int k = 0; k < mBlocks[i]->getWidth(); ++k)
-						resultAll[j + mBlocks[i]->getLenghtMove()][k + mBlocks[i]->getWidthMove()] = result[j * mBlocks[i]->getWidth() + k];
-			}
-			else
-				/*
-				 * Получение данных построчно.
-				 * Такой способ получения необходим, несмотря на то, что матрица в блоке фактически является одномерным массивом.
-				 *
-				 * Любой блок может быть смещен в области на какое-то значение по горизонтали и вертикали.
-				 * Поэтому принять всю матрицу сразу не возможно.
-				 * Каждую строчку нужно отдельно позиционировать в конечной области.
-				 */
-				for (int j = 0; j < mBlocks[i]->getLength(); ++j)
-					MPI_Recv(resultAll[j + mBlocks[i]->getLenghtMove()] + mBlocks[i]->getWidthMove(), mBlocks[i]->getWidth(), MPI_DOUBLE, mBlocks[i]->getNodeNumber(), 999, MPI_COMM_WORLD, &status);
-		}
-
-		/*
-		 * После формирования результирующей матрицы производится вывод в файл.
-		 * Путь к файлу передается параметром этой функции.
-		 * Арумент командной строки.
-		 */
+	if( world_rank == 0 ) {
 		FILE* out = fopen(path, "wb");
 
 		for (int i = 0; i < lengthArea; ++i) {
@@ -175,23 +203,9 @@ void Domain::print(char* path) {
 
 		fclose(out);
 	}
-	else {
-		/*
-		 * Если это не поток 0, то необходимо переслать данные.
-		 * Выполняется это построчно.
-		 * (см. описание выше)
-		 *
-		 * Выполняется проверка на то, что это реальный блок этого потока.
-		 */
-		for (int i = 0; i < blockCount; ++i) {
-			if(mBlocks[i]->isRealBlock()) {
-				double* result = mBlocks[i]->getResult();
 
-				for (int j = 0; j < mBlocks[i]->getLength(); ++j)
-					MPI_Send(result + (j * mBlocks[i]->getWidth()), mBlocks[i]->getWidth(), MPI_DOUBLE, 0, 999, MPI_COMM_WORLD);
-			}
-		}
-	}
+	if( resultAll != NULL )
+		delete resultAll;
 }
 
 /*

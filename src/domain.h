@@ -133,6 +133,8 @@ private:
 	 * Чтение соединения
 	 */
 	Interconnect* readConnection(std::ifstream& in);
+
+	double** collectDataFromNode();
 };
 
 #endif /* SRC_DOMAIN_H_ */
