@@ -61,7 +61,7 @@ BlockCpu::BlockCpu(int _length, int _width, int _lengthMove, int _widthMove, int
 }
 
 BlockCpu::~BlockCpu() {
-	/*if(matrix != NULL)
+	if(matrix != NULL)
 		delete matrix;
 	
 	if(newMatrix != NULL)
@@ -100,7 +100,7 @@ BlockCpu::~BlockCpu() {
 	}
 	
 	
-	if(blockBorder != NULL) {
+	/*if(blockBorder != NULL) {
 		for(int i = 0; i < countSendSegmentBorder; i++ )
 			if(blockBorder[i] != NULL)
 				delete blockBorder[i];
