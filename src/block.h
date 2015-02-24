@@ -77,8 +77,10 @@ protected:
 	 */
 	double** blockBorder;
 	int* blockBorderMove;
+	int* blockBorderMemoryAllocType;
 	std::vector<double*> tempBlockBorder;
 	std::vector<int> tempBlockBorderMove;
+	std::vector<int> tempBlockBorderMemoryAllocType;
 
 	/*
 	 * С помощью Interconnect'а здесь будут находится свежие данные от других блоков,
@@ -87,9 +89,10 @@ protected:
 	 */
 	double** externalBorder;
 	int* externalBorderMove;
+	int* externalBorderMemoryAllocType;
 	std::vector<double*> tempExternalBorder;
 	std::vector<int> tempExternalBorderMove;
-
+	std::vector<int> tempExternalBorderMemoryAllocType;
 
 	/*
 	 * Количество частей гранцы для пересылки и для получения

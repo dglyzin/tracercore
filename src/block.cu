@@ -28,6 +28,9 @@ Block::Block(int _length, int _width, int _lengthMove, int _widthMove, int _node
 
 	blockBorderMove = NULL;
 	externalBorderMove = NULL;
+	
+	blockBorderMemoryAllocType = NULL;
+	externalBorderMemoryAllocType = NULL;
 
 	matrix = newMatrix = NULL;
 }
