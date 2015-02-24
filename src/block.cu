@@ -63,6 +63,9 @@ bool Block::checkValue(int side, int move) {
 }
 
 void Block::freeMemory(int memory_alloc_type, double* memory) {
+	if(memory == NULL)
+		return;
+	
 	switch(memory_alloc_type) {
 		case NOT_ALLOC:
 			break;
@@ -85,6 +88,9 @@ void Block::freeMemory(int memory_alloc_type, double* memory) {
 }
 
 void Block::freeMemory(int memory_alloc_type, int* memory) {
+	if(memory == NULL)
+		return;
+	
 	switch(memory_alloc_type) {
 		case NOT_ALLOC:
 			break;
