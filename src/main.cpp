@@ -70,6 +70,8 @@ int main(int argc, char * argv[]) {
 	d->print(argv[2]);
 	//printf("\nNOT PRINT TO FILE!!!\n");
 
+	delete d;
+
 	/*
 	 * Завершение MPI
 	 */

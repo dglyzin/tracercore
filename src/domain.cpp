@@ -17,6 +17,13 @@ Domain::Domain(int _world_rank, int _world_size, char* path) {
 }
 
 Domain::~Domain() {
+	for (int i = 0; i < blockCount; ++i)
+		delete mBlocks[i];
+	delete mBlocks;
+
+	for (int i = 0; i < connectionCount; ++i)
+		delete mInterconnects[i];
+	delete mInterconnects;
 }
 
 double** Domain::collectDataFromNode() {
