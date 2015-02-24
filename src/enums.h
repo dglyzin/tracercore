@@ -24,7 +24,7 @@ enum BLOCK_TYPE { NULL_BLOCK, CPU, GPU };
 /*
  * Способ выделения памяти.
  */
-enum MEMORY_ALLOC_TYPE { NOT_ALLOC, NEW_ALLOC, CUDA_ALLOC, CUDA_HOST_ALLOC };
+enum MEMORY_ALLOC_TYPE { NOT_ALLOC, NEW, CUDA_MALLOC, CUDA_MALLOC_HOST };
 
 
 int oppositeBorder(int side);
