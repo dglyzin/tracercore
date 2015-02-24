@@ -71,6 +71,9 @@ public:
 	 */
 	int realBlockCount();
 
+	void saveStateToFile(char* path);
+	void loadStateFromFile(char* path);
+
 private:
 	/*
 	 * Массив блоков.

@@ -606,3 +606,11 @@ int Domain::realBlockCount() {
 
 	return count;
 }
+
+void Domain::saveStateToFile(char* path) {
+
+}
+
+void Domain::loadStateFromFile(char* path) {
+
+}
