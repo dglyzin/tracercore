@@ -70,15 +70,15 @@ void Block::freeMemory(int memory_alloc_type, double* memory) {
 		case NOT_ALLOC:
 			break;
 			
-		case NEW_ALLOC:
+		case NEW:
 			delete memory;
 			break;
 			
-		case CUDA_ALLOC:
+		case CUDA_MALLOC:
 			cudaFree(memory);
 			break;
 			
-		case CUDA_HOST_ALLOC:
+		case CUDA_MALLOC_HOST:
 			cudaFreeHost(memory);
 			break;
 			
@@ -95,15 +95,15 @@ void Block::freeMemory(int memory_alloc_type, int* memory) {
 		case NOT_ALLOC:
 			break;
 			
-		case NEW_ALLOC:
+		case NEW:
 			delete memory;
 			break;
 			
-		case CUDA_ALLOC:
+		case CUDA_MALLOC:
 			cudaFree(memory);
 			break;
 			
-		case CUDA_HOST_ALLOC:
+		case CUDA_MALLOC_HOST:
 			cudaFreeHost(memory);
 			break;
 			
