@@ -226,8 +226,11 @@ void Domain::print(char* path) {
 		out.close();
 	}
 
-	if( resultAll != NULL )
+	if( resultAll != NULL ) {
+		for (int i = 0; i < lengthArea; ++i)
+			delete resultAll[i];
 		delete resultAll;
+	}
 }
 
 /*
@@ -617,7 +620,28 @@ int Domain::realBlockCount() {
 }
 
 void Domain::saveStateToFile(char* path) {
+	double** resultAll = collectDataFromNode();
 
+	if( world_rank == 0 ) {
+		ofstream out;
+		out.open(path);
+
+		out << currentIterationNumber << endl;
+
+		for (int i = 0; i < lengthArea; ++i) {
+			for (int j = 0; j < widthArea; ++j)
+				out << resultAll[i][j] << " ";
+			out << endl;
+		}
+
+		out.close();
+	}
+
+	if( resultAll != NULL ) {
+		for (int i = 0; i < lengthArea; ++i)
+			delete resultAll[i];
+		delete resultAll;
+	}
 }
 
 void Domain::loadStateFromFile(char* path) {
