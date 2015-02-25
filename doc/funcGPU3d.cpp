@@ -40,9 +40,35 @@ double func(double* result,
 __device__ double DirichletBound0(){
     return 10.0;
 }
+
+
 __device__ double DirichletBound1(){
     return 20.0;
 }
+
+
+__device__ double NeumannBound1(double* source, int idx, int strideX, int strideY, int strideZ){
+    //example of Neumann conditions for side x=0 
+    double bound_value = 4.0;
+    double nonexistent = source[idx+strideX] - 2.0* bound_value * dx2;
+    double result =  dx2*(source[idx+strideX] + nonexistent - 2.0*source[idx]) //вторая по x
+                   + dy2*(source[idx+strideY] + source[idx-strideY] - 2.0*source[idx]) //вторая по y
+                   + dz2*(source[idx+strideZ] + source[idx-strideZ] - 2.0*source[idx]);//вторая по z
+    return result;
+}
+
+
+__device__ double NeumannBound1(double* source, int idx, int strideX, int strideY, int strideZ){
+    //example of Neumann conditions for side z=z_max 
+    double bound_value = -24.0;
+    double nonexistent = source[idx-strideZ] - 2.0* bound_value * dz2;
+    double result =  dx2*(source[idx+strideX] + source[idx+strideX] - 2.0*source[idx]) //вторая по x
+                   + dy2*(source[idx+strideY] + source[idx-strideY]- 2.0*source[idx]) //вторая по y
+                   + dz2*(nonexistent + source[idx-strideZ]- 2.0*source[idx]);//вторая по z
+    return result;
+}
+
+
 
 
 //GPU
