@@ -13,6 +13,8 @@ Domain::Domain(int _world_rank, int _world_size, char* path) {
 	world_rank = _world_rank;
 	world_size = _world_size;
 
+	currentIterationNumber = 0;
+
 	readFromFile(path);
 }
 
@@ -102,7 +104,7 @@ double** Domain::collectDataFromNode() {
 	}
 }
 
-void Domain::count() {
+void Domain::count(int startingIterationNumber) {
 	/*
 	 * Вычисление коэффициентов необходимых для расчета теплопроводности
 	 */
@@ -125,7 +127,7 @@ void Domain::count() {
 	/*
 	 * Выполнение
 	 */
-	for (int i = 0; i < repeatCount; ++i)
+	for (currentIterationNumber = startingIterationNumber; currentIterationNumber < repeatCount; ++currentIterationNumber)
 		nextStep(dX2, dY2, dT);
 }
 

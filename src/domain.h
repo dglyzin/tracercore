@@ -28,7 +28,7 @@ public:
 	/*
 	 * Полный расчет
 	 */
-	void count();
+	void count(int startingIterationNumber);
 
 	/*
 	 * Выполнение одной итерации (одного шага)
@@ -119,6 +119,8 @@ private:
 	 */
 	int lengthArea;
 	int widthArea;
+
+	int currentIterationNumber;
 
 	MPI_Status status;
 
