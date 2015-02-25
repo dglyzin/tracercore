@@ -33,6 +33,8 @@ Block::Block(int _length, int _width, int _lengthMove, int _widthMove, int _node
 	externalBorderMemoryAllocType = NULL;
 
 	matrix = newMatrix = NULL;
+	
+	result = NULL;
 }
 
 Block::~Block() {

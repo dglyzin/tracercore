@@ -125,6 +125,9 @@ BlockCpu::~BlockCpu() {
 	
 	if(externalBorderMove != NULL)
 		delete externalBorderMove;
+	
+	if(result != NULL)
+		delete result;
 }
 
 void BlockCpu::computeOneStep(double dX2, double dY2, double dT) {

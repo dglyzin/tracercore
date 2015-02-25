@@ -240,6 +240,9 @@ BlockGpu::~BlockGpu() {
 		cudaFree(receiveBorderTypeOnDevice);
 		delete receiveBorderType;
 	}
+	
+	if(result != NULL)
+		delete result;
 }
 
 void BlockGpu::computeOneStep(double dX2, double dY2, double dT) {
