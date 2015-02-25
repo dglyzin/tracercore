@@ -196,6 +196,8 @@ BlockGpu::BlockGpu(int _length, int _width, int _lengthMove, int _widthMove, int
 	
 	cudaMalloc ( (void**)&receiveBorderTypeOnDevice, BORDER_COUNT * sizeof(int*) );
 	cudaMemcpy( receiveBorderTypeOnDevice, receiveBorderType, BORDER_COUNT * sizeof(int*), cudaMemcpyHostToDevice );
+	
+	result = new double [length * width];
 }
 
 BlockGpu::~BlockGpu() {
@@ -271,7 +273,6 @@ void BlockGpu::prepareData() {
 double* BlockGpu::getResult() {
 	cudaSetDevice(deviceNumber);
 	
-	result = new double [length * width];
 	cudaMemcpy( result, matrix, width * length * sizeof(double), cudaMemcpyDeviceToHost );
 	
 	return result;

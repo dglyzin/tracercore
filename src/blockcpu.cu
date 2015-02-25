@@ -58,6 +58,9 @@ BlockCpu::BlockCpu(int _length, int _width, int _lengthMove, int _widthMove, int
 	receiveBorderType[RIGHT] = new int[length];
 	for (int i = 0; i < length; ++i)
 		receiveBorderType[RIGHT][i] = BY_FUNCTION;
+	
+	
+	result = new double [length * width];
 }
 
 BlockCpu::~BlockCpu() {
@@ -281,6 +284,13 @@ void BlockCpu::prepareData() {
 	for (int i = 0; i < length; ++i)
 		if( sendBorderType[RIGHT][i] != BY_FUNCTION )
 			blockBorder[	sendBorderType[RIGHT][i]	][i - blockBorderMove[	sendBorderType[RIGHT][i]	]] = matrix[i * width + (width - 1)];
+}
+
+double* BlockCpu::getResult() {
+	for(int i = 0; i < length * width; i++)
+		result[i] = matrix[i];
+	
+	return result;
 }
 
 void BlockCpu::print() {

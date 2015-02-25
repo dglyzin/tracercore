@@ -28,6 +28,8 @@ public:
 
 	int getBlockType() { return CPU; }
 
+	double* getResult();
+
 	void print();
 
 	double* addNewBlockBorder(Block* neighbor, int side, int move, int borderLength);
