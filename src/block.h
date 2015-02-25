@@ -94,6 +94,9 @@ protected:
 	std::vector<int> tempExternalBorderMove;
 	std::vector<int> tempExternalBorderMemoryAllocType;
 
+
+	double* result;
+
 	/*
 	 * Количество частей гранцы для пересылки и для получения
 	 */

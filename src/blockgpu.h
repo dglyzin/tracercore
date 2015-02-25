@@ -28,8 +28,6 @@ private:
 
 	double** externalBorderOnDevice;
 
-	double* result;
-
 public:
 	BlockGpu(int _length, int _width, int _lengthMove, int _widthMove, int _nodeNumber, int _deviceNumber);
 	virtual ~BlockGpu();
