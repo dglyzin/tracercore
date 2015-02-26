@@ -28,7 +28,7 @@ public:
 	/*
 	 * Полный расчет
 	 */
-	void count(int startingIterationNumber);
+	void count();
 
 	/*
 	 * Выполнение одной итерации (одного шага)
@@ -72,7 +72,7 @@ public:
 	int realBlockCount();
 
 	void saveStateToFile(char* path);
-	void loadStateFromFile(char* blockLocation, char* data);
+	void loadStateFromFile(char* blockLocation, char* dataFile);
 
 private:
 	/*
@@ -121,6 +121,7 @@ private:
 	int widthArea;
 
 	int currentIterationNumber;
+	int startingIterationNumber;
 
 	MPI_Status status;
 

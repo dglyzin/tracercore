@@ -14,6 +14,7 @@ Domain::Domain(int _world_rank, int _world_size, char* path) {
 	world_size = _world_size;
 
 	currentIterationNumber = 0;
+	startingIterationNumber = 0;
 
 	readFromFile(path);
 }
@@ -104,7 +105,7 @@ double** Domain::collectDataFromNode() {
 	}
 }
 
-void Domain::count(int startingIterationNumber) {
+void Domain::count() {
 	/*
 	 * Вычисление коэффициентов необходимых для расчета теплопроводности
 	 */
@@ -341,7 +342,8 @@ void Domain::readFromFile(char* path) {
 
 	/*
 	 * Чтение количества соединений.
-	 */
+	 */ifstream in;
+		in.open(path);
 	in >> connectionCount;
 
 	/*
@@ -650,6 +652,42 @@ void Domain::saveStateToFile(char* path) {
 	}
 }
 
-void Domain::loadStateFromFile(char* blockLocation, char* data) {
+void Domain::loadStateFromFile(char* blockLocation, char* dataFile) {
+	readFromFile(blockLocation);
 
+	ifstream in;
+	in.open(dataFile);
+
+	int length;
+	int width;
+
+	in >> startingIterationNumber;
+	in >> length;
+	in >> width;
+
+	if( length != lengthArea || width != widthArea ) {
+		printf("\nCritacal error!\n");
+		exit(1);
+	}
+
+	double** matrix;
+	for (int i = 0; i < lengthArea; ++i)
+		matrix[i] = new double [widthArea];
+
+	for (int i = 0; i < lengthArea; ++i)
+		for (int j = 0; j < widthArea; ++j)
+			in >> matrix[i][j];
+
+	for (int i = 0; i < blockCount; ++i) {
+		if( mBlocks[i]->isRealBlock() ) {
+			double* data = new double [mBlocks[i]->getLength() * mBlocks[i]->getWidth()];
+
+			for (int j = 0; j < mBlocks[i]->getLength(); ++j) {
+				for (int k = 0; k < mBlocks[i]->getWidth(); ++k)
+					data[k * mBlocks[i]->getWidth() + j] = matrix[	i + mBlocks[i]->getLenghtMove()	][	j + mBlocks[i]->getWidthMove()	];
+			}
+
+			delete data;
+		}
+	}
 }
