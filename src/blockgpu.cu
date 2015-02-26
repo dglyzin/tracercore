@@ -105,6 +105,17 @@ __global__ void assignDoubleArray (double* arr, double value, int arrayLength) {
 
 /*
  * Функция ядра
+ * Копирование вещественных массивов.
+ */
+__global__ void copyIntArray (double* dest, double* source, int arrayLength) {
+	int	idx = BLOCK_SIZE * blockIdx.x + threadIdx.x;
+	
+	if( idx < arrayLength )
+		dest[idx] = source[idx];
+}
+
+/*
+ * Функция ядра
  * Копирование данных из матрицы в массив.
  * Используется при подготовке пересылаемых данных.
  */
