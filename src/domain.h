@@ -22,7 +22,8 @@
 
 class Domain {
 public:
-	Domain(int _world_rank, int _world_size, char* path);
+	Domain(int _world_rank, int _world_size, char* path, double _percentageCompletion);
+	Domain(int _world_rank, int _world_size, char* blockLocation, char* dataFile);
 	virtual ~Domain();
 
 	/*
@@ -122,6 +123,8 @@ private:
 
 	int currentIterationNumber;
 	int startingIterationNumber;
+
+	double percentageCompletion;
 
 	MPI_Status status;
 

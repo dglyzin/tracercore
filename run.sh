@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ $# -ne 4 ]
+if [ $# -ne 5 ]
 then
   echo Неверное количество аргументов.
   echo Необходимо использовать 4 аргумента для запуска.
@@ -20,10 +20,10 @@ fi
 
 if [ $1 == "salloc" ]
 then
-  salloc -N$2 -n$2 mpirun bin/HS $3 $4
+  salloc -N$2 -n$2 mpirun bin/HS $3 $4 $5
 fi
 
 if [ $1 == "srun" ]
 then
-  srun -N$2 -n$2 bin/HS $3 $4
+  srun -N$2 -n$2 bin/HS $3 $4 $5
 fi

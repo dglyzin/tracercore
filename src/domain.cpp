@@ -9,14 +9,28 @@
 
 using namespace std;
 
-Domain::Domain(int _world_rank, int _world_size, char* path) {
+Domain::Domain(int _world_rank, int _world_size, char* path, double _percentageCompletion) {
 	world_rank = _world_rank;
 	world_size = _world_size;
 
 	currentIterationNumber = 0;
 	startingIterationNumber = 0;
 
+	percentageCompletion = _percentageCompletion;
+
 	readFromFile(path);
+}
+
+Domain::Domain(int _world_rank, int _world_size, char* blockLocation, char* dataFile) {
+	world_rank = _world_rank;
+	world_size = _world_size;
+
+	currentIterationNumber = 0;
+	startingIterationNumber = 0;
+
+	percentageCompletion = 100;
+
+	loadStateFromFile(blockLocation, dataFile);
 }
 
 Domain::~Domain() {
@@ -123,18 +137,14 @@ void Domain::count() {
 	/*
 	 * Вычисление количества необходимых итераций
 	 */
-	int repeatCount = (int)(1 / dT) + 1;
-
-	char* paths[10] = {"save/state#0", "save/state#1", "save/state#2", "save/state#3", "save/state#4", "save/state#5", "save/state#6", "save/state#7", "save/state#8", "save/state#9"};
+	int repeatCount = (int)(((1 / dT) + 1) * percentageCompletion / 100);
 
 	/*
 	 * Выполнение
 	 */
-	for (currentIterationNumber = startingIterationNumber; currentIterationNumber < repeatCount; ++currentIterationNumber) {
-		if( (currentIterationNumber % (repeatCount/10)) == 0 )
-			saveStateToFile(paths[currentIterationNumber / (repeatCount/10)]);
+	for (currentIterationNumber = startingIterationNumber; currentIterationNumber < repeatCount; ++currentIterationNumber)
 		nextStep(dX2, dY2, dT);
-	}
+	saveStateToFile("save/saveState");
 }
 
 void Domain::nextStep(double dX2, double dY2, double dT) {
@@ -669,7 +679,7 @@ void Domain::loadStateFromFile(char* blockLocation, char* dataFile) {
 		exit(1);
 	}
 
-	double** matrix;
+	double** matrix = new double* [lengthArea];
 	for (int i = 0; i < lengthArea; ++i)
 		matrix[i] = new double [widthArea];
 
@@ -677,8 +687,11 @@ void Domain::loadStateFromFile(char* blockLocation, char* dataFile) {
 		for (int j = 0; j < widthArea; ++j)
 			in >> matrix[i][j];
 
+	printf("\n***\n");
+
 	for (int i = 0; i < blockCount; ++i) {
 		if( mBlocks[i]->isRealBlock() ) {
+
 			double* data = new double [mBlocks[i]->getLength() * mBlocks[i]->getWidth()];
 
 			for (int j = 0; j < mBlocks[i]->getLength(); ++j) {
@@ -686,7 +699,13 @@ void Domain::loadStateFromFile(char* blockLocation, char* dataFile) {
 					data[k * mBlocks[i]->getWidth() + j] = matrix[	i + mBlocks[i]->getLenghtMove()	][	j + mBlocks[i]->getWidthMove()	];
 			}
 
+			mBlocks[i]->loadData(data);
+
+			mBlocks[i]->print();
+
 			delete data;
 		}
 	}
+
+	printf("\n$$$\n");
 }

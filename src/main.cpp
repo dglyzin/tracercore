@@ -32,7 +32,17 @@ int main(int argc, char * argv[]) {
 	 * Создание основного управляющего класса.
 	 * Номер потока, количество потоков и путь к файлу с данными.
 	 */
-	Domain *d = new Domain(world_rank, world_size, argv[1]);
+
+	double percentageCompletion;
+
+	percentageCompletion = atof(argv[3]);
+
+	Domain* d;
+
+	if(percentageCompletion == 0)
+		d = new Domain(world_rank, world_size, argv[1], argv[3]);
+	else
+		d = new Domain(world_rank, world_size, argv[1], percentageCompletion);
 
 	if(world_rank == 0) {
 		printf("\n\n");
