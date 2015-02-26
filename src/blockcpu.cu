@@ -449,3 +449,8 @@ void BlockCpu::moveTempBorderVectorToBorderArray() {
 	tempBlockBorderMemoryAllocType.clear();
 	tempExternalBorderMemoryAllocType.clear();
 }
+
+void BlockCpu::loadData(double* data) {
+	for(int i = 0; i < length * width; i++)
+		matrix[i] = data[i];
+}
