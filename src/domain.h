@@ -72,7 +72,7 @@ public:
 	int realBlockCount();
 
 	void saveStateToFile(char* path);
-	void loadStateFromFile(char* path);
+	void loadStateFromFile(char* blockLocation, char* data);
 
 private:
 	/*

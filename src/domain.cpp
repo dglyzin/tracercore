@@ -124,7 +124,7 @@ void Domain::count(int startingIterationNumber) {
 	 */
 	int repeatCount = (int)(1 / dT) + 1;
 
-	char* paths[10] = {"save/save#0", "save/save#1", "save/save#2", "save/save#3", "save/save#4", "save/save#5", "save/save#6", "save/save#7", "save/save#8", "save/save#9"};
+	char* paths[10] = {"save/state#0", "save/state#1", "save/state#2", "save/state#3", "save/state#4", "save/state#5", "save/state#6", "save/state#7", "save/state#8", "save/state#9"};
 
 	/*
 	 * Выполнение
@@ -632,6 +632,7 @@ void Domain::saveStateToFile(char* path) {
 		out.open(path);
 
 		out << currentIterationNumber << endl;
+		out << lengthArea << " " << widthArea << endl;
 
 		for (int i = 0; i < lengthArea; ++i) {
 			for (int j = 0; j < widthArea; ++j)
@@ -649,6 +650,6 @@ void Domain::saveStateToFile(char* path) {
 	}
 }
 
-void Domain::loadStateFromFile(char* path) {
+void Domain::loadStateFromFile(char* blockLocation, char* data) {
 
 }
