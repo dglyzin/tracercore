@@ -176,6 +176,8 @@ public:
 	virtual double* addNewExternalBorder(Block* neighbor, int side, int move, int borderLength, double* border) { return NULL; }
 
 	virtual void moveTempBorderVectorToBorderArray() { return; }
+
+	virtual void loadData(double* data) { return; }
 };
 
 #endif /* SRC_BLOCK_H_ */
