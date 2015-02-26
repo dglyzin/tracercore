@@ -342,8 +342,7 @@ void Domain::readFromFile(char* path) {
 
 	/*
 	 * Чтение количества соединений.
-	 */ifstream in;
-		in.open(path);
+	 */
 	in >> connectionCount;
 
 	/*

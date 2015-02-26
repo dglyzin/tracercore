@@ -46,7 +46,7 @@ int main(int argc, char * argv[]) {
 	 */
 	// Получить текущее время
 	time1 = MPI_Wtime();
-	d->count(0);
+	d->count();
 	// Получить текущее время
 	time2 = MPI_Wtime();
 
