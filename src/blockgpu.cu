@@ -107,7 +107,7 @@ __global__ void assignDoubleArray (double* arr, double value, int arrayLength) {
  * Функция ядра
  * Копирование вещественных массивов.
  */
-__global__ void copyIntArray (double* dest, double* source, int arrayLength) {
+__global__ void copyDoubleArray (double* dest, double* source, int arrayLength) {
 	int	idx = BLOCK_SIZE * blockIdx.x + threadIdx.x;
 	
 	if( idx < arrayLength )
@@ -495,4 +495,13 @@ void BlockGpu::moveTempBorderVectorToBorderArray() {
 	
 	delete tempBlockBorderMoveArray;
 	delete tempExternalBorderMoveArray;
+}
+
+void BlockGpu::loadData(double* data) {
+	cudaSetDevice(deviceNumber);
+	
+	dim3 threads ( BLOCK_SIZE );
+	dim3 blocksLengthWidth ( (int)ceil((double)(length * width) / threads.x) );
+	
+	copyDoubleArray <<< blocksLengthWidth, threads >>> (matrix, data, length * width);
 }

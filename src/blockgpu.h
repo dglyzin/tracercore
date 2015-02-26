@@ -48,6 +48,8 @@ public:
 	double* addNewExternalBorder(Block* neighbor, int side, int move, int borderLength, double* border);
 
 	void moveTempBorderVectorToBorderArray();
+
+	void loadData(double* data);
 };
 
 #endif /* SRC_BLOCKGPU_H_ */
