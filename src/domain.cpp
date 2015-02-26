@@ -124,16 +124,14 @@ void Domain::count(int startingIterationNumber) {
 	 */
 	int repeatCount = (int)(1 / dT) + 1;
 
-	char* pathToSave = "save#0";
+	char* paths[10] = {"save/save#0", "save/save#1", "save/save#2", "save/save#3", "save/save#4", "save/save#5", "save/save#6", "save/save#7", "save/save#8", "save/save#9"};
 
 	/*
 	 * Выполнение
 	 */
 	for (currentIterationNumber = startingIterationNumber; currentIterationNumber < repeatCount; ++currentIterationNumber) {
-		/*if( currentIterationNumber % (repeatCount/10) ) {
-			pathToSave[5] = currentIterationNumber / (repeatCount/10) + '0';
-			saveStateToFile(pathToSave);
-		}*/
+		if( (currentIterationNumber % (repeatCount/10)) == 0 )
+			saveStateToFile(paths[currentIterationNumber / (repeatCount/10)]);
 		nextStep(dX2, dY2, dT);
 	}
 }
