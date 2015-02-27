@@ -1,88 +1,274 @@
-//функции типа дирихле для всех границ можно делать одни и те же (если температра одинаковая), .
-//а один и тот же Нейман на разных границах будет отдельной функцией, т.к. придумывает 
-//несуществующую точку в своем направлении.
+#include <math.h>
+#include <stdlib.h>
+
+//важный момент: оптимизировать только скорость
+//много кода - нестрашно, т.к. генерируется автоматически по одному шаблону
+
+#define CELLSIZE 2
+
+#define StepX 0.1
+#define StepY 0.1
+#define StepZ 0.1
+
+#define dx2 0.01
+#define dy2 0.01
+#define dz2 0.01
+
+#define Block0StrideZ 10000
+#define Block0StrideY 100
+#define Block0StrideX 1
+
+#define Block0CountZ 100
+#define Block0CountY 100
+#define Block0CountX 100
+
+#define Block0OffsetX 0.0
+#define Block0OffsetY 0.0
+#define Block0OffsetZ 0.0
+
+#define Block1StrideZ 100
+#define Block1StrideY 10
+#define Block1StrideX 1
+
+#define Block1CountZ 10
+#define Block1CountY 10
+#define Block1CountX 10
+
+#define Block1OffsetX 10.0
+#define Block1OffsetY 5.0
+#define Block1OffsetZ 5.0
 
 
+//начальные условия - только на CPU
+typedef void (*initfunc_ptr_t)( double*, double, double, double );
 
-//CPU
-//
-//
-//
+void Initial0(double* cellstart, double x, double y, double z){
+    cellstart[0] = 15.0;
+    cellstart[1] = sin(x)*cos(y);    
+}
 
+void Initial1(double* cellstart, double x, double y, double z){
+    cellstart[0] = 200.0;
+    cellstart[1] = 100.0;    
+}
 
+//Заполняет result[idx] начальной функцией с номером из initType[idx]
+void BlockFillInitialValues(double* result, int* initType,
+                            int BlockCountX, int BlockCountY, int BlockCountZ,                            
+                            int BlockOffsetX, int BlockOffsetY, int BlockOffsetZ){    
 
-double func(double* result, 
-            double time, double* source,  //исходный X
-            int countX, int countY, int countZ, int cellSize,
-            double dx2, double dy2, double dz2,
-            int** borderTypes,  // 0 = Дирихле, 1 = Нейман, 2 = склейка
-            int** borders,       // номер соответствующего условия,
-                                // функции из набора Дирихле, набора Неймана
-                                // или набора интерконнектов (набор у каждого блока свой,
-                                // чтобы не плодить, а список функций один для всех)
-            double** ic){
-  
-//1. Z=0
-//2. Z=countZ
-//3. Y=0
-//4. Y=countY
-//5. X=0
-//6. X=countX
-//7. else
-  
-#pragma omp parallel for 
-    for (int idxZ=1; idx<countZ; idx++)
-      
-      
+    initfunc_ptr_t initFuncArray[2];  
+    initFuncArray[0] = Initial0;
+    initFuncArray[1] = Initial1;
+    
+    for(int idxZ = 0; idxZ<BlockCountZ; idxZ++)
+        for(int idxY = 0; idxY<BlockCountY; idxY++)
+            for(int idxX = 0; idxX<BlockCountX; idxX++){
+                int idx = (idxZ*BlockCountY*BlockCountX + idxY*BlockCountX + idxX)*CELLSIZE;
+                int type = initType[idx];
+                initFuncArray[type](result+idx, BlockOffsetX + idxX*StepX, BlockOffsetY + idxY*StepY, BlockOffsetZ + idxZ*StepZ);
+            }
+
 }
 
 
-__device__ double DirichletBound0(){
-    return 10.0;
+//граничные условия
+//функции типа дирихле для всех границ всех блоков можно делать одни и те же ,
+//а один и тот же Нейман на разных границах разных блоков будет отдельной функцией, т.к. придумывает 
+//несуществующую точку в своем направлении и с разными stride
+
+typedef void (*boundfunc_ptr_t)( double*, double*, double ); 
+
+//1. Дирихле
+void DirichletBound0(double* result, double* source, double t){
+    result[0] = 15.0;
+    result[1] = sin(t);
+}
+
+//2. Нейман
+//default zero flow for every side (0-5)
+//Блок0
+//сторона x=0
+void Block0DefaultNeumannBound0(double* result, double* source, double t){           
+    result[0] = dx2*(source[Block0StrideX*CELLSIZE] + source[Block0StrideX*CELLSIZE] - 2.0*source[0]) //вторая по x
+              + dy2*(source[Block0StrideY*CELLSIZE] + source[-Block0StrideY*CELLSIZE] - 2.0*source[0]) //вторая по y
+              + dz2*(source[Block0StrideZ*CELLSIZE] + source[-Block0StrideZ*CELLSIZE] - 2.0*source[0]);//вторая по z
+    result[1] = dx2*(source[Block0StrideX*CELLSIZE + 1] + source[Block0StrideX*CELLSIZE + 1] - 2.0*source[0]) //вторая по x
+              + dy2*(source[Block0StrideY*CELLSIZE + 1] + source[-Block0StrideY*CELLSIZE + 1] - 2.0*source[0]) //вторая по y
+              + dz2*(source[Block0StrideZ*CELLSIZE + 1] + source[-Block0StrideZ*CELLSIZE + 1] - 2.0*source[0]);//вторая по z
+}
+
+//сторона x=xmax
+void Block0DefaultNeumannBound1(double* result, double* source, double t){           
+    result[0] = dx2*(source[-Block0StrideX*CELLSIZE] + source[-Block0StrideX*CELLSIZE] - 2.0*source[0]) //вторая по x
+              + dy2*(source[Block0StrideY*CELLSIZE]  + source[-Block0StrideY*CELLSIZE] - 2.0*source[0]) //вторая по y
+              + dz2*(source[Block0StrideZ*CELLSIZE]  + source[-Block0StrideZ*CELLSIZE] - 2.0*source[0]);//вторая по z
+    result[1] = dx2*(source[-Block0StrideX*CELLSIZE + 1] + source[-Block0StrideX*CELLSIZE + 1] - 2.0*source[0]) //вторая по x
+              + dy2*(source[Block0StrideY*CELLSIZE + 1]  + source[-Block0StrideY*CELLSIZE + 1] - 2.0*source[0]) //вторая по y
+              + dz2*(source[Block0StrideZ*CELLSIZE + 1]  + source[-Block0StrideZ*CELLSIZE + 1] - 2.0*source[0]);//вторая по z
+}
+
+//сторона y=0
+void Block0DefaultNeumannBound2(double* result, double* source, double t){           
+    result[0] = dx2*(source[Block0StrideX*CELLSIZE] + source[-Block0StrideX*CELLSIZE] - 2.0*source[0]) //вторая по x
+              + dy2*(source[Block0StrideY*CELLSIZE] + source[Block0StrideY*CELLSIZE] - 2.0*source[0]) //вторая по y
+              + dz2*(source[Block0StrideZ*CELLSIZE] + source[-Block0StrideZ*CELLSIZE] - 2.0*source[0]);//вторая по z
+    result[1] = dx2*(source[Block0StrideX*CELLSIZE + 1] + source[-Block0StrideX*CELLSIZE + 1] - 2.0*source[0]) //вторая по x
+              + dy2*(source[Block0StrideY*CELLSIZE + 1] + source[Block0StrideY*CELLSIZE + 1] - 2.0*source[0]) //вторая по y
+              + dz2*(source[Block0StrideZ*CELLSIZE + 1] + source[-Block0StrideZ*CELLSIZE + 1] - 2.0*source[0]);//вторая по z
+}
+
+//сторона y=ymax
+void Block0DefaultNeumannBound3(double* result, double* source, double t){           
+    result[0] = dx2*(source[Block0StrideX*CELLSIZE]  + source[-Block0StrideX*CELLSIZE] - 2.0*source[0]) //вторая по x
+              + dy2*(-source[Block0StrideY*CELLSIZE] + source[-Block0StrideY*CELLSIZE] - 2.0*source[0]) //вторая по y
+              + dz2*(source[Block0StrideZ*CELLSIZE]  + source[-Block0StrideZ*CELLSIZE] - 2.0*source[0]);//вторая по z
+    result[1] = dx2*(source[Block0StrideX*CELLSIZE + 1]  + source[-Block0StrideX*CELLSIZE + 1] - 2.0*source[0]) //вторая по x
+              + dy2*(-source[Block0StrideY*CELLSIZE + 1] + source[-Block0StrideY*CELLSIZE + 1] - 2.0*source[0]) //вторая по y
+              + dz2*(source[Block0StrideZ*CELLSIZE + 1]  + source[-Block0StrideZ*CELLSIZE + 1] - 2.0*source[0]);//вторая по z
+}
+
+//сторона z=0
+void Block0DefaultNeumannBound4(double* result, double* source, double t){           
+    result[0] = dx2*(source[Block0StrideX*CELLSIZE] + source[-Block0StrideX*CELLSIZE] - 2.0*source[0]) //вторая по x
+              + dy2*(source[Block0StrideY*CELLSIZE] + source[-Block0StrideY*CELLSIZE] - 2.0*source[0]) //вторая по y
+              + dz2*(source[Block0StrideZ*CELLSIZE] + source[Block0StrideZ*CELLSIZE] - 2.0*source[0]);//вторая по z
+    result[1] = dx2*(source[Block0StrideX*CELLSIZE + 1] + source[-Block0StrideX*CELLSIZE + 1] - 2.0*source[0]) //вторая по x
+              + dy2*(source[Block0StrideY*CELLSIZE + 1] + source[-Block0StrideY*CELLSIZE + 1] - 2.0*source[0]) //вторая по y
+              + dz2*(source[Block0StrideZ*CELLSIZE + 1] + source[Block0StrideZ*CELLSIZE + 1] - 2.0*source[0]);//вторая по z
+}
+
+//сторона z=zmax
+void Block0DefaultNeumannBound5(double* result, double* source, double t){           
+    result[0] = dx2*(source[Block0StrideX*CELLSIZE]  + source[-Block0StrideX*CELLSIZE] - 2.0*source[0]) //вторая по x
+              + dy2*(source[Block0StrideY*CELLSIZE]  + source[-Block0StrideY*CELLSIZE] - 2.0*source[0]) //вторая по y
+              + dz2*(source[-Block0StrideZ*CELLSIZE] + source[-Block0StrideZ*CELLSIZE] - 2.0*source[0]);//вторая по z
+    result[1] = dx2*(source[Block0StrideX*CELLSIZE + 1]  + source[-Block0StrideX*CELLSIZE + 1] - 2.0*source[0]) //вторая по x
+              + dy2*(source[Block0StrideY*CELLSIZE + 1]  + source[-Block0StrideY*CELLSIZE + 1] - 2.0*source[0]) //вторая по y
+              + dz2*(source[-Block0StrideZ*CELLSIZE + 1] + source[-Block0StrideZ*CELLSIZE + 1] - 2.0*source[0]);//вторая по z
 }
 
 
-__device__ double DirichletBound1(){
-    return 20.0;
+//Блок1
+//сторона x=0
+void Block1DefaultNeumannBound0(double* result, double* source, double t){           
+    result[0] = dx2*(source[Block1StrideX*CELLSIZE] + source[Block1StrideX*CELLSIZE] - 2.0*source[0]) //вторая по x
+              + dy2*(source[Block1StrideY*CELLSIZE] + source[-Block1StrideY*CELLSIZE] - 2.0*source[0]) //вторая по y
+              + dz2*(source[Block1StrideZ*CELLSIZE] + source[-Block1StrideZ*CELLSIZE] - 2.0*source[0]);//вторая по z
+    result[1] = dx2*(source[Block1StrideX*CELLSIZE + 1] + source[Block1StrideX*CELLSIZE + 1] - 2.0*source[0]) //вторая по x
+              + dy2*(source[Block1StrideY*CELLSIZE + 1] + source[-Block1StrideY*CELLSIZE + 1] - 2.0*source[0]) //вторая по y
+              + dz2*(source[Block1StrideZ*CELLSIZE + 1] + source[-Block1StrideZ*CELLSIZE + 1] - 2.0*source[0]);//вторая по z
+}
+
+//сторона x=xmax
+void Block1DefaultNeumannBound1(double* result, double* source, double t){           
+    result[0] = dx2*(source[-Block1StrideX*CELLSIZE] + source[-Block1StrideX*CELLSIZE] - 2.0*source[0]) //вторая по x
+              + dy2*(source[Block1StrideY*CELLSIZE]  + source[-Block1StrideY*CELLSIZE] - 2.0*source[0]) //вторая по y
+              + dz2*(source[Block1StrideZ*CELLSIZE]  + source[-Block1StrideZ*CELLSIZE] - 2.0*source[0]);//вторая по z
+    result[1] = dx2*(source[-Block1StrideX*CELLSIZE + 1] + source[-Block1StrideX*CELLSIZE + 1] - 2.0*source[0]) //вторая по x
+              + dy2*(source[Block1StrideY*CELLSIZE + 1]  + source[-Block1StrideY*CELLSIZE + 1] - 2.0*source[0]) //вторая по y
+              + dz2*(source[Block1StrideZ*CELLSIZE + 1]  + source[-Block1StrideZ*CELLSIZE + 1] - 2.0*source[0]);//вторая по z
+}
+
+//сторона y=0
+void Block1DefaultNeumannBound2(double* result, double* source, double t){           
+    result[0] = dx2*(source[Block1StrideX*CELLSIZE] + source[-Block1StrideX*CELLSIZE] - 2.0*source[0]) //вторая по x
+              + dy2*(source[Block1StrideY*CELLSIZE] + source[Block1StrideY*CELLSIZE] - 2.0*source[0]) //вторая по y
+              + dz2*(source[Block1StrideZ*CELLSIZE] + source[-Block1StrideZ*CELLSIZE] - 2.0*source[0]);//вторая по z
+    result[1] = dx2*(source[Block1StrideX*CELLSIZE + 1] + source[-Block1StrideX*CELLSIZE + 1] - 2.0*source[0]) //вторая по x
+              + dy2*(source[Block1StrideY*CELLSIZE + 1] + source[Block1StrideY*CELLSIZE + 1] - 2.0*source[0]) //вторая по y
+              + dz2*(source[Block1StrideZ*CELLSIZE + 1] + source[-Block1StrideZ*CELLSIZE + 1] - 2.0*source[0]);//вторая по z
+}
+
+//сторона y=ymax
+void Block1DefaultNeumannBound3(double* result, double* source, double t){           
+    result[0] = dx2*(source[Block1StrideX*CELLSIZE]  + source[-Block1StrideX*CELLSIZE] - 2.0*source[0]) //вторая по x
+              + dy2*(-source[Block1StrideY*CELLSIZE] + source[-Block1StrideY*CELLSIZE] - 2.0*source[0]) //вторая по y
+              + dz2*(source[Block1StrideZ*CELLSIZE]  + source[-Block1StrideZ*CELLSIZE] - 2.0*source[0]);//вторая по z
+    result[1] = dx2*(source[Block1StrideX*CELLSIZE + 1]  + source[-Block1StrideX*CELLSIZE + 1] - 2.0*source[0]) //вторая по x
+              + dy2*(-source[Block1StrideY*CELLSIZE + 1] + source[-Block1StrideY*CELLSIZE + 1] - 2.0*source[0]) //вторая по y
+              + dz2*(source[Block1StrideZ*CELLSIZE + 1]  + source[-Block1StrideZ*CELLSIZE + 1] - 2.0*source[0]);//вторая по z
+}
+
+//сторона z=0
+void Block1DefaultNeumannBound4(double* result, double* source, double t){           
+    result[0] = dx2*(source[Block1StrideX*CELLSIZE] + source[-Block1StrideX*CELLSIZE] - 2.0*source[0]) //вторая по x
+              + dy2*(source[Block1StrideY*CELLSIZE] + source[-Block1StrideY*CELLSIZE] - 2.0*source[0]) //вторая по y
+              + dz2*(source[Block1StrideZ*CELLSIZE] + source[Block1StrideZ*CELLSIZE] - 2.0*source[0]);//вторая по z
+    result[1] = dx2*(source[Block1StrideX*CELLSIZE + 1] + source[-Block1StrideX*CELLSIZE + 1] - 2.0*source[0]) //вторая по x
+              + dy2*(source[Block1StrideY*CELLSIZE + 1] + source[-Block1StrideY*CELLSIZE + 1] - 2.0*source[0]) //вторая по y
+              + dz2*(source[Block1StrideZ*CELLSIZE + 1] + source[Block1StrideZ*CELLSIZE + 1] - 2.0*source[0]);//вторая по z
+}
+
+//сторона z=zmax
+void Block1DefaultNeumannBound5(double* result, double* source, double t){           
+    result[0] = dx2*(source[Block1StrideX*CELLSIZE]  + source[-Block1StrideX*CELLSIZE] - 2.0*source[0]) //вторая по x
+              + dy2*(source[Block1StrideY*CELLSIZE]  + source[-Block1StrideY*CELLSIZE] - 2.0*source[0]) //вторая по y
+              + dz2*(source[-Block1StrideZ*CELLSIZE] + source[-Block1StrideZ*CELLSIZE] - 2.0*source[0]);//вторая по z
+    result[1] = dx2*(source[Block1StrideX*CELLSIZE + 1]  + source[-Block1StrideX*CELLSIZE + 1] - 2.0*source[0]) //вторая по x
+              + dy2*(source[Block1StrideY*CELLSIZE + 1]  + source[-Block1StrideY*CELLSIZE + 1] - 2.0*source[0]) //вторая по y
+              + dz2*(source[-Block1StrideZ*CELLSIZE + 1] + source[-Block1StrideZ*CELLSIZE + 1] - 2.0*source[0]);//вторая по z
 }
 
 
-__device__ double NeumannBound1(double* source, int idx, int strideX, int strideY, int strideZ){
-    //example of Neumann conditions for side x=0 
-    double bound_value = 4.0;
-    double nonexistent = source[idx+strideX] - 2.0* bound_value * dx2;
-    double result =  dx2*(source[idx+strideX] + nonexistent - 2.0*source[idx]) //вторая по x
-                   + dy2*(source[idx+strideY] + source[idx-strideY] - 2.0*source[idx]) //вторая по y
-                   + dz2*(source[idx+strideZ] + source[idx-strideZ] - 2.0*source[idx]);//вторая по z
-    return result;
+//явно заданное граничное условие Нейманна живет на границе z=zmax (у второго блока, Block1) 
+//source и result передаются уже со сдвигом на первый элемент 
+void Block1NeumannBound0(double* result, double* source, double t){       
+    double bound_value; 
+    double nonexistent;        
+    bound_value = -10.0;
+    nonexistent = source[-Block1StrideZ*CELLSIZE] - 2.0 * bound_value * dz2;
+    result[0] = dx2*(source[Block1StrideX*CELLSIZE] + source[-Block1StrideX*CELLSIZE] - 2.0*source[0]) //вторая по x
+              + dy2*(source[Block1StrideY*CELLSIZE] + source[-Block1StrideY*CELLSIZE] - 2.0*source[0]) //вторая по y
+              + dz2*(nonexistent                    + source[-Block1StrideZ*CELLSIZE] - 2.0*source[0]);//вторая по z
+    bound_value = cos(t);
+    nonexistent = source[-Block1StrideZ*CELLSIZE + 1] - 2.0 * bound_value * dz2;
+    result[1] = dx2*(source[Block1StrideX*CELLSIZE + 1] + source[-Block1StrideX*CELLSIZE + 1] - 2.0*source[0]) //вторая по x
+              + dy2*(source[Block1StrideY*CELLSIZE + 1] + source[-Block1StrideY*CELLSIZE + 1] - 2.0*source[0]) //вторая по y
+              + dz2*(nonexistent                        + source[-Block1StrideZ*CELLSIZE + 1] - 2.0*source[0]);//вторая по z
 }
 
 
-__device__ double NeumannBound1(double* source, int idx, int strideX, int strideY, int strideZ){
-    //example of Neumann conditions for side z=z_max 
-    double bound_value = -24.0;
-    double nonexistent = source[idx-strideZ] - 2.0* bound_value * dz2;
-    double result =  dx2*(source[idx+strideX] + source[idx+strideX] - 2.0*source[idx]) //вторая по x
-                   + dy2*(source[idx+strideY] + source[idx-strideY]- 2.0*source[idx]) //вторая по y
-                   + dz2*(nonexistent + source[idx-strideZ]- 2.0*source[idx]);//вторая по z
-    return result;
+void getBoundFuncArray(boundfunc_ptr_t** ppBoundFuncs){
+    boundfunc_ptr_t* pBoundFuncs = *ppBoundFuncs;
+    pBoundFuncs = (boundfunc_ptr_t*) malloc( ( 1 + 6 + 7 ) * sizeof(boundfunc_ptr_t) );        
+    
+    pBoundFuncs[0] = DirichletBound0;
+    
+    pBoundFuncs[1] = Block0DefaultNeumannBound0;
+    pBoundFuncs[2] = Block0DefaultNeumannBound1;
+    pBoundFuncs[3] = Block0DefaultNeumannBound2;
+    pBoundFuncs[4] = Block0DefaultNeumannBound3;
+    pBoundFuncs[5] = Block0DefaultNeumannBound4;
+    pBoundFuncs[6] = Block0DefaultNeumannBound5;
+    
+    pBoundFuncs[7] = Block1DefaultNeumannBound0;
+    pBoundFuncs[8] = Block1DefaultNeumannBound1;
+    pBoundFuncs[9] = Block1DefaultNeumannBound2;
+    pBoundFuncs[10] = Block1DefaultNeumannBound3;
+    pBoundFuncs[11] = Block1DefaultNeumannBound4;
+    pBoundFuncs[12] = Block1DefaultNeumannBound5;
+    
+    pBoundFuncs[13] = Block1NeumannBound0;
+}
+
+void releaseBoundFuncArray(boundfunc_ptr_t* BoundFuncs){
+    free(BoundFuncs);    
 }
 
 
-
-
-//GPU
-__global__ void func_kernel(double* result, 
-                     double time, double* source,  //исходный X
-                     int countX, int countY, int countZ, int cellSize,
-                     double dx2, double dy2, double dz2,
-                     int** borderTypes,  // 0 = Дирихле, 1 = Нейман, 2 = склейка
-                     int** borders,      // номер соответствующего условия,
-                                         // функции из набора Дирихле, набора Неймана
-                                         // или набора интерконнектов (набор у каждого блока свой,
-                                         // чтобы не плодить, а список функций один для всех)
-                     double** ic,
-                     NeumannBounds,  DirichletBounds){
+//основная функция
+void Block0MainFunc(double* result, 
+                    double time, double* source,  //исходный X
+                    int countX, int countY, int countZ, int cellSize,
+                    double dx2, double dy2, double dz2,
+                    int** borderTypes,  // 0 = Дирихле или Нейман, 1 = склейка
+                    int** borders,      // номер соответствующего условия,
+                                        // функции из набора Дирихле и Неймана
+                                        // или набора интерконнектов (набор у каждого блока свой,
+                                        // чтобы не плодить, а список функций один для всех)
+                    double** ic,
+                    boundfunc_ptr_t* pBoundFuncs){
 
     int idxZ = threadIdx.z + blockIdx.z*blockSize.z;
     int idxY = threadIdx.y + blockIdx.y*blockSize.y;
@@ -119,37 +305,3 @@ __global__ void func_kernel(double* result,
 
 }
 
-void funcGPU( double* result, 
-              double time, double* source,  //исходный X
-              int countX, int countY, int countZ, int cellSize,
-              double dx2, double dy2, double dz2,
-              int** borderTypes,  // 0 = Дирихле, 1 = Нейман, 2 = склейка
-              int** borders,       // номер соответствующего условия,
-                                  // функции из набора Дирихле, набора Неймана
-                                  // или набора интерконнектов (набор у каждого блока свой,
-                                  // чтобы не плодить, а список функций один для всех)
-              double** ic, 
-              NeumannBounds,  DirichletBounds //эти функции солвер получил отсюда же через getBoundFuncArray
-            ){ 
-    
-    
-    
-  
-    dim3 threads(16,16,1);
-    dim3 blocks(countX/threads.x, countY/threads.y, countZ/threads.z);
-    func_kernel<<<blocks, threads>>>(result, time, source,
-                 countX, countY, countZ, cellSize, dx2,dy2,dz2,
-                 borderTypes, border, ic,
-                 NeumannBounds, DirichletBounds );    
-    
-}
-
-void getBoundFuncArray(??? NeumannBounds, ??? DirichletBounds){
-      NeumannBounds = 
-      DirichletBounds =   
-      NeumannBounds[0] = NeumannBound0;
-      NeumannBounds[1] = NeumannBound1;
-      NeumannBounds[2] = NeumannBound2;    
-      DirichletBounds[0] = DirichletBound0;
-      DirichletBounds[1] = DirichletBound1;      
-}
