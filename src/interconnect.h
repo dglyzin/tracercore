@@ -12,6 +12,8 @@
 
 #include <mpi.h>
 
+#include "iostream"
+
 #include "enums.h"
 
 /*
@@ -34,7 +36,7 @@ public:
 	 */
 	void sendRecv(int locationNode);
 
-	void print(int locationNode);
+	void print();
 
 private:
 	/*
