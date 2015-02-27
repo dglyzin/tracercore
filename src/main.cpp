@@ -77,6 +77,7 @@ int main(int argc, char * argv[]) {
 		printf("Speed:        %f\n", (double)(d->getCountGridNodes()) * d->getRepeatCount() / calcTime);
 		printf("\n");*/
 
+		cout.precision(4);
 		cout << endl <<
 				"Input file:   " << inputFile << endl <<
 				"Output file:  " << outputFile << endl <<
