@@ -10,7 +10,7 @@ if __name__=='__main__':
     model.loadFromFile(InputFile)    
     model.saveToFile(OutputFile)
     
-    #if filecmp.cmp(InputFile, OutputFile, shallow=False):
-    #  print "Test OK!"
-    #else:
-    #  print "TEST FAILED. Files are different."
+    if filecmp.cmp(InputFile, OutputFile, shallow=False):
+      print "Test OK!"
+    else:
+      print "TEST FAILED. Files are different."
