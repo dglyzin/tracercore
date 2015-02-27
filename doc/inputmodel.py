@@ -50,6 +50,34 @@ class BoundRegion(object):
         return propDict  
 
 
+class InitialRegion(object):
+    def __init__(self, dict, dimension):
+        self.initialNumber = dict["InitialNumber"]        
+        self.xfrom = dict["xfrom"]
+        self.xto = dict["xto"]
+        if dimension>1:            
+            self.yfrom = dict["yfrom"]
+            self.yto = dict["yto"]
+        if dimension>2:
+            self.zfrom = dict["zfrom"]
+            self.zto = dict["zto"]
+        
+    
+    def getPropertiesDict(self, dimension):
+        propDict = OrderedDict([            
+            ("InitialNumber", self.initialNumber),
+            ("xfrom", self.xfrom),
+            ("xto", self.xto)
+        ])   
+        if dimension>1:            
+            propDict.update({"yfrom":self.yfrom})
+            propDict.update({"yto":self.yto})
+        if dimension>2:
+            propDict.update({"zfrom":self.zfrom})
+            propDict.update({"zto":self.zto})
+        return propDict  
+
+
 class Block(object):
     def __init__(self, name, dimension):
         self.name = name
@@ -95,8 +123,9 @@ class Block(object):
         self.boundRegions = []
         for boundDict in dict["BoundRegions"]:
             self.boundRegions.append(BoundRegion(boundDict,self.dimension))
-                
-        self.initialRegions = dict["InitialRegions"]
+        for initDict in dict["InitialRegions"]:
+            self.initialRegions.append(InitialRegion(initDict,self.dimension))                
+        
         
      
     def getPropertiesDict(self):
@@ -120,7 +149,7 @@ class Block(object):
             ("DefaultEquation", self.defaultEquation),
             ("DefaultInitial", self.defaultInitial),
             ("BoundRegions", [bdict.getPropertiesDict(self.dimension) for bdict in  self.boundRegions]),
-            ("InitialRegions", self.initialRegions),
+            ("InitialRegions", [idict.getPropertiesDict(self.dimension) for idict in  self.initialRegions])
         ])   
         return propDict
 

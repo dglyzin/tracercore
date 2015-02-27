@@ -39,13 +39,13 @@
             ], 
             "InitialRegions": [
                 {
-                    "zto": 2.0, 
-                    "yto": 2.0, 
-                    "yfrom": 1.0, 
-                    "xto": 2.0, 
                     "InitialNumber": 1, 
+                    "xfrom": 1.0, 
+                    "xto": 2.0, 
+                    "yfrom": 1.0, 
+                    "yto": 2.0, 
                     "zfrom": 1.0, 
-                    "xfrom": 1.0
+                    "zto": 2.0
                 }
             ]
         }, 
