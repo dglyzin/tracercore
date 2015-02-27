@@ -1,17 +1,72 @@
+#include <math.h>
 //функции типа дирихле для всех границ можно делать одни и те же (если температра одинаковая), .
 //а один и тот же Нейман на разных границах будет отдельной функцией, т.к. придумывает 
 //несуществующую точку в своем направлении.
 
 //важный момент: оптимизировать только скорость
-//много кода - нестрашно, т.к. генерируется автоматическе
+//много кода - нестрашно, т.к. генерируется автоматически по одному шаблону
+
+#define StepX 0.1
+#define StepY 0.1
+#define StepZ 0.1
+
+#define Block0StrideZ 10000
+#define Block0StrideY 100
+
+#define Block0CountZ 100
+#define Block0CountY 100
+#define Block0CountX 100
+
+#define Block0OffsetX 0.0
+#define Block0OffsetY 0.0
+#define Block0OffsetZ 0.0
+
+#define Block1StrideZ 100
+#define Block1StrideY 10
+
+#define Block1CountZ 10
+#define Block1CountY 10
+#define Block1CountX 10
+
+#define Block1OffsetX 10.0
+#define Block1OffsetY 5.0
+#define Block1OffsetZ 5.0
 
 
-//начальные условия
-__device__ double Initial0(){
-    return 2.0;
+
+//начальные условия - только на CPU
+typedef void (*initfunc_ptr_t)( double*, double, double, double );
+
+void Initial0(double* cellstart, double x, double y, double z){
+    cellstart[0] = 15.0;
+    cellstart[1] = sin(x)*cos(y);    
 }
 
+void Initial1(double* cellstart, double x, double y, double z){
+    cellstart[0] = 200.0;
+    cellstart[1] = 100.0;    
+}
 
+//Заполняет result[idx] начальной функцией с номером из initType[idx]
+void BlockFillInitialValues(double* result, int* initType,
+                            int BlockCountX, int BlockCountY, int BlockCountZ,                            
+                            int BlockOffsetX, int BlockOffsetY, int BlockOffsetZ){    
+
+    initfunc_ptr_t initFuncArray[2];  
+    initFuncArray[0] = Initial0;
+    initFuncArray[1] = Initial1;
+    
+    for(int idxZ = 0; idxZ<BlockCountZ; idxZ++)
+        for(int idxY = 0; idxY<BlockCountY; idxY++)
+            for(int idxX = 0; idxX<BlockCountX; idxX++){
+                int idx = idxZ*BlockCountY*BlockCountX + idxY*BlockCountX + idxX;
+                int type = initType[idx];
+                initFuncArray[type](result+idx, BlockOffsetX + idxX*StepX, BlockOffsetY + idxY*StepY, BlockOffsetZ + idxZ*StepZ);
+            }
+
+}
+
+/*
 //граничные условия
 __device__ double DirichletBound0(){
     return 10.0;
@@ -125,4 +180,4 @@ void getBoundFuncArray(??? NeumannBounds, ??? DirichletBounds){
       NeumannBounds[2] = NeumannBound2;    
       DirichletBounds[0] = DirichletBound0;
       DirichletBounds[1] = DirichletBound1;      
-}
+}*/
