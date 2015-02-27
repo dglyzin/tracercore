@@ -18,13 +18,13 @@ main.o: $(SRC)/main.cpp
 	$(CC) $(CFLAGS) $(SRC)/main.cpp -o $(BIN)/main.o
 
 domain.o: $(SRC)/domain.cpp  
-	$(CC) $(CFLAGS) -I$(CUDAINC) $(SRC)/domain.cpp  -fopenmp -o $(BIN)/domain.o
+	$(CC) $(CFLAGS) -I$(CUDAINC) $(SRC)/domain.cpp -fopenmp -o $(BIN)/domain.o
 
 block.o: $(SRC)/block.cu  
 	$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I$(CUDAINC) $(SRC)/block.cu -o $(BIN)/block.o
 
-interconnect.o: $(SRC)/interconnect.cu  
-	$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I$(CUDAINC) -I/usr/mpi/gcc/openmpi-1.8.4/include -L /usr/mpi/gcc/openmpi-1.8.4/lib -lmpi -lmpi_cxx $(SRC)/interconnect.cu -o $(BIN)/interconnect.o
+interconnect.o: $(SRC)/interconnect.cpp
+	$(CC) $(CFLAGS) $(SRC)/interconnect.cpp -o $(BIN)/interconnect.o
 	
 blockcpu.o: $(SRC)/blockcpu.cu  
 	$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I$(CUDAINC) $(SRC)/blockcpu.cu -o $(BIN)/blockcpu.o -Xcompiler -fopenmp
