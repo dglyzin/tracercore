@@ -332,7 +332,7 @@ void BlockGpu::print() {
 	printf("FROM NODE #%d", nodeNumber);
 
 	printf("\nLength: %d, Width: %d\n", length, width);
-	printf("\nlengthMove: %d, widthMove: %d\n", lenghtMove, widthMove);
+	printf("\nlengthMove: %d, widthMove: %d\n", lengthMove, widthMove);
 
 	printf("\nMatrix:\n");
 	for (int i = 0; i < length; ++i)

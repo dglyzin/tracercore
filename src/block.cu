@@ -11,7 +11,7 @@ Block::Block(int _length, int _width, int _lengthMove, int _widthMove, int _node
 	length = _length;
 	width = _width;
 
-	lenghtMove = _lengthMove;
+	lengthMove = _lengthMove;
 	widthMove = _widthMove;
 
 	nodeNumber = _nodeNumber;

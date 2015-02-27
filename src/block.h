@@ -13,6 +13,7 @@
 #include <cmath>
 #include <math.h>
 #include <string.h>
+#include <iostream>
 
 #include <vector>
 
@@ -46,7 +47,7 @@ protected:
 	/*
 	 * Координаты блока в области
 	 */
-	int lenghtMove;
+	int lengthMove;
 	int widthMove;
 
 	/*
@@ -156,7 +157,7 @@ public:
 	 */
 	int getCountGridNodes() { return length * width; }
 
-	int getLenghtMove() { return lenghtMove; }
+	int getLengthMove() { return lengthMove; }
 	int getWidthMove() { return widthMove; }
 
 	int getDeviceNumber() { return deviceNumber; }
