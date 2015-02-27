@@ -4,6 +4,8 @@
 
 #include "domain.h"
 
+using namespace std;
+
 int main(int argc, char * argv[]) {
 	/*
 	 * При запуске обязательно следует указывать 2 аргумента.
@@ -33,30 +35,31 @@ int main(int argc, char * argv[]) {
 	 * Номер потока, количество потоков и путь к файлу с данными.
 	 */
 
-	double percentageCompletion;
+	char* inputFile = argv[1];
+	char* outputFile = argv[2];
+	int flags = atoi(argv[3]);
 
-	percentageCompletion = atof(argv[3]);
+	double percentageCompletion = atoi(argv[4]);
+	char* saveFile = argv[5];
+	char* loadFile = argv[6];
 
-	Domain* d;
 
-	if(percentageCompletion == 0)
-		d = new Domain(world_rank, world_size, argv[1], argv[3]);
-	else
-		d = new Domain(world_rank, world_size, argv[1], percentageCompletion);
+	Domain* d = new Domain(world_rank, world_size, inputFile, flags, percentageCompletion, loadFile);
 
-	if(world_rank == 0) {
+	/*if(world_rank == 0) {
 		printf("\n\n");
 		printf("File:         %s\n", argv[1]);
 		printf("Node count:   %d\n", d->getCountGridNodes());
 		printf("Repeat count: %d\n", d->getRepeatCount());
-	}
+
+	}*/
 
 	/*
 	 * Вычисления.
 	 */
 	// Получить текущее время
 	time1 = MPI_Wtime();
-	d->count();
+	d->count(saveFile);
 	// Получить текущее время
 	time2 = MPI_Wtime();
 
@@ -66,18 +69,27 @@ int main(int argc, char * argv[]) {
 	 */
 	if(world_rank == 0) {
 		double calcTime = time2 - time1;
-		printf("Time:         %f\n", calcTime);
+		/*printf("Time:         %f\n", calcTime);
 		printf("Speed:        %f\n", (double)(d->getCountGridNodes()) * d->getRepeatCount() / calcTime);
-		printf("\n");
+		printf("\n");*/
+
+		cout << endl <<
+				"Input file:   " << inputFile << endl <<
+				"Output file:  " << outputFile << endl <<
+				"Node count:   " << d->getCountGridNodes() << endl <<
+				"Repeat count: " << d->getRepeatCount() << endl <<
+				"Time:         " << calcTime << endl <<
+				"Speed (10^6): " << (double)(d->getCountGridNodes()) * d->getRepeatCount() / calcTime / 1000000<< endl <<
+				endl;
 	}
 
-	printf("\nThread #%d CPU blocks: %d, GPU blocks: %d\n", world_rank, d->getCountCpuBlocks(), d->getCountGpuBlocks());
+	cout << "Thread #" << world_rank << " CPU blocks: " << d->getCountCpuBlocks() << " GPU blocks: " << d->getCountGpuBlocks() << endl;
 
 	/*
 	 * Сбор и вывод результата.
 	 * Передается второй аргумент командной строки - путь к файлу, в который будет записан результат.
 	 */
-	d->print(argv[2]);
+	d->print(outputFile);
 	//printf("\nNOT PRINT TO FILE!!!\n");
 
 	delete d;

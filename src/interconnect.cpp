@@ -61,7 +61,7 @@ void Interconnect::sendRecv(int locationNode) {
 	 */
 }
 
-void Interconnect::print(int locationNode) {
-	printf("\nInterconnect\n");
-	printf("\nnode %d, source %d, dest %d\n", locationNode, sourceLocationNode, destinationLocationNode);
+void Interconnect::print() {
+	cout << endl << "Interconnect" << endl << "Source node: " << sourceLocationNode << "Destination node: " << destinationLocationNode << endl; 
+			
 }
