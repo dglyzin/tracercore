@@ -22,14 +22,14 @@
 
 class Domain {
 public:
-	Domain(int _world_rank, int _world_size, char* path, double _percentageCompletion);
-	Domain(int _world_rank, int _world_size, char* blockLocation, char* dataFile);
+	Domain(int _world_rank, int _world_size, char* inputFile, int _flags, double _percentageCompletion, char* loadFile);
+
 	virtual ~Domain();
 
 	/*
 	 * Полный расчет
 	 */
-	void count();
+	void count(char* saveFile);
 
 	/*
 	 * Выполнение одной итерации (одного шага)
@@ -125,6 +125,8 @@ private:
 	int startingIterationNumber;
 
 	double percentageCompletion;
+
+	int flags;
 
 	MPI_Status status;
 

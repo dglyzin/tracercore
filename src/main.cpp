@@ -33,16 +33,16 @@ int main(int argc, char * argv[]) {
 	 * Номер потока, количество потоков и путь к файлу с данными.
 	 */
 
-	double percentageCompletion;
+	char* inputFile = argv[1];
+	char* outputFile = argv[2];
+	int flags = atoi(argv[3]);
 
-	percentageCompletion = atof(argv[3]);
+	double percentageCompletion = atoi(argv[4]);
+	char* saveFile = argv[5];
+	char* loadFile = argv[6];
 
-	Domain* d;
 
-	if(percentageCompletion == 0)
-		d = new Domain(world_rank, world_size, argv[1], argv[3]);
-	else
-		d = new Domain(world_rank, world_size, argv[1], percentageCompletion);
+	Domain* d = new Domain(world_rank, world_size, inputFile, flags, percentageCompletion, loadFile);
 
 	if(world_rank == 0) {
 		printf("\n\n");
@@ -56,7 +56,7 @@ int main(int argc, char * argv[]) {
 	 */
 	// Получить текущее время
 	time1 = MPI_Wtime();
-	d->count();
+	d->count(saveFile);
 	// Получить текущее время
 	time2 = MPI_Wtime();
 
@@ -77,7 +77,7 @@ int main(int argc, char * argv[]) {
 	 * Сбор и вывод результата.
 	 * Передается второй аргумент командной строки - путь к файлу, в который будет записан результат.
 	 */
-	d->print(argv[2]);
+	d->print(outputFile);
 	//printf("\nNOT PRINT TO FILE!!!\n");
 
 	delete d;

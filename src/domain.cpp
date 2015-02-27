@@ -9,28 +9,24 @@
 
 using namespace std;
 
-Domain::Domain(int _world_rank, int _world_size, char* path, double _percentageCompletion) {
+Domain::Domain(int _world_rank, int _world_size, char* inputFile, int _flags, double _percentageCompletion, char* loadFile) {
 	world_rank = _world_rank;
 	world_size = _world_size;
 
 	currentIterationNumber = 0;
 	startingIterationNumber = 0;
 
-	percentageCompletion = _percentageCompletion;
+	flags = _flags;
 
-	readFromFile(path);
-}
+	if( flags & LOAD_FILE )
+		loadStateFromFile(inputFile, loadFile);
+	else
+		readFromFile(inputFile);
 
-Domain::Domain(int _world_rank, int _world_size, char* blockLocation, char* dataFile) {
-	world_rank = _world_rank;
-	world_size = _world_size;
-
-	currentIterationNumber = 0;
-	startingIterationNumber = 0;
-
-	percentageCompletion = 100;
-
-	loadStateFromFile(blockLocation, dataFile);
+	if( flags & PERCENTAGE_EXECUTION )
+		percentageCompletion = _percentageCompletion;
+	else
+		percentageCompletion = 100;
 }
 
 Domain::~Domain() {
@@ -119,7 +115,7 @@ double** Domain::collectDataFromNode() {
 	}
 }
 
-void Domain::count() {
+void Domain::count(char* saveFile) {
 	/*
 	 * Вычисление коэффициентов необходимых для расчета теплопроводности
 	 */
@@ -144,7 +140,9 @@ void Domain::count() {
 	 */
 	for (currentIterationNumber = startingIterationNumber; currentIterationNumber < repeatCount; ++currentIterationNumber)
 		nextStep(dX2, dY2, dT);
-	saveStateToFile("save/saveState");
+
+	if( flags & SAVE_FILE )
+		saveStateToFile(saveFile);
 }
 
 void Domain::nextStep(double dX2, double dY2, double dT) {
@@ -687,25 +685,18 @@ void Domain::loadStateFromFile(char* blockLocation, char* dataFile) {
 		for (int j = 0; j < widthArea; ++j)
 			in >> matrix[i][j];
 
-	printf("\n***\n");
-
 	for (int i = 0; i < blockCount; ++i) {
 		if( mBlocks[i]->isRealBlock() ) {
 
 			double* data = new double [mBlocks[i]->getLength() * mBlocks[i]->getWidth()];
 
-			for (int j = 0; j < mBlocks[i]->getLength(); ++j) {
+			for (int j = 0; j < mBlocks[i]->getLength(); ++j)
 				for (int k = 0; k < mBlocks[i]->getWidth(); ++k)
-					data[k * mBlocks[i]->getWidth() + j] = matrix[	i + mBlocks[i]->getLenghtMove()	][	j + mBlocks[i]->getWidthMove()	];
-			}
+					data[j * mBlocks[i]->getWidth() + k] = matrix[	j + mBlocks[i]->getLenghtMove()	][	k + mBlocks[i]->getWidthMove()	];
 
 			mBlocks[i]->loadData(data);
-
-			mBlocks[i]->print();
 
 			delete data;
 		}
 	}
-
-	printf("\n$$$\n");
 }
