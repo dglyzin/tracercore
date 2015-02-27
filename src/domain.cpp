@@ -587,15 +587,25 @@ int Domain::getCountGridNodes() {
  * Функция носит исключетельно статистический смысл (на данный момент).
  */
 int Domain::getRepeatCount() {
+	/*
+	 * Вычисление коэффициентов необходимых для расчета теплопроводности
+	 */
 	double dX = 1./widthArea;
 	double dY = 1./lengthArea;
 
+	/*
+	 * Аналогично вышенаписанному
+	 */
 	double dX2 = dX * dX;
 	double dY2 = dY * dY;
 
 	double dT = ( dX2 * dY2 ) / ( 2 * ( dX2 + dY2 ) );
 
-	return (int)(1 / dT) + 1;
+	/*
+	 * Вычисление количества необходимых итераций
+	 */
+	int requiredRepeatCount = (int)((1 / dT) + 1);
+	return (requiredRepeatCount * percentageCompletion / 100);
 }
 
 /*
