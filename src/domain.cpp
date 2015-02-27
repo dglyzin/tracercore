@@ -133,12 +133,13 @@ void Domain::count(char* saveFile) {
 	/*
 	 * Вычисление количества необходимых итераций
 	 */
-	int repeatCount = (int)(((1 / dT) + 1) * percentageCompletion / 100);
+	int requiredRepeatCount = (int)((1 / dT) + 1);
+	int repeatCount = (requiredRepeatCount * percentageCompletion / 100);
 
 	/*
 	 * Выполнение
 	 */
-	for (currentIterationNumber = startingIterationNumber; currentIterationNumber < repeatCount; ++currentIterationNumber)
+	for (currentIterationNumber = startingIterationNumber; (currentIterationNumber < requiredRepeatCount) && (currentIterationNumber < (repeatCount + startingIterationNumber)); ++currentIterationNumber)
 		nextStep(dX2, dY2, dT);
 
 	if( flags & SAVE_FILE )

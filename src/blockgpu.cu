@@ -500,8 +500,5 @@ void BlockGpu::moveTempBorderVectorToBorderArray() {
 void BlockGpu::loadData(double* data) {
 	cudaSetDevice(deviceNumber);
 	
-	dim3 threads ( BLOCK_SIZE );
-	dim3 blocksLengthWidth ( (int)ceil((double)(length * width) / threads.x) );
-	
-	copyDoubleArray <<< blocksLengthWidth, threads >>> (matrix, data, length * width);
+	cudaMemcpy( matrix, data, sizeof(double) * length * width, cudaMemcpyHostToDevice );
 }
