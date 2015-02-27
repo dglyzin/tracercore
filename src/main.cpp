@@ -69,6 +69,10 @@ int main(int argc, char * argv[]) {
 	 */
 	if(world_rank == 0) {
 		double calcTime = time2 - time1;
+		int countGridNodes = d->getCountGridNodes();
+		int repeatCount = d->getRepeatCount();
+		double speed = (double)(countGridNodes) * repeatCount / calcTime / 1000000;
+
 		/*printf("Time:         %f\n", calcTime);
 		printf("Speed:        %f\n", (double)(d->getCountGridNodes()) * d->getRepeatCount() / calcTime);
 		printf("\n");*/
@@ -76,10 +80,10 @@ int main(int argc, char * argv[]) {
 		cout << endl <<
 				"Input file:   " << inputFile << endl <<
 				"Output file:  " << outputFile << endl <<
-				"Node count:   " << d->getCountGridNodes() << endl <<
-				"Repeat count: " << d->getRepeatCount() << endl <<
+				"Node count:   " << countGridNodes << endl <<
+				"Repeat count: " << repeatCount << endl <<
 				"Time:         " << calcTime << endl <<
-				"Speed (10^6): " << (double)(d->getCountGridNodes()) * d->getRepeatCount() / calcTime / 1000000<< endl <<
+				"Speed (10^6): " << speed << endl <<
 				endl;
 	}
 
