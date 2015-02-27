@@ -684,7 +684,7 @@ void Domain::loadStateFromFile(char* blockLocation, char* dataFile) {
 	in >> width;
 
 	if( length != lengthArea || width != widthArea ) {
-		printf("\nCritacal error!\n");
+		cout << endl << "Critical error!" << endl;
 		exit(1);
 	}
 
