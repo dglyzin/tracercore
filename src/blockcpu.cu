@@ -297,7 +297,7 @@ double* BlockCpu::getResult() {
 }
 
 void BlockCpu::print() {
-	printf("FROM NODE #%d", nodeNumber);
+	/*printf("FROM NODE #%d", nodeNumber);
 
 	printf("\nLength: %d, Width: %d\n", length, width);
 	printf("\nlengthMove: %d, widthMove: %d\n", lenghtMove, widthMove);
@@ -360,7 +360,123 @@ void BlockCpu::print() {
 		printf("\nexternalBorder #%d : %d : %d\n", i, externalBorder[i], externalBorderMove[i]);
 
 
-	printf("\n\n\n");
+	printf("\n\n\n");*/
+	cout << "########################################################################################################################################################################################################" << endl;
+	
+	cout << endl;
+	cout << "BlockCpu from node #" << nodeNumber << endl;
+	cout << "Length:      " << length << endl;
+	cout << "Width :      " << width << endl;
+	cout << endl;
+	cout << "Length move: " << lengthMove << endl;
+	cout << "Width move:  " << widthMove << endl;
+	
+	cout << endl;
+	cout << "Block matrix:" << endl;
+	cout.setf(ios::fixed);
+	for(int i = 0; i < length; i++) {
+		for( int j = 0; j < width; j++ ) {
+			cout.width(7);
+			cout.precision(1);
+			cout << matrix[i * width + j];
+		}
+		cout << endl;
+	}
+	
+	cout << endl;
+	cout << "TopSendBorderType" << endl;
+	for( int i =0; i < width; i++ ) {
+		cout.width(4);
+		cout << sendBorderType[TOP][i] << " ";
+	}
+	cout << endl;
+
+	cout << endl;
+	cout << "LeftSendBorderType" << endl;
+	for( int i =0; i < length; i++ ) {
+		cout.width(4);
+		cout << sendBorderType[LEFT][i] << " ";
+	}
+	cout << endl;
+
+	cout << endl;
+	cout << "BottomSendBorderType" << endl;
+	for( int i =0; i < width; i++ ) {
+		cout.width(4);
+		cout << sendBorderType[BOTTOM][i] << " ";
+	}
+	cout << endl;
+
+	cout << endl;
+	cout << "RightSendBorderType" << endl;
+	for( int i =0; i < length; i++ ) {
+		cout.width(4);
+		cout << sendBorderType[RIGHT][i] << " ";
+	}
+	cout << endl;
+
+	
+	cout << endl << endl;
+
+	
+	cout << endl;
+	cout << "TopRecieveBorderType" << endl;
+	for( int i =0; i < width; i++ ) {
+		cout.width(4);
+		cout << receiveBorderType[TOP][i] << " ";
+	}
+	cout << endl;
+
+	cout << endl;
+	cout << "LeftRecieveBorderType" << endl;
+	for( int i =0; i < length; i++ ) {
+		cout.width(4);
+		cout << receiveBorderType[LEFT][i] << " ";
+	}
+	cout << endl;
+
+	cout << endl;
+	cout << "BottomRecieveBorderType" << endl;
+	for( int i =0; i < width; i++ ) {
+		cout.width(4);
+		cout << receiveBorderType[BOTTOM][i] << " ";
+	}
+	cout << endl;
+
+	cout << endl;
+	cout << "RightRecieveBorderType" << endl;
+	for( int i =0; i < length; i++ ) {
+		cout.width(4);
+		cout << receiveBorderType[RIGHT][i] << " ";
+	}
+	cout << endl;
+
+	
+	cout << endl << endl;
+
+	
+	cout << endl;
+	for (int i = 0; i < countSendSegmentBorder; ++i) {
+		cout << "BlockBorder #" << i << endl;
+		cout << "	Memory address: " << blockBorder[i] << endl;
+		cout << "	Border move:    " << blockBorderMove[i] << endl;
+		cout << endl;
+	}
+	
+	
+	cout << endl << endl;
+	
+		
+	cout << endl;
+	for (int i = 0; i < countReceiveSegmentBorder; ++i) {
+		cout << "ExternalBorder #" << i << endl;
+		cout << "	Memory address: " << externalBorder[i] << endl;
+		cout << "	Border move:    " << externalBorderMove[i] << endl;
+		cout << endl;
+	}
+
+	cout << "########################################################################################################################################################################################################" << endl;
+	cout << endl << endl;
 }
 
 double* BlockCpu::addNewBlockBorder(Block* neighbor, int side, int move, int borderLength) {

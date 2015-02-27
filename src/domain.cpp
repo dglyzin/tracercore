@@ -77,7 +77,7 @@ double** Domain::collectDataFromNode() {
 
 				for (int j = 0; j < mBlocks[i]->getLength(); ++j)
 					for (int k = 0; k < mBlocks[i]->getWidth(); ++k)
-						resultAll[j + mBlocks[i]->getLenghtMove()][k + mBlocks[i]->getWidthMove()] = result[j * mBlocks[i]->getWidth() + k];
+						resultAll[j + mBlocks[i]->getLengthMove()][k + mBlocks[i]->getWidthMove()] = result[j * mBlocks[i]->getWidth() + k];
 			}
 			else
 				/*
@@ -89,7 +89,7 @@ double** Domain::collectDataFromNode() {
 				 * Каждую строчку нужно отдельно позиционировать в конечной области.
 				 */
 				for (int j = 0; j < mBlocks[i]->getLength(); ++j)
-					MPI_Recv(resultAll[j + mBlocks[i]->getLenghtMove()] + mBlocks[i]->getWidthMove(), mBlocks[i]->getWidth(), MPI_DOUBLE, mBlocks[i]->getNodeNumber(), 999, MPI_COMM_WORLD, &status);
+					MPI_Recv(resultAll[j + mBlocks[i]->getLengthMove()] + mBlocks[i]->getWidthMove(), mBlocks[i]->getWidth(), MPI_DOUBLE, mBlocks[i]->getNodeNumber(), 999, MPI_COMM_WORLD, &status);
 		}
 
 		return resultAll;
@@ -144,6 +144,11 @@ void Domain::count(char* saveFile) {
 
 	if( flags & SAVE_FILE )
 		saveStateToFile(saveFile);
+
+
+	for (int i = 0; i < blockCount; ++i) {
+		mBlocks[i]->print();
+	}
 }
 
 void Domain::nextStep(double dX2, double dY2, double dT) {
@@ -703,7 +708,7 @@ void Domain::loadStateFromFile(char* blockLocation, char* dataFile) {
 
 			for (int j = 0; j < mBlocks[i]->getLength(); ++j)
 				for (int k = 0; k < mBlocks[i]->getWidth(); ++k)
-					data[j * mBlocks[i]->getWidth() + k] = matrix[	j + mBlocks[i]->getLenghtMove()	][	k + mBlocks[i]->getWidthMove()	];
+					data[j * mBlocks[i]->getWidth() + k] = matrix[	j + mBlocks[i]->getLengthMove()	][	k + mBlocks[i]->getWidthMove()	];
 
 			mBlocks[i]->loadData(data);
 
