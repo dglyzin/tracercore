@@ -96,10 +96,15 @@
     "Equations": [
         {
             "Name": "Flat Brusselator", 
-            "Vars": "x,y,z", 
+            "Vars": ["x","y","z"], 
             "System": [
                 "U'=1+U^2*V-k1*U+a*(D[U,{x,2}]+D[U,{y,2}])", 
                 "V'=k2*U-U^2*V+a*(D[V,{x,2}]+D[V,{y,2}])"
+            ],
+            "Params": ["a", "k1", "k2"],
+            "ParamValues":[
+                {"a":2, "k1":3, "k2":5},
+                {"a":2, "k1":3, "k2":4},
             ]
         }
     ], 
