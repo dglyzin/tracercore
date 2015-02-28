@@ -329,73 +329,7 @@ void BlockGpu::print() {
 	
 	cudaMemcpy( blockBorderMoveToPrint, blockBorderMove, countSendSegmentBorder * sizeof(int), cudaMemcpyDeviceToHost );
 	cudaMemcpy( externalBorderMoveToPrint, externalBorderMove, countReceiveSegmentBorder * sizeof(int), cudaMemcpyDeviceToHost );
-	
-	
-	/*printf("FROM NODE #%d", nodeNumber);
 
-	printf("\nLength: %d, Width: %d\n", length, width);
-	printf("\nlengthMove: %d, widthMove: %d\n", lengthMove, widthMove);
-
-	printf("\nMatrix:\n");
-	for (int i = 0; i < length; ++i)
-	{
-		for (int j = 0; j < width; ++j)
-			printf("%6.1f ", matrixToPrint[i * width + j]);
-		printf("\n");
-	}
-	
-	printf("\ntopSendBorderType\n");
-	for (int i = 0; i < width; ++i)
-		printf("%4d", sendBorderTypeToPrint[TOP][i]);
-	printf("\n");
-
-	printf("\nleftSendBorderType\n");
-	for (int i = 0; i < length; ++i)
-		printf("%4d", sendBorderTypeToPrint[LEFT][i]);
-	printf("\n");
-
-	printf("\nbottomSendBorderType\n");
-	for (int i = 0; i < width; ++i)
-		printf("%4d", sendBorderTypeToPrint[BOTTOM][i]);
-	printf("\n");
-
-	printf("\nrightSendBorderType\n");
-	for (int i = 0; i < length; ++i)
-		printf("%4d", sendBorderTypeToPrint[RIGHT][i]);
-	printf("\n\n\n");
-	
-	
-	
-	printf("\ntopReceiveBorderType\n");
-	for (int i = 0; i < width; ++i)
-		printf("%4d", receiveBorderTypeToPrint[TOP][i]);
-	printf("\n");
-
-	printf("\nleftReceiveBorderType\n");
-	for (int i = 0; i < length; ++i)
-		printf("%4d", receiveBorderTypeToPrint[LEFT][i]);
-	printf("\n");
-
-	printf("\nbottomReceiveBorderType\n");
-	for (int i = 0; i < width; ++i)
-		printf("%4d", receiveBorderTypeToPrint[BOTTOM][i]);
-	printf("\n");
-
-	printf("\nrightReceiveBorderType\n");
-	for (int i = 0; i < length; ++i)
-		printf("%4d", receiveBorderTypeToPrint[RIGHT][i]);
-	printf("\n");
-	
-	
-	
-	for (int i = 0; i < countSendSegmentBorder; ++i)
-		printf("\nblockBorder #%d : %d : %d\n", i, blockBorder[i], blockBorderMoveToPrint[i]);
-
-	for (int i = 0; i < countReceiveSegmentBorder; ++i)
-		printf("\nexternalBorder #%d : %d : %d\n", i, externalBorder[i], externalBorderMoveToPrint[i]);
-	
-
-	printf("\n\n\n");*/
 	
 	cout << "########################################################################################################################################################################################################" << endl;
 	
