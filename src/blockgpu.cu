@@ -447,6 +447,23 @@ void BlockGpu::print() {
 
 	cout << "########################################################################################################################################################################################################" << endl;
 	cout << endl << endl;
+	
+	delete matrixToPrint;
+	
+	delete sendBorderTypeToPrint[TOP];
+	delete sendBorderTypeToPrint[LEFT];
+	delete sendBorderTypeToPrint[BOTTOM];
+	delete sendBorderTypeToPrint[RIGHT];
+	delete sendBorderTypeToPrint;
+	
+	delete receiveBorderTypeToPrint[TOP];
+	delete receiveBorderTypeToPrint[LEFT];
+	delete receiveBorderTypeToPrint[BOTTOM];
+	delete receiveBorderTypeToPrint[RIGHT];
+	delete receiveBorderTypeToPrint;
+	
+	delete blockBorderMoveToPrint;
+	delete externalBorderMoveToPrint;
 }
 
 double* BlockGpu::addNewBlockBorder(Block* neighbor, int side, int move, int borderLength) {
