@@ -221,18 +221,6 @@ void Domain::print(char* path) {
 	 * Арумент командной строки.
 	 */
 
-	/*if( world_rank == 0 ) {
-		FILE* out = fopen(path, "wb");
-
-		for (int i = 0; i < lengthArea; ++i) {
-			for (int j = 0; j < widthArea; ++j)
-				fprintf(out, "%d %d %f\n", i, j, resultAll[i][j]);
-			fprintf(out, "\n");
-		}
-
-		fclose(out);
-	}*/
-
 	if( world_rank == 0 ) {
 		ofstream out;
 		out.open(path);
