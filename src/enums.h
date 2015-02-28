@@ -14,6 +14,8 @@
 #define SAVE_FILE 2
 #define LOAD_FILE 4
 
+#define DEVICE_COUNT 4
+
 /*
  * Сторона границы
  */

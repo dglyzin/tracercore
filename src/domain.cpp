@@ -144,11 +144,6 @@ void Domain::count(char* saveFile) {
 
 	if( flags & SAVE_FILE )
 		saveStateToFile(saveFile);
-
-
-	for (int i = 0; i < blockCount; ++i) {
-		mBlocks[i]->print();
-	}
 }
 
 void Domain::nextStep(double dX2, double dY2, double dT) {
