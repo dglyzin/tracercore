@@ -400,7 +400,7 @@ void BlockCpu::print() {
 	}
 	
 	
-	cout << endl << endl;
+	cout << endl;
 	
 		
 	cout << endl;
