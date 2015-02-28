@@ -62,5 +62,11 @@ void Interconnect::sendRecv(int locationNode) {
 }
 
 void Interconnect::print() {
-	cout << endl << "Interconnect" << endl << "Source node: " << sourceLocationNode << "Destination node: " << destinationLocationNode << endl;
+	cout << endl;
+	cout << "Interconnect" << endl;
+	cout << "	Source node               : " << sourceLocationNode << endl;
+	cout << "	Destination node          : " << destinationLocationNode << endl;
+	cout << "	Source memory address     : " << sourceBlockBorder << endl;
+	cout << "	Destination memory address: " << destinationExternalBorder << endl;
+	cout << endl;
 }
