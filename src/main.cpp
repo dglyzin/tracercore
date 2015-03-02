@@ -39,12 +39,13 @@ int main(int argc, char * argv[]) {
 	char* outputFile = argv[2];
 	int flags = atoi(argv[3]);
 
-	double percentageCompletion = atoi(argv[4]);
-	char* saveFile = argv[5];
-	char* loadFile = argv[6];
+	int stepCount = atoi(argv[4]);
+	double stopTime = atof(argv[5]);
+	char* saveFile = argv[6];
+	char* loadFile = argv[7];
 
 
-	Domain* d = new Domain(world_rank, world_size, inputFile, flags, percentageCompletion, loadFile);
+	Domain* d = new Domain(world_rank, world_size, inputFile, flags, stepCount, stopTime, loadFile);
 
 	/*
 	 * Вычисления.
