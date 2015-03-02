@@ -10,11 +10,6 @@
 
 #define BY_FUNCTION -1
 
-/*#define PERCENTAGE_EXECUTION 1
-#define SAVE_FILE 2
-#define LOAD_FILE 4*/
-
-
 enum FLAGS {
 	SAVE_FILE = 0x01,
 	LOAD_FILE = 0x02,
