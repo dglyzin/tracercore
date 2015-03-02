@@ -79,14 +79,9 @@ void BlockFillInitialValues(double* result, int* initType,
 
 typedef void (*boundfunc_ptr_t)( double*, double*, double ); 
 
-//1. Дирихле
-void DirichletBound0(double* result, double* source, double t){
-    result[0] = 15.0;
-    result[1] = sin(t);
-}
 
-//2. Нейман
-//default zero flow for every side (0-5)
+//условия по умолчанию для каждой грани
+//еще нужно генерировать для каждого ребра (12 штук) и для каждой вершины (8 штук)
 //Блок0
 //сторона x=0
 void Block0DefaultNeumannBound0(double* result, double* source, double t){           
@@ -211,21 +206,40 @@ void Block1DefaultNeumannBound5(double* result, double* source, double t){
 }
 
 
+
 //явно заданное граничное условие Нейманна живет на границе z=zmax (у второго блока, Block1) 
 //source и result передаются уже со сдвигом на первый элемент 
-void Block1NeumannBound0(double* result, double* source, double t){       
+void Block1Bound0(double* result, double* source, double t){       
     double bound_value; 
     double nonexistent;        
     bound_value = -10.0;
-    nonexistent = source[-Block1StrideZ*CELLSIZE] - 2.0 * bound_value * dz2;
+    nonexistent =    source[-Block1StrideZ*CELLSIZE] - 2.0 * bound_value * dz2;
     result[0] = dx2*(source[Block1StrideX*CELLSIZE] + source[-Block1StrideX*CELLSIZE] - 2.0*source[0]) //вторая по x
               + dy2*(source[Block1StrideY*CELLSIZE] + source[-Block1StrideY*CELLSIZE] - 2.0*source[0]) //вторая по y
               + dz2*(nonexistent                    + source[-Block1StrideZ*CELLSIZE] - 2.0*source[0]);//вторая по z
     bound_value = cos(t);
-    nonexistent = source[-Block1StrideZ*CELLSIZE + 1] - 2.0 * bound_value * dz2;
+    nonexistent =    source[-Block1StrideZ*CELLSIZE + 1] - 2.0 * bound_value * dz2;
     result[1] = dx2*(source[Block1StrideX*CELLSIZE + 1] + source[-Block1StrideX*CELLSIZE + 1] - 2.0*source[1]) //вторая по x
               + dy2*(source[Block1StrideY*CELLSIZE + 1] + source[-Block1StrideY*CELLSIZE + 1] - 2.0*source[1]) //вторая по y
               + dz2*(nonexistent                        + source[-Block1StrideZ*CELLSIZE + 1] - 2.0*source[1]);//вторая по z
+}
+
+
+//interconnects
+void IcFuncZstart(double* result, double* source, double t, double* params, double* border ){  
+    result[0] = dx2*(source[Block1StrideX*CELLSIZE] + source[-Block1StrideX*CELLSIZE] - 2.0*source[0]) //вторая по x
+              + dy2*(source[Block1StrideY*CELLSIZE] + source[-Block1StrideY*CELLSIZE] - 2.0*source[0]) //вторая по y
+              + dz2*(source[Block1StrideZ*CELLSIZE] + border[0]                       - 2.0*source[0]);//вторая по z
+    result[1] = dx2*(source[Block1StrideX*CELLSIZE + 1] + source[-Block1StrideX*CELLSIZE + 1] - 2.0*source[1]) //вторая по x
+              + dy2*(source[Block1StrideY*CELLSIZE + 1] + source[-Block1StrideY*CELLSIZE + 1] - 2.0*source[1]) //вторая по y
+              + dz2*(source[Block1StrideZ*CELLSIZE + 1] + border[0]                           - 2.0*source[1]);//вторая по z
+}
+
+
+
+void DirichletBound0(double* result, double* source, double t){
+    result[0] = 15.0;
+    result[1] = sin(t);
 }
 
 
@@ -249,11 +263,23 @@ void getBoundFuncArray(boundfunc_ptr_t** ppBoundFuncs){
     pBoundFuncs[11] = Block1DefaultNeumannBound4;
     pBoundFuncs[12] = Block1DefaultNeumannBound5;
     
-    pBoundFuncs[13] = Block1NeumannBound0;
+    pBoundFuncs[13] = Block1Bound0;
 }
 
 void releaseBoundFuncArray(boundfunc_ptr_t* BoundFuncs){
     free(BoundFuncs);    
+}
+
+
+void Block0InnerFunc0(double* result, double* source, double t, double* params){
+    result[0] = 1.0 + source[0]*source[0]*source[1] - params[1]*source[0] + params[0] * (  
+           dx2*(source[Block1StrideX*CELLSIZE] + source[-Block1StrideX*CELLSIZE] - 2.0*source[0]) //вторая по x
+         + dy2*(source[Block1StrideY*CELLSIZE] + source[-Block1StrideY*CELLSIZE] - 2.0*source[0]) //вторая по y
+         + dz2*(source[Block1StrideZ*CELLSIZE] + source[-Block1StrideZ*CELLSIZE] - 2.0*source[0]) );//вторая по z
+    result[1] = params[2]*source[0] - source[0]*source[0]*source[1] + params[0] * (
+           dx2*(source[Block1StrideX*CELLSIZE + 1] + source[-Block1StrideX*CELLSIZE + 1] - 2.0*source[1]) //вторая по x
+         + dy2*(source[Block1StrideY*CELLSIZE + 1] + source[-Block1StrideY*CELLSIZE + 1] - 2.0*source[1]) //вторая по y
+         + dz2*(source[Block1StrideZ*CELLSIZE + 1] + source[-Block1StrideZ*CELLSIZE + 1] - 2.0*source[1]) );//вторая по z
 }
 
 
@@ -269,43 +295,39 @@ void Block0MainFunc(double* result,
                     double** ic,
                     boundfunc_ptr_t* pBoundFuncs.
                     double* params    ){
-
-    if (idxZ == 0) 
-        if ( (idxY>0)&&(idxX>0)&&(idxY<countY-1)&&(idxX<countX-1) ){            
-            cellStart2D = idxY*countX + idxX;
-            for (int idx = 0; idx<cellSize; idx++)
-                if (borderTypes[BD_ZSTART][cellstart2D+idx] == BT_DIRICHLET)
-                    result[cellstart+idx] = DirichletBounds[ borders[BD_ZSTART][cellstart2D+idx] ] ();
-                else if (borderTypes[BD_ZSTART][cellstart2D+idx] == BT_NEUMANN)
-                    result[cellstart+idx] = NeumannBounds[ borders[BD_ZSTART][cellstart2D+idx] ] (source,);    
-                else //interconnect
-                    result[cellstart+idx] = 
+      
+    int cellStart = 0;
+    //layer z = 0  
+    for(int idxY = 0; idxY<Block0CountY; idxY++)
+        for(int idxX = 0; idxX<Block0CountX; idxX++){
+            ind idx2d = idxY*Block1StrideY+idxX;
+            if (borderTypes[BD_ZSTART][idx2d] == 0)
+                pBoundFuncs[ borders[BD_ZSTART][idx2d] ](result+cellStart, source+cellStart, time, params);
+            else
+                IcFuncZstart(result+cellStart, source+cellStart, time, params, ic[BD_ZSTART]+idx2d*CELLSIZE);
+            cellStart+= CELLSIZE;
         }
-    if (idxZ == countZ-1) 
-    if (idxY == 0) 
-    if (idxY == countY-1) 
-    if (idxX == 0) 
-    if (idxX == countX-1) 
-
-    int cellIdx = Block0CountY*Block0CountX;
-    for(int idxZ = 1; idxZ<Block0CountX-1; idxZ++){
-        cellIdx+=Block0CountX;
+    
+    //internal z layers    
+    for(int idxZ = 1; idxZ<Block0CountZ-1; idxZ++){
+        //line y=0
+        cellStart += Block0CountX * CELLSIZE;
+        //internal y lines
         for(int idxY = 1; idxY<Block0CountY-1; idxY++){
-            cellIdx+=1;   
-            for(int idxX = 1; idxX<Block0CountX-1; idxX++){
-                result[cellIdx*CELLSIZE+0] = 1 +  params
-                      dx2*(source[(cellIdx+Block1StrideX)*CELLSIZE]  + source[-Block1StrideX*CELLSIZE] - 2.0*source[cellIdx*CELLSIZE+0]) //вторая по x
-                    + dy2*(source[Block1StrideY*CELLSIZE]  + source[-Block1StrideY*CELLSIZE] - 2.0*source[cellIdx*CELLSIZE+0]) //вторая по y
-                    + dz2*(source[Block1StrideZ*CELLSIZE] + source[-Block1StrideZ*CELLSIZE] - 2.0*source[cellIdx*CELLSIZE+0]);//вторая по z
-                result[cellIdx*CELLSIZE+1] =
-                      dx2*(source[Block1StrideX*CELLSIZE + 1]  + source[-Block1StrideX*CELLSIZE + 1] - 2.0*source[cellIdx*CELLSIZE+1]) //вторая по x
-                    + dy2*(source[Block1StrideY*CELLSIZE + 1]  + source[-Block1StrideY*CELLSIZE + 1] - 2.0*source[cellIdx*CELLSIZE+1]) //вторая по y
-                    + dz2*(source[Block1StrideZ*CELLSIZE + 1] + source[-Block1StrideZ*CELLSIZE + 1] - 2.0*source[cellIdx*CELLSIZE+1]);//вторая по z
-
-            }    
-            cellIdx+=1;   
+            //point x = 0   
+            cellStart += CELLSIZE;
+            //internal x points
+            for(int idxX = 1; idxX<Block0CountX-1; idxX++)
+                Block0InnerFunc0(result+cellStart, source+cellStart, time, params);
+            cellStart+= CELLSIZE;   
+            //point x = xmax-1
         }
-        cellIdx+=Block0CountX;
-    }
+        //line y=ymax-1
+        cellIdx+=Block0CountY*Block0CountX * CELLSIZE;
+    }        
+    //layer z = zmax-1  
+    
+    
+    
 }
 
