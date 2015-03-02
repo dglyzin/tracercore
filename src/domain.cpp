@@ -138,17 +138,8 @@ void Domain::count(char* saveFile) {
 	double dT = ( dX2 * dY2 ) / ( 2 * ( dX2 + dY2 ) );
 
 	/*
-	 * Вычисление количества необходимых итераций
-	 */
-	/*int requiredRepeatCount = (int)((1 / dT) + 1);
-	int repeatCount = (requiredRepeatCount * percentageCompletion / 100);*/
-
-	/*
 	 * Выполнение
 	 */
-	/*for (currentIterationNumber = startingIterationNumber; (currentIterationNumber < requiredRepeatCount) && (currentIterationNumber < (repeatCount + startingIterationNumber)); ++currentIterationNumber)
-		nextStep(dX2, dY2, dT);*/
-
 	if( flags & STEP_EXECUTION)
 		for (int i = 0; i < stepCount; i++) {
 			nextStep(dX2, dY2, dT);
