@@ -10,11 +10,17 @@
 
 #define BY_FUNCTION -1
 
-#define PERCENTAGE_EXECUTION 1
+/*#define PERCENTAGE_EXECUTION 1
 #define SAVE_FILE 2
-#define LOAD_FILE 4
+#define LOAD_FILE 4*/
 
-#define DEVICE_COUNT 4
+
+enum FLAGS {
+	SAVE_FILE = 0x01,
+	LOAD_FILE = 0x02,
+	TIME_EXECUTION = 0x04,
+	STEP_EXECUTION = 0x08
+};
 
 /*
  * Сторона границы

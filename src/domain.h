@@ -22,7 +22,7 @@
 
 class Domain {
 public:
-	Domain(int _world_rank, int _world_size, char* inputFile, int _flags, double _percentageCompletion, char* loadFile);
+	Domain(int _world_rank, int _world_size, char* inputFile, int _flags, int _stepCount, double _stopTime, char* loadFile);
 
 	virtual ~Domain();
 
@@ -121,12 +121,13 @@ private:
 	int lengthArea;
 	int widthArea;
 
-	int currentIterationNumber;
-	int startingIterationNumber;
-
-	double percentageCompletion;
-
 	int flags;
+	int stepCount;
+	double stepTime;
+	double stopTime;
+	double currentTime;
+
+	int repeatCount;
 
 	MPI_Status status;
 
@@ -134,6 +135,8 @@ private:
 	 * Чтение размеров области
 	 */
 	void readLengthAndWidthArea(std::ifstream& in);
+
+	void readTimeSetting(std::ifstream& in);
 
 	/*
 	 * Чтение блока

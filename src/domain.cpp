@@ -9,12 +9,18 @@
 
 using namespace std;
 
-Domain::Domain(int _world_rank, int _world_size, char* inputFile, int _flags, double _percentageCompletion, char* loadFile) {
+Domain::Domain(int _world_rank, int _world_size, char* inputFile, int _flags, int _stepCount, double _stopTime, char* loadFile) {
 	world_rank = _world_rank;
 	world_size = _world_size;
 
-	currentIterationNumber = 0;
-	startingIterationNumber = 0;
+	currentTime = 0;
+	stepCount = 0;
+
+	stepTime = 0;
+	stopTime = 0;
+
+	repeatCount = 0;
+
 
 	flags = _flags;
 
@@ -23,10 +29,11 @@ Domain::Domain(int _world_rank, int _world_size, char* inputFile, int _flags, do
 	else
 		readFromFile(inputFile);
 
-	if( flags & PERCENTAGE_EXECUTION )
-		percentageCompletion = _percentageCompletion;
-	else
-		percentageCompletion = 100;
+	if( flags & TIME_EXECUTION )
+		stopTime = _stopTime;
+
+	if( flags & STEP_EXECUTION )
+		stepCount = _stepCount;
 }
 
 Domain::~Domain() {
@@ -131,16 +138,20 @@ void Domain::count(char* saveFile) {
 	double dT = ( dX2 * dY2 ) / ( 2 * ( dX2 + dY2 ) );
 
 	/*
-	 * Вычисление количества необходимых итераций
-	 */
-	int requiredRepeatCount = (int)((1 / dT) + 1);
-	int repeatCount = (requiredRepeatCount * percentageCompletion / 100);
-
-	/*
 	 * Выполнение
 	 */
-	for (currentIterationNumber = startingIterationNumber; (currentIterationNumber < requiredRepeatCount) && (currentIterationNumber < (repeatCount + startingIterationNumber)); ++currentIterationNumber)
-		nextStep(dX2, dY2, dT);
+	if( flags & STEP_EXECUTION)
+		for (int i = 0; i < stepCount; i++) {
+			nextStep(dX2, dY2, dT);
+			currentTime += stepTime;
+			repeatCount++;
+		}
+	else
+		while ( currentTime < stopTime ) {
+			nextStep(dX2, dY2, dT);
+			currentTime += stepTime;
+			repeatCount++;
+		}
 
 	if( flags & SAVE_FILE )
 		saveStateToFile(saveFile);
@@ -314,6 +325,8 @@ void Domain::readFromFile(char* path) {
 	ifstream in;
 	in.open(path);
 
+	readTimeSetting(in);
+
 	/*
 	 * Чтение размеров области
 	 */
@@ -371,6 +384,11 @@ void Domain::readFromFile(char* path) {
 void Domain::readLengthAndWidthArea(ifstream& in) {
 	in >> lengthArea;
 	in >> widthArea;
+}
+
+void Domain::readTimeSetting(ifstream& in) {
+	in >> stepTime;
+	in >> stopTime;
 }
 
 /*
@@ -575,25 +593,7 @@ int Domain::getCountGridNodes() {
  * Функция носит исключетельно статистический смысл (на данный момент).
  */
 int Domain::getRepeatCount() {
-	/*
-	 * Вычисление коэффициентов необходимых для расчета теплопроводности
-	 */
-	double dX = 1./widthArea;
-	double dY = 1./lengthArea;
-
-	/*
-	 * Аналогично вышенаписанному
-	 */
-	double dX2 = dX * dX;
-	double dY2 = dY * dY;
-
-	double dT = ( dX2 * dY2 ) / ( 2 * ( dX2 + dY2 ) );
-
-	/*
-	 * Вычисление количества необходимых итераций
-	 */
-	int requiredRepeatCount = (int)((1 / dT) + 1);
-	return (requiredRepeatCount * percentageCompletion / 100);
+	return repeatCount;
 }
 
 /*
@@ -639,7 +639,7 @@ void Domain::saveStateToFile(char* path) {
 		ofstream out;
 		out.open(path);
 
-		out << currentIterationNumber << endl;
+		out << currentTime << endl;
 		out << lengthArea << " " << widthArea << endl;
 
 		for (int i = 0; i < lengthArea; ++i) {
@@ -667,7 +667,7 @@ void Domain::loadStateFromFile(char* blockLocation, char* dataFile) {
 	int length;
 	int width;
 
-	in >> startingIterationNumber;
+	in >> currentTime;
 	in >> length;
 	in >> width;
 
