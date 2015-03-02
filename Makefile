@@ -1,5 +1,5 @@
 CC=mpiCC
-CFLAGS=-c -O3
+CFLAGS=-c -O3 -Wall
 SRC=src
 SRCSOL=src/solvers
 
@@ -23,21 +23,22 @@ domain.o: $(SRC)/domain.cpp
 
 block.o: $(SRC)/block.cu  
 	$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I$(CUDAINC) $(SRC)/block.cu -o $(BIN)/block.o
-
-interconnect.o: $(SRC)/interconnect.cpp
-	$(CC) $(CFLAGS) $(SRC)/interconnect.cpp -o $(BIN)/interconnect.o
 	
 blockcpu.o: $(SRC)/blockcpu.cu  
 	$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I$(CUDAINC) $(SRC)/blockcpu.cu -o $(BIN)/blockcpu.o -Xcompiler -fopenmp
 	
+blockgpu.o: $(SRC)/blockgpu.cu  
+	$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I$(CUDAINC) $(SRC)/blockgpu.cu -o $(BIN)/blockgpu.o
+	
 blocknull.o: $(SRC)/blocknull.cpp  
 	$(CC) $(CFLAGS) $(SRC)/blocknull.cpp -o $(BIN)/blocknull.o
+
+interconnect.o: $(SRC)/interconnect.cpp
+	$(CC) $(CFLAGS) $(SRC)/interconnect.cpp -o $(BIN)/interconnect.o
 	
 enums.o: $(SRC)/enums.cpp
 	$(CC) $(CFLAGS) $(SRC)/enums.cpp -o $(BIN)/enums.o
 	
-blockgpu.o: $(SRC)/blockgpu.cu  
-	$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I$(CUDAINC) $(SRC)/blockgpu.cu -o $(BIN)/blockgpu.o
 
 solver: solver.o
 	echo "hello"
