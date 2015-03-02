@@ -21,11 +21,15 @@ load = "empty"
 fileToRun = "bin/HS"
 
 if argc < 5 :
-	print "Error!"
+	print "Error! Need 4 parameters"
+	print "salloc / srun"
+	print "Thread count"
+	print "File blocks"
+	print "Result file"
 	exit(0)
 
 if sys.argv[1] != "salloc" and sys.argv[1] != "srun" :
-	print "Error!"
+	print "Error! Only salloc / srun"
 	exit(0)
 	
 thread = sys.argv[2]
@@ -58,7 +62,7 @@ while i < argc :
 		i = i+2
 		continue
 	
-	print "Error!"
+	print "Error! Need another argument"
 	exit(0)
 
 arg = inputFile + ' ' + outputFile + ' ' + str(flags) + ' ' + str(step) + ' ' + str(time) + ' ' + save + ' ' + load
