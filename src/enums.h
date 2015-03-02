@@ -44,6 +44,4 @@ int oppositeBorder(int side);
 bool isCPU(int type);
 bool isGPU(int type);
 
-char* blockTypeToString(int type);
-
 #endif /* SRC_ENUMS_H_ */

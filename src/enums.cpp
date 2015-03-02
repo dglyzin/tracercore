@@ -29,19 +29,3 @@ bool isCPU(int type) {
 bool isGPU(int type) {
 	return type == GPU;
 }
-
-char* blockTypeToString(int type) {
-	switch (type) {
-		case NULL_BLOCK:
-			return "NULL";
-
-		case CPU:
-			return "CPU";
-
-		case GPU:
-			return "GPU";
-
-		default:
-			return "NULL";
-	}
-}

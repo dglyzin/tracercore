@@ -66,7 +66,7 @@ int main(int argc, char * argv[]) {
 		int repeatCount = d->getRepeatCount();
 		double speed = (double)(countGridNodes) * repeatCount / calcTime / 1000000;
 
-		cout.precision(4);
+		cout.precision(5);
 		cout << endl <<
 				"Input file:   " << inputFile << endl <<
 				"Output file:  " << outputFile << endl <<
