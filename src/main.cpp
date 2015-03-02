@@ -77,7 +77,7 @@ int main(int argc, char * argv[]) {
 				endl;
 	}
 
-	cout << "Thread #" << world_rank << " CPU blocks: " << d->getCountCpuBlocks() << " GPU blocks: " << d->getCountGpuBlocks() << endl;
+	cout << endl << "Thread #" << world_rank << " CPU blocks: " << d->getCountCpuBlocks() << " GPU blocks: " << d->getCountGpuBlocks() << endl;
 
 	/*
 	 * Сбор и вывод результата.
