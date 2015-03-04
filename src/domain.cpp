@@ -129,6 +129,13 @@ void Domain::count(char* saveFile) {
 	double dX = 1./widthArea;
 	double dY = 1./lengthArea;
 
+	for (int i = 0; i < blockCount; ++i) {
+		mBlocks[i]->print();
+	}
+
+	char c;
+	scanf("%c", &c);
+
 	/*
 	 * Аналогично вышенаписанному
 	 */
@@ -216,13 +223,6 @@ void Domain::nextStep(double dX2, double dY2, double dT) {
 	 */
 	for (int i = 0; i < connectionCount; ++i)
 		mInterconnects[i]->sendRecv(world_rank);
-
-	for (int i = 0; i < blockCount; ++i) {
-		mBlocks[i]->print();
-	}
-
-	char c;
-	scanf("%c", &c);
 }
 
 void Domain::print(char* path) {
