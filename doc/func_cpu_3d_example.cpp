@@ -76,134 +76,24 @@ void BlockFillInitialValues(double* result, int* initType,
 //функции типа дирихле для всех границ всех блоков можно делать одни и те же ,
 //а один и тот же Нейман на разных границах разных блоков будет отдельной функцией, т.к. придумывает 
 //несуществующую точку в своем направлении и с разными stride
+typedef void (*func_ptr_t)(double* result, double* source, double t, int idxX, idxY, idxZ, double* params, double** ic);
 
-typedef void (*boundfunc_ptr_t)( double*, double*, double ); 
 
-
-//условия по умолчанию для каждой грани
-//еще нужно генерировать для каждого ребра (12 штук) и для каждой вершины (8 штук)
+//условия по умолчанию для каждой грани (6 штук),
+//для каждого ребра (12 штук) и для каждой вершины (8 штук)
 //Блок0
-//сторона x=0
-void Block0DefaultNeumannBound0(double* result, double* source, double t){           
-    result[0] = dx2*(source[Block0StrideX*CELLSIZE] + source[Block0StrideX*CELLSIZE] - 2.0*source[0]) //вторая по x
-              + dy2*(source[Block0StrideY*CELLSIZE] + source[-Block0StrideY*CELLSIZE] - 2.0*source[0]) //вторая по y
-              + dz2*(source[Block0StrideZ*CELLSIZE] + source[-Block0StrideZ*CELLSIZE] - 2.0*source[0]);//вторая по z
-    result[1] = dx2*(source[Block0StrideX*CELLSIZE + 1] + source[Block0StrideX*CELLSIZE + 1] - 2.0*source[1]) //вторая по x
-              + dy2*(source[Block0StrideY*CELLSIZE + 1] + source[-Block0StrideY*CELLSIZE + 1] - 2.0*source[1]) //вторая по y
-              + dz2*(source[Block0StrideZ*CELLSIZE + 1] + source[-Block0StrideZ*CELLSIZE + 1] - 2.0*source[1]);//вторая по z
-}
-
-//сторона x=xmax
-void Block0DefaultNeumannBound1(double* result, double* source, double t){           
-    result[0] = dx2*(source[-Block0StrideX*CELLSIZE] + source[-Block0StrideX*CELLSIZE] - 2.0*source[0]) //вторая по x
-              + dy2*(source[Block0StrideY*CELLSIZE]  + source[-Block0StrideY*CELLSIZE] - 2.0*source[0]) //вторая по y
-              + dz2*(source[Block0StrideZ*CELLSIZE]  + source[-Block0StrideZ*CELLSIZE] - 2.0*source[0]);//вторая по z
-    result[1] = dx2*(source[-Block0StrideX*CELLSIZE + 1] + source[-Block0StrideX*CELLSIZE + 1] - 2.0*source[1]) //вторая по x
-              + dy2*(source[Block0StrideY*CELLSIZE + 1]  + source[-Block0StrideY*CELLSIZE + 1] - 2.0*source[1]) //вторая по y
-              + dz2*(source[Block0StrideZ*CELLSIZE + 1]  + source[-Block0StrideZ*CELLSIZE + 1] - 2.0*source[1]);//вторая по z
-}
-
-//сторона y=0
-void Block0DefaultNeumannBound2(double* result, double* source, double t){           
-    result[0] = dx2*(source[Block0StrideX*CELLSIZE] + source[-Block0StrideX*CELLSIZE] - 2.0*source[0]) //вторая по x
-              + dy2*(source[Block0StrideY*CELLSIZE] + source[Block0StrideY*CELLSIZE] - 2.0*source[0]) //вторая по y
-              + dz2*(source[Block0StrideZ*CELLSIZE] + source[-Block0StrideZ*CELLSIZE] - 2.0*source[0]);//вторая по z
-    result[1] = dx2*(source[Block0StrideX*CELLSIZE + 1] + source[-Block0StrideX*CELLSIZE + 1] - 2.0*source[1]) //вторая по x
-              + dy2*(source[Block0StrideY*CELLSIZE + 1] + source[Block0StrideY*CELLSIZE + 1] - 2.0*source[1]) //вторая по y
-              + dz2*(source[Block0StrideZ*CELLSIZE + 1] + source[-Block0StrideZ*CELLSIZE + 1] - 2.0*source[1]);//вторая по z
-}
-
-//сторона y=ymax
-void Block0DefaultNeumannBound3(double* result, double* source, double t){           
-    result[0] = dx2*(source[Block0StrideX*CELLSIZE]  + source[-Block0StrideX*CELLSIZE] - 2.0*source[0]) //вторая по x
-              + dy2*(-source[Block0StrideY*CELLSIZE] + source[-Block0StrideY*CELLSIZE] - 2.0*source[0]) //вторая по y
-              + dz2*(source[Block0StrideZ*CELLSIZE]  + source[-Block0StrideZ*CELLSIZE] - 2.0*source[0]);//вторая по z
-    result[1] = dx2*(source[Block0StrideX*CELLSIZE + 1]  + source[-Block0StrideX*CELLSIZE + 1] - 2.0*source[1]) //вторая по x
-              + dy2*(-source[Block0StrideY*CELLSIZE + 1] + source[-Block0StrideY*CELLSIZE + 1] - 2.0*source[1]) //вторая по y
-              + dz2*(source[Block0StrideZ*CELLSIZE + 1]  + source[-Block0StrideZ*CELLSIZE + 1] - 2.0*source[1]);//вторая по z
-}
-
-//сторона z=0
-void Block0DefaultNeumannBound4(double* result, double* source, double t){           
-    result[0] = dx2*(source[Block0StrideX*CELLSIZE] + source[-Block0StrideX*CELLSIZE] - 2.0*source[0]) //вторая по x
-              + dy2*(source[Block0StrideY*CELLSIZE] + source[-Block0StrideY*CELLSIZE] - 2.0*source[0]) //вторая по y
-              + dz2*(source[Block0StrideZ*CELLSIZE] + source[Block0StrideZ*CELLSIZE] - 2.0*source[0]);//вторая по z
-    result[1] = dx2*(source[Block0StrideX*CELLSIZE + 1] + source[-Block0StrideX*CELLSIZE + 1] - 2.0*source[1]) //вторая по x
-              + dy2*(source[Block0StrideY*CELLSIZE + 1] + source[-Block0StrideY*CELLSIZE + 1] - 2.0*source[1]) //вторая по y
-              + dz2*(source[Block0StrideZ*CELLSIZE + 1] + source[Block0StrideZ*CELLSIZE + 1] - 2.0*source[1]);//вторая по z
-}
-
-//сторона z=zmax
-void Block0DefaultNeumannBound5(double* result, double* source, double t){           
-    result[0] = dx2*(source[Block0StrideX*CELLSIZE]  + source[-Block0StrideX*CELLSIZE] - 2.0*source[0]) //вторая по x
-              + dy2*(source[Block0StrideY*CELLSIZE]  + source[-Block0StrideY*CELLSIZE] - 2.0*source[0]) //вторая по y
-              + dz2*(source[-Block0StrideZ*CELLSIZE] + source[-Block0StrideZ*CELLSIZE] - 2.0*source[0]);//вторая по z
-    result[1] = dx2*(source[Block0StrideX*CELLSIZE + 1]  + source[-Block0StrideX*CELLSIZE + 1] - 2.0*source[1]) //вторая по x
-              + dy2*(source[Block0StrideY*CELLSIZE + 1]  + source[-Block0StrideY*CELLSIZE + 1] - 2.0*source[1]) //вторая по y
-              + dz2*(source[-Block0StrideZ*CELLSIZE + 1] + source[-Block0StrideZ*CELLSIZE + 1] - 2.0*source[1]);//вторая по z
+//сторона z=0, y=0, x=0
+void Block0DefaultNeumannBound0(double* result, double* source, double t, int idxX, idxY, idxZ, double* params, double** ic){       
+    int idx = (idxZ * Block0StrideZ + idxY * Block0StrideY + idxX) * CELLSIZE;    
+    result[idx]  = 1.0 + source[idx]*source[idx]*source[idx+1] - params[1]*source[idx] + params[0] * (
+                 + dx2*(source[idx+Block0StrideX*CELLSIZE] + source[idx+Block0StrideX*CELLSIZE] - 2.0*source[idx]) 
+                 + dy2*(source[idx+Block0StrideY*CELLSIZE] + source[idx+Block0StrideY*CELLSIZE] - 2.0*source[idx]) );
+    result[idx+1] =  params[2] * source[idx] - source[idx] * source[idx] * source[idx+1] + params[0] * (
+                  + dx2*(source[idx+Block0StrideX*CELLSIZE + 1] + source[idx+Block0StrideX*CELLSIZE + 1] - 2.0*source[idx+1])
+                  + dy2*(source[idx+Block0StrideY*CELLSIZE + 1] + source[idx+Block0StrideY*CELLSIZE + 1] - 2.0*source[idx+1]) );                  
 }
 
 
-//Блок1
-//сторона x=0
-void Block1DefaultNeumannBound0(double* result, double* source, double t){           
-    result[0] = dx2*(source[Block1StrideX*CELLSIZE] + source[Block1StrideX*CELLSIZE] - 2.0*source[0]) //вторая по x
-              + dy2*(source[Block1StrideY*CELLSIZE] + source[-Block1StrideY*CELLSIZE] - 2.0*source[0]) //вторая по y
-              + dz2*(source[Block1StrideZ*CELLSIZE] + source[-Block1StrideZ*CELLSIZE] - 2.0*source[0]);//вторая по z
-    result[1] = dx2*(source[Block1StrideX*CELLSIZE + 1] + source[Block1StrideX*CELLSIZE + 1] - 2.0*source[1]) //вторая по x
-              + dy2*(source[Block1StrideY*CELLSIZE + 1] + source[-Block1StrideY*CELLSIZE + 1] - 2.0*source[1]) //вторая по y
-              + dz2*(source[Block1StrideZ*CELLSIZE + 1] + source[-Block1StrideZ*CELLSIZE + 1] - 2.0*source[1]);//вторая по z
-}
-
-//сторона x=xmax
-void Block1DefaultNeumannBound1(double* result, double* source, double t){           
-    result[0] = dx2*(source[-Block1StrideX*CELLSIZE] + source[-Block1StrideX*CELLSIZE] - 2.0*source[0]) //вторая по x
-              + dy2*(source[Block1StrideY*CELLSIZE]  + source[-Block1StrideY*CELLSIZE] - 2.0*source[0]) //вторая по y
-              + dz2*(source[Block1StrideZ*CELLSIZE]  + source[-Block1StrideZ*CELLSIZE] - 2.0*source[0]);//вторая по z
-    result[1] = dx2*(source[-Block1StrideX*CELLSIZE + 1] + source[-Block1StrideX*CELLSIZE + 1] - 2.0*source[1]) //вторая по x
-              + dy2*(source[Block1StrideY*CELLSIZE + 1]  + source[-Block1StrideY*CELLSIZE + 1] - 2.0*source[1]) //вторая по y
-              + dz2*(source[Block1StrideZ*CELLSIZE + 1]  + source[-Block1StrideZ*CELLSIZE + 1] - 2.0*source[1]);//вторая по z
-}
-
-//сторона y=0
-void Block1DefaultNeumannBound2(double* result, double* source, double t){           
-    result[0] = dx2*(source[Block1StrideX*CELLSIZE] + source[-Block1StrideX*CELLSIZE] - 2.0*source[0]) //вторая по x
-              + dy2*(source[Block1StrideY*CELLSIZE] + source[Block1StrideY*CELLSIZE] - 2.0*source[0]) //вторая по y
-              + dz2*(source[Block1StrideZ*CELLSIZE] + source[-Block1StrideZ*CELLSIZE] - 2.0*source[0]);//вторая по z
-    result[1] = dx2*(source[Block1StrideX*CELLSIZE + 1] + source[-Block1StrideX*CELLSIZE + 1] - 2.0*source[1]) //вторая по x
-              + dy2*(source[Block1StrideY*CELLSIZE + 1] + source[Block1StrideY*CELLSIZE + 1] - 2.0*source[1]) //вторая по y
-              + dz2*(source[Block1StrideZ*CELLSIZE + 1] + source[-Block1StrideZ*CELLSIZE + 1] - 2.0*source[1]);//вторая по z
-}
-
-//сторона y=ymax
-void Block1DefaultNeumannBound3(double* result, double* source, double t){           
-    result[0] = dx2*(source[Block1StrideX*CELLSIZE]  + source[-Block1StrideX*CELLSIZE] - 2.0*source[0]) //вторая по x
-              + dy2*(-source[Block1StrideY*CELLSIZE] + source[-Block1StrideY*CELLSIZE] - 2.0*source[0]) //вторая по y
-              + dz2*(source[Block1StrideZ*CELLSIZE]  + source[-Block1StrideZ*CELLSIZE] - 2.0*source[0]);//вторая по z
-    result[1] = dx2*(source[Block1StrideX*CELLSIZE + 1]  + source[-Block1StrideX*CELLSIZE + 1] - 2.0*source[1]) //вторая по x
-              + dy2*(-source[Block1StrideY*CELLSIZE + 1] + source[-Block1StrideY*CELLSIZE + 1] - 2.0*source[1]) //вторая по y
-              + dz2*(source[Block1StrideZ*CELLSIZE + 1]  + source[-Block1StrideZ*CELLSIZE + 1] - 2.0*source[1]);//вторая по z
-}
-
-//сторона z=0
-void Block1DefaultNeumannBound4(double* result, double* source, double t){           
-    result[0] = dx2*(source[Block1StrideX*CELLSIZE] + source[-Block1StrideX*CELLSIZE] - 2.0*source[0]) //вторая по x
-              + dy2*(source[Block1StrideY*CELLSIZE] + source[-Block1StrideY*CELLSIZE] - 2.0*source[0]) //вторая по y
-              + dz2*(source[Block1StrideZ*CELLSIZE] + source[Block1StrideZ*CELLSIZE] - 2.0*source[0]);//вторая по z
-    result[1] = dx2*(source[Block1StrideX*CELLSIZE + 1] + source[-Block1StrideX*CELLSIZE + 1] - 2.0*source[1]) //вторая по x
-              + dy2*(source[Block1StrideY*CELLSIZE + 1] + source[-Block1StrideY*CELLSIZE + 1] - 2.0*source[1]) //вторая по y
-              + dz2*(source[Block1StrideZ*CELLSIZE + 1] + source[Block1StrideZ*CELLSIZE + 1] - 2.0*source[1]);//вторая по z
-}
-
-//сторона z=zmax
-void Block1DefaultNeumannBound5(double* result, double* source, double t){           
-    result[0] = dx2*(source[Block1StrideX*CELLSIZE]  + source[-Block1StrideX*CELLSIZE] - 2.0*source[0]) //вторая по x
-              + dy2*(source[Block1StrideY*CELLSIZE]  + source[-Block1StrideY*CELLSIZE] - 2.0*source[0]) //вторая по y
-              + dz2*(source[-Block1StrideZ*CELLSIZE] + source[-Block1StrideZ*CELLSIZE] - 2.0*source[0]);//вторая по z
-    result[1] = dx2*(source[Block1StrideX*CELLSIZE + 1]  + source[-Block1StrideX*CELLSIZE + 1] - 2.0*source[1]) //вторая по x
-              + dy2*(source[Block1StrideY*CELLSIZE + 1]  + source[-Block1StrideY*CELLSIZE + 1] - 2.0*source[1]) //вторая по y
-              + dz2*(source[-Block1StrideZ*CELLSIZE + 1] + source[-Block1StrideZ*CELLSIZE + 1] - 2.0*source[1]);//вторая по z
-}
 
 
 
@@ -293,7 +183,7 @@ void Block0MainFunc(double* result,
                                         // или набора интерконнектов (набор у каждого блока свой,
                                         // чтобы не плодить, а список функций один для всех)
                     double** ic,
-                    boundfunc_ptr_t* pBoundFuncs.
+                    func_ptr_t* pFuncs.
                     double* params    ){
       
     int cellStart = 0;
