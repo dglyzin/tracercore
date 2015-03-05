@@ -15,7 +15,6 @@ using namespace std;
  * Логика функции аналогична функции для центрального процессора.
  */
 __global__ void calc ( double* matrix, double* newMatrix, int length, int width, double dX2, double dY2, double dT, int **recieveBorderType, double** externalBorder, int* externalBorderMove ) {
-	printf("\nSTART OF CALC\n");
 	double top, left, bottom, right, cur;
 
 	int i = BLOCK_LENGHT_SIZE * blockIdx.x + threadIdx.x;
@@ -263,9 +262,7 @@ void BlockGpu::computeOneStep(double dX2, double dY2, double dT) {
 	dim3 threads ( BLOCK_LENGHT_SIZE, BLOCK_WIDTH_SIZE );
 	dim3 blocks  ( (int)ceil((double)length / threads.x), (int)ceil((double)width / threads.y) );
 
-	printf("\n***\n");
 	calc <<< blocks, threads >>> ( matrix, newMatrix, length, width, dX2, dY2, dT, receiveBorderTypeOnDevice, externalBorderOnDevice, externalBorderMove );
-	printf("\n###\n");
 	
 	double* tmp = matrix;
 
@@ -490,6 +487,9 @@ double* BlockGpu::addNewBlockBorder(Block* neighbor, int side, int move, int bor
 		
 		if( isGPU( neighbor->getBlockType() ) && deviceNumber != neighbor->getDeviceNumber() )
 			cudaMallocHost ( (void**)&newBlockBorder, borderLength * sizeof(double) );
+		
+		if( isGPU( neighbor->getBlockType() ) && deviceNumber == neighbor->getDeviceNumber() )
+			cudaMalloc ( (void**)&newBlockBorder, borderLength * sizeof(double) );
 	}
 	else
 		cudaMalloc ( (void**)&newBlockBorder, borderLength * sizeof(double) );

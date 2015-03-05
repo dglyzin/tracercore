@@ -129,13 +129,6 @@ void Domain::count(char* saveFile) {
 	double dX = 1./widthArea;
 	double dY = 1./lengthArea;
 
-	for (int i = 0; i < blockCount; ++i) {
-		mBlocks[i]->print();
-	}
-
-	char c;
-	scanf("%c", &c);
-
 	/*
 	 * Аналогично вышенаписанному
 	 */
