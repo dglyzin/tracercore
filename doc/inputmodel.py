@@ -187,13 +187,17 @@ class Equation(object):
     def fillProperties(self, dict):
         self.name = dict["Name"]
         self.vars = dict["Vars"]
-        self.system = dict["System"]        
+        self.system = dict["System"]
+        self.params = dict["Params"]
+        self.paramValues = dict["ParamValues"]
    
     def getPropertiesDict(self):          
         propDict = OrderedDict([            
             ("Name", self.name),
             ("Vars", self.vars),
-            ("System", self.system)            
+            ("System", self.system),
+            ("Params", self.params),
+            ("ParamValues", self.paramValues)
         ])   
         return propDict  
 
