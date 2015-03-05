@@ -167,9 +167,6 @@ BlockGpu::BlockGpu(int _length, int _width, int _lengthMove, int _widthMove, int
 	cudaMalloc( (void**)&matrix, width * length * sizeof(double) );
 	cudaMalloc( (void**)&newMatrix, width * length * sizeof(double) );
 	
-	printf("\nmatrix %u\n", matrix);
-	printf("\nnewMatrix %u\n", newMatrix);
-	
 	assignDoubleArray <<< blocksLengthWidth, threads >>> ( matrix, 0, length * width);
 	assignDoubleArray <<< blocksLengthWidth, threads >>> ( newMatrix, 0, length * width);
 
@@ -212,17 +209,6 @@ BlockGpu::BlockGpu(int _length, int _width, int _lengthMove, int _widthMove, int
 	cudaMemcpy( receiveBorderTypeOnDevice, receiveBorderType, BORDER_COUNT * sizeof(int*), cudaMemcpyHostToDevice );
 	
 	result = new double [length * width];
-	
-	cudaEvent_t e;
-	cudaEventCreate(&e);
-	cudaEventSynchronize(e);
-	
-	if( cudaGetLastError() == cudaSuccess )
-		printf("\nCREATE OK\n");
-	else {
-		printf("\nKERNEL CREATE ERROR!!!\n");
-		exit(0);
-	}
 }
 
 BlockGpu::~BlockGpu() {
@@ -283,17 +269,6 @@ void BlockGpu::computeOneStep(double dX2, double dY2, double dT) {
 	matrix = newMatrix;
 
 	newMatrix = tmp;
-	
-	cudaEvent_t e;
-	cudaEventCreate(&e);
-	cudaEventSynchronize(e);
-	
-	if( cudaGetLastError() == cudaSuccess )
-		printf("\nONE STEP OK\n");
-	else {
-		printf("\nKERNEL ONE STEP ERROR!!!\n");
-		exit(0);
-	}
 }
 
 void BlockGpu::prepareData() {
@@ -307,17 +282,6 @@ void BlockGpu::prepareData() {
 	copyBorderFromMatrix <<< blocksLength, threads >>> (blockBorderOnDevice, matrix, sendBorderTypeOnDevice, blockBorderMove, LEFT, length, width);
 	copyBorderFromMatrix <<< blocksWidth, threads >>> (blockBorderOnDevice, matrix, sendBorderTypeOnDevice, blockBorderMove, BOTTOM, length, width);
 	copyBorderFromMatrix <<< blocksLength, threads >>> (blockBorderOnDevice, matrix, sendBorderTypeOnDevice, blockBorderMove, RIGHT, length, width);
-	
-	cudaEvent_t e;
-	cudaEventCreate(&e);
-	cudaEventSynchronize(e);
-	
-	if( cudaGetLastError() == cudaSuccess )
-		printf("\nPREPARE OK\n");
-	else {
-		printf("\nKERNEL PREPARE ERROR!!!\n");
-		exit(0);
-	}
 }
 
 double* BlockGpu::getResult() {
@@ -529,34 +493,10 @@ double* BlockGpu::addNewBlockBorder(Block* neighbor, int side, int move, int bor
 	}
 	else
 		cudaMalloc ( (void**)&newBlockBorder, borderLength * sizeof(double) );
-	
-	cudaEvent_t e1;
-	cudaEventCreate(&e1);
-	cudaEventSynchronize(e1);
-	
-	if( cudaGetLastError() == cudaSuccess )
-		printf("\nMEMORY OK\n");
-	else {
-		printf("\nKERNEL MEMORY ERROR!!!\n");
-		exit(0);
-	}
 
 	tempBlockBorder.push_back(newBlockBorder);
 	tempBlockBorderMove.push_back(move);
-	
-	cudaEvent_t e;
-	cudaEventCreate(&e);
-	cudaEventSynchronize(e);
-	
-	if( cudaGetLastError() == cudaSuccess )
-		printf("\nADD BORDER OK\n");
-	else {
-		printf("\nKERNEL ADD BORDER ERROR!!!\n");
-		exit(0);
-	}
 
-	cout << endl << "border " << newBlockBorder << " " << borderLength << endl;
-	printf("\nborder %u\n", newBlockBorder);
 	return newBlockBorder;
 }
 
@@ -577,41 +517,14 @@ double* BlockGpu::addNewExternalBorder(Block* neighbor, int side, int move, int 
 
 	double* newExternalBorder;
 
-	if( nodeNumber == neighbor->getNodeNumber() ) {
+	if( nodeNumber == neighbor->getNodeNumber() )
 		newExternalBorder = border;
-		printf("\n!!!!!!!!!!!!!!!!!!!!!!\n");
-	}
-	else {
+	else
 		cudaMalloc ( (void**)&newExternalBorder, borderLength * sizeof(double) );
-	}
-	
-	cudaEvent_t e1;
-	cudaEventCreate(&e1);
-	cudaEventSynchronize(e1);
-	
-	if( cudaGetLastError() == cudaSuccess )
-		printf("\nMEMORY OK\n");
-	else {
-		printf("\nKERNEL MEMORY ERROR!!!\n");
-		exit(0);
-	}
 
 	tempExternalBorder.push_back(newExternalBorder);
 	tempExternalBorderMove.push_back(move);
-	
-	cudaEvent_t e;
-	cudaEventCreate(&e);
-	cudaEventSynchronize(e);
-	
-	if( cudaGetLastError() == cudaSuccess )
-		printf("\nADD EXTERNAL OK\n");
-	else {
-		printf("\nKERNEL ADD EXTERNAL ERROR!!!\n");
-		exit(0);
-	}
 
-	cout << endl << "external " << newExternalBorder << " " << borderLength << endl;
-	printf("\nexternal %u\n", newExternalBorder);
 	return newExternalBorder;
 }
 
@@ -653,32 +566,10 @@ void BlockGpu::moveTempBorderVectorToBorderArray() {
 	
 	delete tempBlockBorderMoveArray;
 	delete tempExternalBorderMoveArray;
-	
-	cudaEvent_t e;
-	cudaEventCreate(&e);
-	cudaEventSynchronize(e);
-	
-	if( cudaGetLastError() == cudaSuccess )
-		printf("\nMOVE OK\n");
-	else {
-		printf("\nKERNEL MOVE ERROR!!!\n");
-		exit(0);
-	}
 }
 
 void BlockGpu::loadData(double* data) {
 	cudaSetDevice(deviceNumber);
 	
 	cudaMemcpy( matrix, data, sizeof(double) * length * width, cudaMemcpyHostToDevice );
-	
-	cudaEvent_t e;
-	cudaEventCreate(&e);
-	cudaEventSynchronize(e);
-	
-	if( cudaGetLastError() == cudaSuccess )
-		printf("\nLOAD OK\n");
-	else {
-		printf("\nKERNEL LOAD ERROR!!!\n");
-		exit(0);
-	}
 }
