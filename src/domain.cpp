@@ -178,7 +178,6 @@ void Domain::nextStep(double dX2, double dY2, double dT) {
 	{
 		for (int i = 0; i < blockCount; ++i)
 			if( mBlocks[i]->getBlockType() == GPU && mBlocks[i]->getDeviceNumber() == 0 ) {
-				mBlocks[i]->computeOneStep(dX2, dY2, dT);
 				mBlocks[i]->prepareData();
 			}
 	}
@@ -187,7 +186,6 @@ void Domain::nextStep(double dX2, double dY2, double dT) {
 	{
 		for (int i = 0; i < blockCount; ++i)
 			if( mBlocks[i]->getBlockType() == GPU && mBlocks[i]->getDeviceNumber() == 1 ) {
-				mBlocks[i]->computeOneStep(dX2, dY2, dT);
 				mBlocks[i]->prepareData();
 			}
 	}
@@ -196,7 +194,6 @@ void Domain::nextStep(double dX2, double dY2, double dT) {
 	{
 		for (int i = 0; i < blockCount; ++i)
 			if( mBlocks[i]->getBlockType() == GPU && mBlocks[i]->getDeviceNumber() == 2 ) {
-				mBlocks[i]->computeOneStep(dX2, dY2, dT);
 				mBlocks[i]->prepareData();
 			}
 	}
@@ -205,8 +202,46 @@ void Domain::nextStep(double dX2, double dY2, double dT) {
 	{
 		for (int i = 0; i < blockCount; ++i)
 			if( mBlocks[i]->getBlockType() == CPU ) {
-				mBlocks[i]->computeOneStep(dX2, dY2, dT);
 				mBlocks[i]->prepareData();
+			}
+	}
+
+
+
+	for (int i = 0; i < connectionCount; ++i)
+		mInterconnects[i]->sendRecv(world_rank);
+
+
+
+#pragma omp task
+	{
+		for (int i = 0; i < blockCount; ++i)
+			if( mBlocks[i]->getBlockType() == GPU && mBlocks[i]->getDeviceNumber() == 0 ) {
+				mBlocks[i]->computeOneStep(dX2, dY2, dT);
+			}
+	}
+
+#pragma omp task
+	{
+		for (int i = 0; i < blockCount; ++i)
+			if( mBlocks[i]->getBlockType() == GPU && mBlocks[i]->getDeviceNumber() == 1 ) {
+				mBlocks[i]->computeOneStep(dX2, dY2, dT);
+			}
+	}
+
+#pragma omp task
+	{
+		for (int i = 0; i < blockCount; ++i)
+			if( mBlocks[i]->getBlockType() == GPU && mBlocks[i]->getDeviceNumber() == 2 ) {
+				mBlocks[i]->computeOneStep(dX2, dY2, dT);
+			}
+	}
+
+#pragma omp task
+	{
+		for (int i = 0; i < blockCount; ++i)
+			if( mBlocks[i]->getBlockType() == CPU ) {
+				mBlocks[i]->computeOneStep(dX2, dY2, dT);
 			}
 	}
 
@@ -214,8 +249,6 @@ void Domain::nextStep(double dX2, double dY2, double dT) {
 	 * Все данные пересылаются
 	 * Данная операция не поддается параллельному исполнению, поэтому выполняется отдельно.
 	 */
-	for (int i = 0; i < connectionCount; ++i)
-		mInterconnects[i]->sendRecv(world_rank);
 }
 
 void Domain::print(char* path) {

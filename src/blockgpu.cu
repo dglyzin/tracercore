@@ -252,6 +252,32 @@ BlockGpu::~BlockGpu() {
 		delete receiveBorderType;
 	}
 	
+	
+	if(blockBorder != NULL) {
+		for(int i = 0; i < countSendSegmentBorder; i++ )
+			freeMemory(blockBorderMemoryAllocType[i], blockBorder[i]);
+		
+		delete blockBorder;
+		cudaFree(blockBorderOnDevice);
+		delete blockBorderMemoryAllocType;
+	}
+	
+	if(blockBorderMove != NULL)
+		cudaFree(blockBorderMove);
+	
+	
+	if(externalBorder != NULL) {
+		for(int i = 0; i < countReceiveSegmentBorder; i++ )
+			freeMemory(externalBorderMemoryAllocType[i], externalBorder[i]);
+		
+		delete externalBorder;
+		cudaFree(externalBorderOnDevice);
+		delete externalBorderMemoryAllocType;
+	}
+	
+	if(externalBorderMove != NULL)
+		cudaFree(externalBorderMove);
+	
 	if(result != NULL)
 		delete result;
 }
@@ -460,7 +486,30 @@ void BlockGpu::print() {
 	delete receiveBorderTypeToPrint[RIGHT];
 	delete receiveBorderTypeToPrint;
 	
-	delete blockBorderMoveToPrint;
+	delete blockBorderMoveToPrint;	
+	
+	if(blockBorder != NULL) {
+		for(int i = 0; i < countSendSegmentBorder; i++ )
+			freeMemory(blockBorderMemoryAllocType[i], blockBorder[i]);
+		
+		delete blockBorder;
+		delete blockBorderMemoryAllocType;
+	}
+	
+	if(blockBorderMove != NULL)
+		delete blockBorderMove;
+	
+	
+	if(externalBorder != NULL) {
+		for(int i = 0; i < countReceiveSegmentBorder; i++ )
+			freeMemory(externalBorderMemoryAllocType[i], externalBorder[i]);
+		
+		delete externalBorder;
+		delete externalBorderMemoryAllocType;
+	}
+	
+	if(externalBorderMove != NULL)
+		delete externalBorderMove;
 	delete externalBorderMoveToPrint;
 }
 
@@ -482,17 +531,25 @@ double* BlockGpu::addNewBlockBorder(Block* neighbor, int side, int move, int bor
 	double* newBlockBorder;
 
 	if( nodeNumber == neighbor->getNodeNumber() ) {
-		if( isCPU( neighbor->getBlockType() ) )
+		if( isCPU( neighbor->getBlockType() ) ) {
 			cudaMallocHost ( (void**)&newBlockBorder, borderLength * sizeof(double) );
+			tempBlockBorderMemoryAllocType.push_back(CUDA_MALLOC_HOST);
+		}
 		
-		if( isGPU( neighbor->getBlockType() ) && deviceNumber != neighbor->getDeviceNumber() )
+		if( isGPU( neighbor->getBlockType() ) && deviceNumber != neighbor->getDeviceNumber() ) {
 			cudaMallocHost ( (void**)&newBlockBorder, borderLength * sizeof(double) );
+			tempBlockBorderMemoryAllocType.push_back(CUDA_MALLOC_HOST);
+		}
 		
-		if( isGPU( neighbor->getBlockType() ) && deviceNumber == neighbor->getDeviceNumber() )
+		if( isGPU( neighbor->getBlockType() ) && deviceNumber == neighbor->getDeviceNumber() ) {
 			cudaMalloc ( (void**)&newBlockBorder, borderLength * sizeof(double) );
+			tempBlockBorderMemoryAllocType.push_back(CUDA_MALLOC);
+		}
 	}
-	else
+	else {
 		cudaMalloc ( (void**)&newBlockBorder, borderLength * sizeof(double) );
+		tempBlockBorderMemoryAllocType.push_back(CUDA_MALLOC);
+	}
 
 	tempBlockBorder.push_back(newBlockBorder);
 	tempBlockBorderMove.push_back(move);
@@ -517,10 +574,14 @@ double* BlockGpu::addNewExternalBorder(Block* neighbor, int side, int move, int 
 
 	double* newExternalBorder;
 
-	if( nodeNumber == neighbor->getNodeNumber() )
+	if( nodeNumber == neighbor->getNodeNumber() ) {
 		newExternalBorder = border;
-	else
+		tempExternalBorderMemoryAllocType.push_back(NOT_ALLOC);
+	}
+	else {
 		cudaMalloc ( (void**)&newExternalBorder, borderLength * sizeof(double) );
+		tempExternalBorderMemoryAllocType.push_back(CUDA_MALLOC);
+	}
 
 	tempExternalBorder.push_back(newExternalBorder);
 	tempExternalBorderMove.push_back(move);
@@ -533,18 +594,23 @@ void BlockGpu::moveTempBorderVectorToBorderArray() {
 	
 	blockBorder = new double* [countSendSegmentBorder];
 	int* tempBlockBorderMoveArray = new int [countSendSegmentBorder];
+	blockBorderMemoryAllocType = new int [countSendSegmentBorder];
 
 	externalBorder = new double* [countReceiveSegmentBorder];
 	int* tempExternalBorderMoveArray = new int [countReceiveSegmentBorder];
+	externalBorderMemoryAllocType = new int [countReceiveSegmentBorder];	
+	
 
 	for (int i = 0; i < countSendSegmentBorder; ++i) {
 		blockBorder[i] = tempBlockBorder.at(i);
 		tempBlockBorderMoveArray[i] = tempBlockBorderMove.at(i);
+		blockBorderMemoryAllocType[i] = tempBlockBorderMemoryAllocType.at(i);
 	}
 
 	for (int i = 0; i < countReceiveSegmentBorder; ++i) {
 		externalBorder[i] = tempExternalBorder.at(i);
 		tempExternalBorderMoveArray[i] = tempExternalBorderMove.at(i);
+		externalBorderMemoryAllocType[i] = tempExternalBorderMemoryAllocType.at(i);
 	}
 
 	tempBlockBorder.clear();
