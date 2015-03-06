@@ -38,6 +38,10 @@ public:
 
 	void print();
 
+	void wait() {
+		MPI_Wait(&request, &status);
+	}
+
 private:
 	/*
 	 * Номер потока с исходными данными
