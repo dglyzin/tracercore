@@ -8,7 +8,6 @@ using namespace std;
 
 int main(int argc, char * argv[]) {
 	/*
-	 * TODO Деструктор для видеокарты
 	 * TODO Границы - пересылка - расчет центра
 	 */
 

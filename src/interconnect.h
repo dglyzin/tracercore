@@ -39,6 +39,7 @@ public:
 	void print();
 
 	void wait() {
+		printf("\nDEAD LOCK MAYBE\n");
 		MPI_Wait(&request, &status);
 	}
 
