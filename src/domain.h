@@ -151,6 +151,7 @@ private:
 	double** collectDataFromNode();
 
 	void prepareData();
+	void computeOneStep(double dX2, double dY2, double dT);
 };
 
 #endif /* SRC_DOMAIN_H_ */
