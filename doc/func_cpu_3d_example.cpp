@@ -84,13 +84,24 @@ typedef void (*func_ptr_t)(double* result, double* source, double t, int idxX, i
 //Блок0
 //сторона z=0, y=0, x=0
 void Block0DefaultNeumannBound0(double* result, double* source, double t, int idxX, idxY, idxZ, double* params, double** ic){       
-    int idx = (idxZ * Block0StrideZ + idxY * Block0StrideY + idxX) * CELLSIZE;    
+    int idx = (idxZ * Block0StrideZ + idxY * Block0StrideY + idxX) * CELLSIZE;
     result[idx]  = 1.0 + source[idx]*source[idx]*source[idx+1] - params[1]*source[idx] + params[0] * (
                  + dx2*(source[idx+Block0StrideX*CELLSIZE] + source[idx+Block0StrideX*CELLSIZE] - 2.0*source[idx]) 
                  + dy2*(source[idx+Block0StrideY*CELLSIZE] + source[idx+Block0StrideY*CELLSIZE] - 2.0*source[idx]) );
     result[idx+1] =  params[2] * source[idx] - source[idx] * source[idx] * source[idx+1] + params[0] * (
                   + dx2*(source[idx+Block0StrideX*CELLSIZE + 1] + source[idx+Block0StrideX*CELLSIZE + 1] - 2.0*source[idx+1])
-                  + dy2*(source[idx+Block0StrideY*CELLSIZE + 1] + source[idx+Block0StrideY*CELLSIZE + 1] - 2.0*source[idx+1]) );                  
+                  + dy2*(source[idx+Block0StrideY*CELLSIZE + 1] + source[idx+Block0StrideY*CELLSIZE + 1] - 2.0*source[idx+1]) );
+}
+
+//сторона z=0, y=0, x центральные
+void Block0DefaultNeumannBound0(double* result, double* source, double t, int idxX, idxY, idxZ, double* params, double** ic){       
+    int idx = (idxZ * Block0StrideZ + idxY * Block0StrideY + idxX) * CELLSIZE;
+    result[idx]  = 1.0 + source[idx]*source[idx]*source[idx+1] - params[1]*source[idx] + params[0] * (
+                 + dx2*(source[idx+Block0StrideX*CELLSIZE] + source[idx+Block0StrideX*CELLSIZE] - 2.0*source[idx]) 
+                 + dy2*(source[idx+Block0StrideY*CELLSIZE] + source[idx+Block0StrideY*CELLSIZE] - 2.0*source[idx]) );
+    result[idx+1] =  params[2] * source[idx] - source[idx] * source[idx] * source[idx+1] + params[0] * (
+                  + dx2*(source[idx+Block0StrideX*CELLSIZE + 1] + source[idx+Block0StrideX*CELLSIZE + 1] - 2.0*source[idx+1])
+                  + dy2*(source[idx+Block0StrideY*CELLSIZE + 1] + source[idx+Block0StrideY*CELLSIZE + 1] - 2.0*source[idx+1]) );
 }
 
 
