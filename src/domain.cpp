@@ -174,39 +174,7 @@ void Domain::nextStep(double dX2, double dY2, double dT) {
 	 *
 	 * Внутри выполняется простая проверка на тип блока, что бы вызывать работу только подходящих блоков.
 	 */
-#pragma omp task
-	{
-		for (int i = 0; i < blockCount; ++i)
-			if( mBlocks[i]->getBlockType() == GPU && mBlocks[i]->getDeviceNumber() == 0 ) {
-				mBlocks[i]->prepareData();
-			}
-	}
-
-#pragma omp task
-	{
-		for (int i = 0; i < blockCount; ++i)
-			if( mBlocks[i]->getBlockType() == GPU && mBlocks[i]->getDeviceNumber() == 1 ) {
-				mBlocks[i]->prepareData();
-			}
-	}
-
-#pragma omp task
-	{
-		for (int i = 0; i < blockCount; ++i)
-			if( mBlocks[i]->getBlockType() == GPU && mBlocks[i]->getDeviceNumber() == 2 ) {
-				mBlocks[i]->prepareData();
-			}
-	}
-
-#pragma omp task
-	{
-		for (int i = 0; i < blockCount; ++i)
-			if( mBlocks[i]->getBlockType() == CPU ) {
-				mBlocks[i]->prepareData();
-			}
-	}
-
-
+	prepareData();
 
 	for (int i = 0; i < connectionCount; ++i)
 		mInterconnects[i]->sendRecv(world_rank);
@@ -249,6 +217,40 @@ void Domain::nextStep(double dX2, double dY2, double dT) {
 	 * Все данные пересылаются
 	 * Данная операция не поддается параллельному исполнению, поэтому выполняется отдельно.
 	 */
+}
+
+void Domain::prepareData() {
+#pragma omp task
+	{
+		for (int i = 0; i < blockCount; ++i)
+			if( mBlocks[i]->getBlockType() == GPU && mBlocks[i]->getDeviceNumber() == 0 ) {
+				mBlocks[i]->prepareData();
+			}
+	}
+
+#pragma omp task
+	{
+		for (int i = 0; i < blockCount; ++i)
+			if( mBlocks[i]->getBlockType() == GPU && mBlocks[i]->getDeviceNumber() == 1 ) {
+				mBlocks[i]->prepareData();
+			}
+	}
+
+#pragma omp task
+	{
+		for (int i = 0; i < blockCount; ++i)
+			if( mBlocks[i]->getBlockType() == GPU && mBlocks[i]->getDeviceNumber() == 2 ) {
+				mBlocks[i]->prepareData();
+			}
+	}
+
+#pragma omp task
+	{
+		for (int i = 0; i < blockCount; ++i)
+			if( mBlocks[i]->getBlockType() == CPU ) {
+				mBlocks[i]->prepareData();
+			}
+	}
 }
 
 void Domain::print(char* path) {

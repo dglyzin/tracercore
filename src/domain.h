@@ -149,6 +149,8 @@ private:
 	Interconnect* readConnection(std::ifstream& in);
 
 	double** collectDataFromNode();
+
+	void prepareData();
 };
 
 #endif /* SRC_DOMAIN_H_ */
