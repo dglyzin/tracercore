@@ -4,7 +4,7 @@ import sys
 import filecmp
 
 if __name__=='__main__':
-    InputFile = "input_example.json"
+    InputFile = "input_example2d.json"
     OutputFile = "input_example_re.json"
     model = Model()
     model.loadFromFile(InputFile)    
