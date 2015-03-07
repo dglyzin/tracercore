@@ -40,6 +40,7 @@ public:
 
 	void wait() {
 		printf("\nDEAD LOCK MAYBE\n");
+		MPI_Request_free(&request);
 		MPI_Wait(&request, &status);
 	}
 

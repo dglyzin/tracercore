@@ -299,6 +299,9 @@ void BlockCpu::computeOneStepBorder(double dX2, double dY2, double dT) {
 	 */
 	for (int i = 0; i < length; ++i)
 		for (int j = 0; j < width; ++j) {
+			
+			if( i > 0 && i < length - 1 && j > 0 && j < width - 1 )
+				continue;
 			/*
 			 * Если находимся на верхней границе блока.
 			 * В таком случае необходимо проверить тип границы и в зависимости от ответа принать решение.
