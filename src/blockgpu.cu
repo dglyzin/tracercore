@@ -71,6 +71,73 @@ __global__ void calc ( double* matrix, double* newMatrix, int length, int width,
 	}
 }
 
+__global__ void calcBorder ( double* matrix, double* newMatrix, int length, int width, double dX2, double dY2, double dT, int **recieveBorderType, double** externalBorder, int* externalBorderMove ) {
+	double top, left, bottom, right, cur;
+
+	int i = BLOCK_LENGHT_SIZE * blockIdx.x + threadIdx.x;
+	int j = BLOCK_WIDTH_SIZE * blockIdx.y + threadIdx.y;
+
+	if( i == 0 || i == length - 1 || j == 0 || j == width - 1 ) {
+		if( i == 0 )
+			if( recieveBorderType[TOP][j] == BY_FUNCTION ) {
+				newMatrix[i * width + j] = 100;
+				return;
+			}
+			else
+				top = externalBorder[	recieveBorderType[TOP][j]	][j - externalBorderMove[	recieveBorderType[TOP][j]	]];
+	
+	
+		if( j == 0 )
+			if( recieveBorderType[LEFT][i] == BY_FUNCTION ) {
+				newMatrix[i * width + j] = 10;
+				return;
+			}
+			else
+				left = externalBorder[	recieveBorderType[LEFT][i]	][i - externalBorderMove[	recieveBorderType[LEFT][i]		]];
+	
+	
+		if( i == length - 1 )
+			if( recieveBorderType[BOTTOM][j] == BY_FUNCTION ) {
+				newMatrix[i * width + j] = 10;
+				return;
+			}
+			else
+				bottom = externalBorder[	recieveBorderType[BOTTOM][j]	][j - externalBorderMove[	recieveBorderType[BOTTOM][j]	]];
+	
+	
+		if( j == width - 1 )
+			if( recieveBorderType[RIGHT][i] == BY_FUNCTION ) {
+				newMatrix[i * width + j] = 10;
+				return;
+			}
+			else
+				right = externalBorder[	recieveBorderType[RIGHT][i]	][i - externalBorderMove[	recieveBorderType[RIGHT][i]	]];
+
+	
+		cur = matrix[i * width + j];
+	
+		newMatrix[i * width + j] = cur + dT * ( ( left - 2*cur + right )/dX2 + ( top - 2*cur + bottom )/dY2  );
+	}
+}
+
+__global__ void calcCenter ( double* matrix, double* newMatrix, int length, int width, double dX2, double dY2, double dT, int **recieveBorderType, double** externalBorder, int* externalBorderMove ) {
+	double top, left, bottom, right, cur;
+
+	int i = BLOCK_LENGHT_SIZE * blockIdx.x + threadIdx.x;
+	int j = BLOCK_WIDTH_SIZE * blockIdx.y + threadIdx.y;
+
+	if( i > 0 && i < length - 1 && j > 0 && j < width - 1 ) {
+		top = matrix[(i - 1) * width + j];
+		left = matrix[i * width + (j - 1)];
+		bottom = matrix[(i + 1) * width + j];
+		right = matrix[i * width + (j + 1)];
+
+		cur = matrix[i * width + j];
+	
+		newMatrix[i * width + j] = cur + dT * ( ( left - 2*cur + right )/dX2 + ( top - 2*cur + bottom )/dY2  );
+	}
+}
+
 /*
  * Функция ядра
  * Заполнение целочисленного массива определенным значением.
