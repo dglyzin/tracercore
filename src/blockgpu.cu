@@ -364,6 +364,24 @@ void BlockGpu::computeOneStep(double dX2, double dY2, double dT) {
 	newMatrix = tmp;
 }
 
+void BlockGpu::computeOneStepBorder(double dX2, double dY2, double dT) {
+	cudaSetDevice(deviceNumber);
+		
+	dim3 threads ( BLOCK_LENGHT_SIZE, BLOCK_WIDTH_SIZE );
+	dim3 blocks  ( (int)ceil((double)length / threads.x), (int)ceil((double)width / threads.y) );
+
+	calcBorder <<< blocks, threads >>> ( matrix, newMatrix, length, width, dX2, dY2, dT, receiveBorderTypeOnDevice, externalBorderOnDevice, externalBorderMove );
+}
+
+void BlockGpu::computeOneStepCenter(double dX2, double dY2, double dT) {
+	cudaSetDevice(deviceNumber);
+		
+	dim3 threads ( BLOCK_LENGHT_SIZE, BLOCK_WIDTH_SIZE );
+	dim3 blocks  ( (int)ceil((double)length / threads.x), (int)ceil((double)width / threads.y) );
+
+	calcCenter <<< blocks, threads >>> ( matrix, newMatrix, length, width, dX2, dY2, dT, receiveBorderTypeOnDevice, externalBorderOnDevice, externalBorderMove );
+}
+
 void BlockGpu::prepareData() {
 	cudaSetDevice(deviceNumber);
 	
