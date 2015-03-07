@@ -26,7 +26,7 @@ public:
 
 	void computeOneStep(double dX2, double dY2, double dT);
 	void computeOneStepBorder(double dX2, double dY2, double dT);
-	void computerOneStepCenter(double dX2, double dY2, double dT);
+	void computeOneStepCenter(double dX2, double dY2, double dT);
 
 	int getBlockType() { return CPU; }
 
