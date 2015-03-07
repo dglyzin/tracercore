@@ -154,6 +154,7 @@ private:
 	void computeOneStep(double dX2, double dY2, double dT);
 	void computeOneStepBorder(double dX2, double dY2, double dT);
 	void computeOneStepCenter(double dX2, double dY2, double dT);
+	void swapBlockMatrix();
 };
 
 #endif /* SRC_DOMAIN_H_ */
