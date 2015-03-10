@@ -23,6 +23,11 @@ Interconnect::Interconnect(int _sourceLocationNode, int _destinationLocationNode
 
 	sourceBlockBorder = _sourceBlockBorder;
 	destinationExternalBorder = _destinationExternalBorder;
+
+	if( sourceLocationNode == destinationLocationNode )
+		request = NULL;
+	else
+		request = new MPI_Request();
 }
 
 Interconnect::~Interconnect() {
@@ -43,7 +48,7 @@ void Interconnect::sendRecv(int locationNode) {
 	 * Фактически этот поток РЕАЛЬНО содержить блок имеющий исходную информацию. Блок-источник.
 	 */
 	if(locationNode == sourceLocationNode) {
-		MPI_Send(sourceBlockBorder, borderLength, MPI_DOUBLE, destinationLocationNode, 999, MPI_COMM_WORLD);
+		MPI_Isend(sourceBlockBorder, borderLength, MPI_DOUBLE, destinationLocationNode, 999, MPI_COMM_WORLD, request);
 		return;
 	}
 
@@ -52,7 +57,7 @@ void Interconnect::sendRecv(int locationNode) {
 	 * Это поток РЕАЛЬНО имеет блок, которому необходима информация от другого блока.
 	 */
 	if(locationNode == destinationLocationNode) {
-		MPI_Recv(destinationExternalBorder, borderLength, MPI_DOUBLE, sourceLocationNode, 999, MPI_COMM_WORLD, &status);
+		MPI_Irecv(destinationExternalBorder, borderLength, MPI_DOUBLE, sourceLocationNode, 999, MPI_COMM_WORLD, request);
 		return;
 	}
 

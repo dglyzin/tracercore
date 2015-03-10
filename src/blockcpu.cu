@@ -299,45 +299,20 @@ void BlockCpu::computeOneStepBorder(double dX2, double dY2, double dT) {
 	 */
 	for (int i = 0; i < length; ++i)
 		for (int j = 0; j < width; ++j) {
-			
-			if( i > 0 && i < length - 1 && j > 0 && j < width - 1 )
+			if( i != 0 && i != length - 1 && j != 0 && j != width - 1 )
 				continue;
-			/*
-			 * Если находимся на верхней границе блока.
-			 * В таком случае необходимо проверить тип границы и в зависимости от ответа принать решение.
-			 *
-			 * Стоит отличать границу реальную от границы с блоком.
-			 * Если граница реальна, то точка на границе может не иметь значения выше / значения ниже и так далее, так как это реально границе ВСЕЙ ОБЛАСТИ.
-			 * Если эта граница с другим блоком, то значение выше / ниже сущесвтуют, так как это не граница области.
-			 * Значит их нужно получить и использовать при ирасчете нового значения.
-			 */
 			
 			if( i == 0 )
-				/*
-				 * На данный момент есть только 2 типа границы. Функция и другой блок.
-				 * Поэтому использование else корректно.
-				 *
-				 * Если граница задана функцией, то это значит,
-				 * что наданном этапе в массиве externalBorder уже должны лежать свежие данные от функции.
-				 * В таком случае просто копируем данные из массива в матрицу. Для этой ячейки расчет окончен.
-				 *
-				 * Если это граница с другим блоком, то в top (значение в ячейке выше данной) записываем информацию с гранцы.
-				 * Но продолжаем расчет.
-				 */
 				if( receiveBorderType[TOP][j] == BY_FUNCTION ) {
 					newMatrix[i * width + j] = 100;
 					continue;
 				}
 				else
 					top = externalBorder[	receiveBorderType[TOP][j]	][j - externalBorderMove[	receiveBorderType[TOP][j]	]];
+			else
+				top = matrix[(i - 1) * width + j];
 
 
-			/*
-			 * Аналогично предыдущему случаю.
-			 * Только здесь проверка на левую границу блока.
-			 *
-			 * Рассуждения полностью совпадают со случаем верхней границы.
-			 */
 			if( j == 0 )
 				if( receiveBorderType[LEFT][i] == BY_FUNCTION ) {
 					newMatrix[i * width + j] = 10;
@@ -345,12 +320,10 @@ void BlockCpu::computeOneStepBorder(double dX2, double dY2, double dT) {
 				}
 				else
 					left = externalBorder[	receiveBorderType[LEFT][i]	][i - externalBorderMove[	receiveBorderType[LEFT][i]		]];
+			else
+				left = matrix[i * width + (j - 1)];
 
 
-			/*
-			 * Аналогично первому случаю.
-			 * Граница нижняя.
-			 */
 			if( i == length - 1 )
 				if( receiveBorderType[BOTTOM][j] == BY_FUNCTION ) {
 					newMatrix[i * width + j] = 10;
@@ -358,12 +331,10 @@ void BlockCpu::computeOneStepBorder(double dX2, double dY2, double dT) {
 				}
 				else
 					bottom = externalBorder[	receiveBorderType[BOTTOM][j]	][j - externalBorderMove[	receiveBorderType[BOTTOM][j]	]];
+			else
+				bottom = matrix[(i + 1) * width + j];
 
 
-			/*
-			 * Аналогично первому случаю.
-			 * Граница правая.
-			 */
 			if( j == width - 1 )
 				if( receiveBorderType[RIGHT][i] == BY_FUNCTION ) {
 					newMatrix[i * width + j] = 10;
@@ -371,9 +342,11 @@ void BlockCpu::computeOneStepBorder(double dX2, double dY2, double dT) {
 				}
 				else
 					right = externalBorder[	receiveBorderType[RIGHT][i]	][i - externalBorderMove[	receiveBorderType[RIGHT][i]	]];
+			else
+				right = matrix[i * width + (j + 1)];
+
 
 			cur = matrix[i * width + j];
-
 			newMatrix[i * width + j] = cur + dT * ( ( left - 2*cur + right )/dX2 + ( top - 2*cur + bottom )/dY2  );
 		}
 	}

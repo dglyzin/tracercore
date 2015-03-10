@@ -188,6 +188,12 @@ void Domain::nextStep(double dX2, double dY2, double dT) {
 
 	swapBlockMatrix();
 
+	/*char c;
+	scanf("%c", &c);
+	for (int i = 0; i < blockCount; ++i) {
+		mBlocks[i]->print();
+	}*/
+
 	//computeOneStep(dX2, dY2, dT);
 
 	/*

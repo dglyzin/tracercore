@@ -39,9 +39,9 @@ public:
 	void print();
 
 	void wait() {
-		printf("\nDEAD LOCK MAYBE\n");
-		MPI_Request_free(&request);
-		MPI_Wait(&request, &status);
+		//printf("\nDEAD LOCK MAYBE\n");
+		if( request != NULL )
+			MPI_Wait(request, &status);
 	}
 
 private:
@@ -85,7 +85,7 @@ private:
 	 * Служебные переменные
 	 */
 	MPI_Status status;
-	MPI_Request request;
+	MPI_Request* request;
 };
 
 #endif /* SRC_INTERCONNECT_H_ */
