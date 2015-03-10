@@ -28,6 +28,8 @@ Interconnect::Interconnect(int _sourceLocationNode, int _destinationLocationNode
 		request = NULL;
 	else
 		request = new MPI_Request();
+
+	status = new MPI_Status();
 }
 
 Interconnect::~Interconnect() {

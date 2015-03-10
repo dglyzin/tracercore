@@ -40,7 +40,7 @@ public:
 
 	void wait() {
 		if( request != NULL )
-			MPI_Wait(request, &status);
+			MPI_Wait(request, status);
 	}
 
 private:
@@ -83,7 +83,7 @@ private:
 	/*
 	 * Служебные переменные
 	 */
-	MPI_Status status;
+	MPI_Status* status;
 	MPI_Request* request;
 };
 
