@@ -35,6 +35,9 @@ Interconnect::Interconnect(int _sourceLocationNode, int _destinationLocationNode
 Interconnect::~Interconnect() {
 	if( request != NULL )
 		delete request;
+
+	if( status != NULL )
+		delete status;
 }
 
 void Interconnect::sendRecv(int locationNode) {
