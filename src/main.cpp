@@ -47,6 +47,7 @@ int main(int argc, char * argv[]) {
 	double stopTime = atof(argv[5]);
 	char* saveFile = argv[6];
 	char* loadFile = argv[7];
+	char* statisticsFile = argv[8];
 
 	Domain* d = new Domain(world_rank, world_size, inputFile, flags, stepCount, stopTime, loadFile);
 
