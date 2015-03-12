@@ -64,25 +64,8 @@ int main(int argc, char * argv[]) {
 	 * Вывод информации о времени работы осуществляет только поток с номером 0.
 	 * Время работы -  разница между двумя отсечками, котрые были сделаны ранее.
 	 */
-	if(world_rank == 0) {
-		/*double calcTime = time2 - time1;
-		int countGridNodes = d->getCountGridNodes();
-		int repeatCount = d->getRepeatCount();
-		double speed = (double)(countGridNodes) * repeatCount / calcTime / 1000000;
-
-		cout.precision(5);
-		cout << endl <<
-				"Input file:   " << inputFile << endl <<
-				"Output file:  " << outputFile << endl <<
-				"Node count:   " << countGridNodes << endl <<
-				"Repeat count: " << repeatCount << endl <<
-				"Time:         " << calcTime << endl <<
-				"Speed (10^6): " << speed << endl <<
-				endl;*/
+	if(world_rank == 0)
 		d->printStatisticsInfo(inputFile, outputFile, time2 - time1, statisticsFile);
-	}
-
-	//cout << endl << "Thread #" << world_rank << " CPU blocks: " << d->getCountCpuBlocks() << " GPU blocks: " << d->getCountGpuBlocks() << endl;
 
 	/*
 	 * Сбор и вывод результата.
