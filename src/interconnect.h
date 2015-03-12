@@ -39,8 +39,10 @@ public:
 	void print();
 
 	void wait() {
-		if( request != NULL )
+		if( flag ) {
 			MPI_Wait(request, status);
+			flag = false;
+		}
 	}
 
 private:
@@ -85,6 +87,8 @@ private:
 	 */
 	MPI_Status* status;
 	MPI_Request* request;
+
+	bool flag;
 };
 
 #endif /* SRC_INTERCONNECT_H_ */

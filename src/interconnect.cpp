@@ -24,12 +24,11 @@ Interconnect::Interconnect(int _sourceLocationNode, int _destinationLocationNode
 	sourceBlockBorder = _sourceBlockBorder;
 	destinationExternalBorder = _destinationExternalBorder;
 
-	if( sourceLocationNode == destinationLocationNode )
-		request = NULL;
-	else
-		request = new MPI_Request();
+	request = new MPI_Request();
 
 	status = new MPI_Status();
+
+	flag = false;
 }
 
 Interconnect::~Interconnect() {
@@ -56,6 +55,7 @@ void Interconnect::sendRecv(int locationNode) {
 	 */
 	if(locationNode == sourceLocationNode) {
 		MPI_Isend(sourceBlockBorder, borderLength, MPI_DOUBLE, destinationLocationNode, 999, MPI_COMM_WORLD, request);
+		flag = true;
 		return;
 	}
 
@@ -65,6 +65,7 @@ void Interconnect::sendRecv(int locationNode) {
 	 */
 	if(locationNode == destinationLocationNode) {
 		MPI_Irecv(destinationExternalBorder, borderLength, MPI_DOUBLE, sourceLocationNode, 999, MPI_COMM_WORLD, request);
+		flag = true;
 		return;
 	}
 
