@@ -135,7 +135,7 @@ __global__ void calcCenter ( double* matrix, double* newMatrix, int length, int 
 	int i = BLOCK_LENGHT_SIZE * blockIdx.x + threadIdx.x;
 	int j = BLOCK_WIDTH_SIZE * blockIdx.y + threadIdx.y;
 	
-	if( i > 1 && i < length - 1 && j > 1 && j < width - 1 ) {
+	/*if( (i > 1) && (i < length - 1) && (j > 1) && (j < width - 1) ) {
 		top = matrix[(i - 1) * width + j];
 		left = matrix[i * width + (j - 1)];
 		bottom = matrix[(i + 1) * width + j];
@@ -144,9 +144,9 @@ __global__ void calcCenter ( double* matrix, double* newMatrix, int length, int 
 		cur = matrix[i * width + j];
 	
 		newMatrix[i * width + j] = cur + dT * ( ( left - 2*cur + right )/dX2 + ( top - 2*cur + bottom )/dY2  );
-	}
+	}*/
 	
-	/*if( i < length && j < width )
+	if( i < length && j < width )
 		if( i != 0 && i != length - 1 && j != 0 && j != width - 1 ) {
 			top = matrix[(i - 1) * width + j];
 			left = matrix[i * width + (j - 1)];
@@ -156,7 +156,7 @@ __global__ void calcCenter ( double* matrix, double* newMatrix, int length, int 
 			cur = matrix[i * width + j];
 		
 			newMatrix[i * width + j] = cur + dT * ( ( left - 2*cur + right )/dX2 + ( top - 2*cur + bottom )/dY2  );
-		}*/
+		}
 }
 
 /*

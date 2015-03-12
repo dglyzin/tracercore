@@ -171,6 +171,7 @@ void Domain::nextStep(double dX2, double dY2, double dT) {
 	computeOneStepBorder(dX2, dY2, dT);
 
 	swapBlockMatrix();
+	//computeOneStep(dX2, dY2, dT);
 }
 
 void Domain::prepareData() {
