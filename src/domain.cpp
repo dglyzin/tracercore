@@ -171,8 +171,6 @@ void Domain::nextStep(double dX2, double dY2, double dT) {
 	computeOneStepBorder(dX2, dY2, dT);
 
 	swapBlockMatrix();
-
-	//computeOneStep(dX2, dY2, dT);
 }
 
 void Domain::prepareData() {
@@ -449,7 +447,6 @@ void Domain::print(char* path) {
  *                                         * * * * * * * * * * * * * * * * * * * *
  */
 void Domain::readFromFile(char* path) {
-	//printf("\nSTART READ RANK %d\n", world_rank);
 	ifstream in;
 	in.open(path);
 
@@ -459,8 +456,6 @@ void Domain::readFromFile(char* path) {
 	 * Чтение размеров области
 	 */
 	readLengthAndWidthArea(in);
-
-	//printf("\nTIME AREA RANK %d\n", world_rank);
 
 	/*
 	 * Чтение количества блоков
@@ -477,11 +472,8 @@ void Domain::readFromFile(char* path) {
 	 * Чтение блоков.
 	 * Функция чтения блоков возвращает указатель на блок, его записываем в нужную позицию в массиве.
 	 */
-	for (int i = 0; i < blockCount; ++i) {
+	for (int i = 0; i < blockCount; ++i)
 		mBlocks[i] = readBlock(in);
-		/*if(world_rank == 0)
-			mBlocks[i]->print();*/
-	}
 
 	/*
 	 * Чтение количества соединений.
@@ -574,8 +566,6 @@ Block* Domain::readBlock(ifstream& in) {
 	 */
 	in >> type;
 
-	//printf("\nDATA BLOCK READ RANK %d\n", world_rank);
-
 	/*
 	 * Если номер потока исполнения и номер предписанного потока совпадают, то будет сформирован реальный блок.
 	 * В противном случае блок-заглушка.
@@ -588,19 +578,14 @@ Block* Domain::readBlock(ifstream& in) {
 	if(world_rank_creator == world_rank)
 		switch (type) {
 			case 0:
-				//printf("\nCPU %d\n", world_rank);
 				return new BlockCpu(length, width, lengthMove, widthMove, world_rank_creator, 0);
 			case 1:
-				//printf("\nGPU %d\n", world_rank);
 				return new BlockGpu(length, width, lengthMove, widthMove, world_rank_creator, 0);
 			case 2:
-				//printf("\nGPU %d\n", world_rank);
 				return new BlockGpu(length, width, lengthMove, widthMove, world_rank_creator, 1);
 			case 3:
-				//printf("\nGPU %d\n", world_rank);
 				return new BlockGpu(length, width, lengthMove, widthMove, world_rank_creator, 2);
 			default:
-				//printf("\nNULL %d\n", world_rank);
 				return new BlockNull(length, width, lengthMove, widthMove, world_rank_creator, 0);
 		}
 	else

@@ -29,14 +29,10 @@ int main(int argc, char * argv[]) {
 	MPI_Comm_size(MPI_COMM_WORLD, &world_size);
 	MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
 
-	//printf("\n*********\n");
-
 	/*
 	 * Переменные для расчета время работы.
 	 */
 	double time1, time2;
-
-	//printf("\n##########\n");
 
 	/*
 	 * Создание основного управляющего класса.
@@ -52,12 +48,7 @@ int main(int argc, char * argv[]) {
 	char* saveFile = argv[6];
 	char* loadFile = argv[7];
 
-	//printf("\n$$$$$$$$$$$ %d\n", world_rank);
-
-
 	Domain* d = new Domain(world_rank, world_size, inputFile, flags, stepCount, stopTime, loadFile);
-
-	//printf("\n^^^^^^^^^^ %d\n", world_rank);
 
 	/*
 	 * Вычисления.
@@ -96,7 +87,6 @@ int main(int argc, char * argv[]) {
 	 * Передается второй аргумент командной строки - путь к файлу, в который будет записан результат.
 	 */
 	d->print(outputFile);
-	//printf("\nNOT PRINT TO FILE!!!\n");
 
 	delete d;
 
