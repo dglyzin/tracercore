@@ -7,6 +7,7 @@ SAVE_FILE = 0x01
 LOAD_FILE = 0x02
 TIME_EXECUTION = 0x04
 STEP_EXECUTION = 0x08
+STATISTICS = 0x10
 
 thread = 1
 inputFile = "empty"
@@ -17,6 +18,7 @@ step = 0
 time = 0
 save = "empty"
 load = "empty"
+stat = "empty"
 
 fileToRun = "bin/HS"
 
@@ -62,10 +64,16 @@ while i < argc :
 		i = i+2
 		continue
 	
+	if sys.argv[i] == "-stat" :
+		flags = flags | STATISTICS
+		stat = sys.argv[i+1]
+		i = i+2
+		continue
+	
 	print "Error! Need another argument"
 	exit(0)
 
-arg = inputFile + ' ' + outputFile + ' ' + str(flags) + ' ' + str(step) + ' ' + str(time) + ' ' + save + ' ' + load
+arg = inputFile + ' ' + outputFile + ' ' + str(flags) + ' ' + str(step) + ' ' + str(time) + ' ' + save + ' ' + load + ' ' + stat
 
 command = ""
 

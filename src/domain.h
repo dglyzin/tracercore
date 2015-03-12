@@ -75,7 +75,7 @@ public:
 	void saveStateToFile(char* path);
 	void loadStateFromFile(char* blockLocation, char* dataFile);
 
-	void printStatisticsInfo(char* inputFile, char* outputFile, double calcTime);
+	void printStatisticsInfo(char* inputFile, char* outputFile, double calcTime, char* statisticsFile);
 
 private:
 	/*

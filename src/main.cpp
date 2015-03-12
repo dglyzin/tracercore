@@ -79,7 +79,7 @@ int main(int argc, char * argv[]) {
 				"Time:         " << calcTime << endl <<
 				"Speed (10^6): " << speed << endl <<
 				endl;*/
-		d->printStatisticsInfo(inputFile, outputFile, time2 - time1);
+		d->printStatisticsInfo(inputFile, outputFile, time2 - time1, statisticsFile);
 	}
 
 	//cout << endl << "Thread #" << world_rank << " CPU blocks: " << d->getCountCpuBlocks() << " GPU blocks: " << d->getCountGpuBlocks() << endl;

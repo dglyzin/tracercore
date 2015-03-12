@@ -826,39 +826,80 @@ void Domain::loadStateFromFile(char* blockLocation, char* dataFile) {
 	}
 }
 
-void Domain::printStatisticsInfo(char* inputFile, char* outputFile, double calcTime) {
+void Domain::printStatisticsInfo(char* inputFile, char* outputFile, double calcTime, char* statisticsFile) {
 	int countGridNodes = getCountGridNodes();
 	int repeatCount = getRepeatCount();
 	double speed = (double)(countGridNodes) * repeatCount / calcTime / 1000000;
 
-	cout << "############################################################" << endl;
-	cout.precision(5);
-	cout << endl <<
-			"Input file:   " << inputFile << endl <<
-			"Output file:  " << outputFile << endl <<
-			"Node count:   " << countGridNodes << endl <<
-			"Repeat count: " << repeatCount << endl <<
-			"Time:         " << calcTime << endl <<
-			"Speed (10^6): " << speed << endl <<
-			endl;
+	if ( flags & STATISTICS ) {
+		ofstream out;
+		out.open(statisticsFile, ios::app);
 
-	for (int i = 0; i < world_size; ++i) {
-		int cpuCount = 0;
-		int gpuCount = 0;
+		out << "############################################################" << endl;
+		out.precision(5);
+		out << endl <<
+				"Input file:   " << inputFile << endl <<
+				"Output file:  " << outputFile << endl <<
+				"Node count:   " << countGridNodes << endl <<
+				"Repeat count: " << repeatCount << endl <<
+				"Time:         " << calcTime << endl <<
+				"Speed (10^6): " << speed << endl <<
+				endl;
 
-		for (int j = 0; j < blockCount; ++j) {
-			if( mBlocks[i]->getNodeNumber()  == i ) {
-				if( isCPU( mBlocks[j]->getBlockType() ) )
-					cpuCount++;
+		for (int i = 0; i < world_size; ++i) {
+			int cpuCount = 0;
+			int gpuCount = 0;
 
-				if( isGPU( mBlocks[j]->getBlockType() ) )
-					gpuCount++;
+			for (int j = 0; j < blockCount; ++j) {
+				if( mBlocks[i]->getNodeNumber()  == i ) {
+					if( isCPU( mBlocks[j]->getBlockType() ) )
+						cpuCount++;
+
+					if( isGPU( mBlocks[j]->getBlockType() ) )
+						gpuCount++;
+				}
 			}
+
+			out << "Thread #" << i << " CPU blocks: " << cpuCount << " GPU blocks: " << gpuCount << endl << endl;
+
 		}
 
-		cout << "Thread #" << i << " CPU blocks: " << cpuCount << " GPU blocks: " << gpuCount << endl << endl;
+		out << "############################################################" << endl;
 
+		out.close();
+	}
+	else {
+		cout << "############################################################" << endl;
+		cout.precision(5);
+		cout << endl <<
+				"Input file:   " << inputFile << endl <<
+				"Output file:  " << outputFile << endl <<
+				"Node count:   " << countGridNodes << endl <<
+				"Repeat count: " << repeatCount << endl <<
+				"Time:         " << calcTime << endl <<
+				"Speed (10^6): " << speed << endl <<
+				endl;
+
+		for (int i = 0; i < world_size; ++i) {
+			int cpuCount = 0;
+			int gpuCount = 0;
+
+			for (int j = 0; j < blockCount; ++j) {
+				if( mBlocks[i]->getNodeNumber()  == i ) {
+					if( isCPU( mBlocks[j]->getBlockType() ) )
+						cpuCount++;
+
+					if( isGPU( mBlocks[j]->getBlockType() ) )
+						gpuCount++;
+				}
+			}
+
+			cout << "Thread #" << i << " CPU blocks: " << cpuCount << " GPU blocks: " << gpuCount << endl << endl;
+
+		}
+
+		cout << "############################################################" << endl;
 	}
 
-	cout << "############################################################" << endl;
+
 }
