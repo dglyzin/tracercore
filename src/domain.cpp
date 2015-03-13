@@ -831,6 +831,8 @@ void Domain::printStatisticsInfo(char* inputFile, char* outputFile, double calcT
 	int repeatCount = getRepeatCount();
 	double speed = (double)(countGridNodes) * repeatCount / calcTime / 1000000;
 
+	printf("\nINCORRECT WORK!!!\n");
+
 	if ( flags & STATISTICS ) {
 		ofstream out;
 		out.open(statisticsFile, ios::app);
