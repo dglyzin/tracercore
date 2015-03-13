@@ -831,8 +831,6 @@ void Domain::printStatisticsInfo(char* inputFile, char* outputFile, double calcT
 	int repeatCount = getRepeatCount();
 	double speed = (double)(countGridNodes) * repeatCount / calcTime / 1000000;
 
-	printf("\nINCORRECT WORK!!!\n");
-
 	if ( flags & STATISTICS ) {
 		ofstream out;
 		out.open(statisticsFile, ios::app);
@@ -848,7 +846,7 @@ void Domain::printStatisticsInfo(char* inputFile, char* outputFile, double calcT
 				"Speed (10^6): " << speed << endl <<
 				endl;
 
-		for (int i = 0; i < world_size; ++i) {
+		/*for (int i = 0; i < world_size; ++i) {
 			int cpuCount = 0;
 			int gpuCount = 0;
 
@@ -864,7 +862,7 @@ void Domain::printStatisticsInfo(char* inputFile, char* outputFile, double calcT
 
 			out << "Thread #" << i << " CPU blocks: " << cpuCount << " GPU blocks: " << gpuCount << endl << endl;
 
-		}
+		}*/
 
 		out << "############################################################" << endl;
 
@@ -882,23 +880,18 @@ void Domain::printStatisticsInfo(char* inputFile, char* outputFile, double calcT
 				"Speed (10^6): " << speed << endl <<
 				endl;
 
-		for (int i = 0; i < world_size; ++i) {
+		/*for (int i = 0; i < world_size; ++i) {
 			int cpuCount = 0;
 			int gpuCount = 0;
 
-			for (int j = 0; j < blockCount; ++j) {
-				if( mBlocks[i]->getNodeNumber()  == i ) {
-					if( isCPU( mBlocks[j]->getBlockType() ) )
-						cpuCount++;
-
-					if( isGPU( mBlocks[j]->getBlockType() ) )
-						gpuCount++;
-				}
+			if( world_rank == 0 ) {
+				MPI_Recv(&cpuCount, 1, MPI_INT, i, 999, MPI_COMM_WORLD, &status);
+				MPI_Recv(resultAll[j + mBlocks[i]->getLengthMove()] + mBlocks[i]->getWidthMove(), mBlocks[i]->getWidth(), MPI_DOUBLE, mBlocks[i]->getNodeNumber(), 999, MPI_COMM_WORLD, &status);
 			}
 
 			cout << "Thread #" << i << " CPU blocks: " << cpuCount << " GPU blocks: " << gpuCount << endl << endl;
 
-		}
+		}*/
 
 		cout << "############################################################" << endl;
 	}
