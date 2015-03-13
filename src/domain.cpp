@@ -827,74 +827,50 @@ void Domain::loadStateFromFile(char* blockLocation, char* dataFile) {
 }
 
 void Domain::printStatisticsInfo(char* inputFile, char* outputFile, double calcTime, char* statisticsFile) {
-	int countGridNodes = getCountGridNodes();
-	int repeatCount = getRepeatCount();
-	double speed = (double)(countGridNodes) * repeatCount / calcTime / 1000000;
-
 	if ( flags & STATISTICS ) {
-		ofstream out;
-		out.open(statisticsFile, ios::app);
+		if( world_rank == 0 ) {
+			int countGridNodes = getCountGridNodes();
+			int repeatCount = getRepeatCount();
+			double speed = (double)(countGridNodes) * repeatCount / calcTime / 1000000;
 
-		out << "############################################################" << endl;
-		out.precision(5);
-		out << endl <<
-				"Input file:   " << inputFile << endl <<
-				"Output file:  " << outputFile << endl <<
-				"Node count:   " << countGridNodes << endl <<
-				"Repeat count: " << repeatCount << endl <<
-				"Time:         " << calcTime << endl <<
-				"Speed (10^6): " << speed << endl <<
-				endl;
+			int* devices = new int[world_size * 2];
+			devices[0] = getCountCpuBlocks();
+			devices[1] = getCountGpuBlocks();
 
-		/*for (int i = 0; i < world_size; ++i) {
-			int cpuCount = 0;
-			int gpuCount = 0;
-
-			for (int j = 0; j < blockCount; ++j) {
-				if( mBlocks[i]->getNodeNumber()  == i ) {
-					if( isCPU( mBlocks[j]->getBlockType() ) )
-						cpuCount++;
-
-					if( isGPU( mBlocks[j]->getBlockType() ) )
-						gpuCount++;
-				}
+			for (int i = 1; i < world_size; ++i) {
+				MPI_Recv(devices + 2 * i, 1, MPI_INT, i, 999, MPI_COMM_WORLD, &status);
+				MPI_Recv(devices + 2 * i + 1, 1, MPI_INT, i, 999, MPI_COMM_WORLD, &status);
 			}
 
-			out << "Thread #" << i << " CPU blocks: " << cpuCount << " GPU blocks: " << gpuCount << endl << endl;
+			ofstream out;
+			out.open(statisticsFile, ios::app);
 
-		}*/
+			out << "############################################################" << endl;
+			out.precision(5);
+			out << endl <<
+					"Input file:   " << inputFile << endl <<
+					"Output file:  " << outputFile << endl <<
+					"Node count:   " << countGridNodes << endl <<
+					"Repeat count: " << repeatCount << endl <<
+					"Time:         " << calcTime << endl <<
+					"Speed (10^6): " << speed << endl <<
+					endl;
 
-		out << "############################################################" << endl;
+			for (int i = 0; i < world_size; ++i)
+				out << "Thread #" << i << " CPU blocks: " << devices[2 * i] << " GPU blocks: " << devices[2 * i + 1] << endl << endl;
 
-		out.close();
+			out << "############################################################" << endl;
+
+			out.close();
+
+			delete devices;
+		}
+		else {
+			int cpuCount = getCountCpuBlocks();
+			int gpuCount = getCountGpuBlocks();
+
+			MPI_Send(&cpuCount, 1, MPI_INT, 0, 999, MPI_COMM_WORLD);
+			MPI_Send(&gpuCount, 1, MPI_INT, 0, 999, MPI_COMM_WORLD);
+		}
 	}
-	else {
-		cout << "############################################################" << endl;
-		cout.precision(5);
-		cout << endl <<
-				"Input file:   " << inputFile << endl <<
-				"Output file:  " << outputFile << endl <<
-				"Node count:   " << countGridNodes << endl <<
-				"Repeat count: " << repeatCount << endl <<
-				"Time:         " << calcTime << endl <<
-				"Speed (10^6): " << speed << endl <<
-				endl;
-
-		/*for (int i = 0; i < world_size; ++i) {
-			int cpuCount = 0;
-			int gpuCount = 0;
-
-			if( world_rank == 0 ) {
-				MPI_Recv(&cpuCount, 1, MPI_INT, i, 999, MPI_COMM_WORLD, &status);
-				MPI_Recv(resultAll[j + mBlocks[i]->getLengthMove()] + mBlocks[i]->getWidthMove(), mBlocks[i]->getWidth(), MPI_DOUBLE, mBlocks[i]->getNodeNumber(), 999, MPI_COMM_WORLD, &status);
-			}
-
-			cout << "Thread #" << i << " CPU blocks: " << cpuCount << " GPU blocks: " << gpuCount << endl << endl;
-
-		}*/
-
-		cout << "############################################################" << endl;
-	}
-
-
 }

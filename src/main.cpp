@@ -64,8 +64,7 @@ int main(int argc, char * argv[]) {
 	 * Вывод информации о времени работы осуществляет только поток с номером 0.
 	 * Время работы -  разница между двумя отсечками, котрые были сделаны ранее.
 	 */
-	if(world_rank == 0)
-		d->printStatisticsInfo(inputFile, outputFile, time2 - time1, statisticsFile);
+	d->printStatisticsInfo(inputFile, outputFile, time2 - time1, statisticsFile);
 
 	/*
 	 * Сбор и вывод результата.
