@@ -304,39 +304,9 @@ void Domain::computeOneStepCenter(double dX2, double dY2, double dT) {
 }
 
 void Domain::swapBlockMatrix() {
-#pragma omp task
-	{
-		for (int i = 0; i < blockCount; ++i)
-			if( mBlocks[i]->getBlockType() == GPU && mBlocks[i]->getDeviceNumber() == 0 ) {
-				mBlocks[i]->swapMatrix();
-			}
+	for (int i = 0; i < blockCount; ++i) {
+		mBlocks[i]->swapMatrix();
 	}
-
-#pragma omp task
-	{
-		for (int i = 0; i < blockCount; ++i)
-			if( mBlocks[i]->getBlockType() == GPU && mBlocks[i]->getDeviceNumber() == 1 ) {
-				mBlocks[i]->swapMatrix();
-			}
-	}
-
-#pragma omp task
-	{
-		for (int i = 0; i < blockCount; ++i)
-			if( mBlocks[i]->getBlockType() == GPU && mBlocks[i]->getDeviceNumber() == 2 ) {
-				mBlocks[i]->swapMatrix();
-			}
-	}
-
-#pragma omp task
-	{
-		for (int i = 0; i < blockCount; ++i)
-			if( mBlocks[i]->getBlockType() == CPU ) {
-				mBlocks[i]->swapMatrix();
-			}
-	}
-
-#pragma omp taskwait
 }
 
 void Domain::print(char* path) {
