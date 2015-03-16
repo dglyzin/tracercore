@@ -29,7 +29,7 @@ public:
 	/*
 	 * Полный расчет
 	 */
-	void count(char* saveFile);
+	void compute(char* saveFile);
 
 	/*
 	 * Выполнение одной итерации (одного шага)

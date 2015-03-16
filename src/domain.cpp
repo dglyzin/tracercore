@@ -122,7 +122,7 @@ double** Domain::collectDataFromNode() {
 	}
 }
 
-void Domain::count(char* saveFile) {
+void Domain::compute(char* saveFile) {
 	/*
 	 * Вычисление коэффициентов необходимых для расчета теплопроводности
 	 */
