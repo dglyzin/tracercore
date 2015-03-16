@@ -210,38 +210,23 @@ void Domain::prepareData() {
 #pragma omp taskwait
 }
 
+
+void Domain::processDeviceBlocks(int deviceType, int deviceNumber, double dX2, double dY2, double dT) {
+	for (int i = 0; i < blockCount; ++i)
+        if( mBlocks[i]->getBlockType() == deviceType && mBlocks[i]->getDeviceNumber() == deviceNumber ) {
+		    mBlocks[i]->computeOneStep(dX2, dY2, dT);
+		}
+}
+
 void Domain::computeOneStep(double dX2, double dY2, double dT) {
 #pragma omp task
-	{
-		for (int i = 0; i < blockCount; ++i)
-			if( mBlocks[i]->getBlockType() == GPU && mBlocks[i]->getDeviceNumber() == 0 ) {
-				mBlocks[i]->computeOneStep(dX2, dY2, dT);
-			}
-	}
-
+	processDeviceBlocks(GPU, 0, dX2, dY2, dT);
 #pragma omp task
-	{
-		for (int i = 0; i < blockCount; ++i)
-			if( mBlocks[i]->getBlockType() == GPU && mBlocks[i]->getDeviceNumber() == 1 ) {
-				mBlocks[i]->computeOneStep(dX2, dY2, dT);
-			}
-	}
-
+	processDeviceBlocks(GPU, 1, dX2, dY2, dT);
 #pragma omp task
-	{
-		for (int i = 0; i < blockCount; ++i)
-			if( mBlocks[i]->getBlockType() == GPU && mBlocks[i]->getDeviceNumber() == 2 ) {
-				mBlocks[i]->computeOneStep(dX2, dY2, dT);
-			}
-	}
-
+	processDeviceBlocks(GPU, 2, dX2, dY2, dT);
 #pragma omp task
-	{
-		for (int i = 0; i < blockCount; ++i)
-			if( mBlocks[i]->getBlockType() == CPU ) {
-				mBlocks[i]->computeOneStep(dX2, dY2, dT);
-			}
-	}
+	processDeviceBlocks(CPU, 0, dX2, dY2, dT);
 
 #pragma omp taskwait
 }
