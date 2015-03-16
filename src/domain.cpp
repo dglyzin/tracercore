@@ -210,38 +210,23 @@ void Domain::prepareData() {
 #pragma omp taskwait
 }
 
+
+void Domain::processDeviceBlocks(int deviceType, int deviceNumber, double dX2, double dY2, double dT) {
+	for (int i = 0; i < blockCount; ++i)
+        if( mBlocks[i]->getBlockType() == deviceType && mBlocks[i]->getDeviceNumber() == deviceNumber ) {
+		    mBlocks[i]->computeOneStep(dX2, dY2, dT);
+		}
+}
+
 void Domain::computeOneStep(double dX2, double dY2, double dT) {
 #pragma omp task
-	{
-		for (int i = 0; i < blockCount; ++i)
-			if( mBlocks[i]->getBlockType() == GPU && mBlocks[i]->getDeviceNumber() == 0 ) {
-				mBlocks[i]->computeOneStep(dX2, dY2, dT);
-			}
-	}
-
+	processDeviceBlocks(GPU, 0, dX2, dY2, dT);
 #pragma omp task
-	{
-		for (int i = 0; i < blockCount; ++i)
-			if( mBlocks[i]->getBlockType() == GPU && mBlocks[i]->getDeviceNumber() == 1 ) {
-				mBlocks[i]->computeOneStep(dX2, dY2, dT);
-			}
-	}
-
+	processDeviceBlocks(GPU, 1, dX2, dY2, dT);
 #pragma omp task
-	{
-		for (int i = 0; i < blockCount; ++i)
-			if( mBlocks[i]->getBlockType() == GPU && mBlocks[i]->getDeviceNumber() == 2 ) {
-				mBlocks[i]->computeOneStep(dX2, dY2, dT);
-			}
-	}
-
+	processDeviceBlocks(GPU, 2, dX2, dY2, dT);
 #pragma omp task
-	{
-		for (int i = 0; i < blockCount; ++i)
-			if( mBlocks[i]->getBlockType() == CPU ) {
-				mBlocks[i]->computeOneStep(dX2, dY2, dT);
-			}
-	}
+	processDeviceBlocks(CPU, 0, dX2, dY2, dT);
 
 #pragma omp taskwait
 }
@@ -735,7 +720,7 @@ int Domain::getRepeatCount() {
 /*
  * Количество блоков, имеющих тип "центальный процессор".
  */
-int Domain::getCountCpuBlocks() {
+int Domain::getCpuBlocksCount() {
 	int count = 0;
 	for (int i = 0; i < blockCount; ++i)
 		if( isCPU(mBlocks[i]->getBlockType()) )
@@ -747,7 +732,7 @@ int Domain::getCountCpuBlocks() {
 /*
  * Количество блоков, имеющих тип "видеокарта".
  */
-int Domain::getCountGpuBlocks() {
+int Domain::getGpuBlocksCount() {
 	int count = 0;
 	for (int i = 0; i < blockCount; ++i)
 		if(isGPU(mBlocks[i]->getBlockType()))
@@ -844,8 +829,8 @@ void Domain::printStatisticsInfo(char* inputFile, char* outputFile, double calcT
 			double speed = (double)(countGridNodes) * repeatCount / calcTime / 1000000;
 
 			int* devices = new int[world_size * 2];
-			devices[0] = getCountCpuBlocks();
-			devices[1] = getCountGpuBlocks();
+			devices[0] = getCpuBlocksCount();
+			devices[1] = getGpuBlocksCount();
 
 			for (int i = 1; i < world_size; ++i) {
 				MPI_Recv(devices + 2 * i, 1, MPI_INT, i, 999, MPI_COMM_WORLD, &status);
@@ -876,8 +861,8 @@ void Domain::printStatisticsInfo(char* inputFile, char* outputFile, double calcT
 			delete devices;
 		}
 		else {
-			int cpuCount = getCountCpuBlocks();
-			int gpuCount = getCountGpuBlocks();
+			int cpuCount = getCpuBlocksCount();
+			int gpuCount = getGpuBlocksCount();
 
 			MPI_Send(&cpuCount, 1, MPI_INT, 0, 999, MPI_COMM_WORLD);
 			MPI_Send(&gpuCount, 1, MPI_INT, 0, 999, MPI_COMM_WORLD);

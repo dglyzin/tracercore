@@ -60,12 +60,12 @@ public:
 	/*
 	 * Количество реальных блоков типа "центральный процессор"
 	 */
-	int getCountCpuBlocks();
+	int getCpuBlocksCount();
 
 	/*
 	 * Количество реальных блоков типа "видеокарта"
 	 */
-	int getCountGpuBlocks();
+	int getGpuBlocksCount();
 
 	/*
 	 * Количество реальных блоков любого типа.
@@ -153,6 +153,7 @@ private:
 	double** collectDataFromNode();
 
 	void prepareData();
+	void processDeviceBlocks(int deviceType, int deviceNumber, double dX2, double dY2, double dT);
 	void computeOneStep(double dX2, double dY2, double dT);
 	void computeOneStepBorder(double dX2, double dY2, double dT);
 	void computeOneStepCenter(double dX2, double dY2, double dT);
