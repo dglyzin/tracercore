@@ -206,6 +206,8 @@ void Domain::prepareData() {
 				mBlocks[i]->prepareData();
 			}
 	}
+
+#pragma omp taskwait
 }
 
 void Domain::computeOneStep(double dX2, double dY2, double dT) {
@@ -240,6 +242,8 @@ void Domain::computeOneStep(double dX2, double dY2, double dT) {
 				mBlocks[i]->computeOneStep(dX2, dY2, dT);
 			}
 	}
+
+#pragma omp taskwait
 }
 
 void Domain::computeOneStepBorder(double dX2, double dY2, double dT) {
@@ -274,6 +278,8 @@ void Domain::computeOneStepBorder(double dX2, double dY2, double dT) {
 				mBlocks[i]->computeOneStepBorder(dX2, dY2, dT);
 			}
 	}
+
+#pragma omp taskwait
 }
 
 void Domain::computeOneStepCenter(double dX2, double dY2, double dT) {
@@ -308,6 +314,8 @@ void Domain::computeOneStepCenter(double dX2, double dY2, double dT) {
 				mBlocks[i]->computeOneStepCenter(dX2, dY2, dT);
 			}
 	}
+
+#pragma omp taskwait
 }
 
 void Domain::swapBlockMatrix() {
@@ -342,6 +350,8 @@ void Domain::swapBlockMatrix() {
 				mBlocks[i]->swapMatrix();
 			}
 	}
+
+#pragma omp taskwait
 }
 
 void Domain::print(char* path) {
