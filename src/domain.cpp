@@ -218,6 +218,20 @@ void Domain::processDeviceBlocks(int deviceType, int deviceNumber, double dX2, d
 		}
 }
 
+void Domain::processDeviceBlocksBorder(int deviceType, int deviceNumber, double dX2, double dY2, double dT) {
+	for (int i = 0; i < blockCount; ++i)
+        if( mBlocks[i]->getBlockType() == deviceType && mBlocks[i]->getDeviceNumber() == deviceNumber ) {
+		    mBlocks[i]->computeOneStepBorder(dX2, dY2, dT);
+		}
+}
+
+void Domain::processDeviceBlocksCenter(int deviceType, int deviceNumber, double dX2, double dY2, double dT) {
+	for (int i = 0; i < blockCount; ++i)
+        if( mBlocks[i]->getBlockType() == deviceType && mBlocks[i]->getDeviceNumber() == deviceNumber ) {
+		    mBlocks[i]->computeOneStepCenter(dX2, dY2, dT);
+		}
+}
+
 void Domain::computeOneStep(double dX2, double dY2, double dT) {
 #pragma omp task
 	processDeviceBlocks(GPU, 0, dX2, dY2, dT);
@@ -233,72 +247,26 @@ void Domain::computeOneStep(double dX2, double dY2, double dT) {
 
 void Domain::computeOneStepBorder(double dX2, double dY2, double dT) {
 #pragma omp task
-	{
-		for (int i = 0; i < blockCount; ++i)
-			if( mBlocks[i]->getBlockType() == GPU && mBlocks[i]->getDeviceNumber() == 0 ) {
-				mBlocks[i]->computeOneStepBorder(dX2, dY2, dT);
-			}
-	}
-
+	processDeviceBlocksBorder(GPU, 0, dX2, dY2, dT);
 #pragma omp task
-	{
-		for (int i = 0; i < blockCount; ++i)
-			if( mBlocks[i]->getBlockType() == GPU && mBlocks[i]->getDeviceNumber() == 1 ) {
-				mBlocks[i]->computeOneStepBorder(dX2, dY2, dT);
-			}
-	}
-
+	processDeviceBlocksBorder(GPU, 1, dX2, dY2, dT);
 #pragma omp task
-	{
-		for (int i = 0; i < blockCount; ++i)
-			if( mBlocks[i]->getBlockType() == GPU && mBlocks[i]->getDeviceNumber() == 2 ) {
-				mBlocks[i]->computeOneStepBorder(dX2, dY2, dT);
-			}
-	}
-
+	processDeviceBlocksBorder(GPU, 2, dX2, dY2, dT);
 #pragma omp task
-	{
-		for (int i = 0; i < blockCount; ++i)
-			if( mBlocks[i]->getBlockType() == CPU ) {
-				mBlocks[i]->computeOneStepBorder(dX2, dY2, dT);
-			}
-	}
+	processDeviceBlocksBorder(CPU, 0, dX2, dY2, dT);
 
 #pragma omp taskwait
 }
 
 void Domain::computeOneStepCenter(double dX2, double dY2, double dT) {
 #pragma omp task
-	{
-		for (int i = 0; i < blockCount; ++i)
-			if( mBlocks[i]->getBlockType() == GPU && mBlocks[i]->getDeviceNumber() == 0 ) {
-				mBlocks[i]->computeOneStepCenter(dX2, dY2, dT);
-			}
-	}
-
+	processDeviceBlocksCenter(GPU, 0, dX2, dY2, dT);
 #pragma omp task
-	{
-		for (int i = 0; i < blockCount; ++i)
-			if( mBlocks[i]->getBlockType() == GPU && mBlocks[i]->getDeviceNumber() == 1 ) {
-				mBlocks[i]->computeOneStepCenter(dX2, dY2, dT);
-			}
-	}
-
+	processDeviceBlocksCenter(GPU, 1, dX2, dY2, dT);
 #pragma omp task
-	{
-		for (int i = 0; i < blockCount; ++i)
-			if( mBlocks[i]->getBlockType() == GPU && mBlocks[i]->getDeviceNumber() == 2 ) {
-				mBlocks[i]->computeOneStepCenter(dX2, dY2, dT);
-			}
-	}
-
+	processDeviceBlocksCenter(GPU, 2, dX2, dY2, dT);
 #pragma omp task
-	{
-		for (int i = 0; i < blockCount; ++i)
-			if( mBlocks[i]->getBlockType() == CPU ) {
-				mBlocks[i]->computeOneStepCenter(dX2, dY2, dT);
-			}
-	}
+	processDeviceBlocksCenter(CPU, 0, dX2, dY2, dT);
 
 #pragma omp taskwait
 }
