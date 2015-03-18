@@ -153,6 +153,7 @@ private:
 	double** collectDataFromNode();
 
 	void prepareData();
+	void prepareDeviceData(int deviceType, int deviceNumber);
 	void processDeviceBlocks(int deviceType, int deviceNumber, double dX2, double dY2, double dT);
 	void processDeviceBlocksBorder(int deviceType, int deviceNumber, double dX2, double dY2, double dT);
 	void processDeviceBlocksCenter(int deviceType, int deviceNumber, double dX2, double dY2, double dT);
