@@ -6,6 +6,8 @@
  */
 
 #include "blockcpu.h"
+#include <cuda.h>
+#include <cuda_runtime_api.h>
 
 using namespace std;
 
