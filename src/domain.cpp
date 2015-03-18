@@ -229,7 +229,7 @@ void Domain::computeOneStep(double dX2, double dY2, double dT) {
 }
 
 void Domain::computeOneStepBorder(double dX2, double dY2, double dT) {
-/*#pragma omp task
+#pragma omp task
 	processDeviceBlocksBorder(GPU, 0, dX2, dY2, dT);
 #pragma omp task
 	processDeviceBlocksBorder(GPU, 1, dX2, dY2, dT);
@@ -238,13 +238,13 @@ void Domain::computeOneStepBorder(double dX2, double dY2, double dT) {
 #pragma omp task
 	processDeviceBlocksBorder(CPU, 0, dX2, dY2, dT);
 
-#pragma omp taskwait*/
-	for (int i = 0; i < blockCount; ++i)
-		mBlocks[i]->computeOneStepBorder(dX2, dY2, dT);
+#pragma omp taskwait
+/*	for (int i = 0; i < blockCount; ++i)
+		mBlocks[i]->computeOneStepBorder(dX2, dY2, dT);*/
 }
 
 void Domain::computeOneStepCenter(double dX2, double dY2, double dT) {
-/*#pragma omp task
+#pragma omp task
 	processDeviceBlocksCenter(GPU, 0, dX2, dY2, dT);
 #pragma omp task
 	processDeviceBlocksCenter(GPU, 1, dX2, dY2, dT);
@@ -253,9 +253,9 @@ void Domain::computeOneStepCenter(double dX2, double dY2, double dT) {
 #pragma omp task
 	processDeviceBlocksCenter(CPU, 0, dX2, dY2, dT);
 
-#pragma omp taskwait*/
-	for (int i = 0; i < blockCount; ++i)
-		mBlocks[i]->computeOneStepCenter(dX2, dY2, dT);
+#pragma omp taskwait
+	/*for (int i = 0; i < blockCount; ++i)
+		mBlocks[i]->computeOneStepCenter(dX2, dY2, dT);*/
 }
 
 void Domain::swapBlockMatrix() {
