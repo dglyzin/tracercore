@@ -6,6 +6,9 @@
  */
 
 #include "block.h"
+#include <cuda.h>
+#include <cuda_runtime_api.h>
+
 
 Block::Block(int _length, int _width, int _lengthMove, int _widthMove, int _nodeNumber, int _deviceNumber) {
 	length = _length;

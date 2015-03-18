@@ -21,11 +21,11 @@ main.o: $(SRC)/main.cpp
 domain.o: $(SRC)/domain.cpp  
 	$(CC) $(CFLAGS) -I$(CUDAINC) $(SRC)/domain.cpp -fopenmp -o $(BIN)/domain.o
 
-block.o: $(SRC)/block.cu  
-	$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I$(CUDAINC) $(SRC)/block.cu -o $(BIN)/block.o
+block.o: $(SRC)/block.cpp  
+	$(CC) $(CFLAGS)  -I$(CUDAINC) $(SRC)/block.cpp -o $(BIN)/block.o
 	
-blockcpu.o: $(SRC)/blockcpu.cu  
-	$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I$(CUDAINC) $(SRC)/blockcpu.cu -o $(BIN)/blockcpu.o -Xcompiler -fopenmp
+blockcpu.o: $(SRC)/blockcpu.cpp  
+	$(CC) $(CFLAGS) -I$(CUDAINC) $(SRC)/blockcpu.cpp -o $(BIN)/blockcpu.o -fopenmp
 	
 blockgpu.o: $(SRC)/blockgpu.cu  
 	$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I$(CUDAINC) $(SRC)/blockgpu.cu -o $(BIN)/blockgpu.o
