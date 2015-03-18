@@ -382,6 +382,7 @@ void BlockGpu::computeOneStep(double dX2, double dY2, double dT) {
 	calc <<< blocks, threads >>> ( matrix, newMatrix, length, width, dX2, dY2, dT, receiveBorderTypeOnDevice, externalBorderOnDevice, externalBorderMove );
 	
 	cudaEventSynchronize(sync);
+	cudaEventDestroy(sync);
 	
 	double* tmp = matrix;
 
@@ -402,6 +403,7 @@ void BlockGpu::computeOneStepBorder(double dX2, double dY2, double dT) {
 	calcBorder <<< blocks, threads >>> ( matrix, newMatrix, length, width, dX2, dY2, dT, receiveBorderTypeOnDevice, externalBorderOnDevice, externalBorderMove );
 	
 	cudaEventSynchronize(sync);
+	cudaEventDestroy(sync);
 }
 
 void BlockGpu::computeOneStepCenter(double dX2, double dY2, double dT) {
@@ -416,6 +418,7 @@ void BlockGpu::computeOneStepCenter(double dX2, double dY2, double dT) {
 	calcCenter <<< blocks, threads >>> ( matrix, newMatrix, length, width, dX2, dY2, dT, receiveBorderTypeOnDevice, externalBorderOnDevice, externalBorderMove );
 	
 	cudaEventSynchronize(sync);
+	cudaEventDestroy(sync);
 }
 
 void BlockGpu::prepareData() {
@@ -434,6 +437,7 @@ void BlockGpu::prepareData() {
 	copyBorderFromMatrix <<< blocksLength, threads >>> (blockBorderOnDevice, matrix, sendBorderTypeOnDevice, blockBorderMove, RIGHT, length, width);
 	
 	cudaEventSynchronize(sync);
+	cudaEventDestroy(sync);
 }
 
 double* BlockGpu::getResult() {
