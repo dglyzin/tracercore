@@ -168,10 +168,15 @@ void Domain::nextStep(double dX2, double dY2, double dT) {
 	for (int i = 0; i < connectionCount; ++i)
 		mInterconnects[i]->wait();
 
+	char c;
+	scanf("%c", &c);
+
 	computeOneStepBorder(dX2, dY2, dT);
 
 	swapBlockMatrix();
 	//computeOneStep(dX2, dY2, dT);
+
+	printAreaToConsole();
 }
 
 void Domain::prepareDeviceData(int deviceType, int deviceNumber) {
@@ -284,6 +289,26 @@ void Domain::print(char* path) {
 		}
 
 		out.close();
+	}
+
+	if( resultAll != NULL ) {
+		for (int i = 0; i < lengthArea; ++i)
+			delete resultAll[i];
+		delete resultAll;
+	}
+}
+
+void Domain::printAreaToConsole() {
+	double** resultAll = collectDataFromNode();
+
+	cout.setf(ios::fixed);
+	for(int i = 0; i < lengthArea; i++) {
+		for( int j = 0; j < widthArea; j++ ) {
+			cout.width(7);
+			cout.precision(1);
+			cout << resultAll[i][j];
+		}
+		cout << endl;
 	}
 
 	if( resultAll != NULL ) {
