@@ -41,6 +41,7 @@ public:
 	 */
 	void print(char* path);
 	void printAreaToConsole();
+	void printBlocksToConsole();
 
 	/*
 	 * Чтение с файла.

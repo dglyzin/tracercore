@@ -318,6 +318,12 @@ void Domain::printAreaToConsole() {
 	}
 }
 
+void Domain::printBlocksToConsole() {
+	for (int i = 0; i < blockCount; ++i) {
+		mBlocks[i]->print();
+	}
+}
+
 /*
  * Функция чтения данных из файла
  *
