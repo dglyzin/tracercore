@@ -373,16 +373,17 @@ BlockGpu::~BlockGpu() {
 void BlockGpu::computeOneStep(double dX2, double dY2, double dT) {
 	cudaSetDevice(deviceNumber);
 	
-	cudaEvent_t sync;
-	cudaEventCreate(&sync);
+	/*cudaEvent_t sync;
+	cudaEventCreate(&sync);*/
 	
 	dim3 threads ( BLOCK_LENGHT_SIZE, BLOCK_WIDTH_SIZE );
 	dim3 blocks  ( (int)ceil((double)length / threads.x), (int)ceil((double)width / threads.y) );
 
 	calc <<< blocks, threads >>> ( matrix, newMatrix, length, width, dX2, dY2, dT, receiveBorderTypeOnDevice, externalBorderOnDevice, externalBorderMove );
 	
+	/*cudaEventRecord(sync, NULL);
 	cudaEventSynchronize(sync);
-	cudaEventDestroy(sync);
+	cudaEventDestroy(sync);*/
 	
 	double* tmp = matrix;
 
@@ -394,38 +395,34 @@ void BlockGpu::computeOneStep(double dX2, double dY2, double dT) {
 void BlockGpu::computeOneStepBorder(double dX2, double dY2, double dT) {
 	cudaSetDevice(deviceNumber);
 	
-	cudaEvent_t sync;
-	cudaEventCreate(&sync);
+	/*cudaEvent_t sync;
+	cudaEventCreate(&sync);*/
 		
 	dim3 threads ( BLOCK_LENGHT_SIZE, BLOCK_WIDTH_SIZE );
 	dim3 blocks  ( (int)ceil((double)length / threads.x), (int)ceil((double)width / threads.y) );
 
 	calcBorder <<< blocks, threads >>> ( matrix, newMatrix, length, width, dX2, dY2, dT, receiveBorderTypeOnDevice, externalBorderOnDevice, externalBorderMove );
 	
+	/*cudaEventRecord(sync, NULL);
 	cudaEventSynchronize(sync);
-	cudaEventDestroy(sync);
+	cudaEventDestroy(sync);*/
+	cudaThreadSynchronize();
 }
 
 void BlockGpu::computeOneStepCenter(double dX2, double dY2, double dT) {
 	cudaSetDevice(deviceNumber);
-	
-	cudaEvent_t sync;
-	cudaEventCreate(&sync);
 		
 	dim3 threads ( BLOCK_LENGHT_SIZE, BLOCK_WIDTH_SIZE );
 	dim3 blocks  ( (int)ceil((double)length / threads.x), (int)ceil((double)width / threads.y) );
 
 	calcCenter <<< blocks, threads >>> ( matrix, newMatrix, length, width, dX2, dY2, dT, receiveBorderTypeOnDevice, externalBorderOnDevice, externalBorderMove );
-	
-	cudaEventSynchronize(sync);
-	cudaEventDestroy(sync);
 }
 
 void BlockGpu::prepareData() {
 	cudaSetDevice(deviceNumber);
 	
-	cudaEvent_t sync;
-	cudaEventCreate(&sync);
+	/*cudaEvent_t sync;
+	cudaEventCreate(&sync);*/
 	
 	dim3 threads ( BLOCK_SIZE );
 	dim3 blocksLength  ( (int)ceil((double)length / threads.x) );
@@ -436,8 +433,10 @@ void BlockGpu::prepareData() {
 	copyBorderFromMatrix <<< blocksWidth, threads >>> (blockBorderOnDevice, matrix, sendBorderTypeOnDevice, blockBorderMove, BOTTOM, length, width);
 	copyBorderFromMatrix <<< blocksLength, threads >>> (blockBorderOnDevice, matrix, sendBorderTypeOnDevice, blockBorderMove, RIGHT, length, width);
 	
+	/*cudaEventRecord(sync, NULL);
 	cudaEventSynchronize(sync);
-	cudaEventDestroy(sync);
+	cudaEventDestroy(sync);*/
+	cudaThreadSynchronize();
 }
 
 double* BlockGpu::getResult() {
