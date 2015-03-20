@@ -218,7 +218,7 @@ void Domain::prepareData() {
 	prepareDeviceData(GPU, 1);
 #pragma omp task
 	prepareDeviceData(GPU, 2);
-#pragma omp task
+//#pragma omp task
 	prepareDeviceData(CPU, 0);
 
 #pragma omp taskwait
@@ -252,7 +252,7 @@ void Domain::computeOneStepBorder(double dX2, double dY2, double dT) {
 	processDeviceBlocksBorder(GPU, 1, dX2, dY2, dT);
 #pragma omp task
 	processDeviceBlocksBorder(GPU, 2, dX2, dY2, dT);
-#pragma omp task
+//#pragma omp task
 	processDeviceBlocksBorder(CPU, 0, dX2, dY2, dT);
 
 #pragma omp taskwait
@@ -271,7 +271,7 @@ void Domain::computeOneStepCenter(double dX2, double dY2, double dT) {
 	processDeviceBlocksCenter(GPU, 1, dX2, dY2, dT);
 #pragma omp task
 	processDeviceBlocksCenter(GPU, 2, dX2, dY2, dT);
-#pragma omp task
+//#pragma omp task
 	processDeviceBlocksCenter(CPU, 0, dX2, dY2, dT);
 
 //#pragma omp taskwait
