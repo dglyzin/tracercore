@@ -255,7 +255,7 @@ void Domain::computeOneStepBorder(double dX2, double dY2, double dT) {
 //#pragma omp task
 	processDeviceBlocksBorder(CPU, 0, dX2, dY2, dT);
 
-#pragma omp taskwait
+//#pragma omp taskwait
 /*	for (int i = 0; i < blockCount; ++i)
 		mBlocks[i]->computeOneStepBorder(dX2, dY2, dT);*/
 }

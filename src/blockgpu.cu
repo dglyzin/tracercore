@@ -406,7 +406,7 @@ void BlockGpu::computeOneStepBorder(double dX2, double dY2, double dT) {
 	/*cudaEventRecord(sync, NULL);
 	cudaEventSynchronize(sync);
 	cudaEventDestroy(sync);*/
-	cudaThreadSynchronize();
+	//cudaThreadSynchronize();
 }
 
 void BlockGpu::computeOneStepCenter(double dX2, double dY2, double dT) {
@@ -420,7 +420,7 @@ void BlockGpu::computeOneStepCenter(double dX2, double dY2, double dT) {
 
 void BlockGpu::prepareData() {
 	cudaSetDevice(deviceNumber);
-	
+	//cudaThreadSynchronize();
 	/*cudaEvent_t sync;
 	cudaEventCreate(&sync);*/
 	
