@@ -168,15 +168,9 @@ void Domain::nextStep(double dX2, double dY2, double dT) {
 	for (int i = 0; i < connectionCount; ++i)
 		mInterconnects[i]->wait();
 
-	/*char c;
-	scanf("%c", &c);*/
-
 	computeOneStepBorder(dX2, dY2, dT);
 
 	swapBlockMatrix();
-	//computeOneStep(dX2, dY2, dT);
-
-	//printAreaToConsole();
 }
 
 void Domain::prepareDeviceData(int deviceType, int deviceNumber) {
@@ -208,27 +202,19 @@ void Domain::processDeviceBlocksCenter(int deviceType, int deviceNumber, double 
 }
 
 void Domain::prepareData() {
-	/*prepareDeviceData(GPU, 0);
-	prepareDeviceData(GPU, 1);
-	prepareDeviceData(GPU, 2);
-	prepareDeviceData(CPU, 0);*/
 #pragma omp task
 	prepareDeviceData(GPU, 0);
 #pragma omp task
 	prepareDeviceData(GPU, 1);
 #pragma omp task
 	prepareDeviceData(GPU, 2);
-//#pragma omp task
+
 	prepareDeviceData(CPU, 0);
 
 #pragma omp taskwait
 }
 
 void Domain::computeOneStep(double dX2, double dY2, double dT) {
-	/*processDeviceBlocks(GPU, 0, dX2, dY2, dT);
-	processDeviceBlocks(GPU, 1, dX2, dY2, dT);
-	processDeviceBlocks(GPU, 2, dX2, dY2, dT);
-	processDeviceBlocks(CPU, 0, dX2, dY2, dT);*/
 #pragma omp task
 	processDeviceBlocks(GPU, 0, dX2, dY2, dT);
 #pragma omp task
@@ -242,22 +228,14 @@ void Domain::computeOneStep(double dX2, double dY2, double dT) {
 }
 
 void Domain::computeOneStepBorder(double dX2, double dY2, double dT) {
-	/*processDeviceBlocksBorder(GPU, 0, dX2, dY2, dT);
-	processDeviceBlocksBorder(GPU, 1, dX2, dY2, dT);
-	processDeviceBlocksBorder(GPU, 2, dX2, dY2, dT);
-	processDeviceBlocksBorder(CPU, 0, dX2, dY2, dT);*/
 #pragma omp task
 	processDeviceBlocksBorder(GPU, 0, dX2, dY2, dT);
 #pragma omp task
 	processDeviceBlocksBorder(GPU, 1, dX2, dY2, dT);
 #pragma omp task
 	processDeviceBlocksBorder(GPU, 2, dX2, dY2, dT);
-//#pragma omp task
-	processDeviceBlocksBorder(CPU, 0, dX2, dY2, dT);
 
-//#pragma omp taskwait
-/*	for (int i = 0; i < blockCount; ++i)
-		mBlocks[i]->computeOneStepBorder(dX2, dY2, dT);*/
+	processDeviceBlocksBorder(CPU, 0, dX2, dY2, dT);
 }
 
 void Domain::computeOneStepCenter(double dX2, double dY2, double dT) {
@@ -271,12 +249,8 @@ void Domain::computeOneStepCenter(double dX2, double dY2, double dT) {
 	processDeviceBlocksCenter(GPU, 1, dX2, dY2, dT);
 #pragma omp task
 	processDeviceBlocksCenter(GPU, 2, dX2, dY2, dT);
-//#pragma omp task
-	processDeviceBlocksCenter(CPU, 0, dX2, dY2, dT);
 
-//#pragma omp taskwait
-	/*for (int i = 0; i < blockCount; ++i)
-		mBlocks[i]->computeOneStepCenter(dX2, dY2, dT);*/
+	processDeviceBlocksCenter(CPU, 0, dX2, dY2, dT);
 }
 
 void Domain::swapBlockMatrix() {
