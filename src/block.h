@@ -96,7 +96,7 @@ protected:
 	std::vector<int> tempExternalBorderMemoryAllocType;
 
 
-	double* result;
+	//double* result;
 
 	/*
 	 * Количество частей гранцы для пересылки и для получения

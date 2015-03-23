@@ -62,7 +62,7 @@ BlockCpu::BlockCpu(int _length, int _width, int _lengthMove, int _widthMove, int
 		receiveBorderType[RIGHT][i] = BY_FUNCTION;
 	
 	
-	result = new double [length * width];
+	//result = new double [length * width];
 }
 
 BlockCpu::~BlockCpu() {
@@ -128,8 +128,8 @@ BlockCpu::~BlockCpu() {
 	if(externalBorderMove != NULL)
 		delete externalBorderMove;
 	
-	if(result != NULL)
-		delete result;
+	/*if(result != NULL)
+		delete result;*/
 }
 
 void BlockCpu::computeOneStep(double dX2, double dY2, double dT) {
@@ -421,9 +421,11 @@ void BlockCpu::prepareData() {
 }
 
 double* BlockCpu::getCurrentState() {
+	double* result = new double [length * width];
+
 	for(int i = 0; i < length * width; i++)
 		result[i] = matrix[i];
-	
+
 	return result;
 }
 

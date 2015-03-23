@@ -296,7 +296,7 @@ BlockGpu::BlockGpu(int _length, int _width, int _lengthMove, int _widthMove, int
 	cudaMalloc ( (void**)&receiveBorderTypeOnDevice, BORDER_COUNT * sizeof(int*) );
 	cudaMemcpy( receiveBorderTypeOnDevice, receiveBorderType, BORDER_COUNT * sizeof(int*), cudaMemcpyHostToDevice );
 	
-	result = new double [length * width];
+	//result = new double [length * width];
 }
 
 BlockGpu::~BlockGpu() {
@@ -366,8 +366,8 @@ BlockGpu::~BlockGpu() {
 	if(externalBorderMove != NULL)
 		cudaFree(externalBorderMove);
 	
-	if(result != NULL)
-		delete result;
+	/*if(result != NULL)
+		delete result;*/
 }
 
 void BlockGpu::computeOneStep(double dX2, double dY2, double dT) {
@@ -441,6 +441,8 @@ void BlockGpu::prepareData() {
 
 double* BlockGpu::getCurrentState() {
 	cudaSetDevice(deviceNumber);
+	
+	double* result = new double [length * width];
 	
 	cudaMemcpy( result, matrix, width * length * sizeof(double), cudaMemcpyDeviceToHost );
 	
