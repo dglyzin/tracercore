@@ -10,6 +10,11 @@
 
 #define BY_FUNCTION -1
 
+#define SAVE_FILE_CODE 253
+#define GEOM_FILE_CODE 254
+#define VERSION_MAJOR 1
+#define VERSION_MINOR 0
+
 enum FLAGS {
 	SAVE_FILE = 0x01,
 	LOAD_FILE = 0x02,
