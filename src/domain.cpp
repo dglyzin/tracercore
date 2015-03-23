@@ -80,7 +80,7 @@ double** Domain::collectDataFromNode() {
 		 */
 		for (int i = 0; i < blockCount; ++i) {
 			if(mBlocks[i]->isRealBlock()) {
-				double* result = mBlocks[i]->getResult();
+				double* result = mBlocks[i]->getCurrentState();
 
 				for (int j = 0; j < mBlocks[i]->getLength(); ++j)
 					for (int k = 0; k < mBlocks[i]->getWidth(); ++k)
@@ -111,7 +111,7 @@ double** Domain::collectDataFromNode() {
 		 */
 		for (int i = 0; i < blockCount; ++i) {
 			if(mBlocks[i]->isRealBlock()) {
-				double* result = mBlocks[i]->getResult();
+				double* result = mBlocks[i]->getCurrentState();
 
 				for (int j = 0; j < mBlocks[i]->getLength(); ++j)
 					MPI_Send(result + (j * mBlocks[i]->getWidth()), mBlocks[i]->getWidth(), MPI_DOUBLE, 0, 999, MPI_COMM_WORLD);

@@ -30,7 +30,7 @@ public:
 
 	int getBlockType() { return CPU; }
 
-	double* getResult();
+	double* getCurrentState();
 
 	void print();
 

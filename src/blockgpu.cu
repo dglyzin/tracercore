@@ -439,7 +439,7 @@ void BlockGpu::prepareData() {
 	cudaThreadSynchronize();
 }
 
-double* BlockGpu::getResult() {
+double* BlockGpu::getCurrentState() {
 	cudaSetDevice(deviceNumber);
 	
 	cudaMemcpy( result, matrix, width * length * sizeof(double), cudaMemcpyDeviceToHost );

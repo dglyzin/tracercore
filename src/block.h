@@ -156,7 +156,7 @@ public:
 	/*
 	 * Возвращает результурющую матрицу данного блока.
 	 */
-	virtual double* getResult() { return NULL; }
+	virtual double* getCurrentState() { return NULL; }
 
 	int getLength() { return length; }
 	int getWidth() { return width; }

@@ -420,7 +420,7 @@ void BlockCpu::prepareData() {
 			blockBorder[	sendBorderType[RIGHT][i]	][i - blockBorderMove[	sendBorderType[RIGHT][i]	]] = matrix[i * width + (width - 1)];
 }
 
-double* BlockCpu::getResult() {
+double* BlockCpu::getCurrentState() {
 	for(int i = 0; i < length * width; i++)
 		result[i] = matrix[i];
 	

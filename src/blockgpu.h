@@ -42,7 +42,7 @@ public:
 
 	int getBlockType() { return GPU; }
 
-	double* getResult();
+	double* getCurrentState();
 
 	void print();
 
