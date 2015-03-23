@@ -119,6 +119,8 @@ void Domain::compute(char* saveFile) {
 
 	if( flags & SAVE_FILE )
 		saveStateToFile(saveFile);
+
+	printBlocksToConsole();
 }
 
 void Domain::nextStep(double dX2, double dY2, double dT) {
@@ -224,21 +226,36 @@ void Domain::swapBlockMatrix() {
 }
 
 void Domain::print(char* path) {
-	//double** resultAll = collectDataFromNode();
+	double** resultAll = collectDataFromNode();
+	double** area = NULL;
 
-	/*
-	 * После формирования результирующей матрицы производится вывод в файл.
-	 * Путь к файлу передается параметром этой функции.
-	 * Арумент командной строки.
-	 */
+	if( world_rank == 0 ) {
+		area = new double* [lengthArea];
+		for (int i = 0; i < lengthArea; ++i) {
+			area[i] = new double [widthArea];
+		}
 
-	/*if( world_rank == 0 ) {
+		for (int i = 0; i < lengthArea; ++i) {
+			for (int j = 0; j < widthArea; ++j) {
+				area[i][j] = 0;
+			}
+		}
+
+		for (int i = 0; i < blockCount; ++i) {
+			for (int j = 0; j < mBlocks[i]->getLength(); ++j) {
+				for (int k = 0; k < mBlocks[i]->getWidth(); ++k) {
+					area[ j + mBlocks[i]->getLengthMove() ][ k + mBlocks[i]->getWidthMove() ] =
+							resultAll[i][ j * mBlocks[i]->getLength() + k ];
+				}
+			}
+		}
+
 		ofstream out;
 		out.open(path);
 
 		for (int i = 0; i < lengthArea; ++i) {
 			for (int j = 0; j < widthArea; ++j)
-				out << i << " " << j << " " << resultAll[i][j] << endl;
+				out << i << " " << j << " " << area[i][j] << endl;
 			out << endl;
 		}
 
@@ -246,10 +263,16 @@ void Domain::print(char* path) {
 	}
 
 	if( resultAll != NULL ) {
-		for (int i = 0; i < lengthArea; ++i)
+		for (int i = 0; i < blockCount; ++i)
 			delete resultAll[i];
 		delete resultAll;
-	}*/
+	}
+
+	if( area != NULL ) {
+		for (int i = 0; i < blockCount; ++i)
+			delete area[i];
+		delete area;
+	}
 }
 
 void Domain::printAreaToConsole() {
