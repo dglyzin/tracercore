@@ -226,7 +226,7 @@ void Domain::swapBlockMatrix() {
 }
 
 void Domain::print(char* path) {
-	double** resultAll = collectDataFromNode();
+	/*double** resultAll = collectDataFromNode();
 	double** area = NULL;
 
 	if( world_rank == 0 ) {
@@ -272,7 +272,7 @@ void Domain::print(char* path) {
 		for (int i = 0; i < blockCount; ++i)
 			delete area[i];
 		delete area;
-	}
+	}*/
 }
 
 void Domain::printAreaToConsole() {
