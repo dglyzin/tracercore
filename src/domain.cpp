@@ -668,11 +668,11 @@ void Domain::saveStateToFile(char* path) {
 
 	if( world_rank == 0 ) {
 		ofstream out;
-		out.open(path);
+		out.open(path, ios::binary);
 
-		out << 253 << endl;
-		out << 1 << endl;
-		out << 0 << endl;
+		out << SAVE_FILE_CODE << endl;
+		out << VERSION_MAJOR << endl;
+		out << VERSION_MINOR << endl;
 		out << currentTime << endl;
 		out << blockCount << endl;
 
@@ -698,41 +698,50 @@ void Domain::loadStateFromFile(char* blockLocation, char* dataFile) {
 	readFromFile(blockLocation);
 
 	ifstream in;
-	in.open(dataFile);
+	in.open(dataFile, ios::binary);
 
-	int length;
-	int width;
+	int save_file_code;
+	int version_major;
+	int version_minor;
 
-	in >> currentTime;
-	in >> length;
-	in >> width;
+	int tmp_blockCount;
 
-	if( length != lengthArea || width != widthArea ) {
-		cout << endl << "Critical error!" << endl;
-		exit(1);
+	in >> save_file_code;
+
+	if( save_file_code != SAVE_FILE_CODE ) {
+		cout << endl << "Error save file. Save code." << endl;
+		exit(0);
 	}
 
-	double** matrix = new double* [lengthArea];
-	for (int i = 0; i < lengthArea; ++i)
-		matrix[i] = new double [widthArea];
+	in >> version_major;
+	in >> version_minor;
 
-	for (int i = 0; i < lengthArea; ++i)
-		for (int j = 0; j < widthArea; ++j)
-			in >> matrix[i][j];
+	in >> currentTime;
+	in >> tmp_blockCount;
+
+	if( tmp_blockCount != blockCount ) {
+		cout << endl << "Error save file. Block count." << endl;
+		exit(0);
+	}
 
 	for (int i = 0; i < blockCount; ++i) {
-		if( mBlocks[i]->isRealBlock() ) {
+		int length, width;
 
-			double* data = new double [mBlocks[i]->getLength() * mBlocks[i]->getWidth()];
+		in >> length;
+		in >> width;
 
-			for (int j = 0; j < mBlocks[i]->getLength(); ++j)
-				for (int k = 0; k < mBlocks[i]->getWidth(); ++k)
-					data[j * mBlocks[i]->getWidth() + k] = matrix[	j + mBlocks[i]->getLengthMove()	][	k + mBlocks[i]->getWidthMove()	];
-
-			mBlocks[i]->loadData(data);
-
-			delete data;
+		if( length != mBlocks[i]->getLength() || width != mBlocks[i]->getWidth() ) {
+			cout << endl << "Error save file. Block size." << endl;
+			exit(0);
 		}
+
+		double* data = new double [length * width];
+
+		for (int j = 0; j < length * width; ++j)
+			in >> data[j];
+
+		mBlocks[i]->loadData(data);
+		delete data;
 	}
 }
 
