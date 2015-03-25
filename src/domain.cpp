@@ -120,7 +120,7 @@ void Domain::compute(char* saveFile) {
 	if( flags & SAVE_FILE )
 		saveStateToFile(saveFile);
 
-	printBlocksToConsole();
+	//printBlocksToConsole();
 }
 
 void Domain::nextStep(double dX2, double dY2, double dT) {

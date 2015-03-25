@@ -619,28 +619,6 @@ void BlockGpu::print() {
 	
 	delete blockBorderMoveToPrint;	
 	
-	if(blockBorder != NULL) {
-		for(int i = 0; i < countSendSegmentBorder; i++ )
-			freeMemory(blockBorderMemoryAllocType[i], blockBorder[i]);
-		
-		delete blockBorder;
-		delete blockBorderMemoryAllocType;
-	}
-	
-	if(blockBorderMove != NULL)
-		delete blockBorderMove;
-	
-	
-	if(externalBorder != NULL) {
-		for(int i = 0; i < countReceiveSegmentBorder; i++ )
-			freeMemory(externalBorderMemoryAllocType[i], externalBorder[i]);
-		
-		delete externalBorder;
-		delete externalBorderMemoryAllocType;
-	}
-	
-	if(externalBorderMove != NULL)
-		delete externalBorderMove;
 	delete externalBorderMoveToPrint;
 }
 
