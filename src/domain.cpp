@@ -137,6 +137,9 @@ void Domain::nextStep(double dX2, double dY2, double dT) {
 	computeOneStepBorder(dX2, dY2, dT);
 
 	swapBlockMatrix();
+	/*char c;
+	scanf("%c", &c);
+	printBlocksToConsole();*/
 }
 
 void Domain::prepareDeviceData(int deviceType, int deviceNumber) {
@@ -226,7 +229,7 @@ void Domain::swapBlockMatrix() {
 }
 
 void Domain::print(char* path) {
-	/*double** resultAll = collectDataFromNode();
+	double** resultAll = collectDataFromNode();
 	double** area = NULL;
 
 	if( world_rank == 0 ) {
@@ -242,10 +245,16 @@ void Domain::print(char* path) {
 		}
 
 		for (int i = 0; i < blockCount; ++i) {
-			for (int j = 0; j < mBlocks[i]->getLength(); ++j) {
-				for (int k = 0; k < mBlocks[i]->getWidth(); ++k) {
-					area[ j + mBlocks[i]->getLengthMove() ][ k + mBlocks[i]->getWidthMove() ] =
-							resultAll[i][ j * mBlocks[i]->getLength() + k ];
+			int length_move = mBlocks[i]->getLengthMove();
+			int width_move = mBlocks[i]->getWidthMove();
+
+			int length = mBlocks[i]->getLength();
+			int width = mBlocks[i]->getWidth();
+
+			for (int j = 0; j < length; ++j) {
+				for (int k = 0; k < width; ++k) {
+					area[ j + length_move ][ k + width_move ] =
+							resultAll[i][ j * width + k ];
 				}
 			}
 		}
@@ -272,7 +281,7 @@ void Domain::print(char* path) {
 		for (int i = 0; i < blockCount; ++i)
 			delete area[i];
 		delete area;
-	}*/
+	}
 }
 
 void Domain::printAreaToConsole() {

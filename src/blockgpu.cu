@@ -681,6 +681,8 @@ double* BlockGpu::addNewBlockBorder(Block* neighbor, int side, int move, int bor
 		cudaMalloc ( (void**)&newBlockBorder, borderLength * sizeof(double) );
 		tempBlockBorderMemoryAllocType.push_back(CUDA_MALLOC);
 	}
+	
+	cout << endl << newBlockBorder << endl;
 
 	tempBlockBorder.push_back(newBlockBorder);
 	tempBlockBorderMove.push_back(move);
