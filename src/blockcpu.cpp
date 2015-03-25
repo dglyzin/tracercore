@@ -127,9 +127,6 @@ BlockCpu::~BlockCpu() {
 	
 	if(externalBorderMove != NULL)
 		delete externalBorderMove;
-	
-	/*if(result != NULL)
-		delete result;*/
 }
 
 void BlockCpu::computeOneStep(double dX2, double dY2, double dT) {
@@ -563,15 +560,12 @@ double* BlockCpu::addNewBlockBorder(Block* neighbor, int side, int move, int bor
 
 	if( ( nodeNumber == neighbor->getNodeNumber() ) && isGPU( neighbor->getBlockType() ) ) {
 		cudaMallocHost ( (void**)&newBlockBorder, borderLength * sizeof(double) );
-
 		tempBlockBorderMemoryAllocType.push_back(CUDA_MALLOC_HOST);
 	}
 	else {
 		newBlockBorder = new double [borderLength];
 		tempBlockBorderMemoryAllocType.push_back(NEW);
 	}
-
-	cout << endl << newBlockBorder << endl;
 
 	tempBlockBorder.push_back(newBlockBorder);
 	tempBlockBorderMove.push_back(move);

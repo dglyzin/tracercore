@@ -119,8 +119,6 @@ void Domain::compute(char* saveFile) {
 
 	if( flags & SAVE_FILE )
 		saveStateToFile(saveFile);
-
-	//printBlocksToConsole();
 }
 
 void Domain::nextStep(double dX2, double dY2, double dT) {
@@ -137,9 +135,6 @@ void Domain::nextStep(double dX2, double dY2, double dT) {
 	computeOneStepBorder(dX2, dY2, dT);
 
 	swapBlockMatrix();
-	/*char c;
-	scanf("%c", &c);
-	printBlocksToConsole();*/
 }
 
 void Domain::prepareDeviceData(int deviceType, int deviceNumber) {
@@ -208,10 +203,6 @@ void Domain::computeOneStepBorder(double dX2, double dY2, double dT) {
 }
 
 void Domain::computeOneStepCenter(double dX2, double dY2, double dT) {
-	/*processDeviceBlocksCenter(GPU, 0, dX2, dY2, dT);
-	processDeviceBlocksCenter(GPU, 1, dX2, dY2, dT);
-	processDeviceBlocksCenter(GPU, 2, dX2, dY2, dT);
-	processDeviceBlocksCenter(CPU, 0, dX2, dY2, dT);*/
 #pragma omp task
 	processDeviceBlocksCenter(GPU, 0, dX2, dY2, dT);
 #pragma omp task
