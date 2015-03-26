@@ -23,6 +23,9 @@ enum FLAGS {
 	STATISTICS = 0x10
 };
 
+#define SIZE_INT sizeof(int)
+#define SIZE_DOUBLE sizeof(double)
+
 /*
  * Сторона границы
  */
