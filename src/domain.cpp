@@ -70,8 +70,10 @@ double* Domain::getBlockCurrentState(int number) {
 		if(mBlocks[number]->isRealBlock()) {
 			result = mBlocks[number]->getCurrentState();
 		}
-		else
+		else {
+			result = new double [mBlocks[number]->getLength() * mBlocks[number]->getWidth()];
 			MPI_Recv(result, mBlocks[number]->getLength() * mBlocks[number]->getWidth(), MPI_DOUBLE, mBlocks[number]->getNodeNumber(), 999, MPI_COMM_WORLD, &status);
+		}
 
 		return result;
 	}

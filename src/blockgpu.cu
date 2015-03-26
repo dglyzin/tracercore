@@ -403,6 +403,8 @@ void BlockGpu::computeOneStepCenter(double dX2, double dY2, double dT) {
 void BlockGpu::prepareData() {
 	cudaSetDevice(deviceNumber);
 	
+	cudaThreadSynchronize();
+	
 	dim3 threads ( BLOCK_SIZE );
 	dim3 blocksLength  ( (int)ceil((double)length / threads.x) );
 	dim3 blocksWidth  ( (int)ceil((double)width / threads.x) );
