@@ -695,16 +695,42 @@ void Domain::saveStateToFile(char* path) {
 		ofstream out;
 		out.open(path, ios::binary);
 
-		out << SAVE_FILE_CODE << endl;
-		out << VERSION_MAJOR << endl;
-		out << VERSION_MINOR << endl;
-		out << currentTime << endl;
-		out << blockCount << endl;
+		int save_file_code = SAVE_FILE_CODE;
+		int version_major = VERSION_MAJOR;
+		int version_minor = VERSION_MINOR;
+
+		out.write((char*)&save_file_code, SIZE_INT);
+		out.write((char*)&version_major, SIZE_INT);
+		out.write((char*)&version_minor, SIZE_INT);
+
+		out.write((char*)&currentTime, SIZE_DOUBLE);
+		out.write((char*)&blockCount, SIZE_INT);
+
+		//out << SAVE_FILE_CODE << endl;
+		//out << VERSION_MAJOR << endl;
+		//out << VERSION_MINOR << endl;
+		//out << currentTime << endl;
+		//out << blockCount << endl;
+
+		int length;
+		int width;
+
+		double value;
 
 		for (int i = 0; i < blockCount; ++i) {
-			out << mBlocks[i]->getLength() << " " << mBlocks[i]->getWidth() << endl;
+			length = mBlocks[i]->getLength();
+			width = mBlocks[i]->getWidth();
+
+			cout << length << "l " << width << "w ";
+
+			out.write((char*)&length, SIZE_INT);
+			out.write((char*)&width, SIZE_INT);
+
+			//out << mBlocks[i]->getLength() << " " << mBlocks[i]->getWidth() << endl;
 			for (int j = 0; j < mBlocks[i]->getLength() * mBlocks[i]->getWidth(); ++j) {
-				out << resultAll[i][j] << " ";
+				value = resultAll[i][j];
+				//out << resultAll[i][j] << " ";
+				out.write((char*)&(resultAll[i][j]), SIZE_DOUBLE);
 			}
 			out << endl;
 		}
@@ -731,18 +757,24 @@ void Domain::loadStateFromFile(char* blockLocation, char* dataFile) {
 
 	int tmp_blockCount;
 
-	in >> save_file_code;
+	//in >> save_file_code;
+	in.read((char*)&save_file_code, SIZE_INT);
 
 	if( save_file_code != SAVE_FILE_CODE ) {
 		cout << endl << "Error save file. Save code." << endl;
 		exit(0);
 	}
 
-	in >> version_major;
-	in >> version_minor;
+	//in >> version_major;
+	//in >> version_minor;
+	in.read((char*)&version_major, SIZE_INT);
+	in.read((char*)&version_minor, SIZE_INT);
 
-	in >> currentTime;
-	in >> tmp_blockCount;
+	//in >> currentTime;
+	//in >> tmp_blockCount;
+
+	in.read((char*)&currentTime, SIZE_DOUBLE);
+	in.read((char*)&tmp_blockCount, SIZE_INT);
 
 	if( tmp_blockCount != blockCount ) {
 		cout << endl << "Error save file. Block count." << endl;
@@ -752,8 +784,12 @@ void Domain::loadStateFromFile(char* blockLocation, char* dataFile) {
 	for (int i = 0; i < blockCount; ++i) {
 		int length, width;
 
-		in >> length;
-		in >> width;
+		//in >> length;
+		//in >> width;
+		in.read((char*)&length, SIZE_INT);
+		in.read((char*)&width, SIZE_INT);
+
+		cout << length << "l " << width << "w ";
 
 		if( length != mBlocks[i]->getLength() || width != mBlocks[i]->getWidth() ) {
 			cout << endl << "Error save file. Block size." << endl;
@@ -763,7 +799,8 @@ void Domain::loadStateFromFile(char* blockLocation, char* dataFile) {
 		double* data = new double [length * width];
 
 		for (int j = 0; j < length * width; ++j)
-			in >> data[j];
+			//in >> data[j];
+			in.read((char*)&(data[j]), SIZE_DOUBLE);
 
 		mBlocks[i]->loadData(data);
 		delete data;
