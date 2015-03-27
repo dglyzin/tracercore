@@ -379,19 +379,24 @@ void Domain::printBlocksToConsole() {
  */
 void Domain::readFromFile(char* path) {
 	ifstream in;
-	in.open(path);
+	in.open(path, ios::binary);
 
 	readTimeSetting(in);
 
 	/*
 	 * Чтение размеров области
 	 */
-	readLengthAndWidthArea(in);
+	//readLengthAndWidthArea(in);
+
+	readSaveInterval(in);
+	readGridSteps(in);
+	readCellAndHaloSize(in);
 
 	/*
 	 * Чтение количества блоков
 	 */
-	in >> blockCount;
+	//in >> blockCount;
+	in.read((char*)&blockCount, SIZE_INT);
 
 	/*
 	 * Создаем массив указателей на блоки.
@@ -443,8 +448,27 @@ void Domain::readLengthAndWidthArea(ifstream& in) {
 }
 
 void Domain::readTimeSetting(ifstream& in) {
-	in >> stepTime;
-	in >> stopTime;
+	/*in >> stepTime;
+	in >> stopTime;*/
+
+	in.read((char*)&startTime, SIZE_DOUBLE);
+	in.read((char*)&stopTime, SIZE_DOUBLE);
+	in.read((char*)&stepTime, SIZE_DOUBLE);
+}
+
+void Domain::readSaveInterval(ifstream& in) {
+	in.read((char*)&saveInterval, SIZE_DOUBLE);
+}
+
+void Domain::readGridSteps(ifstream& in) {
+	in.read((char*)&dx, SIZE_DOUBLE);
+	in.read((char*)&dy, SIZE_DOUBLE);
+	in.read((char*)&dz, SIZE_DOUBLE);
+}
+
+void Domain::readCellAndHaloSize(ifstream& in) {
+	in.read((char*)&cellSize, SIZE_INT);
+	in.read((char*)&haloSize, SIZE_INT);
 }
 
 /*
@@ -473,8 +497,8 @@ Block* Domain::readBlock(ifstream& in) {
 	/*
 	 * Чтение размеров блока.
 	 */
-	in >> length;
-	in >> width;
+	/*in >> length;
+	in >> width;*/
 
 	/*
 	 * Координаты.

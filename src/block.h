@@ -38,17 +38,17 @@ protected:
 	double* matrix;
 	double* newMatrix;
 
-	/*
-	 * Длина и ширина матрицы для вычислений.
-	 */
-	int length;
-	int width;
+	int dimension;
 
-	/*
-	 * Координаты блока в области
-	 */
-	int lengthMove;
-	int widthMove;
+	int xCount;
+	int yCount;
+	int zCount;
+
+	int xOffset;
+	int yOffset;
+	int zOffset;
+
+	unsigned short int* functionNumber;
 
 	/*
 	 * Тип устройства.
@@ -104,16 +104,11 @@ protected:
 	int countSendSegmentBorder;
 	int countReceiveSegmentBorder;
 
-	/*
-	 * Функция проверяет допустимость значений для данного блока
-	 */
-	bool checkValue(int side, int move);
-
 	void freeMemory(int memory_alloc_type, double* memory);
 	void freeMemory(int memory_alloc_type, int* memory);
 
 public:
-	Block(int _length, int _width, int _lengthMove, int _widthMove, int _nodeNumber, int _deviceNumber);
+	Block(int _dimension, int _xCount, int _yCount, int _zCount, int _xOffset, int _yOffset, int _zOffset, int _nodeNumber, int _deviceNumber);
 	virtual ~Block();
 
 	/*
@@ -158,20 +153,20 @@ public:
 	 */
 	virtual double* getCurrentState() { return NULL; }
 
-	int getLength() { return length; }
-	int getWidth() { return width; }
+	int getXCount() { return xCount; }
+	int getYCount() { return yCount; }
+	int getZCount() { return zCount; }
 
-	/*
-	 * Возвращает количество узлов области блока.
-	 */
-	int getCountGridNodes() { return length * width; }
+	int getXOffset() { return xOffset; }
+	int getYOffset() { return yOffset; }
+	int getZOffset() { return zOffset; }
 
-	int getLengthMove() { return lengthMove; }
-	int getWidthMove() { return widthMove; }
+	int getGridNodeCount();
 
 	int getDeviceNumber() { return deviceNumber; }
-
 	int getNodeNumber() { return nodeNumber; }
+
+	void setFunctionNumber(unsigned short int* functionNumberData ) { return; }
 
 	/*
 	 * Вовращаение указателя на определенную границу.

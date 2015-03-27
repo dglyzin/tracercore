@@ -126,10 +126,21 @@ private:
 	int widthArea;
 
 	int flags;
+
 	int stepCount;
-	double stepTime;
+
+	double startTime;
 	double stopTime;
+	double stepTime;
+
 	double currentTime;
+
+	double saveInterval;
+
+	double dx, dy, dz;
+
+	int cellSize;
+	int haloSize;
 
 	int repeatCount;
 
@@ -141,6 +152,12 @@ private:
 	void readLengthAndWidthArea(std::ifstream& in);
 
 	void readTimeSetting(std::ifstream& in);
+
+	void readSaveInterval(std::ifstream& in);
+
+	void readGridSteps(std::ifstream& in);
+
+	void readCellAndHaloSize(std::ifstream& in);
 
 	/*
 	 * Чтение блока

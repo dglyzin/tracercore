@@ -10,12 +10,16 @@
 #include <cuda_runtime_api.h>
 
 
-Block::Block(int _length, int _width, int _lengthMove, int _widthMove, int _nodeNumber, int _deviceNumber) {
-	length = _length;
-	width = _width;
+Block::Block(int _dimension, int _xCount, int _yCount, int _zCount, int _xOffset, int _yOffset, int _zOffset, int _nodeNumber, int _deviceNumber) {
+	dimension = _dimension;
 
-	lengthMove = _lengthMove;
-	widthMove = _widthMove;
+	xCount = _xCount;
+	yCount = _yCount;
+	zCount = _zCount;
+
+	xOffset = _xOffset;
+	yOffset = _yOffset;
+	zOffset = _zOffset;
 
 	nodeNumber = _nodeNumber;
 
@@ -36,6 +40,7 @@ Block::Block(int _length, int _width, int _lengthMove, int _widthMove, int _node
 	externalBorderMemoryAllocType = NULL;
 
 	matrix = newMatrix = NULL;
+	functionNumber = NULL;
 	
 	//result = NULL;
 }
@@ -44,27 +49,17 @@ Block::~Block() {
 
 }
 
-/*
- * Проверяется, попадает ли сдвиг на границу.
- * Есть возможность выйти за пределы массива границы.
- *
- * Например: длина границы 20, сдвиг 25.
- * Если проверка не выполнена, то тбудет возвращен указател на область, которая по факту не относится к границе.
- * Это будет ошибка.
- *
- * Данная функция также проверяет, что переданный "номер" стороны является корректным.
- */
-bool Block::checkValue(int side, int move) {
-	if( (side == TOP || side == BOTTOM) && move > width )
-		return true;
-
-	if( (side == LEFT || side == RIGHT) && move > length )
-		return true;
-
-	if( side >= BORDER_COUNT )
-		return true;
-
-	return false;
+int Block::getGridNodeCount() {
+	switch (dimension) {
+		case 0:
+			return xCount;
+		case 1:
+			return xCount * yCount;
+		case 2:
+			return xCount * yCount * zCount;
+		default:
+			return xCount;
+	}
 }
 
 void Block::freeMemory(int memory_alloc_type, double* memory) {
