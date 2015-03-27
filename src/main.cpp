@@ -6,6 +6,8 @@
 
 using namespace std;
 
+void testRead(char* path);
+
 int main(int argc, char * argv[]) {
 	/*
 	 * TODO Границы - пересылка - расчет центра
@@ -78,4 +80,8 @@ int main(int argc, char * argv[]) {
 	 * Завершение MPI
 	 */
 	MPI_Finalize();
+}
+
+void testRead(char* path) {
+
 }
