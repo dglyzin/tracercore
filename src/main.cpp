@@ -56,7 +56,7 @@ int main(int argc, char * argv[]) {
 	 */
 	// Получить текущее время
 	time1 = MPI_Wtime();
-	d->compute(saveFile);
+	//d->compute(saveFile);
 	// Получить текущее время
 	time2 = MPI_Wtime();
 
@@ -64,7 +64,7 @@ int main(int argc, char * argv[]) {
 	 * Вывод информации о времени работы осуществляет только поток с номером 0.
 	 * Время работы -  разница между двумя отсечками, котрые были сделаны ранее.
 	 */
-	d->printStatisticsInfo(inputFile, outputFile, time2 - time1, statisticsFile);
+	//d->printStatisticsInfo(inputFile, outputFile, time2 - time1, statisticsFile);
 
 	/*
 	 * Сбор и вывод результата.
