@@ -42,9 +42,6 @@ Interconnect::~Interconnect() {
 void Interconnect::sendRecv(int locationNode) {
 	/*
 	 * Пересылка внутри блока.
-	 * На данный момент реализован не оптимальный способ передачи данных внутри потока.
-	 * Данный передаются с помощью MPI-пересылок.
-	 * В дальнейшем должена быть реализована "склейка" границ.
 	 */
 	if(locationNode == sourceLocationNode && locationNode == destinationLocationNode)
 		return;
