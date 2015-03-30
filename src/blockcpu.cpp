@@ -13,12 +13,26 @@ using namespace std;
 
 BlockCpu::BlockCpu(int _length, int _width, int _lengthMove, int _widthMove, int _nodeNumber, int _deviceNumber) : Block(  _length, _width, _lengthMove, _widthMove, _nodeNumber, _deviceNumber  ) {
 
-	matrix = new double [length * width];
-	newMatrix = new double [length * width];
+	matrix = new double [xCount * yCount * zCount * cellSize];
+	newMatrix = new double [xCount * yCount * zCount * cellSize];
 
-	for (int i = 0; i < length; ++i)
-		for (int j = 0; j < width; ++j)
-			matrix[i * width + j] = newMatrix[i * width + j] = 0;
+	for (int i = 0; i < zCount; ++i) {
+		int zShift = xCount * yCount * i;
+
+		for (int j = 0; j < yCount; ++j) {
+			int yShift = xCount * j;
+
+			for (int k = 0; k < xCount; ++k) {
+				int xShift = k;
+
+				for (int l = 0; l < cellSize; ++l) {
+					int cellShift = l;
+					matrix[ zShift + yShift + xShift + cellShift ] =
+							newMatrix[ zShift + yShift + xShift + cellShift ] = 0;
+				}
+			}
+		}
+	}
 
 	/*
 	 * Типы границ блока. Выделение памяти.
