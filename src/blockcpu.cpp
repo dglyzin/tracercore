@@ -39,7 +39,13 @@ BlockCpu::BlockCpu(int _length, int _width, int _lengthMove, int _widthMove, int
 	 * Типы границ блока. Выделение памяти.
 	 * По умолчанию границы задаются функциями, то есть нет границ между блоками.
 	 */
-	sendBorderType = new int* [BORDER_COUNT];
+
+	/*
+	 * TODO Новая реализация всех границ
+	 * соседи писать через вектора, как было ранее
+	 * для определения "границ" использовать 5 значение: сторона, начальные координаты, конечный (по 2 штуки) - определяют прямоугольную область
+	 */
+	/*sendBorderType = new int* [BORDER_COUNT];
 
 	sendBorderType[TOP] = new int[width];
 	for(int i = 0; i < width; i++)
@@ -74,7 +80,7 @@ BlockCpu::BlockCpu(int _length, int _width, int _lengthMove, int _widthMove, int
 
 	receiveBorderType[RIGHT] = new int[length];
 	for (int i = 0; i < length; ++i)
-		receiveBorderType[RIGHT][i] = BY_FUNCTION;
+		receiveBorderType[RIGHT][i] = BY_FUNCTION;*/
 	
 	
 	//result = new double [length * width];
