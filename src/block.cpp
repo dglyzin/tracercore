@@ -86,6 +86,12 @@ int Block::getGridNodeCount() {
 	return xCount * yCount * zCount;
 }
 
+void Block::swapMatrix() {
+	double* tmp = matrix;
+	matrix = newMatrix;
+	newMatrix = tmp;
+}
+
 void Block::freeMemory(int memory_alloc_type, double* memory) {
 	if(memory == NULL)
 		return;

@@ -139,11 +139,7 @@ public:
 	virtual void computeOneStepBorder(double dX2, double dY2, double dT) { return; }
 	virtual void computeOneStepCenter(double dX2, double dY2, double dT) { return; }
 
-	virtual void swapMatrix() {
-		double* tmp = matrix;
-		matrix = newMatrix;
-		newMatrix = tmp;
-	}
+	void swapMatrix();
 
 	/*
 	 * Возвращает тип блока.
