@@ -29,7 +29,7 @@ enum FLAGS {
 /*
  * Сторона границы
  */
-enum BORDER_SIDE { TOP, LEFT, BOTTOM, RIGHT, BORDER_COUNT };
+enum BORDER_SIDE { LEFT, RIGHT, FRONT, BACK, TOP, BOTTOM, BORDER_COUNT };
 
 /*
  * Типы блоков.
