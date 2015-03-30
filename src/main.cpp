@@ -8,16 +8,6 @@ using namespace std;
 
 int main(int argc, char * argv[]) {
 	/*
-	 * TODO Границы - пересылка - расчет центра
-	 */
-
-	/*
-	 * При запуске обязательно следует указывать 2 аргумента.
-	 * Пусть к файлу с исходными данными
-	 * Путь к файлу, в который будет записан результат.
-	 */
-
-	/*
 	 * Инициализация MPI
 	 */
 	MPI_Init(NULL, NULL);
@@ -34,11 +24,6 @@ int main(int argc, char * argv[]) {
 	 */
 	double time1, time2;
 
-	/*
-	 * Создание основного управляющего класса.
-	 * Номер потока, количество потоков и путь к файлу с данными.
-	 */
-
 	char* inputFile = argv[1];
 	char* outputFile = argv[2];
 	int flags = atoi(argv[3]);
@@ -48,6 +33,11 @@ int main(int argc, char * argv[]) {
 	char* saveFile = argv[6];
 	char* loadFile = argv[7];
 	char* statisticsFile = argv[8];
+
+	/*
+	 * Создание основного управляющего класса.
+	 * Номер потока, количество потоков и путь к файлу с данными.
+	 */
 
 	Domain* d = new Domain(world_rank, world_size, inputFile, flags, stepCount, stopTime, loadFile);
 
