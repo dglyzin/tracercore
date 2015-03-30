@@ -31,6 +31,8 @@ enum FLAGS {
  */
 enum BORDER_SIDE { LEFT, RIGHT, FRONT, BACK, TOP, BOTTOM, BORDER_COUNT };
 
+enum INTERCONNECT_COMPONENT { SIDE, START_X, START_Y, STOP_X, STOP_Y, INTERCONNECT_COMPONENT_COUNT };
+
 /*
  * Типы блоков.
  * Центральный процессов или одна их трех видеокарт.
