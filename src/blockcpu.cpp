@@ -27,6 +27,7 @@ BlockCpu::BlockCpu(int _length, int _width, int _lengthMove, int _widthMove, int
 
 				for (int l = 0; l < cellSize; ++l) {
 					int cellShift = l;
+
 					matrix[ zShift + yShift + xShift + cellShift ] =
 							newMatrix[ zShift + yShift + xShift + cellShift ] = 0;
 				}
