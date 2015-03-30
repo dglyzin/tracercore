@@ -50,6 +50,9 @@ protected:
 
 	unsigned short int* functionNumber;
 
+	int cellSize;
+	int haloSize;
+
 	/*
 	 * Тип устройства.
 	 * Для видеокарт - номер видеокарты.
@@ -108,7 +111,11 @@ protected:
 	void freeMemory(int memory_alloc_type, int* memory);
 
 public:
-	Block(int _dimension, int _xCount, int _yCount, int _zCount, int _xOffset, int _yOffset, int _zOffset, int _nodeNumber, int _deviceNumber);
+	Block(int _dimension, int _xCount, int _yCount, int _zCount,
+			int _xOffset, int _yOffset, int _zOffset,
+			int _nodeNumber, int _deviceNumber,
+			int _haloSize, int _cellSize);
+
 	virtual ~Block();
 
 	/*

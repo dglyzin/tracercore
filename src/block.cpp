@@ -10,7 +10,10 @@
 #include <cuda_runtime_api.h>
 
 
-Block::Block(int _dimension, int _xCount, int _yCount, int _zCount, int _xOffset, int _yOffset, int _zOffset, int _nodeNumber, int _deviceNumber) {
+Block::Block(int _dimension, int _xCount, int _yCount, int _zCount,
+		int _xOffset, int _yOffset, int _zOffset,
+		int _nodeNumber, int _deviceNumber,
+		int _haloSize, int _cellSize) {
 	dimension = _dimension;
 
 	xCount = _xCount;
@@ -41,8 +44,9 @@ Block::Block(int _dimension, int _xCount, int _yCount, int _zCount, int _xOffset
 
 	matrix = newMatrix = NULL;
 	functionNumber = NULL;
-	
-	//result = NULL;
+
+	cellSize = _cellSize;
+	haloSize = _haloSize;
 }
 
 Block::~Block() {
