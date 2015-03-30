@@ -213,7 +213,7 @@ void testRead(char* path) {
 
 		cout << "	source block:      " << sourceBlock << endl;
 		cout << "	destination block: " << destinationBlock << endl;
-		cout << "	sourse side:       " << sourceSide << endl;
+		cout << "	source side:       " << sourceSide << endl;
 		cout << "	destination side:  " << destinationSide << endl;
 
 		for (int j = 0; j < dimension; ++j) {
