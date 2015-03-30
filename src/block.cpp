@@ -83,16 +83,7 @@ Block::~Block() {
 }
 
 int Block::getGridNodeCount() {
-	switch (dimension) {
-		case 0:
-			return xCount;
-		case 1:
-			return xCount * yCount;
-		case 2:
-			return xCount * yCount * zCount;
-		default:
-			return xCount;
-	}
+	return xCount * yCount * zCount;
 }
 
 void Block::freeMemory(int memory_alloc_type, double* memory) {
