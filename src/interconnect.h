@@ -38,12 +38,7 @@ public:
 
 	void print();
 
-	void wait() {
-		if( flag ) {
-			MPI_Wait(request, status);
-			flag = false;
-		}
-	}
+	void wait();
 
 private:
 	/*

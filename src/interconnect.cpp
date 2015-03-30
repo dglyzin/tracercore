@@ -74,6 +74,13 @@ void Interconnect::sendRecv(int locationNode) {
 	 */
 }
 
+void Interconnect::wait() {
+	if( flag ) {
+		MPI_Wait(request, status);
+		flag = false;
+	}
+}
+
 void Interconnect::print() {
 	cout << endl;
 	cout << "Interconnect" << endl;
