@@ -131,8 +131,8 @@ public:
 	 */
 	virtual void prepareData() { return; }
 
-	virtual void computeOneStepBorder(double dX2, double dY2, double dT) { return; }
-	virtual void computeOneStepCenter(double dX2, double dY2, double dT) { return; }
+	virtual void computeOneStepBorder(double* param) { return; }
+	virtual void computeOneStepCenter(double* param) { return; }
 
 	void swapMatrix();
 
