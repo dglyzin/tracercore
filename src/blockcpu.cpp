@@ -11,7 +11,14 @@
 
 using namespace std;
 
-BlockCpu::BlockCpu(int _length, int _width, int _lengthMove, int _widthMove, int _nodeNumber, int _deviceNumber) : Block(  _length, _width, _lengthMove, _widthMove, _nodeNumber, _deviceNumber  ) {
+BlockCpu::BlockCpu(int _dimension, int _xCount, int _yCount, int _zCount,
+		int _xOffset, int _yOffset, int _zOffset,
+		int _nodeNumber, int _deviceNumber,
+		int _haloSize, int _cellSize) :
+				Block( _dimension, _xCount, _yCount, _zCount,
+				_xOffset, _yOffset, _zOffset,
+				_nodeNumber, _deviceNumber,
+				_haloSize, _cellSize ) {
 
 	matrix = new double [xCount * yCount * zCount * cellSize];
 	newMatrix = new double [xCount * yCount * zCount * cellSize];
