@@ -526,7 +526,7 @@ Block* Domain::readBlock(ifstream& in) {
 	cout << endl << "DON'T CREATE GPU BLOCK! SEE DOMAIN.H includes!!!" << endl;
 
 	if(node == world_rank)
-		switch (deviceType) {
+		/*switch (deviceType) {
 			case 0:
 				return new BlockCpu(dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, haloSize, cellSize);
 			case 1:
@@ -537,7 +537,8 @@ Block* Domain::readBlock(ifstream& in) {
 				//return new BlockGpu(length, width, lengthMove, widthMove, world_rank_creator, 2);
 			default:
 				return new BlockNull(dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, haloSize, cellSize);
-		}
+		}*/
+		return new BlockCpu(dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, haloSize, cellSize);
 	else
 		return new BlockNull(dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, haloSize, cellSize);
 }
