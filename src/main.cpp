@@ -62,7 +62,7 @@ int main(int argc, char * argv[]) {
 	 */
 	d->print(outputFile);
 
-	delete d;
+	//delete d;
 
 	/*
 	 * Завершение MPI
