@@ -382,31 +382,17 @@ void Domain::readFromFile(char* path) {
 	for (int i = 0; i < blockCount; ++i)
 		mBlocks[i] = readBlock(in);
 
-	/*
-	 * Чтение количества соединений.
 
-	in >> connectionCount;
-
-
-	 * Создаем массив указателей на соединения.
+	readConnectionCount(in);
 
 	mInterconnects = new Interconnect* [connectionCount];
-
-
-	 * Читаем соединения.
-	 * Функция чтения соединения вовращает указатель на соединение, его записываем в нужную позицию в массиве.
 
 	for (int i = 0; i < connectionCount; ++i)
 		mInterconnects[i] = readConnection(in);
 
+	cout << endl << "MOVE TEMP BORDER VECTOR!!" << endl;
 
-	 * Для каждого блока выполняем операцию переноса данных из вектора в масиив.
-	 *
-	 * Информация о частях границ для отправки/получения переносится из векторов в массивы.
-	 * Еак как на момент создания блока неизвестно сколько именно у него "соседей",
-	 * сколько частей границ нужно отправлять/получать, изначально данные пишутся в ектор, а затем переносятся в массивы.
-
-	for (int i = 0; i < blockCount; ++i)
+	/*for (int i = 0; i < blockCount; ++i)
 		mBlocks[i]->moveTempBorderVectorToBorderArray();*/
 }
 
@@ -463,6 +449,12 @@ void Domain::readBlockCount(ifstream& in) {
 	in.read((char*)&blockCount, SIZE_INT);
 
 	cout << "block count:   " << blockCount << endl;
+}
+
+void Domain::readConnectionCount(ifstream& in) {
+	in.read((char*)&connectionCount, SIZE_INT);
+
+	cout << "connection count:   " << connectionCount << endl;
 }
 
 /*
@@ -570,7 +562,7 @@ Interconnect* Domain::readConnection(ifstream& in) {
 
 	for (int j = 0; j < dimension; ++j) {
 		in.read((char*)&length[j], SIZE_INT);
-		cout << "	length" << j << ":            " << length << endl;
+		cout << "	length" << j << ":           " << length[j] << endl;
 	}
 
 	in.read((char*)&sourceBlock, SIZE_INT);
