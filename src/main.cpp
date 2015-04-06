@@ -24,7 +24,7 @@ int main(int argc, char * argv[]) {
 	 */
 	MPI_Init(NULL, NULL);
 
-	testRead("brusselator_2block.bin");
+	//testRead("brusselator_2block.bin");
 
 	/*
 	 * Для каждого потока получаем его номер и общее количество потоков.
@@ -53,14 +53,14 @@ int main(int argc, char * argv[]) {
 	char* loadFile = argv[7];
 	char* statisticsFile = argv[8];
 
-	//Domain* d = new Domain(world_rank, world_size, inputFile, flags, stepCount, stopTime, loadFile);
+	Domain* d = new Domain(world_rank, world_size, inputFile, flags, stepCount, stopTime, loadFile);
 
 	/*
 	 * Вычисления.
 	 */
 	// Получить текущее время
 	time1 = MPI_Wtime();
-	//d->compute(saveFile);
+	d->compute(saveFile);
 	// Получить текущее время
 	time2 = MPI_Wtime();
 
@@ -68,15 +68,15 @@ int main(int argc, char * argv[]) {
 	 * Вывод информации о времени работы осуществляет только поток с номером 0.
 	 * Время работы -  разница между двумя отсечками, котрые были сделаны ранее.
 	 */
-	//d->printStatisticsInfo(inputFile, outputFile, time2 - time1, statisticsFile);
+	d->printStatisticsInfo(inputFile, outputFile, time2 - time1, statisticsFile);
 
 	/*
 	 * Сбор и вывод результата.
 	 * Передается второй аргумент командной строки - путь к файлу, в который будет записан результат.
 	 */
-	//d->print(outputFile);
+	d->print(outputFile);
 
-	//delete d;
+	delete d;
 
 	/*
 	 * Завершение MPI
