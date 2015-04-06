@@ -730,7 +730,7 @@ void Domain::saveStateToFile(char* path) {
 			for (int j = 0; j < mBlocks[i]->getLength() * mBlocks[i]->getWidth(); ++j) {
 				value = resultAll[i][j];
 				//out << resultAll[i][j] << " ";
-				out.write((char*)&(resultAll[i][j]), SIZE_DOUBLE);
+				out.write((char*)&(value), SIZE_DOUBLE);
 			}
 			out << endl;
 		}
