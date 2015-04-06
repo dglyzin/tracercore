@@ -53,6 +53,12 @@ BlockCpu::BlockCpu(int _dimension, int _xCount, int _yCount, int _zCount,
 
 	getFuncArray(&mUserFuncs);
 	getInitFuncArray(&mUserInitFuncs);
+	initDefaultParams(&mParams, &mParamsCount);
+	cout << "Default params ("<<mParamsCount<<"): ";
+	for (int idx=0;idx<mParamsCount; idx++)
+		cout <<mParams[idx] << " ";
+	cout << endl;
+
 	cout << "functions loaded\n";
 	printf("Func array points to %d \n", (long unsigned int) mUserFuncs );
 	double params[3];
@@ -136,8 +142,9 @@ BlockCpu::BlockCpu(int _dimension, int _xCount, int _yCount, int _zCount,
 }
 
 BlockCpu::~BlockCpu() {
+	releaseParams(mParams);
 	releaseFuncArray(mUserFuncs);
-	getInitFuncArray(&mUserInitFuncs);
+	releaseInitFuncArray(mUserInitFuncs);
 
 	if(matrix != NULL)
 		delete matrix;

@@ -113,6 +113,8 @@ protected:
 
 	func_ptr_t* mUserFuncs;
 	initfunc_fill_ptr_t* mUserInitFuncs;
+	double * mParams;
+	int mParamsCount;
 
 public:
 	Block(int _dimension, int _xCount, int _yCount, int _zCount,
