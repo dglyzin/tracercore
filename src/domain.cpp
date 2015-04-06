@@ -64,7 +64,9 @@ double** Domain::collectDataFromNode() {
 }
 
 double* Domain::getBlockCurrentState(int number) {
-	double* result = NULL;
+	cout << endl << "GET CURRENT STATE NOT WORK!" << endl;
+	return 0;
+	/*double* result = NULL;
 
 	if(world_rank == 0) {
 		if(mBlocks[number]->isRealBlock()) {
@@ -85,7 +87,7 @@ double* Domain::getBlockCurrentState(int number) {
 			return NULL;
 		}
 	}
-	return NULL;
+	return NULL;*/
 }
 
 void Domain::compute(char* saveFile) {
@@ -146,24 +148,19 @@ void Domain::prepareDeviceData(int deviceType, int deviceNumber) {
 		}
 }
 
-void Domain::processDeviceBlocks(int deviceType, int deviceNumber, double dX2, double dY2, double dT) {
-	for (int i = 0; i < blockCount; ++i)
-        if( mBlocks[i]->getBlockType() == deviceType && mBlocks[i]->getDeviceNumber() == deviceNumber ) {
-		    mBlocks[i]->computeOneStep(dX2, dY2, dT);
-		}
-}
-
 void Domain::processDeviceBlocksBorder(int deviceType, int deviceNumber, double dX2, double dY2, double dT) {
 	for (int i = 0; i < blockCount; ++i)
         if( mBlocks[i]->getBlockType() == deviceType && mBlocks[i]->getDeviceNumber() == deviceNumber ) {
-		    mBlocks[i]->computeOneStepBorder(dX2, dY2, dT);
+        	cout << endl << "ERROR! PROCESS DEVICE!" << endl;
+		    mBlocks[i]->computeOneStepBorder(currentTime, NULL);
 		}
 }
 
 void Domain::processDeviceBlocksCenter(int deviceType, int deviceNumber, double dX2, double dY2, double dT) {
 	for (int i = 0; i < blockCount; ++i)
         if( mBlocks[i]->getBlockType() == deviceType && mBlocks[i]->getDeviceNumber() == deviceNumber ) {
-		    mBlocks[i]->computeOneStepCenter(dX2, dY2, dT);
+        	cout << endl << "ERROR! PROCESS DEVICE!" << endl;
+		    mBlocks[i]->computeOneStepCenter(currentTime, NULL);
 		}
 }
 
@@ -176,19 +173,6 @@ void Domain::prepareData() {
 	prepareDeviceData(GPU, 2);
 
 	prepareDeviceData(CPU, 0);
-
-#pragma omp taskwait
-}
-
-void Domain::computeOneStep(double dX2, double dY2, double dT) {
-#pragma omp task
-	processDeviceBlocks(GPU, 0, dX2, dY2, dT);
-#pragma omp task
-	processDeviceBlocks(GPU, 1, dX2, dY2, dT);
-#pragma omp task
-	processDeviceBlocks(GPU, 2, dX2, dY2, dT);
-#pragma omp task
-	processDeviceBlocks(CPU, 0, dX2, dY2, dT);
 
 #pragma omp taskwait
 }
@@ -222,7 +206,9 @@ void Domain::swapBlockMatrix() {
 }
 
 void Domain::print(char* path) {
-	double** resultAll = collectDataFromNode();
+	cout << endl << "PRINT DON'T WORK" << endl;
+	return;
+	/*double** resultAll = collectDataFromNode();
 	double** area = NULL;
 
 	if( world_rank == 0 ) {
@@ -274,7 +260,7 @@ void Domain::print(char* path) {
 		for (int i = 0; i < blockCount; ++i)
 			delete area[i];
 		delete area;
-	}
+	}*/
 }
 
 void Domain::printAreaToConsole() {
@@ -530,16 +516,18 @@ Block* Domain::readBlock(ifstream& in) {
 	 *
 	 * В зависимости от считанного типа будет создан либо блок для центрального процессора, либо блок для одной их видеокарт.
 	 */
+	cout << endl << "DON'T CREATE GPU BLOCK! SEE DOMAIN.H includes!!!" << endl;
+
 	if(world_rank_creator == world_rank)
 		switch (type) {
 			case 0:
 				return new BlockCpu(length, width, lengthMove, widthMove, world_rank_creator, 0);
 			case 1:
-				return new BlockGpu(length, width, lengthMove, widthMove, world_rank_creator, 0);
+				//return new BlockGpu(length, width, lengthMove, widthMove, world_rank_creator, 0);
 			case 2:
-				return new BlockGpu(length, width, lengthMove, widthMove, world_rank_creator, 1);
+				//return new BlockGpu(length, width, lengthMove, widthMove, world_rank_creator, 1);
 			case 3:
-				return new BlockGpu(length, width, lengthMove, widthMove, world_rank_creator, 2);
+				//return new BlockGpu(length, width, lengthMove, widthMove, world_rank_creator, 2);
 			default:
 				return new BlockNull(length, width, lengthMove, widthMove, world_rank_creator, 0);
 		}
@@ -663,7 +651,7 @@ Interconnect* Domain::readConnection(ifstream& in) {
 int Domain::getCountGridNodes() {
 	int count = 0;
 	for (int i = 0; i < blockCount; ++i)
-		count += mBlocks[i]->getCountGridNodes();
+		count += mBlocks[i]->getGridNodeCount();
 
 	return count;
 }
@@ -713,7 +701,9 @@ int Domain::realBlockCount() {
 }
 
 void Domain::saveStateToFile(char* path) {
-	double** resultAll = collectDataFromNode();
+	cout << endl << "SAVE STATE DON'T WORK" << endl;
+	return;
+	/*double** resultAll = collectDataFromNode();
 
 	if( world_rank == 0 ) {
 		ofstream out;
@@ -766,11 +756,13 @@ void Domain::saveStateToFile(char* path) {
 		for (int i = 0; i < blockCount; ++i)
 			delete resultAll[i];
 		delete resultAll;
-	}
+	}*/
 }
 
 void Domain::loadStateFromFile(char* blockLocation, char* dataFile) {
-	readFromFile(blockLocation);
+	cout << endl << "LOAD STATE DON'T WORK" << endl;
+	return;
+	/*readFromFile(blockLocation);
 
 	ifstream in;
 	in.open(dataFile, ios::binary);
@@ -828,11 +820,13 @@ void Domain::loadStateFromFile(char* blockLocation, char* dataFile) {
 
 		mBlocks[i]->loadData(data);
 		delete data;
-	}
+	}*/
 }
 
 void Domain::printStatisticsInfo(char* inputFile, char* outputFile, double calcTime, char* statisticsFile) {
-	if ( flags & STATISTICS ) {
+	cout << endl << "PRINT STATISTIC INFO DON'T WORK" << endl;
+	return;
+	/*if ( flags & STATISTICS ) {
 		if( world_rank == 0 ) {
 			int countGridNodes = getCountGridNodes();
 			int repeatCount = getRepeatCount();
@@ -877,5 +871,5 @@ void Domain::printStatisticsInfo(char* inputFile, char* outputFile, double calcT
 			MPI_Send(&cpuCount, 1, MPI_INT, 0, 999, MPI_COMM_WORLD);
 			MPI_Send(&gpuCount, 1, MPI_INT, 0, 999, MPI_COMM_WORLD);
 		}
-	}
+	}*/
 }

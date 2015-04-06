@@ -11,7 +11,7 @@
 #include <fstream>
 #include <string.h>
 #include "blockcpu.h"
-#include "blockgpu.h"
+//#include "blockgpu.h"
 #include "blocknull.h"
 #include "interconnect.h"
 
@@ -174,10 +174,8 @@ private:
 
 	void prepareData();
 	void prepareDeviceData(int deviceType, int deviceNumber);
-	void processDeviceBlocks(int deviceType, int deviceNumber, double dX2, double dY2, double dT);
 	void processDeviceBlocksBorder(int deviceType, int deviceNumber, double dX2, double dY2, double dT);
 	void processDeviceBlocksCenter(int deviceType, int deviceNumber, double dX2, double dY2, double dT);
-	void computeOneStep(double dX2, double dY2, double dT);
 	void computeOneStepBorder(double dX2, double dY2, double dT);
 	void computeOneStepCenter(double dX2, double dY2, double dT);
 	void swapBlockMatrix();
