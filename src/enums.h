@@ -48,6 +48,8 @@ enum MEMORY_ALLOC_TYPE { NOT_ALLOC, NEW, CUDA_MALLOC, CUDA_MALLOC_HOST };
 
 int oppositeBorder(int side);
 
+int getSide(int number);
+
 bool isCPU(int type);
 bool isGPU(int type);
 
