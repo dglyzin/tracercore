@@ -8,6 +8,7 @@
 #include "blockcpu.h"
 #include <cuda.h>
 #include <cuda_runtime_api.h>
+#include "userfuncs.h"
 
 using namespace std;
 
@@ -42,6 +43,7 @@ BlockCpu::BlockCpu(int _dimension, int _xCount, int _yCount, int _zCount,
 		}
 	}
 
+	getFuncArray(&mUserFuncs);
 	/*
 	 * Типы границ блока. Выделение памяти.
 	 * По умолчанию границы задаются функциями, то есть нет границ между блоками.
@@ -94,6 +96,8 @@ BlockCpu::BlockCpu(int _dimension, int _xCount, int _yCount, int _zCount,
 }
 
 BlockCpu::~BlockCpu() {
+	releaseFuncArray(mUserFuncs);
+
 	if(matrix != NULL)
 		delete matrix;
 	
