@@ -511,9 +511,13 @@ Block* Domain::readBlock(ifstream& in) {
 
 	for (int j = 0; j < total; ++j) {
 		in.read((char*)&functionNumber[j], SIZE_UN_SH_INT);
-		cout << functionNumber[j] << " ";
-	}
 
+	}
+	for (int idxY = 0; idxY < count[1]; ++idxY) {
+		for (int idxX = 0; idxX < count[0]; ++idxX)
+		    cout << functionNumber[idxY*count[0]+idxX] << " ";
+		cout << endl;
+	}
 	cout << endl;
 
 	cout << endl << "DON'T CREATE GPU BLOCK! SEE DOMAIN.H includes!!!" << endl;

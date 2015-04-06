@@ -20,7 +20,7 @@ BlockCpu::BlockCpu(int _dimension, int _xCount, int _yCount, int _zCount,
 				_xOffset, _yOffset, _zOffset,
 				_nodeNumber, _deviceNumber,
 				_haloSize, _cellSize ) {
-
+	cout << "Creating block..\n";
 	matrix = new double [xCount * yCount * zCount * cellSize];
 	newMatrix = new double [xCount * yCount * zCount * cellSize];
 
@@ -36,8 +36,8 @@ BlockCpu::BlockCpu(int _dimension, int _xCount, int _yCount, int _zCount,
 				for (int l = 0; l < cellSize; ++l) {
 					int cellShift = l;
 
-					matrix[ zShift + yShift + xShift + cellShift ] =
-							newMatrix[ zShift + yShift + xShift + cellShift ] = 0;
+					matrix[ (zShift + yShift + xShift)*cellSize + cellShift ] =
+							newMatrix[ (zShift + yShift + xShift)*cellSize + cellShift ] = 0;
 				}
 			}
 		}
@@ -55,11 +55,34 @@ BlockCpu::BlockCpu(int _dimension, int _xCount, int _yCount, int _zCount,
 	getInitFuncArray(&mUserInitFuncs);
 	cout << "functions loaded\n";
 	printf("Func array points to %d \n", (long unsigned int) mUserFuncs );
-	mUserFuncs[0](newMatrix, matrix, 0.0, 0, 0, NULL, NULL);
+	double params[3];
+	params[0]=params[1]=params[2] = 0;
+	mUserFuncs[0](newMatrix, matrix, 0.0, 2, 2, 0, params, NULL);
 	printf("Func array points to %d \n", (long unsigned int) mUserInitFuncs );
 	mUserInitFuncs[0](matrix,functionNumber);
+	cout << "Initial values filled \n";
 
-	//cout << "Initial values filled \n";
+	for (int i = 0; i < zCount; ++i) {
+			int zShift = xCount * yCount * i;
+
+			for (int j = 0; j < yCount; ++j) {
+				int yShift = xCount * j;
+
+				for (int k = 0; k < xCount; ++k) {
+					int xShift = k;
+                    printf("(");
+					for (int l = 0; l < cellSize; ++l) {
+						int cellShift = l;
+
+						printf("%f ", matrix[ (zShift + yShift + xShift)*cellSize + cellShift ]);
+
+					}
+					printf(") ");
+				}
+				printf("\n");
+			}
+			printf("\n");
+		}
 
 	/*
 	 * Типы границ блока. Выделение памяти.
