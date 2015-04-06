@@ -43,6 +43,14 @@ BlockCpu::BlockCpu(int _dimension, int _xCount, int _yCount, int _zCount,
 		}
 	}
 
+	int count = getGridNodeCount();
+
+	functionNumber = new unsigned short int [count];
+
+	for (int i = 0; i < count; ++i) {
+		functionNumber[i] = _functionNumber[i];
+	}
+
 	getFuncArray(&mUserFuncs);
 	cout << "functions loaded\n";
 
