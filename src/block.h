@@ -131,11 +131,6 @@ public:
 	 */
 	virtual void prepareData() { return; }
 
-	/*
-	 * Выполняет вычисления.
-	 */
-	virtual void computeOneStep(double dX2, double dY2, double dT) { return; }
-
 	virtual void computeOneStepBorder(double dX2, double dY2, double dT) { return; }
 	virtual void computeOneStepCenter(double dX2, double dY2, double dT) { return; }
 
