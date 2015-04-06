@@ -601,13 +601,6 @@ Interconnect* Domain::readConnection(ifstream& in) {
 	int destinationNode = mBlocks[destination]->getNodeNumber();
 
 	/*
-	 * Получение типов блоков.
-	 * CPU / DEVICE ...
-	 */
-	int sourceType = mBlocks[source]->getBlockType();
-	int destionationType = mBlocks[destination]->getBlockType();
-
-	/*
 	 * По считанной букве определяется сторона блока НАЗНАЧЕНИЯ
 	 */
 	switch (borderSide) {
@@ -650,7 +643,7 @@ Interconnect* Domain::readConnection(ifstream& in) {
 	 * Формируется соединение.
 	 * оно же и вовращается.
 	 */
-	return new Interconnect(sourceNode, destinationNode, sourceType, destionationType, borderLength, sourceData, destinationData);
+	return new Interconnect(sourceNode, destinationNode, borderLength, sourceData, destinationData);
 }
 
 /*
