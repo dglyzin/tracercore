@@ -76,6 +76,7 @@ Block::Block(int _dimension, int _xCount, int _yCount, int _zCount,
 
 	cellSize = _cellSize;
 	haloSize = _haloSize;
+
 }
 
 Block::~Block() {
