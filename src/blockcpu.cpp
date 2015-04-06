@@ -44,6 +44,8 @@ BlockCpu::BlockCpu(int _dimension, int _xCount, int _yCount, int _zCount,
 	}
 
 	getFuncArray(&mUserFuncs);
+	cout << "functions loaded\n";
+
 	/*
 	 * Типы границ блока. Выделение памяти.
 	 * По умолчанию границы задаются функциями, то есть нет границ между блоками.
