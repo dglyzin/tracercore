@@ -515,10 +515,11 @@ Block* Domain::readBlock(ifstream& in) {
 		total *= count[j];
 	}
 
+	unsigned short int* functionNumber = new unsigned short int [total];
+
 	for (int j = 0; j < total; ++j) {
-		unsigned short int value;
-		in.read((char*)&value, SIZE_UN_SH_INT);
-		cout << value << " ";
+		in.read((char*)&functionNumber[j], SIZE_UN_SH_INT);
+		cout << functionNumber[j] << " ";
 	}
 
 	cout << endl;
@@ -538,7 +539,7 @@ Block* Domain::readBlock(ifstream& in) {
 			default:
 				return new BlockNull(dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, haloSize, cellSize);
 		}*/
-		return new BlockCpu(dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, haloSize, cellSize);
+		return new BlockCpu(dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, haloSize, cellSize, functionNumber);
 	else
 		return new BlockNull(dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, haloSize, cellSize);
 }
