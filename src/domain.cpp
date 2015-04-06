@@ -6,7 +6,6 @@
  */
 
 #include "domain.h"
-#include "userfuncs.h"
 
 using namespace std;
 
@@ -74,9 +73,8 @@ double* Domain::getBlockCurrentState(int number) {
 			result = mBlocks[number]->getCurrentState();
 		}
 		else {
-			int bsize =   mBlocks[number]->getXCount() * mBlocks[number]->getXCount() * mBlocks[number]->getXCount();
-			result = new double [bsize];
-			MPI_Recv(result, bsize, MPI_DOUBLE, mBlocks[number]->getNodeNumber(), 999, MPI_COMM_WORLD, &status);
+			result = new double [mBlocks[number]->getLength() * mBlocks[number]->getWidth()];
+			MPI_Recv(result, mBlocks[number]->getLength() * mBlocks[number]->getWidth(), MPI_DOUBLE, mBlocks[number]->getNodeNumber(), 999, MPI_COMM_WORLD, &status);
 		}
 
 		return result;
@@ -84,8 +82,7 @@ double* Domain::getBlockCurrentState(int number) {
 	else {
 		if(mBlocks[number]->isRealBlock()) {
 			result = mBlocks[number]->getCurrentState();
-			int bsize =   mBlocks[number]->getXCount() * mBlocks[number]->getXCount() * mBlocks[number]->getXCount();
-			MPI_Send(result, bsize, MPI_DOUBLE, 0, 999, MPI_COMM_WORLD);
+			MPI_Send(result, mBlocks[number]->getLength() * mBlocks[number]->getWidth(), MPI_DOUBLE, 0, 999, MPI_COMM_WORLD);
 			delete result;
 			return NULL;
 		}
@@ -96,21 +93,21 @@ double* Domain::getBlockCurrentState(int number) {
 void Domain::compute(char* saveFile) {
 	/*
 	 * Вычисление коэффициентов необходимых для расчета теплопроводности
-	 */
+
 	double dX = 1./widthArea;
 	double dY = 1./lengthArea;
 
-	/*
+
 	 * Аналогично вышенаписанному
-	 */
+
 	double dX2 = dX * dX;
 	double dY2 = dY * dY;
 
 	double dT = ( dX2 * dY2 ) / ( 2 * ( dX2 + dY2 ) );
 
-	/*
+
 	 * Выполнение
-	 */
+
 	if( flags & STEP_EXECUTION)
 		for (int i = 0; i < stepCount; i++) {
 			nextStep(dX2, dY2, dT);
@@ -125,7 +122,7 @@ void Domain::compute(char* saveFile) {
 		}
 
 	if( flags & SAVE_FILE )
-		saveStateToFile(saveFile);
+		saveStateToFile(saveFile);*/
 }
 
 void Domain::nextStep(double dX2, double dY2, double dT) {
