@@ -370,12 +370,6 @@ void Domain::readFromFile(char* path) {
 	in.open(path, ios::binary);
 
 	readTimeSetting(in);
-
-	/*
-	 * Чтение размеров области
-	 */
-	//readLengthAndWidthArea(in);
-
 	readSaveInterval(in);
 	readGridSteps(in);
 	readCellAndHaloSize(in);
@@ -427,36 +421,53 @@ void Domain::readFromFile(char* path) {
 		mBlocks[i]->moveTempBorderVectorToBorderArray();
 }
 
-/*
- * Чтение размеров области.
- */
-void Domain::readLengthAndWidthArea(ifstream& in) {
-	in >> lengthArea;
-	in >> widthArea;
+void Domain::readFileStat(ifstream& in) {
+	char fileType;
+	char versionMajor;
+	char versionMinor;
+
+	in.read((char*)&fileType, 1);
+	in.read((char*)&versionMajor, 1);
+	in.read((char*)&versionMinor, 1);
+
+	cout << endl;
+	cout << "file type:     " << (unsigned int)fileType << endl;
+	cout << "version major: " << (unsigned int)versionMajor << endl;
+	cout << "version minor: " << (unsigned int)versionMinor << endl;
 }
 
 void Domain::readTimeSetting(ifstream& in) {
-	/*in >> stepTime;
-	in >> stopTime;*/
-
 	in.read((char*)&startTime, SIZE_DOUBLE);
 	in.read((char*)&stopTime, SIZE_DOUBLE);
 	in.read((char*)&stepTime, SIZE_DOUBLE);
+
+	cout << "start time:    " << startTime << endl;
+	cout << "stop time:     " << stopTime << endl;
+	cout << "step time:     " << stepTime << endl;
 }
 
 void Domain::readSaveInterval(ifstream& in) {
 	in.read((char*)&saveInterval, SIZE_DOUBLE);
+
+	cout << "save interval: " << saveInterval << endl;
 }
 
 void Domain::readGridSteps(ifstream& in) {
 	in.read((char*)&dx, SIZE_DOUBLE);
 	in.read((char*)&dy, SIZE_DOUBLE);
 	in.read((char*)&dz, SIZE_DOUBLE);
+
+	cout << "dx:            " << dx << endl;
+	cout << "dy:            " << dy << endl;
+	cout << "dz:            " << dz << endl;
 }
 
 void Domain::readCellAndHaloSize(ifstream& in) {
 	in.read((char*)&cellSize, SIZE_INT);
 	in.read((char*)&haloSize, SIZE_INT);
+
+	cout << "cell size:     " << cellSize << endl;
+	cout << "halo size:     " << haloSize << endl;
 }
 
 /*

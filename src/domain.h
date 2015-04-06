@@ -146,17 +146,10 @@ private:
 
 	MPI_Status status;
 
-	/*
-	 * Чтение размеров области
-	 */
-	void readLengthAndWidthArea(std::ifstream& in);
-
+	void readFileStat(std::ifstream& in);
 	void readTimeSetting(std::ifstream& in);
-
 	void readSaveInterval(std::ifstream& in);
-
 	void readGridSteps(std::ifstream& in);
-
 	void readCellAndHaloSize(std::ifstream& in);
 
 	/*
