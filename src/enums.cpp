@@ -26,6 +26,25 @@ int oppositeBorder(int side) {
 	}
 }
 
+int getSide(int number) {
+	switch (number) {
+		case 0:
+			return LEFT;
+		case 1:
+			return RIGHT;
+		case 2:
+			return FRONT;
+		case 3:
+			return BACK;
+		case 4:
+			return TOP;
+		case 5:
+			return BOTTOM;
+		default:
+			return LEFT;
+	}
+}
+
 bool isCPU(int type) {
 	return type == CPU;
 }

@@ -382,31 +382,17 @@ void Domain::readFromFile(char* path) {
 	for (int i = 0; i < blockCount; ++i)
 		mBlocks[i] = readBlock(in);
 
-	/*
-	 * Чтение количества соединений.
 
-	in >> connectionCount;
-
-
-	 * Создаем массив указателей на соединения.
+	readConnectionCount(in);
 
 	mInterconnects = new Interconnect* [connectionCount];
-
-
-	 * Читаем соединения.
-	 * Функция чтения соединения вовращает указатель на соединение, его записываем в нужную позицию в массиве.
 
 	for (int i = 0; i < connectionCount; ++i)
 		mInterconnects[i] = readConnection(in);
 
+	cout << endl << "MOVE TEMP BORDER VECTOR!!" << endl;
 
-	 * Для каждого блока выполняем операцию переноса данных из вектора в масиив.
-	 *
-	 * Информация о частях границ для отправки/получения переносится из векторов в массивы.
-	 * Еак как на момент создания блока неизвестно сколько именно у него "соседей",
-	 * сколько частей границ нужно отправлять/получать, изначально данные пишутся в ектор, а затем переносятся в массивы.
-
-	for (int i = 0; i < blockCount; ++i)
+	/*for (int i = 0; i < blockCount; ++i)
 		mBlocks[i]->moveTempBorderVectorToBorderArray();*/
 }
 
@@ -463,6 +449,12 @@ void Domain::readBlockCount(ifstream& in) {
 	in.read((char*)&blockCount, SIZE_INT);
 
 	cout << "block count:   " << blockCount << endl;
+}
+
+void Domain::readConnectionCount(ifstream& in) {
+	in.read((char*)&connectionCount, SIZE_INT);
+
+	cout << "connection count:   " << connectionCount << endl;
 }
 
 /*
@@ -548,109 +540,65 @@ Block* Domain::readBlock(ifstream& in) {
  * Чтение соединения.
  */
 Interconnect* Domain::readConnection(ifstream& in) {
-	/*
-	 * Соединение формируется из
-	 * блока источника
-	 * блока получателя
-	 * стороны (границы) блока получателя
-	 * сдвига по границе источника
-	 * сдвига по границе получателя
-	 */
-	int source;
-	int destination;
+	int dimension;
+	int sourceBlock;
+	int destinationBlock;
 
-	char borderSide;
+	int sourceSide;
+	int destinationSide;
 
-	int connectionSourceMove;
-	int connectionDestinationMove;
-	int borderLength;
+	int* length = new int[2];
+	length[0] = length[1] = 1;
 
-	/*
-	 * Чтение номера блока-источника и номера блока-получателя
-	 */
-	in >> source;
-	in >> destination;
+	int* offsetSource = new int[2];
+	offsetSource[0] = offsetSource[1] = 0;
 
-	/*
-	 * Чтение стороны соединения блока-получателя
-	 */
-	in >> borderSide;
+	int* offsetDestination = new int[2];
+	offsetDestination[0] = offsetDestination[1] = 0;
 
-	/*
-	 * Сдвиги по границе для блока-источника и блока-получателя.
-	 */
-	in >> connectionSourceMove;
-	in >> connectionDestinationMove;
+	in.read((char*)&dimension, SIZE_INT);
+	cout << endl;
+	cout << "Interconnect #<NONE>" << endl;
 
-	/*
-	 * Длина границы.
-	 */
-	in >> borderLength;
-
-	/*
-	 * Переменная, которая реально хранит торону.
-	 * Целое число, а не символ.
-	 */
-	int side;
-
-	/*
-	 * По счиатнным данным извлекается информация о блоках
-	 * Номера потокав, к которым они РЕАЛЬНО приписаны
-	 */
-	int sourceNode = mBlocks[source]->getNodeNumber();
-	int destinationNode = mBlocks[destination]->getNodeNumber();
-
-	/*
-	 * Получение типов блоков.
-	 * CPU / DEVICE ...
-	 */
-	int sourceType = mBlocks[source]->getBlockType();
-	int destionationType = mBlocks[destination]->getBlockType();
-
-	/*
-	 * По считанной букве определяется сторона блока НАЗНАЧЕНИЯ
-	 */
-	switch (borderSide) {
-		case 't':
-			side = TOP;
-			break;
-
-		case 'l':
-			side = LEFT;
-			break;
-
-		case 'b':
-			side = BOTTOM;
-			break;
-
-		case 'r':
-			side = RIGHT;
-			break;
-
-		default:
-			return NULL;
+	for (int j = 0; j < dimension; ++j) {
+		in.read((char*)&length[j], SIZE_INT);
+		cout << "	length" << j << ":           " << length[j] << endl;
 	}
 
-	/*
-	 * Функция oppositeBorder возвращает противоположную сторону.
-	 * Если граница блока назначения правая - значит у блока источника левая и так далее.
-	 *
-	 * Блок-источник добавляет себе новую часть границы, которую будет необходимо переслать.
-	 * Возвращает указатель на область, в котрую будет помещены данные.
-	 * В зависимости от номера потока блока-назаначения и его типа память должна выделяться по-разному.
-	 *
-	 * Блок-назначения добавляет себе новую область, откуда можно будет достать информацию от блока источника.
-	 * Если блоки расположены на одном узле, то область может не выделится.
-	 * Блок будет ссылать прямо на область памяти, в которую блок-источник будет помещать данные.
-	 */
-	double* sourceData = mBlocks[source]->addNewBlockBorder(mBlocks[destination], oppositeBorder(side), connectionSourceMove, borderLength);
-	double* destinationData = mBlocks[destination]->addNewExternalBorder(mBlocks[source], side, connectionDestinationMove, borderLength, sourceData);
+	in.read((char*)&sourceBlock, SIZE_INT);
+	in.read((char*)&destinationBlock, SIZE_INT);
+	in.read((char*)&sourceSide, SIZE_INT);
+	in.read((char*)&destinationSide, SIZE_INT);
 
-	/*
-	 * Формируется соединение.
-	 * оно же и вовращается.
-	 */
-	return new Interconnect(sourceNode, destinationNode, sourceType, destionationType, borderLength, sourceData, destinationData);
+	cout << "	source block:      " << sourceBlock << endl;
+	cout << "	destination block: " << destinationBlock << endl;
+	cout << "	source side:       " << sourceSide << endl;
+	cout << "	destination side:  " << destinationSide << endl;
+
+	for (int j = 0; j < dimension; ++j) {
+		in.read((char*)&offsetSource[j], SIZE_INT);
+		cout << "	offsetSource" << j << ":            " << offsetSource[j] << endl;
+	}
+
+	for (int j = 0; j < dimension; ++j) {
+		in.read((char*)&offsetDestination[j], SIZE_INT);
+		cout << "	offsetDestnation" << j << ":        " << offsetDestination[j] << endl;
+	}
+
+	//double* sourceData = mBlocks[source]->addNewBlockBorder(mBlocks[destination], oppositeBorder(side), connectionSourceMove, borderLength);
+	//double* destinationData = mBlocks[destination]->addNewExternalBorder(mBlocks[source], side, connectionDestinationMove, borderLength, sourceData);
+
+	int sourceNode = mBlocks[sourceBlock]->getNodeNumber();
+	int destinationNode = mBlocks[destinationBlock]->getNodeNumber();
+
+	int borderLength = length[0] * length[1] * cellSize * haloSize;
+
+	double* sourceData = NULL;
+	double* destinationData = NULL;
+
+	cout << endl << "ERROR sorceData = destinationData = NULL!!!" << endl;
+
+	return new Interconnect(sourceNode, destinationNode, borderLength, sourceData, destinationData);
 }
 
 /*

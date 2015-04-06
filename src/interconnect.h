@@ -22,9 +22,7 @@
 
 class Interconnect {
 public:
-	Interconnect(int _sourceLocationNode, int _destinationLocationNode,
-			int _sourceType, int _destinationType,
-			int _borderLength,
+	Interconnect(int _sourceLocationNode, int _destinationLocationNode, int _borderLength,
 			double* _sourceBlockBorder, double* _destinationExternalBorder);
 	virtual ~Interconnect();
 
@@ -50,16 +48,6 @@ private:
 	 * Номер потока, которому необходимо прислать данные
 	 */
 	int destinationLocationNode;
-
-	/*
-	 * Тип блока с исходными данными.
-	 */
-	int sourceType;
-
-	/*
-	 * Тип блока, которому данные пересылаются.
-	 */
-	int destinationType;
 
 	/*
 	 * Длина пересылаемого блока.
