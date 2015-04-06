@@ -160,6 +160,7 @@ public:
 	int getZOffset() { return zOffset; }
 
 	int getGridNodeCount();
+	int getGridElementCount();
 
 	int getDeviceNumber() { return deviceNumber; }
 	int getNodeNumber() { return nodeNumber; }

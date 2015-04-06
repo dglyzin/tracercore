@@ -86,6 +86,10 @@ int Block::getGridNodeCount() {
 	return xCount * yCount * zCount;
 }
 
+int Block::getGridElementCount() {
+	return getGridNodeCount() * cellSize;
+}
+
 void Block::swapMatrix() {
 	double* tmp = matrix;
 	matrix = newMatrix;
