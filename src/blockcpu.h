@@ -16,7 +16,10 @@
 
 class BlockCpu: public Block {
 public:
-	BlockCpu(int _length, int _width, int _lengthMove, int _widthMove, int _nodeNumber, int _deviceNumber);
+	BlockCpu(int _dimension, int _xCount, int _yCount, int _zCount,
+			int _xOffset, int _yOffset, int _zOffset,
+			int _nodeNumber, int _deviceNumber,
+			int _haloSize, int _cellSize);
 
 	~BlockCpu();
 
@@ -24,9 +27,8 @@ public:
 
 	void prepareData();
 
-	void computeOneStep(double dX2, double dY2, double dT);
-	void computeOneStepBorder(double dX2, double dY2, double dT);
-	void computeOneStepCenter(double dX2, double dY2, double dT);
+	void computeOneStepBorder(double time, double* param);
+	void computeOneStepCenter(double time, double* param);
 
 	int getBlockType() { return CPU; }
 
