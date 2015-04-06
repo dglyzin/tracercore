@@ -71,8 +71,9 @@ double* Domain::getBlockCurrentState(int number) {
 			result = mBlocks[number]->getCurrentState();
 		}
 		else {
-			result = new double [mBlocks[number]->getLength() * mBlocks[number]->getWidth()];
-			MPI_Recv(result, mBlocks[number]->getLength() * mBlocks[number]->getWidth(), MPI_DOUBLE, mBlocks[number]->getNodeNumber(), 999, MPI_COMM_WORLD, &status);
+			int bsize =   mBlocks[number]->getXCount() * mBlocks[number]->getXCount() * mBlocks[number]->getXCount();
+			result = new double [bsize];
+			MPI_Recv(result, bsize, MPI_DOUBLE, mBlocks[number]->getNodeNumber(), 999, MPI_COMM_WORLD, &status);
 		}
 
 		return result;
@@ -80,7 +81,8 @@ double* Domain::getBlockCurrentState(int number) {
 	else {
 		if(mBlocks[number]->isRealBlock()) {
 			result = mBlocks[number]->getCurrentState();
-			MPI_Send(result, mBlocks[number]->getLength() * mBlocks[number]->getWidth(), MPI_DOUBLE, 0, 999, MPI_COMM_WORLD);
+			int bsize =   mBlocks[number]->getXCount() * mBlocks[number]->getXCount() * mBlocks[number]->getXCount();
+			MPI_Send(result, bsize, MPI_DOUBLE, 0, 999, MPI_COMM_WORLD);
 			delete result;
 			return NULL;
 		}
