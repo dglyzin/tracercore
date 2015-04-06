@@ -369,56 +369,45 @@ void Domain::readFromFile(char* path) {
 	ifstream in;
 	in.open(path, ios::binary);
 
+	readFileStat(in);
 	readTimeSetting(in);
 	readSaveInterval(in);
 	readGridSteps(in);
 	readCellAndHaloSize(in);
 
-	/*
-	 * Чтение количества блоков
-	 */
-	//in >> blockCount;
-	in.read((char*)&blockCount, SIZE_INT);
+	readBlockCount(in);
 
-	/*
-	 * Создаем массив указателей на блоки.
-	 * Его длина = количество блоков.
-	 */
 	mBlocks = new Block* [blockCount];
 
-	/*
-	 * Чтение блоков.
-	 * Функция чтения блоков возвращает указатель на блок, его записываем в нужную позицию в массиве.
-	 */
 	for (int i = 0; i < blockCount; ++i)
 		mBlocks[i] = readBlock(in);
 
 	/*
 	 * Чтение количества соединений.
-	 */
+
 	in >> connectionCount;
 
-	/*
+
 	 * Создаем массив указателей на соединения.
-	 */
+
 	mInterconnects = new Interconnect* [connectionCount];
 
-	/*
+
 	 * Читаем соединения.
 	 * Функция чтения соединения вовращает указатель на соединение, его записываем в нужную позицию в массиве.
-	 */
+
 	for (int i = 0; i < connectionCount; ++i)
 		mInterconnects[i] = readConnection(in);
 
-	/*
+
 	 * Для каждого блока выполняем операцию переноса данных из вектора в масиив.
 	 *
 	 * Информация о частях границ для отправки/получения переносится из векторов в массивы.
 	 * Еак как на момент создания блока неизвестно сколько именно у него "соседей",
 	 * сколько частей границ нужно отправлять/получать, изначально данные пишутся в ектор, а затем переносятся в массивы.
-	 */
+
 	for (int i = 0; i < blockCount; ++i)
-		mBlocks[i]->moveTempBorderVectorToBorderArray();
+		mBlocks[i]->moveTempBorderVectorToBorderArray();*/
 }
 
 void Domain::readFileStat(ifstream& in) {
@@ -470,6 +459,12 @@ void Domain::readCellAndHaloSize(ifstream& in) {
 	cout << "halo size:     " << haloSize << endl;
 }
 
+void Domain::readBlockCount(ifstream& in) {
+	in.read((char*)&blockCount, SIZE_INT);
+
+	cout << "block count:   " << blockCount << endl;
+}
+
 /*
  * Чтение одного конкретного блока.
  * Эта функция заносит в блок лишь базовую инфомармацию.
@@ -483,58 +478,57 @@ void Domain::readCellAndHaloSize(ifstream& in) {
  * Не будет готовить информацию для пересылки и не будет считываеть ее из других источников.
  */
 Block* Domain::readBlock(ifstream& in) {
-	int length;
-	int width;
+	int dimension;
+	int node;
+	int deviceType;
+	int deviceNumber;
 
-	int lengthMove;
-	int widthMove;
+	int* count = new int[3];
+	count[0] = count[1] = count[2] = 1;
 
-	int world_rank_creator;
+	int* offset = new int[3];
+	offset[0] = offset[1] = offset[2] = 0;
 
-	int type = 0;
+	int total = 1;
 
-	/*
-	 * Чтение размеров блока.
-	 */
-	/*in >> length;
-	in >> width;*/
 
-	/*
-	 * Координаты.
-	 * Свдиги по длини и ширине
-	 */
-	in >> lengthMove;
-	in >> widthMove;
+	in.read((char*)&dimension, SIZE_INT);
+	in.read((char*)&node, SIZE_INT);
+	in.read((char*)&deviceType, SIZE_INT);
+	in.read((char*)&deviceNumber, SIZE_INT);
 
-	/*
-	 * Номер потока, который СОЗДАСТ это блок
-	 */
-	in >> world_rank_creator;
+	cout << endl;
+	cout << "Block #" << "<NONE>" << endl;
+	cout << "	dimension:     " << dimension << endl;
+	cout << "	node:          " << node << endl;
+	cout << "	device type:   " << deviceType << endl;
+	cout << "	device number: " << deviceNumber << endl;
 
-	/*
-	 * Чтение типа блока.
-	 * 0 - центральный процессор
-	 * 1 - видеокарта 1
-	 * 2 - видеокарта 2
-	 * 3 - видеокарта 3
-	 */
-	in >> type;
+	for (int j = 0; j < dimension; ++j) {
+		in.read((char*)&offset[j], SIZE_INT);
+		cout << "	offset" << j << ":           " << count << endl;
+	}
 
-	/*
-	 * Если номер потока исполнения и номер предписанного потока совпадают, то будет сформирован реальный блок.
-	 * В противном случае блок-заглушка.
-	 *
-	 * Предписанный поток задается в файле.
-	 * Предписанный поток - поток, который должен иметь этот блок в качестве реального блока.
-	 *
-	 * В зависимости от считанного типа будет создан либо блок для центрального процессора, либо блок для одной их видеокарт.
-	 */
+	for (int j = 0; j < dimension; ++j) {
+		in.read((char*)&count[j], SIZE_INT);
+		cout << "	count" << j << ":            " << count << endl;
+		total *= count[j];
+	}
+
+	for (int j = 0; j < total; ++j) {
+		unsigned short int value;
+		in.read((char*)&value, SIZE_UN_SH_INT);
+		cout << value << " ";
+	}
+
+	cout << endl;
+
 	cout << endl << "DON'T CREATE GPU BLOCK! SEE DOMAIN.H includes!!!" << endl;
 
-	if(world_rank_creator == world_rank)
-		switch (type) {
+	if(node == world_rank)
+		switch (deviceType) {
 			case 0:
-				return new BlockCpu(length, width, lengthMove, widthMove, world_rank_creator, 0);
+				return new BlockCpu(dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, haloSize, cellSize);
 			case 1:
 				//return new BlockGpu(length, width, lengthMove, widthMove, world_rank_creator, 0);
 			case 2:
@@ -542,10 +536,10 @@ Block* Domain::readBlock(ifstream& in) {
 			case 3:
 				//return new BlockGpu(length, width, lengthMove, widthMove, world_rank_creator, 2);
 			default:
-				return new BlockNull(length, width, lengthMove, widthMove, world_rank_creator, 0);
+				return new BlockNull(dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, haloSize, cellSize);
 		}
 	else
-		return new BlockNull(length, width, lengthMove, widthMove, world_rank_creator, 0);
+		return new BlockNull(dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, haloSize, cellSize);
 }
 
 /*
