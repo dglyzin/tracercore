@@ -171,15 +171,6 @@ public:
 
 	void setFunctionNumber(unsigned short int* functionNumberData ) { return; }
 
-	/*
-	 * Вовращаение указателя на определенную границу.
-	 * Выполняется проверка на существование этой границы.
-	 */
-	double* getTopBlockBorder() { return blockBorder != NULL ? blockBorder[TOP] : NULL; }
-	double* getLeftBlockBorder() { return blockBorder != NULL ? blockBorder[LEFT] : NULL; }
-	double* getBottomBlockBorder() { return blockBorder != NULL ? blockBorder[BOTTOM] : NULL; }
-	double* getRightBlockBorder() { return blockBorder != NULL ? blockBorder[RIGHT] : NULL; }
-
 	virtual double* addNewBlockBorder(Block* neighbor, int side, int move, int borderLength) { return NULL; }
 	virtual double* addNewExternalBorder(Block* neighbor, int side, int move, int borderLength, double* border) { return NULL; }
 
