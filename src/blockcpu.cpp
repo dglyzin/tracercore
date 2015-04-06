@@ -52,7 +52,14 @@ BlockCpu::BlockCpu(int _dimension, int _xCount, int _yCount, int _zCount,
 	}
 
 	getFuncArray(&mUserFuncs);
+	getInitFuncArray(&mUserInitFuncs);
 	cout << "functions loaded\n";
+	printf("Func array points to %d \n", (long unsigned int) mUserFuncs );
+	mUserFuncs[0](newMatrix, matrix, 0.0, 0, 0, NULL, NULL);
+	printf("Func array points to %d \n", (long unsigned int) mUserInitFuncs );
+	mUserInitFuncs[0](matrix,functionNumber);
+
+	//cout << "Initial values filled \n";
 
 	/*
 	 * Типы границ блока. Выделение памяти.
@@ -107,6 +114,7 @@ BlockCpu::BlockCpu(int _dimension, int _xCount, int _yCount, int _zCount,
 
 BlockCpu::~BlockCpu() {
 	releaseFuncArray(mUserFuncs);
+	getInitFuncArray(&mUserInitFuncs);
 
 	if(matrix != NULL)
 		delete matrix;

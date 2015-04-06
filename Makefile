@@ -14,6 +14,12 @@ all: HS solver
 
 HS: main.o domain.o block.o blockcpu.o blocknull.o interconnect.o enums.o #blockgpu.o
 	$(CUDACC) -O3 $(CUDAARCH) -I$(CUDAINC) $(MPILIB) -L./bin -luserfuncs $(BIN)/main.o $(BIN)/domain.o $(BIN)/block.o $(BIN)/interconnect.o  $(BIN)/blockcpu.o $(BIN)/blocknull.o $(BIN)/enums.o -o $(BIN)/HS -Xcompiler -fopenmp
+
+#HS: main.o domain.o block.o blockcpu.o blocknull.o interconnect.o enums.o userfuncs.o #blockgpu.o
+#	$(CUDACC) -O3 $(CUDAARCH) -I$(CUDAINC) $(MPILIB) $(BIN)/userfuncs.o $(BIN)/main.o $(BIN)/domain.o $(BIN)/block.o $(BIN)/interconnect.o  $(BIN)/blockcpu.o $(BIN)/blocknull.o $(BIN)/enums.o -o $(BIN)/HS -Xcompiler -fopenmp
+
+#userfuncs.o: $(SRC)/userfuncs.cpp
+#	$(CC) $(CFLAGS) $(SRC)/userfuncs.cpp -o $(BIN)/userfuncs.o
 	
 main.o: $(SRC)/main.cpp
 	$(CC) $(CFLAGS) $(SRC)/main.cpp -o $(BIN)/main.o

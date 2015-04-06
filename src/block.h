@@ -112,6 +112,7 @@ protected:
 	void freeMemory(int memory_alloc_type, int* memory);
 
 	func2d_ptr_t* mUserFuncs;
+	initfunc2d_fill_ptr_t* mUserInitFuncs;
 
 public:
 	Block(int _dimension, int _xCount, int _yCount, int _zCount,
