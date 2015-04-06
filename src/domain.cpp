@@ -6,6 +6,7 @@
  */
 
 #include "domain.h"
+#include "userfuncs.h"
 
 using namespace std;
 
