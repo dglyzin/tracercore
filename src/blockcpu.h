@@ -25,10 +25,10 @@ public:
 
 	bool isRealBlock() { return true; }
 
-	void prepareData();
+	void prepareData() { std::cout << std::endl << "prepare data" << std::endl; }
 
 	void computeOneStepBorder(double time, double* param) { std::cout << std::endl << "one step border" << std::endl; }
-	void computeOneStepCenter(double time, double* param) { std::cout << std::endl << "one step border" << std::endl; }
+	void computeOneStepCenter(double time, double* param) { std::cout << std::endl << "one step center" << std::endl; }
 
 	int getBlockType() { return CPU; }
 

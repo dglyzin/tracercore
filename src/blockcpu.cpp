@@ -157,19 +157,19 @@ BlockCpu::~BlockCpu() {
 		delete externalBorderMove;
 }
 
-void BlockCpu::computeOneStepBorder(double dX2, double dY2, double dT) {
-	/*
-	 * Теплопроводность
-	 */
+/*void BlockCpu::computeOneStepBorder(double dX2, double dY2, double dT) {
 
-	/*
+	 * Теплопроводность
+
+
+
 	 * Параллельное вычисление на максимально возможном количестве потоков.
 	 * Максимально возможное количесвто потоков получается из-за самой библиотеки omp
 	 * Если явно не указывать, какое именно количесвто нитей необходимо создать, то будет создано макстимально возможное на данный момент.
-	 */
+
 # pragma omp parallel
 	{
-		/*
+
 		 * Для решения задачи теплопроводности нам необходимо знать несколько значений.
 		 * Среди них
 		 * значение в ячейке выше
@@ -179,14 +179,14 @@ void BlockCpu::computeOneStepBorder(double dX2, double dY2, double dT) {
 		 * текущее значение в данной ячейке
 		 *
 		 * остально данные передаются в функцию в качестве параметров.
-		 */
+
 	double top, left, bottom, right, cur;
 
 # pragma omp for
-	/*
+
 	 * Проходим по всем ячейкам матрицы.
 	 * Для каждой из них будет выполнен перерасчет.
-	 */
+
 	for (int i = 0; i < length; ++i)
 		for (int j = 0; j < width; ++j) {
 			if( i != 0 && i != length - 1 && j != 0 && j != width - 1 )
@@ -240,21 +240,21 @@ void BlockCpu::computeOneStepBorder(double dX2, double dY2, double dT) {
 			newMatrix[i * width + j] = cur + dT * ( ( left - 2*cur + right )/dX2 + ( top - 2*cur + bottom )/dY2  );
 		}
 	}
-}
+}*/
 
-void BlockCpu::computeOneStepCenter(double dX2, double dY2, double dT) {
-	/*
+/*void BlockCpu::computeOneStepCenter(double dX2, double dY2, double dT) {
+
 	 * Теплопроводность
-	 */
 
-	/*
+
+
 	 * Параллельное вычисление на максимально возможном количестве потоков.
 	 * Максимально возможное количесвто потоков получается из-за самой библиотеки omp
 	 * Если явно не указывать, какое именно количесвто нитей необходимо создать, то будет создано макстимально возможное на данный момент.
-	 */
+
 # pragma omp parallel
 	{
-		/*
+
 		 * Для решения задачи теплопроводности нам необходимо знать несколько значений.
 		 * Среди них
 		 * значение в ячейке выше
@@ -264,14 +264,14 @@ void BlockCpu::computeOneStepCenter(double dX2, double dY2, double dT) {
 		 * текущее значение в данной ячейке
 		 *
 		 * остально данные передаются в функцию в качестве параметров.
-		 */
+
 	double top, left, bottom, right, cur;
 
 # pragma omp for
-	/*
+
 	 * Проходим по всем ячейкам матрицы.
 	 * Для каждой из них будет выполнен перерасчет.
-	 */
+
 	for (int i = 1; i < length - 1; ++i)
 		for (int j = 1; j < width - 1; ++j) {
 			top = matrix[(i - 1) * width + j];
@@ -284,13 +284,13 @@ void BlockCpu::computeOneStepCenter(double dX2, double dY2, double dT) {
 			newMatrix[i * width + j] = cur + dT * ( ( left - 2*cur + right )/dX2 + ( top - 2*cur + bottom )/dY2  );
 		}
 	}
-}
+}*/
 
-void BlockCpu::prepareData() {
-	/*
+/*void BlockCpu::prepareData() {
+
 	 * Копирование данных из матрицы в массивы.
 	 * В дальнейшем эти массивы будет пеесылаться другим блокам.
-	 */
+
 	for (int i = 0; i < width; ++i)
 		if( sendBorderType[TOP][i] != BY_FUNCTION )
 			blockBorder[	sendBorderType[TOP][i]	][i - blockBorderMove[	sendBorderType[TOP][i]	]] = matrix[0 * width + i];
@@ -306,12 +306,13 @@ void BlockCpu::prepareData() {
 	for (int i = 0; i < length; ++i)
 		if( sendBorderType[RIGHT][i] != BY_FUNCTION )
 			blockBorder[	sendBorderType[RIGHT][i]	][i - blockBorderMove[	sendBorderType[RIGHT][i]	]] = matrix[i * width + (width - 1)];
-}
+}*/
 
 double* BlockCpu::getCurrentState() {
-	double* result = new double [length * width];
+	int count = getGridNodeCount();
+	double* result = new double [count];
 
-	for(int i = 0; i < length * width; i++)
+	for(int i = 0; i < count; i++)
 		result[i] = matrix[i];
 
 	return result;
