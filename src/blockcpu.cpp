@@ -157,143 +157,6 @@ BlockCpu::~BlockCpu() {
 		delete externalBorderMove;
 }
 
-void BlockCpu::computeOneStep(double dX2, double dY2, double dT) {
-	/*
-	 * Теплопроводность
-	 */
-
-	/*
-	 * Параллельное вычисление на максимально возможном количестве потоков.
-	 * Максимально возможное количесвто потоков получается из-за самой библиотеки omp
-	 * Если явно не указывать, какое именно количесвто нитей необходимо создать, то будет создано макстимально возможное на данный момент.
-	 */
-# pragma omp parallel
-	{
-		/*
-		 * Для решения задачи теплопроводности нам необходимо знать несколько значений.
-		 * Среди них
-		 * значение в ячейке выше
-		 * значение в ячейке слева
-		 * значение в ячейке снизу
-		 * значение в ячейке справа
-		 * текущее значение в данной ячейке
-		 *
-		 * остально данные передаются в функцию в качестве параметров.
-		 */
-	double top, left, bottom, right, cur;
-
-# pragma omp for
-	/*
-	 * Проходим по всем ячейкам матрицы.
-	 * Для каждой из них будет выполнен перерасчет.
-	 */
-	for (int i = 0; i < length; ++i)
-		for (int j = 0; j < width; ++j) {
-			/*
-			 * Если находимся на верхней границе блока.
-			 * В таком случае необходимо проверить тип границы и в зависимости от ответа принать решение.
-			 *
-			 * Стоит отличать границу реальную от границы с блоком.
-			 * Если граница реальна, то точка на границе может не иметь значения выше / значения ниже и так далее, так как это реально границе ВСЕЙ ОБЛАСТИ.
-			 * Если эта граница с другим блоком, то значение выше / ниже сущесвтуют, так как это не граница области.
-			 * Значит их нужно получить и использовать при ирасчете нового значения.
-			 */
-			
-			if( i == 0 )
-				/*
-				 * На данный момент есть только 2 типа границы. Функция и другой блок.
-				 * Поэтому использование else корректно.
-				 *
-				 * Если граница задана функцией, то это значит,
-				 * что наданном этапе в массиве externalBorder уже должны лежать свежие данные от функции.
-				 * В таком случае просто копируем данные из массива в матрицу. Для этой ячейки расчет окончен.
-				 *
-				 * Если это граница с другим блоком, то в top (значение в ячейке выше данной) записываем информацию с гранцы.
-				 * Но продолжаем расчет.
-				 */
-				if( receiveBorderType[TOP][j] == BY_FUNCTION ) {
-					newMatrix[i * width + j] = 100;
-					continue;
-				}
-				else
-					top = externalBorder[	receiveBorderType[TOP][j]	][j - externalBorderMove[	receiveBorderType[TOP][j]	]];
-			else
-				/*
-				 * Если находимся не на верхней границе блока, то есть возможность просто получить значение в ячейке выше данной.
-				 */
-				top = matrix[(i - 1) * width + j];
-
-
-			/*
-			 * Аналогично предыдущему случаю.
-			 * Только здесь проверка на левую границу блока.
-			 *
-			 * Рассуждения полностью совпадают со случаем верхней границы.
-			 */
-			if( j == 0 )
-				if( receiveBorderType[LEFT][i] == BY_FUNCTION ) {
-					newMatrix[i * width + j] = 10;
-					continue;
-				}
-				else
-					left = externalBorder[	receiveBorderType[LEFT][i]	][i - externalBorderMove[	receiveBorderType[LEFT][i]		]];
-			else
-				left = matrix[i * width + (j - 1)];
-
-
-			/*
-			 * Аналогично первому случаю.
-			 * Граница нижняя.
-			 */
-			if( i == length - 1 )
-				if( receiveBorderType[BOTTOM][j] == BY_FUNCTION ) {
-					newMatrix[i * width + j] = 10;
-					continue;
-				}
-				else
-					bottom = externalBorder[	receiveBorderType[BOTTOM][j]	][j - externalBorderMove[	receiveBorderType[BOTTOM][j]	]];
-			else
-				bottom = matrix[(i + 1) * width + j];
-
-
-			/*
-			 * Аналогично первому случаю.
-			 * Граница правая.
-			 */
-			if( j == width - 1 )
-				if( receiveBorderType[RIGHT][i] == BY_FUNCTION ) {
-					newMatrix[i * width + j] = 10;
-					continue;
-				}
-				else
-					right = externalBorder[	receiveBorderType[RIGHT][i]	][i - externalBorderMove[	receiveBorderType[RIGHT][i]	]];
-			else
-				right = matrix[i * width + (j + 1)];
-
-
-			/*
-			 * Текущее значение всегда (если вообще дошли до этого места) можно просто получить из матрицы.
-			 */
-			cur = matrix[i * width + j];
-
-			/*
-			 * Формула расчета для конкретной точки.
-			 */
-			newMatrix[i * width + j] = cur + dT * ( ( left - 2*cur + right )/dX2 + ( top - 2*cur + bottom )/dY2  );
-		}
-	}
-/*
- * Указатель на старую матрицу запоминается
- * Новая матрица становится текущей
- * Память, занимаемая старой матрицей освобождается.
- */
-	double* tmp = matrix;
-
-	matrix = newMatrix;
-
-	newMatrix = tmp;
-}
-
 void BlockCpu::computeOneStepBorder(double dX2, double dY2, double dT) {
 	/*
 	 * Теплопроводность
@@ -455,7 +318,9 @@ double* BlockCpu::getCurrentState() {
 }
 
 void BlockCpu::print() {
-	cout << "########################################################################################################################################################################################################" << endl;
+	cout << endl << "BLOCK PRINT NOT WORK!" << endl;
+	return;
+	/*cout << "########################################################################################################################################################################################################" << endl;
 	
 	cout << endl;
 	cout << "BlockCpu from node #" << nodeNumber << endl;
@@ -570,15 +435,10 @@ void BlockCpu::print() {
 	}
 
 	cout << "########################################################################################################################################################################################################" << endl;
-	cout << endl << endl;
+	cout << endl << endl;*/
 }
 
 double* BlockCpu::addNewBlockBorder(Block* neighbor, int side, int move, int borderLength) {
-	if( checkValue(side, move + borderLength) ) {
-		printf("\nCritical error!\n");
-		exit(1);
-	}
-
 	for (int i = 0; i < borderLength; ++i)
 		sendBorderType[side][i + move] = countSendSegmentBorder;
 
@@ -602,11 +462,6 @@ double* BlockCpu::addNewBlockBorder(Block* neighbor, int side, int move, int bor
 }
 
 double* BlockCpu::addNewExternalBorder(Block* neighbor, int side, int move, int borderLength, double* border) {
-	if( checkValue(side, move + borderLength) ) {
-		printf("\nCritical error!\n");
-		exit(1);
-	}
-
 	for (int i = 0; i < borderLength; ++i)
 		receiveBorderType[side][i + move] = countReceiveSegmentBorder;
 
@@ -661,6 +516,8 @@ void BlockCpu::moveTempBorderVectorToBorderArray() {
 }
 
 void BlockCpu::loadData(double* data) {
-	for(int i = 0; i < length * width; i++)
-		matrix[i] = data[i];
+	cout << endl << "LOAD DATA NOT WORK!" << endl;
+	return;
+	/*for(int i = 0; i < length * width; i++)
+		matrix[i] = data[i];*/
 }

@@ -27,8 +27,8 @@ public:
 
 	void prepareData();
 
-	void computeOneStepBorder(double time, double* param);
-	void computeOneStepCenter(double time, double* param);
+	void computeOneStepBorder(double time, double* param) { std::cout << std::endl << "one step border" << std::endl; }
+	void computeOneStepCenter(double time, double* param) { std::cout << std::endl << "one step border" << std::endl; }
 
 	int getBlockType() { return CPU; }
 

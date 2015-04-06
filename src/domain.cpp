@@ -264,7 +264,9 @@ void Domain::print(char* path) {
 }
 
 void Domain::printAreaToConsole() {
-	double** resultAll = collectDataFromNode();
+	cout << endl << "PRINT AREA TO CONSOLE DON'T WORK" << endl;
+	return;
+	/*double** resultAll = collectDataFromNode();
 
 	cout.setf(ios::fixed);
 	for(int i = 0; i < lengthArea; i++) {
@@ -280,7 +282,7 @@ void Domain::printAreaToConsole() {
 		for (int i = 0; i < lengthArea; ++i)
 			delete resultAll[i];
 		delete resultAll;
-	}
+	}*/
 }
 
 void Domain::printBlocksToConsole() {
