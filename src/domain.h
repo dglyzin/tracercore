@@ -100,6 +100,12 @@ private:
 	Interconnect** mInterconnects;
 
 	/*
+	 * Номер класса солверов
+	 * В рамках каждого класса реализуется солвер для цпу и солвер для гпу
+	 */
+	int mSolverIndex;
+
+	/*
 	 * Массив солверов.
 	 * Каждому блоку соответствует солвер.
 	 * Нереальным блокам соответсвтует нулл
@@ -120,25 +126,27 @@ private:
 	 */
 	int mSolverStageCount;
 
+
+
 	/*
 	 * Номер потока
 	 */
-	int world_rank;
+	int mWorldRank;
 
 	/*
 	 * Количество потоков в целом
 	 */
-	int world_size;
+	int mWorldSize;
 
 	/*
 	 * Количество блоков
 	 */
-	int blockCount;
+	int mBlockCount;
 
 	/*
 	 * Количество соединений между блоками
 	 */
-	int connectionCount;
+	int mConnectionCount;
 
 	/*
 	 * Размеры области
@@ -149,7 +157,7 @@ private:
 
 	int flags;
 
-	int stepCount;
+	int mStepCount;
 
 	double startTime;
 	double stopTime;
@@ -159,12 +167,12 @@ private:
 
 	double saveInterval;
 
-	double dx, dy, dz;
+	double mDx, mDy, mDz;
 
-	int cellSize;
-	int haloSize;
+	int mCellSize;
+	int mHaloSize;
 
-	int repeatCount;
+	int mRepeatCount;
 
 	MPI_Status status;
 

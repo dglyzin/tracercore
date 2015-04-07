@@ -10,16 +10,16 @@
 using namespace std;
 
 Domain::Domain(int _world_rank, int _world_size, char* inputFile, int _flags, int _stepCount, double _stopTime, char* loadFile) {
-	world_rank = _world_rank;
-	world_size = _world_size;
+	mWorldRank = _world_rank;
+	mWorldSize = _world_size;
 
 	currentTime = 0;
-	stepCount = 0;
+	mStepCount = 0;
 
 	stepTime = 0;
 	stopTime = 0;
 
-	repeatCount = 0;
+	mRepeatCount = 0;
 
 
 	flags = _flags;
@@ -33,15 +33,15 @@ Domain::Domain(int _world_rank, int _world_size, char* inputFile, int _flags, in
 		stopTime = _stopTime;
 
 	if( flags & STEP_EXECUTION )
-		stepCount = _stepCount;
+		mStepCount = _stepCount;
 }
 
 Domain::~Domain() {
-	for (int i = 0; i < blockCount; ++i)
+	for (int i = 0; i < mBlockCount; ++i)
 		delete mBlocks[i];
 	delete mBlocks;
 
-	for (int i = 0; i < connectionCount; ++i)
+	for (int i = 0; i < mConnectionCount; ++i)
 		delete mInterconnects[i];
 	delete mInterconnects;
 }
@@ -49,14 +49,14 @@ Domain::~Domain() {
 double** Domain::collectDataFromNode() {
 	double** resultAll = NULL;
 
-	if(world_rank == 0) {
-		resultAll = new double* [blockCount];
+	if(mWorldRank == 0) {
+		resultAll = new double* [mBlockCount];
 	}
 
-	for (int i = 0; i < blockCount; ++i) {
+	for (int i = 0; i < mBlockCount; ++i) {
 		double* tmp = getBlockCurrentState(i);
 
-		if(world_rank == 0)
+		if(mWorldRank == 0)
 			resultAll[i] = tmp;
 	}
 
@@ -129,12 +129,12 @@ void Domain::nextStep() {
 	//последовательно выполняем все стадии метода
     for(int stage=0; stage < mSolverStageCount; stage++){
 		prepareData(stage);
-		for (int i = 0; i < connectionCount; ++i)
-			mInterconnects[i]->sendRecv(world_rank);
+		for (int i = 0; i < mConnectionCount; ++i)
+			mInterconnects[i]->sendRecv(mWorldRank);
 
 		computeOneStepCenter(stage);
 
-		for (int i = 0; i < connectionCount; ++i)
+		for (int i = 0; i < mConnectionCount; ++i)
 			mInterconnects[i]->wait();
 		computeOneStepBorder(stage);
     }
@@ -142,14 +142,14 @@ void Domain::nextStep() {
 }
 
 void Domain::prepareDeviceData(int deviceType, int deviceNumber, int stage) {
-	for (int i = 0; i < blockCount; ++i)
+	for (int i = 0; i < mBlockCount; ++i)
 		if( mBlocks[i]->getBlockType() == deviceType && mBlocks[i]->getDeviceNumber() == deviceNumber ) {
 			mSolvers[i]->prepareStageData(stage);
 		}
 }
 
 void Domain::processDeviceBlocksBorder(int deviceType, int deviceNumber, int stage) {
-	for (int i = 0; i < blockCount; ++i)
+	for (int i = 0; i < mBlockCount; ++i)
         if( mBlocks[i]->getBlockType() == deviceType && mBlocks[i]->getDeviceNumber() == deviceNumber ) {
         	cout << endl << "ERROR! PROCESS DEVICE!" << endl;
 		    mSolvers[i]->computeOneStageBorder(currentTime, NULL, stage);
@@ -157,7 +157,7 @@ void Domain::processDeviceBlocksBorder(int deviceType, int deviceNumber, int sta
 }
 
 void Domain::processDeviceBlocksCenter(int deviceType, int deviceNumber, int stage) {
-	for (int i = 0; i < blockCount; ++i)
+	for (int i = 0; i < mBlockCount; ++i)
         if( mBlocks[i]->getBlockType() == deviceType && mBlocks[i]->getDeviceNumber() == deviceNumber ) {
         	cout << endl << "ERROR! PROCESS DEVICE!" << endl;
 		    mSolvers[i]->computeOneStageCenter(currentTime, NULL, stage);
@@ -200,7 +200,7 @@ void Domain::computeOneStepCenter(int stage) {
 }
 
 void Domain::swapBlockMatrix() {
-	for (int i = 0; i < blockCount; ++i) {
+	for (int i = 0; i < mBlockCount; ++i) {
 		mBlocks[i]->swapMatrix();
 	}
 }
@@ -286,7 +286,7 @@ void Domain::printAreaToConsole() {
 }
 
 void Domain::printBlocksToConsole() {
-	for (int i = 0; i < blockCount; ++i) {
+	for (int i = 0; i < mBlockCount; ++i) {
 		mBlocks[i]->print();
 	}
 }
@@ -377,18 +377,25 @@ void Domain::readFromFile(char* path) {
 
 	readBlockCount(in);
 
-	mBlocks = new Block* [blockCount];
+	mBlocks = new Block* [mBlockCount];
 
-	for (int i = 0; i < blockCount; ++i)
+	//readSolverIndex;
+	mSolvers = new Solver* [mBlockCount];
+
+	for (int i = 0; i < mBlockCount; ++i)
 		mBlocks[i] = readBlock(in);
 
 
 	readConnectionCount(in);
 
-	mInterconnects = new Interconnect* [connectionCount];
+	mInterconnects = new Interconnect* [mConnectionCount];
 
-	for (int i = 0; i < connectionCount; ++i)
+	for (int i = 0; i < mConnectionCount; ++i)
 		mInterconnects[i] = readConnection(in);
+
+	for (int i = 0; i < mBlockCount; ++i)
+		mSolvers[i] = NULL; //produceSolver(mSolverIndex, mBlocks[i]);
+
 
 	cout << endl << "MOVE TEMP BORDER VECTOR!!" << endl;
 
@@ -428,33 +435,33 @@ void Domain::readSaveInterval(ifstream& in) {
 }
 
 void Domain::readGridSteps(ifstream& in) {
-	in.read((char*)&dx, SIZE_DOUBLE);
-	in.read((char*)&dy, SIZE_DOUBLE);
-	in.read((char*)&dz, SIZE_DOUBLE);
+	in.read((char*)&mDx, SIZE_DOUBLE);
+	in.read((char*)&mDy, SIZE_DOUBLE);
+	in.read((char*)&mDz, SIZE_DOUBLE);
 
-	cout << "dx:            " << dx << endl;
-	cout << "dy:            " << dy << endl;
-	cout << "dz:            " << dz << endl;
+	cout << "dx:            " << mDx << endl;
+	cout << "dy:            " << mDy << endl;
+	cout << "dz:            " << mDz << endl;
 }
 
 void Domain::readCellAndHaloSize(ifstream& in) {
-	in.read((char*)&cellSize, SIZE_INT);
-	in.read((char*)&haloSize, SIZE_INT);
+	in.read((char*)&mCellSize, SIZE_INT);
+	in.read((char*)&mHaloSize, SIZE_INT);
 
-	cout << "cell size:     " << cellSize << endl;
-	cout << "halo size:     " << haloSize << endl;
+	cout << "cell size:     " << mCellSize << endl;
+	cout << "halo size:     " << mHaloSize << endl;
 }
 
 void Domain::readBlockCount(ifstream& in) {
-	in.read((char*)&blockCount, SIZE_INT);
+	in.read((char*)&mBlockCount, SIZE_INT);
 
-	cout << "block count:   " << blockCount << endl;
+	cout << "block count:   " << mBlockCount << endl;
 }
 
 void Domain::readConnectionCount(ifstream& in) {
-	in.read((char*)&connectionCount, SIZE_INT);
+	in.read((char*)&mConnectionCount, SIZE_INT);
 
-	cout << "connection count:   " << connectionCount << endl;
+	cout << "connection count:   " << mConnectionCount << endl;
 }
 
 /*
@@ -522,7 +529,7 @@ Block* Domain::readBlock(ifstream& in) {
 
 	cout << endl << "DON'T CREATE GPU BLOCK! SEE DOMAIN.H includes!!!" << endl;
 
-	if(node == world_rank)
+	if(node == mWorldRank)
 		/*switch (deviceType) {
 			case 0:
 				return new BlockCpu(dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, haloSize, cellSize);
@@ -535,9 +542,9 @@ Block* Domain::readBlock(ifstream& in) {
 			default:
 				return new BlockNull(dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, haloSize, cellSize);
 		}*/
-		return new BlockCpu(dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, haloSize, cellSize, functionNumber);
+		return new BlockCpu(dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize, functionNumber);
 	else
-		return new BlockNull(dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, haloSize, cellSize);
+		return new BlockNull(dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize);
 }
 
 /*
@@ -595,7 +602,7 @@ Interconnect* Domain::readConnection(ifstream& in) {
 	int sourceNode = mBlocks[sourceBlock]->getNodeNumber();
 	int destinationNode = mBlocks[destinationBlock]->getNodeNumber();
 
-	int borderLength = length[0] * length[1] * cellSize * haloSize;
+	int borderLength = length[0] * length[1] * mCellSize * mHaloSize;
 
 	double* sourceData = NULL;
 	double* destinationData = NULL;
@@ -611,7 +618,7 @@ Interconnect* Domain::readConnection(ifstream& in) {
  */
 int Domain::getCountGridNodes() {
 	int count = 0;
-	for (int i = 0; i < blockCount; ++i)
+	for (int i = 0; i < mBlockCount; ++i)
 		count += mBlocks[i]->getGridNodeCount();
 
 	return count;
@@ -622,7 +629,7 @@ int Domain::getCountGridNodes() {
  * Функция носит исключетельно статистический смысл (на данный момент).
  */
 int Domain::getRepeatCount() {
-	return repeatCount;
+	return mRepeatCount;
 }
 
 /*
@@ -630,7 +637,7 @@ int Domain::getRepeatCount() {
  */
 int Domain::getCpuBlocksCount() {
 	int count = 0;
-	for (int i = 0; i < blockCount; ++i)
+	for (int i = 0; i < mBlockCount; ++i)
 		if( isCPU(mBlocks[i]->getBlockType()) )
 			count++;
 
@@ -642,7 +649,7 @@ int Domain::getCpuBlocksCount() {
  */
 int Domain::getGpuBlocksCount() {
 	int count = 0;
-	for (int i = 0; i < blockCount; ++i)
+	for (int i = 0; i < mBlockCount; ++i)
 		if(isGPU(mBlocks[i]->getBlockType()))
 			count++;
 
@@ -654,7 +661,7 @@ int Domain::getGpuBlocksCount() {
  */
 int Domain::realBlockCount() {
 	int count = 0;
-	for (int i = 0; i < blockCount; ++i)
+	for (int i = 0; i < mBlockCount; ++i)
 		if( mBlocks[i]->isRealBlock() )
 			count++;
 
