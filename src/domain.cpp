@@ -125,78 +125,78 @@ void Domain::compute(char* saveFile) {
 		saveStateToFile(saveFile);*/
 }
 
-void Domain::nextStep(double dX2, double dY2, double dT) {
-	prepareData();
+void Domain::nextStep() {
+	//последовательно выполняем все стадии метода
+    for(int stage=0; stage < mSolverStageCount; stage++){
+		prepareData(stage);
+		for (int i = 0; i < connectionCount; ++i)
+			mInterconnects[i]->sendRecv(world_rank);
 
-	for (int i = 0; i < connectionCount; ++i)
-		mInterconnects[i]->sendRecv(world_rank);
+		computeOneStepCenter(stage);
 
-	computeOneStepCenter(dX2, dY2, dT);
-
-	for (int i = 0; i < connectionCount; ++i)
-		mInterconnects[i]->wait();
-
-	computeOneStepBorder(dX2, dY2, dT);
-
-	swapBlockMatrix();
+		for (int i = 0; i < connectionCount; ++i)
+			mInterconnects[i]->wait();
+		computeOneStepBorder(stage);
+    }
+    swapBlockMatrix();
 }
 
-void Domain::prepareDeviceData(int deviceType, int deviceNumber) {
+void Domain::prepareDeviceData(int deviceType, int deviceNumber, int stage) {
 	for (int i = 0; i < blockCount; ++i)
 		if( mBlocks[i]->getBlockType() == deviceType && mBlocks[i]->getDeviceNumber() == deviceNumber ) {
-			mBlocks[i]->prepareData();
+			mSolvers[i]->prepareStageData(stage);
 		}
 }
 
-void Domain::processDeviceBlocksBorder(int deviceType, int deviceNumber, double dX2, double dY2, double dT) {
+void Domain::processDeviceBlocksBorder(int deviceType, int deviceNumber, int stage) {
 	for (int i = 0; i < blockCount; ++i)
         if( mBlocks[i]->getBlockType() == deviceType && mBlocks[i]->getDeviceNumber() == deviceNumber ) {
         	cout << endl << "ERROR! PROCESS DEVICE!" << endl;
-		    mBlocks[i]->computeOneStepBorder(currentTime, NULL);
+		    mSolvers[i]->computeOneStageBorder(currentTime, NULL, stage);
 		}
 }
 
-void Domain::processDeviceBlocksCenter(int deviceType, int deviceNumber, double dX2, double dY2, double dT) {
+void Domain::processDeviceBlocksCenter(int deviceType, int deviceNumber, int stage) {
 	for (int i = 0; i < blockCount; ++i)
         if( mBlocks[i]->getBlockType() == deviceType && mBlocks[i]->getDeviceNumber() == deviceNumber ) {
         	cout << endl << "ERROR! PROCESS DEVICE!" << endl;
-		    mBlocks[i]->computeOneStepCenter(currentTime, NULL);
+		    mSolvers[i]->computeOneStageCenter(currentTime, NULL, stage);
 		}
 }
 
-void Domain::prepareData() {
+void Domain::prepareData(int stage) {
 #pragma omp task
-	prepareDeviceData(GPU, 0);
+	prepareDeviceData(GPU, 0, stage);
 #pragma omp task
-	prepareDeviceData(GPU, 1);
+	prepareDeviceData(GPU, 1, stage);
 #pragma omp task
-	prepareDeviceData(GPU, 2);
+	prepareDeviceData(GPU, 2, stage);
 
-	prepareDeviceData(CPU, 0);
+	prepareDeviceData(CPU, 0, stage);
 
 #pragma omp taskwait
 }
 
-void Domain::computeOneStepBorder(double dX2, double dY2, double dT) {
+void Domain::computeOneStepBorder(int stage) {
 #pragma omp task
-	processDeviceBlocksBorder(GPU, 0, dX2, dY2, dT);
+	processDeviceBlocksBorder(GPU, 0, stage);
 #pragma omp task
-	processDeviceBlocksBorder(GPU, 1, dX2, dY2, dT);
+	processDeviceBlocksBorder(GPU, 1, stage);
 #pragma omp task
-	processDeviceBlocksBorder(GPU, 2, dX2, dY2, dT);
+	processDeviceBlocksBorder(GPU, 2, stage);
 
-	processDeviceBlocksBorder(CPU, 0, dX2, dY2, dT);
+	processDeviceBlocksBorder(CPU, 0, stage);
 }
 
-void Domain::computeOneStepCenter(double dX2, double dY2, double dT) {
+void Domain::computeOneStepCenter(int stage) {
 #pragma omp task
-	processDeviceBlocksCenter(GPU, 0, dX2, dY2, dT);
+	processDeviceBlocksCenter(GPU, 0, stage);
 #pragma omp task
-	processDeviceBlocksCenter(GPU, 1, dX2, dY2, dT);
+	processDeviceBlocksCenter(GPU, 1, stage);
 #pragma omp task
-	processDeviceBlocksCenter(GPU, 2, dX2, dY2, dT);
+	processDeviceBlocksCenter(GPU, 2, stage);
 
-	processDeviceBlocksCenter(CPU, 0, dX2, dY2, dT);
+	processDeviceBlocksCenter(CPU, 0, stage);
 }
 
 void Domain::swapBlockMatrix() {

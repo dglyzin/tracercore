@@ -14,6 +14,7 @@
 //#include "blockgpu.h"
 #include "blocknull.h"
 #include "interconnect.h"
+#include "solvers/solver.h"
 
 /*
  * Основной управляющий класс приложения.
@@ -34,7 +35,7 @@ public:
 	/*
 	 * Выполнение одной итерации (одного шага)
 	 */
-	void nextStep(double dX, double dY, double dT);
+	void nextStep();
 
 	/*
 	 * Сбор и запись данных в файл.
@@ -97,6 +98,27 @@ private:
 	 * Реальная пересылка произойдет только если вызов пришел с коррекного потока исполения.
 	 */
 	Interconnect** mInterconnects;
+
+	/*
+	 * Массив солверов.
+	 * Каждому блоку соответствует солвер.
+	 * Нереальным блокам соответсвтует нулл
+	 * Солвер способен продвинуть блок на один шаг во времени.
+	 * Для этого он заставляет блок многократно вычислять его функцию.
+	 * Где брать источник и куда складывать результат, солвер говорит сам.
+	 * Солвер содержит несколько вспомогательных хранилищ основной матрицы.
+	 * Первая стадия солвера всегда использует   Block->matrix в качестве источника
+	 * Последняя стадия солвера всегда использует Block->newMatrix в качестве хранилища результата
+	 * После последней стадии нужно сделать swap
+	 *
+	 */
+	Solver** mSolvers;
+
+	/*
+	 * Количество стадий (вычислений правых частей)
+	 * используемого солвера
+	 */
+	int mSolverStageCount;
 
 	/*
 	 * Номер потока
@@ -167,12 +189,12 @@ private:
 	double** collectDataFromNode();
 	double* getBlockCurrentState(int number);
 
-	void prepareData();
-	void prepareDeviceData(int deviceType, int deviceNumber);
-	void processDeviceBlocksBorder(int deviceType, int deviceNumber, double dX2, double dY2, double dT);
-	void processDeviceBlocksCenter(int deviceType, int deviceNumber, double dX2, double dY2, double dT);
-	void computeOneStepBorder(double dX2, double dY2, double dT);
-	void computeOneStepCenter(double dX2, double dY2, double dT);
+	void prepareData(int stage);
+	void prepareDeviceData(int deviceType, int deviceNumber, int stage);
+	void processDeviceBlocksBorder(int deviceType, int deviceNumber, int stage);
+	void processDeviceBlocksCenter(int deviceType, int deviceNumber, int stage);
+	void computeOneStepBorder(int stage);
+	void computeOneStepCenter(int stage);
 	void swapBlockMatrix();
 };
 

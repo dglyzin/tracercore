@@ -11,6 +11,9 @@
 class Solver {
 public:
     Solver();
+    virtual void prepareStageData(int stage) { return; }
+  	virtual void computeOneStageBorder(double time, double* param, int stage) { return; }
+  	virtual void computeOneStageCenter(double time, double* param, int stage) { return; }
 
 
 

@@ -135,10 +135,10 @@ public:
 	 * Выполняет подготовку данных.
 	 * Заполняет массивы границ для пересылки.
 	 */
-	virtual void prepareData() { return; }
+	virtual void prepareData(double* source) { return; }
 
-	virtual void computeOneStepBorder(double time, double* param) { return; }
-	virtual void computeOneStepCenter(double time, double* param) { return; }
+	virtual void computeOneStepBorder(double* result, double* source, double time, double* param) { return; }
+	virtual void computeOneStepCenter(double* result, double* source, double time, double* param) { return; }
 
 	void swapMatrix();
 
