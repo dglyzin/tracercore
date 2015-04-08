@@ -69,7 +69,10 @@ protected:
 	int nodeNumber;
 
 	int* sendBorderInfo;
+	std::vector<int> tempSendBorderInfo;
+
 	int* receiveBorderInfo;
+	std::vector<int> tempSenBorderInfo;
 
 	/*
 	 * Граничные условия для других блоков,
