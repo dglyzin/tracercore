@@ -59,8 +59,8 @@ Block::Block(int _dimension, int _xCount, int _yCount, int _zCount,
 
 	countSendSegmentBorder = countReceiveSegmentBorder = 0;
 
-	sendBorderType = NULL;
-	receiveBorderType = NULL;
+	sendBorderInfo = NULL;
+	receiveBorderInfo = NULL;
 
 	blockBorder = NULL;
 	externalBorder = NULL;
@@ -76,6 +76,12 @@ Block::Block(int _dimension, int _xCount, int _yCount, int _zCount,
 
 	cellSize = _cellSize;
 	haloSize = _haloSize;
+
+	mParamsCount = 0;
+	mParams = NULL;
+
+	mUserFuncs = NULL;
+	mUserInitFuncs = NULL;
 
 }
 

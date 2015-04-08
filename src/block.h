@@ -72,8 +72,8 @@ protected:
 	 * Тип границы блока.
 	 * BY_FUNCTION - границы с другим блоком нет, значения даются функцией.
 	 */
-	int** sendBorderType;
-	int** receiveBorderType;
+	int** sendBorderInfo;
+	int** receiveBorderInfo;
 
 	/*
 	 * Граничные условия для других блоков,
