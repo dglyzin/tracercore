@@ -169,8 +169,8 @@ public:
 
 	void setFunctionNumber(unsigned short int* functionNumberData ) { return; }
 
-	virtual double* addNewBlockBorder(Block* neighbor, int side, int move, int borderLength) { return NULL; }
-	virtual double* addNewExternalBorder(Block* neighbor, int side, int move, int borderLength, double* border) { return NULL; }
+	virtual double* addNewBlockBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength) { return NULL; }
+	virtual double* addNewExternalBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength, double* border) { return NULL; }
 
 	virtual void moveTempBorderVectorToBorderArray() { return; }
 

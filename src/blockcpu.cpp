@@ -421,7 +421,7 @@ void BlockCpu::print() {
 	cout << endl << endl;*/
 }
 
-double* BlockCpu::addNewBlockBorder(Block* neighbor, int side, int move, int borderLength) {
+double* BlockCpu::addNewBlockBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength) {
 	/*for (int i = 0; i < borderLength; ++i)
 		sendBorderType[side][i + move] = countSendSegmentBorder;
 
@@ -445,7 +445,7 @@ double* BlockCpu::addNewBlockBorder(Block* neighbor, int side, int move, int bor
 	return NULL;
 }
 
-double* BlockCpu::addNewExternalBorder(Block* neighbor, int side, int move, int borderLength, double* border) {
+double* BlockCpu::addNewExternalBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength, double* border) {
 	/*for (int i = 0; i < borderLength; ++i)
 		receiveBorderType[side][i + move] = countReceiveSegmentBorder;
 

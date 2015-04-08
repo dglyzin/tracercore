@@ -36,8 +36,8 @@ public:
 
 	void print();
 
-	double* addNewBlockBorder(Block* neighbor, int side, int move, int borderLength);
-	double* addNewExternalBorder(Block* neighbor, int side, int move, int borderLength, double* border);
+	double* addNewBlockBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength);
+	double* addNewExternalBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength, double* border);
 
 	void moveTempBorderVectorToBorderArray();
 
