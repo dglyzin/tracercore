@@ -123,9 +123,6 @@ BlockCpu::~BlockCpu() {
 		delete blockBorderMemoryAllocType;
 	}
 	
-	if(blockBorderMove != NULL)
-		delete blockBorderMove;
-	
 	
 	if(externalBorder != NULL) {
 		for(int i = 0; i < countReceiveSegmentBorder; i++ )
@@ -134,9 +131,6 @@ BlockCpu::~BlockCpu() {
 		delete externalBorder;
 		delete externalBorderMemoryAllocType;
 	}
-	
-	if(externalBorderMove != NULL)
-		delete externalBorderMove;
 }
 
 /*void BlockCpu::computeOneStepBorder(double dX2, double dY2, double dT) {
@@ -496,30 +490,24 @@ double* BlockCpu::addNewExternalBorder(Block* neighbor, int side, int mOffset, i
 
 void BlockCpu::moveTempBorderVectorToBorderArray() {
 	blockBorder = new double* [countSendSegmentBorder];
-	blockBorderMove = new int [countSendSegmentBorder];
 	blockBorderMemoryAllocType = new int [countSendSegmentBorder];
 
 	externalBorder = new double* [countReceiveSegmentBorder];
-	externalBorderMove = new int [countReceiveSegmentBorder];
 	externalBorderMemoryAllocType = new int [countReceiveSegmentBorder];	
 	
 
 	for (int i = 0; i < countSendSegmentBorder; ++i) {
 		blockBorder[i] = tempBlockBorder.at(i);
-		blockBorderMove[i] = tempBlockBorderMove.at(i);
 		blockBorderMemoryAllocType[i] = tempBlockBorderMemoryAllocType.at(i);
 	}
 
 	for (int i = 0; i < countReceiveSegmentBorder; ++i) {
 		externalBorder[i] = tempExternalBorder.at(i);
-		externalBorderMove[i] = tempExternalBorderMove.at(i);
 		externalBorderMemoryAllocType[i] = tempExternalBorderMemoryAllocType.at(i);
 	}
 
 	tempBlockBorder.clear();
-	tempBlockBorderMove.clear();
 	tempExternalBorder.clear();
-	tempExternalBorderMove.clear();
 	
 	tempBlockBorderMemoryAllocType.clear();
 	tempExternalBorderMemoryAllocType.clear();
