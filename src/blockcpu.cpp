@@ -100,45 +100,7 @@ BlockCpu::BlockCpu(int _dimension, int _xCount, int _yCount, int _zCount,
 	 * соседи писать через вектора, как было ранее
 	 * для определения "границ" использовать 5 значение: сторона, начальные координаты, конечный (по 2 штуки) - определяют прямоугольную область
 	 */
-	/*sendBorderType = new int* [BORDER_COUNT];
-
-	sendBorderType[TOP] = new int[width];
-	for(int i = 0; i < width; i++)
-		sendBorderType[TOP][i] = BY_FUNCTION;
-
-	sendBorderType[LEFT] = new int[length];
-	for (int i = 0; i < length; ++i)
-		sendBorderType[LEFT][i] = BY_FUNCTION;
-
-	sendBorderType[BOTTOM] = new int[width];
-	for(int i = 0; i < width; i++)
-		sendBorderType[BOTTOM][i] = BY_FUNCTION;
-
-	sendBorderType[RIGHT] = new int[length];
-	for (int i = 0; i < length; ++i)
-		sendBorderType[RIGHT][i] = BY_FUNCTION;
-
-
-	receiveBorderType = new int* [BORDER_COUNT];
-
-	receiveBorderType[TOP] = new int[width];
-	for(int i = 0; i < width; i++)
-		receiveBorderType[TOP][i] = BY_FUNCTION;
-
-	receiveBorderType[LEFT] = new int[length];
-	for (int i = 0; i < length; ++i)
-		receiveBorderType[LEFT][i] = BY_FUNCTION;
-
-	receiveBorderType[BOTTOM] = new int[width];
-	for(int i = 0; i < width; i++)
-		receiveBorderType[BOTTOM][i] = BY_FUNCTION;
-
-	receiveBorderType[RIGHT] = new int[length];
-	for (int i = 0; i < length; ++i)
-		receiveBorderType[RIGHT][i] = BY_FUNCTION;*/
 	
-	
-	//result = new double [length * width];
 }
 
 BlockCpu::~BlockCpu() {
@@ -151,38 +113,6 @@ BlockCpu::~BlockCpu() {
 	
 	if(newMatrix != NULL)
 		delete newMatrix;
-	
-	if(sendBorderType != NULL) {
-		if(sendBorderType[TOP] != NULL)
-			delete sendBorderType[TOP];
-		
-		if(sendBorderType[LEFT] != NULL)
-			delete sendBorderType[LEFT];
-		
-		if(sendBorderType[BOTTOM] != NULL)
-			delete sendBorderType[BOTTOM];
-		
-		if(sendBorderType[RIGHT] != NULL)
-			delete sendBorderType[RIGHT];
-		
-		delete sendBorderType;		
-	}
-	
-	if(receiveBorderType != NULL) {
-		if(receiveBorderType[TOP] != NULL)
-			delete receiveBorderType[TOP];
-		
-		if(receiveBorderType[LEFT] != NULL)
-			delete receiveBorderType[LEFT];
-		
-		if(receiveBorderType[BOTTOM] != NULL)
-			delete receiveBorderType[BOTTOM];
-		
-		if(receiveBorderType[RIGHT] != NULL)
-			delete receiveBorderType[RIGHT];
-		
-		delete receiveBorderType;		
-	}
 	
 	
 	if(blockBorder != NULL) {

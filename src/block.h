@@ -68,10 +68,6 @@ protected:
 	 */
 	int nodeNumber;
 
-	/*
-	 * Тип границы блока.
-	 * BY_FUNCTION - границы с другим блоком нет, значения даются функцией.
-	 */
 	int** sendBorderInfo;
 	int** receiveBorderInfo;
 
