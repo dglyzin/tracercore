@@ -17,7 +17,7 @@ Domain::Domain(int _world_rank, int _world_size, char* inputFile, int _flags, in
 	currentTime = 0;
 	mStepCount = 0;
 
-	stepTime = 0;
+	timeStep = 0;
 	stopTime = 0;
 
 	mRepeatCount = 0;
@@ -35,6 +35,9 @@ Domain::Domain(int _world_rank, int _world_size, char* inputFile, int _flags, in
 
 	if( flags & STEP_EXECUTION )
 		mStepCount = _stepCount;
+
+	mAcceptedStepCount = 0;
+	mRejectedStepCount = 0;
 }
 
 Domain::~Domain() {
@@ -139,7 +142,13 @@ void Domain::nextStep() {
 			mInterconnects[i]->wait();
 		computeOneStepBorder(stage);
     }
-    swapBlockMatrix();
+    int step_rejected = checkErrorAndUpdateTimeStep();
+    if (!step_rejected){
+    	swapBlockMatrix();
+    	mAcceptedStepCount++;
+    }
+    else
+    	mRejectedStepCount++;
 }
 
 void Domain::prepareDeviceData(int deviceType, int deviceNumber, int stage) {
@@ -153,7 +162,7 @@ void Domain::processDeviceBlocksBorder(int deviceType, int deviceNumber, int sta
 	for (int i = 0; i < mBlockCount; ++i)
         if( mBlocks[i]->getBlockType() == deviceType && mBlocks[i]->getDeviceNumber() == deviceNumber ) {
         	cout << endl << "ERROR! PROCESS DEVICE!" << endl;
-		    mBlocks[i]->computeStageBorder(stage, currentTime);
+		    mBlocks[i]->computeStageBorder(stage, currentTime, timeStep);
 		}
 }
 
@@ -161,7 +170,7 @@ void Domain::processDeviceBlocksCenter(int deviceType, int deviceNumber, int sta
 	for (int i = 0; i < mBlockCount; ++i)
         if( mBlocks[i]->getBlockType() == deviceType && mBlocks[i]->getDeviceNumber() == deviceNumber ) {
         	cout << endl << "ERROR! PROCESS DEVICE!" << endl;
-		    mBlocks[i]->computeStageCenter(stage, currentTime);
+		    mBlocks[i]->computeStageCenter(stage, currentTime, timeStep);
 		}
 }
 
@@ -204,6 +213,11 @@ void Domain::swapBlockMatrix() {
 	for (int i = 0; i < mBlockCount; ++i) {
 		mBlocks[i]->swapMatrix();
 	}
+}
+
+int Domain::checkErrorAndUpdateTimeStep() {
+    //TODO real update
+	return 0; //Accepted
 }
 
 void Domain::print(char* path) {
@@ -422,11 +436,11 @@ void Domain::readFileStat(ifstream& in) {
 void Domain::readTimeSetting(ifstream& in) {
 	in.read((char*)&startTime, SIZE_DOUBLE);
 	in.read((char*)&stopTime, SIZE_DOUBLE);
-	in.read((char*)&stepTime, SIZE_DOUBLE);
+	in.read((char*)&timeStep, SIZE_DOUBLE);
 
 	cout << "start time:    " << startTime << endl;
 	cout << "stop time:     " << stopTime << endl;
-	cout << "step time:     " << stepTime << endl;
+	cout << "step time:     " << timeStep << endl;
 }
 
 void Domain::readSaveInterval(ifstream& in) {
@@ -624,7 +638,7 @@ Interconnect* Domain::readConnection(ifstream& in) {
  * Получение общего количества узлов сетки.
  * Сумма со всех блоков.
  */
-int Domain::getCountGridNodes() {
+int Domain::getGridNodeCount() {
 	int count = 0;
 	for (int i = 0; i < mBlockCount; ++i)
 		count += mBlocks[i]->getGridNodeCount();
@@ -643,7 +657,7 @@ int Domain::getRepeatCount() {
 /*
  * Количество блоков, имеющих тип "центальный процессор".
  */
-int Domain::getCpuBlocksCount() {
+int Domain::getCpuBlockCount() {
 	int count = 0;
 	for (int i = 0; i < mBlockCount; ++i)
 		if( isCPU(mBlocks[i]->getBlockType()) )
@@ -655,7 +669,7 @@ int Domain::getCpuBlocksCount() {
 /*
  * Количество блоков, имеющих тип "видеокарта".
  */
-int Domain::getGpuBlocksCount() {
+int Domain::getGpuBlockCount() {
 	int count = 0;
 	for (int i = 0; i < mBlockCount; ++i)
 		if(isGPU(mBlocks[i]->getBlockType()))
