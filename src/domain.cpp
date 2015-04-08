@@ -6,6 +6,7 @@
  */
 
 #include "domain.h"
+#include "solvers/solver.h"
 
 using namespace std;
 
@@ -144,7 +145,7 @@ void Domain::nextStep() {
 void Domain::prepareDeviceData(int deviceType, int deviceNumber, int stage) {
 	for (int i = 0; i < mBlockCount; ++i)
 		if( mBlocks[i]->getBlockType() == deviceType && mBlocks[i]->getDeviceNumber() == deviceNumber ) {
-			mSolvers[i]->prepareStageData(stage);
+			mBlocks[i]->prepareStageData(stage);
 		}
 }
 
@@ -152,7 +153,7 @@ void Domain::processDeviceBlocksBorder(int deviceType, int deviceNumber, int sta
 	for (int i = 0; i < mBlockCount; ++i)
         if( mBlocks[i]->getBlockType() == deviceType && mBlocks[i]->getDeviceNumber() == deviceNumber ) {
         	cout << endl << "ERROR! PROCESS DEVICE!" << endl;
-		    mSolvers[i]->computeOneStageBorder(currentTime, NULL, stage);
+		    mBlocks[i]->computeStageBorder(stage, currentTime);
 		}
 }
 
@@ -160,7 +161,7 @@ void Domain::processDeviceBlocksCenter(int deviceType, int deviceNumber, int sta
 	for (int i = 0; i < mBlockCount; ++i)
         if( mBlocks[i]->getBlockType() == deviceType && mBlocks[i]->getDeviceNumber() == deviceNumber ) {
         	cout << endl << "ERROR! PROCESS DEVICE!" << endl;
-		    mSolvers[i]->computeOneStageCenter(currentTime, NULL, stage);
+		    mBlocks[i]->computeStageCenter(stage, currentTime);
 		}
 }
 
@@ -374,13 +375,15 @@ void Domain::readFromFile(char* path) {
 	readSaveInterval(in);
 	readGridSteps(in);
 	readCellAndHaloSize(in);
+	readSolverIndex(in);
+
+	//mSolverStageCount = GetSolverStageCount(mSolverIndex);
 
 	readBlockCount(in);
 
 	mBlocks = new Block* [mBlockCount];
 
-	//readSolverIndex;
-	mSolvers = new Solver* [mBlockCount];
+
 
 	for (int i = 0; i < mBlockCount; ++i)
 		mBlocks[i] = readBlock(in);
@@ -393,8 +396,6 @@ void Domain::readFromFile(char* path) {
 	for (int i = 0; i < mConnectionCount; ++i)
 		mInterconnects[i] = readConnection(in);
 
-	for (int i = 0; i < mBlockCount; ++i)
-		mSolvers[i] = NULL; //produceSolver(mSolverIndex, mBlocks[i]);
 
 
 	cout << endl << "MOVE TEMP BORDER VECTOR!!" << endl;
@@ -451,6 +452,13 @@ void Domain::readCellAndHaloSize(ifstream& in) {
 	cout << "cell size:     " << mCellSize << endl;
 	cout << "halo size:     " << mHaloSize << endl;
 }
+
+
+void Domain::readSolverIndex(std::ifstream& in){
+	in.read((char*)&mSolverIndex, SIZE_INT);
+	cout << "Solver index:  " << mSolverIndex << endl;
+}
+
 
 void Domain::readBlockCount(ifstream& in) {
 	in.read((char*)&mBlockCount, SIZE_INT);

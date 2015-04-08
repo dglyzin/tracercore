@@ -27,8 +27,8 @@ public:
 
 	void prepareData(double* source) { std::cout << std::endl << "prepare data" << std::endl; }
 
-	void computeOneStepBorder(double* result, double* source, double time, double* param) { std::cout << std::endl << "one step border" << std::endl; }
-	void computeOneStepCenter(double* result, double* source, double time, double* param) { std::cout << std::endl << "one step center" << std::endl; }
+	void computeStageBorder(double* result, double* source, double time, double* param) { std::cout << std::endl << "one step border" << std::endl; }
+	void computeStageCenter(double* result, double* source, double time, double* param) { std::cout << std::endl << "one step center" << std::endl; }
 
 	int getBlockType() { return CPU; }
 

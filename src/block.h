@@ -131,10 +131,10 @@ public:
 	 * Выполняет подготовку данных.
 	 * Заполняет массивы границ для пересылки.
 	 */
-	virtual void prepareData(double* source) { return; }
+	virtual void prepareStageData(int stage) { return; }
 
-	virtual void computeOneStepBorder(double* result, double* source, double time, double* param) { return; }
-	virtual void computeOneStepCenter(double* result, double* source, double time, double* param) { return; }
+	virtual void computeStageBorder(int stage, double time) { return; }
+	virtual void computeStageCenter(int stage, double time) { return; }
 
 	void swapMatrix();
 
