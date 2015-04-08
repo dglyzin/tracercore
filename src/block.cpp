@@ -64,9 +64,6 @@ Block::Block(int _dimension, int _xCount, int _yCount, int _zCount,
 
 	blockBorder = NULL;
 	externalBorder = NULL;
-
-	blockBorderMove = NULL;
-	externalBorderMove = NULL;
 	
 	blockBorderMemoryAllocType = NULL;
 	externalBorderMemoryAllocType = NULL;

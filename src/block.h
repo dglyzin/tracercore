@@ -77,10 +77,8 @@ protected:
 	 * Interconnect их забирает (должен знать откуда забирать).
 	 */
 	double** blockBorder;
-	int* blockBorderMove;
 	int* blockBorderMemoryAllocType;
 	std::vector<double*> tempBlockBorder;
-	std::vector<int> tempBlockBorderMove;
 	std::vector<int> tempBlockBorderMemoryAllocType;
 
 	/*
@@ -89,10 +87,8 @@ protected:
 	 * Первыми пишут Interconnect'ы, затем функции.
 	 */
 	double** externalBorder;
-	int* externalBorderMove;
 	int* externalBorderMemoryAllocType;
 	std::vector<double*> tempExternalBorder;
-	std::vector<int> tempExternalBorderMove;
 	std::vector<int> tempExternalBorderMemoryAllocType;
 
 
