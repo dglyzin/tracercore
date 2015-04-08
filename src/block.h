@@ -68,8 +68,8 @@ protected:
 	 */
 	int nodeNumber;
 
-	int** sendBorderInfo;
-	int** receiveBorderInfo;
+	int* sendBorderInfo;
+	int* receiveBorderInfo;
 
 	/*
 	 * Граничные условия для других блоков,
