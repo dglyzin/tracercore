@@ -109,7 +109,7 @@ protected:
 
 	func_ptr_t* mUserFuncs;
 	initfunc_fill_ptr_t* mUserInitFuncs;
-	double * mParams;
+	double* mParams;
 	int mParamsCount;
 
 public:

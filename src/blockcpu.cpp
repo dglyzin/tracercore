@@ -422,7 +422,7 @@ void BlockCpu::print() {
 }
 
 double* BlockCpu::addNewBlockBorder(Block* neighbor, int side, int move, int borderLength) {
-	for (int i = 0; i < borderLength; ++i)
+	/*for (int i = 0; i < borderLength; ++i)
 		sendBorderType[side][i + move] = countSendSegmentBorder;
 
 	countSendSegmentBorder++;
@@ -441,11 +441,12 @@ double* BlockCpu::addNewBlockBorder(Block* neighbor, int side, int move, int bor
 	tempBlockBorder.push_back(newBlockBorder);
 	tempBlockBorderMove.push_back(move);
 
-	return newBlockBorder;
+	return newBlockBorder;*/
+	return NULL;
 }
 
 double* BlockCpu::addNewExternalBorder(Block* neighbor, int side, int move, int borderLength, double* border) {
-	for (int i = 0; i < borderLength; ++i)
+	/*for (int i = 0; i < borderLength; ++i)
 		receiveBorderType[side][i + move] = countReceiveSegmentBorder;
 
 	countReceiveSegmentBorder++;
@@ -464,7 +465,8 @@ double* BlockCpu::addNewExternalBorder(Block* neighbor, int side, int move, int 
 	tempExternalBorder.push_back(newExternalBorder);
 	tempExternalBorderMove.push_back(move);
 
-	return newExternalBorder;
+	return newExternalBorder;*/
+	return NULL;
 }
 
 void BlockCpu::moveTempBorderVectorToBorderArray() {
