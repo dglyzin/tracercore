@@ -50,6 +50,8 @@ int oppositeBorder(int side);
 
 int getSide(int number);
 
+char* getSideName(int side);
+
 bool isCPU(int type);
 bool isGPU(int type);
 

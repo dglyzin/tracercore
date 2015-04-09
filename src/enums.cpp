@@ -45,6 +45,25 @@ int getSide(int number) {
 	}
 }
 
+char* getSideName(int side) {
+	switch (side) {
+		case LEFT:
+			return "LEFT";
+		case RIGHT:
+			return "RIGHT";
+		case FRONT:
+			return "FRONT";
+		case BACK:
+			return "BACK";
+		case TOP:
+			return "TOP";
+		case BOTTOM:
+			return "BOTTOM";
+		default:
+			return "ERROR SIDE";
+	}
+}
+
 bool isCPU(int type) {
 	return type == CPU;
 }
