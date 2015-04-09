@@ -64,6 +64,21 @@ char* getSideName(int side) {
 	}
 }
 
+char* getMemoryTypeName(int type) {
+	switch (type) {
+		case NOT_ALLOC:
+			return "NOT_ALLOC";
+		case NEW:
+			return "NEW";
+		case CUDA_MALLOC:
+			return "CUDA_MALLOC";
+		case CUDA_MALLOC_HOST:
+			return "CUDA_MALLOC_HOST";
+		default:
+			return "ERROR MEMORY TYPE";
+	}
+}
+
 bool isCPU(int type) {
 	return type == CPU;
 }
