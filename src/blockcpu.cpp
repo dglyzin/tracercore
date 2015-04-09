@@ -295,30 +295,52 @@ double* BlockCpu::getCurrentState() {
 }
 
 void BlockCpu::print() {
-	cout << endl << "BLOCK PRINT NOT WORK!" << endl;
-	return;
-	/*cout << "########################################################################################################################################################################################################" << endl;
+	cout << "########################################################################################################################################################################################################" << endl;
 	
 	cout << endl;
 	cout << "BlockCpu from node #" << nodeNumber << endl;
-	cout << "Length:      " << length << endl;
-	cout << "Width :      " << width << endl;
+	cout << "Dimension    " << dimension << endl;
 	cout << endl;
-	cout << "Length move: " << lengthMove << endl;
-	cout << "Width move:  " << widthMove << endl;
+	cout << "xCount:      " << xCount << endl;
+	cout << "yCount:      " << yCount << endl;
+	cout << "zCount:      " << zCount << endl;
+	cout << endl;
+	cout << "xOffset:     " << xOffset << endl;
+	cout << "yOffset:     " << yOffset << endl;
+	cout << "zOffset:     " << zOffset << endl;
+	cout << endl;
+	cout << "Cell size:   " << cellSize << endl;
+	cout << "Halo size:   " << haloSize << endl;
 	
 	cout << endl;
 	cout << "Block matrix:" << endl;
 	cout.setf(ios::fixed);
-	for(int i = 0; i < length; i++) {
-		for( int j = 0; j < width; j++ ) {
-			cout.width(7);
-			cout.precision(1);
-			cout << matrix[i * width + j];
+	for (int i = 0; i < zCount; ++i) {
+		cout << "z = " << i << endl;
+
+		int zShift = xCount * yCount * i;
+
+		for (int j = 0; j < yCount; ++j) {
+			int yShift = xCount * j;
+
+			for (int k = 0; k < xCount; ++k) {
+				int xShift = k;
+
+				cout << "("
+				for (int l = 0; l < cellSize; ++l) {
+					int cellShift = l;
+
+					cout.width(7);
+					cout.precision(1);
+					cout << matrix[ (zShift + yShift + xShift)*cellSize + cellShift ] << " ";
+				}
+				cout << ")";
+			}
 		}
-		cout << endl;
 	}
-	
+
+
+
 	cout << endl;
 	cout << "TopSendBorderType" << endl;
 	for( int i =0; i < width; i++ ) {
@@ -412,7 +434,7 @@ void BlockCpu::print() {
 	}
 
 	cout << "########################################################################################################################################################################################################" << endl;
-	cout << endl << endl;*/
+	cout << endl << endl;
 }
 
 double* BlockCpu::addNewBlockBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength) {
