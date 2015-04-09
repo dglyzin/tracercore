@@ -538,6 +538,13 @@ void BlockCpu::moveTempBorderVectorToBorderArray() {
 	for (int i = 0; i < countReceiveSegmentBorder; ++i) {
 		externalBorder[i] = tempExternalBorder.at(i);
 		externalBorderMemoryAllocType[i] = tempExternalBorderMemoryAllocType.at(i);
+
+		int index = INTERCONNECT_COMPONENT_COUNT * i;
+		receiveBorderInfo[ index + SIDE ] = tempReceiveBorderInfo.at(index + 0);
+		receiveBorderInfo[ index + M_OFFSET ] = tempReceiveBorderInfo.at(index + 1);
+		receiveBorderInfo[ index + N_OFFSET ] = tempReceiveBorderInfo.at(index + 2);
+		receiveBorderInfo[ index + M_LENGTH ] = tempReceiveBorderInfo.at(index + 3);
+		receiveBorderInfo[ index + N_LENGTH ] = tempReceiveBorderInfo.at(index + 4);
 	}
 
 	tempBlockBorder.clear();
@@ -545,6 +552,9 @@ void BlockCpu::moveTempBorderVectorToBorderArray() {
 	
 	tempBlockBorderMemoryAllocType.clear();
 	tempExternalBorderMemoryAllocType.clear();
+
+	tempSendBorderInfo.clear();
+	tempReceiveBorderInfo.clear();
 }
 
 void BlockCpu::loadData(double* data) {
