@@ -25,7 +25,7 @@ public:
 
 	bool isRealBlock() { return true; }
 
-	void prepareData(double* source) { std::cout << std::endl << "prepare data" << std::endl; }
+	void void prepareStageData(int stage);
 
 	void computeStageBorder(double* result, double* source, double time, double* param) { std::cout << std::endl << "one step border" << std::endl; }
 	void computeStageCenter(double* result, double* source, double time, double* param) { std::cout << std::endl << "one step center" << std::endl; }

@@ -262,27 +262,20 @@ BlockCpu::~BlockCpu() {
 	}
 }*/
 
-/*void BlockCpu::prepareData() {
+void BlockCpu::prepareStageData(int stage) {
+	for (int i = 0; i < countSendSegmentBorder; ++i) {
+		int index = INTERCONNECT_COMPONENT_COUNT * i;
 
-	 * Копирование данных из матрицы в массивы.
-	 * В дальнейшем эти массивы будет пеесылаться другим блокам.
-
-	for (int i = 0; i < width; ++i)
-		if( sendBorderType[TOP][i] != BY_FUNCTION )
-			blockBorder[	sendBorderType[TOP][i]	][i - blockBorderMove[	sendBorderType[TOP][i]	]] = matrix[0 * width + i];
-
-	for (int i = 0; i < length; ++i)
-		if( sendBorderType[LEFT][i] != BY_FUNCTION )
-			blockBorder[	sendBorderType[LEFT][i]	][i - blockBorderMove[	sendBorderType[LEFT][i]	]] = matrix[i * width + 0];
-
-	for (int i = 0; i < width; ++i)
-		if( sendBorderType[BOTTOM][i] != BY_FUNCTION )
-			blockBorder[	sendBorderType[BOTTOM][i]	][i - blockBorderMove[	sendBorderType[BOTTOM][i]	]] = matrix[(length - 1) * width + i];
-
-	for (int i = 0; i < length; ++i)
-		if( sendBorderType[RIGHT][i] != BY_FUNCTION )
-			blockBorder[	sendBorderType[RIGHT][i]	][i - blockBorderMove[	sendBorderType[RIGHT][i]	]] = matrix[i * width + (width - 1)];
-}*/
+		switch (sendBorderInfo[index + SIDE]) {
+			case LEFT:
+				break;
+			case RIGHT:
+				break;
+			default:
+				break;
+		}
+	}
+}
 
 double* BlockCpu::getCurrentState() {
 	int count = getGridNodeCount();
