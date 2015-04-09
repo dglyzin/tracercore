@@ -517,14 +517,19 @@ double* BlockCpu::addNewExternalBorder(Block* neighbor, int side, int mOffset, i
 void BlockCpu::moveTempBorderVectorToBorderArray() {
 	blockBorder = new double* [countSendSegmentBorder];
 	blockBorderMemoryAllocType = new int [countSendSegmentBorder];
+	sendBorderInfo = new int [INTERCONNECT_COMPONENT_COUNT * countSendSegmentBorder];
 
 	externalBorder = new double* [countReceiveSegmentBorder];
-	externalBorderMemoryAllocType = new int [countReceiveSegmentBorder];	
-	
+	externalBorderMemoryAllocType = new int [countReceiveSegmentBorder];
+	receiveBorderInfo = new int [INTERCONNECT_COMPONENT_COUNT * countReceiveSegmentBorder];
 
 	for (int i = 0; i < countSendSegmentBorder; ++i) {
 		blockBorder[i] = tempBlockBorder.at(i);
 		blockBorderMemoryAllocType[i] = tempBlockBorderMemoryAllocType.at(i);
+
+		int index = INTERCONNECT_COMPONENT_COUNT * i;
+		sendBorderInfo[ index + SIDE ] = tempSendBorderInfo.at(index + 0);
+		sendBorderInfo[ index + M_OFFSET ] = tempSendBorderInfo.at(index + 1);
 	}
 
 	for (int i = 0; i < countReceiveSegmentBorder; ++i) {
