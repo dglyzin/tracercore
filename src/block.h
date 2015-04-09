@@ -72,7 +72,7 @@ protected:
 	std::vector<int> tempSendBorderInfo;
 
 	int* receiveBorderInfo;
-	std::vector<int> tempSenBorderInfo;
+	std::vector<int> tempReceiveBorderInfo;
 
 	/*
 	 * Граничные условия для других блоков,
