@@ -45,7 +45,7 @@ public:
 	void printBlocksToConsole();
 
 	/*
-	 * Чтение с файла.
+	 * Чтение из файла.
 	 */
 	void readFromFile(char* path);
 
@@ -53,7 +53,7 @@ public:
 	 * Возвращает суммарное количество узлов области.
 	 * Сумма со всех блоков.
 	 */
-	int getCountGridNodes();
+	int getGridNodeCount();
 
 	/*
 	 * Возвращает количество необходимых итераций.
@@ -63,12 +63,12 @@ public:
 	/*
 	 * Количество реальных блоков типа "центральный процессор"
 	 */
-	int getCpuBlocksCount();
+	int getCpuBlockCount();
 
 	/*
 	 * Количество реальных блоков типа "видеокарта"
 	 */
-	int getGpuBlocksCount();
+	int getGpuBlockCount();
 
 	/*
 	 * Количество реальных блоков любого типа.
@@ -111,8 +111,6 @@ private:
 	 */
 	int mSolverStageCount;
 
-
-
 	/*
 	 * Номер потока
 	 */
@@ -146,7 +144,11 @@ private:
 
 	double startTime;
 	double stopTime;
-	double stepTime;
+
+	double timeStep;
+	int mAcceptedStepCount;
+	int mRejectedStepCount;
+
 
 	double currentTime;
 
@@ -189,6 +191,11 @@ private:
 	void processDeviceBlocksCenter(int deviceType, int deviceNumber, int stage);
 	void computeOneStepBorder(int stage);
 	void computeOneStepCenter(int stage);
+	/*
+	 * after every step (successful or not) we update timestep according to an error
+	 */
+	int checkErrorAndUpdateTimeStep();
+
 	void swapBlockMatrix();
 };
 
