@@ -416,6 +416,10 @@ void Domain::readFromFile(char* path) {
 
 	/*for (int i = 0; i < blockCount; ++i)
 		mBlocks[i]->moveTempBorderVectorToBorderArray();*/
+
+	for (int i = 0; i < mBlockCount; ++i) {
+		mBlocks[i]->print();
+	}
 }
 
 void Domain::readFileStat(ifstream& in) {

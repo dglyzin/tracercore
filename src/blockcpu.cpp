@@ -326,22 +326,23 @@ void BlockCpu::print() {
 			for (int k = 0; k < xCount; ++k) {
 				int xShift = k;
 
-				cout << "("
+				cout << "(";
 				for (int l = 0; l < cellSize; ++l) {
 					int cellShift = l;
 
-					cout.width(7);
+					cout.width(5);
 					cout.precision(1);
 					cout << matrix[ (zShift + yShift + xShift)*cellSize + cellShift ] << " ";
 				}
 				cout << ")";
 			}
+			cout << endl;
 		}
 	}
 
 
 
-	cout << endl;
+	/*cout << endl;
 	cout << "TopSendBorderType" << endl;
 	for( int i =0; i < width; i++ ) {
 		cout.width(4);
@@ -431,7 +432,7 @@ void BlockCpu::print() {
 		cout << "	Memory address: " << externalBorder[i] << endl;
 		cout << "	Border move:    " << externalBorderMove[i] << endl;
 		cout << endl;
-	}
+	}*/
 
 	cout << "########################################################################################################################################################################################################" << endl;
 	cout << endl << endl;
