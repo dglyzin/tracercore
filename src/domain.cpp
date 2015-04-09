@@ -411,11 +411,8 @@ void Domain::readFromFile(char* path) {
 		mInterconnects[i] = readConnection(in);
 
 
-
-	cout << endl << "MOVE TEMP BORDER VECTOR!!" << endl;
-
-	/*for (int i = 0; i < blockCount; ++i)
-		mBlocks[i]->moveTempBorderVectorToBorderArray();*/
+	for (int i = 0; i < mBlockCount; ++i)
+		mBlocks[i]->moveTempBorderVectorToBorderArray();
 
 	for (int i = 0; i < mBlockCount; ++i) {
 		mBlocks[i]->print();
