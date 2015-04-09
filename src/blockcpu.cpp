@@ -271,6 +271,14 @@ void BlockCpu::prepareStageData(int stage) {
 				break;
 			case RIGHT:
 				break;
+			case FRONT:
+				break;
+			case BACK:
+				break;
+			case TOP:
+				break;
+			case BOTTOM:
+				break;
 			default:
 				break;
 		}
