@@ -530,6 +530,9 @@ void BlockCpu::moveTempBorderVectorToBorderArray() {
 		int index = INTERCONNECT_COMPONENT_COUNT * i;
 		sendBorderInfo[ index + SIDE ] = tempSendBorderInfo.at(index + 0);
 		sendBorderInfo[ index + M_OFFSET ] = tempSendBorderInfo.at(index + 1);
+		sendBorderInfo[ index + N_OFFSET ] = tempSendBorderInfo.at(index + 2);
+		sendBorderInfo[ index + M_LENGTH ] = tempSendBorderInfo.at(index + 3);
+		sendBorderInfo[ index + N_LENGTH ] = tempSendBorderInfo.at(index + 4);
 	}
 
 	for (int i = 0; i < countReceiveSegmentBorder; ++i) {
