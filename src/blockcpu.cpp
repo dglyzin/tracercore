@@ -341,7 +341,7 @@ void BlockCpu::print() {
 	}
 
 	cout << endl;
-	cout << "Send border info" << endl;
+	cout << "Send border info (" << countSendSegmentBorder << ")" << endl;
 	for (int i = 0; i < countSendSegmentBorder; ++i) {
 		int index = INTERCONNECT_COMPONENT_COUNT * i;
 		cout << "Block border #" << i << endl;
@@ -356,7 +356,7 @@ void BlockCpu::print() {
 	}
 
 	cout << endl;
-	cout << "Receive border info" << endl;
+	cout << "Receive border info (" << countReceiveSegmentBorder << ")" << endl;
 	for (int i = 0; i < countReceiveSegmentBorder; ++i) {
 		int index = INTERCONNECT_COMPONENT_COUNT * i;
 		cout << "Block border #" << i << endl;
