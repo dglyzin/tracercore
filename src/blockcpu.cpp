@@ -417,6 +417,7 @@ void BlockCpu::print() {
 
 double* BlockCpu::addNewBlockBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength) {
 	countSendSegmentBorder++;
+
 	tempSendBorderInfo.push_back(side);
 	tempSendBorderInfo.push_back(mOffset);
 	tempSendBorderInfo.push_back(nOffset);
@@ -465,6 +466,31 @@ double* BlockCpu::addNewBlockBorder(Block* neighbor, int side, int mOffset, int 
 }
 
 double* BlockCpu::addNewExternalBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength, double* border) {
+	countReceiveSegmentBorder++;
+
+	tempReceiveBorderInfo.push_back(side);
+	tempReceiveBorderInfo.push_back(mOffset);
+	tempReceiveBorderInfo.push_back(nOffset);
+	tempReceiveBorderInfo.push_back(mLength);
+	tempReceiveBorderInfo.push_back(nLength);
+
+	int borderLength = mLength * nLength;
+
+	double* newExternalBorder;
+
+	if( nodeNumber == neighbor->getNodeNumber() ) {
+		newExternalBorder = border;
+		tempExternalBorderMemoryAllocType.push_back(NOT_ALLOC);
+	}
+	else {
+		newExternalBorder = new double [borderLength];
+		tempExternalBorderMemoryAllocType.push_back(NEW);
+	}
+
+	tempExternalBorder.push_back(newExternalBorder);
+
+	return newExternalBorder;
+
 	/*for (int i = 0; i < borderLength; ++i)
 		receiveBorderType[side][i + move] = countReceiveSegmentBorder;
 
@@ -484,8 +510,8 @@ double* BlockCpu::addNewExternalBorder(Block* neighbor, int side, int mOffset, i
 	tempExternalBorder.push_back(newExternalBorder);
 	tempExternalBorderMove.push_back(move);
 
-	return newExternalBorder;*/
-	return NULL;
+	return newExternalBorder;
+	return NULL;*/
 }
 
 void BlockCpu::moveTempBorderVectorToBorderArray() {
