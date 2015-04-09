@@ -341,12 +341,12 @@ void BlockCpu::print() {
 	}
 
 	cout << endl;
-
 	cout << "Send border info" << endl;
 	for (int i = 0; i < countSendSegmentBorder; ++i) {
 		int index = INTERCONNECT_COMPONENT_COUNT * i;
 		cout << "Block border #" << i << endl;
 		cout << "	Memory address: " << blockBorder[i] << endl;
+		cout << "	Memory type:    " << getMemoryTypeName( blockBorderMemoryAllocType[i] );
 		cout << "	Side:           " << getSideName( sendBorderInfo[index + SIDE] ) << endl;
 		cout << "	mOffset:        " << sendBorderInfo[index + M_OFFSET] << endl;
 		cout << "	nOffset:        " << sendBorderInfo[index + N_OFFSET] << endl;
@@ -355,6 +355,20 @@ void BlockCpu::print() {
 		cout << endl;
 	}
 
+	cout << endl;
+	cout << "Receive border info" << endl;
+	for (int i = 0; i < countReceiveSegmentBorder; ++i) {
+		int index = INTERCONNECT_COMPONENT_COUNT * i;
+		cout << "Block border #" << i << endl;
+		cout << "	Memory address: " << externalBorder[i] << endl;
+		cout << "	Memory type:    " << getMemoryTypeName( externalBorderMemoryAllocType[i] );
+		cout << "	Side:           " << getSideName( receiveBorderInfo[index + SIDE] ) << endl;
+		cout << "	mOffset:        " << receiveBorderInfo[index + M_OFFSET] << endl;
+		cout << "	nOffset:        " << receiveBorderInfo[index + N_OFFSET] << endl;
+		cout << "	mLength:        " << receiveBorderInfo[index + M_LENGTH] << endl;
+		cout << "	nLength:        " << receiveBorderInfo[index + N_LENGTH] << endl;
+		cout << endl;
+	}
 
 	/*cout << endl;
 	cout << "TopSendBorderType" << endl;
