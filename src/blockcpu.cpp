@@ -378,7 +378,7 @@ void BlockCpu::print() {
 	cout << endl << endl;
 	cout << "Parameters (" << mParamsCount << ")" << endl;
 	for (int i = 0; i < mParamsCount; ++i) {
-		cout << "	parameter #" << i << ": " << mParams[i] << endl;
+		cout << "	parameter #" << i << ":   " << mParams[i] << endl;
 	}
 
 
@@ -645,4 +645,14 @@ void BlockCpu::loadData(double* data) {
 	return;
 	/*for(int i = 0; i < length * width; i++)
 		matrix[i] = data[i];*/
+}
+
+void BlockCpu::prepareLeftBorder(int borderNumber, int mOffset, int nOffset, int mLength, int nLength) {
+	for (int z = mOffset; z < mOffset + mLength; ++z) {
+		for (int y = nOffset; y < nOffset + nLength; ++y) {
+			for (int x = 0; x < haloSize; ++x) {
+				blockBorder[borderNumber];
+			}
+		}
+	}
 }

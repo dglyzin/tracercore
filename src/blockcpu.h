@@ -43,6 +43,13 @@ public:
 	void moveTempBorderVectorToBorderArray();
 
 	void loadData(double* data);
+
+	void prepareLeftBorder(int borderNumber, int mOffset, int nOffset, int mLength, int nLength);
+	void prepareRoghtBorder(int borderNumber, int mOffset, int nOffset, int mLength, int nLength);
+	void prepareFrontBorder(int borderNumber, int mOffset, int nOffset, int mLength, int nLength);
+	void prepareBackBorder(int borderNumber, int mOffset, int nOffset, int mLength, int nLength);
+	void prepareTopBorder(int borderNumber, int mOffset, int nOffset, int mLength, int nLength);
+	void prepareBottomBorder(int borderNumber, int mOffset, int nOffset, int mLength, int nLength);
 };
 
 #endif /* SRC_BLOCKCPU_H_ */
