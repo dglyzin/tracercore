@@ -414,7 +414,7 @@ void Domain::readFromFile(char* path) {
 	for (int i = 0; i < mBlockCount; ++i)
 		mBlocks[i]->moveTempBorderVectorToBorderArray();
 
-	printBlocksToConsole();
+	//printBlocksToConsole();
 }
 
 void Domain::readFileStat(ifstream& in) {
