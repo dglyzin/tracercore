@@ -44,12 +44,12 @@ public:
 
 	void loadData(double* data);
 
-	void prepareLeftBorder(int borderNumber, int mOffset, int nOffset, int mLength, int nLength);
-	void prepareRightBorder(int borderNumber, int mOffset, int nOffset, int mLength, int nLength) {return;}
-	void prepareFrontBorder(int borderNumber, int mOffset, int nOffset, int mLength, int nLength) {return;}
-	void prepareBackBorder(int borderNumber, int mOffset, int nOffset, int mLength, int nLength) {return;}
-	void prepareTopBorder(int borderNumber, int mOffset, int nOffset, int mLength, int nLength) {return;}
-	void prepareBottomBorder(int borderNumber, int mOffset, int nOffset, int mLength, int nLength) {return;}
+	void prepareLeftBorder(double* source, int borderNumber, int mOffset, int nOffset, int mLength, int nLength);
+	void prepareRightBorder(double* source, int borderNumber, int mOffset, int nOffset, int mLength, int nLength) {return;}
+	void prepareFrontBorder(double* source, int borderNumber, int mOffset, int nOffset, int mLength, int nLength) {return;}
+	void prepareBackBorder(double* source, int borderNumber, int mOffset, int nOffset, int mLength, int nLength) {return;}
+	void prepareTopBorder(double* source, int borderNumber, int mOffset, int nOffset, int mLength, int nLength) {return;}
+	void prepareBottomBorder(double* source, int borderNumber, int mOffset, int nOffset, int mLength, int nLength) {return;}
 };
 
 #endif /* SRC_BLOCKCPU_H_ */

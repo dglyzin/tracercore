@@ -175,12 +175,12 @@ public:
 
 	virtual void loadData(double* data) { return; }
 
-	virtual void prepareLeftBorder(int borderNumber, int mOffset, int nOffset, int mLength, int nLength) { return; }
-	virtual void prepareRightBorder(int borderNumber, int mOffset, int nOffset, int mLength, int nLength) { return; }
-	virtual void prepareFrontBorder(int borderNumber, int mOffset, int nOffset, int mLength, int nLength) { return; }
-	virtual void prepareBackBorder(int borderNumber, int mOffset, int nOffset, int mLength, int nLength) { return; }
-	virtual void prepareTopBorder(int borderNumber, int mOffset, int nOffset, int mLength, int nLength) { return; }
-	virtual void prepareBottomBorder(int borderNumber, int mOffset, int nOffset, int mLength, int nLength) { return; }
+	virtual void prepareLeftBorder(double* source, int borderNumber, int mOffset, int nOffset, int mLength, int nLength) { return; }
+	virtual void prepareRightBorder(double* source, int borderNumber, int mOffset, int nOffset, int mLength, int nLength) { return; }
+	virtual void prepareFrontBorder(double* source, int borderNumber, int mOffset, int nOffset, int mLength, int nLength) { return; }
+	virtual void prepareBackBorder(double* source, int borderNumber, int mOffset, int nOffset, int mLength, int nLength) { return; }
+	virtual void prepareTopBorder(double* source, int borderNumber, int mOffset, int nOffset, int mLength, int nLength) { return; }
+	virtual void prepareBottomBorder(double* source, int borderNumber, int mOffset, int nOffset, int mLength, int nLength) { return; }
 };
 
 #endif /* SRC_BLOCK_H_ */

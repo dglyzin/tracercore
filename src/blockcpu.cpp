@@ -507,7 +507,7 @@ double* BlockCpu::addNewBlockBorder(Block* neighbor, int side, int mOffset, int 
 	tempSendBorderInfo.push_back(mLength);
 	tempSendBorderInfo.push_back(nLength);
 
-	int borderLength = mLength * nLength;
+	int borderLength = mLength * nLength * cellSize * haloSize;
 
 	double* newBlockBorder;
 
@@ -557,7 +557,7 @@ double* BlockCpu::addNewExternalBorder(Block* neighbor, int side, int mOffset, i
 	tempReceiveBorderInfo.push_back(mLength);
 	tempReceiveBorderInfo.push_back(nLength);
 
-	int borderLength = mLength * nLength;
+	int borderLength = mLength * nLength * cellSize * haloSize;
 
 	double* newExternalBorder;
 
@@ -647,11 +647,23 @@ void BlockCpu::loadData(double* data) {
 		matrix[i] = data[i];*/
 }
 
-void BlockCpu::prepareLeftBorder(int borderNumber, int mOffset, int nOffset, int mLength, int nLength) {
+void BlockCpu::prepareLeftBorder(double* source, int borderNumber, int mOffset, int nOffset, int mLength, int nLength) {
+	int index = 0;
 	for (int z = mOffset; z < mOffset + mLength; ++z) {
+		int zShift = xCount * yCount * z;
+
 		for (int y = nOffset; y < nOffset + nLength; ++y) {
+			int yShift = xCount * y;
+
 			for (int x = 0; x < haloSize; ++x) {
-				blockBorder[borderNumber];
+				int xShift = x;
+
+				for (int c = 0; c < cellSize; ++c) {
+					int cellShift = c;
+
+					blockBorder[borderNumber][index] = source[ (zShift + yShift + xShift)*cellSize + cellShift ];
+					index++;
+				}
 			}
 		}
 	}
