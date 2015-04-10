@@ -302,9 +302,6 @@ void Domain::printAreaToConsole() {
 
 void Domain::printBlocksToConsole() {
 	for (int i = 0; i < mBlockCount; ++i) {
-		char c;
-		cout << endl << i << endl;
-		scanf("%c", &c);
 		mBlocks[i]->print();
 	}
 }
