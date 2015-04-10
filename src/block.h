@@ -20,6 +20,7 @@
 #include <omp.h>
 
 #include "enums.h"
+#include "solvers/solver.h"
 #include "userfuncs.h"
 
 /*
@@ -31,13 +32,7 @@
 class Block {
 
 protected:
-	/*
-	 * Матрица для вычислений.
-	 * Хранит текущее значения области.
-	 * Из нее получаются границы блока - для пересылки
-	 */
-	double* matrix;
-	double* newMatrix;
+	Solver* mSolver;
 
 	int dimension;
 
@@ -135,7 +130,7 @@ public:
 	virtual void computeStageBorder(int stage, double time, double step) { return; }
 	virtual void computeStageCenter(int stage, double time, double step) { return; }
 
-	void swapMatrix();
+	void confirmStep();
 
 	/*
 	 * Возвращает тип блока.

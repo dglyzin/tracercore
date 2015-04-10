@@ -96,44 +96,29 @@ double* Domain::getBlockCurrentState(int number) {
 }
 
 void Domain::compute(char* saveFile) {
-	/*
-	 * Вычисление коэффициентов необходимых для расчета теплопроводности
-
-	double dX = 1./widthArea;
-	double dY = 1./lengthArea;
-
-
-	 * Аналогично вышенаписанному
-
-	double dX2 = dX * dX;
-	double dY2 = dY * dY;
-
-	double dT = ( dX2 * dY2 ) / ( 2 * ( dX2 + dY2 ) );
-
-
-	 * Выполнение
-
+	cout << endl << "Computation started..." << endl;
+	cout<< "Current time: "<<currentTime<<", finish time: "<<stopTime<< ", time step: " << timeStep<<endl;
+	cout <<(flags & STEP_EXECUTION)<<", solver stage count: " <<mSolverStageCount<<endl;
 	if( flags & STEP_EXECUTION)
-		for (int i = 0; i < stepCount; i++) {
-			nextStep(dX2, dY2, dT);
-			currentTime += stepTime;
-			repeatCount++;
-		}
+		for (int i = 0; i < mStepCount; i++)
+			nextStep();
 	else
-		while ( currentTime < stopTime ) {
-			nextStep(dX2, dY2, dT);
-			currentTime += stepTime;
-			repeatCount++;
+		while ( currentTime < stopTime ){
+			nextStep();
+			cout<< currentTime<<" "<<stopTime<< " " << timeStep<<endl;
 		}
+	cout <<"Computation finished!" << endl;
 
 	if( flags & SAVE_FILE )
-		saveStateToFile(saveFile);*/
+		saveStateToFile(saveFile);
+
 }
 
 void Domain::nextStep() {
 	//последовательно выполняем все стадии метода
     for(int stage=0; stage < mSolverStageCount; stage++){
 		prepareData(stage);
+
 		for (int i = 0; i < mConnectionCount; ++i)
 			mInterconnects[i]->sendRecv(mWorldRank);
 
@@ -141,15 +126,22 @@ void Domain::nextStep() {
 
 		for (int i = 0; i < mConnectionCount; ++i)
 			mInterconnects[i]->wait();
+
 		computeOneStepBorder(stage);
     }
+
     int step_rejected = checkErrorAndUpdateTimeStep();
     if (!step_rejected){
-    	swapBlockMatrix();
+    	confirmStep();
     	mAcceptedStepCount++;
+    	currentTime += timeStep;
+    	//cout<<"Step accepted\n"<<endl;
     }
-    else
+    else{
     	mRejectedStepCount++;
+        currentTime += timeStep;
+        cout<<"Step rejected!\n"<<endl;
+    }
 }
 
 void Domain::prepareDeviceData(int deviceType, int deviceNumber, int stage) {
@@ -162,7 +154,7 @@ void Domain::prepareDeviceData(int deviceType, int deviceNumber, int stage) {
 void Domain::processDeviceBlocksBorder(int deviceType, int deviceNumber, int stage) {
 	for (int i = 0; i < mBlockCount; ++i)
         if( mBlocks[i]->getBlockType() == deviceType && mBlocks[i]->getDeviceNumber() == deviceNumber ) {
-        	cout << endl << "ERROR! PROCESS DEVICE!" << endl;
+        	//cout << endl << "ERROR! PROCESS DEVICE!" << endl;
 		    mBlocks[i]->computeStageBorder(stage, currentTime, timeStep);
 		}
 }
@@ -170,7 +162,7 @@ void Domain::processDeviceBlocksBorder(int deviceType, int deviceNumber, int sta
 void Domain::processDeviceBlocksCenter(int deviceType, int deviceNumber, int stage) {
 	for (int i = 0; i < mBlockCount; ++i)
         if( mBlocks[i]->getBlockType() == deviceType && mBlocks[i]->getDeviceNumber() == deviceNumber ) {
-        	cout << endl << "ERROR! PROCESS DEVICE!" << endl;
+        	//cout << endl << "ERROR! PROCESS DEVICE!" << endl;
 		    mBlocks[i]->computeStageCenter(stage, currentTime, timeStep);
 		}
 }
@@ -210,9 +202,9 @@ void Domain::computeOneStepCenter(int stage) {
 	processDeviceBlocksCenter(CPU, 0, stage);
 }
 
-void Domain::swapBlockMatrix() {
+void Domain::confirmStep() {
 	for (int i = 0; i < mBlockCount; ++i) {
-		mBlocks[i]->swapMatrix();
+		mBlocks[i]->confirmStep();
 	}
 }
 
@@ -392,7 +384,7 @@ void Domain::readFromFile(char* path) {
 	readCellAndHaloSize(in);
 	readSolverIndex(in);
 
-	//mSolverStageCount = GetSolverStageCount(mSolverIndex);
+	mSolverStageCount = GetSolverStageCount(mSolverIndex);
 
 	readBlockCount(in);
 
@@ -560,9 +552,9 @@ Block* Domain::readBlock(ifstream& in) {
 
 	if(node == mWorldRank){
 		if (deviceType==0)  //CPU BLOCK
-			resBlock = new BlockCpu(dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize, initFuncNumber, compFuncNumber);
+			resBlock = new BlockCpu(dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize, initFuncNumber, compFuncNumber, mSolverIndex);
 		else if (deviceType==1) //GPU BLOCK
-			resBlock = new BlockGpu(dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize, initFuncNumber, compFuncNumber);
+			resBlock = new BlockGpu(dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize, initFuncNumber, compFuncNumber, mSolverIndex);
 		else{
 			printf("Invalid block type!\n");
 			assert(false);

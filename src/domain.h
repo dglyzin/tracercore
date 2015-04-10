@@ -196,7 +196,7 @@ private:
 	 */
 	int checkErrorAndUpdateTimeStep();
 
-	void swapBlockMatrix();
+	void confirmStep();
 };
 
 #endif /* SRC_DOMAIN_H_ */

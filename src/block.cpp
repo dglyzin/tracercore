@@ -68,7 +68,6 @@ Block::Block(int _dimension, int _xCount, int _yCount, int _zCount,
 	blockBorderMemoryAllocType = NULL;
 	externalBorderMemoryAllocType = NULL;
 
-	matrix = newMatrix = NULL;
 	mCompFuncNumber = NULL;
 
 	cellSize = _cellSize;
@@ -93,10 +92,8 @@ int Block::getGridElementCount() {
 	return getGridNodeCount() * cellSize;
 }
 
-void Block::swapMatrix() {
-	double* tmp = matrix;
-	matrix = newMatrix;
-	newMatrix = tmp;
+void Block::confirmStep() {
+	mSolver->confirmStep();
 }
 
 void Block::freeMemory(int memory_alloc_type, double* memory) {

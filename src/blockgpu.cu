@@ -246,7 +246,8 @@ BlockGpu::BlockGpu(int _dimension, int _xCount, int _yCount, int _zCount,
 		int _xOffset, int _yOffset, int _zOffset,
 		int _nodeNumber, int _deviceNumber,
 		int _haloSize, int _cellSize,
-		unsigned short int* _initFuncNumber, unsigned short int* _compFuncNumber) :
+		unsigned short int* _initFuncNumber, unsigned short int* _compFuncNumber,
+		int _mSolverIndex) :
 				Block( _dimension, _xCount, _yCount, _zCount,
 				_xOffset, _yOffset, _zOffset,
 				_nodeNumber, _deviceNumber,
@@ -340,7 +341,7 @@ double* BlockGpu::getCurrentState() {
 	int count = getGridNodeCount();
 	double* result = new double [count];
 
-	cudaMemcpy( result, matrix, count * sizeof(double), cudaMemcpyDeviceToHost );
+	//cudaMemcpy( result, matrix, count * sizeof(double), cudaMemcpyDeviceToHost );
 
 	return result;
 }

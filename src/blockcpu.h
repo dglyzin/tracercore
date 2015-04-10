@@ -20,7 +20,8 @@ public:
 			int _xOffset, int _yOffset, int _zOffset,
 			int _nodeNumber, int _deviceNumber,
 			int _haloSize, int _cellSize,
-			unsigned short int* _initFuncNumber, unsigned short int* _compFuncNumber);
+			unsigned short int* _initFuncNumber, unsigned short int* _compFuncNumber,
+			int _solverIndex);
 
 	~BlockCpu();
 
@@ -28,12 +29,12 @@ public:
 
 	void prepareStageData(int stage);
 
-	void computeStageBorder(int stage, double time, double step) { std::cout << std::endl << "one step border" << std::endl; }
-	void computeStageCenter(int stage, double time, double step) { std::cout << std::endl << "one step center" << std::endl; }
+	void computeStageBorder(int stage, double time, double step) {}// std::cout << std::endl << "one step border" << std::endl; }
+	void computeStageCenter(int stage, double time, double step) {}// std::cout << std::endl << "one step center" << std::endl; }
 
 	int getBlockType() { return CPU; }
 
-	double* getCurrentState();
+	double* getCurrentState(double* result);
 
 	void print();
 

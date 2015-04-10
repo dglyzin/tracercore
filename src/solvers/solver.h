@@ -9,19 +9,33 @@
 #define SOLVER_H_
 
 enum SOLVER_IDX { EULER, RK4 };
+int GetSolverStageCount(int solverIdx);
+
 
 class Solver {
 public:
     Solver();
+    void copyState(double* result);
     virtual void prepareStageData(int stage) { return; }
-  	virtual void computeOneStageBorder(double time, double* param, int stage) { return; }
-  	virtual void computeOneStageCenter(double time, double* param, int stage) { return; }
+    virtual void confirmStep() { return; }
+  	virtual void getStageArrays(double** result, double** source, double* factor, int stage, double timeStep) { return; }
+  	double* getStatePtr(){ return mState;}
+protected:
+  	int     mCount;
+  	double* mState;
+};
+Solver* GetCpuSolver(int solverIdx, int count);
+Solver* GetGpuSolver(int solverIdx, int count);
 
+class EulerSolver: public Solver{
+public:
+	EulerSolver(int _count);
+	~EulerSolver();
+    void prepareStageData(int stage) { return; }
+    void getStageArrays(double** result, double** source, double* factor, int stage, double timeStep) { return; }
 };
 
 
-
-int GetSolverStageCount1(int solverIdx);
 
 
 #endif /* SOLVER_H_ */

@@ -16,33 +16,15 @@ BlockCpu::BlockCpu(int _dimension, int _xCount, int _yCount, int _zCount,
 		int _xOffset, int _yOffset, int _zOffset,
 		int _nodeNumber, int _deviceNumber,
 		int _haloSize, int _cellSize,
-		unsigned short int* _initFuncNumber, unsigned short int* _compFuncNumber) :
+		unsigned short int* _initFuncNumber, unsigned short int* _compFuncNumber,
+		int _solverIndex) :
 				Block( _dimension, _xCount, _yCount, _zCount,
 				_xOffset, _yOffset, _zOffset,
 				_nodeNumber, _deviceNumber,
 				_haloSize, _cellSize ) {
 	cout << "Creating block..\n";
-	matrix = new double [xCount * yCount * zCount * cellSize];
-	newMatrix = new double [xCount * yCount * zCount * cellSize];
+	mSolver = GetCpuSolver(_solverIndex, xCount * yCount * zCount * cellSize );
 
-	for (int i = 0; i < zCount; ++i) {
-		int zShift = xCount * yCount * i;
-
-		for (int j = 0; j < yCount; ++j) {
-			int yShift = xCount * j;
-
-			for (int k = 0; k < xCount; ++k) {
-				int xShift = k;
-
-				for (int l = 0; l < cellSize; ++l) {
-					int cellShift = l;
-
-					matrix[ (zShift + yShift + xShift)*cellSize + cellShift ] =
-							newMatrix[ (zShift + yShift + xShift)*cellSize + cellShift ] = 0;
-				}
-			}
-		}
-	}
 
 	int count = getGridNodeCount();
 
@@ -67,7 +49,7 @@ BlockCpu::BlockCpu(int _dimension, int _xCount, int _yCount, int _zCount,
 
 	//mUserFuncs[0](newMatrix, matrix, 0.0, 2, 2, 0, mParams, NULL);
 	printf("Func array points to %d \n", (long unsigned int) mUserInitFuncs );
-
+	double* matrix = mSolver->getStatePtr();
 	mUserInitFuncs[0](matrix,_initFuncNumber);
 	cout << "Initial values filled \n";
 
@@ -111,13 +93,7 @@ BlockCpu::~BlockCpu() {
 	releaseParams(mParams);
 	releaseFuncArray(mUserFuncs);
 	releaseInitFuncArray(mUserInitFuncs);
-
-	if(matrix != NULL)
-		delete matrix;
-	
-	if(newMatrix != NULL)
-		delete newMatrix;
-	
+	delete mSolver;
 	
 	if(blockBorder != NULL) {
 		for(int i = 0; i < countSendSegmentBorder; i++ )
@@ -221,8 +197,8 @@ BlockCpu::~BlockCpu() {
 		}
 	}
 }*/
-
-/*void BlockCpu::computeOneStepCenter(double dX2, double dY2, double dT) {
+/*
+void BlockCpu::computeStageCenter() {
 
 	 * Теплопроводность
 
@@ -289,12 +265,9 @@ void BlockCpu::prepareStageData(int stage) {
 	}
 }
 
-double* BlockCpu::getCurrentState() {
+double* BlockCpu::getCurrentState(double* result) {
 	int count = getGridNodeCount();
-	double* result = new double [count];
-
-	for(int i = 0; i < count; i++)
-		result[i] = matrix[i];
+	mSolver->copyState(result);
 
 	return result;
 }
@@ -320,7 +293,7 @@ void BlockCpu::print() {
 	cout << endl;
 	cout << "Block matrix:" << endl;
 	cout.setf(ios::fixed);
-	for (int i = 0; i < zCount; ++i) {
+	/*for (int i = 0; i < zCount; ++i) {
 		cout << "z = " << i << endl;
 
 		int zShift = xCount * yCount * i;
@@ -343,7 +316,7 @@ void BlockCpu::print() {
 			}
 			cout << endl;
 		}
-	}
+	}*/
 
 	cout << endl;
 	cout << "Send border info (" << countSendSegmentBorder << ")" << endl;

@@ -30,7 +30,8 @@ public:
 			int _xOffset, int _yOffset, int _zOffset,
 			int _nodeNumber, int _deviceNumber,
 			int _haloSize, int _cellSize,
-			unsigned short int* _initFuncNumber, unsigned short int* _compFuncNumber);
+			unsigned short int* _initFuncNumber, unsigned short int* _compFuncNumber,
+			int _mSolverIndex);
 	virtual ~BlockGpu();
 
 	bool isRealBlock() { return true; }
