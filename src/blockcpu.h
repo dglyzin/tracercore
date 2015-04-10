@@ -45,7 +45,7 @@ public:
 	void loadData(double* data);
 
 	void prepareLeftBorder(double* source, int borderNumber, int mOffset, int nOffset, int mLength, int nLength);
-	void prepareRightBorder(double* source, int borderNumber, int mOffset, int nOffset, int mLength, int nLength) {return;}
+	void prepareRightBorder(double* source, int borderNumber, int mOffset, int nOffset, int mLength, int nLength);
 	void prepareFrontBorder(double* source, int borderNumber, int mOffset, int nOffset, int mLength, int nLength) {return;}
 	void prepareBackBorder(double* source, int borderNumber, int mOffset, int nOffset, int mLength, int nLength) {return;}
 	void prepareTopBorder(double* source, int borderNumber, int mOffset, int nOffset, int mLength, int nLength) {return;}
