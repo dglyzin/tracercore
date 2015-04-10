@@ -46,8 +46,8 @@ public:
 
 	void prepareLeftBorder(double* source, int borderNumber, int mOffset, int nOffset, int mLength, int nLength);
 	void prepareRightBorder(double* source, int borderNumber, int mOffset, int nOffset, int mLength, int nLength);
-	void prepareFrontBorder(double* source, int borderNumber, int mOffset, int nOffset, int mLength, int nLength) {return;}
-	void prepareBackBorder(double* source, int borderNumber, int mOffset, int nOffset, int mLength, int nLength) {return;}
+	void prepareFrontBorder(double* source, int borderNumber, int mOffset, int nOffset, int mLength, int nLength);
+	void prepareBackBorder(double* source, int borderNumber, int mOffset, int nOffset, int mLength, int nLength);
 	void prepareTopBorder(double* source, int borderNumber, int mOffset, int nOffset, int mLength, int nLength) {return;}
 	void prepareBottomBorder(double* source, int borderNumber, int mOffset, int nOffset, int mLength, int nLength) {return;}
 };

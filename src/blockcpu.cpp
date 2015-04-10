@@ -690,3 +690,47 @@ void BlockCpu::prepareRightBorder(double* source, int borderNumber, int mOffset,
 		}
 	}
 }
+
+void BlockCpu::prepareFrontBorder(double* source, int borderNumber, int mOffset, int nOffset, int mLength, int nLength) {
+	int index = 0;
+	for (int z = mOffset; z < mOffset + mLength; ++z) {
+		int zShift = xCount * yCount * z;
+
+		for (int y = 0; y < haloSize; ++y) {
+			int yShift = xCount * y;
+
+			for (int x = nOffset; x < nOffset + nLength; ++x) {
+				int xShift = x;
+
+				for (int c = 0; c < cellSize; ++c) {
+					int cellShift = c;
+
+					blockBorder[borderNumber][index] = source[ (zShift + yShift + xShift)*cellSize + cellShift ];
+					index++;
+				}
+			}
+		}
+	}
+}
+
+void BlockCpu::prepareBackBorder(double* source, int borderNumber, int mOffset, int nOffset, int mLength, int nLength) {
+	int index = 0;
+	for (int z = mOffset; z < mOffset + mLength; ++z) {
+		int zShift = xCount * yCount * z;
+
+		for (int y = yCount - haloSize; y < yCount; ++y) {
+			int yShift = xCount * y;
+
+			for (int x = nOffset; x < nOffset + nLength; ++x) {
+				int xShift = x;
+
+				for (int c = 0; c < cellSize; ++c) {
+					int cellShift = c;
+
+					blockBorder[borderNumber][index] = source[ (zShift + yShift + xShift)*cellSize + cellShift ];
+					index++;
+				}
+			}
+		}
+	}
+}
