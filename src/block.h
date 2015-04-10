@@ -49,7 +49,7 @@ protected:
 	int yOffset;
 	int zOffset;
 
-	unsigned short int* functionNumber;
+	unsigned short int* mCompFuncNumber;
 
 	int cellSize;
 	int haloSize;

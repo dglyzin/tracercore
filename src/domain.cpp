@@ -501,6 +501,7 @@ void Domain::readConnectionCount(ifstream& in) {
  * Не будет готовить информацию для пересылки и не будет считываеть ее из других источников.
  */
 Block* Domain::readBlock(ifstream& in) {
+	Block* resBlock;
 	int dimension;
 	int node;
 	int deviceType;
@@ -538,18 +539,28 @@ Block* Domain::readBlock(ifstream& in) {
 		total *= count[j];
 	}
 
-	unsigned short int* functionNumber = new unsigned short int [total];
+	unsigned short int* initFuncNumber = new unsigned short int [total];
+	unsigned short int* compFuncNumber = new unsigned short int [total];
 
-	for (int j = 0; j < total; ++j) {
-		in.read((char*)&functionNumber[j], SIZE_UN_SH_INT);
+	in.read((char*)initFuncNumber, total*SIZE_UN_SH_INT);
+	in.read((char*)compFuncNumber, total*SIZE_UN_SH_INT);
 
-	}
+
+	cout << "Init func number:" << endl;
 	for (int idxY = 0; idxY < count[1]; ++idxY) {
 		for (int idxX = 0; idxX < count[0]; ++idxX)
-		    cout << functionNumber[idxY*count[0]+idxX] << " ";
+		    cout << initFuncNumber[idxY*count[0]+idxX] << " ";
 		cout << endl;
 	}
 	cout << endl;
+
+	cout << "Comp func number:" << endl;
+	for (int idxY = 0; idxY < count[1]; ++idxY) {
+			for (int idxX = 0; idxX < count[0]; ++idxX)
+			    cout << compFuncNumber[idxY*count[0]+idxX] << " ";
+			cout << endl;
+		}
+		cout << endl;
 
 	cout << endl << "DON'T CREATE GPU BLOCK! SEE DOMAIN.H includes!!!" << endl;
 
@@ -566,9 +577,11 @@ Block* Domain::readBlock(ifstream& in) {
 			default:
 				return new BlockNull(dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, haloSize, cellSize);
 		}*/
-		return new BlockCpu(dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize, functionNumber);
+		resBlock =  new BlockCpu(dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize, initFuncNumber, compFuncNumber);
 	else
-		return new BlockNull(dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize);
+		resBlock =  new BlockNull(dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize);
+
+	return resBlock;
 }
 
 /*
