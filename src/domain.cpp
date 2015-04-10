@@ -525,7 +525,7 @@ Block* Domain::readBlock(ifstream& in) {
 
 	for (int j = 0; j < dimension; ++j) {
 		in.read((char*)&offset[j], SIZE_INT);
-		cout << "	offset" << j << ":           " << count[j] << endl;
+		cout << "	offset" << j << ":           " << offset[j] << endl;
 	}
 
 	for (int j = 0; j < dimension; ++j) {
