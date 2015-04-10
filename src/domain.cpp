@@ -302,6 +302,9 @@ void Domain::printAreaToConsole() {
 
 void Domain::printBlocksToConsole() {
 	for (int i = 0; i < mBlockCount; ++i) {
+		char c;
+		cout << endl << i << endl;
+		scanf("%c", &c);
 		mBlocks[i]->print();
 	}
 }
@@ -414,9 +417,7 @@ void Domain::readFromFile(char* path) {
 	for (int i = 0; i < mBlockCount; ++i)
 		mBlocks[i]->moveTempBorderVectorToBorderArray();
 
-	for (int i = 0; i < mBlockCount; ++i) {
-		mBlocks[i]->print();
-	}
+	printBlocksToConsole();
 }
 
 void Domain::readFileStat(ifstream& in) {

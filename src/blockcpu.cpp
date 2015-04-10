@@ -347,7 +347,7 @@ void BlockCpu::print() {
 		int index = INTERCONNECT_COMPONENT_COUNT * i;
 		cout << "Block border #" << i << endl;
 		cout << "	Memory address: " << blockBorder[i] << endl;
-		cout << "	Memory type:    " << getMemoryTypeName( blockBorderMemoryAllocType[i] );
+		cout << "	Memory type:    " << getMemoryTypeName( blockBorderMemoryAllocType[i] ) << endl;
 		cout << "	Side:           " << getSideName( sendBorderInfo[index + SIDE] ) << endl;
 		cout << "	mOffset:        " << sendBorderInfo[index + M_OFFSET] << endl;
 		cout << "	nOffset:        " << sendBorderInfo[index + N_OFFSET] << endl;
@@ -362,7 +362,7 @@ void BlockCpu::print() {
 		int index = INTERCONNECT_COMPONENT_COUNT * i;
 		cout << "Block border #" << i << endl;
 		cout << "	Memory address: " << externalBorder[i] << endl;
-		cout << "	Memory type:    " << getMemoryTypeName( externalBorderMemoryAllocType[i] );
+		cout << "	Memory type:    " << getMemoryTypeName( externalBorderMemoryAllocType[i] ) << endl;
 		cout << "	Side:           " << getSideName( receiveBorderInfo[index + SIDE] ) << endl;
 		cout << "	mOffset:        " << receiveBorderInfo[index + M_OFFSET] << endl;
 		cout << "	nOffset:        " << receiveBorderInfo[index + N_OFFSET] << endl;
