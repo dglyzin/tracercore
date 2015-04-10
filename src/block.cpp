@@ -69,7 +69,7 @@ Block::Block(int _dimension, int _xCount, int _yCount, int _zCount,
 	externalBorderMemoryAllocType = NULL;
 
 	matrix = newMatrix = NULL;
-	functionNumber = NULL;
+	mCompFuncNumber = NULL;
 
 	cellSize = _cellSize;
 	haloSize = _haloSize;

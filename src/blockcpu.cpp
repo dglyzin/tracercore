@@ -15,7 +15,8 @@ using namespace std;
 BlockCpu::BlockCpu(int _dimension, int _xCount, int _yCount, int _zCount,
 		int _xOffset, int _yOffset, int _zOffset,
 		int _nodeNumber, int _deviceNumber,
-		int _haloSize, int _cellSize, unsigned short int* _functionNumber) :
+		int _haloSize, int _cellSize,
+		unsigned short int* _initFuncNumber, unsigned short int* _compFuncNumber) :
 				Block( _dimension, _xCount, _yCount, _zCount,
 				_xOffset, _yOffset, _zOffset,
 				_nodeNumber, _deviceNumber,
@@ -45,10 +46,10 @@ BlockCpu::BlockCpu(int _dimension, int _xCount, int _yCount, int _zCount,
 
 	int count = getGridNodeCount();
 
-	functionNumber = new unsigned short int [count];
+	mCompFuncNumber = new unsigned short int [count];
 
 	for (int i = 0; i < count; ++i) {
-		functionNumber[i] = _functionNumber[i];
+		mCompFuncNumber[i] = _compFuncNumber[i];
 	}
 
 	getFuncArray(&mUserFuncs);
@@ -65,7 +66,8 @@ BlockCpu::BlockCpu(int _dimension, int _xCount, int _yCount, int _zCount,
 	params[0]=params[1]=params[2] = 0;
 	mUserFuncs[0](newMatrix, matrix, 0.0, 2, 2, 0, params, NULL);
 	printf("Func array points to %d \n", (long unsigned int) mUserInitFuncs );
-	mUserInitFuncs[0](matrix,functionNumber);
+
+	mUserInitFuncs[0](matrix,_initFuncNumber);
 	cout << "Initial values filled \n";
 
 	for (int i = 0; i < zCount; ++i) {
