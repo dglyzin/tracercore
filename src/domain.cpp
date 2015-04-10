@@ -7,6 +7,7 @@
 
 #include "domain.h"
 #include "solvers/solver.h"
+#include <cassert>
 
 using namespace std;
 
@@ -557,22 +558,16 @@ Block* Domain::readBlock(ifstream& in) {
 		}
 		cout << endl;
 
-	cout << endl << "DON'T CREATE GPU BLOCK! SEE DOMAIN.H includes!!!" << endl;
-
-	if(node == mWorldRank)
-		/*switch (deviceType) {
-			case 0:
-				return new BlockCpu(dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, haloSize, cellSize);
-			case 1:
-				//return new BlockGpu(length, width, lengthMove, widthMove, world_rank_creator, 0);
-			case 2:
-				//return new BlockGpu(length, width, lengthMove, widthMove, world_rank_creator, 1);
-			case 3:
-				//return new BlockGpu(length, width, lengthMove, widthMove, world_rank_creator, 2);
-			default:
-				return new BlockNull(dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, haloSize, cellSize);
-		}*/
-		resBlock =  new BlockCpu(dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize, initFuncNumber, compFuncNumber);
+	if(node == mWorldRank){
+		if (deviceType==0)  //CPU BLOCK
+			resBlock = new BlockCpu(dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize, initFuncNumber, compFuncNumber);
+		else if (deviceType==1) //GPU BLOCK
+			resBlock = new BlockGpu(dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize, initFuncNumber, compFuncNumber);
+		else{
+			printf("Invalid block type!\n");
+			assert(false);
+		}
+	}
 	else
 		resBlock =  new BlockNull(dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize);
 
