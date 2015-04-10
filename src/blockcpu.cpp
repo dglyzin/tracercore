@@ -381,6 +381,27 @@ void BlockCpu::print() {
 		cout << "	parameter #" << i << ": " << mParams[i] << endl;
 	}
 
+
+	cout << endl << endl;
+	cout << "Compute function number" << endl;
+	cout.setf(ios::fixed);
+	for (int i = 0; i < zCount; ++i) {
+		cout << "z = " << i << endl;
+
+		int zShift = xCount * yCount * i;
+
+		for (int j = 0; j < yCount; ++j) {
+			int yShift = xCount * j;
+
+			for (int k = 0; k < xCount; ++k) {
+				int xShift = k;
+				cout << mCompFuncNumber[ zShift + yShift + xShift ] << " ";
+			}
+			cout << endl;
+		}
+	}
+	cout << endl;
+
 	/*cout << endl;
 	cout << "TopSendBorderType" << endl;
 	for( int i =0; i < width; i++ ) {
