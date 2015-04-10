@@ -578,6 +578,9 @@ Block* Domain::readBlock(ifstream& in) {
 	else
 		resBlock =  new BlockNull(dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize);
 
+	delete initFuncNumber;
+	delete compFuncNumber;
+
 	return resBlock;
 }
 
