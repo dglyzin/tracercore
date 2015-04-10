@@ -397,8 +397,6 @@ void Domain::readFromFile(char* path) {
 
 	mBlocks = new Block* [mBlockCount];
 
-
-
 	for (int i = 0; i < mBlockCount; ++i)
 		mBlocks[i] = readBlock(in);
 

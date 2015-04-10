@@ -360,7 +360,7 @@ void BlockCpu::print() {
 		cout << endl;
 	}
 
-	cout << endl;
+	cout << endl << endl;
 	cout << "Receive border info (" << countReceiveSegmentBorder << ")" << endl;
 	for (int i = 0; i < countReceiveSegmentBorder; ++i) {
 		int index = INTERCONNECT_COMPONENT_COUNT * i;
@@ -373,6 +373,12 @@ void BlockCpu::print() {
 		cout << "	mLength:        " << receiveBorderInfo[index + M_LENGTH] << endl;
 		cout << "	nLength:        " << receiveBorderInfo[index + N_LENGTH] << endl;
 		cout << endl;
+	}
+
+	cout << endl << endl;
+	cout << "Parameters (" << mParamsCount << ")" << endl;
+	for (int i = 0; i < mParamsCount; ++i) {
+		cout << "	parameter #" << i << ": " << mParams[i] << endl;
 	}
 
 	/*cout << endl;
