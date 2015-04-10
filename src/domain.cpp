@@ -402,7 +402,7 @@ void Domain::readFromFile(char* path) {
 	for (int i = 0; i < mBlockCount; ++i)
 		mBlocks[i] = readBlock(in);
 
-
+/*
 	readConnectionCount(in);
 
 	mInterconnects = new Interconnect* [mConnectionCount];
@@ -413,8 +413,8 @@ void Domain::readFromFile(char* path) {
 
 	for (int i = 0; i < mBlockCount; ++i)
 		mBlocks[i]->moveTempBorderVectorToBorderArray();
-
-	printBlocksToConsole();
+*/
+	//printBlocksToConsole();
 }
 
 void Domain::readFileStat(ifstream& in) {
@@ -535,6 +535,7 @@ Block* Domain::readBlock(ifstream& in) {
 		cout << "	count" << j << ":            " << count[j] << endl;
 		total *= count[j];
 	}
+	cout <<"Total = " << total<< endl;
 
 	unsigned short int* initFuncNumber = new unsigned short int [total];
 	unsigned short int* compFuncNumber = new unsigned short int [total];
@@ -578,8 +579,8 @@ Block* Domain::readBlock(ifstream& in) {
 	else
 		resBlock =  new BlockNull(dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize);
 
-	delete initFuncNumber;
-	delete compFuncNumber;
+	//delete initFuncNumber;
+	//delete compFuncNumber;
 
 	return resBlock;
 }
