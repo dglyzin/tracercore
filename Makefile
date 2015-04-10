@@ -12,8 +12,8 @@ MPILIB=-I/usr/mpi/gcc/openmpi-1.8.4/include -L /usr/mpi/gcc/openmpi-1.8.4/lib -l
 
 all: HS solver
 
-HS: main.o domain.o block.o blockcpu.o blocknull.o interconnect.o enums.o #blockgpu.o
-	$(CUDACC) -O3 $(CUDAARCH) -I$(CUDAINC) $(MPILIB) -L./bin -luserfuncs $(BIN)/main.o $(BIN)/domain.o $(BIN)/block.o $(BIN)/interconnect.o  $(BIN)/blockcpu.o $(BIN)/blocknull.o $(BIN)/enums.o -o $(BIN)/HS -Xcompiler -fopenmp
+HS: main.o domain.o block.o blockcpu.o blocknull.o interconnect.o enums.o blockgpu.o
+	$(CUDACC) -O3 $(CUDAARCH) -I$(CUDAINC) $(MPILIB) -L./bin -luserfuncs $(BIN)/main.o $(BIN)/domain.o $(BIN)/block.o $(BIN)/interconnect.o  $(BIN)/blockcpu.o $(BIN)/blockgpu.o $(BIN)/blocknull.o $(BIN)/enums.o -o $(BIN)/HS -Xcompiler -fopenmp
 
 #HS: main.o domain.o block.o blockcpu.o blocknull.o interconnect.o enums.o userfuncs.o #blockgpu.o
 #	$(CUDACC) -O3 $(CUDAARCH) -I$(CUDAINC) $(MPILIB) $(BIN)/userfuncs.o $(BIN)/main.o $(BIN)/domain.o $(BIN)/block.o $(BIN)/interconnect.o  $(BIN)/blockcpu.o $(BIN)/blocknull.o $(BIN)/enums.o -o $(BIN)/HS -Xcompiler -fopenmp
@@ -33,8 +33,8 @@ block.o: $(SRC)/block.cpp
 blockcpu.o: $(SRC)/blockcpu.cpp  
 	$(CC) $(CFLAGS) -I$(CUDAINC) $(SRC)/blockcpu.cpp -o $(BIN)/blockcpu.o -fopenmp
 	
-#blockgpu.o: $(SRC)/blockgpu.cu  
-#	$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I$(CUDAINC) $(SRC)/blockgpu.cu -o $(BIN)/blockgpu.o
+blockgpu.o: $(SRC)/blockgpu.cu  
+	$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I$(CUDAINC) $(SRC)/blockgpu.cu -o $(BIN)/blockgpu.o
 	
 blocknull.o: $(SRC)/blocknull.cpp  
 	$(CC) $(CFLAGS) $(SRC)/blocknull.cpp -o $(BIN)/blocknull.o

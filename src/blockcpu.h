@@ -28,8 +28,8 @@ public:
 
 	void prepareStageData(int stage);
 
-	void computeStageBorder(double* result, double* source, double time, double* param) { std::cout << std::endl << "one step border" << std::endl; }
-	void computeStageCenter(double* result, double* source, double time, double* param) { std::cout << std::endl << "one step center" << std::endl; }
+	void computeStageBorder(int stage, double time, double step) { std::cout << std::endl << "one step border" << std::endl; }
+	void computeStageCenter(int stage, double time, double step) { std::cout << std::endl << "one step center" << std::endl; }
 
 	int getBlockType() { return CPU; }
 
@@ -45,11 +45,11 @@ public:
 	void loadData(double* data);
 
 	void prepareLeftBorder(int borderNumber, int mOffset, int nOffset, int mLength, int nLength);
-	void prepareRoghtBorder(int borderNumber, int mOffset, int nOffset, int mLength, int nLength);
-	void prepareFrontBorder(int borderNumber, int mOffset, int nOffset, int mLength, int nLength);
-	void prepareBackBorder(int borderNumber, int mOffset, int nOffset, int mLength, int nLength);
-	void prepareTopBorder(int borderNumber, int mOffset, int nOffset, int mLength, int nLength);
-	void prepareBottomBorder(int borderNumber, int mOffset, int nOffset, int mLength, int nLength);
+	void prepareRightBorder(int borderNumber, int mOffset, int nOffset, int mLength, int nLength) {return;}
+	void prepareFrontBorder(int borderNumber, int mOffset, int nOffset, int mLength, int nLength) {return;}
+	void prepareBackBorder(int borderNumber, int mOffset, int nOffset, int mLength, int nLength) {return;}
+	void prepareTopBorder(int borderNumber, int mOffset, int nOffset, int mLength, int nLength) {return;}
+	void prepareBottomBorder(int borderNumber, int mOffset, int nOffset, int mLength, int nLength) {return;}
 };
 
 #endif /* SRC_BLOCKCPU_H_ */

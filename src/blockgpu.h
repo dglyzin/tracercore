@@ -21,24 +21,24 @@
 
 class BlockGpu: public Block {
 private:
-	int** sendBorderTypeOnDevice;
-	int** receiveBorderTypeOnDevice;
-
 	double** blockBorderOnDevice;
 
 	double** externalBorderOnDevice;
 
 public:
-	BlockGpu(int _length, int _width, int _lengthMove, int _widthMove, int _nodeNumber, int _deviceNumber);
+	BlockGpu(int _dimension, int _xCount, int _yCount, int _zCount,
+			int _xOffset, int _yOffset, int _zOffset,
+			int _nodeNumber, int _deviceNumber,
+			int _haloSize, int _cellSize,
+			unsigned short int* _initFuncNumber, unsigned short int* _compFuncNumber);
 	virtual ~BlockGpu();
 
 	bool isRealBlock() { return true; }
 
-	void prepareData();
+	void prepareStageData(int stage) { std::cout << std::endl << "prepare data" << std::endl; }
 
-	void computeOneStep(double dX2, double dY2, double dT);
-	void computeOneStepBorder(double dX2, double dY2, double dT);
-	void computeOneStepCenter(double dX2, double dY2, double dT);
+	void computeStageBorder(int stage, double time, double step) { std::cout << std::endl << "one step border" << std::endl; }
+	void computeStageCenter(int stage, double time, double step) { std::cout << std::endl << "one step center" << std::endl; }
 
 	int getBlockType() { return GPU; }
 
@@ -46,10 +46,10 @@ public:
 
 	void print();
 
-	double* addNewBlockBorder(Block* neighbor, int side, int move, int borderLength);
-	double* addNewExternalBorder(Block* neighbor, int side, int move, int borderLength, double* border);
+	double* addNewBlockBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength) { std::cout << std::endl << "add new block border" << std::endl; return NULL; }
+	double* addNewExternalBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength, double* border) { std::cout << std::endl << "add new external border" << std::endl; return NULL; }
 
-	void moveTempBorderVectorToBorderArray();
+	void moveTempBorderVectorToBorderArray() { std::cout << std::endl << "move array to vector" << std::endl; }
 
 	void loadData(double* data);
 };

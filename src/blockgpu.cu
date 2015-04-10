@@ -242,12 +242,19 @@ __global__ void copyBorderFromMatrix ( double** blockBorder, double* matrix, int
 	blockBorder[	sendBorderType[side][idx]	][idx - blockBorderMove[	sendBorderType[side][idx]	]] = value;
 }
 
-BlockGpu::BlockGpu(int _length, int _width, int _lengthMove, int _widthMove, int _nodeNumber, int _deviceNumber) : Block(  _length, _width, _lengthMove, _widthMove, _nodeNumber, _deviceNumber ) {
-	deviceNumber = _deviceNumber;
+BlockGpu::BlockGpu(int _dimension, int _xCount, int _yCount, int _zCount,
+		int _xOffset, int _yOffset, int _zOffset,
+		int _nodeNumber, int _deviceNumber,
+		int _haloSize, int _cellSize,
+		unsigned short int* _initFuncNumber, unsigned short int* _compFuncNumber) :
+				Block( _dimension, _xCount, _yCount, _zCount,
+				_xOffset, _yOffset, _zOffset,
+				_nodeNumber, _deviceNumber,
+				_haloSize, _cellSize ) {
 	
 	cudaSetDevice(deviceNumber);
 	
-	dim3 threads ( BLOCK_SIZE );
+	/*dim3 threads ( BLOCK_SIZE );
 	dim3 blocksLength  ( (int)ceil((double)length / threads.x) );
 	dim3 blocksWidth  ( (int)ceil((double)width / threads.x) );
 	dim3 blocksLengthWidth ( (int)ceil((double)(length * width) / threads.x) );
@@ -256,90 +263,15 @@ BlockGpu::BlockGpu(int _length, int _width, int _lengthMove, int _widthMove, int
 	cudaMalloc( (void**)&newMatrix, width * length * sizeof(double) );
 	
 	assignDoubleArray <<< blocksLengthWidth, threads >>> ( matrix, 0, length * width);
-	assignDoubleArray <<< blocksLengthWidth, threads >>> ( newMatrix, 0, length * width);
-
-	/*
-	 * Типы границ блока. Выделение памяти.
-	 */
-	sendBorderType = new int* [BORDER_COUNT];
-
-	cudaMalloc ( (void**)&sendBorderType[TOP], width * sizeof(int) );
-	assignIntArray <<< blocksWidth, threads >>> ( sendBorderType[TOP], BY_FUNCTION, width ); 
-
-	cudaMalloc ( (void**)&sendBorderType[LEFT], length * sizeof(int) );
-	assignIntArray <<< blocksLength, threads >>> ( sendBorderType[LEFT], BY_FUNCTION, length );
-
-	cudaMalloc ( (void**)&sendBorderType[BOTTOM], width * sizeof(int) );
-	assignIntArray <<< blocksWidth, threads >>> ( sendBorderType[BOTTOM], BY_FUNCTION, width ); 
-
-	cudaMalloc ( (void**)&sendBorderType[RIGHT], length * sizeof(int) );
-	assignIntArray <<< blocksLength, threads >>> ( sendBorderType[RIGHT], BY_FUNCTION, length );
-	
-	cudaMalloc ( (void**)&sendBorderTypeOnDevice, BORDER_COUNT * sizeof(int*) );
-	cudaMemcpy( sendBorderTypeOnDevice, sendBorderType, BORDER_COUNT * sizeof(int*), cudaMemcpyHostToDevice );
-	
-	
-	receiveBorderType = new int* [BORDER_COUNT];
-
-	cudaMalloc ( (void**)&receiveBorderType[TOP], width * sizeof(int) );
-	assignIntArray <<< blocksWidth, threads >>> ( receiveBorderType[TOP], BY_FUNCTION, width ); 
-
-	cudaMalloc ( (void**)&receiveBorderType[LEFT], length * sizeof(int) );
-	assignIntArray <<< blocksLength, threads >>> ( receiveBorderType[LEFT], BY_FUNCTION, length );
-
-	cudaMalloc ( (void**)&receiveBorderType[BOTTOM], width * sizeof(int) );
-	assignIntArray <<< blocksWidth, threads >>> ( receiveBorderType[BOTTOM], BY_FUNCTION, width ); 
-
-	cudaMalloc ( (void**)&receiveBorderType[RIGHT], length * sizeof(int) );
-	assignIntArray <<< blocksLength, threads >>> ( receiveBorderType[RIGHT], BY_FUNCTION, length );
-	
-	cudaMalloc ( (void**)&receiveBorderTypeOnDevice, BORDER_COUNT * sizeof(int*) );
-	cudaMemcpy( receiveBorderTypeOnDevice, receiveBorderType, BORDER_COUNT * sizeof(int*), cudaMemcpyHostToDevice );
-	
-	//result = new double [length * width];
+	assignDoubleArray <<< blocksLengthWidth, threads >>> ( newMatrix, 0, length * width);*/
 }
 
 BlockGpu::~BlockGpu() {
-	if(matrix != NULL)
+	/*if(matrix != NULL)
 		cudaFree(matrix);
 	
 	if(newMatrix != NULL)
-		cudaFree(newMatrix);
-	
-	if(sendBorderType != NULL) {
-		if(sendBorderType[TOP] != NULL)
-			cudaFree(sendBorderType[TOP]);
-		
-		if(sendBorderType[LEFT] != NULL)
-			cudaFree(sendBorderType[LEFT]);
-		
-		if(sendBorderType[BOTTOM] != NULL)
-			cudaFree(sendBorderType[BOTTOM]);
-		
-		if(sendBorderType[RIGHT] != NULL)
-			cudaFree(sendBorderType[RIGHT]);
-		
-		cudaFree(sendBorderTypeOnDevice);
-		delete sendBorderType;
-	}
-	
-	if(receiveBorderType != NULL) {
-		if(receiveBorderType[TOP] != NULL)
-			cudaFree(receiveBorderType[TOP]);
-		
-		if(receiveBorderType[LEFT] != NULL)
-			cudaFree(receiveBorderType[LEFT]);
-		
-		if(receiveBorderType[BOTTOM] != NULL)
-			cudaFree(receiveBorderType[BOTTOM]);
-		
-		if(receiveBorderType[RIGHT] != NULL)
-			cudaFree(receiveBorderType[RIGHT]);
-		
-		cudaFree(receiveBorderTypeOnDevice);
-		delete receiveBorderType;
-	}
-	
+		cudaFree(newMatrix);	
 	
 	if(blockBorder != NULL) {
 		for(int i = 0; i < countSendSegmentBorder; i++ )
@@ -364,43 +296,28 @@ BlockGpu::~BlockGpu() {
 	}
 	
 	if(externalBorderMove != NULL)
-		cudaFree(externalBorderMove);
+		cudaFree(externalBorderMove);*/
 }
 
-void BlockGpu::computeOneStep(double dX2, double dY2, double dT) {
-	cudaSetDevice(deviceNumber);
-	
-	dim3 threads ( BLOCK_LENGHT_SIZE, BLOCK_WIDTH_SIZE );
-	dim3 blocks  ( (int)ceil((double)length / threads.x), (int)ceil((double)width / threads.y) );
-
-	calc <<< blocks, threads >>> ( matrix, newMatrix, length, width, dX2, dY2, dT, receiveBorderTypeOnDevice, externalBorderOnDevice, externalBorderMove );
-	
-	double* tmp = matrix;
-
-	matrix = newMatrix;
-
-	newMatrix = tmp;
-}
-
-void BlockGpu::computeOneStepBorder(double dX2, double dY2, double dT) {
+/*void BlockGpu::computeOneStepBorder(double dX2, double dY2, double dT) {
 	cudaSetDevice(deviceNumber);
 		
 	dim3 threads ( BLOCK_LENGHT_SIZE, BLOCK_WIDTH_SIZE );
 	dim3 blocks  ( (int)ceil((double)length / threads.x), (int)ceil((double)width / threads.y) );
 
 	calcBorder <<< blocks, threads >>> ( matrix, newMatrix, length, width, dX2, dY2, dT, receiveBorderTypeOnDevice, externalBorderOnDevice, externalBorderMove );
-}
+}*/
 
-void BlockGpu::computeOneStepCenter(double dX2, double dY2, double dT) {
+/*void BlockGpu::computeOneStepCenter(double dX2, double dY2, double dT) {
 	cudaSetDevice(deviceNumber);
 		
 	dim3 threads ( BLOCK_LENGHT_SIZE, BLOCK_WIDTH_SIZE );
 	dim3 blocks  ( (int)ceil((double)length / threads.x), (int)ceil((double)width / threads.y) );
 
 	calcCenter <<< blocks, threads >>> ( matrix, newMatrix, length, width, dX2, dY2, dT, receiveBorderTypeOnDevice, externalBorderOnDevice, externalBorderMove );
-}
+}*/
 
-void BlockGpu::prepareData() {
+/*void BlockGpu::prepareData() {
 	cudaSetDevice(deviceNumber);
 	
 	cudaThreadSynchronize();
@@ -415,22 +332,24 @@ void BlockGpu::prepareData() {
 	copyBorderFromMatrix <<< blocksLength, threads >>> (blockBorderOnDevice, matrix, sendBorderTypeOnDevice, blockBorderMove, RIGHT, length, width);
 	
 	cudaThreadSynchronize();
-}
+}*/
 
 double* BlockGpu::getCurrentState() {
 	cudaSetDevice(deviceNumber);
-	
-	double* result = new double [length * width];
-	
-	cudaMemcpy( result, matrix, width * length * sizeof(double), cudaMemcpyDeviceToHost );
-	
+
+	int count = getGridNodeCount();
+	double* result = new double [count];
+
+	cudaMemcpy( result, matrix, count * sizeof(double), cudaMemcpyDeviceToHost );
+
 	return result;
 }
 
 void BlockGpu::print() {
 	cudaSetDevice(deviceNumber);
+	cout << endl << "GPU PRINT DON'T WORK" << endl;
 	
-	double* matrixToPrint = new double [length * width];
+	/*double* matrixToPrint = new double [length * width];
 	
 	int** sendBorderTypeToPrint = new int* [BORDER_COUNT];
 	sendBorderTypeToPrint[TOP] = new int [width];
@@ -597,10 +516,10 @@ void BlockGpu::print() {
 	
 	delete blockBorderMoveToPrint;	
 	
-	delete externalBorderMoveToPrint;
+	delete externalBorderMoveToPrint;*/
 }
 
-double* BlockGpu::addNewBlockBorder(Block* neighbor, int side, int move, int borderLength) {
+/*double* BlockGpu::addNewBlockBorder(Block* neighbor, int side, int move, int borderLength) {
 	cudaSetDevice(deviceNumber);
 	
 	if( checkValue(side, move + borderLength) ) {
@@ -642,9 +561,9 @@ double* BlockGpu::addNewBlockBorder(Block* neighbor, int side, int move, int bor
 	tempBlockBorderMove.push_back(move);
 
 	return newBlockBorder;
-}
+}*/
 
-double* BlockGpu::addNewExternalBorder(Block* neighbor, int side, int move, int borderLength, double* border) {
+/*double* BlockGpu::addNewExternalBorder(Block* neighbor, int side, int move, int borderLength, double* border) {
 	cudaSetDevice(deviceNumber);
 	
 	if( checkValue(side, move + borderLength) ) {
@@ -674,9 +593,9 @@ double* BlockGpu::addNewExternalBorder(Block* neighbor, int side, int move, int 
 	tempExternalBorderMove.push_back(move);
 
 	return newExternalBorder;
-}
+}*/
 
-void BlockGpu::moveTempBorderVectorToBorderArray() {
+/*void BlockGpu::moveTempBorderVectorToBorderArray() {
 	cudaSetDevice(deviceNumber);
 	
 	blockBorder = new double* [countSendSegmentBorder];
@@ -719,10 +638,13 @@ void BlockGpu::moveTempBorderVectorToBorderArray() {
 	
 	delete tempBlockBorderMoveArray;
 	delete tempExternalBorderMoveArray;
-}
+}*/
 
 void BlockGpu::loadData(double* data) {
 	cudaSetDevice(deviceNumber);
 	
-	cudaMemcpy( matrix, data, sizeof(double) * length * width, cudaMemcpyHostToDevice );
+	cout << endl << "GPU LOAD DATA NOT WORK!" << endl;
+	return;
+	
+	/*cudaMemcpy( matrix, data, sizeof(double) * length * width, cudaMemcpyHostToDevice );*/
 }
