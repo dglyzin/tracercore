@@ -51,6 +51,8 @@ public:
 	void prepareBackBorder(double* source, int borderNumber, int mOffset, int nOffset, int mLength, int nLength);
 	void prepareTopBorder(double* source, int borderNumber, int mOffset, int nOffset, int mLength, int nLength);
 	void prepareBottomBorder(double* source, int borderNumber, int mOffset, int nOffset, int mLength, int nLength);
+
+	void prepareBorder(double* source, int borderNumber, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop);
 };
 
 #endif /* SRC_BLOCKCPU_H_ */

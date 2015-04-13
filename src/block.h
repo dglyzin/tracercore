@@ -176,6 +176,8 @@ public:
 	virtual void prepareBackBorder(double* source, int borderNumber, int mOffset, int nOffset, int mLength, int nLength) { return; }
 	virtual void prepareTopBorder(double* source, int borderNumber, int mOffset, int nOffset, int mLength, int nLength) { return; }
 	virtual void prepareBottomBorder(double* source, int borderNumber, int mOffset, int nOffset, int mLength, int nLength) { return; }
+
+	virtual void prepareBorder(double* source, int borderNumber, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop) { return; }
 };
 
 #endif /* SRC_BLOCK_H_ */
