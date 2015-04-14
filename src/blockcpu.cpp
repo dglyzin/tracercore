@@ -249,20 +249,30 @@ void BlockCpu::prepareStageData(int stage) {
 		double* source = NULL;
 		cout << endl << "Source = NULL" << endl;
 
+		int mStart = sendBorderInfo[ index + M_OFFSET ];
+		int mStop = mStart + sendBorderInfo[ index + M_LENGTH ];
+
+		int nStart = sendBorderInfo[ index + N_OFFSET ];
+		int nStop = nStart + sendBorderInfo[ index + N_LENGTH ];
+
 		switch (sendBorderInfo[index + SIDE]) {
 			case LEFT:
-				prepareBorder(source, i, sendBorderInfo[ index + M_OFFSET ], sendBorderInfo[ index + M_OFFSET ] + sendBorderInfo[ index + N_OFFSET ],
-						sendBorderInfo[ index + N_OFFSET ], sendBorderInfo[ index + N_OFFSET ] + sendBorderInfo[ index + N_LENGTH ], 0, haloSize);
+				prepareBorder(source, i, mStart, mStop, nStart, nStop, 0, haloSize);
 				break;
 			case RIGHT:
+				prepareBorder(source, i, mStart, mStop, nStart, nStop, xCount - haloSize, xCount);
 				break;
 			case FRONT:
+				prepareBorder(source, i, mStart, mStop, 0, haloSize, nStart, nStop);
 				break;
 			case BACK:
+				prepareBorder(source, i, mStart, mStop, yCount - haloSize, yCount, nStart, nStop);
 				break;
 			case TOP:
+				prepareBorder(source, i, 0, haloSize, mStart, mStop, nStart, nStop);
 				break;
 			case BOTTOM:
+				prepareBorder(source, i, zCount - haloSize, zCount, mStart, mStop, nStart, nStop);
 				break;
 			default:
 				break;
