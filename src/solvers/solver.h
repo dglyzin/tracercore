@@ -15,15 +15,18 @@ int GetSolverStageCount(int solverIdx);
 class Solver {
 public:
     Solver();
+    virtual ~Solver() { return; }
     void copyState(double* result);
     virtual void prepareStageData(int stage) { return; }
     virtual void confirmStep() { return; }
   	virtual void getStageArrays(double** result, double** source, double* factor, int stage, double timeStep) { return; }
   	double* getStatePtr(){ return mState;}
+
 protected:
   	int     mCount;
   	double* mState;
 };
+
 Solver* GetCpuSolver(int solverIdx, int count);
 Solver* GetGpuSolver(int solverIdx, int count);
 
