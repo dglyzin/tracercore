@@ -34,6 +34,8 @@ enum BORDER_SIDE { LEFT, RIGHT, FRONT, BACK, TOP, BOTTOM, BORDER_COUNT };
 
 enum INTERCONNECT_COMPONENT { SIDE, M_OFFSET, N_OFFSET, M_LENGTH, N_LENGTH, INTERCONNECT_COMPONENT_COUNT };
 
+enum SOLVER_TYPE { EULER, RK4 };
+
 /*
  * Типы блоков.
  * Центральный процессов или одна их трех видеокарт.
@@ -56,5 +58,7 @@ char* getMemoryTypeName(int type);
 
 bool isCPU(int type);
 bool isGPU(int type);
+
+int getSolverStageCount(int solverIdx);
 
 #endif /* SRC_ENUMS_H_ */
