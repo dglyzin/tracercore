@@ -17,9 +17,10 @@ public:
     Solver();
     virtual ~Solver() { return; }
     void copyState(double* result);
-    virtual void prepareStageData(int stage) { return; }
     virtual void confirmStep() { return; }
-  	virtual void getStageArrays(double** result, double** source, double* factor, int stage, double timeStep) { return; }
+    virtual double* getStageSource(int stage) { return NULL; }
+  	virtual double* getStageResult(int stage) { return NULL; }
+  	virtual double  getStageFactor(int stage, double timeStep) { return 0; }
   	double* getStatePtr(){ return mState;}
 
 protected:
@@ -34,8 +35,12 @@ class EulerSolver: public Solver{
 public:
 	EulerSolver(int _count);
 	~EulerSolver();
-    void prepareStageData(int stage) { return; }
-    void getStageArrays(double** result, double** source, double* factor, int stage, double timeStep) { return; }
+	double* getStageSource(int stage);
+	double* getStageResult(int stage);
+	double  getStageFactor(int stage, double timeStep);
+	void confirmStep();
+private:
+    double* mTempStore1;
 };
 
 

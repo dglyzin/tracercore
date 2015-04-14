@@ -7,6 +7,7 @@
 
 #include <stdlib.h>
 #include "solver.h"
+#include <cassert>
 
 int GetSolverStageCount(int solverIdx){
 	if      (solverIdx == EULER)
@@ -35,7 +36,6 @@ Solver* GetGpuSolver(int solverIdx, int count){
 
 Solver::Solver(){
 
-// printf("very strange action\n");
 }
 
 void Solver::copyState(double* result){
@@ -47,10 +47,37 @@ void Solver::copyState(double* result){
 EulerSolver::EulerSolver(int _count){
     mCount = _count;
     mState = new double[mCount];
+    mTempStore1 = new double[mCount];
     for (int i = 0; i < mCount; ++i)
         mState[i]= 0;
+
+
 }
 
 EulerSolver::~EulerSolver(){
     delete mState;
+    delete mTempStore1;
 }
+
+double* EulerSolver::getStageSource(int stage){
+    assert(stage == 0);
+    return mState;
+}
+
+double* EulerSolver::getStageResult(int stage){
+    assert(stage == 0);
+    return mTempStore1;
+}
+
+double EulerSolver::getStageFactor(int stage, double timeStep){
+    assert(stage == 0);
+    return timeStep;
+}
+
+void EulerSolver::confirmStep(){
+    double* temp = mState;
+    mState = mTempStore1;
+    mTempStore1 = temp;
+}
+
+
