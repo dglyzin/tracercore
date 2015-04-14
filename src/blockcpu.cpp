@@ -813,7 +813,7 @@ Solver* BlockCpu::createSolver(int solverIdx, int count) {
 		case EULER:
 			return new EulerSolver(count);
 		case RK4:
-			cout << endl << "RK$ SOLVER NOT READY!" << endl;
+			cout << endl << "RK4 SOLVER NOT READY!" << endl;
 			return NULL;
 		default:
 			return new EulerSolver(count);
