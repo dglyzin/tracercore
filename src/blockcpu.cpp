@@ -197,37 +197,11 @@ BlockCpu::~BlockCpu() {
 		}
 	}
 }*/
-/*
-void BlockCpu::computeStageCenter() {
-
-	 * Теплопроводность
-
-
-
-	 * Параллельное вычисление на максимально возможном количестве потоков.
-	 * Максимально возможное количесвто потоков получается из-за самой библиотеки omp
-	 * Если явно не указывать, какое именно количесвто нитей необходимо создать, то будет создано макстимально возможное на данный момент.
-
-# pragma omp parallel
-	{
-
-		 * Для решения задачи теплопроводности нам необходимо знать несколько значений.
-		 * Среди них
-		 * значение в ячейке выше
-		 * значение в ячейке слева
-		 * значение в ячейке снизу
-		 * значение в ячейке справа
-		 * текущее значение в данной ячейке
-		 *
-		 * остально данные передаются в функцию в качестве параметров.
-
-	double top, left, bottom, right, cur;
+void BlockCpu::computeStageCenter(int stage, double time, double step) {
+/*# pragma omp parallel
+	 {
 
 # pragma omp for
-
-	 * Проходим по всем ячейкам матрицы.
-	 * Для каждой из них будет выполнен перерасчет.
-
 	for (int i = 1; i < length - 1; ++i)
 		for (int j = 1; j < width - 1; ++j) {
 			top = matrix[(i - 1) * width + j];
@@ -239,8 +213,44 @@ void BlockCpu::computeStageCenter() {
 
 			newMatrix[i * width + j] = cur + dT * ( ( left - 2*cur + right )/dX2 + ( top - 2*cur + bottom )/dY2  );
 		}
+	}*/
+}
+
+void BlockCpu::computeStageCenter_1d(int stage, double time, double step) {
+# pragma omp parallel
+	{
+# pragma omp for
+		for (int x = haloSize; x < xCount - haloSize; ++x) {
+			cout << "Calc x_" << x << endl;
+		}
 	}
-}*/
+}
+
+void BlockCpu::computeStageCenter_2d(int stage, double time, double step) {
+# pragma omp parallel
+	{
+# pragma omp for
+		for (int y = haloSize; y < yCount - haloSize; ++y) {
+			for (int x = haloSize; x < xCount - haloSize; ++x) {
+				cout << "Calc y_" << y << " x_" << x << endl;
+			}
+		}
+	}
+}
+
+void BlockCpu::computeStageCenter_3d(int stage, double time, double step) {
+# pragma omp parallel
+	{
+# pragma omp for
+		for (int z = haloSize; z < zCount - haloSize; ++z) {
+			for (int y = haloSize; y < yCount - haloSize; ++y) {
+				for (int x = haloSize; x < xCount - haloSize; ++x) {
+					cout << "Calc z_" << z << " y_" << y << " x_" << x << endl;
+				}
+			}
+		}
+	}
+}
 
 void BlockCpu::prepareStageData(int stage) {
 	for (int i = 0; i < countSendSegmentBorder; ++i) {
