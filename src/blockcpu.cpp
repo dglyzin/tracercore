@@ -246,8 +246,13 @@ void BlockCpu::prepareStageData(int stage) {
 	for (int i = 0; i < countSendSegmentBorder; ++i) {
 		int index = INTERCONNECT_COMPONENT_COUNT * i;
 
+		double* source = NULL;
+		cout << endl << "Source = NULL" << endl;
+
 		switch (sendBorderInfo[index + SIDE]) {
 			case LEFT:
+				prepareBorder(source, i, sendBorderInfo[ index + M_OFFSET ], sendBorderInfo[ index + M_OFFSET ] + sendBorderInfo[ index + N_OFFSET ],
+						sendBorderInfo[ index + N_OFFSET ], sendBorderInfo[ index + N_OFFSET ] + sendBorderInfo[ index + N_LENGTH ], 0, haloSize);
 				break;
 			case RIGHT:
 				break;
