@@ -185,12 +185,16 @@ private:
 	double** collectDataFromNode();
 	double* getBlockCurrentState(int number);
 
-	void prepareData(int stage);
+
 	void prepareDeviceData(int deviceType, int deviceNumber, int stage);
 	void processDeviceBlocksBorder(int deviceType, int deviceNumber, int stage);
 	void processDeviceBlocksCenter(int deviceType, int deviceNumber, int stage);
+	void prepareDeviceArgument(int deviceType, int deviceNumber, int stage);
+
+	void prepareData(int stage);
 	void computeOneStepBorder(int stage);
 	void computeOneStepCenter(int stage);
+	void prepareNextStageArgument(int stage);
 	/*
 	 * after every step (successful or not) we update timestep according to an error
 	 */

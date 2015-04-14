@@ -130,6 +130,8 @@ public:
 	virtual void computeStageBorder(int stage, double time, double step) { return; }
 	virtual void computeStageCenter(int stage, double time, double step) { return; }
 
+	void prepareArgument(int stage);
+
 	void confirmStep();
 
 	/*

@@ -128,6 +128,9 @@ void Domain::nextStep() {
 			mInterconnects[i]->wait();
 
 		computeOneStepBorder(stage);
+		prepareNextStageArgument(stage);
+
+
     }
 
     int step_rejected = checkErrorAndUpdateTimeStep();
@@ -166,6 +169,15 @@ void Domain::processDeviceBlocksCenter(int deviceType, int deviceNumber, int sta
 		    mBlocks[i]->computeStageCenter(stage, currentTime, timeStep);
 		}
 }
+void Domain::prepareDeviceArgument(int deviceType, int deviceNumber, int stage) {
+	for (int i = 0; i < mBlockCount; ++i)
+        if( mBlocks[i]->getBlockType() == deviceType && mBlocks[i]->getDeviceNumber() == deviceNumber ) {
+        	//cout << endl << "ERROR! PROCESS DEVICE!" << endl;
+		    mBlocks[i]->prepareArgument(stage);
+		}
+}
+
+
 
 void Domain::prepareData(int stage) {
 #pragma omp task
@@ -190,6 +202,19 @@ void Domain::computeOneStepBorder(int stage) {
 
 	processDeviceBlocksBorder(CPU, 0, stage);
 }
+
+void Domain::prepareNextStageArgument(int stage) {
+#pragma omp task
+	prepareDeviceArgument(GPU, 0, stage);
+#pragma omp task
+	prepareDeviceArgument(GPU, 1, stage);
+#pragma omp task
+	prepareDeviceArgument(GPU, 2, stage);
+
+	prepareDeviceArgument(CPU, 0, stage);
+}
+
+
 
 void Domain::computeOneStepCenter(int stage) {
 #pragma omp task

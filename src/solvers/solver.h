@@ -13,6 +13,7 @@ public:
     Solver();
     virtual ~Solver() { return; }
     void copyState(double* result);
+    virtual void prepareArgument(int stage) { return; }
     virtual void confirmStep() { return; }
     virtual double* getStageSource(int stage) { return NULL; }
   	virtual double* getStageResult(int stage) { return NULL; }
