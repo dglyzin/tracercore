@@ -384,7 +384,7 @@ void Domain::readFromFile(char* path) {
 	readCellAndHaloSize(in);
 	readSolverIndex(in);
 
-	mSolverStageCount = GetSolverStageCount(mSolverIndex);
+	mSolverStageCount = getSolverStageCount(mSolverIndex);
 
 	readBlockCount(in);
 

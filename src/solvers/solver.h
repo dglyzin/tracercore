@@ -8,10 +8,6 @@
 #ifndef SOLVER_H_
 #define SOLVER_H_
 
-enum SOLVER_IDX { EULER, RK4 };
-int GetSolverStageCount(int solverIdx);
-
-
 class Solver {
 public:
     Solver();
@@ -28,8 +24,8 @@ protected:
   	double* mState;
 };
 
-Solver* GetCpuSolver(int solverIdx, int count);
-Solver* GetGpuSolver(int solverIdx, int count);
+/*Solver* GetCpuSolver(int solverIdx, int count);
+Solver* GetGpuSolver(int solverIdx, int count);*/
 
 class EulerSolver: public Solver{
 public:

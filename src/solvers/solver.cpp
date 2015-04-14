@@ -9,17 +9,8 @@
 #include "solver.h"
 #include <cassert>
 
-int GetSolverStageCount(int solverIdx){
-	if      (solverIdx == EULER)
-		return 1;
-	else if (solverIdx == RK4)
-		return 4;
-	else
-		return -1;
-}
 
-
-Solver* GetCpuSolver(int solverIdx, int count){
+/*Solver* GetCpuSolver(int solverIdx, int count){
 	if      (solverIdx == EULER)
 		return new EulerSolver(count);
 	else if (solverIdx == RK4)
@@ -30,7 +21,7 @@ Solver* GetCpuSolver(int solverIdx, int count){
 
 Solver* GetGpuSolver(int solverIdx, int count){
 	return NULL;
-}
+}*/
 
 
 

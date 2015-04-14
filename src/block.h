@@ -178,6 +178,8 @@ public:
 	virtual void prepareBottomBorder(double* source, int borderNumber, int mOffset, int nOffset, int mLength, int nLength) { return; }
 
 	virtual void prepareBorder(double* source, int borderNumber, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop) { return; }
+
+	virtual Solver* createSolver(int solverIdx, int count) { return NULL; }
 };
 
 #endif /* SRC_BLOCK_H_ */
