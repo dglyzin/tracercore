@@ -219,9 +219,12 @@ void BlockCpu::computeStageCenter(int stage, double time, double step) {
 void BlockCpu::computeStageCenter_1d(int stage, double time, double step) {
 # pragma omp parallel
 	{
+		double* result = mSolver->getStageResult(stage);
+		double* source = mSolver->getStageSource(stage);
 # pragma omp for
 		for (int x = haloSize; x < xCount - haloSize; ++x) {
 			cout << "Calc x_" << x << endl;
+			mUserFuncs[ mCompFuncNumber[x] ](result, source, time, x, 0, 0, mParams, externalBorder);
 		}
 	}
 }
@@ -229,10 +232,15 @@ void BlockCpu::computeStageCenter_1d(int stage, double time, double step) {
 void BlockCpu::computeStageCenter_2d(int stage, double time, double step) {
 # pragma omp parallel
 	{
+		double* result = mSolver->getStageResult(stage);
+		double* source = mSolver->getStageSource(stage);
 # pragma omp for
 		for (int y = haloSize; y < yCount - haloSize; ++y) {
+			int yShift = xCount * y;
 			for (int x = haloSize; x < xCount - haloSize; ++x) {
+				int xShift = x;
 				cout << "Calc y_" << y << " x_" << x << endl;
+				mUserFuncs[ mCompFuncNumber[ yShift + xShift ] ](result, source, time, x, y, 0, mParams, externalBorder);
 			}
 		}
 	}
@@ -241,11 +249,17 @@ void BlockCpu::computeStageCenter_2d(int stage, double time, double step) {
 void BlockCpu::computeStageCenter_3d(int stage, double time, double step) {
 # pragma omp parallel
 	{
+		double* result = mSolver->getStageResult(stage);
+		double* source = mSolver->getStageSource(stage);
 # pragma omp for
 		for (int z = haloSize; z < zCount - haloSize; ++z) {
+			int zShift = yCount * xCount * z;
 			for (int y = haloSize; y < yCount - haloSize; ++y) {
+				int yShift = xCount * y;
 				for (int x = haloSize; x < xCount - haloSize; ++x) {
+					int xShift = x;
 					cout << "Calc z_" << z << " y_" << y << " x_" << x << endl;
+					mUserFuncs[ mCompFuncNumber[ zShift * yShift * xShift ] ](result, source, time, x, y, z, mParams, externalBorder);
 				}
 			}
 		}
