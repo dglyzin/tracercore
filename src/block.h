@@ -170,13 +170,6 @@ public:
 
 	virtual void loadData(double* data) { return; }
 
-	virtual void prepareLeftBorder(double* source, int borderNumber, int mOffset, int nOffset, int mLength, int nLength) { return; }
-	virtual void prepareRightBorder(double* source, int borderNumber, int mOffset, int nOffset, int mLength, int nLength) { return; }
-	virtual void prepareFrontBorder(double* source, int borderNumber, int mOffset, int nOffset, int mLength, int nLength) { return; }
-	virtual void prepareBackBorder(double* source, int borderNumber, int mOffset, int nOffset, int mLength, int nLength) { return; }
-	virtual void prepareTopBorder(double* source, int borderNumber, int mOffset, int nOffset, int mLength, int nLength) { return; }
-	virtual void prepareBottomBorder(double* source, int borderNumber, int mOffset, int nOffset, int mLength, int nLength) { return; }
-
 	virtual void prepareBorder(double* source, int borderNumber, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop) { return; }
 
 	virtual Solver* createSolver(int solverIdx, int count) { return NULL; }
