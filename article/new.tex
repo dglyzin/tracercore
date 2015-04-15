@@ -1,9 +1,9 @@
-\documentclass[10pt,a4paper,landscape]{extbook}
+\documentclass[14pt,a4paper,landscape]{extbook}
 \usepackage[T2A]{fontenc}
 \usepackage[russian]{babel}
 \usepackage{graphicx}
 \usepackage{amsfonts,amssymb,amscd,amsmath}
-\usepackage[left=0.5cm, right=0.5cm, top=2.7cm, bottom=2cm]{geometry}
+\usepackage[left=1.5cm, right=1.5cm, top=2.7cm, bottom=2cm]{geometry}
 \usepackage{tikz}
 \usetikzlibrary{arrows,positioning}
 
@@ -21,38 +21,43 @@
 
 	\node [sum, right of=startStep, node distance=1.5cm] (startStage) {};
 
-	\node [block, right of=startStage, node distance=3cm] (cpuPrepare) {CPU prepare};
-	\node [block, above of=cpuPrepare, node distance=2cm] (gpu1Prepare) {GPU1 prepare};
-	\node [block, above of=gpu1Prepare, node distance=2cm] (gpu2Prepare) {GPU2 prepare};
-	\node [block, above of=gpu2Prepare, node distance=2cm] (gpu3Prepare) {GPU3 prepare};
+	\node [block, right of=startStage, node distance=2.5cm] (cpuPrepare) {CPU};
+	\node [block, above of=cpuPrepare, node distance=2cm] (gpu1Prepare) {GPU1};
+	\node [block, above of=gpu1Prepare, node distance=2cm] (gpu2Prepare) {GPU2};
+	\node [block, above of=gpu2Prepare, node distance=2cm] (gpu3Prepare) {GPU3};
 
-	\node [sum, right of=cpuPrepare, pin={[pinstyle]below:Sync}, node distance=2cm] (sync) {};
+	\node [block, above of=gpu3Prepare, node distance=1.2cm, fill=red!20] (preapre) {Prepare data};
 
-	\node [output, right of=startStep, node distance=2.5cm] (pr) {};
-
-
-
-	\node [block, right of=sync, node distance=3.5cm] (cpuCenter) {CPU compute center};
-	\node [block, above of=cpuCenter, node distance=2cm] (gpu1Center) {GPU1 compute center};
-	\node [block, above of=gpu1Center, node distance=2cm] (gpu2Center) {GPU2 compute center};
-	\node [block, above of=gpu2Center, node distance=2cm] (gpu3Center) {GPU3 compute center};
-
-	\node [block, below of=cpuCenter, node distance=2cm] (sendRecv) {Send / receive};
-
-	\node [output, right of=sync, node distance=1.2cm] (comC) {};
+	\node [output, left of=cpuPrepare, node distance=1.5cm] (pr) {};
+	\node [sum, right of=cpuPrepare, pin={[pinstyle]below:Sync}, node distance=1.5cm] (sync) {};
 
 
 
-	\node [sum, right of=cpuCenter, pin={[pinstyle]above:Wait}, node distance=2.5cm] (wait) {};
+	\node [block, right of=sync, node distance=3.5cm] (cpuCenter) {CPU};
+	\node [block, above of=cpuCenter, node distance=2cm] (gpu1Center) {GPU1};
+	\node [block, above of=gpu1Center, node distance=2cm] (gpu2Center) {GPU2};
+	\node [block, above of=gpu2Center, node distance=2cm] (gpu3Center) {GPU3};
 
-	\node [block, right of=wait, node distance=4cm] (cpuBorder) {CPU compute border};
-	\node [block, above of=cpuBorder, node distance=2cm] (gpu1Border) {GPU1 compute border};
-	\node [block, above of=gpu1Border, node distance=2cm] (gpu2Border) {GPU2 compute border};
-	\node [block, above of=gpu2Border, node distance=2cm] (gpu3Border) {GPU3 compute border};
+	\node [block, above of=gpu3Center, node distance=1.2cm, fill=red!20] (center) {Compute center};
 
-	\node [output, right of=wait, node distance=1cm] (comB) {};
+	\node [block, below of=cpuCenter, node distance=2cm] (sendRecv) {Send/receive};
 
-	\node [block, right of=cpuBorder, node distance=4.5cm] (prepareArgs) {Prepare args};
+	\node [output, left of=cpuCenter, node distance=2cm] (comC) {};
+
+
+
+	\node [sum, right of=cpuCenter, pin={[pinstyle]above:Wait}, node distance=2cm] (wait) {};
+
+	\node [block, right of=wait, node distance=3cm] (cpuBorder) {CPU};
+	\node [block, above of=cpuBorder, node distance=2cm] (gpu1Border) {GPU1};
+	\node [block, above of=gpu1Border, node distance=2cm] (gpu2Border) {GPU2};
+	\node [block, above of=gpu2Border, node distance=2cm] (gpu3Border) {GPU3};
+
+	\node [block, above of=gpu3Border, node distance=1.2cm, fill=red!20] (border) {Compute border};
+
+	\node [output, left of=cpuBorder, node distance=1.5cm] (comB) {};
+
+	\node [block, right of=cpuBorder, node distance=3.5cm] (prepareArgs) {Prepare args};
 
 
 	\node [sum, right of=prepareArgs, node distance=2.5cm] (stopStage) {};
@@ -104,6 +109,7 @@
 
 	\draw [-] (stopStep) |- (tmp2);
 	\draw [->] (tmp2) -| (startStep);
+
 
 	%\draw [-](wait) -- (output);
 
