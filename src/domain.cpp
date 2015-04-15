@@ -146,8 +146,8 @@ void Domain::nextStep() {
     	computeStage(stage);
 
     if (mSolverInfo->isVariableStep()){
-		int step_rejected = checkErrorAndUpdateTimeStep();
-		if (!step_rejected){
+    	double error = collectError();
+		if (mSolverInfo->isErrorOK(error)){
 			confirmStep();
 			mAcceptedStepCount++;
 			currentTime += timeStep;
@@ -158,6 +158,7 @@ void Domain::nextStep() {
 			currentTime += timeStep;
 			cout<<"Step rejected!\n"<<endl;
 		}
+		mSolverInfo->getNewStep(timeStep, error);
     }
 	else{ //constant step
 		confirmStep();
@@ -261,9 +262,9 @@ void Domain::confirmStep() {
 	}
 }
 
-int Domain::checkErrorAndUpdateTimeStep() {
-double err1, err2, err3;
-
+double Domain::collectError() {
+	double err1, err2, err3;
+    //1. Get total error for current node
 #pragma omp task
 	err1 = getDeviceError(GPU, 0);
 #pragma omp task
@@ -276,10 +277,11 @@ double err1, err2, err3;
 #pragma omp taskwait
 	nodeError += err1 + err2 + err3;
 
+    //2. Collect errors from all nodes
+    double totalError = nodeError;
 
-
-	//TODO real update
-	return 0; //Accepted
+	//TODO MPI_ALLREDUCE
+	return totalError;
 }
 
 void Domain::print(char* path) {

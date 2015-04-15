@@ -21,6 +21,7 @@ public:
     virtual void confirmStep() { return; }
     virtual double getStepError() { return 0.0; }
 
+
 protected:
   	int     mCount;
   	double* mState;
@@ -34,6 +35,10 @@ public:
 	                                   //to prepare data on first step
 	int isVariableStep() { return mVariableStep; }
 	int getStageCount() { return mStageCount; }
+
+	virtual double getNewStep(double timeStep, double error) { return timeStep; }
+	virtual int isErrorOK(double error) { return 1; }
+
 protected:
 	int mIsFSAL;
 	int mVariableStep;

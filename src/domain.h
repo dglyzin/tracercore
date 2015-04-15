@@ -201,7 +201,7 @@ private:
 	/*
 	 * after every step (successful or not) we update timestep according to an error
 	 */
-	int checkErrorAndUpdateTimeStep();
+	double collectError();
 
 	void confirmStep();
 };
