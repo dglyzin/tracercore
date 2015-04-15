@@ -19,7 +19,7 @@ public:
     virtual double* getStageResult(int stage) { return NULL; }
     virtual void prepareArgument(int stage) { return; }
     virtual void confirmStep() { return; }
-    virtual double getStepError() { return 0; }
+    virtual double getStepError() { return 0.0; }
 
 protected:
   	int     mCount;
@@ -51,8 +51,7 @@ public:
 	double* getStageResult(int stage);
 	void prepareArgument(int stage,double timeStep);
 	void confirmStep();
-	int isFSAL() { return 0; }
-	double getStepError() { return 0; }
+	double getStepError() { return 0.0; }
 
 private:
     double* mTempStore1;

@@ -100,9 +100,10 @@ double* Domain::getBlockCurrentState(int number) {
 void Domain::compute(char* saveFile) {
 	cout << endl << "Computation started..." << endl;
 	cout<< "Current time: "<<currentTime<<", finish time: "<<stopTime<< ", time step: " << timeStep<<endl;
-	cout <<(flags & STEP_EXECUTION)<<", solver stage count: " <<mSolverStageCount<<endl;
+	cout <<(flags & STEP_EXECUTION)<<", solver stage count: " <<mSolverInfo->getStageCount()<<endl;
 
-	initSolvers();
+	if (mSolverInfo->isFSAL() )
+	    initSolvers();
 
 	if( flags & STEP_EXECUTION)
 		for (int i = 0; i < mStepCount; i++)
@@ -120,7 +121,7 @@ void Domain::compute(char* saveFile) {
 }
 
 void Domain::initSolvers() {
-	computeStage(-1);
+	computeStage(SOLVER_INIT_STAGE);
 }
 
 void Domain::computeStage(int stage) {
@@ -141,21 +142,29 @@ void Domain::computeStage(int stage) {
 
 void Domain::nextStep() {
 	//последовательно выполняем все стадии метода
-    for(int stage=0; stage < mSolverStageCount; stage++)
+    for(int stage=0; stage < mSolverInfo->getStageCount(); stage++)
     	computeStage(stage);
 
-    int step_rejected = checkErrorAndUpdateTimeStep();
-    if (!step_rejected){
-    	confirmStep();
-    	mAcceptedStepCount++;
-    	currentTime += timeStep;
-    	//cout<<"Step accepted\n"<<endl;
+    if (mSolverInfo->isVariableStep()){
+		int step_rejected = checkErrorAndUpdateTimeStep();
+		if (!step_rejected){
+			confirmStep();
+			mAcceptedStepCount++;
+			currentTime += timeStep;
+			//cout<<"Step accepted\n"<<endl;
+		}
+		else{
+			mRejectedStepCount++;
+			currentTime += timeStep;
+			cout<<"Step rejected!\n"<<endl;
+		}
     }
-    else{
-    	mRejectedStepCount++;
-        currentTime += timeStep;
-        cout<<"Step rejected!\n"<<endl;
-    }
+	else{ //constant step
+		confirmStep();
+		mAcceptedStepCount++;
+		currentTime += timeStep;
+
+	}
 }
 
 void Domain::prepareDeviceData(int deviceType, int deviceNumber, int stage) {
@@ -266,6 +275,8 @@ double err1, err2, err3;
 
 #pragma omp taskwait
 	nodeError += err1 + err2 + err3;
+
+
 
 	//TODO real update
 	return 0; //Accepted
@@ -451,7 +462,6 @@ void Domain::readFromFile(char* path) {
 		default:
 			mSolverInfo = new EulerSolverInfo();
 	}
-	mSolverStageCount = mSolverInfo->getStageCount();
 
 	readBlockCount(in);
 

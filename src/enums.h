@@ -15,6 +15,8 @@
 #define VERSION_MAJOR 1
 #define VERSION_MINOR 0
 
+#define SOLVER_INIT_STAGE -1
+
 enum FLAGS {
 	SAVE_FILE = 0x01,
 	LOAD_FILE = 0x02,

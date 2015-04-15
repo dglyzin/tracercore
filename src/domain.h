@@ -109,11 +109,6 @@ private:
 	 */
 	SolverInfo * mSolverInfo;
 
-	/*
-	 * Количество стадий (вычислений правых частей)
-	 * используемого солвера
-	 */
-	int mSolverStageCount;
 
 	/*
 	 * Номер потока
