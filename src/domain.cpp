@@ -409,6 +409,7 @@ void Domain::readFromFile(char* path) {
 	readCellAndHaloSize(in);
 	readSolverIndex(in);
 
+
 	mSolverStageCount = getSolverStageCount(mSolverIndex);
 
 	readBlockCount(in);
@@ -417,7 +418,6 @@ void Domain::readFromFile(char* path) {
 
 	for (int i = 0; i < mBlockCount; ++i)
 		mBlocks[i] = readBlock(in);
-
 
 	readConnectionCount(in);
 
@@ -431,6 +431,7 @@ void Domain::readFromFile(char* path) {
 		mBlocks[i]->moveTempBorderVectorToBorderArray();
 
 	printBlocksToConsole();
+
 }
 
 void Domain::readFileStat(ifstream& in) {
