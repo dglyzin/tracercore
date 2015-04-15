@@ -9,7 +9,7 @@
 
 \begin{document}
 
-\tikzstyle{block} = [draw, fill=blue!20, rectangle, minimum height=2em]
+\tikzstyle{block} = [draw, fill=green!20, rectangle, minimum height=2em]
 \tikzstyle{sum} = [draw, fill=blue!20, circle]
 \tikzstyle{output} = [coordinate]
 \tikzstyle{pinstyle} = [pin edge={to-,thin,black}]
@@ -59,8 +59,11 @@
 	\node [block, right of=stopStage, node distance=1.5cm] (swap) {Swap};
 	\node [sum, right of=swap, node distance=1.5cm] (stopStep) {};
 
-	\node [output, below of=cpuCenter, node distance=4cm] (tmp1) {};
-	\node [output, below of=cpuCenter, node distance=6cm] (tmp2) {};
+	%\node [output, below of=wait, node distance=4cm, pin={[pinstyle]above:Next stage}] (tmp1) {};
+	%\node [output, below of=wait, node distance=6cm, pin={[pinstyle]above:Next step}] (tmp2) {};
+
+	\node [block, below of=wait, node distance=4cm, fill=yellow!20] (tmp1) {Next stage};
+	\node [block, below of=wait, node distance=6cm, fill=yellow!20] (tmp2) {Next step};
 
 	%\node [output, below of=wait, node distance=3cm] (output) {};
 
