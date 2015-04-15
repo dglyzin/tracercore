@@ -72,7 +72,7 @@ public:
 
 
 
-//***********************1. RK4 SOLVER**************
+//***********************2. RK4 SOLVER**************
 class RK4Solver: public Solver{
 public:
 	RK4Solver(int _count);
@@ -96,6 +96,33 @@ private:
 class RK4SolverInfo: public SolverInfo{
 public:
 	RK4SolverInfo() {mIsFSAL = 0; mVariableStep = 0; mStageCount = 4;}
+};
+
+
+//***********************3. DP45 SOLVER**************
+class DP45Solver: public Solver{
+public:
+	DP45Solver(int _count);
+	~DP45Solver();
+	double* getStageSource(int stage);
+	double* getStageResult(int stage);
+	double getStageTimeStep(int stage);
+	void prepareArgument(int stage, double timeStep);
+	void confirmStep();
+	double getStepError();
+
+private:
+    double* mTempStore1;
+    double* mTempStore2;
+    double* mTempStore3;
+    double* mTempStore4;
+    double* mArg;
+
+};
+
+class DP45SolverInfo: public SolverInfo{
+public:
+	DP45SolverInfo() {mIsFSAL = 1; mVariableStep = 1; mStageCount = 6;}
 };
 
 
