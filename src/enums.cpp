@@ -86,12 +86,3 @@ bool isCPU(int type) {
 bool isGPU(int type) {
 	return type == GPU;
 }
-
-int getSolverStageCount(int solverIdx) {
-	if      (solverIdx == EULER)
-		return 1;
-	else if (solverIdx == RK4)
-		return 4;
-	else
-		return -1;
-}

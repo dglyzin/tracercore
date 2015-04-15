@@ -36,6 +36,8 @@ public:
 	void computeStageCenter_2d(int stage, double time, double step);
 	void computeStageCenter_3d(int stage, double time, double step);
 
+	double getSolverStepError();
+
 	int getBlockType() { return CPU; }
 
 	double* getCurrentState(double* result);

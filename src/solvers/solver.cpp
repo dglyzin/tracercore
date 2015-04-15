@@ -26,6 +26,9 @@ Solver* GetGpuSolver(int solverIdx, int count){
 
 
 Solver::Solver(){
+}
+
+SolverInfo::SolverInfo(){
 
 }
 
@@ -34,15 +37,15 @@ void Solver::copyState(double* result){
 		result[idx] = mState[idx];
 }
 
-
+//****************1. EULER SOLVER*************//
 EulerSolver::EulerSolver(int _count){
     mCount = _count;
     mState = new double[mCount];
     mTempStore1 = new double[mCount];
-    for (int i = 0; i < mCount; ++i)
-        mState[i]= 0;
-
-
+    for (int idx = 0; idx < mCount; ++idx){
+        mState[idx] = 0;
+        mTempStore1[idx] = 0;
+    }
 }
 
 EulerSolver::~EulerSolver(){
@@ -60,9 +63,10 @@ double* EulerSolver::getStageResult(int stage){
     return mTempStore1;
 }
 
-double EulerSolver::getStageFactor(int stage, double timeStep){
-    assert(stage == 0);
-    return timeStep;
+void EulerSolver::prepareArgument(int stage, double timeStep){
+#pragma omp parallel for
+	for (int idx = 0; idx < mCount; ++idx)
+	    mTempStore1[idx]= mState[idx] + timeStep*mTempStore1[idx];
 }
 
 void EulerSolver::confirmStep(){
@@ -70,5 +74,3 @@ void EulerSolver::confirmStep(){
     mState = mTempStore1;
     mTempStore1 = temp;
 }
-
-

@@ -95,10 +95,15 @@ double* Domain::getBlockCurrentState(int number) {
 	return NULL;*/
 }
 
+
+
 void Domain::compute(char* saveFile) {
 	cout << endl << "Computation started..." << endl;
 	cout<< "Current time: "<<currentTime<<", finish time: "<<stopTime<< ", time step: " << timeStep<<endl;
 	cout <<(flags & STEP_EXECUTION)<<", solver stage count: " <<mSolverStageCount<<endl;
+
+	initSolvers();
+
 	if( flags & STEP_EXECUTION)
 		for (int i = 0; i < mStepCount; i++)
 			nextStep();
@@ -114,24 +119,30 @@ void Domain::compute(char* saveFile) {
 
 }
 
+void Domain::initSolvers() {
+	computeStage(-1);
+}
+
+void Domain::computeStage(int stage) {
+	prepareData(stage);
+
+	for (int i = 0; i < mConnectionCount; ++i)
+		mInterconnects[i]->sendRecv(mWorldRank);
+
+	computeOneStepCenter(stage);
+
+	for (int i = 0; i < mConnectionCount; ++i)
+		mInterconnects[i]->wait();
+
+	computeOneStepBorder(stage);
+	prepareNextStageArgument(stage);
+}
+
+
 void Domain::nextStep() {
 	//последовательно выполняем все стадии метода
-    for(int stage=0; stage < mSolverStageCount; stage++){
-		prepareData(stage);
-
-		for (int i = 0; i < mConnectionCount; ++i)
-			mInterconnects[i]->sendRecv(mWorldRank);
-
-		computeOneStepCenter(stage);
-
-		for (int i = 0; i < mConnectionCount; ++i)
-			mInterconnects[i]->wait();
-
-		computeOneStepBorder(stage);
-		prepareNextStageArgument(stage);
-
-
-    }
+    for(int stage=0; stage < mSolverStageCount; stage++)
+    	computeStage(stage);
 
     int step_rejected = checkErrorAndUpdateTimeStep();
     if (!step_rejected){
@@ -174,6 +185,14 @@ void Domain::prepareDeviceArgument(int deviceType, int deviceNumber, int stage) 
         if( mBlocks[i]->getBlockType() == deviceType && mBlocks[i]->getDeviceNumber() == deviceNumber ) {
         	//cout << endl << "ERROR! PROCESS DEVICE!" << endl;
 		    mBlocks[i]->prepareArgument(stage);
+		}
+}
+
+double Domain::getDeviceError(int deviceType, int deviceNumber) {
+	for (int i = 0; i < mBlockCount; ++i)
+        if( mBlocks[i]->getBlockType() == deviceType && mBlocks[i]->getDeviceNumber() == deviceNumber ) {
+        	//cout << endl << "ERROR! PROCESS DEVICE!" << endl;
+		    mBlocks[i]->getSolverStepError();
 		}
 }
 
@@ -234,7 +253,21 @@ void Domain::confirmStep() {
 }
 
 int Domain::checkErrorAndUpdateTimeStep() {
-    //TODO real update
+double err1, err2, err3;
+
+#pragma omp task
+	err1 = getDeviceError(GPU, 0);
+#pragma omp task
+	err2 = getDeviceError(GPU, 1);
+#pragma omp task
+	err3 = getDeviceError(GPU, 2);
+
+	double nodeError = getDeviceError(CPU, 0);
+
+#pragma omp taskwait
+	nodeError += err1 + err2 + err3;
+
+	//TODO real update
 	return 0; //Accepted
 }
 
@@ -409,7 +442,16 @@ void Domain::readFromFile(char* path) {
 	readCellAndHaloSize(in);
 	readSolverIndex(in);
 
-	mSolverStageCount = getSolverStageCount(mSolverIndex);
+	switch (mSolverIndex) {
+		case EULER:
+			mSolverInfo = new EulerSolverInfo();
+		case RK4:
+			cout << endl << "RK4 SOLVER NOT READY!" << endl;
+			mSolverInfo = NULL;
+		default:
+			mSolverInfo = new EulerSolverInfo();
+	}
+	mSolverStageCount = mSolverInfo->getStageCount();
 
 	readBlockCount(in);
 

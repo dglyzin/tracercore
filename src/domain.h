@@ -104,6 +104,10 @@ private:
 	 * В рамках каждого класса реализуется солвер для цпу и солвер для гпу
 	 */
 	int mSolverIndex;
+	/*
+	 * Структура данных, возвращающая основные параметры солвера
+	 */
+	SolverInfo * mSolverInfo;
 
 	/*
 	 * Количество стадий (вычислений правых частей)
@@ -185,16 +189,20 @@ private:
 	double** collectDataFromNode();
 	double* getBlockCurrentState(int number);
 
+	void initSolvers();
 
 	void prepareDeviceData(int deviceType, int deviceNumber, int stage);
 	void processDeviceBlocksBorder(int deviceType, int deviceNumber, int stage);
 	void processDeviceBlocksCenter(int deviceType, int deviceNumber, int stage);
 	void prepareDeviceArgument(int deviceType, int deviceNumber, int stage);
+	double getDeviceError(int deviceType, int deviceNumber);
 
 	void prepareData(int stage);
 	void computeOneStepBorder(int stage);
 	void computeOneStepCenter(int stage);
 	void prepareNextStageArgument(int stage);
+
+	void computeStage(int stage);
 	/*
 	 * after every step (successful or not) we update timestep according to an error
 	 */

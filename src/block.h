@@ -121,6 +121,7 @@ public:
 	 */
 	virtual bool isRealBlock() { return false; }
 
+	virtual void initSolver() { return; }
 	/*
 	 * Выполняет подготовку данных.
 	 * Заполняет массивы границ для пересылки.
@@ -131,6 +132,8 @@ public:
 	virtual void computeStageCenter(int stage, double time, double step) { return; }
 
 	void prepareArgument(int stage);
+
+	double getSolverStepError() {return 0.0;}
 
 	void confirmStep();
 

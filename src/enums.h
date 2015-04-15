@@ -59,6 +59,5 @@ char* getMemoryTypeName(int type);
 bool isCPU(int type);
 bool isGPU(int type);
 
-int getSolverStageCount(int solverIdx);
 
 #endif /* SRC_ENUMS_H_ */

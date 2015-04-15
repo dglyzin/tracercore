@@ -197,6 +197,7 @@ BlockCpu::~BlockCpu() {
 		}
 	}
 }*/
+
 void BlockCpu::computeStageCenter(int stage, double time, double step) {
 /*# pragma omp parallel
 	 {
@@ -303,6 +304,11 @@ void BlockCpu::prepareStageData(int stage) {
 		}
 	}
 }
+
+double BlockCpu::getSolverStepError() {
+	return mSolver->getStepError();
+}
+
 
 double* BlockCpu::getCurrentState(double* result) {
 	int count = getGridNodeCount();
