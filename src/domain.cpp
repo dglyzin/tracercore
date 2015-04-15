@@ -69,7 +69,7 @@ double** Domain::collectDataFromNode() {
 }
 
 double* Domain::getBlockCurrentState(int number) {
-	cout << endl << "GET CURRENT STATE NOT WORK!" << endl;
+	cout << endl << "GET CURRENT STATE DOES NOT WORK!" << endl;
 	return 0;
 	/*double* result = NULL;
 
@@ -194,16 +194,18 @@ void Domain::prepareDeviceArgument(int deviceType, int deviceNumber, int stage) 
 	for (int i = 0; i < mBlockCount; ++i)
         if( mBlocks[i]->getBlockType() == deviceType && mBlocks[i]->getDeviceNumber() == deviceNumber ) {
         	//cout << endl << "ERROR! PROCESS DEVICE!" << endl;
-		    mBlocks[i]->prepareArgument(stage);
+		    mBlocks[i]->prepareArgument(stage, timeStep);
 		}
 }
 
 double Domain::getDeviceError(int deviceType, int deviceNumber) {
+	double error=0;
 	for (int i = 0; i < mBlockCount; ++i)
         if( mBlocks[i]->getBlockType() == deviceType && mBlocks[i]->getDeviceNumber() == deviceNumber ) {
         	//cout << endl << "ERROR! PROCESS DEVICE!" << endl;
-		    mBlocks[i]->getSolverStepError();
+		    error+=mBlocks[i]->getSolverStepError();
 		}
+	return error;
 }
 
 
@@ -264,6 +266,7 @@ void Domain::confirmStep() {
 
 double Domain::collectError() {
 	double err1, err2, err3;
+	err1=err2=err3=0;
     //1. Get total error for current node
 #pragma omp task
 	err1 = getDeviceError(GPU, 0);
@@ -285,7 +288,7 @@ double Domain::collectError() {
 }
 
 void Domain::print(char* path) {
-	cout << endl << "PRINT DON'T WORK" << endl;
+	cout << endl << "PRINT DOESN'T WORK" << endl;
 	return;
 	/*double** resultAll = collectDataFromNode();
 	double** area = NULL;
@@ -343,7 +346,7 @@ void Domain::print(char* path) {
 }
 
 void Domain::printAreaToConsole() {
-	cout << endl << "PRINT AREA TO CONSOLE DON'T WORK" << endl;
+	cout << endl << "PRINT AREA TO CONSOLE DOESN'T WORK" << endl;
 	return;
 	/*double** resultAll = collectDataFromNode();
 
@@ -768,7 +771,7 @@ int Domain::realBlockCount() {
 }
 
 void Domain::saveStateToFile(char* path) {
-	cout << endl << "SAVE STATE DON'T WORK" << endl;
+	cout << endl << "SAVE STATE DOESN'T WORK" << endl;
 	return;
 	/*double** resultAll = collectDataFromNode();
 
@@ -827,7 +830,7 @@ void Domain::saveStateToFile(char* path) {
 }
 
 void Domain::loadStateFromFile(char* blockLocation, char* dataFile) {
-	cout << endl << "LOAD STATE DON'T WORK" << endl;
+	cout << endl << "LOAD STATE DOESN'T WORK" << endl;
 	return;
 	/*readFromFile(blockLocation);
 
@@ -891,7 +894,7 @@ void Domain::loadStateFromFile(char* blockLocation, char* dataFile) {
 }
 
 void Domain::printStatisticsInfo(char* inputFile, char* outputFile, double calcTime, char* statisticsFile) {
-	cout << endl << "PRINT STATISTIC INFO DON'T WORK" << endl;
+	cout << endl << "PRINT STATISTIC INFO DOESN'T WORK" << endl;
 	return;
 	/*if ( flags & STATISTICS ) {
 		if( world_rank == 0 ) {

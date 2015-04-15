@@ -92,8 +92,8 @@ int Block::getGridElementCount() {
 	return getGridNodeCount() * cellSize;
 }
 
-void Block::prepareArgument(int stage){
-	mSolver->prepareArgument(stage);
+void Block::prepareArgument(int stage, double timestep){
+	mSolver->prepareArgument(stage, timestep);
 }
 
 void Block::confirmStep() {

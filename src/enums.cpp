@@ -48,34 +48,34 @@ int getSide(int number) {
 char* getSideName(int side) {
 	switch (side) {
 		case LEFT:
-			return "LEFT";
+			return (char*)"LEFT";
 		case RIGHT:
-			return "RIGHT";
+			return (char*)"RIGHT";
 		case FRONT:
-			return "FRONT";
+			return (char*)"FRONT";
 		case BACK:
-			return "BACK";
+			return (char*)"BACK";
 		case TOP:
-			return "TOP";
+			return (char*)"TOP";
 		case BOTTOM:
-			return "BOTTOM";
+			return (char*)"BOTTOM";
 		default:
-			return "ERROR SIDE";
+			return (char*)"ERROR SIDE";
 	}
 }
 
 char* getMemoryTypeName(int type) {
 	switch (type) {
 		case NOT_ALLOC:
-			return "NOT_ALLOC";
+			return (char*)"NOT_ALLOC";
 		case NEW:
-			return "NEW";
+			return (char*)"NEW";
 		case CUDA_MALLOC:
-			return "CUDA_MALLOC";
+			return (char*)"CUDA_MALLOC";
 		case CUDA_MALLOC_HOST:
-			return "CUDA_MALLOC_HOST";
+			return (char*)"CUDA_MALLOC_HOST";
 		default:
-			return "ERROR MEMORY TYPE";
+			return (char*)"ERROR MEMORY TYPE";
 	}
 }
 

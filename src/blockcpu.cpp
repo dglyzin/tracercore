@@ -45,10 +45,10 @@ BlockCpu::BlockCpu(int _dimension, int _xCount, int _yCount, int _zCount,
 	cout << endl;
 
 	cout << "functions loaded\n";
-	printf("Func array points to %d \n", (long unsigned int) mUserFuncs );
+	//printf("Func array points to %d \n", (long unsigned int) mUserFuncs );
 
 	//mUserFuncs[0](newMatrix, matrix, 0.0, 2, 2, 0, mParams, NULL);
-	printf("Func array points to %d \n", (long unsigned int) mUserInitFuncs );
+	//printf("Func array points to %d \n", (long unsigned int) mUserInitFuncs );
 	double* matrix = mSolver->getStatePtr();
 	mUserInitFuncs[0](matrix,_initFuncNumber);
 	cout << "Initial values filled \n";
@@ -311,7 +311,6 @@ double BlockCpu::getSolverStepError() {
 
 
 double* BlockCpu::getCurrentState(double* result) {
-	int count = getGridNodeCount();
 	mSolver->copyState(result);
 
 	return result;

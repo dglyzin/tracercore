@@ -17,7 +17,8 @@ public:
 
     virtual double* getStageSource(int stage) { return NULL; }
     virtual double* getStageResult(int stage) { return NULL; }
-    virtual void prepareArgument(int stage) { return; }
+    virtual double getStageTimeStep(int stage) { return 0; }
+    virtual void prepareArgument(int stage, double timeStep) { return; }
     virtual void confirmStep() { return; }
     virtual double getStepError() { return 0.0; }
 
@@ -48,13 +49,14 @@ protected:
 /*Solver* GetCpuSolver(int solverIdx, int count);
 Solver* GetGpuSolver(int solverIdx, int count);*/
 
+//***********************1. EULER SOLVER**************
 class EulerSolver: public Solver{
 public:
 	EulerSolver(int _count);
 	~EulerSolver();
 	double* getStageSource(int stage);
 	double* getStageResult(int stage);
-	void prepareArgument(int stage,double timeStep);
+	void prepareArgument(int stage, double timeStep);
 	void confirmStep();
 	double getStepError() { return 0.0; }
 
@@ -67,6 +69,36 @@ class EulerSolverInfo: public SolverInfo{
 public:
 	EulerSolverInfo() {mIsFSAL = 0; mVariableStep = 0; mStageCount = 1;}
 };
+
+
+
+//***********************1. RK4 SOLVER**************
+class RK4Solver: public Solver{
+public:
+	RK4Solver(int _count);
+	~RK4Solver();
+	double* getStageSource(int stage);
+	double* getStageResult(int stage);
+	double getStageTimeStep(int stage);
+	void prepareArgument(int stage, double timeStep);
+	void confirmStep();
+	double getStepError() { return 0.0; }
+
+private:
+    double* mTempStore1;
+    double* mTempStore2;
+    double* mTempStore3;
+    double* mTempStore4;
+    double* mArg;
+
+};
+
+class RK4SolverInfo: public SolverInfo{
+public:
+	RK4SolverInfo() {mIsFSAL = 0; mVariableStep = 0; mStageCount = 4;}
+};
+
+
 
 
 #endif /* SOLVER_H_ */

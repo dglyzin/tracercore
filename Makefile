@@ -46,7 +46,7 @@ enums.o: $(SRC)/enums.cpp
 	$(CC) $(CFLAGS) $(SRC)/enums.cpp -o $(BIN)/enums.o
 	
 solver.o: $(SRCSOL)/solver.cpp
-	$(CC) $(CFLAGS) $(SRCSOL)/solver.cpp -o $(BIN)/solver.o
+	$(CC) $(CFLAGS) $(SRCSOL)/solver.cpp -o $(BIN)/solver.o -fopenmp
 
 clean:
 	rm -rf $(BIN)/*.o $(BIN)/HS
