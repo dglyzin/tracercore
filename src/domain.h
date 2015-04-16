@@ -54,7 +54,11 @@ public:
 	 * Сумма со всех блоков.
 	 */
 	int getGridNodeCount();
-
+	/*
+	 * Возвращает суммарное количество элементов области.
+	 * Сумма со всех блоков.
+	 */
+	int getGridElementCount();
 	/*
 	 * Возвращает количество необходимых итераций.
 	 */
@@ -108,7 +112,8 @@ private:
 	 * Структура данных, возвращающая основные параметры солвера
 	 */
 	SolverInfo * mSolverInfo;
-
+    double mAtol; //solver absolute tolerance
+    double mRtol; //solver relative tolerance
 
 	/*
 	 * Номер потока

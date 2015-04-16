@@ -141,13 +141,14 @@ void Domain::computeStage(int stage) {
 
 
 void Domain::nextStep() {
+	int totalGridElements = getGridElementCount();
 	//последовательно выполняем все стадии метода
     for(int stage=0; stage < mSolverInfo->getStageCount(); stage++)
     	computeStage(stage);
 
     if (mSolverInfo->isVariableStep()){
     	double error = collectError();
-		if (mSolverInfo->isErrorOK(error)){
+		if (mSolverInfo->isErrorOK(error,totalGridElements)){
 			confirmStep();
 			mAcceptedStepCount++;
 			currentTime += timeStep;
@@ -155,10 +156,9 @@ void Domain::nextStep() {
 		}
 		else{
 			mRejectedStepCount++;
-			currentTime += timeStep;
 			cout<<"Step rejected!\n"<<endl;
 		}
-		mSolverInfo->getNewStep(timeStep, error);
+		mSolverInfo->getNewStep(timeStep, error,totalGridElements);
     }
 	else{ //constant step
 		confirmStep();
@@ -203,7 +203,7 @@ double Domain::getDeviceError(int deviceType, int deviceNumber) {
 	for (int i = 0; i < mBlockCount; ++i)
         if( mBlocks[i]->getBlockType() == deviceType && mBlocks[i]->getDeviceNumber() == deviceNumber ) {
         	//cout << endl << "ERROR! PROCESS DEVICE!" << endl;
-		    error+=mBlocks[i]->getSolverStepError();
+		    error+=mBlocks[i]->getSolverStepError(timeStep, mAtol, mRtol);
 		}
 	return error;
 }
@@ -260,7 +260,7 @@ void Domain::computeOneStepCenter(int stage) {
 
 void Domain::confirmStep() {
 	for (int i = 0; i < mBlockCount; ++i) {
-		mBlocks[i]->confirmStep();
+		mBlocks[i]->confirmStep(timeStep);
 	}
 }
 
@@ -727,7 +727,21 @@ int Domain::getGridNodeCount() {
 }
 
 /*
- * Заного вычисляется количество повторений для вычислений.
+ * Получение общего количества элементов сетки.
+ * Сумма со всех блоков.
+ */
+int Domain::getGridElementCount() {
+	int count = 0;
+	for (int i = 0; i < mBlockCount; ++i)
+		count += mBlocks[i]->getGridElementCount();
+
+	return count;
+}
+
+
+
+/*
+ * Заново вычисляется количество повторений для вычислений.
  * Функция носит исключетельно статистический смысл (на данный момент).
  */
 int Domain::getRepeatCount() {

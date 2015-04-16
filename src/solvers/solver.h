@@ -19,12 +19,12 @@ public:
     virtual double* getStageResult(int stage) { return NULL; }
     virtual double getStageTimeStep(int stage) { return 0; }
     virtual void prepareArgument(int stage, double timeStep) { return; }
-    virtual void confirmStep() { return; }
-    virtual double getStepError() { return 0.0; }
+    virtual void confirmStep(double timestep) { return; }
+    virtual double getStepError(double timeStep, double aTol, double rTol) { return 0.0; }
 
 
 protected:
-  	int     mCount;
+  	int     mCount; //total number of elements in every array
   	double* mState;
 };
 
@@ -37,8 +37,8 @@ public:
 	int isVariableStep() { return mVariableStep; }
 	int getStageCount() { return mStageCount; }
 
-	virtual double getNewStep(double timeStep, double error) { return timeStep; }
-	virtual int isErrorOK(double error) { return 1; }
+	virtual double getNewStep(double timeStep, double error, int totalDomainElements) { return timeStep; }
+	virtual int isErrorOK(double error, int totalDomainElements) { return 1; }
 
 protected:
 	int mIsFSAL;
@@ -57,8 +57,8 @@ public:
 	double* getStageSource(int stage);
 	double* getStageResult(int stage);
 	void prepareArgument(int stage, double timeStep);
-	void confirmStep();
-	double getStepError() { return 0.0; }
+	void confirmStep(double timestep);
+	double getStepError(double timeStep, double aTol, double rTol) { return 0.0; }
 
 private:
     double* mTempStore1;
@@ -81,8 +81,8 @@ public:
 	double* getStageResult(int stage);
 	double getStageTimeStep(int stage);
 	void prepareArgument(int stage, double timeStep);
-	void confirmStep();
-	double getStepError() { return 0.0; }
+	void confirmStep(double timestep);
+	double getStepError(double timeStep, double aTol, double rTol) { return 0.0; }
 
 private:
     double* mTempStore1;
@@ -108,14 +108,17 @@ public:
 	double* getStageResult(int stage);
 	double getStageTimeStep(int stage);
 	void prepareArgument(int stage, double timeStep);
-	void confirmStep();
-	double getStepError();
+	void confirmStep(double timestep);
+	double getStepError(double timeStep, double aTol, double rTol);
 
 private:
     double* mTempStore1;
     double* mTempStore2;
     double* mTempStore3;
     double* mTempStore4;
+    double* mTempStore5;
+    double* mTempStore6;
+    double* mTempStore7;
     double* mArg;
 
 };
@@ -123,9 +126,10 @@ private:
 class DP45SolverInfo: public SolverInfo{
 public:
 	DP45SolverInfo() {mIsFSAL = 1; mVariableStep = 1; mStageCount = 6;}
+	double getNewStep(double timeStep, double error, int totalDomainElements); //error = total sum of squares from all blocks
+	int isErrorOK(double error, int totalDomainElements); //error = total sum of squares from all blocks
+
 };
-
-
 
 
 #endif /* SOLVER_H_ */

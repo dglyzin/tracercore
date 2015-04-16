@@ -305,8 +305,8 @@ void BlockCpu::prepareStageData(int stage) {
 	}
 }
 
-double BlockCpu::getSolverStepError() {
-	return mSolver->getStepError();
+double BlockCpu::getSolverStepError(double timeStep, double aTol, double rTol) {
+	return mSolver->getStepError(timeStep, aTol, rTol);
 }
 
 

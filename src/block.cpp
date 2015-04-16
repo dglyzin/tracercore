@@ -96,8 +96,8 @@ void Block::prepareArgument(int stage, double timestep){
 	mSolver->prepareArgument(stage, timestep);
 }
 
-void Block::confirmStep() {
-	mSolver->confirmStep();
+void Block::confirmStep(double timestep) {
+	mSolver->confirmStep( timestep);
 }
 
 void Block::freeMemory(int memory_alloc_type, double* memory) {
