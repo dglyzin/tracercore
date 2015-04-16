@@ -149,3 +149,19 @@ void Block::freeMemory(int memory_alloc_type, int* memory) {
 			break;
 	}
 }
+
+void Block::computeStageCenter(int stage, double time, double step) {
+	switch (dimension) {
+		case 1:
+			computeStageCenter_1d(stage, time, step);
+			break;
+		case 2:
+			computeStageCenter_2d(stage, time, step);
+			break;
+		case 3:
+			computeStageCenter_3d(stage, time, step);
+			break;
+		default:
+			break;
+	}
+}

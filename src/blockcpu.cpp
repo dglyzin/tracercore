@@ -198,22 +198,6 @@ BlockCpu::~BlockCpu() {
 	}
 }*/
 
-void BlockCpu::computeStageCenter(int stage, double time, double step) {
-	switch (dimension) {
-		case 1:
-			computeStageCenter_1d(stage, time, step);
-			break;
-		case 2:
-			computeStageCenter_2d(stage, time, step);
-			break;
-		case 3:
-			computeStageCenter_3d(stage, time, step);
-			break;
-		default:
-			break;
-	}
-}
-
 void BlockCpu::computeStageCenter_1d(int stage, double time, double step) {
 # pragma omp parallel
 	{
