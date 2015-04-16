@@ -36,6 +36,10 @@ public:
 	void computeStageCenter_2d(int stage, double time, double step);
 	void computeStageCenter_3d(int stage, double time, double step);
 
+	void computeStageBorder_1d(int stage, double time, double step);
+	void computeStageBorder_2d(int stage, double time, double step);
+	void computeStageBorder_3d(int stage, double time, double step);
+
 	double getSolverStepError(double timeStep, double aTol, double rTol);
 
 	int getBlockType() { return CPU; }

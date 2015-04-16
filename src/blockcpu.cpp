@@ -248,6 +248,27 @@ void BlockCpu::computeStageCenter_3d(int stage, double time, double step) {
 	}
 }
 
+void BlockCpu::computeStageBorder_1d(int stage, double time, double step) {
+# pragma omp parallel
+	{
+		double* result = mSolver->getStageResult(stage);
+		double* source = mSolver->getStageSource(stage);
+# pragma omp for
+		for (int x = haloSize; x < xCount - haloSize; ++x) {
+			cout << "Calc x_" << x << endl;
+			mUserFuncs[ mCompFuncNumber[x] ](result, source, time, x, 0, 0, mParams, externalBorder);
+		}
+	}
+}
+
+void BlockCpu::computeStageBorder_2d(int stage, double time, double step) {
+
+}
+
+void BlockCpu::computeStageBorder_3d(int stage, double time, double step) {
+
+}
+
 void BlockCpu::prepareStageData(int stage) {
 	for (int i = 0; i < countSendSegmentBorder; ++i) {
 		int index = INTERCONNECT_COMPONENT_COUNT * i;

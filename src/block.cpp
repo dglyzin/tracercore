@@ -165,3 +165,19 @@ void Block::computeStageCenter(int stage, double time, double step) {
 			break;
 	}
 }
+
+void Block::computeStageBorder(int stage, double time, double step) {
+	switch (dimension) {
+		case 1:
+			computeStageBorder_1d(stage, time, step);
+			break;
+		case 2:
+			computeStageBorder_2d(stage, time, step);
+			break;
+		case 3:
+			computeStageBorder_3d(stage, time, step);
+			break;
+		default:
+			break;
+	}
+}

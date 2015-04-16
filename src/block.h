@@ -128,12 +128,16 @@ public:
 	 */
 	virtual void prepareStageData(int stage) { return; }
 
-	void computeStageBorder(int stage, double time, double step) { return; }
+	void computeStageBorder(int stage, double time, double step);
 	void computeStageCenter(int stage, double time, double step);
 
 	virtual void computeStageCenter_1d(int stage, double time, double step) { return; }
 	virtual void computeStageCenter_2d(int stage, double time, double step) { return; }
 	virtual void computeStageCenter_3d(int stage, double time, double step) { return; }
+
+	virtual void computeStageBorder_1d(int stage, double time, double step) { return; }
+	virtual void computeStageBorder_2d(int stage, double time, double step) { return; }
+	virtual void computeStageBorder_3d(int stage, double time, double step) { return; }
 
 	void prepareArgument(int stage, double timestep );
 
