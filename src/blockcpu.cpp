@@ -199,22 +199,19 @@ BlockCpu::~BlockCpu() {
 }*/
 
 void BlockCpu::computeStageCenter(int stage, double time, double step) {
-/*# pragma omp parallel
-	 {
-
-# pragma omp for
-	for (int i = 1; i < length - 1; ++i)
-		for (int j = 1; j < width - 1; ++j) {
-			top = matrix[(i - 1) * width + j];
-			left = matrix[i * width + (j - 1)];
-			bottom = matrix[(i + 1) * width + j];
-			right = matrix[i * width + (j + 1)];
-
-			cur = matrix[i * width + j];
-
-			newMatrix[i * width + j] = cur + dT * ( ( left - 2*cur + right )/dX2 + ( top - 2*cur + bottom )/dY2  );
-		}
-	}*/
+	switch (dimension) {
+		case 1:
+			computeStageCenter_1d(stage, time, step);
+			break;
+		case 2:
+			computeStageCenter_2d(stage, time, step);
+			break;
+		case 3:
+			computeStageCenter_3d(stage, time, step);
+			break;
+		default:
+			break;
+	}
 }
 
 void BlockCpu::computeStageCenter_1d(int stage, double time, double step) {
