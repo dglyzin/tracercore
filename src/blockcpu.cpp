@@ -257,7 +257,7 @@ void BlockCpu::computeStageCenter_3d(int stage, double time, double step) {
 				for (int x = haloSize; x < xCount - haloSize; ++x) {
 					int xShift = x;
 					cout << "Calc z_" << z << " y_" << y << " x_" << x << endl;
-					mUserFuncs[ mCompFuncNumber[ zShift * yShift * xShift ] ](result, source, time, x, y, z, mParams, externalBorder);
+					mUserFuncs[ mCompFuncNumber[ zShift + yShift + xShift ] ](result, source, time, x, y, z, mParams, externalBorder);
 				}
 			}
 		}
