@@ -133,7 +133,7 @@ public:
 
 	void prepareArgument(int stage, double timestep );
 
-	double getSolverStepError(double timeStep, double aTol, double rTol) {return 0.0;}
+	virtual double getSolverStepError(double timeStep, double aTol, double rTol) {return 0.0;}
 
 	void confirmStep(double timestep);
 
