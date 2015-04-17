@@ -1,0 +1,316 @@
+\documentclass[fullscreen=true,unicode,bookmarks=false]{beamer}
+\mode<presentation>
+{
+  \usetheme{Pittsburgh}
+%  \usetheme{Warsaw}  
+  \setbeamercovered{transparent}
+}
+\usepackage[cp1251]{inputenc}
+\usepackage[T2A]{fontenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{latexsym}
+\usepackage{colortbl}
+\usepackage{tikz}
+\usepackage{graphicx}
+%\usepackage{pnets}
+\selectlanguage{russian}
+
+%some drawings
+%\usetikzlibrary{decorations.shapes}
+
+\usetikzlibrary{arrows,positioning}
+
+
+%\usecolortheme{wolverine}
+%\useoutertheme{shadow}
+\subject{Parallel algorithms}
+
+%\AtBeginSubsection[]
+%{
+%  \begin{frame}{План}
+ %   \tableofcontents[currentsection,currentsubsection]
+ % \end{frame}
+%}
+\title[Доклад]{Автоматизация конечно-разностного моделирования диффузионных задач \\на
+гибридных вычислительных кластерах}
+\author[Глызин Д.С. \& Фролов Д.A. ]%{ \and  \\  \texttt{} } 
+{%
+   \texorpdfstring{
+        \begin{columns}
+            \column{.3\linewidth}
+            \centering
+            {Дмитрий Глызин\\
+            \href{mailto:glyzin@gmail.com}{glyzin@gmail.com}}
+            \column{.3\linewidth}
+            \centering
+            {Даниил Фролов\\
+            \href{mailto:frolovd94@gmail.com}{frolovd94@gmail.com}}
+        \end{columns}
+}{}
+}
+%\author[Фролов Д.A.,]{ \\  \texttt{glyzin@gmail.com} } 
+\institute[ЯрГУ]
+{Ярославский госуниверситет им. П.Г. Демидова}
+\date[21.04.2015]{Таруса, 21-23 апреля 2015 г.}
+
+\begin{document}
+
+\begin{frame}[label=frame_1]
+    \titlepage
+\end{frame}
+
+%\begin{frame}
+%\frametitle{}
+%    \tableofcontents[pausesections]
+%\end{frame}
+
+\section{Доклад}
+\subsection{Задача}
+
+\begin{frame}[label=frame_222]{Параллельная обработка}
+
+
+
+\tikzstyle{block} = [draw, fill=green!20, rectangle, minimum height=2em]
+\tikzstyle{sum} = [draw, fill=blue!20, circle]
+\tikzstyle{output} = [coordinate]
+\tikzstyle{pinstyle} = [pin edge={to-,thin,black}]
+
+
+\begin{tikzpicture}[auto, node distance=2cm,>=latex']
+
+	\node [sum] (startStep) {};
+
+	\node [sum, right of=startStep, node distance=1.5cm] (startStage) {};
+
+	\node [block, right of=startStage, node distance=2.5cm] (cpuPrepare) {CPU};
+	\node [block, above of=cpuPrepare, node distance=2cm] (gpu1Prepare) {GPU1};
+	\node [block, above of=gpu1Prepare, node distance=2cm] (gpu2Prepare) {GPU2};
+	\node [block, above of=gpu2Prepare, node distance=2cm] (gpu3Prepare) {GPU3};
+
+	\node [block, above of=gpu3Prepare, node distance=1.2cm, fill=red!20] (preapre) {Prepare data};
+
+	\node [output, left of=cpuPrepare, node distance=1.5cm] (pr) {};
+	\node [sum, right of=cpuPrepare, pin={[pinstyle]below:Sync}, node distance=1.5cm] (sync) {};
+
+
+
+	\node [block, right of=sync, node distance=3.5cm] (cpuCenter) {CPU};
+	\node [block, above of=cpuCenter, node distance=2cm] (gpu1Center) {GPU1};
+	\node [block, above of=gpu1Center, node distance=2cm] (gpu2Center) {GPU2};
+	\node [block, above of=gpu2Center, node distance=2cm] (gpu3Center) {GPU3};
+
+	\node [block, above of=gpu3Center, node distance=1.2cm, fill=red!20] (center) {Compute center};
+
+	\node [block, below of=cpuCenter, node distance=2cm] (sendRecv) {Send/receive};
+
+	\node [output, left of=cpuCenter, node distance=2cm] (comC) {};
+
+
+
+	\node [sum, right of=cpuCenter, pin={[pinstyle]above:Wait}, node distance=2cm] (wait) {};
+
+	\node [block, right of=wait, node distance=3cm] (cpuBorder) {CPU};
+	\node [block, above of=cpuBorder, node distance=2cm] (gpu1Border) {GPU1};
+	\node [block, above of=gpu1Border, node distance=2cm] (gpu2Border) {GPU2};
+	\node [block, above of=gpu2Border, node distance=2cm] (gpu3Border) {GPU3};
+
+	\node [block, above of=gpu3Border, node distance=1.2cm, fill=red!20] (border) {Compute border};
+
+	\node [output, left of=cpuBorder, node distance=1.5cm] (comB) {};
+
+	\node [block, right of=cpuBorder, node distance=3.5cm] (prepareArgs) {Prepare args};
+
+
+	\node [sum, right of=prepareArgs, node distance=2.5cm] (stopStage) {};
+	\node [block, right of=stopStage, node distance=1.5cm] (swap) {Swap};
+	\node [sum, right of=swap, node distance=1.5cm] (stopStep) {};
+
+	%\node [output, below of=wait, node distance=4cm, pin={[pinstyle]above:Next stage}] (tmp1) {};
+	%\node [output, below of=wait, node distance=6cm, pin={[pinstyle]above:Next step}] (tmp2) {};
+
+	\node [block, below of=wait, node distance=4cm, fill=yellow!20] (tmp1) {Next stage};
+	\node [block, below of=wait, node distance=6cm, fill=yellow!20] (tmp2) {Next step};
+
+	%\node [output, below of=wait, node distance=3cm] (output) {};
+
+	\draw [->, line width=2](startStep) -- (startStage);
+	\draw [->, line width=2](startStage) -- (cpuPrepare);
+
+	\draw [->, line width=2] (pr) |- (gpu1Prepare);
+	\draw [->, line width=2] (pr) |- (gpu2Prepare);
+	\draw [->, line width=2] (pr) |- (gpu3Prepare);
+
+	\draw [->, line width=2](cpuPrepare) -- (sync);
+	\draw [->, line width=2](gpu1Prepare) -| (sync);
+	\draw [->, line width=2](gpu2Prepare) -| (sync);
+	\draw [->, line width=2](gpu3Prepare) -| (sync);
+
+	\draw [->, line width=2](sync) -- (cpuCenter);
+	\draw [->, line width=2] (comC) |- (gpu1Center);
+	\draw [->, line width=2] (comC) |- (gpu2Center);
+	\draw [->, line width=2] (comC) |- (gpu3Center);
+	\draw [->, line width=2] (comC) |- (sendRecv);
+	\draw [->, line width=2] (sendRecv) -| (wait);
+
+	\draw [->, line width=2](cpuCenter) -- (wait);
+
+	\draw [->, line width=2](wait) -- (cpuBorder);
+	\draw [->, line width=2] (comB) |- (gpu1Border);
+	\draw [->, line width=2] (comB) |- (gpu2Border);
+	\draw [->, line width=2] (comB) |- (gpu3Border);
+
+	\draw [->, line width=2](cpuBorder) -- (prepareArgs);
+
+	\draw [->, line width=2](prepareArgs) -- (stopStage);
+	\draw [->, line width=2](stopStage) -- (swap);
+	\draw [->, line width=2](swap) -- (stopStep);
+
+	\draw [-, line width=2] (stopStage) |- (tmp1);
+	\draw [->, line width=2] (tmp1) -| (startStage);
+
+	\draw [-, line width=2] (stopStep) |- (tmp2);
+	\draw [->, line width=2] (tmp2) -| (startStep);
+
+
+	\draw [/tikz/dashed, line width=2] (gpu1Center) -- (gpu1Border);
+	\draw [/tikz/dashed, line width=2] (gpu2Center) -- (gpu2Border);
+	\draw [/tikz/dashed, line width=2] (gpu3Center) -- (gpu3Border);
+
+	%\draw [-](wait) -- (output);
+
+
+
+	%\draw [->] (stopStage) |- (startStage);
+
+%	\draw [->] (controller) -- node[name=u] {$u$} (system);
+%	\node [output, right of=system] (output) {};
+%	\node [block, below of=u] (measurements) {Measurements};
+%
+%
+%	\draw [->](step) -- (stage);
+%
+%	\draw [->] (stage) -- node {$e$} (controller);
+%	\draw [->] (system) -- node [name=y] {$y$}(output);
+%	\draw [->] (y) |- (measurements);
+%	\draw [->] (measurements) -| node[pos=0.99] {$-$} 
+%	node [near end] {$y_m$} (stage);
+\end{tikzpicture}
+
+
+
+
+\end{frame}
+
+
+
+\begin{frame}[label=frame_2]{Задача}
+\begin{itemize}
+\item Строительство в условиях многолетней мерзлоты
+\item Учет различных типов грунта с различной влажностью
+\item Краевые условия, учитывающие наличие построек, снега, силу ветра
+\item Необходим прогноз на несколько лет
+\item Типичные масштабы области: 100х100х10м
+\item Элементы размером 5x5x100 см
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}[label=frame_2]{Задача}
+Рассмотрим задачу теплопроводности
+\begin{equation}
+\frac{\partial E(x,t)}{\partial t} =\mbox{div} (\lambda(x,u) \nabla u(x,t)) + F(x) 
+\end{equation}
+в прямоугольной области $x\in D \subset \mbox{R}^3$ c условиями непроницаемости на границе, где $E(x,t)$ --- энтальпия на единицу объема, $u(x,t)$ --- температура, $\lambda(x,u)$ --- известная зависимость коэффициента теплопроводности от температуры, $F(x,t)$ --- известная плотность внутренних источников тепла.
+\end{frame}
+
+
+\begin{frame}[label=frame_2]{Задача}
+Для моделирования процесса распространения тепла в грунте в условиях многолетней мерзлоты необходимо учитывать замерзание воды, для этого связь между $E$ и $u$ (в каждой точке области) будем задавать в виде:
+\begin{equation}
+E(u) = \int_0^u C(\xi) +Q_w \delta(\xi-u^*)  d\xi,
+\end{equation}
+где $C(u)$ --- известная теплоемкость грунта, $u^*$ --- температура фазового перехода, $Q_w$ --- теплота плавления воды. 
+\end{frame}
+
+
+\subsection{Метод}
+\begin{frame}[label=frame_3]{Метод}
+Для численного решения задачи (1)-(2) область $D=[0,s^{(x)}]x[0,s^{(y)}]x[0,s^{(z)}]$ разобьем прямоугольной сеткой
+\begin{gather*} 
+0=x_0<x_1<\dots<x_{m_x}=s^{(x)}, \quad h^{(x)}_i = x_{i+1}-x_i \\
+0=y_0<y_1<\dots<y_{m_y}=s^{(y)},  \quad h^{(y)}_j = y_{j+1}-y_j \\
+0=z_0<z_1<\dots<z_{m_z}=s^{(z)},  \quad h^{(z)}_k = z_{k+1}-z_k  
+\end{gather*}
+
+на элементарные объемы $v_{i,j,k}$, $i=0..m_x-1$, $j=0..m_y-1$, $k=0..m_z-1$
+
+
+\end{frame}
+
+
+\begin{frame}[label=frame_4]{Метод}
+Каждый шаг метода требует:
+\begin{itemize}
+\item вычисления теплопотока через все грани элементарных объемов
+\item обновления энтальпии элементарных объемов с учетом теплопотоков
+\item вычисления температуры и доли жидкой воды по новой энтальпии
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}[label=frame_4]{Теплопоток}
+Вычисление теплопотока через все грани элементарных объемов:
+\begin{equation*}
+q^{x}_{i,j,k} = \frac{h^{(y)}_j h^{(z)}_k (u_{i-1, j,k}-u_{i,j,k} )}{h^{(x)}_{i-1} \lambda^{-1}_{i-1,j,k} / 2 + h^{(x)}_{i} \lambda^{-1}_{i,j,k} / 2},
+\end{equation*}
+где 
+$\lambda =  w*\lambda_{Th} + (1-w) *\lambda_{Fr}$ --- теплопроводность, $w$ --- доля жидкой воды, $\lambda_{Th}$ и $\lambda_{Fr}$ --- экспериментально полученные теплопроводности талого и мерзлого грунта
+\end{frame}
+
+\begin{frame}[label=frame_4]{Энтальпия}
+Новое значение энтальпии с учетом теплопотоков:
+\begin{multline}
+H^{l+1}_{i,j,k} =  H^{l}_{i,j,k} +\\ + \frac{\Delta t}{\Delta v_{i,j,k}} ( q^{x}_{i,j,k} - q^{x}_{i+1,j,k}+q^{y}_{i,j,k}-q^{y}_{i,j+1,k} 
++q^{z}_{i,j,k}-q^{z}_{i,j,k+1})
+\end{multline}
+\end{frame}
+
+\begin{frame}[label=frame_4]{Температура и доля жидкой воды}
+В зависимости от величины энтальпии температура вычисляется тремя способами:
+\begin{itemize}
+\item $H>H_{melt}$: $u = u^* + (H-H_{melt})/C_{Th}$
+\item $H_0\le H\le H_{melt}$: $u = u^*$
+\item $H<H_0$:  температура приближается по подготовленной таблице зависимости энтальпии от температуры.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[label=frame_4]{Численное моделирование}
+Кластерные вычисления по стандартной схеме:
+\begin{itemize}
+\item разделение работы между узлами с помощью MPI
+\item в рамках одного узла использование параллелизма CPU и GPU с помощью OpenMP и CUDA
+\end{itemize}
+\end{frame}
+
+\begin{frame}[label=frame_4]{Производительность на одном узле}
+Задача: 100х100х100 элементов
+
+Узел: 2xE5-2690 (8 ядер, 2.9ГГц), 3хGPU Tesla M2090
+\begin{itemize}
+\item Только 2 CPU: 409 млн. блоков в секунду
+\item 1 GPU: 607 млн. блоков в секунду
+\item 3 GPU+2 CPU: 1520 млн. блоков в секунду 
+\item потери на синхронизацию 32\%
+\end{itemize}
+
+\end{frame}
+
+
+
+\end{document}
+
+
