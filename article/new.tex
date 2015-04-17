@@ -8,6 +8,7 @@
 \usetikzlibrary{arrows,positioning}
 
 \begin{document}
+\thispagestyle{empty}
 
 \tikzstyle{block} = [draw, fill=green!20, rectangle, minimum height=2em]
 \tikzstyle{sum} = [draw, fill=blue!20, circle]
@@ -19,56 +20,56 @@
 
 	\node [sum] (startStep) {};
 
-	\node [sum, right of=startStep, node distance=1.5cm] (startStage) {};
+	\node [sum, right of=startStep, node distance=1cm] (startStage) {};
 
-	\node [block, right of=startStage, node distance=2.5cm] (cpuPrepare) {CPU};
-	\node [block, above of=cpuPrepare, node distance=2cm] (gpu1Prepare) {GPU1};
-	\node [block, above of=gpu1Prepare, node distance=2cm] (gpu2Prepare) {GPU2};
-	\node [block, above of=gpu2Prepare, node distance=2cm] (gpu3Prepare) {GPU3};
+	\node [block, right of=startStage, node distance=2cm] (cpuPrepare) {CPU};
+	\node [block, above of=cpuPrepare, node distance=1cm] (gpu1Prepare) {GPU1};
+	\node [block, above of=gpu1Prepare, node distance=1cm] (gpu2Prepare) {GPU2};
+	\node [block, above of=gpu2Prepare, node distance=1cm] (gpu3Prepare) {GPU3};
 
 	\node [block, above of=gpu3Prepare, node distance=1.2cm, fill=red!20] (preapre) {Prepare data};
 
-	\node [output, left of=cpuPrepare, node distance=1.5cm] (pr) {};
-	\node [sum, right of=cpuPrepare, pin={[pinstyle]below:Sync}, node distance=1.5cm] (sync) {};
+	\node [output, left of=cpuPrepare, node distance=1.2cm] (pr) {};
+	\node [sum, right of=cpuPrepare, pin={[pinstyle]below:Sync}, node distance=1.2cm] (sync) {};
 
 
 
-	\node [block, right of=sync, node distance=3.5cm] (cpuCenter) {CPU};
-	\node [block, above of=cpuCenter, node distance=2cm] (gpu1Center) {GPU1};
-	\node [block, above of=gpu1Center, node distance=2cm] (gpu2Center) {GPU2};
-	\node [block, above of=gpu2Center, node distance=2cm] (gpu3Center) {GPU3};
+	\node [block, right of=sync, node distance=2cm] (cpuCenter) {CPU};
+	\node [block, above of=cpuCenter, node distance=1cm] (gpu1Center) {GPU1};
+	\node [block, above of=gpu1Center, node distance=1cm] (gpu2Center) {GPU2};
+	\node [block, above of=gpu2Center, node distance=1cm] (gpu3Center) {GPU3};
 
 	\node [block, above of=gpu3Center, node distance=1.2cm, fill=red!20] (center) {Compute center};
 
-	\node [block, below of=cpuCenter, node distance=2cm] (sendRecv) {Send/receive};
+	\node [block, below of=cpuCenter, node distance=1.2cm] (sendRecv) {Send/recv};
 
-	\node [output, left of=cpuCenter, node distance=2cm] (comC) {};
+	\node [output, left of=cpuCenter, node distance=1.5cm] (comC) {};
 
 
 
-	\node [sum, right of=cpuCenter, pin={[pinstyle]above:Wait}, node distance=2cm] (wait) {};
+	\node [sum, right of=cpuCenter, node distance=1.5cm] (wait) {};
 
-	\node [block, right of=wait, node distance=3cm] (cpuBorder) {CPU};
-	\node [block, above of=cpuBorder, node distance=2cm] (gpu1Border) {GPU1};
-	\node [block, above of=gpu1Border, node distance=2cm] (gpu2Border) {GPU2};
-	\node [block, above of=gpu2Border, node distance=2cm] (gpu3Border) {GPU3};
+	\node [block, right of=wait, node distance=2cm] (cpuBorder) {CPU};
+	\node [block, above of=cpuBorder, node distance=1cm] (gpu1Border) {GPU1};
+	\node [block, above of=gpu1Border, node distance=1cm] (gpu2Border) {GPU2};
+	\node [block, above of=gpu2Border, node distance=1cm] (gpu3Border) {GPU3};
 
 	\node [block, above of=gpu3Border, node distance=1.2cm, fill=red!20] (border) {Compute border};
 
-	\node [output, left of=cpuBorder, node distance=1.5cm] (comB) {};
+	\node [output, left of=cpuBorder, node distance=1.2cm] (comB) {};
 
-	\node [block, right of=cpuBorder, node distance=3.5cm] (prepareArgs) {Prepare args};
+	\node [block, right of=cpuBorder, node distance=2.5cm] (prepareArgs) {Prepare args};
 
 
-	\node [sum, right of=prepareArgs, node distance=2.5cm] (stopStage) {};
-	\node [block, right of=stopStage, node distance=1.5cm] (swap) {Swap};
-	\node [sum, right of=swap, node distance=1.5cm] (stopStep) {};
+	\node [sum, right of=prepareArgs, node distance=2cm] (stopStage) {};
+	\node [block, right of=stopStage, node distance=1.3cm] (swap) {Swap};
+	\node [sum, right of=swap, node distance=1.3cm] (stopStep) {};
 
 	%\node [output, below of=wait, node distance=4cm, pin={[pinstyle]above:Next stage}] (tmp1) {};
 	%\node [output, below of=wait, node distance=6cm, pin={[pinstyle]above:Next step}] (tmp2) {};
 
-	\node [block, below of=wait, node distance=4cm, fill=yellow!20] (tmp1) {Next stage};
-	\node [block, below of=wait, node distance=6cm, fill=yellow!20] (tmp2) {Next step};
+	\node [block, below of=wait, node distance=2.2cm, fill=yellow!20] (tmp1) {Next stage};
+	\node [block, below of=wait, node distance=3.2cm, fill=yellow!20] (tmp2) {Next step};
 
 	%\node [output, below of=wait, node distance=3cm] (output) {};
 
