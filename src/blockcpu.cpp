@@ -396,6 +396,7 @@ void BlockCpu::computeStageBorder_3d(int stage, double time, double step) {
 				}
 			}
 		}
+	}
 }
 
 void BlockCpu::prepareStageData(int stage) {
