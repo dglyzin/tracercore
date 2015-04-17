@@ -325,8 +325,8 @@ void BlockCpu::computeStageBorder_3d(int stage, double time, double step) {
 		double* source = mSolver->getStageSource(stage);
 
 		for (int z = 0; z < haloSize; ++z) {
-	# pragma omp for
 			int zShift = yCount * xCount * z;
+	# pragma omp for
 			for (int y = 0; y < yCount; ++y) {
 				int yShift = xCount * y;
 				for (int x = 0; x < xCount; ++x) {
@@ -338,8 +338,8 @@ void BlockCpu::computeStageBorder_3d(int stage, double time, double step) {
 		}
 
 		for (int z = zCount - haloSize; z < zCount; ++z) {
-	# pragma omp for
 			int zShift = yCount * xCount * z;
+	# pragma omp for
 			for (int y = 0; y < yCount; ++y) {
 				int yShift = xCount * y;
 				for (int x = 0; x < xCount; ++x) {
