@@ -39,7 +39,7 @@
 	\node [block, above of=gpu1Center, node distance=1cm] (gpu2Center) {GPU2};
 	\node [block, above of=gpu2Center, node distance=1cm] (gpu3Center) {GPU3};
 
-	\node [block, above of=gpu3Center, node distance=1.2cm, fill=red!20] (center) {Compute center};
+	\node [block, above of=gpu3Center, node distance=1.2cm, fill=red!20] (center) {Center};
 
 	\node [block, below of=cpuCenter, node distance=1.2cm] (sendRecv) {Send/recv};
 
@@ -54,16 +54,23 @@
 	\node [block, above of=gpu1Border, node distance=1cm] (gpu2Border) {GPU2};
 	\node [block, above of=gpu2Border, node distance=1cm] (gpu3Border) {GPU3};
 
-	\node [block, above of=gpu3Border, node distance=1.2cm, fill=red!20] (border) {Compute border};
+	\node [block, above of=gpu3Border, node distance=1.2cm, fill=red!20] (border) {Border};
 
 	\node [output, left of=cpuBorder, node distance=1.2cm] (comB) {};
 
-	\node [block, right of=cpuBorder, node distance=2.5cm] (prepareArgs) {Prepare args};
+
+	\node [block, right of=cpuBorder, node distance=2.7cm] (cpuArgs) {CPU};
+	\node [block, above of=cpuArgs, node distance=1cm] (gpu1Args) {GPU1};
+	\node [block, above of=gpu1Args, node distance=1cm] (gpu2Args) {GPU2};
+	\node [block, above of=gpu2Args, node distance=1cm] (gpu3Args) {GPU3};
+
+	\node [block, above of=gpu3Args, node distance=1.2cm, fill=red!20] (prepareArgs) {Prepare args};
+
+	\node [output, left of=cpuArgs, node distance=1.2cm] (args) {};
 
 
-	\node [sum, right of=prepareArgs, node distance=2cm] (stopStage) {};
-	\node [block, right of=stopStage, node distance=1.3cm] (swap) {Swap};
-	\node [sum, right of=swap, node distance=1.3cm] (stopStep) {};
+	\node [sum, right of=cpuArgs, node distance=1.5cm] (stopStage) {};
+	\node [sum, right of=stopStage, node distance=1cm] (stopStep) {};
 
 	%\node [output, below of=wait, node distance=4cm, pin={[pinstyle]above:Next stage}] (tmp1) {};
 	%\node [output, below of=wait, node distance=6cm, pin={[pinstyle]above:Next step}] (tmp2) {};
@@ -99,11 +106,14 @@
 	\draw [->, line width=2] (comB) |- (gpu2Border);
 	\draw [->, line width=2] (comB) |- (gpu3Border);
 
-	\draw [->, line width=2](cpuBorder) -- (prepareArgs);
+	\draw [->, line width=2] (args) |- (gpu1Args);
+	\draw [->, line width=2] (args) |- (gpu2Args);
+	\draw [->, line width=2] (args) |- (gpu3Args);
 
-	\draw [->, line width=2](prepareArgs) -- (stopStage);
-	\draw [->, line width=2](stopStage) -- (swap);
-	\draw [->, line width=2](swap) -- (stopStep);
+	\draw [->, line width=2](cpuBorder) -- (cpuArgs);
+
+	\draw [->, line width=2](cpuArgs) -- (stopStage);
+	\draw [->, line width=2](stopStage) -- (stopStep);
 
 	\draw [-, line width=2] (stopStage) |- (tmp1);
 	\draw [->, line width=2] (tmp1) -| (startStage);
@@ -115,6 +125,10 @@
 	\draw [/tikz/dashed, line width=2] (gpu1Center) -- (gpu1Border);
 	\draw [/tikz/dashed, line width=2] (gpu2Center) -- (gpu2Border);
 	\draw [/tikz/dashed, line width=2] (gpu3Center) -- (gpu3Border);
+
+	\draw [/tikz/dashed, line width=2] (gpu1Border) -- (gpu1Args);
+	\draw [/tikz/dashed, line width=2] (gpu2Border) -- (gpu2Args);
+	\draw [/tikz/dashed, line width=2] (gpu3Border) -- (gpu3Args);
 
 	%\draw [-](wait) -- (output);
 
