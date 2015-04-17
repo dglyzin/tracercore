@@ -78,6 +78,8 @@ Block::Block(int _dimension, int _xCount, int _yCount, int _zCount,
 
 	mUserFuncs = NULL;
 	mUserInitFuncs = NULL;
+
+	mSolver = NULL;
 }
 
 Block::~Block() {

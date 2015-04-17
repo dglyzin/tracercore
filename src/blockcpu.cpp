@@ -205,7 +205,7 @@ void BlockCpu::computeStageCenter_1d(int stage, double time, double step) {
 		double* source = mSolver->getStageSource(stage);
 # pragma omp for
 		for (int x = haloSize; x < xCount - haloSize; ++x) {
-			cout << "Calc x_" << x << endl;
+			//cout << "Calc x_" << x << endl;
 			mUserFuncs[ mCompFuncNumber[x] ](result, source, time, x, 0, 0, mParams, externalBorder);
 		}
 	}
@@ -221,7 +221,7 @@ void BlockCpu::computeStageCenter_2d(int stage, double time, double step) {
 			int yShift = xCount * y;
 			for (int x = haloSize; x < xCount - haloSize; ++x) {
 				int xShift = x;
-				cout << "Calc y_" << y << " x_" << x << endl;
+				//cout << "Calc y_" << y << " x_" << x << endl;
 				mUserFuncs[ mCompFuncNumber[ yShift + xShift ] ](result, source, time, x, y, 0, mParams, externalBorder);
 			}
 		}
@@ -240,7 +240,7 @@ void BlockCpu::computeStageCenter_3d(int stage, double time, double step) {
 				int yShift = xCount * y;
 				for (int x = haloSize; x < xCount - haloSize; ++x) {
 					int xShift = x;
-					cout << "Calc z_" << z << " y_" << y << " x_" << x << endl;
+					//cout << "Calc z_" << z << " y_" << y << " x_" << x << endl;
 					mUserFuncs[ mCompFuncNumber[ zShift + yShift + xShift ] ](result, source, time, x, y, z, mParams, externalBorder);
 				}
 			}
@@ -255,13 +255,13 @@ void BlockCpu::computeStageBorder_1d(int stage, double time, double step) {
 		double* source = mSolver->getStageSource(stage);
 # pragma omp for
 		for (int x = 0; x < haloSize; ++x) {
-			cout << "Border Calc x_" << x << endl;
+			//cout << "Border Calc x_" << x << endl;
 			mUserFuncs[ mCompFuncNumber[x] ](result, source, time, x, 0, 0, mParams, externalBorder);
 		}
 
 # pragma omp for
 		for (int x = xCount - haloSize; x < xCount; ++x) {
-			cout << "Border Calc x_" << x << endl;
+			//cout << "Border Calc x_" << x << endl;
 			mUserFuncs[ mCompFuncNumber[x] ](result, source, time, x, 0, 0, mParams, externalBorder);
 		}
 	}
@@ -277,7 +277,8 @@ void BlockCpu::computeStageBorder_2d(int stage, double time, double step) {
 			int xShift = x;
 			for (int y = 0; y < haloSize; ++y) {
 				int yShift = xCount * y;
-				cout << "Calc y_" << y << " x_" << x << endl;
+				//cout << "Calc y_" << y << " x_" << x << endl;
+				//printf("Calc y = %d, x = %d\n", y, x);
 				mUserFuncs[ mCompFuncNumber[ yShift + xShift ] ](result, source, time, x, y, 0, mParams, externalBorder);
 			}
 		}
@@ -287,7 +288,8 @@ void BlockCpu::computeStageBorder_2d(int stage, double time, double step) {
 			int xShift = x;
 			for (int y = yCount - haloSize; y < yCount; ++y) {
 				int yShift = xCount * y;
-				cout << "Calc y_" << y << " x_" << x << endl;
+				//cout << "Calc y_" << y << " x_" << x << endl;
+				//printf("Calc y = %d, x = %d\n", y, x);
 				mUserFuncs[ mCompFuncNumber[ yShift + xShift ] ](result, source, time, x, y, 0, mParams, externalBorder);
 			}
 		}
@@ -297,7 +299,8 @@ void BlockCpu::computeStageBorder_2d(int stage, double time, double step) {
 			int yShift = xCount * y;
 			for (int x = 0; x < haloSize; ++x) {
 				int xShift = x;
-				cout << "Calc y_" << y << " x_" << x << endl;
+				//cout << "Calc y_" << y << " x_" << x << endl;
+				//printf("Calc y = %d, x = %d\n", y, x);
 				mUserFuncs[ mCompFuncNumber[ yShift + xShift ] ](result, source, time, x, y, 0, mParams, externalBorder);
 			}
 		}
@@ -307,7 +310,8 @@ void BlockCpu::computeStageBorder_2d(int stage, double time, double step) {
 			int yShift = xCount * y;
 			for (int x = xCount - haloSize; x < xCount; ++x) {
 				int xShift = x;
-				cout << "Calc y_" << y << " x_" << x << endl;
+				//cout << "Calc y_" << y << " x_" << x << endl;
+				//printf("Calc y = %d, x = %d\n", y, x);
 				mUserFuncs[ mCompFuncNumber[ yShift + xShift ] ](result, source, time, x, y, 0, mParams, externalBorder);
 			}
 		}
@@ -326,7 +330,7 @@ void BlockCpu::computeStageBorder_3d(int stage, double time, double step) {
 				int yShift = xCount * y;
 				for (int x = 0; x < xCount; ++x) {
 					int xShift = x;
-					cout << "Border Calc z_" << z << " y_" << y << " x_" << x << endl;
+					//cout << "Border Calc z_" << z << " y_" << y << " x_" << x << endl;
 					mUserFuncs[ mCompFuncNumber[ zShift + yShift + xShift ] ](result, source, time, x, y, z, mParams, externalBorder);
 				}
 			}
@@ -339,7 +343,7 @@ void BlockCpu::computeStageBorder_3d(int stage, double time, double step) {
 				int yShift = xCount * y;
 				for (int x = 0; x < xCount; ++x) {
 					int xShift = x;
-					cout << "Border Calc z_" << z << " y_" << y << " x_" << x << endl;
+					//cout << "Border Calc z_" << z << " y_" << y << " x_" << x << endl;
 					mUserFuncs[ mCompFuncNumber[ zShift + yShift + xShift ] ](result, source, time, x, y, z, mParams, externalBorder);
 				}
 			}
@@ -352,7 +356,7 @@ void BlockCpu::computeStageBorder_3d(int stage, double time, double step) {
 				int yShift = xCount * y;
 				for (int x = 0; x < xCount; ++x) {
 					int xShift = x;
-					cout << "Border Calc z_" << z << " y_" << y << " x_" << x << endl;
+					//cout << "Border Calc z_" << z << " y_" << y << " x_" << x << endl;
 					mUserFuncs[ mCompFuncNumber[ zShift + yShift + xShift ] ](result, source, time, x, y, z, mParams, externalBorder);
 				}
 			}
@@ -365,7 +369,7 @@ void BlockCpu::computeStageBorder_3d(int stage, double time, double step) {
 				int yShift = xCount * y;
 				for (int x = 0; x < xCount; ++x) {
 					int xShift = x;
-					cout << "Border Calc z_" << z << " y_" << y << " x_" << x << endl;
+					//cout << "Border Calc z_" << z << " y_" << y << " x_" << x << endl;
 					mUserFuncs[ mCompFuncNumber[ zShift + yShift + xShift ] ](result, source, time, x, y, z, mParams, externalBorder);
 				}
 			}
@@ -378,7 +382,7 @@ void BlockCpu::computeStageBorder_3d(int stage, double time, double step) {
 				int yShift = xCount * y;
 				for (int x = 0; x < haloSize; ++x) {
 					int xShift = x;
-					cout << "Border Calc z_" << z << " y_" << y << " x_" << x << endl;
+					//cout << "Border Calc z_" << z << " y_" << y << " x_" << x << endl;
 					mUserFuncs[ mCompFuncNumber[ zShift + yShift + xShift ] ](result, source, time, x, y, z, mParams, externalBorder);
 				}
 			}
@@ -391,7 +395,7 @@ void BlockCpu::computeStageBorder_3d(int stage, double time, double step) {
 				int yShift = xCount * y;
 				for (int x = xCount - haloSize; x < xCount; ++x) {
 					int xShift = x;
-					cout << "Border Calc z_" << z << " y_" << y << " x_" << x << endl;
+					//cout << "Border Calc z_" << z << " y_" << y << " x_" << x << endl;
 					mUserFuncs[ mCompFuncNumber[ zShift + yShift + xShift ] ](result, source, time, x, y, z, mParams, externalBorder);
 				}
 			}
