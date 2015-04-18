@@ -122,7 +122,9 @@ Scientific Computation
 \item Параллельный фреймворк
 \begin{itemize}
 \item крупнозернистый параллелизм: разбиение задачи на блоки и распределение блоков по устройствам
-\item мелкозернистый параллелизм в рамках блока: работа с общей памятью, OpenMP и CUDA
+\item пересылка необходимых данных между блоками на разных узлах с помощью MPI 
+\item обмен данными через pinned-память между устройствами на одном узле
+\item мелкозернистый параллелизм в рамках блока: работа с общей памятью, OpenMP на CPU и CUDA на GPU
 \item использование арифметики двойной точности: CPU дает значительный вклад
 \end{itemize}
 \item Алгоритмы интегрирования и анализа данных
@@ -150,16 +152,36 @@ Scientific Computation
 \item Тестовая задача: уравнение теплопроводности
 
 \item Метод Эйлера, постоянный шаг
+
 \end{itemize}
+В дальнейшем 2 CPU в рамках одного узла используются как единое вычислительное устройство, обозначеное CPU.
 \end{frame}
 
 
-\begin{frame}[label=frame_222]{Тестирование: 1 и 2 узла}
+\begin{frame}[label=frame_222]{Тестовый пример}
+\includegraphics[scale=0.35]{example}
+\end{frame}
+
+
+\begin{frame}[label=frame_222]{CPU, 1 и 2 узла}
 \includegraphics[scale=0.55]{CPU_1dev_2dev}
 \end{frame}
 
-\begin{frame}[label=frame_222]{Тестирование: 1 и 2 узла}
+\begin{frame}[label=frame_222]{ GPU и CPU}
 \includegraphics[scale=0.55]{CPU_GPU_1dev}
+\end{frame}
+
+\begin{frame}[label=frame_222]{ 1 и 2 GPU на 1 узле}
+\includegraphics[scale=0.55]{GPU_1dev_2dev}
+\end{frame}
+
+
+\begin{frame}[label=frame_222]{CPU на 2 узлах и 2 GPU на 1 узле}
+\includegraphics[scale=0.55]{CPU_GPU_2dev}
+\end{frame}
+
+\begin{frame}[label=frame_222]{Сравнение}
+\includegraphics[scale=0.55]{hist}
 \end{frame}
 
 
