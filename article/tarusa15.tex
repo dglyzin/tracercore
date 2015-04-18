@@ -141,6 +141,26 @@ Scientific Computation
 
 \end{frame}
 
+\begin{frame}[label=frame_222]{Тестирование производительности}
+\begin{itemize}
+\item Оборудование: 2 узла: 2xCPU E5-2690 (8 ядер, 2.9ГГц), 3хGPU Tesla M2090, Infiniband QDR 40Gbps
+
+\item ПО: SLES 12, gcc 4.8,  Mellanox OFED 2.4, OpenMPI 1.8, CUDA Toolkit 7.0 
+
+\item Тестовая задача: уравнение теплопроводности
+
+\item Метод Эйлера, постоянный шаг
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[label=frame_222]{Тестирование: 1 и 2 узла}
+\includegraphics[scale=0.55]{CPU_1dev_2dev}
+\end{frame}
+
+\begin{frame}[label=frame_222]{Тестирование: 1 и 2 узла}
+\includegraphics[scale=0.55]{CPU_GPU_1dev}
+\end{frame}
 
 
 \end{document}
