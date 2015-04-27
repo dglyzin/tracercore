@@ -385,12 +385,15 @@ void Domain::readFromFile(char* path) {
 	readCellAndHaloSize(in);
 	readSolverIndex(in);
 
+
 	switch (mSolverIndex) {
 		case EULER:
 			mSolverInfo = new EulerSolverInfo();
+			break;
 		case RK4:
 			cout << endl << "RK4 SOLVER NOT READY!" << endl;
 			mSolverInfo = NULL;
+			break;
 		default:
 			mSolverInfo = new EulerSolverInfo();
 	}
@@ -664,8 +667,6 @@ int Domain::getGridElementCount() {
 
 	return count;
 }
-
-
 
 /*
  * Заново вычисляется количество повторений для вычислений.
