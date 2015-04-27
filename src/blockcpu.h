@@ -40,9 +40,6 @@ public:
 
 	void prepareStageData(int stage);
 
-	/*void computeStageBorder(int stage, double time, double step) {}// std::cout << std::endl << "one step border" << std::endl; }
-	void computeStageCenter(int stage, double time, double step) ;// std::cout << std::endl << "one step center" << std::endl; }*/
-
 	double getSolverStepError(double timeStep, double aTol, double rTol);
 
 	int getBlockType() { return CPU; }

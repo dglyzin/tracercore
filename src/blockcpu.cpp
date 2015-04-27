@@ -74,18 +74,6 @@ BlockCpu::BlockCpu(int _dimension, int _xCount, int _yCount, int _zCount,
 			}
 			printf("\n");
 		}
-
-	/*
-	 * Типы границ блока. Выделение памяти.
-	 * По умолчанию границы задаются функциями, то есть нет границ между блоками.
-	 */
-
-	/*
-	 * TODO Новая реализация всех границ
-	 * соседи писать через вектора, как было ранее
-	 * для определения "границ" использовать 5 значение: сторона, начальные координаты, конечный (по 2 штуки) - определяют прямоугольную область
-	 */
-	
 }
 
 BlockCpu::~BlockCpu() {
@@ -112,91 +100,6 @@ BlockCpu::~BlockCpu() {
 		delete externalBorderMemoryAllocType;
 	}
 }
-
-/*void BlockCpu::computeOneStepBorder(double dX2, double dY2, double dT) {
-
-	 * Теплопроводность
-
-
-
-	 * Параллельное вычисление на максимально возможном количестве потоков.
-	 * Максимально возможное количесвто потоков получается из-за самой библиотеки omp
-	 * Если явно не указывать, какое именно количесвто нитей необходимо создать, то будет создано макстимально возможное на данный момент.
-
-# pragma omp parallel
-	{
-
-		 * Для решения задачи теплопроводности нам необходимо знать несколько значений.
-		 * Среди них
-		 * значение в ячейке выше
-		 * значение в ячейке слева
-		 * значение в ячейке снизу
-		 * значение в ячейке справа
-		 * текущее значение в данной ячейке
-		 *
-		 * остально данные передаются в функцию в качестве параметров.
-
-	double top, left, bottom, right, cur;
-
-# pragma omp for
-
-	 * Проходим по всем ячейкам матрицы.
-	 * Для каждой из них будет выполнен перерасчет.
-
-	for (int i = 0; i < length; ++i)
-		for (int j = 0; j < width; ++j) {
-			if( i != 0 && i != length - 1 && j != 0 && j != width - 1 )
-				continue;
-			
-			if( i == 0 )
-				if( receiveBorderType[TOP][j] == BY_FUNCTION ) {
-					newMatrix[i * width + j] = 100;
-					continue;
-				}
-				else
-					top = externalBorder[	receiveBorderType[TOP][j]	][j - externalBorderMove[	receiveBorderType[TOP][j]	]];
-			else
-				top = matrix[(i - 1) * width + j];
-
-
-			if( j == 0 )
-				if( receiveBorderType[LEFT][i] == BY_FUNCTION ) {
-					newMatrix[i * width + j] = 10;
-					continue;
-				}
-				else
-					left = externalBorder[	receiveBorderType[LEFT][i]	][i - externalBorderMove[	receiveBorderType[LEFT][i]		]];
-			else
-				left = matrix[i * width + (j - 1)];
-
-
-			if( i == length - 1 )
-				if( receiveBorderType[BOTTOM][j] == BY_FUNCTION ) {
-					newMatrix[i * width + j] = 10;
-					continue;
-				}
-				else
-					bottom = externalBorder[	receiveBorderType[BOTTOM][j]	][j - externalBorderMove[	receiveBorderType[BOTTOM][j]	]];
-			else
-				bottom = matrix[(i + 1) * width + j];
-
-
-			if( j == width - 1 )
-				if( receiveBorderType[RIGHT][i] == BY_FUNCTION ) {
-					newMatrix[i * width + j] = 10;
-					continue;
-				}
-				else
-					right = externalBorder[	receiveBorderType[RIGHT][i]	][i - externalBorderMove[	receiveBorderType[RIGHT][i]	]];
-			else
-				right = matrix[i * width + (j + 1)];
-
-
-			cur = matrix[i * width + j];
-			newMatrix[i * width + j] = cur + dT * ( ( left - 2*cur + right )/dX2 + ( top - 2*cur + bottom )/dY2  );
-		}
-	}
-}*/
 
 void BlockCpu::computeStageCenter_1d(int stage, double time, double step) {
 # pragma omp parallel
@@ -474,30 +377,9 @@ void BlockCpu::print() {
 	cout << endl;
 	cout << "Block matrix:" << endl;
 	cout.setf(ios::fixed);
-	/*for (int i = 0; i < zCount; ++i) {
-		cout << "z = " << i << endl;
 
-		int zShift = xCount * yCount * i;
 
-		for (int j = 0; j < yCount; ++j) {
-			int yShift = xCount * j;
-
-			for (int k = 0; k < xCount; ++k) {
-				int xShift = k;
-
-				cout << "(";
-				for (int l = 0; l < cellSize; ++l) {
-					int cellShift = l;
-
-					cout.width(5);
-					cout.precision(1);
-					cout << matrix[ (zShift + yShift + xShift)*cellSize + cellShift ] << " ";
-				}
-				cout << ")";
-			}
-			cout << endl;
-		}
-	}*/
+	// TODO вывод информации о Solver'е
 
 	cout << endl;
 	cout << "Send border info (" << countSendSegmentBorder << ")" << endl;
@@ -555,98 +437,6 @@ void BlockCpu::print() {
 		}
 	}
 	cout << endl;
-
-	/*cout << endl;
-	cout << "TopSendBorderType" << endl;
-	for( int i =0; i < width; i++ ) {
-		cout.width(4);
-		cout << sendBorderType[TOP][i] << " ";
-	}
-	cout << endl;
-
-	cout << endl;
-	cout << "LeftSendBorderType" << endl;
-	for( int i =0; i < length; i++ ) {
-		cout.width(4);
-		cout << sendBorderType[LEFT][i] << " ";
-	}
-	cout << endl;
-
-	cout << endl;
-	cout << "BottomSendBorderType" << endl;
-	for( int i =0; i < width; i++ ) {
-		cout.width(4);
-		cout << sendBorderType[BOTTOM][i] << " ";
-	}
-	cout << endl;
-
-	cout << endl;
-	cout << "RightSendBorderType" << endl;
-	for( int i =0; i < length; i++ ) {
-		cout.width(4);
-		cout << sendBorderType[RIGHT][i] << " ";
-	}
-	cout << endl;
-
-	
-	cout << endl << endl;
-
-	
-	cout << endl;
-	cout << "TopRecieveBorderType" << endl;
-	for( int i =0; i < width; i++ ) {
-		cout.width(4);
-		cout << receiveBorderType[TOP][i] << " ";
-	}
-	cout << endl;
-
-	cout << endl;
-	cout << "LeftRecieveBorderType" << endl;
-	for( int i =0; i < length; i++ ) {
-		cout.width(4);
-		cout << receiveBorderType[LEFT][i] << " ";
-	}
-	cout << endl;
-
-	cout << endl;
-	cout << "BottomRecieveBorderType" << endl;
-	for( int i =0; i < width; i++ ) {
-		cout.width(4);
-		cout << receiveBorderType[BOTTOM][i] << " ";
-	}
-	cout << endl;
-
-	cout << endl;
-	cout << "RightRecieveBorderType" << endl;
-	for( int i =0; i < length; i++ ) {
-		cout.width(4);
-		cout << receiveBorderType[RIGHT][i] << " ";
-	}
-	cout << endl;
-
-	
-	cout << endl << endl;
-
-	
-	cout << endl;
-	for (int i = 0; i < countSendSegmentBorder; ++i) {
-		cout << "BlockBorder #" << i << endl;
-		cout << "	Memory address: " << blockBorder[i] << endl;
-		cout << "	Border move:    " << blockBorderMove[i] << endl;
-		cout << endl;
-	}
-	
-	
-	cout << endl;
-	
-		
-	cout << endl;
-	for (int i = 0; i < countReceiveSegmentBorder; ++i) {
-		cout << "ExternalBorder #" << i << endl;
-		cout << "	Memory address: " << externalBorder[i] << endl;
-		cout << "	Border move:    " << externalBorderMove[i] << endl;
-		cout << endl;
-	}*/
 
 	cout << "########################################################################################################################################################################################################" << endl;
 	cout << endl << endl;
