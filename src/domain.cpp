@@ -203,6 +203,7 @@ double Domain::getDeviceError(int deviceType, int deviceNumber) {
 	for (int i = 0; i < mBlockCount; ++i)
         if( mBlocks[i]->getBlockType() == deviceType && mBlocks[i]->getDeviceNumber() == deviceNumber ) {
         	//cout << endl << "ERROR! PROCESS DEVICE!" << endl;
+        	// TODO почему сумма?
 		    error+=mBlocks[i]->getSolverStepError(timeStep, mAtol, mRtol);
 		}
 	return error;

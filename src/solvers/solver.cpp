@@ -150,7 +150,7 @@ double* RK4Solver::getStageResult(int stage){
 	return NULL;
 }
 
-
+// TODO на что влияет?
 double RK4Solver::getStageTimeStep(int stage){
     if      (stage == 0) return 0.0;
     else if (stage == 1) return 0.5;
