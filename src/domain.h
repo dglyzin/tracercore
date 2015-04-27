@@ -111,6 +111,7 @@ private:
 	/*
 	 * Структура данных, возвращающая основные параметры солвера
 	 */
+	// TODO назначение?
 	SolverInfo * mSolverInfo;
     double mAtol; //solver absolute tolerance
     double mRtol; //solver relative tolerance
@@ -149,6 +150,7 @@ private:
 	double startTime;
 	double stopTime;
 
+	// TODO почему можем не принять?
 	double timeStep;
 	int mAcceptedStepCount;
 	int mRejectedStepCount;
@@ -158,6 +160,7 @@ private:
 
 	double saveInterval;
 
+	// TODO назначение?
 	double mDx, mDy, mDz;
 
 	int mCellSize;
