@@ -49,7 +49,7 @@ void RK4Solver::prepareArgument(int stage, double timeStep) {
 	    const double b1 = 1.0/6.0;
 	    const double b2 = 1.0/3.0;
 	    const double b3 = 1.0/3.0;
-	    const double b4= 1.0/6.0;
+	    const double b4 = 1.0/6.0;
 	#pragma omp parallel for
 		for (int idx = 0; idx < mCount; idx++)
 			mArg[idx] = mState[idx] + timeStep * ( b1 * mTempStore1[idx] + b2 * mTempStore2[idx] + b3 * mTempStore3[idx] + b4 * mTempStore4[idx] );
