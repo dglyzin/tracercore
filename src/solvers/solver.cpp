@@ -5,6 +5,8 @@
  *      Author: dglyzin
  */
 
+#include "solver.h"
+
 /*Solver* GetCpuSolver(int solverIdx, int count){
 	if      (solverIdx == EULER)
 		return new EulerSolver(count);

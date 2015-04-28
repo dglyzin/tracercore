@@ -12,7 +12,6 @@
 #include <omp.h>
 
 #include <stdlib.h>
-#include "solver.h"
 #include <cassert>
 #include <math.h>
 
