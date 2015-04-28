@@ -12,13 +12,15 @@
 
 class EulerSolver: public Solver{
 public:
-	EulerSolver(int _mCount);
+	EulerSolver(int _count);
 	~EulerSolver();
 
 	virtual void copyState(double* result) { return; }
 
 	double* getStageSource(int stage);
 	double* getStageResult(int stage);
+
+	virtual double getStageTimeStep(int stage) { return 0; }
 
 	void prepareArgument(int stage, double timeStep) { return; }
 

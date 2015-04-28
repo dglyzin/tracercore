@@ -17,7 +17,7 @@
 
 class Solver {
 public:
-    Solver(int _mCount);
+    Solver(int _count);
     virtual ~Solver() { return; }
 
     virtual void copyState(double* result);// { return; }
