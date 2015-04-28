@@ -8,11 +8,11 @@
 #ifndef SRC_SOLVERS_EULERSOLVERCPU_H_
 #define SRC_SOLVERS_EULERSOLVERCPU_H_
 
-#include "solver.h"
+#include "eulersolver.h"
 
 class EulerSolverCpu: public EulerSolver {
 public:
-	EulerSolverCpu(int _mCount);
+	EulerSolverCpu(int _count);
 	virtual ~EulerSolverCpu();
 
 	void copyState(double* result);

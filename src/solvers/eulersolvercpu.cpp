@@ -7,7 +7,7 @@
 
 #include "eulersolvercpu.h"
 
-EulerSolverCpu::EulerSolverCpu(int _mCount) : EulerSolver(_mCount) {
+EulerSolverCpu::EulerSolverCpu(int _count) : EulerSolver(_count) {
 	mState = new double [mCount];
 	mTempStore1 = new double [mCount];
 }

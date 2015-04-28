@@ -31,32 +31,6 @@ RK4Solver::~RK4Solver(){
     delete mArg;*/
 }
 
-void RK4Solver::prepareArgument(int stage, double timeStep) {
-
-	if      (stage == 0)
-#pragma omp parallel for
-		for (int idx = 0; idx < mCount; idx++)
-			mArg[idx] = mState[idx] + 0.5 * timeStep*mTempStore1[idx];
-	else if (stage == 1)
-#pragma omp parallel for
-		for (int idx = 0; idx < mCount; idx++)
-			mArg[idx] = mState[idx] + 0.5 * timeStep*mTempStore2[idx];
-	else if (stage == 2)
-#pragma omp parallel for
-		for (int idx = 0; idx < mCount; idx++)
-			mArg[idx] = mState[idx] + timeStep * mTempStore3[idx];
-	else if (stage == 3){
-	    const double b1 = 1.0/6.0;
-	    const double b2 = 1.0/3.0;
-	    const double b3 = 1.0/3.0;
-	    const double b4 = 1.0/6.0;
-	#pragma omp parallel for
-		for (int idx = 0; idx < mCount; idx++)
-			mArg[idx] = mState[idx] + timeStep * ( b1 * mTempStore1[idx] + b2 * mTempStore2[idx] + b3 * mTempStore3[idx] + b4 * mTempStore4[idx] );
-	}
-	else assert(0);
-}
-
 double* RK4Solver::getStageSource(int stage){
 	if      (stage == 0) return mState;
 	else if (stage == 1) return mArg;
