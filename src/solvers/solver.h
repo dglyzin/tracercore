@@ -8,20 +8,25 @@
 #ifndef SOLVER_H_
 #define SOLVER_H_
 
+#include <stdlib.h>
+
 class Solver {
 public:
     Solver();
     virtual ~Solver() { return; }
-    void copyState(double* result);
+    virtual void copyState(double* result) { return; }
     double* getStatePtr(){ return mState;}
 
     virtual double* getStageSource(int stage) { return NULL; }
     virtual double* getStageResult(int stage) { return NULL; }
-    virtual double getStageTimeStep(int stage) { return 0; }
-    virtual void prepareArgument(int stage, double timeStep) { return; }
-    virtual void confirmStep(double timestep) { return; }
-    virtual double getStepError(double timeStep, double aTol, double rTol) { return 0.0; }
 
+    virtual double getStageTimeStep(int stage) { return 0; }
+
+    virtual void prepareArgument(int stage, double timeStep) { return; }
+
+    virtual void confirmStep(double timestep) { return; }
+
+    virtual double getStepError(double timeStep, double aTol, double rTol) { return 0.0; }
 
 protected:
   	int     mCount; //total number of elements in every array
@@ -50,7 +55,7 @@ protected:
 Solver* GetGpuSolver(int solverIdx, int count);*/
 
 //***********************1. EULER SOLVER**************
-class EulerSolver: public Solver{
+/*class EulerSolver: public Solver{
 public:
 	EulerSolver(int _count);
 	~EulerSolver();
@@ -63,7 +68,7 @@ public:
 private:
     double* mTempStore1;
 
-};
+};*/
 
 class EulerSolverInfo: public SolverInfo{
 public:

@@ -24,6 +24,8 @@ Solver* GetGpuSolver(int solverIdx, int count){
 }*/
 
 Solver::Solver(){
+	mCount = 0;
+	mState = NULL;
 }
 
 SolverInfo::SolverInfo(){
