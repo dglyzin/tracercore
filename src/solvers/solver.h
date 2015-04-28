@@ -9,6 +9,12 @@
 #define SOLVER_H_
 
 #include <stdlib.h>
+#include <omp.h>
+
+#include <stdlib.h>
+#include "solver.h"
+#include <cassert>
+#include <math.h>
 
 class Solver {
 public:
