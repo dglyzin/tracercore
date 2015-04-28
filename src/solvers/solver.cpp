@@ -35,7 +35,7 @@ void Solver::copyState(double* result){
 }
 
 //****************1. EULER SOLVER*************//
-EulerSolver::EulerSolver(int _count){
+EulerSolver::EulerSolver(int _count) {
     mCount = _count;
     mState = new double[mCount];
     mTempStore1 = new double[mCount];
