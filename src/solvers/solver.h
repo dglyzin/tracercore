@@ -19,7 +19,7 @@ class Solver {
 public:
     Solver();
     virtual ~Solver() { return; }
-    virtual void copyState(double* result) { return; }
+    virtual void copyState(double* result);// { return; }
     double* getStatePtr(){ return mState;}
 
     virtual double* getStageSource(int stage) { return NULL; }
@@ -60,7 +60,7 @@ protected:
 Solver* GetGpuSolver(int solverIdx, int count);*/
 
 //***********************1. EULER SOLVER**************
-/*class EulerSolver: public Solver{
+class EulerSolver: public Solver{
 public:
 	EulerSolver(int _count);
 	~EulerSolver();
@@ -73,7 +73,7 @@ public:
 private:
     double* mTempStore1;
 
-};*/
+};
 
 class EulerSolverInfo: public SolverInfo{
 public:

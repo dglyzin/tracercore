@@ -35,7 +35,7 @@ void Solver::copyState(double* result){
 }
 
 //****************1. EULER SOLVER*************//
-/*EulerSolver::EulerSolver(int _count){
+EulerSolver::EulerSolver(int _count){
     mCount = _count;
     mState = new double[mCount];
     mTempStore1 = new double[mCount];
@@ -70,7 +70,7 @@ void EulerSolver::confirmStep(double timestep){
     double* temp = mState;
     mState = mTempStore1;
     mTempStore1 = temp;
-}*/
+}
 
 //****************2. RK4 SOLVER*************//
 /*
