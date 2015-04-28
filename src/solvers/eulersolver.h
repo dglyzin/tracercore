@@ -26,7 +26,7 @@ public:
 
 	double getStepError(double timeStep, double aTol, double rTol) { return 0.0; }
 
-private:
+protected:
     double* mTempStore1;
 
 };
