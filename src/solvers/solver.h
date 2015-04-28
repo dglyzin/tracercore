@@ -17,8 +17,9 @@
 
 class Solver {
 public:
-    Solver();
+    Solver(int _mCount);
     virtual ~Solver() { return; }
+
     virtual void copyState(double* result);// { return; }
     double* getStatePtr(){ return mState;}
 
