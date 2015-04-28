@@ -15,6 +15,8 @@ public:
 	EulerSolver(int _mCount);
 	~EulerSolver();
 
+	virtual void copyState(double* result) { return; }
+
 	double* getStageSource(int stage);
 	double* getStageResult(int stage);
 
