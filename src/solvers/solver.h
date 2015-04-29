@@ -21,19 +21,20 @@ public:
     Solver(int _count);
     virtual ~Solver() { return; }
 
-    virtual void copyState(double* result);// { return; }
+    virtual void copyState(double* result) = 0;
+
     double* getStatePtr(){ return mState;}
 
-    virtual double* getStageSource(int stage) { return NULL; }
-    virtual double* getStageResult(int stage) { return NULL; }
+    virtual double* getStageSource(int stage) = 0;
+    virtual double* getStageResult(int stage) = 0;
 
-    virtual double getStageTimeStep(int stage) { return 0; }
+    virtual double getStageTimeStep(int stage) = 0;
 
-    virtual void prepareArgument(int stage, double timeStep) { return; }
+    virtual void prepareArgument(int stage, double timeStep) = 0;
 
-    virtual void confirmStep(double timestep) { return; }
+    virtual void confirmStep(double timestep) = 0;
 
-    virtual double getStepError(double timeStep, double aTol, double rTol) { return 0.0; }
+    virtual double getStepError(double timeStep, double aTol, double rTol) = 0;
 
 protected:
   	int     mCount; //total number of elements in every array
