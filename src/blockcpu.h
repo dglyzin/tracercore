@@ -55,7 +55,7 @@ public:
 
 	void loadData(double* data);
 
-	Solver* createSolver(int solverIdx, int count);
+	void createSolver(int solverIdx);
 };
 
 #endif /* SRC_BLOCKCPU_H_ */

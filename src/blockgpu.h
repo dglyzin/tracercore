@@ -63,7 +63,7 @@ public:
 
 	void loadData(double* data);
 
-	Solver* createSolver(int solverIdx, int count) { std::cout << std::endl << "GPU get solver step error" << std::endl; return NULL; }
+	void createSolver(int solverIdx) { std::cout << std::endl << "GPU get solver step error" << std::endl; }
 };
 
 #endif /* SRC_BLOCKGPU_H_ */

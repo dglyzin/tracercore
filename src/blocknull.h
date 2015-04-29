@@ -54,7 +54,7 @@ public:
 
 	void loadData(double* data) { return; }
 
-	Solver* createSolver(int solverIdx, int count) { return NULL; }
+	void createSolver(int solverIdx) { return; }
 };
 
 #endif /* SRC_BLOCKNULL_H_ */

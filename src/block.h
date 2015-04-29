@@ -183,7 +183,7 @@ public:
 
 	virtual void loadData(double* data) = 0;
 
-	virtual Solver* createSolver(int solverIdx, int count) = 0;
+	virtual void createSolver(int solverIdx) = 0;
 };
 
 #endif /* SRC_BLOCK_H_ */

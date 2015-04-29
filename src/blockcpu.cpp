@@ -23,7 +23,8 @@ BlockCpu::BlockCpu(int _dimension, int _xCount, int _yCount, int _zCount,
 				_nodeNumber, _deviceNumber,
 				_haloSize, _cellSize ) {
 	cout << "Creating block..\n";
-	mSolver = createSolver(_solverIndex, xCount * yCount * zCount * cellSize );
+
+	createSolver(_solverIndex );
 
 
 	int count = getGridNodeCount();
@@ -611,7 +612,7 @@ void BlockCpu::prepareBorder(double* source, int borderNumber, int zStart, int z
 	}
 }
 
-Solver* BlockCpu::createSolver(int solverIdx, int count) {
+void BlockCpu::createSolver(int solverIdx) {
 	/*if      (solverIdx == EULER)
 		return new EulerSolver(count);
 	else if (solverIdx == RK4)
@@ -619,13 +620,17 @@ Solver* BlockCpu::createSolver(int solverIdx, int count) {
 	else
 		return new EulerSolver(count);*/
 
+	int count = getGridElementCount();
+
 	switch (solverIdx) {
 		case EULER:
-			return new EulerSolver(count);
+			mSolver = new EulerSolver(count);
+			break;
 		case RK4:
 			cout << endl << "RK4 SOLVER NOT READY!" << endl;
-			return NULL;
+			break;
 		default:
-			return new EulerSolver(count);
+			mSolver = new EulerSolver(count);
+			break;
 	}
 }
