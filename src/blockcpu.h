@@ -26,6 +26,8 @@ private:
 	void computeStageBorder_2d(int stage, double time, double step);
 	void computeStageBorder_3d(int stage, double time, double step);
 
+	void createSolver(int solverIdx);
+
 public:
 	BlockCpu(int _dimension, int _xCount, int _yCount, int _zCount,
 			int _xOffset, int _yOffset, int _zOffset,
@@ -54,8 +56,6 @@ public:
 	void moveTempBorderVectorToBorderArray();
 
 	void loadData(double* data);
-
-	void createSolver(int solverIdx);
 };
 
 #endif /* SRC_BLOCKCPU_H_ */

@@ -28,6 +28,8 @@ private:
 	void computeStageBorder_2d(int stage, double time, double step) { return; }
 	void computeStageBorder_3d(int stage, double time, double step) { return; }
 
+	void createSolver(int solverIdx) { return; }
+
 public:
 	BlockNull(int _dimension, int _xCount, int _yCount, int _zCount,
 				int _xOffset, int _yOffset, int _zOffset,
@@ -53,8 +55,6 @@ public:
 	void moveTempBorderVectorToBorderArray() { return; }
 
 	void loadData(double* data) { return; }
-
-	void createSolver(int solverIdx) { return; }
 };
 
 #endif /* SRC_BLOCKNULL_H_ */

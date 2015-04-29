@@ -108,6 +108,8 @@ protected:
 	virtual void computeStageBorder_2d(int stage, double time, double step) = 0;
 	virtual void computeStageBorder_3d(int stage, double time, double step) = 0;
 
+	virtual void createSolver(int solverIdx) = 0;
+
 	func_ptr_t* mUserFuncs;
 	initfunc_fill_ptr_t* mUserInitFuncs;
 	double* mParams;
@@ -182,8 +184,6 @@ public:
 	virtual void moveTempBorderVectorToBorderArray() = 0;
 
 	virtual void loadData(double* data) = 0;
-
-	virtual void createSolver(int solverIdx) = 0;
 };
 
 #endif /* SRC_BLOCK_H_ */

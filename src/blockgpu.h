@@ -35,6 +35,8 @@ private:
 	void computeStageBorder_2d(int stage, double time, double step) { std::cout << std::endl << "GPU compute border 2d" << std::endl; }
 	void computeStageBorder_3d(int stage, double time, double step) { std::cout << std::endl << "GPU compute border 3d" << std::endl; }
 
+	void createSolver(int solverIdx) { std::cout << std::endl << "GPU get solver step error" << std::endl; }
+
 public:
 	BlockGpu(int _dimension, int _xCount, int _yCount, int _zCount,
 			int _xOffset, int _yOffset, int _zOffset,
@@ -62,8 +64,6 @@ public:
 	void moveTempBorderVectorToBorderArray() { std::cout << std::endl << "GPU move array to vector" << std::endl; }
 
 	void loadData(double* data);
-
-	void createSolver(int solverIdx) { std::cout << std::endl << "GPU get solver step error" << std::endl; }
 };
 
 #endif /* SRC_BLOCKGPU_H_ */
