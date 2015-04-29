@@ -25,6 +25,16 @@ private:
 
 	double** externalBorderOnDevice;
 
+	void prepareBorder(double* source, int borderNumber, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop) { std::cout << std::endl << "GPU prepare border" << std::endl; }
+
+	void computeStageCenter_1d(int stage, double time, double step) { std::cout << std::endl << "GPU compute center 1d" << std::endl; }
+	void computeStageCenter_2d(int stage, double time, double step) { std::cout << std::endl << "GPU compute center 2d" << std::endl; }
+	void computeStageCenter_3d(int stage, double time, double step) { std::cout << std::endl << "GPU compute center 3d" << std::endl; }
+
+	void computeStageBorder_1d(int stage, double time, double step) { std::cout << std::endl << "GPU compute border 1d" << std::endl; }
+	void computeStageBorder_2d(int stage, double time, double step) { std::cout << std::endl << "GPU compute border 2d" << std::endl; }
+	void computeStageBorder_3d(int stage, double time, double step) { std::cout << std::endl << "GPU compute border 3d" << std::endl; }
+
 public:
 	BlockGpu(int _dimension, int _xCount, int _yCount, int _zCount,
 			int _xOffset, int _yOffset, int _zOffset,
@@ -36,10 +46,9 @@ public:
 
 	bool isRealBlock() { return true; }
 
-	void prepareStageData(int stage) { std::cout << std::endl << "prepare data" << std::endl; }
+	void prepareStageData(int stage) { std::cout << std::endl << "GPU prepare data" << std::endl; }
 
-	void computeStageBorder(int stage, double time, double step) { std::cout << std::endl << "one step border" << std::endl; }
-	void computeStageCenter(int stage, double time, double step) { std::cout << std::endl << "one step center" << std::endl; }
+	double getSolverStepError(double timeStep, double aTol, double rTol) { std::cout << std::endl << "GPU get solver step error" << std::endl; return 0.0; }
 
 	int getBlockType() { return GPU; }
 
@@ -47,12 +56,14 @@ public:
 
 	void print();
 
-	double* addNewBlockBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength) { std::cout << std::endl << "add new block border" << std::endl; return NULL; }
-	double* addNewExternalBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength, double* border) { std::cout << std::endl << "add new external border" << std::endl; return NULL; }
+	double* addNewBlockBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength) { std::cout << std::endl << "GPU add new block border" << std::endl; return NULL; }
+	double* addNewExternalBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength, double* border) { std::cout << std::endl << "GPU add new external border" << std::endl; return NULL; }
 
-	void moveTempBorderVectorToBorderArray() { std::cout << std::endl << "move array to vector" << std::endl; }
+	void moveTempBorderVectorToBorderArray() { std::cout << std::endl << "GPU move array to vector" << std::endl; }
 
 	void loadData(double* data);
+
+	Solver* createSolver(int solverIdx, int count) { std::cout << std::endl << "GPU get solver step error" << std::endl; return NULL; }
 };
 
 #endif /* SRC_BLOCKGPU_H_ */
