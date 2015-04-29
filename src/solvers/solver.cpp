@@ -334,6 +334,7 @@ double DP45SolverInfo::getNewStep(double timeStep, double error, int totalDomain
 	double err = sqrt(error/totalDomainElements);
 	return timeStep * min_d(facmax,max_d(facmin,fac*pow(1.0/err,1.0/5.0)));
 }
+
 int DP45SolverInfo::isErrorOK(double error, int totalDomainElements){
 	double err = sqrt(error/totalDomainElements);
 	if (err<1)
