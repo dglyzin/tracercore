@@ -335,11 +335,11 @@ BlockGpu::~BlockGpu() {
 	cudaThreadSynchronize();
 }*/
 
-void BlockGpu::getCurrentState(double* result); {
+void BlockGpu::getCurrentState(double* result) {
 	cudaSetDevice(deviceNumber);
 
 	cout << endl << "GPU get cut state maybe bad" << endl;
-	cudaMemcpy( result, matrix, count * sizeof(double), cudaMemcpyDeviceToHost );
+	//cudaMemcpy( result, matrix, count * sizeof(double), cudaMemcpyDeviceToHost );
 }
 
 void BlockGpu::print() {
