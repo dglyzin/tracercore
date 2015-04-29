@@ -20,6 +20,11 @@ Solver* GetGpuSolver(int solverIdx, int count){
 	return NULL;
 }*/
 
+Solver::Solver() {
+	mCount = 0;
+	mState = NULL;
+}
+
 Solver::Solver(int _count){
 	mCount = _count;
 	mState = NULL;

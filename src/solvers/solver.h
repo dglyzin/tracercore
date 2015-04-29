@@ -17,7 +17,7 @@
 
 class Solver {
 public:
-	Solver() {}
+	Solver();
     Solver(int _count);
     virtual ~Solver() { return; }
 
