@@ -44,7 +44,7 @@ public:
 
 	int getBlockType() { return CPU; }
 
-	double* getCurrentState(double* result);
+	void getCurrentState(double* result);
 
 	void print();
 

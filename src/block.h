@@ -98,15 +98,15 @@ protected:
 	void freeMemory(int memory_alloc_type, double* memory);
 	void freeMemory(int memory_alloc_type, int* memory);
 
-	virtual void prepareBorder(double* source, int borderNumber, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop) { return; }
+	virtual void prepareBorder(double* source, int borderNumber, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop) = 0;
 
-	virtual void computeStageCenter_1d(int stage, double time, double step) { return; }
-	virtual void computeStageCenter_2d(int stage, double time, double step) { return; }
-	virtual void computeStageCenter_3d(int stage, double time, double step) { return; }
+	virtual void computeStageCenter_1d(int stage, double time, double step) = 0;
+	virtual void computeStageCenter_2d(int stage, double time, double step) = 0;
+	virtual void computeStageCenter_3d(int stage, double time, double step) = 0;
 
-	virtual void computeStageBorder_1d(int stage, double time, double step) { return; }
-	virtual void computeStageBorder_2d(int stage, double time, double step) { return; }
-	virtual void computeStageBorder_3d(int stage, double time, double step) { return; }
+	virtual void computeStageBorder_1d(int stage, double time, double step) = 0;
+	virtual void computeStageBorder_2d(int stage, double time, double step) = 0;
+	virtual void computeStageBorder_3d(int stage, double time, double step) = 0;
 
 	func_ptr_t* mUserFuncs;
 	initfunc_fill_ptr_t* mUserInitFuncs;
@@ -126,38 +126,39 @@ public:
 	 * true - да, является
 	 * false - нет не является
 	 */
-	virtual bool isRealBlock() { return false; }
+	virtual bool isRealBlock() = 0;
 
 	virtual void initSolver() { return; }
+
 	/*
 	 * Выполняет подготовку данных.
 	 * Заполняет массивы границ для пересылки.
 	 */
-	virtual void prepareStageData(int stage) { return; }
+	virtual void prepareStageData(int stage) = 0;
 
 	void computeStageBorder(int stage, double time, double step);
 	void computeStageCenter(int stage, double time, double step);
 
 	void prepareArgument(int stage, double timestep );
 
-	virtual double getSolverStepError(double timeStep, double aTol, double rTol) {return 0.0;}
+	virtual double getSolverStepError(double timeStep, double aTol, double rTol) = 0;
 
 	void confirmStep(double timestep);
 
 	/*
 	 * Возвращает тип блока.
 	 */
-	virtual int getBlockType() { return NULL_BLOCK; }
+	virtual int getBlockType() = 0;
 
 	/*
 	 * Печатает информацию о блоке на консоль.
 	 */
-	virtual void print() { return; }
+	virtual void print() = 0;
 
 	/*
 	 * Возвращает результурющую матрицу данного блока.
 	 */
-	virtual double* getCurrentState() { return NULL; }
+	virtual void getCurrentState(double* result) = 0;
 
 	int getXCount() { return xCount; }
 	int getYCount() { return yCount; }
@@ -175,14 +176,14 @@ public:
 
 	void setFunctionNumber(unsigned short int* functionNumberData ) { return; }
 
-	virtual double* addNewBlockBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength) { return NULL; }
-	virtual double* addNewExternalBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength, double* border) { return NULL; }
+	virtual double* addNewBlockBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength) = 0;
+	virtual double* addNewExternalBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength, double* border) = 0;
 
-	virtual void moveTempBorderVectorToBorderArray() { return; }
+	virtual void moveTempBorderVectorToBorderArray() = 0;
 
-	virtual void loadData(double* data) { return; }
+	virtual void loadData(double* data) = 0;
 
-	virtual Solver* createSolver(int solverIdx, int count) { return NULL; }
+	virtual Solver* createSolver(int solverIdx, int count) = 0;
 };
 
 #endif /* SRC_BLOCK_H_ */

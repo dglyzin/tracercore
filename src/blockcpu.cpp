@@ -350,10 +350,8 @@ double BlockCpu::getSolverStepError(double timeStep, double aTol, double rTol) {
 }
 
 
-double* BlockCpu::getCurrentState(double* result) {
+void BlockCpu::getCurrentState(double* result) {
 	mSolver->copyState(result);
-
-	return result;
 }
 
 void BlockCpu::print() {
