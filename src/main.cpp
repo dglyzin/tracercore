@@ -6,11 +6,44 @@
 
 using namespace std;
 
+/*
+class A {
+public:
+	virtual void Am1() = 0;
+	virtual void Am2() = 0;
+	virtual void Am3() = 0;
+};
+
+class B {
+public:
+	virtual void Bm1() = 0;
+	virtual void Bm2() = 0;
+	virtual void Bm3() = 0;
+};
+
+class C : public A, B {
+public:
+	void Am1() { return; }
+
+	void Bm1() { return; }
+	void Bm2() { return; }
+	void Bm3() { return; }
+
+	static int get3() { return 3; }
+};
+
+class D : public C {
+public:
+	void Am2() { return; }
+	void Am3() { return; }
+};*/
+
 int main(int argc, char * argv[]) {
 	// TODO Переделывание солверов
 	/*
 	 * Инициализация MPI
 	 */
+
 	MPI_Init(NULL, NULL);
 
 	/*
