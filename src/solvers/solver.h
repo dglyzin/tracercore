@@ -21,14 +21,14 @@ public:
     Solver(int _count);
     virtual ~Solver() { return; }
 
-    virtual void copyState(double* result);
+    virtual void copyState(double* result) = 0;
 
     double* getStatePtr(){ return mState;}
 
     virtual double* getStageSource(int stage) = 0;
     virtual double* getStageResult(int stage) = 0;
 
-    virtual double getStageTimeStep(int stage)  {return 0.0;}
+    virtual double getStageTimeStep(int stage) = 0;
 
     virtual void prepareArgument(int stage, double timeStep) = 0;
 
@@ -36,9 +36,12 @@ public:
 
     virtual double getStepError(double timeStep, double aTol, double rTol) = 0;
 
-    /*virtual bool isFSAL() = 0;
+    virtual bool isFSAL() = 0;
     virtual bool isVariableStep() = 0;
-    virtual int getStageCount() = 0;*/
+    virtual int getStageCount() = 0;
+
+	virtual double getNewStep(double timeStep, double error, int totalDomainElements) = 0;
+	virtual bool isErrorPermissible(double error, int totalDomainElements) = 0;
 
 protected:
   	int     mCount; //total number of elements in every array
