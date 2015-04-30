@@ -20,13 +20,20 @@ public:
 	double* getStageSource(int stage);
 	double* getStageResult(int stage);
 
-	virtual double getStageTimeStep(int stage) { return 0; }
+	double getStageTimeStep(int stage) { return 0; }
 
 	void prepareArgument(int stage, double timeStep) { return; }
 
 	void confirmStep(double timestep);
 
 	double getStepError(double timeStep, double aTol, double rTol) { return 0.0; }
+
+    bool isFSAL() { return false; }
+    bool isVariableStep() { return false; }
+    int getStageCount() { return 1; }
+
+	double getNewStep(double timeStep, double error, int totalDomainElements) { return timeStep; }
+	bool isErrorPermissible(double error, int totalDomainElements) { return true; }
 
 protected:
     double* mTempStore1;
