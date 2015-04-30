@@ -10,6 +10,8 @@
 
 #include "solver.h"
 
+#include <algorithm>
+
 class DP45Solver: public Solver {
 public:
 	DP45Solver(int _count);
@@ -32,8 +34,8 @@ public:
     bool isVariableStep() { return true; }
     int getStageCount() { return 6; }
 
-	double getNewStep(double timeStep, double error, int totalDomainElements) { return timeStep; }
-	bool isErrorPermissible(double error, int totalDomainElements) { return true; }
+	double getNewStep(double timeStep, double error, int totalDomainElements);
+	bool isErrorPermissible(double error, int totalDomainElements);
 
 private:
     double* mTempStore1;
@@ -60,7 +62,7 @@ private:
     const double e5=-17253.0/339200.0, e6=22.0/525.0, e7=-1.0/40.0;
     const double facmin=0.5, facmax = 2, fac = 0.9;
 
-    void prepareFSAL() { return; }
+    virtual void prepareFSAL(double timeStep) { return; }
 };
 
 #endif /* SRC_SOLVERS_DP45SOLVER_H_ */

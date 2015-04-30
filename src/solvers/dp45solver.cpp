@@ -7,6 +7,8 @@
 
 #include "dp45solver.h"
 
+using namespace std;
+
 DP45Solver::DP45Solver(int _count) : Solver(_count) {
 	mTempStore1 = mTempStore2 = mTempStore3 = mTempStore4 =
 			mTempStore5 = mTempStore6 = mTempStore7 = mArg = NULL;
@@ -56,8 +58,22 @@ void DP45Solver::confirmStep(double timestep){
     mState = mArg;
     mArg = temp;
 
-    prepareFSAL();
+    prepareFSAL(timestep);
 /*#pragma omp parallel for
 	for (int idx=0; idx<mCount; idx++)
 		mArg[idx] = mState[idx]+a21*timestep*mTempStore7[idx];*/
+}
+
+
+double DP45Solver::getNewStep(double timeStep, double error, int totalDomainElements){
+	double err = sqrt(error/totalDomainElements);
+	return timeStep * min( facmax, max( facmin, fac * pow(1.0/err,1.0/5.0) ) );
+}
+
+bool DP45Solver::isErrorPermissible(double error, int totalDomainElements){
+	double err = sqrt(error/totalDomainElements);
+	if (err < 1)
+		return true;
+	else
+		return false;
 }
