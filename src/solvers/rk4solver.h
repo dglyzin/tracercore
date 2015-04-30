@@ -29,6 +29,13 @@ public:
 
 	double getStepError(double timeStep, double aTol, double rTol) { return 0.0; }
 
+    bool isFSAL() { return false; }
+    bool isVariableStep() { return false; }
+    int getStageCount() { return 4; }
+
+	double getNewStep(double timeStep, double error, int totalDomainElements) { return timeStep; }
+	bool isErrorPermissible(double error, int totalDomainElements) { return true; }
+
 protected:
     double* mTempStore1;
     double* mTempStore2;
