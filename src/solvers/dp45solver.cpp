@@ -51,11 +51,13 @@ double DP45Solver::getStageTimeStep(int stage){
     return 0.0;
 }
 
-/*void DP45Solver::confirmStep(double timestep){
+void DP45Solver::confirmStep(double timestep){
     double* temp = mState;
     mState = mArg;
     mArg = temp;
-#pragma omp parallel for
+
+    prepareFSAL();
+/*#pragma omp parallel for
 	for (int idx=0; idx<mCount; idx++)
-		mArg[idx] = mState[idx]+a21*timestep*mTempStore7[idx];
-}*/
+		mArg[idx] = mState[idx]+a21*timestep*mTempStore7[idx];*/
+}

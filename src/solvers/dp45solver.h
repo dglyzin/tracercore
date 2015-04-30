@@ -59,6 +59,8 @@ private:
     const double e1=71.0/57600.0, e3=-71.0/16695.0, e4=71.0/1920.0;
     const double e5=-17253.0/339200.0, e6=22.0/525.0, e7=-1.0/40.0;
     const double facmin=0.5, facmax = 2, fac = 0.9;
+
+    void prepareFSAL() { return; }
 };
 
 #endif /* SRC_SOLVERS_DP45SOLVER_H_ */
