@@ -12,7 +12,7 @@
 
 class DP45Solver: public Solver {
 public:
-	DP45Solver();
+	DP45Solver(int _count);
 	virtual ~DP45Solver();
 
 	virtual void copyState(double* result) { return; }
@@ -27,6 +27,13 @@ public:
 	virtual void confirmStep(double timestep) { return; }
 
 	virtual double getStepError(double timeStep, double aTol, double rTol) { return 0.0; }
+
+    bool isFSAL() { return true; }
+    bool isVariableStep() { return true; }
+    int getStageCount() { return 6; }
+
+	double getNewStep(double timeStep, double error, int totalDomainElements) { return timeStep; }
+	bool isErrorPermissible(double error, int totalDomainElements) { return true; }
 
 private:
     double* mTempStore1;

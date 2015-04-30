@@ -7,13 +7,12 @@
 
 #include "dp45solver.h"
 
-DP45Solver::DP45Solver() {
-	// TODO Auto-generated constructor stub
-
+DP45Solver::DP45Solver(int _count) : Solver(_count) {
+	mTempStore1 = mTempStore2 = mTempStore3 = mTempStore4 =
+			mTempStore5 = mTempStore6 = mTempStore7 = mArg = NULL;
 }
 
 DP45Solver::~DP45Solver() {
-	// TODO Auto-generated destructor stub
 }
 
 double* DP45Solver::getStageSource(int stage){
