@@ -13,7 +13,7 @@
 class RK4Solver: public Solver {
 public:
 public:
-	RK4Solver(int _mCount);
+	RK4Solver(int _count);
 	~RK4Solver();
 
     virtual void copyState(double* result) { return; }
