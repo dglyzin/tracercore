@@ -30,7 +30,7 @@ Solver::Solver(int _count){
 	mState = NULL;
 }
 
-SolverInfo::SolverInfo(){
+/*SolverInfo::SolverInfo(){
 
 }
 
@@ -39,7 +39,7 @@ void Solver::copyState(double* result){
 		result[idx] = mState[idx];
 }
 
-//****************1. EULER SOLVER*************//
+//****************1. EULER SOLVER*************
 EulerSolver::EulerSolver(int _count) {
     mCount = _count;
     mState = new double[mCount];
@@ -77,15 +77,15 @@ void EulerSolver::confirmStep(double timestep){
     mTempStore1 = temp;
 }
 
-//****************2. RK4 SOLVER*************//
-/*
+//****************2. RK4 SOLVER*************
+
  * Stage 0: mState -f-> ts1, mState+h/2 ts1 --> arg
  * Stage 1: arg -f-> ts2, mState+h/2 ts2 --> arg
  * Stage 2: arg -f-> ts3, mState+h ts3   --> arg
  * Stage 3: arg -f-> ts4, mState+h/6 ts1 + h/3 ts2 + h/3 ts3 + h/4 ts4 --> arg
  *
  * confirm: mState<-->arg
- */
+
 
 RK4Solver::RK4Solver(int _count){
     mCount = _count;
@@ -170,7 +170,7 @@ void RK4Solver::confirmStep(double timestep){
     mArg = temp;
 }
 
-//****************3. DP45 SOLVER*************//
+//****************3. DP45 SOLVER*************
 const double c2=0.2, c3=0.3, c4=0.8, c5=8.0/9.0;
 
 const double a21=0.2, a31=3.0/40.0, a32=9.0/40.0;
@@ -185,7 +185,7 @@ const double e1=71.0/57600.0, e3=-71.0/16695.0, e4=71.0/1920.0;
 const double e5=-17253.0/339200.0, e6=22.0/525.0, e7=-1.0/40.0;
 const double facmin=0.5, facmax = 2, fac = 0.9;
 
-/*
+
  * Stage -1: mState -f-> ts1, mState+a21*ts1 --> arg
  *
  * Stage  0: arg -f-> ts2, mState+(h*a31*ts1+a32*ts2) --> arg
@@ -197,7 +197,7 @@ const double facmin=0.5, facmax = 2, fac = 0.9;
  * error:  +e_i*ts_i
  *
  * confirm: mState<-->arg,  mState+a21*ts7 --> arg
- */
+
 
 void DP45Solver::prepareArgument(int stage, double timeStep) {
 
@@ -264,10 +264,10 @@ DP45Solver::~DP45Solver(){
 
 static double max_d (double a, double b){
   return (a > b)?a:b;
-} /* max_d */
+}  max_d
 static double min_d (double a, double b){
   return (a < b)?a:b;
-} /* min_d */
+}  min_d
 
 
 double DP45Solver::getStepError(double timeStep, double aTol, double rTol){
@@ -341,4 +341,4 @@ int DP45SolverInfo::isErrorOK(double error, int totalDomainElements){
 		return 1;
 	else
 		return 0;
-}
+}*/

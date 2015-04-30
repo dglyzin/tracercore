@@ -12,8 +12,8 @@ MPILIB=-I/usr/mpi/gcc/openmpi-1.8.4/include -L /usr/mpi/gcc/openmpi-1.8.4/lib -l
 
 all: HS 
 
-HS: main.o domain.o block.o blockcpu.o blocknull.o interconnect.o enums.o blockgpu.o solver.o
-	$(CUDACC) -O3 $(CUDAARCH) -I$(CUDAINC) $(MPILIB) -L./bin -luserfuncs $(BIN)/main.o $(BIN)/domain.o $(BIN)/block.o $(BIN)/interconnect.o  $(BIN)/blockcpu.o $(BIN)/blockgpu.o $(BIN)/blocknull.o $(BIN)/enums.o $(BIN)/solver.o -o $(BIN)/HS -Xcompiler -fopenmp
+HS: main.o domain.o block.o blockcpu.o blocknull.o interconnect.o enums.o blockgpu.o solver.o eulersolver.o rk4solver.o dp45solver.o eulersolvercpu.o
+	$(CUDACC) -O3 $(CUDAARCH) -I$(CUDAINC) $(MPILIB) -L./bin -luserfuncs $(BIN)/main.o $(BIN)/domain.o $(BIN)/block.o $(BIN)/interconnect.o  $(BIN)/blockcpu.o $(BIN)/blockgpu.o $(BIN)/blocknull.o $(BIN)/enums.o $(BIN)/solver.o $(BIN)/eulersolver.o $(BIN)/rk4solver.o $(BIN)/dp45solver.o $(BIN)/eulersolvercpu.o -o $(BIN)/HS -Xcompiler -fopenmp
 
 #HS: main.o domain.o block.o blockcpu.o blocknull.o interconnect.o enums.o userfuncs.o #blockgpu.o
 #	$(CUDACC) -O3 $(CUDAARCH) -I$(CUDAINC) $(MPILIB) $(BIN)/userfuncs.o $(BIN)/main.o $(BIN)/domain.o $(BIN)/block.o $(BIN)/interconnect.o  $(BIN)/blockcpu.o $(BIN)/blocknull.o $(BIN)/enums.o -o $(BIN)/HS -Xcompiler -fopenmp
@@ -47,6 +47,18 @@ enums.o: $(SRC)/enums.cpp
 	
 solver.o: $(SRCSOL)/solver.cpp
 	$(CC) $(CFLAGS) $(SRCSOL)/solver.cpp -o $(BIN)/solver.o -fopenmp
+	
+eulersolver.o: $(SRCSOL)/eulersolver.cpp
+	$(CC) $(CFLAGS) $(SRCSOL)/eulersolver.cpp -o $(BIN)/eulersolver.o
+	
+rk4solver.o: $(SRCSOL)/rk4solver.cpp
+	$(CC) $(CFLAGS) $(SRCSOL)/rk4solver.cpp -o $(BIN)/rk4solver.o
+	
+dp45solver.o: $(SRCSOL)/dp45solver.cpp
+	$(CC) $(CFLAGS) $(SRCSOL)/dp45solver.cpp -o $(BIN)/dp45solver.o
+	
+eulersolvercpu.o: $(SRCSOL)/eulersolvercpu.cpp
+	$(CC) $(CFLAGS) $(SRCSOL)/eulersolvercpu.cpp -o $(BIN)/eulersolvercpu.o
 
 clean:
 	rm -rf $(BIN)/*.o $(BIN)/HS

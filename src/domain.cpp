@@ -148,7 +148,7 @@ void Domain::nextStep() {
 
     if (mSolverInfo->isVariableStep()){
     	double error = collectError();
-		if (mSolverInfo->isErrorOK(error,totalGridElements)){
+		if (mSolverInfo->isErrorPermissible(error,totalGridElements)){
 			confirmStep();
 			mAcceptedStepCount++;
 			currentTime += timeStep;
@@ -388,14 +388,14 @@ void Domain::readFromFile(char* path) {
 
 	switch (mSolverIndex) {
 		case EULER:
-			mSolverInfo = new EulerSolverInfo();
+			mSolverInfo = new EulerSolver();
 			break;
 		case RK4:
 			cout << endl << "RK4 SOLVER NOT READY!" << endl;
 			mSolverInfo = NULL;
 			break;
 		default:
-			mSolverInfo = new EulerSolverInfo();
+			mSolverInfo = new EulerSolver();
 	}
 
 	readBlockCount(in);

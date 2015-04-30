@@ -14,6 +14,7 @@
 
 class DP45Solver: public Solver {
 public:
+	DP45Solver();
 	DP45Solver(int _count);
 	virtual ~DP45Solver();
 
@@ -26,7 +27,7 @@ public:
 
 	void prepareArgument(int stage, double timeStep) { return; }
 
-	virtual void confirmStep(double timestep) { return; }
+	virtual void confirmStep(double timestep);
 
 	virtual double getStepError(double timeStep, double aTol, double rTol) { return 0.0; }
 

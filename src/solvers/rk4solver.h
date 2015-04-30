@@ -13,6 +13,7 @@
 class RK4Solver: public Solver {
 public:
 public:
+	RK4Solver();
 	RK4Solver(int _count);
 	~RK4Solver();
 

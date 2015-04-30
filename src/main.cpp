@@ -39,7 +39,6 @@ public:
 };*/
 
 int main(int argc, char * argv[]) {
-	// TODO Переделывание солверов
 	/*
 	 * Инициализация MPI
 	 */

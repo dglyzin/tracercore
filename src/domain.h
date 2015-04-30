@@ -112,7 +112,7 @@ private:
 	 * Структура данных, возвращающая основные параметры солвера
 	 */
 	// TODO назначение?
-	SolverInfo * mSolverInfo;
+	Solver* mSolverInfo;
     double mAtol; //solver absolute tolerance
     double mRtol; //solver relative tolerance
 

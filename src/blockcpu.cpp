@@ -624,13 +624,13 @@ void BlockCpu::createSolver(int solverIdx) {
 
 	switch (solverIdx) {
 		case EULER:
-			mSolver = new EulerSolver(count);
+			mSolver = new EulerSolverCpu(count);
 			break;
 		case RK4:
 			cout << endl << "RK4 SOLVER NOT READY!" << endl;
 			break;
 		default:
-			mSolver = new EulerSolver(count);
+			mSolver = new EulerSolverCpu(count);
 			break;
 	}
 }

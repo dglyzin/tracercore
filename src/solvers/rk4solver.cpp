@@ -7,6 +7,10 @@
 
 #include "rk4solver.h"
 
+RK4Solver::RK4Solver() : Solver() {
+	mTempStore1 = mTempStore2 = mTempStore3 = mTempStore4 = mArg = NULL;
+}
+
 RK4Solver::RK4Solver(int _count) : Solver(_count){
     //mCount = _count;
     mTempStore1 = mTempStore2 = mTempStore3 = mTempStore4 = mArg = NULL;

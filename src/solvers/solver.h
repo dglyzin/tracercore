@@ -47,6 +47,7 @@ protected:
   	int     mCount; //total number of elements in every array
   	double* mState;
 };
+/*
 
 class SolverInfo{
 public:
@@ -66,8 +67,8 @@ protected:
 	int mStageCount;
 };
 
-/*Solver* GetCpuSolver(int solverIdx, int count);
-Solver* GetGpuSolver(int solverIdx, int count);*/
+Solver* GetCpuSolver(int solverIdx, int count);
+Solver* GetGpuSolver(int solverIdx, int count);
 
 //***********************1. EULER SOLVER**************
 class EulerSolver: public Solver{
@@ -150,6 +151,7 @@ public:
 	int isErrorOK(double error, int totalDomainElements); //error = total sum of squares from all blocks
 
 };
+*/
 
 
 #endif /* SOLVER_H_ */

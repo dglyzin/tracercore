@@ -12,6 +12,7 @@
 
 class EulerSolver: public Solver{
 public:
+	EulerSolver();
 	EulerSolver(int _count);
 	~EulerSolver();
 
