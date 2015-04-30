@@ -20,7 +20,7 @@ public:
 	double* getStageSource(int stage);
 	double* getStageResult(int stage);
 
-	double getStageTimeStep(int stage) { return 0; }
+	double getStageTimeStep(int stage) { return 0.0; }
 
 	void prepareArgument(int stage, double timeStep) { return; }
 
