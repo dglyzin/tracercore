@@ -34,14 +34,15 @@ OBJECT=$(OBJECTCPP) $(OBJECTCU)
 EXECUTABLE=HS
 
 #all:
-#	$(SOURCE)
+#	$(OBJECT)
 all: $(SOURCE) $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECT)
-	$(CUDACC) -O3 $(CUDAARCH) -I$(CUDAINC) $(MPILIB) -L$(USERFUNCLIB) $(OBJECT) -o $@
+	$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I$(CUDAINC) $(MPILIB) -L$(USERFUNCLIB) $(OBJECT) -o $@ -Xcompiler -fopenmp
 
 .cpp.o:
 	$(CC) $(CFLAGS) -I$(CUDAINC) -fopenmp $< -o $@
+	111
 
 .cu.o:
 	$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I$(CUDAINC) $< -o $@
