@@ -31,16 +31,13 @@ OBJECTCU=$(SOURCECU:.cu=.o)
 
 EXECUTABLE=HS
 
-
-
-
 all: $(SOURCECPP) $(SOURCECU) $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECTCPP) $(OBJECTCU)
-	$(CUDACC)) -O3 $(CUDAARCH) -I $(CUDAINC) $(MPILIB) -L $(USERFUNCLIB) $(OBJECTCPP) $(OBJECTCU) -o $@
+	$(CUDACC) -O3 $(CUDAARCH) -I$(CUDAINC) $(MPILIB) -L$(USERFUNCLIB) $(OBJECTCPP) $(OBJECTCU) -o $@
 	
 .cpp.o:
-	$(CC) $(CFLAGS) -I $(CUDAINC) -fopenmp $< -o $@
+	$(CC) $(CFLAGS) -I$(CUDAINC) -fopenmp $< -o $@
 	
 .cu.o:
-	$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I $(CUDAINC) $< -o $@
+	$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I$(CUDAINC) $< -o $@
