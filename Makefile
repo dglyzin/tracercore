@@ -1,64 +1,48 @@
 CC=mpiCC
 CFLAGS=-c -O3 -Wall
-SRC=src
-SRCSOL=src/solvers
 
 CUDACC=nvcc
 CUFLAGS=-c -O3
 CUDAINC=/usr/local/cuda/include
-CUDAARCH=-arch=sm_20 
+CUDAARCH=-arch=sm_20
+
+SRC=src
+SRCSOL=$(SRC)/solvers
+
 BIN=bin
 MPILIB=-I/usr/mpi/gcc/openmpi-1.8.4/include -L /usr/mpi/gcc/openmpi-1.8.4/lib -lmpi -lmpi_cxx
 
-all: HS 
+USERFUNCLIB=./bin -l userfuncs
 
-HS: main.o domain.o block.o blockcpu.o blocknull.o interconnect.o enums.o blockgpu.o solver.o eulersolver.o rk4solver.o dp45solver.o eulersolvercpu.o
-	$(CUDACC) -O3 $(CUDAARCH) -I$(CUDAINC) $(MPILIB) -L./bin -luserfuncs $(BIN)/main.o $(BIN)/domain.o $(BIN)/block.o $(BIN)/interconnect.o  $(BIN)/blockcpu.o $(BIN)/blockgpu.o $(BIN)/blocknull.o $(BIN)/enums.o $(BIN)/solver.o $(BIN)/eulersolver.o $(BIN)/rk4solver.o $(BIN)/dp45solver.o $(BIN)/eulersolvercpu.o -o $(BIN)/HS -Xcompiler -fopenmp
 
-#HS: main.o domain.o block.o blockcpu.o blocknull.o interconnect.o enums.o userfuncs.o #blockgpu.o
-#	$(CUDACC) -O3 $(CUDAARCH) -I$(CUDAINC) $(MPILIB) $(BIN)/userfuncs.o $(BIN)/main.o $(BIN)/domain.o $(BIN)/block.o $(BIN)/interconnect.o  $(BIN)/blockcpu.o $(BIN)/blocknull.o $(BIN)/enums.o -o $(BIN)/HS -Xcompiler -fopenmp
 
-#userfuncs.o: $(SRC)/userfuncs.cpp
-#	$(CC) $(CFLAGS) $(SRC)/userfuncs.cpp -o $(BIN)/userfuncs.o
-	
-main.o: $(SRC)/main.cpp
-	$(CC) $(CFLAGS) $(SRC)/main.cpp -o $(BIN)/main.o
+BLOCKCPP=block.cpp blockcpu.cpp blocknull.cpp
+BLOCKGPU=blockgpu.cu
 
-domain.o: $(SRC)/domain.cpp  
-	$(CC) $(CFLAGS) -I$(CUDAINC) $(SRC)/domain.cpp -fopenmp -o $(BIN)/domain.o
+SOLVER=$(SRCSOL)/solver.cpp $(SRCSOL)/eulersolver.cpp $(SRCSOL)/rk4solver.cpp $(SRCSOL)/dp45solver.cpp
+SOLVERCPU=$(SRCSOL)/eulersolvercpu.cpp $(SRCSOL)/rk4solvercpu.cpp $(SRCSOL)/dp45solvercpu.cpp
+SOLVERGPU=
 
-block.o: $(SRC)/block.cpp  
-	$(CC) $(CFLAGS)  -I$(CUDAINC) $(SRC)/block.cpp -o $(BIN)/block.o
-	
-blockcpu.o: $(SRC)/blockcpu.cpp  
-	$(CC) $(CFLAGS) -I$(CUDAINC) $(SRC)/blockcpu.cpp -o $(BIN)/blockcpu.o -fopenmp
-	
-blockgpu.o: $(SRC)/blockgpu.cu  
-	$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I$(CUDAINC) $(SRC)/blockgpu.cu -o $(BIN)/blockgpu.o
-	
-blocknull.o: $(SRC)/blocknull.cpp  
-	$(CC) $(CFLAGS) $(SRC)/blocknull.cpp -o $(BIN)/blocknull.o
+SOURCECPP=main.cpp domain.cpp interconnect.cpp $(BLOCKCPP) $(SOLVER) $(SOLVERCPU)
+SOURCECU=$(BLOCKGPU) $(SOLVERGPU)
 
-interconnect.o: $(SRC)/interconnect.cpp
-	$(CC) $(CFLAGS) $(SRC)/interconnect.cpp -o $(BIN)/interconnect.o
-	
-enums.o: $(SRC)/enums.cpp
-	$(CC) $(CFLAGS) $(SRC)/enums.cpp -o $(BIN)/enums.o
-	
-solver.o: $(SRCSOL)/solver.cpp
-	$(CC) $(CFLAGS) $(SRCSOL)/solver.cpp -o $(BIN)/solver.o -fopenmp
-	
-eulersolver.o: $(SRCSOL)/eulersolver.cpp
-	$(CC) $(CFLAGS) $(SRCSOL)/eulersolver.cpp -o $(BIN)/eulersolver.o
-	
-rk4solver.o: $(SRCSOL)/rk4solver.cpp
-	$(CC) $(CFLAGS) $(SRCSOL)/rk4solver.cpp -o $(BIN)/rk4solver.o
-	
-dp45solver.o: $(SRCSOL)/dp45solver.cpp
-	$(CC) $(CFLAGS) $(SRCSOL)/dp45solver.cpp -o $(BIN)/dp45solver.o
-	
-eulersolvercpu.o: $(SRCSOL)/eulersolvercpu.cpp
-	$(CC) $(CFLAGS) $(SRCSOL)/eulersolvercpu.cpp -o $(BIN)/eulersolvercpu.o
+#OBJECTCPP=$(SOURCECPP:.cpp .o)
+#OBJECTCU=$(SOURCECU:.cu .o)
 
-clean:
-	rm -rf $(BIN)/*.o $(BIN)/HS
+.SOME: .cpp .o
+
+EXECUTABLE=HS
+
+
+
+
+all: $(SOURCECPP) $(SOURCECU) $(EXECUTABLE)
+
+$(EXECUTABLE): $(OBJECTCPP) $(OBJECTCU)
+	$(CUDACC)) -O3 $(CUDAARCH) -I $(CUDAINC) $(MPILIB) -L $(USERFUNCLIB) $(OBJECTCPP) $(OBJECTCU) -o $@
+	
+.cpp.o:
+	$(CC) $(CFLAGS) -I $(CUDAINC) -fopenmp $< -o $@
+	
+.cu.o:
+	$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I $(CUDAINC) $< -o $@
