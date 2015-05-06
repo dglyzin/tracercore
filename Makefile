@@ -45,3 +45,8 @@ $(EXECUTABLE): $(OBJECT)
 
 .cu.o:
 	$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I$(CUDAINC) $< -o $@
+
+	
+clean:
+	rm -rf $(SRC)/*.o
+	rm -rf $(SOLVER)/*.o
