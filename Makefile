@@ -17,7 +17,7 @@ USERFUNCLIB=./bin -l userfuncs
 
 
 BLOCKCPP=$(SRC)/block.cpp $(SRC)/blockcpu.cpp $(SRC)/blocknull.cpp
-BLOCKGPU=#$(SRC)/blockgpu.cu
+BLOCKGPU=$(SRC)/blockgpu.cu
 
 SOLVER=$(SRCSOL)/solver.cpp $(SRCSOL)/eulersolver.cpp $(SRCSOL)/rk4solver.cpp $(SRCSOL)/dp45solver.cpp
 SOLVERCPU=$(SRCSOL)/eulersolvercpu.cpp $(SRCSOL)/rk4solvercpu.cpp $(SRCSOL)/dp45solvercpu.cpp
@@ -29,12 +29,12 @@ SOURCE=$(SOURCECPP) $(SOURCECU)
 
 OBJECTCPP=$(SOURCECPP:.cpp=.o)
 OBJECTCU=$(SOURCECU:.cu=.o)
-OBJECT=$(OBJECTCPP) $(OBJECTCU) block1.o
+OBJECT=$(OBJECTCPP) $(OBJECTCU) #block1.o
 
 EXECUTABLE=HS
 
 #all:
-#	$(OBJECT)
+#	$(OBJECT) $(SOURCE)
 all: $(SOURCE) $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECT)
@@ -44,7 +44,8 @@ $(EXECUTABLE): $(OBJECT)
 	$(CC) $(CFLAGS) -I$(CUDAINC) -fopenmp $< -o $@
 
 .cu.o:
-	$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I$(CUDAINC) $< -o $@
+	#$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I$(CUDAINC) $< -o $@
+	echo "11"
 	
 block1.o: $(SRC)/blockgpu.cu
 	$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I$(CUDAINC) $(SRC)/blockgpu.cu -o $(SRC)/block1.o
