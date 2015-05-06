@@ -49,4 +49,4 @@ $(EXECUTABLE): $(OBJECT)
 	
 clean:
 	rm -rf $(SRC)/*.o
-	rm -rf $(SOLVER)/*.o
+	rm -rf $(SRCSOL)/*.o
