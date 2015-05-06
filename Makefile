@@ -1,5 +1,5 @@
 CC=mpiCC
-CFLAGS=-c -O3 -Wall
+CFLAGS=-c -O3 -Wall -std=c++11
 
 CUDACC=nvcc
 CUFLAGS=-c -O3
@@ -45,6 +45,7 @@ $(EXECUTABLE): $(OBJECT)
 
 .cu.o:
 	$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I$(CUDAINC) $< -o $@
+	echo "111"
 
 	
 clean:
