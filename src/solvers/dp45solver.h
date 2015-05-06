@@ -38,7 +38,7 @@ public:
 	double getNewStep(double timeStep, double error, int totalDomainElements);
 	bool isErrorPermissible(double error, int totalDomainElements);
 
-private:
+protected:
     double* mTempStore1;
     double* mTempStore2;
     double* mTempStore3;
