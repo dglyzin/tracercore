@@ -16,14 +16,14 @@ USERFUNCLIB=./bin -l userfuncs
 
 
 
-BLOCKCPP=block.cpp blockcpu.cpp blocknull.cpp
-BLOCKGPU=blockgpu.cu
+BLOCKCPP=$(SRC)/block.cpp $(SRC)/blockcpu.cpp $(SRC)/blocknull.cpp
+BLOCKGPU=$(SRC)/blockgpu.cu
 
 SOLVER=$(SRCSOL)/solver.cpp $(SRCSOL)/eulersolver.cpp $(SRCSOL)/rk4solver.cpp $(SRCSOL)/dp45solver.cpp
 SOLVERCPU=$(SRCSOL)/eulersolvercpu.cpp $(SRCSOL)/rk4solvercpu.cpp $(SRCSOL)/dp45solvercpu.cpp
 SOLVERGPU=
 
-SOURCECPP=main.cpp domain.cpp interconnect.cpp $(BLOCKCPP) $(SOLVER) $(SOLVERCPU)
+SOURCECPP=$(SRC)/main.cpp $(SRC)/domain.cpp $(SRC)/interconnect.cpp $(BLOCKCPP) $(SOLVER) $(SOLVERCPU)
 SOURCECU=$(BLOCKGPU) $(SOLVERGPU)
 SOURCE=$(SOURCECPP) $(SOURCECU)
 
@@ -42,7 +42,6 @@ $(EXECUTABLE): $(OBJECT)
 
 .cpp.o:
 	$(CC) $(CFLAGS) -I$(CUDAINC) -fopenmp $< -o $@
-	111
 
 .cu.o:
 	$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I$(CUDAINC) $< -o $@
