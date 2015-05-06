@@ -17,24 +17,24 @@ USERFUNCLIB=./bin -l userfuncs
 
 
 BLOCKCPP=$(SRC)/block.cpp $(SRC)/blockcpu.cpp $(SRC)/blocknull.cpp
-BLOCKGPU=$(SRC)/blockgpu.cu
+BLOCKGPU=#$(SRC)/blockgpu.cu
 
 SOLVER=$(SRCSOL)/solver.cpp $(SRCSOL)/eulersolver.cpp $(SRCSOL)/rk4solver.cpp $(SRCSOL)/dp45solver.cpp
 SOLVERCPU=$(SRCSOL)/eulersolvercpu.cpp $(SRCSOL)/rk4solvercpu.cpp $(SRCSOL)/dp45solvercpu.cpp
 SOLVERGPU=
 
-SOURCECPP=$(SRC)/main.cpp $(SRC)/domain.cpp $(SRC)/interconnect.cpp $(BLOCKCPP) $(SOLVER) $(SOLVERCPU)
+SOURCECPP=$(SRC)/main.cpp $(SRC)/domain.cpp $(SRC)/interconnect.cpp $(SRC)/enums.cpp $(BLOCKCPP) $(SOLVER) $(SOLVERCPU)
 SOURCECU=$(BLOCKGPU) $(SOLVERGPU)
 SOURCE=$(SOURCECPP) $(SOURCECU)
 
 OBJECTCPP=$(SOURCECPP:.cpp=.o)
 OBJECTCU=$(SOURCECU:.cu=.o)
-OBJECT=$(OBJECTCPP) $(OBJECTCU)
+OBJECT=$(OBJECTCPP) $(OBJECTCU) block1.o
 
 EXECUTABLE=HS
 
 #all:
-#	$(SOURCE)
+#	$(OBJECT)
 all: $(SOURCE) $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECT)
@@ -45,7 +45,9 @@ $(EXECUTABLE): $(OBJECT)
 
 .cu.o:
 	$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I$(CUDAINC) $< -o $@
-	echo "111"
+	
+block1.o: $(SRC)/blockgpu.cu
+	$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I$(CUDAINC) $(SRC)/blockgpu.cu -o $(SRC)/block1.o
 
 	
 clean:
