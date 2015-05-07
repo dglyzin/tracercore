@@ -2,7 +2,7 @@ CC=mpiCC
 CFLAGS=-c -O3 -Wall -std=c++11
 
 CUDACC=nvcc
-CUFLAGS=-O3
+CUFLAGS=-c -O3 -std=c++11
 CUDAINC=/usr/local/cuda/include
 CUDAARCH=-arch=sm_20
 
@@ -17,7 +17,7 @@ USERFUNCLIB=./bin -l userfuncs
 
 
 BLOCKCPP=$(SRC)/block.cpp $(SRC)/blockcpu.cpp $(SRC)/blocknull.cpp
-BLOCKGPU=$(SRC)/blockgpu.cu
+BLOCKGPU=#$(SRC)/blockgpu.cu
 
 SOLVER=$(SRCSOL)/solver.cpp $(SRCSOL)/eulersolver.cpp $(SRCSOL)/rk4solver.cpp $(SRCSOL)/dp45solver.cpp
 SOLVERCPU=$(SRCSOL)/eulersolvercpu.cpp $(SRCSOL)/rk4solvercpu.cpp $(SRCSOL)/dp45solvercpu.cpp
@@ -27,9 +27,9 @@ SOURCECPP=$(SRC)/main.cpp $(SRC)/domain.cpp $(SRC)/interconnect.cpp $(SRC)/enums
 SOURCECU=$(BLOCKGPU) $(SOLVERGPU)
 SOURCE=$(SOURCECPP) $(SOURCECU)
 
-#OBJECTCPP=$(SOURCECPP:.cpp=.o)
-#OBJECTCU=$(SOURCECU:.cu=.o)
-#OBJECT=$(OBJECTCPP) $(OBJECTCU) #block1.o
+OBJECTCPP=$(SOURCECPP:.cpp=.o)
+OBJECTCU=$(SOURCECU:.cu=.o)
+OBJECT=$(OBJECTCPP) $(OBJECTCU)
 
 EXECUTABLE=HS
 
@@ -37,8 +37,8 @@ EXECUTABLE=HS
 #	$(OBJECT) $(SOURCE)
 all: $(EXECUTABLE)
 
-$(EXECUTABLE): $(SOURCE)
-	$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I$(CUDAINC) $(MPILIB) -L$(USERFUNCLIB) $(SOURCE) -o $(EXECUTABLE) -Xcompiler -fopenmp
+$(EXECUTABLE): $(OBJECT) block1.o
+	$(CUDACC) -O3 $(CUDAARCH) -I$(CUDAINC) $(MPILIB) -L$(USERFUNCLIB) $(OBJECT) $(SRC)/block1.o -o $(BIN)/$(EXECUTABLE) -Xcompiler -fopenmp
 
 .cpp.o:
 	$(CC) $(CFLAGS) -I$(CUDAINC) -fopenmp $< -o $@
