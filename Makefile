@@ -35,10 +35,10 @@ EXECUTABLE=HS
 
 #all:
 #	$(OBJECT) $(SOURCE)
-all: $(SOURCE) $(EXECUTABLE)
+all: $(EXECUTABLE)
 
-$(EXECUTABLE): $(OBJECT)
-	$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I$(CUDAINC) $(MPILIB) -L$(USERFUNCLIB) $(OBJECT) -o $@ -Xcompiler -fopenmp
+$(EXECUTABLE): $(SOURCE)
+	$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I$(CUDAINC) $(MPILIB) -L$(USERFUNCLIB) -o $(EXECUTABLE) $(SOURCE) -Xcompiler -fopenmp
 
 .cpp.o:
 	$(CC) $(CFLAGS) -I$(CUDAINC) -fopenmp $< -o $@
