@@ -45,7 +45,6 @@ $(EXECUTABLE): $(OBJECT) block1.o
 
 .cu.o:
 	#$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I$(CUDAINC) $< -o $@
-	echo "11"
 	
 block1.o: $(SRC)/blockgpu.cu
 	$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I$(CUDAINC) $(SRC)/blockgpu.cu -o $(SRC)/block1.o
