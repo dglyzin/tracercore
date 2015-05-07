@@ -2,7 +2,7 @@ CC=mpiCC
 CFLAGS=-c -O3 -Wall -std=c++11
 
 CUDACC=nvcc
-CUFLAGS=-c -O3
+CUFLAGS=-O3
 CUDAINC=/usr/local/cuda/include
 CUDAARCH=-arch=sm_20
 
@@ -10,9 +10,9 @@ SRC=src
 SRCSOL=$(SRC)/solvers
 
 BIN=bin
-MPILIB=-I/usr/mpi/gcc/openmpi-1.8.4/include -L/usr/mpi/gcc/openmpi-1.8.4/lib -lmpi -lmpi_cxx
+MPILIB=-I/usr/mpi/gcc/openmpi-1.8.4/include -L /usr/mpi/gcc/openmpi-1.8.4/lib -lmpi -lmpi_cxx
 
-USERFUNCLIB=./bin -luserfuncs
+USERFUNCLIB=./bin -l userfuncs
 
 
 
@@ -38,7 +38,7 @@ EXECUTABLE=HS
 all: $(EXECUTABLE)
 
 $(EXECUTABLE): $(SOURCE)
-	$(CUDACC) -O3 $(CUDAARCH) -I$(CUDAINC) $(MPILIB) -L./bin -luserfuncs $(SOURCE) -o $(BIN)/HS -Xcompiler -fopenmp
+	$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I$(CUDAINC) $(MPILIB) -L$(USERFUNCLIB) $(SOURCE) -o $(EXECUTABLE) -Xcompiler -fopenmp
 
 .cpp.o:
 	$(CC) $(CFLAGS) -I$(CUDAINC) -fopenmp $< -o $@
