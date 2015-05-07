@@ -10,9 +10,9 @@ SRC=src
 SRCSOL=$(SRC)/solvers
 
 BIN=bin
-MPILIB=-I/usr/mpi/gcc/openmpi-1.8.4/include -L /usr/mpi/gcc/openmpi-1.8.4/lib -lmpi -lmpi_cxx
+MPILIB=-I/usr/mpi/gcc/openmpi-1.8.4/include -L/usr/mpi/gcc/openmpi-1.8.4/lib -lmpi -lmpi_cxx
 
-USERFUNCLIB=./bin -l userfuncs
+USERFUNCLIB=./bin -luserfuncs
 
 
 
@@ -27,9 +27,9 @@ SOURCECPP=$(SRC)/main.cpp $(SRC)/domain.cpp $(SRC)/interconnect.cpp $(SRC)/enums
 SOURCECU=$(BLOCKGPU) $(SOLVERGPU)
 SOURCE=$(SOURCECPP) $(SOURCECU)
 
-OBJECTCPP=$(SOURCECPP:.cpp=.o)
-OBJECTCU=$(SOURCECU:.cu=.o)
-OBJECT=$(OBJECTCPP) $(OBJECTCU) #block1.o
+#OBJECTCPP=$(SOURCECPP:.cpp=.o)
+#OBJECTCU=$(SOURCECU:.cu=.o)
+#OBJECT=$(OBJECTCPP) $(OBJECTCU) #block1.o
 
 EXECUTABLE=HS
 
@@ -38,7 +38,7 @@ EXECUTABLE=HS
 all: $(EXECUTABLE)
 
 $(EXECUTABLE): $(SOURCE)
-	$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I$(CUDAINC) $(MPILIB) -L$(USERFUNCLIB) -o $(EXECUTABLE) $(SOURCE) -Xcompiler -fopenmp
+	$(CUDACC) -O3 $(CUDAARCH) -I$(CUDAINC) $(MPILIB) -L./bin -luserfuncs $(SOURCE) -o $(BIN)/HS -Xcompiler -fopenmp
 
 .cpp.o:
 	$(CC) $(CFLAGS) -I$(CUDAINC) -fopenmp $< -o $@
