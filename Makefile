@@ -39,15 +39,12 @@ all: $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECT) block1.o
 	$(CUDACC) -O3 $(CUDAARCH) -I$(CUDAINC) $(MPILIB) -L$(USERFUNCLIB) $(OBJECT) $(SRC)/block1.o -o $(BIN)/$(EXECUTABLE) -Xcompiler -fopenmp
-	
-$(OBJECT): $(SOURCE)
+
+.cpp.o:
 	$(CC) $(CFLAGS) -I$(CUDAINC) -fopenmp $< -o $@
 
-#.cpp.o:
-#	$(CC) $(CFLAGS) -I$(CUDAINC) -fopenmp $< -o $@
-
-#.cu.o:
-#	$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I$(CUDAINC) $< -o $@
+.cu.o:
+	$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I$(CUDAINC) $< -o $@
 	
 block1.o: $(SRC)/blockgpu.cu
 	$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I$(CUDAINC) $(SRC)/blockgpu.cu -o $(SRC)/block1.o
