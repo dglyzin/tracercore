@@ -37,8 +37,8 @@ EXECUTABLE=HS
 #	$(OBJECT) $(SOURCE)
 all: $(EXECUTABLE)
 
-$(EXECUTABLE): $(OBJECT) block1.o
-	$(CUDACC) -O3 $(CUDAARCH) -I$(CUDAINC) $(MPILIB) -L$(USERFUNCLIB) $(OBJECT) $(SRC)/block1.o -o $(BIN)/$(EXECUTABLE) -Xcompiler -fopenmp
+$(EXECUTABLE): $(OBJECT) blockgpu.o
+	$(CUDACC) -O3 $(CUDAARCH) -I$(CUDAINC) $(MPILIB) -L$(USERFUNCLIB) $(OBJECT) $(SRC)/blockgpu.o -o $(BIN)/$(EXECUTABLE) -Xcompiler -fopenmp
 
 .cpp.o:
 	$(CC) $(CFLAGS) -I$(CUDAINC) -fopenmp $< -o $@
@@ -46,8 +46,8 @@ $(EXECUTABLE): $(OBJECT) block1.o
 .cu.o:
 	$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I$(CUDAINC) $< -o $@
 	
-block1.o: $(SRC)/blockgpu.cu
-	$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I$(CUDAINC) $(SRC)/blockgpu.cu -o $(SRC)/block1.o
+blockgpu.o: $(SRC)/blockgpu.cu
+	$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I$(CUDAINC) $(SRC)/blockgpu.cu -o $(SRC)/blockgpu.o
 
 	
 clean:
