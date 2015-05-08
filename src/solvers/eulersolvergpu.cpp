@@ -8,26 +8,26 @@
 #include "eulersolvergpu.h"
 
 EulerSolverGpu::EulerSolverGpu(int _count) : EulerSolver(_count) {
-	mState = new double [mCount];
-	mTempStore1 = new double [mCount];
+	/*mState = new double [mCount];
+	mTempStore1 = new double [mCount];*/
 	cudaMalloc( (void**)&mState, count );
 	cudaMalloc( (void**)&mTempState1, count );
 }
 
 EulerSolverGpu::~EulerSolverGpu() {
-	delete mState;
-	delete mTempStore1;
+	cudaFree(mState);
+	cudaFree(mTempStore1);
 }
 
 
 void EulerSolverGpu::copyState(double* result) {
-	for (int idx = 0; idx < mCount; ++idx)
-		result[idx] = mState[idx];
+	/*for (int idx = 0; idx < mCount; ++idx)
+		result[idx] = mState[idx];*/
 }
 
 void EulerSolverGpu::prepareArgument(int stage, double timeStep) {
-#pragma omp parallel for
+/*#pragma omp parallel for
 	for (int idx = 0; idx < mCount; ++idx)
-	    mTempStore1[idx]= mState[idx] + timeStep * mTempStore1[idx];
+	    mTempStore1[idx]= mState[idx] + timeStep * mTempStore1[idx];*/
 }
 
