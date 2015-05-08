@@ -6,8 +6,6 @@
  */
 
 #include "block.h"
-#include <cuda.h>
-#include <cuda_runtime_api.h>
 
 
 Block::Block(int _dimension, int _xCount, int _yCount, int _zCount,

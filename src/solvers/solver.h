@@ -15,6 +15,9 @@
 #include <cassert>
 #include <math.h>
 
+#include <cuda.h>
+#include <cuda_runtime_api.h>
+
 class Solver {
 public:
 	Solver();
