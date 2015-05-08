@@ -5,3 +5,5 @@
 
 void assignArray(int* array, int value, int arrayLength);
 void assignArray(double* array, double value, int arrayLength);
+
+void copyArray()
