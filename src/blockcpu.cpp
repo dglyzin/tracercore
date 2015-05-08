@@ -627,7 +627,10 @@ void BlockCpu::createSolver(int solverIdx) {
 			mSolver = new EulerSolverCpu(count);
 			break;
 		case RK4:
-			cout << endl << "RK4 SOLVER NOT READY!" << endl;
+			mSolver = new RK4SolverCpu(count);
+			break;
+		case DP45:
+			mSolver = new DP45SolverCpu(count);
 			break;
 		default:
 			mSolver = new EulerSolverCpu(count);
