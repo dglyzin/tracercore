@@ -154,7 +154,7 @@
  * Функция ядра
  * Заполнение целочисленного массива определенным значением.
  */
-__global__ void assignIntArray (int* arr, int value, int arrayLength) {
+__global__ void assignIntArrayGlobal (int* arr, int value, int arrayLength) {
 	int	idx = BLOCK_SIZE * blockIdx.x + threadIdx.x;
 	
 	if( idx < arrayLength )
@@ -165,7 +165,7 @@ __global__ void assignIntArray (int* arr, int value, int arrayLength) {
  * Функция ядра
  * Копирование целочесленных массивов.
  */
-__global__ void copyIntArray (int* dest, int* source, int arrayLength) {
+__global__ void copyIntArrayGlobal (int* dest, int* source, int arrayLength) {
 	int	idx = BLOCK_SIZE * blockIdx.x + threadIdx.x;
 	
 	if( idx < arrayLength )
@@ -176,7 +176,7 @@ __global__ void copyIntArray (int* dest, int* source, int arrayLength) {
  * Функция ядра
  * Заполнение вещественного массива определенным значением.
  */
-__global__ void assignDoubleArray (double* arr, double value, int arrayLength) {
+__global__ void assignDoubleArrayGlobal (double* arr, double value, int arrayLength) {
 	int	idx = BLOCK_SIZE * blockIdx.x + threadIdx.x;
 	
 	if( idx < arrayLength )
@@ -187,11 +187,25 @@ __global__ void assignDoubleArray (double* arr, double value, int arrayLength) {
  * Функция ядра
  * Копирование вещественных массивов.
  */
-__global__ void copyDoubleArray (double* dest, double* source, int arrayLength) {
+__global__ void copyDoubleArrayGlobal (double* dest, double* source, int arrayLength) {
 	int	idx = BLOCK_SIZE * blockIdx.x + threadIdx.x;
 	
 	if( idx < arrayLength )
 		dest[idx] = source[idx];
+}
+
+void assignArray(int* arr, int value, int arrayLength) {
+	dim3 threads ( BLOCK_SIZE );
+	dim3 blocks  ( (int)ceil((double)arrayLength / threads.x) );
+	
+	assignIntArray <<< blocks, threads >>> ( matrix, value, arrayLength);
+}
+
+void assignArray(double* arr, double value, int arrayLength) {
+	dim3 threads ( BLOCK_SIZE );
+	dim3 blocks  ( (int)ceil((double)arrayLength / threads.x) );
+	
+	assignDoubleArray <<< blocks, threads >>> ( matrix, value, arrayLength);
 }
 
 /*
