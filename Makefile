@@ -20,22 +20,23 @@ BLOCK=$(SRC)/block.cpp $(SRC)/blockcpu.cpp $(SRC)/blocknull.cpp $(SRC)/blockgpu.
 
 SOLVER=$(SRCSOL)/solver.cpp $(SRCSOL)/eulersolver.cpp $(SRCSOL)/rk4solver.cpp $(SRCSOL)/dp45solver.cpp $(SRCSOL)/eulersolvercpu.cpp $(SRCSOL)/rk4solvercpu.cpp $(SRCSOL)/dp45solvercpu.cpp
 
-SOURCECPP=$(SRC)/main.cpp $(SRC)/domain.cpp $(SRC)/interconnect.cpp $(SRC)/enums.cpp $(BLOCK) $(SOLVER)
-SOURCE=$(SOURCECPP) $(SOURCECU)
+SOURCE=$(SRC)/main.cpp $(SRC)/domain.cpp $(SRC)/interconnect.cpp $(SRC)/enums.cpp $(BLOCK) $(SOLVER)
 
-OBJECT=$(SOURCECPP:.cpp=.o)
+OBJECT=$(SOURCE:.cpp=.o)
 
 EXECUTABLE=HS
 
 
 all: $(EXECUTABLE)
 
-$(EXECUTABLE): $(OBJECT)
-	$(CUDACC) -O3 $(CUDAARCH) -I$(CUDAINC) $(MPILIB) -L$(USERFUNCLIB) $(OBJECT) -o $(BIN)/$(EXECUTABLE) -Xcompiler -fopenmp
+$(EXECUTABLE): $(OBJECT) cuda_func.o
+	$(CUDACC) -O3 $(CUDAARCH) -I$(CUDAINC) $(MPILIB) -L$(USERFUNCLIB) $(OBJECT) $(SRC)/cuda_func.o -o $(BIN)/$(EXECUTABLE) -Xcompiler -fopenmp
 
 .cpp.o:
 	$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I$(CUDAINC) $(MPILIB) $< -o $@ -Xcompiler -fopenmp
 
+cuda_func.o:
+	$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I$(CUDAINC) $(MPILIB) $(SRC)/cuda_func.cu -o $(SRC)/cuda_func.o
 	
 clean:
 	rm -rf $(SRC)/*.o

@@ -10,11 +10,6 @@
 
 #include "block.h"
 
-#define BLOCK_LENGHT_SIZE 32
-#define BLOCK_WIDTH_SIZE 16
-
-#define BLOCK_SIZE 512
-
 /*
  * Класс обработки данных на видеокарте
  */
