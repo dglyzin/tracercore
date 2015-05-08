@@ -33,7 +33,7 @@ $(EXECUTABLE): $(OBJECT) cuda_func.o
 	$(CUDACC) -O3 $(CUDAARCH) -I$(CUDAINC) $(MPILIB) -L$(USERFUNCLIB) $(OBJECT) $(SRC)/cuda_func.o -o $(BIN)/$(EXECUTABLE) -Xcompiler -fopenmp
 
 .cpp.o:
-	$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I$(CUDAINC) $(MPILIB) $< -o $@ -Xcompiler -fopenmp
+	$(CC) $(CFLAGS) -I$(CUDAINC) -fopenmp $< -o $@
 
 cuda_func.o:
 	$(CUDACC) $(CUFLAGS) $(CUDAARCH) -I$(CUDAINC) $(MPILIB) $(SRC)/cuda_func.cu -o $(SRC)/cuda_func.o
