@@ -12,8 +12,12 @@
 
 class EulerSolverGpu: public EulerSolver {
 public:
-	EulerSolverGpu();
+	EulerSolverGpu(int _count);
 	virtual ~EulerSolverGpu();
+
+	void copyState(double* result);
+
+	void prepareArgument(int stage, double timeStep);
 };
 
 #endif /* SRC_SOLVERS_EULERSOLVERGPU_H_ */
