@@ -7,12 +7,14 @@
 
 #include "eulersolvergpu.h"
 
-EulerSolverGpu::EulerSolverCpu(int _count) : EulerSolver(_count) {
+EulerSolverGpu::EulerSolverGpu(int _count) : EulerSolver(_count) {
 	mState = new double [mCount];
 	mTempStore1 = new double [mCount];
+	cudaMalloc( (void**)&mState, count );
+	cudaMalloc( (void**)&mTempState1, count );
 }
 
-EulerSolverGpu::~EulerSolverCpu() {
+EulerSolverGpu::~EulerSolverGpu() {
 	delete mState;
 	delete mTempStore1;
 }
