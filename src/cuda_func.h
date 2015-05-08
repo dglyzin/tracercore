@@ -3,5 +3,5 @@
 
 #define BLOCK_SIZE 512
 
-void assignArray(int* arr, int value, int arrayLength);
-void assignArray(double* arr, double value, int arrayLength);
+void assignArray(int* array, int value, int arrayLength);
+void assignArray(double* array, double value, int arrayLength);
