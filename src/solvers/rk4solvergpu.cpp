@@ -40,13 +40,12 @@ RK4SolverGpu::~RK4SolverGpu() {
 }
 
 void RK4SolverGpu::copyState(double* result) {
-	for (int idx = 0; idx < mCount; ++idx)
-		result[idx] = mState[idx];
+	cudaMemcpy(result, mState, mCount * sizeof(double), cudaMemcpyDeviceToHost);
 }
 
 void RK4SolverGpu::prepareArgument(int stage, double timeStep) {
 
-	if      (stage == 0)
+	/*if      (stage == 0)
 #pragma omp parallel for
 		for (int idx = 0; idx < mCount; idx++)
 			mArg[idx] = mState[idx] + 0.5 * timeStep*mTempStore1[idx];
@@ -64,5 +63,13 @@ void RK4SolverGpu::prepareArgument(int stage, double timeStep) {
 		for (int idx = 0; idx < mCount; idx++)
 			mArg[idx] = mState[idx] + timeStep * ( b1 * mTempStore1[idx] + b2 * mTempStore2[idx] + b3 * mTempStore3[idx] + b4 * mTempStore4[idx] );
 	}
-	else assert(0);
+	else assert(0);*/
+
+	switch (stage) {
+		case 0:
+
+			break;
+		default:
+			break;
+	}
 }

@@ -21,7 +21,7 @@ EulerSolverGpu::~EulerSolverGpu() {
 
 
 void EulerSolverGpu::copyState(double* result) {
-	cudaMemcpy(result, mState, mCount, cudaMemcpyDeviceToHost);
+	cudaMemcpy(result, mState, mCount * sizeof(double), cudaMemcpyDeviceToHost);
 }
 
 void EulerSolverGpu::prepareArgument(int stage, double timeStep) {
