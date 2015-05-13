@@ -28,6 +28,10 @@ RK4SolverGpu::RK4SolverGpu(int _count) : RK4Solver(_count) {
 
     assignArray(mState, 0, mCount);
     assignArray(mTempStore1, 0, mCount);
+    assignArray(mTempStore2, 0, mCount);
+    assignArray(mTempStore3, 0, mCount);
+    assignArray(mTempStore4, 0, mCount);
+    assignArray(mArg, 0, mCount);
 }
 
 RK4SolverGpu::~RK4SolverGpu() {
@@ -67,9 +71,38 @@ void RK4SolverGpu::prepareArgument(int stage, double timeStep) {
 
 	switch (stage) {
 		case 0:
+			multipliedArrayByNumber(mTempStore1, 0.5 * timeStep, mArg, mCount);
+			sumArray(mArg, mState, mArg, mCount);
+			break;
+
+		case 1:
+			multipliedArrayByNumber(mTempStore2, 0.5 * timeStep, mArg, mCount);
+			sumArray(mArg, mState, mArg, mCount);
+			break;
+
+		case 2:
+			multipliedArrayByNumber(mTempStore3, timeStep, mArg, mCount);
+			sumArray(mArg, mState, mArg, mCount);
+			break;
+
+		case 3:
+			multipliedArrayByNumber(mTempStore1, b1, mTempStore1, mCount);
+			multipliedArrayByNumber(mTempStore2, b2, mTempStore1, mCount);
+			multipliedArrayByNumber(mTempStore3, b3, mTempStore1, mCount);
+			multipliedArrayByNumber(mTempStore4, b4, mTempStore1, mCount);
+
+			sumArray(mArg, mTempStore1, mArg, mCount);
+			sumArray(mArg, mTempStore2, mArg, mCount);
+			sumArray(mArg, mTempStore3, mArg, mCount);
+			sumArray(mArg, mTempStore4, mArg, mCount);
+
+			multipliedArrayByNumber(mArg, timeStep, mArg, mCount);
+
+			sumArray(mArg, mState, mArg, mCount);
 
 			break;
 		default:
+			assert(0);
 			break;
 	}
 }
