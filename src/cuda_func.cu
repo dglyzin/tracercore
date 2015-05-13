@@ -185,11 +185,11 @@ __global__ void sumDoubleArray (double* arg1, double* arg2, double* result, int 
 		result[idx] = arg1[idx] + arg2[idx];
 }
 
-__global__ void multipliedDoubleArrayByNumber (double* array, double value, int arrayLength) {
+__global__ void multipliedDoubleArrayByNumber (double* array, double value, double* result, int arrayLength) {
 	int	idx = BLOCK_SIZE * blockIdx.x + threadIdx.x;
 	
 	if( idx < arrayLength )
-		array[idx] *= value;
+		result[idx] = array[idx] * value;
 }
 
 
@@ -231,11 +231,11 @@ void sumArray(double* arg1, double* arg2, double* result, int arrayLength) {
 	sumDoubleArray <<< blocks, threads >>> ( arg1, arg2, result, arrayLength);
 }
 
-void multipliedArrayByNumber(double* array, double value, int arrayLength) {
+void multipliedArrayByNumber(double* array, double value, double* result, int arrayLength) {
 	dim3 threads ( BLOCK_SIZE );
 	dim3 blocks  ( (int)ceil((double)arrayLength / threads.x) );
 	
-	multipliedDoubleArrayByNumber <<< blocks, threads >>> ( array, value, arrayLength);
+	multipliedDoubleArrayByNumber <<< blocks, threads >>> ( array, value, result, arrayLength);
 }
 
 void prepareArgument() {

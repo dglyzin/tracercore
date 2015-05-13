@@ -18,7 +18,7 @@ void copyArray(double* dest, double* source, int arrayLength);
 
 void sumArray(double* arg1, double* arg2, double* result, int arrayLength);
 
-void multipliedArrayByNumber(double* array, double value, int arrayLength);
+void multipliedArrayByNumber(double* array, double value, double* result, int arrayLength);
 
 void prepareArgument();
 void prepareBorder();
