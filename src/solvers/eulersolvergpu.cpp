@@ -29,6 +29,6 @@ void EulerSolverGpu::prepareArgument(int stage, double timeStep) {
 	for (int idx = 0; idx < mCount; ++idx)
 	    mTempStore1[idx]= mState[idx] + timeStep * mTempStore1[idx];*/
 	multipliedArrayByNumber(mTempStore1, timeStep, mCount);
-	sumArray(mState, mTempStore1, mState, mCount);
+	sumArray(mState, mTempStore1, mTempStore1, mCount);
 }
 
