@@ -8,3 +8,9 @@ void assignArray(double* array, double value, int arrayLength);
 
 void copyArray(int* dest, int* source, int arrayLength);
 void copyArray(double* dest, double* source, int arrayLength);
+
+void prepareArgument();
+void prepareBorder();
+void computeCenter();
+void computeBorder();
+
