@@ -206,6 +206,22 @@ void copyArray(double* dest, double* source, int arrayLength) {
 	
 	copyDoubleArray <<< blocks, threads >>> ( dest, source, arrayLength);
 }
+
+void prepareArgument() {
+	printf("\nPrepare argument GPU\n");
+}
+
+void prepareBorder() {
+	printf("\nPreapre border GPU\n");
+}
+
+void computeCenter() {
+	printf("\nCompute center GPU\n");
+}
+
+void computeBorder() {
+	printf("\nCompute border GPU\n");
+}
 /*
  * Функция ядра
  * Копирование данных из матрицы в массив.
