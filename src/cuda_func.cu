@@ -154,11 +154,11 @@
  * Функция ядра
  * Заполнение целочисленного массива определенным значением.
  */
-__global__ void assignIntArray (int* arr, int value, int arrayLength) {
+__global__ void assignIntArray (int* array, int value, int arrayLength) {
 	int	idx = BLOCK_SIZE * blockIdx.x + threadIdx.x;
 	
 	if( idx < arrayLength )
-		arr[idx] = value;
+		array[idx] = value;
 }
 
 /*
@@ -176,11 +176,11 @@ __global__ void copyIntArray (int* dest, int* source, int arrayLength) {
  * Функция ядра
  * Заполнение вещественного массива определенным значением.
  */
-__global__ void assignDoubleArray (double* arr, double value, int arrayLength) {
+__global__ void assignDoubleArray (double* array, double value, int arrayLength) {
 	int	idx = BLOCK_SIZE * blockIdx.x + threadIdx.x;
 	
 	if( idx < arrayLength )
-		arr[idx] = value;
+		array[idx] = value;
 }
 
 /*
