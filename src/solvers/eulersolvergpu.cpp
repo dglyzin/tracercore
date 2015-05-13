@@ -10,8 +10,8 @@
 EulerSolverGpu::EulerSolverGpu(int _count) : EulerSolver(_count) {
 	/*mState = new double [mCount];
 	mTempStore1 = new double [mCount];*/
-	cudaMalloc( (void**)&mState, count );
-	cudaMalloc( (void**)&mTempState1, count );
+	cudaMalloc( (void**)&mState, mCount );
+	cudaMalloc( (void**)&mTempStore1, mCount );
 }
 
 EulerSolverGpu::~EulerSolverGpu() {
@@ -21,13 +21,14 @@ EulerSolverGpu::~EulerSolverGpu() {
 
 
 void EulerSolverGpu::copyState(double* result) {
-	/*for (int idx = 0; idx < mCount; ++idx)
-		result[idx] = mState[idx];*/
+	cudaMemcpy(result, mState, mCount, cudaMemcpyDeviceToHost);
 }
 
 void EulerSolverGpu::prepareArgument(int stage, double timeStep) {
 /*#pragma omp parallel for
 	for (int idx = 0; idx < mCount; ++idx)
 	    mTempStore1[idx]= mState[idx] + timeStep * mTempStore1[idx];*/
+	multipliedArrayByNumber(mTempStore1, timeStep, mCount);
+	sumArray(mState, mTempStore1, mState, mCount);
 }
 

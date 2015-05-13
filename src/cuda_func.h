@@ -16,6 +16,10 @@ void assignArray(double* array, double value, int arrayLength);
 void copyArray(int* dest, int* source, int arrayLength);
 void copyArray(double* dest, double* source, int arrayLength);
 
+void sumArray(double* arg1, double* arg2, double* result, int arrayLength);
+
+void multipliedArrayByNumber(double* array, double value, int arrayLength);
+
 void prepareArgument();
 void prepareBorder();
 void computeCenter();

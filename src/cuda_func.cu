@@ -178,6 +178,23 @@ __global__ void copyDoubleArray (double* dest, double* source, int arrayLength) 
 		dest[idx] = source[idx];
 }
 
+__global__ void sumDoubleArray (double* arg1, double* arg2, double* result, int arrayLength) {
+	int	idx = BLOCK_SIZE * blockIdx.x + threadIdx.x;
+	
+	if( idx < arrayLength )
+		result[idx] = arg1[idx] + arg2[idx];
+}
+
+__global__ void multipliedDoubleArrayByNumber (double* array, double value, int arrayLength) {
+	int	idx = BLOCK_SIZE * blockIdx.x + threadIdx.x;
+	
+	if( idx < arrayLength )
+		array[idx] *= value;
+}
+
+
+
+
 void assignArray(int* array, int value, int arrayLength) {
 	dim3 threads ( BLOCK_SIZE );
 	dim3 blocks  ( (int)ceil((double)arrayLength / threads.x) );
@@ -205,6 +222,20 @@ void copyArray(double* dest, double* source, int arrayLength) {
 	dim3 blocks  ( (int)ceil((double)arrayLength / threads.x) );
 	
 	copyDoubleArray <<< blocks, threads >>> ( dest, source, arrayLength);
+}
+
+void sumArray(double* arg1, double* arg2, double* result, int arrayLength) {
+	dim3 threads ( BLOCK_SIZE );
+	dim3 blocks  ( (int)ceil((double)arrayLength / threads.x) );
+	
+	sumDoubleArray <<< blocks, threads >>> ( arg1, arg2, result, arrayLength);
+}
+
+void multipliedArrayByNumber(double* array, double value, int arrayLength) {
+	dim3 threads ( BLOCK_SIZE );
+	dim3 blocks  ( (int)ceil((double)arrayLength / threads.x) );
+	
+	multipliedDoubleArrayByNumber <<< blocks, threads >>> ( array, value, arrayLength);
 }
 
 void prepareArgument() {
