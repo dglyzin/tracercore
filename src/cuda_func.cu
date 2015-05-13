@@ -150,10 +150,6 @@
 		}
 }*/
 
-/*
- * Функция ядра
- * Заполнение целочисленного массива определенным значением.
- */
 __global__ void assignIntArray (int* array, int value, int arrayLength) {
 	int	idx = BLOCK_SIZE * blockIdx.x + threadIdx.x;
 	
@@ -161,10 +157,6 @@ __global__ void assignIntArray (int* array, int value, int arrayLength) {
 		array[idx] = value;
 }
 
-/*
- * Функция ядра
- * Копирование целочесленных массивов.
- */
 __global__ void copyIntArray (int* dest, int* source, int arrayLength) {
 	int	idx = BLOCK_SIZE * blockIdx.x + threadIdx.x;
 	
@@ -172,10 +164,6 @@ __global__ void copyIntArray (int* dest, int* source, int arrayLength) {
 		dest[idx] = source[idx];
 }
 
-/*
- * Функция ядра
- * Заполнение вещественного массива определенным значением.
- */
 __global__ void assignDoubleArray (double* array, double value, int arrayLength) {
 	int	idx = BLOCK_SIZE * blockIdx.x + threadIdx.x;
 	
@@ -183,10 +171,6 @@ __global__ void assignDoubleArray (double* array, double value, int arrayLength)
 		array[idx] = value;
 }
 
-/*
- * Функция ядра
- * Копирование вещественных массивов.
- */
 __global__ void copyDoubleArray (double* dest, double* source, int arrayLength) {
 	int	idx = BLOCK_SIZE * blockIdx.x + threadIdx.x;
 	
@@ -208,6 +192,20 @@ void assignArray(double* array, double value, int arrayLength) {
 	assignDoubleArray <<< blocks, threads >>> ( array, value, arrayLength);
 }
 
+void copyArray(int* dest, int* source, int arrayLength) {
+	dim3 threads ( BLOCK_SIZE );
+	dim3 blocks  ( (int)ceil((double)arrayLength / threads.x) );
+	
+	copyIntArray <<< blocks, threads >>> ( dest, source, arrayLength);
+}
+
+
+void copyArray(double* dest, double* source, int arrayLength) {
+	dim3 threads ( BLOCK_SIZE );
+	dim3 blocks  ( (int)ceil((double)arrayLength / threads.x) );
+	
+	copyDoubleArray <<< blocks, threads >>> ( dest, source, arrayLength);
+}
 /*
  * Функция ядра
  * Копирование данных из матрицы в массив.
