@@ -10,8 +10,8 @@
 EulerSolverGpu::EulerSolverGpu(int _count) : EulerSolver(_count) {
 	/*mState = new double [mCount];
 	mTempStore1 = new double [mCount];*/
-	cudaMalloc( (void**)&mState, mCount );
-	cudaMalloc( (void**)&mTempStore1, mCount );
+	cudaMalloc( (void**)&mState, mCount * sizeof(double) );
+	cudaMalloc( (void**)&mTempStore1, mCount * sizeof(double) );
 }
 
 EulerSolverGpu::~EulerSolverGpu() {
