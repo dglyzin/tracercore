@@ -25,9 +25,6 @@ void EulerSolverGpu::copyState(double* result) {
 }
 
 void EulerSolverGpu::prepareArgument(int stage, double timeStep) {
-/*#pragma omp parallel for
-	for (int idx = 0; idx < mCount; ++idx)
-	    mTempStore1[idx]= mState[idx] + timeStep * mTempStore1[idx];*/
 	multipliedArrayByNumber(mTempStore1, timeStep, mTempStore1, mCount);
 	sumArray(mState, mTempStore1, mTempStore1, mCount);
 }
