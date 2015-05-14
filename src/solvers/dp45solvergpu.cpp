@@ -9,8 +9,8 @@
 
 using namespace std;
 
-DP45SolverCpu::DP45SolverCpu(int _count) : DP45Solver(_count) {
-	mState = new double [mCount];
+DP45SolverGpu::DP45SolverGpu(int _count) : DP45Solver(_count) {
+	/*mState = new double [mCount];
 
 	mTempStore1 = new double [mCount];
 	mTempStore2 = new double [mCount];
@@ -25,37 +25,58 @@ DP45SolverCpu::DP45SolverCpu(int _count) : DP45Solver(_count) {
     for (int idx = 0; idx < mCount; ++idx){
         mState[idx] = 0;
         mTempStore1[idx] = 0;
-    }
+    }*/
+
+    cudaMalloc( (void**)&mState, mCount * sizeof(double) );
+    cudaMalloc( (void**)&mTempStore1, mCount * sizeof(double) );
+    cudaMalloc( (void**)&mTempStore2, mCount * sizeof(double) );
+    cudaMalloc( (void**)&mTempStore3, mCount * sizeof(double) );
+    cudaMalloc( (void**)&mTempStore4, mCount * sizeof(double) );
+    cudaMalloc( (void**)&mTempStore5, mCount * sizeof(double) );
+    cudaMalloc( (void**)&mTempStore6, mCount * sizeof(double) );
+    cudaMalloc( (void**)&mTempStore7, mCount * sizeof(double) );
+    cudaMalloc( (void**)&mArg, mCount * sizeof(double) );
+
+    assignArray(mState, 0, mCount);
+    assignArray(mTempStore1, 0, mCount);
+    assignArray(mTempStore2, 0, mCount);
+    assignArray(mTempStore3, 0, mCount);
+    assignArray(mTempStore4, 0, mCount);
+    assignArray(mTempStore5, 0, mCount);
+    assignArray(mTempStore6, 0, mCount);
+    assignArray(mTempStore7, 0, mCount);
+    assignArray(mArg, 0, mCount);
 }
 
-DP45SolverCpu::~DP45SolverCpu() {
-    delete mState;
-
-    delete mTempStore1;
-    delete mTempStore2;
-    delete mTempStore3;
-    delete mTempStore4;
-    delete mTempStore5;
-    delete mTempStore6;
-    delete mTempStore7;
-
-    delete mArg;
+DP45SolverGpu::~DP45SolverGpu() {
+    cudaFree(mState);
+    cudaFree(mTempStore1);
+    cudaFree(mTempStore2);
+    cudaFree(mTempStore3);
+    cudaFree(mTempStore4);
+    cudaFree(mTempStore5);
+    cudaFree(mTempStore6);
+    cudaFree(mTempStore7);
+    cudaFree(mArg);
 }
 
-void DP45SolverCpu::prepareFSAL(double timeStep) {
-#pragma omp parallel for
+void DP45SolverGpu::prepareFSAL(double timeStep) {
+/*#pragma omp parallel for
 	for (int idx = 0; idx < mCount; idx++)
-		mArg[idx] = mState[idx] + a21 * timeStep * mTempStore7[idx];
+		mArg[idx] = mState[idx] + a21 * timeStep * mTempStore7[idx];*/
+	multipliedArrayByNumber(mTempStore7, a21 * timeStep, mArg, mCount);
+	sumArray(mArg, mState, mArg, mCount);
 }
 
-void DP45SolverCpu::copyState(double* result) {
-	for (int idx = 0; idx < mCount; ++idx)
-		result[idx] = mState[idx];
+void DP45SolverGpu::copyState(double* result) {
+	/*for (int idx = 0; idx < mCount; ++idx)
+		result[idx] = mState[idx];*/
+	cudaMemcpy(result, mState, mCount * sizeof(double), cudaMemcpyDeviceToHost);
 }
 
-void DP45SolverCpu::prepareArgument(int stage, double timeStep) {
+void DP45SolverGpu::prepareArgument(int stage, double timeStep) {
 
-	if      (stage == 0)
+	/*if      (stage == 0)
 #pragma omp parallel for
 		for (int idx=0; idx<mCount; idx++)
 			mArg[idx] = mState[idx]+timeStep*(a31*mTempStore1[idx] + a32*mTempStore2[idx]);
@@ -83,10 +104,49 @@ void DP45SolverCpu::prepareArgument(int stage, double timeStep) {
 		for (int idx=0; idx<mCount; idx++)
 			mArg[idx] = mState[idx]+a21*timeStep*mTempStore1[idx];
 
-	else assert(0);
+	else assert(0);*/
+
+	switch (stage) {
+		case 0:
+			multipliedByNumberAndSumArrays(mTempStore1, a31, mTempStore2, a32, mArg, mCount);
+			multipliedArrayByNumber(mArg, timeStep, mArg, mCount);
+			sumArray(mArg, mState, mArg, mCount);
+			break;
+
+		case 1:
+			multipliedByNumberAndSumArrays(mTempStore1, a41, mTempStore2, a42, mTempStore3, a43, mArg, mCount);
+			multipliedArrayByNumber(mArg, timeStep, mArg, mCount);
+			sumArray(mArg, mState, mArg, mCount);
+			break;
+
+		case 2:
+			multipliedByNumberAndSumArrays(mTempStore1, a51, mTempStore2, a52, mTempStore3, a53, mTempStore4, a54, mArg, mCount);
+			multipliedArrayByNumber(mArg, timeStep, mArg, mCount);
+			sumArray(mArg, mState, mArg, mCount);
+			break;
+
+			// TODO check!!
+		case 3: case 4:
+			multipliedByNumberAndSumArrays(mTempStore1, a61, mTempStore2, a62, mTempStore3, a63, mTempStore4, a64, mTempStore5, a65, mArg, mCount);
+			multipliedArrayByNumber(mArg, timeStep, mArg, mCount);
+			sumArray(mArg, mState, mArg, mCount);
+			break;
+
+		case 5:
+			break;
+
+		case -1:
+			multipliedArrayByNumber(mTempStore1, a21 * timeStep, mArg, mCount);
+			sumArray(mArg, mState, mArg, mCount);
+			break;
+
+		default:
+			assert(0);
+			break;
+	}
 }
 
-double DP45SolverCpu::getStepError(double timeStep, double aTol, double rTol){
+double DP45SolverGpu::getStepError(double timeStep, double aTol, double rTol){
 	double err=0;
 #pragma omp parallel for reduction (+:err)
 	for (int idx=0; idx<mCount; idx++){
