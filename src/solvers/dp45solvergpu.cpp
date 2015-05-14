@@ -147,7 +147,7 @@ void DP45SolverGpu::prepareArgument(int stage, double timeStep) {
 }
 
 double DP45SolverGpu::getStepError(double timeStep, double aTol, double rTol){
-	double err=0;
+	/*double err=0;
 #pragma omp parallel for reduction (+:err)
 	for (int idx=0; idx<mCount; idx++){
 		double erri = timeStep * (e1 * mTempStore1[idx] + e3 * mTempStore3[idx] + e4 * mTempStore4[idx] +
@@ -156,6 +156,8 @@ double DP45SolverGpu::getStepError(double timeStep, double aTol, double rTol){
 	   err += erri * erri;
 	}
 
-	return err;
+	return err;*/
+	//TODO shared memory??
+	return 0;
 }
 
