@@ -194,6 +194,36 @@ __global__ void multipliedDoubleArrayByNumber (double* array, double value, doub
 
 
 
+__global__ void multipliedByNumberAndSumDoubleArrays(double* array1, double value1, double* array2, double value2, double* result, int arrayLength) {
+	int	idx = BLOCK_SIZE * blockIdx.x + threadIdx.x;
+	
+	if( idx < arrayLength )
+		result[idx] = value1 * array1[idx] + value2 * array2[idx];
+}
+
+__global__ void multipliedByNumberAndSumDoubleArrays(double* array1, double value1, double* array2, double value2, double* array3, double value3, double* result, int arrayLength) {
+	int	idx = BLOCK_SIZE * blockIdx.x + threadIdx.x;
+	
+	if( idx < arrayLength )
+		result[idx] = value1 * array1[idx] + value2 * array2[idx] + value3 * array3[idx];
+}
+
+__global__ void multipliedByNumberAndSumDoubleArrays(double* array1, double value1, double* array2, double value2, double* array3, double value3, double* array4, double value4, double* result, int arrayLength) {
+	int	idx = BLOCK_SIZE * blockIdx.x + threadIdx.x;
+	
+	if( idx < arrayLength )
+		result[idx] = value1 * array1[idx] + value2 * array2[idx] + value3 * array3[idx] + value4 * array4[idx];
+}
+
+__global__ void multipliedByNumberAndSumDoubleArrays(double* array1, double value1, double* array2, double value2, double* array3, double value3, double* array4, double value4, double* array5, double value5, double* result, int arrayLength) {
+	int	idx = BLOCK_SIZE * blockIdx.x + threadIdx.x;
+	
+	if( idx < arrayLength )
+		result[idx] = value1 * array1[idx] + value2 * array2[idx] + value3 * array3[idx] + value4 * array4[idx] + value5 * array5[idx];
+}
+
+
+
 
 void assignArray(int* array, int value, int arrayLength) {
 	dim3 threads ( BLOCK_SIZE );
@@ -237,6 +267,36 @@ void multipliedArrayByNumber(double* array, double value, double* result, int ar
 	
 	multipliedDoubleArrayByNumber <<< blocks, threads >>> ( array, value, result, arrayLength);
 }
+
+
+void multipliedByNumberAndSumArrays(double* array1, double value1, double* array2, double value2, double* result, int arrayLength) {
+	dim3 threads ( BLOCK_SIZE );
+	dim3 blocks  ( (int)ceil((double)arrayLength / threads.x) );
+	
+	multipliedByNumberAndSumDoubleArrays <<< blocks, threads >>> ( array1, value1, array2, value2, result, arrayLength);
+}
+
+void multipliedByNumberAndSumArrays(double* array1, double value1, double* array2, double value2, double* array3, double value3, double* result, int arrayLength) {
+	dim3 threads ( BLOCK_SIZE );
+	dim3 blocks  ( (int)ceil((double)arrayLength / threads.x) );
+	
+	multipliedByNumberAndSumDoubleArrays <<< blocks, threads >>> ( array1, value1, array2, value2, array3, value3, result, arrayLength);
+}
+
+void multipliedByNumberAndSumArrays(double* array1, double value1, double* array2, double value2, double* array3, double value3, double* array4, double value4, double* result, int arrayLength) {
+	dim3 threads ( BLOCK_SIZE );
+	dim3 blocks  ( (int)ceil((double)arrayLength / threads.x) );
+	
+	multipliedByNumberAndSumDoubleArrays <<< blocks, threads >>> ( array1, value1, array2, value2, array3, value3, array4, value4, result, arrayLength);
+}
+
+void multipliedByNumberAndSumArrays(double* array1, double value1, double* array2, double value2, double* array3, double value3, double* array4, double value4, double* array5, double value5, double* result, int arrayLength) {
+	dim3 threads ( BLOCK_SIZE );
+	dim3 blocks  ( (int)ceil((double)arrayLength / threads.x) );
+	
+	multipliedByNumberAndSumDoubleArrays <<< blocks, threads >>> ( array1, value1, array2, value2, array3, value3, array4, value4, array5, value5, result, arrayLength);
+}
+
 
 void prepareArgument() {
 	printf("\nPrepare argument GPU\n");

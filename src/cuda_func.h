@@ -20,7 +20,12 @@ void sumArray(double* arg1, double* arg2, double* result, int arrayLength);
 
 void multipliedArrayByNumber(double* array, double value, double* result, int arrayLength);
 
-void prepareArgument();
+void multipliedByNumberAndSumArrays(double* array1, double value1, double* array2, double value2, double* result, int arrayLength);
+void multipliedByNumberAndSumArrays(double* array1, double value1, double* array2, double value2, double* array3, double value3, double* result, int arrayLength);
+void multipliedByNumberAndSumArrays(double* array1, double value1, double* array2, double value2, double* array3, double value3, double* array4, double value4, double* result, int arrayLength);
+void multipliedByNumberAndSumArrays(double* array1, double value1, double* array2, double value2, double* array3, double value3, double* array4, double value4, double* array5, double value5, double* result, int arrayLength);
+
+
 void prepareBorder();
 void computeCenter();
 void computeBorder();
