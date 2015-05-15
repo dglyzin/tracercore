@@ -24,6 +24,7 @@ void multipliedByNumberAndSumArrays(double* array1, double value1, double* array
 void multipliedByNumberAndSumArrays(double* array1, double value1, double* array2, double value2, double* array3, double value3, double* result, int arrayLength);
 void multipliedByNumberAndSumArrays(double* array1, double value1, double* array2, double value2, double* array3, double value3, double* array4, double value4, double* result, int arrayLength);
 void multipliedByNumberAndSumArrays(double* array1, double value1, double* array2, double value2, double* array3, double value3, double* array4, double value4, double* array5, double value5, double* result, int arrayLength);
+void multipliedByNumberAndSumArrays(double* array1, double value1, double* array2, double value2, double* array3, double value3, double* array4, double value4, double* array5, double value5, double* array6, double value6, double* result, int arrayLength);
 
 double sumElementOfArray(double* array, int arrayLength);
 
