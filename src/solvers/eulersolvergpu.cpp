@@ -25,7 +25,7 @@ void EulerSolverGpu::copyState(double* result) {
 }
 
 void EulerSolverGpu::prepareArgument(int stage, double timeStep) {
-	multipliedArrayByNumber(mTempStore1, timeStep, mTempStore1, mCount);
+	multiplyArrayByNumber(mTempStore1, timeStep, mTempStore1, mCount);
 	sumArray(mState, mTempStore1, mTempStore1, mCount);
 }
 

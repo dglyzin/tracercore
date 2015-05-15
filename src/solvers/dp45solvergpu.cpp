@@ -64,7 +64,7 @@ void DP45SolverGpu::prepareFSAL(double timeStep) {
 /*#pragma omp parallel for
 	for (int idx = 0; idx < mCount; idx++)
 		mArg[idx] = mState[idx] + a21 * timeStep * mTempStore7[idx];*/
-	multipliedArrayByNumber(mTempStore7, a21 * timeStep, mArg, mCount);
+	multiplyArrayByNumber(mTempStore7, a21 * timeStep, mArg, mCount);
 	sumArray(mArg, mState, mArg, mCount);
 }
 
@@ -108,27 +108,27 @@ void DP45SolverGpu::prepareArgument(int stage, double timeStep) {
 
 	switch (stage) {
 		case 0:
-			multipliedByNumberAndSumArrays(mTempStore1, a31, mTempStore2, a32, mArg, mCount);
-			multipliedArrayByNumber(mArg, timeStep, mArg, mCount);
+			multiplyByNumberAndSumArrays(mTempStore1, a31, mTempStore2, a32, mArg, mCount);
+			multiplyArrayByNumber(mArg, timeStep, mArg, mCount);
 			sumArray(mArg, mState, mArg, mCount);
 			break;
 
 		case 1:
-			multipliedByNumberAndSumArrays(mTempStore1, a41, mTempStore2, a42, mTempStore3, a43, mArg, mCount);
-			multipliedArrayByNumber(mArg, timeStep, mArg, mCount);
+			multiplyByNumberAndSumArrays(mTempStore1, a41, mTempStore2, a42, mTempStore3, a43, mArg, mCount);
+			multiplyArrayByNumber(mArg, timeStep, mArg, mCount);
 			sumArray(mArg, mState, mArg, mCount);
 			break;
 
 		case 2:
-			multipliedByNumberAndSumArrays(mTempStore1, a51, mTempStore2, a52, mTempStore3, a53, mTempStore4, a54, mArg, mCount);
-			multipliedArrayByNumber(mArg, timeStep, mArg, mCount);
+			multiplyByNumberAndSumArrays(mTempStore1, a51, mTempStore2, a52, mTempStore3, a53, mTempStore4, a54, mArg, mCount);
+			multiplyArrayByNumber(mArg, timeStep, mArg, mCount);
 			sumArray(mArg, mState, mArg, mCount);
 			break;
 
 			// TODO check!!
 		case 3: case 4:
-			multipliedByNumberAndSumArrays(mTempStore1, a61, mTempStore2, a62, mTempStore3, a63, mTempStore4, a64, mTempStore5, a65, mArg, mCount);
-			multipliedArrayByNumber(mArg, timeStep, mArg, mCount);
+			multiplyByNumberAndSumArrays(mTempStore1, a61, mTempStore2, a62, mTempStore3, a63, mTempStore4, a64, mTempStore5, a65, mArg, mCount);
+			multiplyArrayByNumber(mArg, timeStep, mArg, mCount);
 			sumArray(mArg, mState, mArg, mCount);
 			break;
 
@@ -136,7 +136,7 @@ void DP45SolverGpu::prepareArgument(int stage, double timeStep) {
 			break;
 
 		case -1:
-			multipliedArrayByNumber(mTempStore1, a21 * timeStep, mArg, mCount);
+			multiplyArrayByNumber(mTempStore1, a21 * timeStep, mArg, mCount);
 			sumArray(mArg, mState, mArg, mCount);
 			break;
 

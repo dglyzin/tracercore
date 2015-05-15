@@ -71,37 +71,37 @@ void RK4SolverGpu::prepareArgument(int stage, double timeStep) {
 
 	switch (stage) {
 		case 0:
-			multipliedArrayByNumber(mTempStore1, 0.5 * timeStep, mArg, mCount);
+			multiplyArrayByNumber(mTempStore1, 0.5 * timeStep, mArg, mCount);
 			sumArray(mArg, mState, mArg, mCount);
 			break;
 
 		case 1:
-			multipliedArrayByNumber(mTempStore2, 0.5 * timeStep, mArg, mCount);
+			multiplyArrayByNumber(mTempStore2, 0.5 * timeStep, mArg, mCount);
 			sumArray(mArg, mState, mArg, mCount);
 			break;
 
 		case 2:
-			multipliedArrayByNumber(mTempStore3, timeStep, mArg, mCount);
+			multiplyArrayByNumber(mTempStore3, timeStep, mArg, mCount);
 			sumArray(mArg, mState, mArg, mCount);
 			break;
 
 		case 3:
-			/*multipliedArrayByNumber(mTempStore1, b1, mTempStore1, mCount);
-			multipliedArrayByNumber(mTempStore2, b2, mTempStore1, mCount);
-			multipliedArrayByNumber(mTempStore3, b3, mTempStore1, mCount);
-			multipliedArrayByNumber(mTempStore4, b4, mTempStore1, mCount);
+			/*multiplyArrayByNumber(mTempStore1, b1, mTempStore1, mCount);
+			multiplyArrayByNumber(mTempStore2, b2, mTempStore1, mCount);
+			multiplyArrayByNumber(mTempStore3, b3, mTempStore1, mCount);
+			multiplyArrayByNumber(mTempStore4, b4, mTempStore1, mCount);
 
 			sumArray(mArg, mTempStore1, mArg, mCount);
 			sumArray(mArg, mTempStore2, mArg, mCount);
 			sumArray(mArg, mTempStore3, mArg, mCount);
 			sumArray(mArg, mTempStore4, mArg, mCount);
 
-			multipliedArrayByNumber(mArg, timeStep, mArg, mCount);
+			multiplyArrayByNumber(mArg, timeStep, mArg, mCount);
 
 			sumArray(mArg, mState, mArg, mCount);*/
 
-			multipliedByNumberAndSumArrays(mTempStore1, b1, mTempStore2, b2, mTempStore3, b3, mTempStore4, b4, mArg, mCount);
-			multipliedArrayByNumber(mArg, timeStep, mArg, mCount);
+			multiplyByNumberAndSumArrays(mTempStore1, b1, mTempStore2, b2, mTempStore3, b3, mTempStore4, b4, mArg, mCount);
+			multiplyArrayByNumber(mArg, timeStep, mArg, mCount);
 			sumArray(mArg, mState, mArg, mCount);
 
 			break;
