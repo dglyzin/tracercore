@@ -10,6 +10,10 @@
 
 #include "block.h"
 
+#include "solvers/eulersolvergpu.h"
+#include "solvers/rk4solvergpu.h"
+#include "solvers/dp45solvergpu.h"
+
 /*
  * Класс обработки данных на видеокарте
  */
@@ -30,7 +34,7 @@ private:
 	void computeStageBorder_2d(int stage, double time, double step) { std::cout << std::endl << "GPU compute border 2d" << std::endl; }
 	void computeStageBorder_3d(int stage, double time, double step) { std::cout << std::endl << "GPU compute border 3d" << std::endl; }
 
-	void createSolver(int solverIdx) { std::cout << std::endl << "GPU get solver step error" << std::endl; }
+	void createSolver(int solverIdx);
 
 public:
 	BlockGpu(int _dimension, int _xCount, int _yCount, int _zCount,

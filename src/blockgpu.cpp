@@ -22,6 +22,8 @@ BlockGpu::BlockGpu(int _dimension, int _xCount, int _yCount, int _zCount,
 	
 	cudaSetDevice(deviceNumber);
 	
+
+
 	/*dim3 threads ( BLOCK_SIZE );
 	dim3 blocksLength  ( (int)ceil((double)length / threads.x) );
 	dim3 blocksWidth  ( (int)ceil((double)width / threads.x) );
@@ -411,4 +413,25 @@ void BlockGpu::loadData(double* data) {
 	return;
 	
 	/*cudaMemcpy( matrix, data, sizeof(double) * length * width, cudaMemcpyHostToDevice );*/
+}
+
+void BlockGpu::createSolver(int solverIdx) {
+	cudaSetDevice(deviceNumber);
+
+	int count = getGridElementCount();
+
+	switch (solverIdx) {
+		case EULER:
+			mSolver = new EulerSolverGpu(count);
+			break;
+		case RK4:
+			mSolver = new RK4SolverGpu(count);
+			break;
+		case DP45:
+			mSolver = new DP45SolverGpu(count);
+			break;
+		default:
+			mSolver = new EulerSolverGpu(count);
+			break;
+	}
 }
