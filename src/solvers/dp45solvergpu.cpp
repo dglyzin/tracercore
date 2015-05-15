@@ -163,6 +163,7 @@ double DP45SolverGpu::getStepError(double timeStep, double aTol, double rTol){
 	/*
 	 * В этой функции в качестве временного хранилища исползуется mArg
 	 */
-
+	multiplyByNumberAndSumArrays(mTempStore1, e1, mTempStore3, e3, mTempStore4, e4, mTempStore5, e5, mTempStore6, e6, mTempStore7, e7, mArg, mCount);
+	//multiplyArrayByNumber(mArg, timeStep / (aTol + rTol * max(mArg[idx], mState[idx])), mArg, mCount);
 }
 
