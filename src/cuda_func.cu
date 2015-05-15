@@ -230,6 +230,26 @@ __global__ void multipliedByNumberAndSumDoubleArrays(double* array1, double valu
 }
 
 
+__global__ void sumElementOfDoubleArray(double* array, double* result, int arrayLength) {
+    __shared__ double data[BLOCK_SIZE];
+    
+    int tid=threadIdx.x; 
+    int idx=blockIdx.x*blockDim.x+threadIdx.x;
+    
+    data[tid] = ( idx < arrayLength ) ? array[idx] : 0;
+
+    __syncthreads();// ждем пока все нити(потоки) скопируют данные. 
+ 
+    for(int s = blockDim.x/2; s > 0; s = s/2) { 
+        if (tid < s)
+        	data[tid] += data[ tid + s ]; 
+        __syncthreads(); 
+    }
+    
+    if ( tid==0 ) 
+        result[blockIdx.x] = data[0]; 
+}
+
 
 
 void assignArray(int* array, int value, int arrayLength) {
@@ -312,6 +332,8 @@ void multipliedByNumberAndSumArrays(double* array1, double value1, double* array
 }
 
 
+
+
 void prepareBorder() {
 	printf("\nPreapre border GPU\n");
 }
@@ -330,7 +352,10 @@ double sumElementOfArray(double* array, int arrayLength) {
 	
 	cudaMalloc( (void**)&sumDevice, 1 * sizeof(double) );
 	
-	
+	dim3 threads ( BLOCK_SIZE );
+	dim3 blocks  ( (int)ceil((double)arrayLength / threads.x) );
+		
+	sumElementOfDoubleArray <<< blocks, threads >>> ( array, sumDevice, arrayLength );
 	
 	cudaMemcpy(&sumHost, sumDevice, 1 * sizeof(double), cudaMemcpyDeviceToHost);
 	cudaFree(sumDevice);
