@@ -158,6 +158,11 @@ double DP45SolverGpu::getStepError(double timeStep, double aTol, double rTol){
 
 	return err;*/
 	//TODO shared memory??
-	return 0;
+	//return 0;
+
+	/*
+	 * В этой функции в качестве временного хранилища исползуется mArg
+	 */
+
 }
 
