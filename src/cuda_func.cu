@@ -298,10 +298,6 @@ void multipliedByNumberAndSumArrays(double* array1, double value1, double* array
 }
 
 
-void prepareArgument() {
-	printf("\nPrepare argument GPU\n");
-}
-
 void prepareBorder() {
 	printf("\nPreapre border GPU\n");
 }
@@ -312,6 +308,20 @@ void computeCenter() {
 
 void computeBorder() {
 	printf("\nCompute border GPU\n");
+}
+
+double sumElementOfArray(double* array, int arrayLength) {
+	double sumHost;
+	double* sumDevice;
+	
+	cudaMalloc( (void**)&sumDevice, 1 * sizeof(double) );
+	
+	
+	
+	cudaMemcpy(&sumHost, sumDevice, 1 * sizeof(double), cudaMemcpyDeviceToHost);
+	cudaFree(sumDevice);
+	
+	return sumHost;
 }
 /*
  * Функция ядра
