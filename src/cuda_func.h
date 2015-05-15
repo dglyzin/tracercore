@@ -40,11 +40,11 @@ void multiplyByNumberAndSumArrays(double* array1, double value1, double* array2,
 
 double sumElementOfArray(double* array, int arrayLength);
 
-double getStepErrorDP45(double* mTempStore1, double e1,
-		double* mTempStore3, double e3, double* mTempStore4, double e4,
-		double* mTempStore5, double e5, double* mTempStore6, double e6,
-		double* mTempStore7, double e7, double* mState, double* mArg,
-		double timeStep, double aTol, double rTol, double mCount);
+double getStepErrorDP45(double* mTempStore1, double e1, double* mTempStore3,
+		double e3, double* mTempStore4, double e4, double* mTempStore5,
+		double e5, double* mTempStore6, double e6, double* mTempStore7,
+		double e7, double* mState, double* mArg, double timeStep, double aTol,
+		double rTol, double mCount);
 
 void prepareBorder();
 void computeCenter();
