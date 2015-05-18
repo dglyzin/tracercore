@@ -44,7 +44,8 @@ BlockGpu::~BlockGpu() {
 	releaseFuncArray(mUserFuncs);
 	releaseInitFuncArray(mUserInitFuncs);
 
-	delete mSolver;
+	if( mSolver != NULL )
+		delete mSolver;
 
 	if(blockBorder != NULL) {
 		double** tmpBlockBorder = new double* [ countSendSegmentBorder * sizeof(double*) ];
