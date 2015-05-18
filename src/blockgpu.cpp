@@ -366,26 +366,28 @@ void BlockGpu::print() {
 void BlockGpu::moveTempBorderVectorToBorderArray() {
 	cudaSetDevice(deviceNumber);
 	
-	//blockBorder = new double* [countSendSegmentBorder];
+	double* tmpBlockBorder = new double* [countSendSegmentBorder];
 	cudaMalloc ( (void**)&blockBorder, countSendSegmentBorder * sizeof(double*) );
-	//int* tempBlockBorderMoveArray = new int [countSendSegmentBorder];
+	double* tmpSendBorderInfo = new int [ INTERCONNECT_COMPONENT_COUNT * countSendSegmentBorder ];
+	cudaMalloc ( (void**)&sendBorderInfo, INTERCONNECT_COMPONENT_COUNT * countSendSegmentBorder * sizeof(double*) );
 	blockBorderMemoryAllocType = new int [countSendSegmentBorder];
 
-	//externalBorder = new double* [countReceiveSegmentBorder];
+	double* tmpExternalBorder = new double* [countReceiveSegmentBorder];
 	cudaMalloc ( (void**)&externalBorder, countReceiveSegmentBorder * sizeof(double*) );
-	//int* tempExternalBorderMoveArray = new int [countReceiveSegmentBorder];
+	double* tmpReceiveBorderInfo = new int [ INTERCONNECT_COMPONENT_COUNT * countReceiveSegmentBorder ];
+	cudaMalloc ( (void**)&receiveBorderInfo, INTERCONNECT_COMPONENT_COUNT * countReceiveSegmentBorder * sizeof(double*) );
 	externalBorderMemoryAllocType = new int [countReceiveSegmentBorder];	
 	
 
 	for (int i = 0; i < countSendSegmentBorder; ++i) {
-		blockBorder[i] = tempBlockBorder.at(i);
-		tempBlockBorderMoveArray[i] = tempBlockBorderMove.at(i);
+		/*blockBorder[i] = tempBlockBorder.at(i);
+		tempBlockBorderMoveArray[i] = tempBlockBorderMove.at(i);*/
 		blockBorderMemoryAllocType[i] = tempBlockBorderMemoryAllocType.at(i);
 	}
 
 	for (int i = 0; i < countReceiveSegmentBorder; ++i) {
-		externalBorder[i] = tempExternalBorder.at(i);
-		tempExternalBorderMoveArray[i] = tempExternalBorderMove.at(i);
+		/*externalBorder[i] = tempExternalBorder.at(i);
+		tempExternalBorderMoveArray[i] = tempExternalBorderMove.at(i);*/
 		externalBorderMemoryAllocType[i] = tempExternalBorderMemoryAllocType.at(i);
 	}
 
