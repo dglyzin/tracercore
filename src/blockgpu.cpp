@@ -285,20 +285,23 @@ void BlockGpu::print() {
 	delete externalBorderMoveToPrint;*/
 }
 
-/*double* BlockGpu::addNewBlockBorder(Block* neighbor, int side, int move, int borderLength) {
-	cudaSetDevice(deviceNumber);
-	
-	if( checkValue(side, move + borderLength) ) {
-		printf("\nCritical error!\n");
-		exit(1);
-	}
+double* BlockGpu::addNewBlockBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength) {
+	/*cudaSetDevice(deviceNumber);
 
 	dim3 threads ( BLOCK_SIZE );
 	dim3 blocks  ( (int)ceil((double)borderLength / threads.x) );
 	
-	assignIntArray <<< blocks, threads >>> ( sendBorderType[side] + move, countSendSegmentBorder, borderLength );
+	assignIntArray <<< blocks, threads >>> ( sendBorderType[side] + move, countSendSegmentBorder, borderLength );*/
 
 	countSendSegmentBorder++;
+
+	tempSendBorderInfo.push_back(side);
+	tempSendBorderInfo.push_back(mOffset);
+	tempSendBorderInfo.push_back(nOffset);
+	tempSendBorderInfo.push_back(mLength);
+	tempSendBorderInfo.push_back(nLength);
+
+	int borderLength = mLength * nLength * cellSize * haloSize;
 
 	double* newBlockBorder;
 
@@ -324,10 +327,9 @@ void BlockGpu::print() {
 	}
 
 	tempBlockBorder.push_back(newBlockBorder);
-	tempBlockBorderMove.push_back(move);
 
 	return newBlockBorder;
-}*/
+}
 
 /*double* BlockGpu::addNewExternalBorder(Block* neighbor, int side, int move, int borderLength, double* border) {
 	cudaSetDevice(deviceNumber);
