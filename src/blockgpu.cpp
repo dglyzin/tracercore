@@ -363,15 +363,17 @@ void BlockGpu::print() {
 	return newExternalBorder;
 }*/
 
-/*void BlockGpu::moveTempBorderVectorToBorderArray() {
+void BlockGpu::moveTempBorderVectorToBorderArray() {
 	cudaSetDevice(deviceNumber);
 	
-	blockBorder = new double* [countSendSegmentBorder];
-	int* tempBlockBorderMoveArray = new int [countSendSegmentBorder];
+	//blockBorder = new double* [countSendSegmentBorder];
+	cudaMalloc ( (void**)&blockBorder, countSendSegmentBorder * sizeof(double*) );
+	//int* tempBlockBorderMoveArray = new int [countSendSegmentBorder];
 	blockBorderMemoryAllocType = new int [countSendSegmentBorder];
 
-	externalBorder = new double* [countReceiveSegmentBorder];
-	int* tempExternalBorderMoveArray = new int [countReceiveSegmentBorder];
+	//externalBorder = new double* [countReceiveSegmentBorder];
+	cudaMalloc ( (void**)&externalBorder, countReceiveSegmentBorder * sizeof(double*) );
+	//int* tempExternalBorderMoveArray = new int [countReceiveSegmentBorder];
 	externalBorderMemoryAllocType = new int [countReceiveSegmentBorder];	
 	
 
@@ -388,11 +390,15 @@ void BlockGpu::print() {
 	}
 
 	tempBlockBorder.clear();
-	tempBlockBorderMove.clear();
 	tempExternalBorder.clear();
-	tempExternalBorderMove.clear();
 	
-	cudaMalloc ( (void**)&blockBorderOnDevice, countSendSegmentBorder * sizeof(double*) );
+	tempBlockBorderMemoryAllocType.clear();
+	tempExternalBorderMemoryAllocType.clear();
+
+	tempSendBorderInfo.clear();
+	tempReceiveBorderInfo.clear();
+
+	/*cudaMalloc ( (void**)&blockBorderOnDevice, countSendSegmentBorder * sizeof(double*) );
 	cudaMemcpy( blockBorderOnDevice, blockBorder, countSendSegmentBorder * sizeof(double*), cudaMemcpyHostToDevice );
 	
 	cudaMalloc ( (void**)&externalBorderOnDevice, countReceiveSegmentBorder * sizeof(double*) );
@@ -402,11 +408,11 @@ void BlockGpu::print() {
 	cudaMemcpy( blockBorderMove, tempBlockBorderMoveArray, countSendSegmentBorder * sizeof(int), cudaMemcpyHostToDevice );
 	
 	cudaMalloc ( (void**)&externalBorderMove, countReceiveSegmentBorder * sizeof(int) );	
-	cudaMemcpy( externalBorderMove, tempExternalBorderMoveArray, countReceiveSegmentBorder * sizeof(int), cudaMemcpyHostToDevice );
+	cudaMemcpy( externalBorderMove, tempExternalBorderMoveArray, countReceiveSegmentBorder * sizeof(int), cudaMemcpyHostToDevice );*/
 	
 	delete tempBlockBorderMoveArray;
 	delete tempExternalBorderMoveArray;
-}*/
+}
 
 void BlockGpu::loadData(double* data) {
 	cudaSetDevice(deviceNumber);

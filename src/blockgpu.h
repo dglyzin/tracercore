@@ -20,9 +20,9 @@
 
 class BlockGpu: public Block {
 private:
-	double** blockBorderOnDevice;
+	/*double** blockBorderOnDevice;
 
-	double** externalBorderOnDevice;
+	double** externalBorderOnDevice;*/
 
 	void prepareBorder(double* source, int borderNumber, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop) { std::cout << std::endl << "GPU prepare border" << std::endl; }
 
@@ -63,7 +63,7 @@ public:
 	//double* addNewBlockBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength); //{ std::cout << std::endl << "GPU add new block border" << std::endl; return NULL; }
 	//double* addNewExternalBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength, double* border) { std::cout << std::endl << "GPU add new external border" << std::endl; return NULL; }
 
-	void moveTempBorderVectorToBorderArray() { std::cout << std::endl << "GPU move array to vector" << std::endl; }
+	void moveTempBorderVectorToBorderArray();// { std::cout << std::endl << "GPU move array to vector" << std::endl; }
 
 	void loadData(double* data);
 };
