@@ -412,20 +412,18 @@ void BlockGpu::moveTempBorderVectorToBorderArray() {
 	tempSendBorderInfo.clear();
 	tempReceiveBorderInfo.clear();
 
-	/*cudaMalloc ( (void**)&blockBorderOnDevice, countSendSegmentBorder * sizeof(double*) );
-	cudaMemcpy( blockBorderOnDevice, blockBorder, countSendSegmentBorder * sizeof(double*), cudaMemcpyHostToDevice );
+	cudaMemcpy( blockBorder, tmpBlockBorder, countSendSegmentBorder * sizeof(double*), cudaMemcpyHostToDevice );
 	
-	cudaMalloc ( (void**)&externalBorderOnDevice, countReceiveSegmentBorder * sizeof(double*) );
-	cudaMemcpy( externalBorderOnDevice, externalBorder, countReceiveSegmentBorder * sizeof(double*), cudaMemcpyHostToDevice );
+	cudaMemcpy( externalBorder, tmpExternalBorder, countReceiveSegmentBorder * sizeof(double*), cudaMemcpyHostToDevice );
 	
-	cudaMalloc ( (void**)&blockBorderMove, countSendSegmentBorder * sizeof(int) );
-	cudaMemcpy( blockBorderMove, tempBlockBorderMoveArray, countSendSegmentBorder * sizeof(int), cudaMemcpyHostToDevice );
+	cudaMemcpy( sendBorderInfo, tmpSendBorderInfo, INTERCONNECT_COMPONENT_COUNT * countSendSegmentBorder * sizeof(int), cudaMemcpyHostToDevice );
+
+	cudaMemcpy( receiveBorderInfo, tmpReceiveBorderInfo, INTERCONNECT_COMPONENT_COUNT * countReceiveSegmentBorder * sizeof(int), cudaMemcpyHostToDevice );
 	
-	cudaMalloc ( (void**)&externalBorderMove, countReceiveSegmentBorder * sizeof(int) );	
-	cudaMemcpy( externalBorderMove, tempExternalBorderMoveArray, countReceiveSegmentBorder * sizeof(int), cudaMemcpyHostToDevice );*/
-	
-	delete tempBlockBorderMoveArray;
-	delete tempExternalBorderMoveArray;
+	delete tmpBlockBorder;
+	delete tmpExternalBorder;
+	delete tmpSendBorderInfo;
+	delete tmpReceiveBorderInfo;
 }
 
 void BlockGpu::loadData(double* data) {
