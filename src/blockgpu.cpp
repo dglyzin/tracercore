@@ -113,8 +113,100 @@ void BlockGpu::getCurrentState(double* result) {
 
 void BlockGpu::print() {
 	cudaSetDevice(deviceNumber);
-	cout << endl << "GPU PRINT DON'T WORK" << endl;
 	
+	int* tmpSendBorderInfo = new int [ INTERCONNECT_COMPONENT_COUNT * countSendSegmentBorder ];
+	cudaMemcpy( tmpSendBorderInfo, sendBorderInfo, INTERCONNECT_COMPONENT_COUNT * countSendSegmentBorder * sizeof(int), cudaMemcpyDeviceToHost );
+
+	int* tmpReceiveBorderInfo = new int [ INTERCONNECT_COMPONENT_COUNT * countSendSegmentBorder ];
+	cudaMemcpy( tmpReceiveBorderInfo, receiveBorderInfo, INTERCONNECT_COMPONENT_COUNT * countReceiveSegmentBorder * sizeof(int), cudaMemcpyDeviceToHost );
+
+	cout << "########################################################################################################################################################################################################" << endl;
+
+	cout << endl;
+	cout << "BlockGpu from node #" << nodeNumber << endl;
+	cout << "Dimension    " << dimension << endl;
+	cout << endl;
+	cout << "xCount:      " << xCount << endl;
+	cout << "yCount:      " << yCount << endl;
+	cout << "zCount:      " << zCount << endl;
+	cout << endl;
+	cout << "xOffset:     " << xOffset << endl;
+	cout << "yOffset:     " << yOffset << endl;
+	cout << "zOffset:     " << zOffset << endl;
+	cout << endl;
+	cout << "Cell size:   " << cellSize << endl;
+	cout << "Halo size:   " << haloSize << endl;
+
+	cout << endl;
+	cout << "Block matrix:" << endl;
+	cout.setf(ios::fixed);
+
+
+	// TODO вывод информации о Solver'е
+
+	cout << endl;
+	cout << "Send border info (" << countSendSegmentBorder << ")" << endl;
+	for (int i = 0; i < countSendSegmentBorder; ++i) {
+		int index = INTERCONNECT_COMPONENT_COUNT * i;
+		cout << "Block border #" << i << endl;
+		cout << "	Memory address: " << blockBorder[i] << endl;
+		cout << "	Memory type:    " << getMemoryTypeName( blockBorderMemoryAllocType[i] ) << endl;
+		cout << "	Side:           " << getSideName( tmpSendBorderInfo[index + SIDE] ) << endl;
+		cout << "	mOffset:        " << tmpSendBorderInfo[index + M_OFFSET] << endl;
+		cout << "	nOffset:        " << tmpSendBorderInfo[index + N_OFFSET] << endl;
+		cout << "	mLength:        " << tmpSendBorderInfo[index + M_LENGTH] << endl;
+		cout << "	nLength:        " << tmpSendBorderInfo[index + N_LENGTH] << endl;
+		cout << endl;
+	}
+
+	cout << endl << endl;
+	cout << "Receive border info (" << countReceiveSegmentBorder << ")" << endl;
+	for (int i = 0; i < countReceiveSegmentBorder; ++i) {
+		int index = INTERCONNECT_COMPONENT_COUNT * i;
+		cout << "Block border #" << i << endl;
+		cout << "	Memory address: " << externalBorder[i] << endl;
+		cout << "	Memory type:    " << getMemoryTypeName( externalBorderMemoryAllocType[i] ) << endl;
+		cout << "	Side:           " << getSideName( tmpReceiveBorderInfo[index + SIDE] ) << endl;
+		cout << "	mOffset:        " << tmpReceiveBorderInfo[index + M_OFFSET] << endl;
+		cout << "	nOffset:        " << tmpReceiveBorderInfo[index + N_OFFSET] << endl;
+		cout << "	mLength:        " << tmpReceiveBorderInfo[index + M_LENGTH] << endl;
+		cout << "	nLength:        " << tmpReceiveBorderInfo[index + N_LENGTH] << endl;
+		cout << endl;
+	}
+
+	cout << endl << " Параметры не выводятся!!! " << endl;
+	/*cout << "Parameters (" << mParamsCount << ")" << endl;
+	for (int i = 0; i < mParamsCount; ++i) {
+		cout << "	parameter #" << i << ":   " << mParams[i] << endl;
+	}*/
+
+
+	cout << endl << " Информация о функциях не выводится!!! " << endl;
+	/*cout << "Compute function number" << endl;
+	cout.setf(ios::fixed);
+	for (int i = 0; i < zCount; ++i) {
+		cout << "z = " << i << endl;
+
+		int zShift = xCount * yCount * i;
+
+		for (int j = 0; j < yCount; ++j) {
+			int yShift = xCount * j;
+
+			for (int k = 0; k < xCount; ++k) {
+				int xShift = k;
+				cout << mCompFuncNumber[ zShift + yShift + xShift ] << " ";
+			}
+			cout << endl;
+		}
+	}*/
+	cout << endl;
+
+	cout << "########################################################################################################################################################################################################" << endl;
+	cout << endl << endl;
+
+	delete tmpSendBorderInfo;
+	delete tmpReceiveBorderInfo;
+
 	/*double* matrixToPrint = new double [length * width];
 	
 	int** sendBorderTypeToPrint = new int* [BORDER_COUNT];
@@ -369,13 +461,13 @@ void BlockGpu::moveTempBorderVectorToBorderArray() {
 	double** tmpBlockBorder = new double* [countSendSegmentBorder];
 	cudaMalloc ( (void**)&blockBorder, countSendSegmentBorder * sizeof(double*) );
 	int* tmpSendBorderInfo = new int [ INTERCONNECT_COMPONENT_COUNT * countSendSegmentBorder ];
-	cudaMalloc ( (void**)&sendBorderInfo, INTERCONNECT_COMPONENT_COUNT * countSendSegmentBorder * sizeof(double*) );
+	cudaMalloc ( (void**)&sendBorderInfo, INTERCONNECT_COMPONENT_COUNT * countSendSegmentBorder * sizeof(int) );
 	blockBorderMemoryAllocType = new int [countSendSegmentBorder];
 
 	double** tmpExternalBorder = new double* [countReceiveSegmentBorder];
 	cudaMalloc ( (void**)&externalBorder, countReceiveSegmentBorder * sizeof(double*) );
 	int* tmpReceiveBorderInfo = new int [ INTERCONNECT_COMPONENT_COUNT * countReceiveSegmentBorder ];
-	cudaMalloc ( (void**)&receiveBorderInfo, INTERCONNECT_COMPONENT_COUNT * countReceiveSegmentBorder * sizeof(double*) );
+	cudaMalloc ( (void**)&receiveBorderInfo, INTERCONNECT_COMPONENT_COUNT * countReceiveSegmentBorder * sizeof(int) );
 	externalBorderMemoryAllocType = new int [countReceiveSegmentBorder];	
 	
 
