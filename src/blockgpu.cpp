@@ -37,6 +37,43 @@ BlockGpu::BlockGpu(int _dimension, int _xCount, int _yCount, int _zCount,
 }
 
 BlockGpu::~BlockGpu() {
+	cout<<"Deleting block GPU"<<endl;
+	cout<<"Some wrong may be happen!!"<<endl;
+
+	releaseParams(mParams);
+	releaseFuncArray(mUserFuncs);
+	releaseInitFuncArray(mUserInitFuncs);
+
+	delete mSolver;
+
+	if(blockBorder != NULL) {
+		double** tmpBlockBorder = new double* [ countSendSegmentBorder * sizeof(double*) ];
+		cudaMemcpy( tmpBlockBorder, blockBorder, countSendSegmentBorder * sizeof(double*), cudaMemcpyDeviceToHost );
+
+		for(int i = 0; i < countSendSegmentBorder; i++ )
+			freeMemory(blockBorderMemoryAllocType[i], tmpBlockBorder[i]);
+
+		cudaFree(blockBorder);
+		cudaFree(sendBorderInfo);
+		delete blockBorderMemoryAllocType;
+
+		delete tmpBlockBorder;
+	}
+
+
+	if(externalBorder != NULL) {
+		double** tmpExternalBorder = new double* [ countReceiveSegmentBorder * sizeof(double*) ];
+		cudaMemcpy( tmpExternalBorder, externalBorder, countReceiveSegmentBorder * sizeof(double*), cudaMemcpyDeviceToHost );
+
+		for(int i = 0; i < countReceiveSegmentBorder; i++ )
+			freeMemory(externalBorderMemoryAllocType[i], tmpExternalBorder[i]);
+
+		cudaFree(externalBorder);
+		cudaFree(receiveBorderInfo);
+		delete externalBorderMemoryAllocType;
+
+		delete tmpExternalBorder;
+	}
 }
 
 /*void BlockGpu::computeOneStepBorder(double dX2, double dY2, double dT) {
