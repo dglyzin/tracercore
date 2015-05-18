@@ -174,14 +174,14 @@ void BlockGpu::print() {
 		cout << endl;
 	}
 
-	cout << endl << " Параметры не выводятся!!! " << endl;
+	cout << endl << "GPU Параметры не выводятся!!!" << endl;
 	/*cout << "Parameters (" << mParamsCount << ")" << endl;
 	for (int i = 0; i < mParamsCount; ++i) {
 		cout << "	parameter #" << i << ":   " << mParams[i] << endl;
 	}*/
 
 
-	cout << endl << " Информация о функциях не выводится!!! " << endl;
+	cout << endl << "GPU Информация о функциях не выводится!!!" << endl;
 	/*cout << "Compute function number" << endl;
 	cout.setf(ios::fixed);
 	for (int i = 0; i < zCount; ++i) {
