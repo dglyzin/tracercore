@@ -366,15 +366,15 @@ void BlockGpu::print() {
 void BlockGpu::moveTempBorderVectorToBorderArray() {
 	cudaSetDevice(deviceNumber);
 	
-	double* tmpBlockBorder = new double* [countSendSegmentBorder];
+	double** tmpBlockBorder = new double* [countSendSegmentBorder];
 	cudaMalloc ( (void**)&blockBorder, countSendSegmentBorder * sizeof(double*) );
-	double* tmpSendBorderInfo = new int [ INTERCONNECT_COMPONENT_COUNT * countSendSegmentBorder ];
+	int* tmpSendBorderInfo = new int [ INTERCONNECT_COMPONENT_COUNT * countSendSegmentBorder ];
 	cudaMalloc ( (void**)&sendBorderInfo, INTERCONNECT_COMPONENT_COUNT * countSendSegmentBorder * sizeof(double*) );
 	blockBorderMemoryAllocType = new int [countSendSegmentBorder];
 
-	double* tmpExternalBorder = new double* [countReceiveSegmentBorder];
+	double** tmpExternalBorder = new double* [countReceiveSegmentBorder];
 	cudaMalloc ( (void**)&externalBorder, countReceiveSegmentBorder * sizeof(double*) );
-	double* tmpReceiveBorderInfo = new int [ INTERCONNECT_COMPONENT_COUNT * countReceiveSegmentBorder ];
+	int* tmpReceiveBorderInfo = new int [ INTERCONNECT_COMPONENT_COUNT * countReceiveSegmentBorder ];
 	cudaMalloc ( (void**)&receiveBorderInfo, INTERCONNECT_COMPONENT_COUNT * countReceiveSegmentBorder * sizeof(double*) );
 	externalBorderMemoryAllocType = new int [countReceiveSegmentBorder];	
 	
