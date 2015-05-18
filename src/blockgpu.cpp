@@ -380,15 +380,27 @@ void BlockGpu::moveTempBorderVectorToBorderArray() {
 	
 
 	for (int i = 0; i < countSendSegmentBorder; ++i) {
-		/*blockBorder[i] = tempBlockBorder.at(i);
-		tempBlockBorderMoveArray[i] = tempBlockBorderMove.at(i);*/
+		tmpBlockBorder[i] = tempBlockBorder.at(i);
 		blockBorderMemoryAllocType[i] = tempBlockBorderMemoryAllocType.at(i);
+
+		int index = INTERCONNECT_COMPONENT_COUNT * i;
+		tmpSendBorderInfo[ index + SIDE ] = tempSendBorderInfo.at(index + 0);
+		tmpSendBorderInfo[ index + M_OFFSET ] = tempSendBorderInfo.at(index + 1);
+		tmpSendBorderInfo[ index + N_OFFSET ] = tempSendBorderInfo.at(index + 2);
+		tmpSendBorderInfo[ index + M_LENGTH ] = tempSendBorderInfo.at(index + 3);
+		tmpSendBorderInfo[ index + N_LENGTH ] = tempSendBorderInfo.at(index + 4);
 	}
 
 	for (int i = 0; i < countReceiveSegmentBorder; ++i) {
-		/*externalBorder[i] = tempExternalBorder.at(i);
-		tempExternalBorderMoveArray[i] = tempExternalBorderMove.at(i);*/
+		tmpExternalBorder[i] = tempExternalBorder.at(i);
 		externalBorderMemoryAllocType[i] = tempExternalBorderMemoryAllocType.at(i);
+
+		int index = INTERCONNECT_COMPONENT_COUNT * i;
+		tmpReceiveBorderInfo[ index + SIDE ] = tempReceiveBorderInfo.at(index + 0);
+		tmpReceiveBorderInfo[ index + M_OFFSET ] = tempReceiveBorderInfo.at(index + 1);
+		tmpReceiveBorderInfo[ index + N_OFFSET ] = tempReceiveBorderInfo.at(index + 2);
+		tmpReceiveBorderInfo[ index + M_LENGTH ] = tempReceiveBorderInfo.at(index + 3);
+		tmpReceiveBorderInfo[ index + N_LENGTH ] = tempReceiveBorderInfo.at(index + 4);
 	}
 
 	tempBlockBorder.clear();
