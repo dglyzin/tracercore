@@ -30,6 +30,9 @@ private:
 
 	void createSolver(int solverIdx) { return; }
 
+	double* getNewBlockBorder(Block* neighbor, int borderLength, int& memoryType) { return NULL; }
+	double* getNewExternalBorder(Block* neighbor, int borderLength, double* border, int& memoryType) { return NULL; }
+
 public:
 	BlockNull(int _dimension, int _xCount, int _yCount, int _zCount,
 				int _xOffset, int _yOffset, int _zOffset,
@@ -49,8 +52,8 @@ public:
 
 	void print() { return; }
 
-	double* addNewBlockBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength) { return NULL; }
-	double* addNewExternalBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength, double* border) { return NULL; }
+	//double* addNewBlockBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength) { return NULL; }
+	//double* addNewExternalBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength, double* border) { return NULL; }
 
 	void moveTempBorderVectorToBorderArray() { return; }
 

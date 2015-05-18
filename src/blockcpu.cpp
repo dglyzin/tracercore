@@ -441,7 +441,7 @@ void BlockCpu::print() {
 	cout << endl << endl;
 }
 
-double* BlockCpu::addNewBlockBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength) {
+/*double* BlockCpu::addNewBlockBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength) {
 	countSendSegmentBorder++;
 
 	tempSendBorderInfo.push_back(side);
@@ -468,7 +468,7 @@ double* BlockCpu::addNewBlockBorder(Block* neighbor, int side, int mOffset, int 
 	return newBlockBorder;
 
 
-	/*for (int i = 0; i < borderLength; ++i)
+	for (int i = 0; i < borderLength; ++i)
 		sendBorderType[side][i + move] = countSendSegmentBorder;
 
 	countSendSegmentBorder++;
@@ -488,10 +488,10 @@ double* BlockCpu::addNewBlockBorder(Block* neighbor, int side, int mOffset, int 
 	tempBlockBorderMove.push_back(move);
 
 	return newBlockBorder;
-	return NULL;*/
-}
+	return NULL;
+}*/
 
-double* BlockCpu::addNewExternalBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength, double* border) {
+/*double* BlockCpu::addNewExternalBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength, double* border) {
 	countReceiveSegmentBorder++;
 
 	tempReceiveBorderInfo.push_back(side);
@@ -517,7 +517,7 @@ double* BlockCpu::addNewExternalBorder(Block* neighbor, int side, int mOffset, i
 
 	return newExternalBorder;
 
-	/*for (int i = 0; i < borderLength; ++i)
+	for (int i = 0; i < borderLength; ++i)
 		receiveBorderType[side][i + move] = countReceiveSegmentBorder;
 
 	countReceiveSegmentBorder++;
@@ -537,8 +537,8 @@ double* BlockCpu::addNewExternalBorder(Block* neighbor, int side, int mOffset, i
 	tempExternalBorderMove.push_back(move);
 
 	return newExternalBorder;
-	return NULL;*/
-}
+	return NULL;
+}*/
 
 void BlockCpu::moveTempBorderVectorToBorderArray() {
 	blockBorder = new double* [countSendSegmentBorder];
@@ -636,4 +636,38 @@ void BlockCpu::createSolver(int solverIdx) {
 			mSolver = new EulerSolverCpu(count);
 			break;
 	}
+}
+
+double* BlockCpu::getNewBlockBorder(Block* neighbor, int borderLength, int& memoryType) {
+	double* tmpBorder;
+
+	if( ( nodeNumber == neighbor->getNodeNumber() ) && isGPU( neighbor->getBlockType() ) ) {
+		cudaMallocHost ( (void**)&tmpBorder, borderLength * sizeof(double) );
+		//tempBlockBorderMemoryAllocType.push_back(CUDA_MALLOC_HOST);
+		memoryType = CUDA_MALLOC_HOST;
+	}
+	else {
+		tmpBorder = new double [borderLength];
+		//tempBlockBorderMemoryAllocType.push_back(NEW);
+		memoryType = NEW;
+	}
+
+	return tmpBorder;
+}
+
+double* BlockCpu::getNewExternalBorder(Block* neighbor, int borderLength, double* border, int& memoryType) {
+	double* tmpBorder;
+
+	if( nodeNumber == neighbor->getNodeNumber() ) {
+		tmpBorder = border;
+		//tempExternalBorderMemoryAllocType.push_back(NOT_ALLOC);
+		memoryType = NOT_ALLOC;
+	}
+	else {
+		tmpBorder = new double [borderLength];
+		//tempExternalBorderMemoryAllocType.push_back(NEW);
+		memoryType = NEW;
+	}
+
+	return tmpBorder;
 }

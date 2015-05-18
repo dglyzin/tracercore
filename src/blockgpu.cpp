@@ -285,13 +285,13 @@ void BlockGpu::print() {
 	delete externalBorderMoveToPrint;*/
 }
 
-double* BlockGpu::addNewBlockBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength) {
-	/*cudaSetDevice(deviceNumber);
+/*double* BlockGpu::addNewBlockBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength) {
+	cudaSetDevice(deviceNumber);
 
 	dim3 threads ( BLOCK_SIZE );
 	dim3 blocks  ( (int)ceil((double)borderLength / threads.x) );
 	
-	assignIntArray <<< blocks, threads >>> ( sendBorderType[side] + move, countSendSegmentBorder, borderLength );*/
+	assignIntArray <<< blocks, threads >>> ( sendBorderType[side] + move, countSendSegmentBorder, borderLength );
 
 	countSendSegmentBorder++;
 
@@ -329,7 +329,7 @@ double* BlockGpu::addNewBlockBorder(Block* neighbor, int side, int mOffset, int 
 	tempBlockBorder.push_back(newBlockBorder);
 
 	return newBlockBorder;
-}
+}*/
 
 /*double* BlockGpu::addNewExternalBorder(Block* neighbor, int side, int move, int borderLength, double* border) {
 	cudaSetDevice(deviceNumber);
@@ -436,4 +436,52 @@ void BlockGpu::createSolver(int solverIdx) {
 			mSolver = new EulerSolverGpu(count);
 			break;
 	}
+}
+
+double* BlockGpu::getNewBlockBorder(Block* neighbor, int borderLength, int& memoryType) {
+	double* tmpBorder;
+
+	if( nodeNumber == neighbor->getNodeNumber() ) {
+		if( isCPU( neighbor->getBlockType() ) ) {
+			cudaMallocHost ( (void**)&tmpBorder, borderLength * sizeof(double) );
+			//tempBlockBorderMemoryAllocType.push_back(CUDA_MALLOC_HOST);
+			memoryType = CUDA_MALLOC_HOST;
+		}
+
+		if( isGPU( neighbor->getBlockType() ) && deviceNumber != neighbor->getDeviceNumber() ) {
+			cudaMallocHost ( (void**)&tmpBorder, borderLength * sizeof(double) );
+			//tempBlockBorderMemoryAllocType.push_back(CUDA_MALLOC_HOST);
+			memoryType = CUDA_MALLOC_HOST;
+		}
+
+		if( isGPU( neighbor->getBlockType() ) && deviceNumber == neighbor->getDeviceNumber() ) {
+			cudaMalloc ( (void**)&tmpBorder, borderLength * sizeof(double) );
+			//tempBlockBorderMemoryAllocType.push_back(CUDA_MALLOC);
+			memoryType = CUDA_MALLOC;
+		}
+	}
+	else {
+		cudaMalloc ( (void**)&tmpBorder, borderLength * sizeof(double) );
+		//tempBlockBorderMemoryAllocType.push_back(CUDA_MALLOC);
+		memoryType = CUDA_MALLOC;
+	}
+
+	return tmpBorder;
+}
+
+double* BlockGpu::getNewExternalBorder(Block* neighbor, int borderLength, double* border, int& memoryType) {
+	double* tmpBorder;
+
+	if( nodeNumber == neighbor->getNodeNumber() ) {
+		tmpBorder = border;
+		//tempExternalBorderMemoryAllocType.push_back(NOT_ALLOC);
+		memoryType = NOT_ALLOC;
+	}
+	else {
+		cudaMalloc ( (void**)&tmpBorder, borderLength * sizeof(double) );
+		//tempExternalBorderMemoryAllocType.push_back(CUDA_MALLOC);
+		memoryType = CUDA_MALLOC;
+	}
+
+	return tmpBorder;
 }

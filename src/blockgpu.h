@@ -36,6 +36,9 @@ private:
 
 	void createSolver(int solverIdx);
 
+	double* getNewBlockBorder(Block* neighbor, int borderLength, int& memoryType);
+	double* getNewExternalBorder(Block* neighbor, int borderLength, double* border, int& memoryType);
+
 public:
 	BlockGpu(int _dimension, int _xCount, int _yCount, int _zCount,
 			int _xOffset, int _yOffset, int _zOffset,
@@ -57,8 +60,8 @@ public:
 
 	void print();
 
-	double* addNewBlockBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength); //{ std::cout << std::endl << "GPU add new block border" << std::endl; return NULL; }
-	double* addNewExternalBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength, double* border) { std::cout << std::endl << "GPU add new external border" << std::endl; return NULL; }
+	//double* addNewBlockBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength); //{ std::cout << std::endl << "GPU add new block border" << std::endl; return NULL; }
+	//double* addNewExternalBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength, double* border) { std::cout << std::endl << "GPU add new external border" << std::endl; return NULL; }
 
 	void moveTempBorderVectorToBorderArray() { std::cout << std::endl << "GPU move array to vector" << std::endl; }
 

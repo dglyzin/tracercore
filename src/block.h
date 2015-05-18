@@ -110,6 +110,9 @@ protected:
 
 	virtual void createSolver(int solverIdx) = 0;
 
+	virtual double* getNewBlockBorder(Block* neighbor, int borderLength, int& memoryType) = 0;
+	virtual double* getNewExternalBorder(Block* neighbor, int borderLength, double* border, int& memoryType) = 0;
+
 	func_ptr_t* mUserFuncs;
 	initfunc_fill_ptr_t* mUserInitFuncs;
 	double* mParams;
@@ -178,8 +181,8 @@ public:
 
 	void setFunctionNumber(unsigned short int* functionNumberData ) { return; }
 
-	virtual double* addNewBlockBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength) = 0;
-	virtual double* addNewExternalBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength, double* border) = 0;
+	double* addNewBlockBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength);
+	double* addNewExternalBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength, double* border);
 
 	virtual void moveTempBorderVectorToBorderArray() = 0;
 
