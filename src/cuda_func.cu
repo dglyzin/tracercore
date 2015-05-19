@@ -285,9 +285,9 @@ __global__ void prepareBorderDevice(double* dest, double* source, int borderNumb
 			y = BLOCK_SIZE * blockIdx.x + threadIdx.x;
 			x = 0;
 			
-			int zShift = xCount * yCount * z;
-			int yShift = xCount * y;
-			int xShift = x;
+			zShift = xCount * yCount * z;
+			yShift = xCount * y;
+			xShift = x;
 			
 			index = (zShift + yShift + xShift)*cellSize;
 			
@@ -301,9 +301,9 @@ __global__ void prepareBorderDevice(double* dest, double* source, int borderNumb
 			y = BLOCK_SIZE * blockIdx.x + threadIdx.x;
 			x = xCount - 1;
 			
-			int zShift = xCount * yCount * z;
-			int yShift = xCount * y;
-			int xShift = x;
+			zShift = xCount * yCount * z;
+			yShift = xCount * y;
+			xShift = x;
 			
 			index = (zShift + yShift + xShift)*cellSize;
 			
