@@ -297,6 +297,21 @@ __global__ void prepareBorderDevice(double* dest, double* source, int borderNumb
 			break;
 			
 		case RIGHT:
+			z = BLOCK_SIZE * blockIdx.y + threadIdx.y;
+			y = BLOCK_SIZE * blockIdx.x + threadIdx.x;
+			x = xCount - 1;
+			
+			int zShift = xCount * yCount * z;
+			int yShift = xCount * y;
+			int xShift = x;
+			
+			index = (zShift + yShift + xShift)*cellSize;
+			
+			for( int i = 0; i < cellSize; i++ )
+				printf("???");
+			
+			break;
+			
 			break;
 	}
 }
