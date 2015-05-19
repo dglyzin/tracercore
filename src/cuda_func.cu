@@ -297,7 +297,7 @@ __global__ void prepareBorderDevice(double* dest, double* source, int borderNumb
 			break;
 			
 		case RIGHT:
-			
+			break;
 	}
 }
 
