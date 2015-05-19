@@ -268,7 +268,7 @@ __global__ void forGetStepErrorDP45(double* mTempStore1, double e1,
 
 
 
-__global__ void prepareBorderDevice(double* dest, double* source, int borderNumber, int zCount, int yCount, int xCount) {
+__global__ void prepareBorderDevice(double* dest, double* source, int borderNumber, int zCount, int yCount, int xCount, int cosntVar) {
 	
 }
 
