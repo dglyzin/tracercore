@@ -350,7 +350,7 @@ void multiplyByNumberAndSumArrays(double* array1, double value1, double* array2,
 
 
 
-void prepareBorder() {
+void prepareBorder(double* dest, double* source, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop, int zCount, int yCount, int xCount) {
 	printf("\nPreapre border GPU\n");
 }
 
