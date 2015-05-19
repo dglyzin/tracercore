@@ -268,6 +268,10 @@ __global__ void forGetStepErrorDP45(double* mTempStore1, double e1,
 
 
 
+__global__ void prepareBorderDevice(double* dest, double* source, int borderNumber, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop, int zCount, int yCount, int xCount) {
+}
+
+
 void assignArray(int* array, int value, int arrayLength) {
 	dim3 threads ( BLOCK_SIZE );
 	dim3 blocks  ( (int)ceil((double)arrayLength / threads.x) );
@@ -350,7 +354,7 @@ void multiplyByNumberAndSumArrays(double* array1, double value1, double* array2,
 
 
 
-void prepareBorder(double* dest, double* source, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop, int zCount, int yCount, int xCount) {
+void prepareBorder(double* dest, double* source, int borderNumber, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop, int zCount, int yCount, int xCount) {
 	printf("\nPreapre border GPU\n");
 }
 
