@@ -268,8 +268,37 @@ __global__ void forGetStepErrorDP45(double* mTempStore1, double e1,
 
 
 
-__global__ void prepareBorderDevice(double* dest, double* source, int borderNumber, int zStart, int yStart, int xStart, int zCount, int yCount, int xCount) {
+__global__ void prepareBorderDevice(double* dest, double* source, int borderNumber, int zStart, int yStart, int xStart, int zCount, int yCount, int xCount, int cellSize) {
+	int z = zStart;
+	int y = yStart;
+	int x = xStart;
 	
+	int zShift;
+	int yShift;
+	int xShift;
+	
+	int index;
+	
+	switch (borderNumber) {
+		case LEFT:
+			z = BLOCK_SIZE * blockIdx.y + threadIdx.y;
+			y = BLOCK_SIZE * blockIdx.x + threadIdx.x;
+			x = 0;
+			
+			int zShift = xCount * yCount * z;
+			int yShift = xCount * y;
+			int xShift = x;
+			
+			index = (zShift + yShift + xShift)*cellSize;
+			
+			for( int i = 0; i < cellSize; i++ )
+				printf("???");
+			
+			break;
+			
+		case RIGHT:
+			
+	}
 }
 
 
