@@ -46,7 +46,7 @@ double getStepErrorDP45(double* mTempStore1, double e1, double* mTempStore3,
 		double e7, double* mState, double* mArg, double timeStep, double aTol,
 		double rTol, double mCount);
 
-void prepareBorder(double* dest, double* source, int borderNumber, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop, int zCount, int yCount, int xCount);
+void prepareBorder(double* source, int borderNumber, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop, double** blockBorder, int zCount, int yCount, int xCount, int cellSize);
 void computeCenter();
 void computeBorder();
 

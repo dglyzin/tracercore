@@ -394,8 +394,8 @@ void multiplyByNumberAndSumArrays(double* array1, double value1, double* array2,
 
 
 
-void prepareBorder(double* dest, double* source, int borderNumber, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop, int zCount, int yCount, int xCount) {
-	printf("\nPreapre border GPU\n");
+void prepareBorder(double* source, int borderNumber, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop, double** blockBorder, int zCount, int yCount, int xCount, int cellSize) {
+	prepareBorderDevice <<< 1, 1 >>> (source, borderNumber, zStart, zStop, yStart, yStop, xStart, xStop, blockBorder, zCount, yCount, xCount, cellSize);
 }
 
 void computeCenter() {
