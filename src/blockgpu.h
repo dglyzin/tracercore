@@ -24,7 +24,7 @@ private:
 
 	double** externalBorderOnDevice;*/
 
-	void prepareBorder(double* source, int borderNumber, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop) { std::cout << std::endl << "GPU prepare border" << std::endl; }
+	void prepareBorder(double* source, int borderNumber, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop);
 
 	void computeStageCenter_1d(int stage, double time, double step) { std::cout << std::endl << "GPU compute center 1d" << std::endl; }
 	void computeStageCenter_2d(int stage, double time, double step) { std::cout << std::endl << "GPU compute center 2d" << std::endl; }
@@ -52,7 +52,7 @@ public:
 
 	void prepareStageData(int stage) { std::cout << std::endl << "GPU prepare data" << std::endl; }
 
-	double getSolverStepError(double timeStep, double aTol, double rTol) { std::cout << std::endl << "GPU get solver step error" << std::endl; return 0.0; }
+	double getSolverStepError(double timeStep, double aTol, double rTol) { return mSolver->getStepError(timeStep, aTol, rTol); }
 
 	int getBlockType() { return GPU; }
 
