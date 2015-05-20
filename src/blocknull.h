@@ -18,7 +18,7 @@
 
 class BlockNull: public Block {
 private:
-	void prepareBorder(double* source, int borderNumber, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop) { return; }
+	void prepareBorder(int borderNumber, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop) { return; }
 
 	void computeStageCenter_1d(int stage, double time, double step) { return; }
 	void computeStageCenter_2d(int stage, double time, double step) { return; }
@@ -42,7 +42,7 @@ public:
 
 	bool isRealBlock() { return false; }
 
-	void prepareStageData(int stage) { return; }
+	//void prepareStageData(int stage) { return; }
 
 	double getSolverStepError(double timeStep, double aTol, double rTol) { return 0.0; }
 

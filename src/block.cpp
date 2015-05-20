@@ -239,3 +239,41 @@ double* Block::addNewExternalBorder(Block* neighbor, int side, int mOffset, int 
 
 	return newExternalBorder;
 }
+
+void Block::prepareStageData(int stage) {
+	for (int i = 0; i < countSendSegmentBorder; ++i) {
+		int index = INTERCONNECT_COMPONENT_COUNT * i;
+
+		/*double* source = NULL;
+		cout << endl << "Source = NULL" << endl;*/
+
+		int mStart = sendBorderInfo[ index + M_OFFSET ];
+		int mStop = mStart + sendBorderInfo[ index + M_LENGTH ];
+
+		int nStart = sendBorderInfo[ index + N_OFFSET ];
+		int nStop = nStart + sendBorderInfo[ index + N_LENGTH ];
+
+		switch (sendBorderInfo[index + SIDE]) {
+			case LEFT:
+				prepareBorder(i, mStart, mStop, nStart, nStop, 0, haloSize);
+				break;
+			case RIGHT:
+				prepareBorder(i, mStart, mStop, nStart, nStop, xCount - haloSize, xCount);
+				break;
+			case FRONT:
+				prepareBorder(i, mStart, mStop, 0, haloSize, nStart, nStop);
+				break;
+			case BACK:
+				prepareBorder(i, mStart, mStop, yCount - haloSize, yCount, nStart, nStop);
+				break;
+			case TOP:
+				prepareBorder(i, 0, haloSize, mStart, mStop, nStart, nStop);
+				break;
+			case BOTTOM:
+				prepareBorder(i, zCount - haloSize, zCount, mStart, mStop, nStart, nStop);
+				break;
+			default:
+				break;
+		}
+	}
+}

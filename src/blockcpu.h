@@ -20,7 +20,7 @@
 
 class BlockCpu: public Block {
 private:
-	void prepareBorder(double* source, int borderNumber, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop);
+	void prepareBorder(int borderNumber, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop);
 
 	void computeStageCenter_1d(int stage, double time, double step);
 	void computeStageCenter_2d(int stage, double time, double step);
@@ -47,7 +47,7 @@ public:
 
 	bool isRealBlock() { return true; }
 
-	void prepareStageData(int stage);
+	//void prepareStageData(int stage);
 
 	double getSolverStepError(double timeStep, double aTol, double rTol);
 

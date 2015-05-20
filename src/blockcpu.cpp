@@ -308,7 +308,7 @@ void BlockCpu::computeStageBorder_3d(int stage, double time, double step) {
 	}
 }
 
-void BlockCpu::prepareStageData(int stage) {
+/*void BlockCpu::prepareStageData(int stage) {
 	for (int i = 0; i < countSendSegmentBorder; ++i) {
 		int index = INTERCONNECT_COMPONENT_COUNT * i;
 
@@ -344,7 +344,7 @@ void BlockCpu::prepareStageData(int stage) {
 				break;
 		}
 	}
-}
+}*/
 
 double BlockCpu::getSolverStepError(double timeStep, double aTol, double rTol) {
 	return mSolver->getStepError(timeStep, aTol, rTol);
@@ -491,7 +491,10 @@ void BlockCpu::loadData(double* data) {
 		matrix[i] = data[i];*/
 }
 
-void BlockCpu::prepareBorder(double* source, int borderNumber, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop) {
+void BlockCpu::prepareBorder(int borderNumber, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop) {
+	double* source = NULL;
+	// TODO ПРОВЕРИТЬ!!!! ПОЛУЧАТЬ ОТ СОЛВЕРА!!!
+	cout << endl << "source == NULL!!!!" << endl;
 	int index = 0;
 	for (int z = zStart; z < zStop; ++z) {
 		int zShift = xCount * yCount * z;
