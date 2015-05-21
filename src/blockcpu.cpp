@@ -46,6 +46,7 @@ BlockCpu::BlockCpu(int _dimension, int _xCount, int _yCount, int _zCount,
 	cout << endl;
 
 	cout << "functions loaded\n";
+
 	//printf("Func array points to %d \n", (long unsigned int) mUserFuncs );
 
 	//mUserFuncs[0](newMatrix, matrix, 0.0, 2, 2, 0, mParams, NULL);

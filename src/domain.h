@@ -182,7 +182,7 @@ private:
 	/*
 	 * Чтение блока
 	 */
-	Block* readBlock(std::ifstream& in);
+	Block* readBlock(std::ifstream& in, int idx);
 
 	/*
 	 * Чтение соединения

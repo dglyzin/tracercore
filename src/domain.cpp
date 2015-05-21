@@ -402,9 +402,12 @@ void Domain::readFromFile(char* path) {
 
 	mBlocks = new Block* [mBlockCount];
 
-	for (int i = 0; i < mBlockCount; ++i)
-		mBlocks[i] = readBlock(in);
+	printf ("DEBUG reading blocks.\n ");
 
+	for (int i = 0; i < mBlockCount; ++i)
+		mBlocks[i] = readBlock(in, i);
+
+	printf ("DEBUG blocks read.\n ");
 
 	readConnectionCount(in);
 
@@ -500,7 +503,7 @@ void Domain::readConnectionCount(ifstream& in) {
  * После чтения блок будет считать, что ни с кем не связан.
  * Не будет готовить информацию для пересылки и не будет считываеть ее из других источников.
  */
-Block* Domain::readBlock(ifstream& in) {
+Block* Domain::readBlock(ifstream& in, int idx) {
 	Block* resBlock;
 	int dimension;
 	int node;
@@ -522,7 +525,7 @@ Block* Domain::readBlock(ifstream& in) {
 	in.read((char*)&deviceNumber, SIZE_INT);
 
 	cout << endl;
-	cout << "Block #" << "<NONE>" << endl;
+	cout << "Block #" << idx << endl;
 	cout << "	dimension:     " << dimension << endl;
 	cout << "	node:          " << node << endl;
 	cout << "	device type:   " << deviceType << endl;

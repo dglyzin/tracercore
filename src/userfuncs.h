@@ -23,6 +23,4 @@ void releaseFuncArray(func_ptr_t* Funcs);
 void initDefaultParams(double **pparams, int* pparamscount);
 void releaseParams(double *params);
 
-
-
 #endif /* USERFUNCS_H_ */

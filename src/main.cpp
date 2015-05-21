@@ -71,7 +71,7 @@ int main(int argc, char * argv[]) {
 	 * Создание основного управляющего класса.
 	 * Номер потока, количество потоков и путь к файлу с данными.
 	 */
-
+	printf ("DEBUG creating domain...\n ");
 	Domain* d = new Domain(world_rank, world_size, inputFile, flags, stepCount, stopTime, loadFile);
 
 	/*
@@ -79,6 +79,7 @@ int main(int argc, char * argv[]) {
 	 */
 	// Получить текущее время
 	time1 = MPI_Wtime();
+	printf ("Test run w/o computations \n");
 	d->compute(saveFile);
 	// Получить текущее время
 	time2 = MPI_Wtime();
