@@ -29,8 +29,6 @@ void EulerSolverCpu::prepareArgument(int stage, double timeStep) {
 	    mTempStore1[idx]= mState[idx] + timeStep * mTempStore1[idx];
 }
 
-void EulerSolverCpu::printToConsole() {
-	for (int i = 0; i < mCount; ++i) {
-		printf("%7.2f", mState[i]);
-	}
+double* EulerSolverCpu::getMState() {
+	return mState;
 }

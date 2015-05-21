@@ -19,7 +19,7 @@ public:
 
 	void prepareArgument(int stage, double timeStep);
 
-	void printToConsole();
+	double* getMState();
 };
 
 #endif /* SRC_SOLVERS_EULERSOLVERCPU_H_ */

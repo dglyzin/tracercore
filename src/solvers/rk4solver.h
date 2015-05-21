@@ -37,7 +37,7 @@ public:
 	double getNewStep(double timeStep, double error, int totalDomainElements) { return timeStep; }
 	bool isErrorPermissible(double error, int totalDomainElements) { return true; }
 
-	virtual void printToConsole() { return; }
+	virtual double* getMState() { return NULL; }
 
 protected:
     double* mTempStore1;
