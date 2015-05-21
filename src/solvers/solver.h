@@ -48,6 +48,8 @@ public:
 	virtual double getNewStep(double timeStep, double error, int totalDomainElements) = 0;
 	virtual bool isErrorPermissible(double error, int totalDomainElements) = 0;
 
+	virtual void printToConsole() = 0;
+
 protected:
   	int     mCount; //total number of elements in every array
   	double* mState;

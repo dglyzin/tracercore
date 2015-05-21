@@ -18,6 +18,8 @@ public:
 	void copyState(double* result);
 
 	void prepareArgument(int stage, double timeStep);
+
+	void printToConsole();
 };
 
 #endif /* SRC_SOLVERS_EULERSOLVERCPU_H_ */

@@ -96,6 +96,8 @@ int main(int argc, char * argv[]) {
 	 */
 	d->print(outputFile);
 
+	d->printBlocksToConsole();
+
 	delete d;
 
 	/*

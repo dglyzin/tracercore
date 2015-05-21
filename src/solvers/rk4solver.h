@@ -24,7 +24,7 @@ public:
 
 	double getStageTimeStep(int stage);
 
-	void prepareArgument(int stage, double timeStep) { return; }
+	virtual void prepareArgument(int stage, double timeStep) { return; }
 
 	void confirmStep(double timestep);
 
@@ -36,6 +36,8 @@ public:
 
 	double getNewStep(double timeStep, double error, int totalDomainElements) { return timeStep; }
 	bool isErrorPermissible(double error, int totalDomainElements) { return true; }
+
+	virtual void printToConsole() { return; }
 
 protected:
     double* mTempStore1;

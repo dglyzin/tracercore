@@ -380,6 +380,7 @@ void BlockCpu::print() {
 
 
 	// TODO вывод информации о Solver'е
+	mSolver->printToConsole();
 
 	cout << endl;
 	cout << "Send border info (" << countSendSegmentBorder << ")" << endl;
