@@ -111,7 +111,7 @@ void Domain::compute(char* saveFile) {
 	else
 		while ( currentTime < stopTime ){
 			nextStep();
-			cout<< currentTime<<" "<<stopTime<< " " << timeStep<<endl;
+			//cout<< currentTime<<" "<<stopTime<< " " << timeStep<<endl;
 		}
 	cout <<"Computation finished!" << endl;
 

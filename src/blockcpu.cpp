@@ -54,7 +54,7 @@ BlockCpu::BlockCpu(int _dimension, int _xCount, int _yCount, int _zCount,
 	double* matrix = mSolver->getStatePtr();
 	mUserInitFuncs[0](matrix,_initFuncNumber);
 	cout << "Initial values filled \n";
-
+    /*
 	for (int i = 0; i < zCount; ++i) {
 			int zShift = xCount * yCount * i;
 
@@ -75,7 +75,7 @@ BlockCpu::BlockCpu(int _dimension, int _xCount, int _yCount, int _zCount,
 				printf("\n");
 			}
 			printf("\n");
-		}
+		}*/
 }
 
 BlockCpu::~BlockCpu() {

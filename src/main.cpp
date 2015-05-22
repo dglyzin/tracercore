@@ -79,7 +79,7 @@ int main(int argc, char * argv[]) {
 	 */
 	// Получить текущее время
 	time1 = MPI_Wtime();
-	printf ("Test run w/o computations \n");
+	printf ("Running computations \n");
 	d->compute(saveFile);
 	// Получить текущее время
 	time2 = MPI_Wtime();
