@@ -80,7 +80,7 @@ int main(int argc, char * argv[]) {
 	// Получить текущее время
 	time1 = MPI_Wtime();
 	printf ("Running computations \n");
-	d->compute(saveFile);
+	d->compute("//home//tester//Tracer1//Heat_test2//state1");
 	// Получить текущее время
 	time2 = MPI_Wtime();
 

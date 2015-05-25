@@ -69,30 +69,27 @@ double** Domain::collectDataFromNode() {
 }
 
 double* Domain::getBlockCurrentState(int number) {
-	cout << endl << "GET CURRENT STATE DOES NOT WORK!" << endl;
-	return 0;
-	/*double* result = NULL;
+	double* result = new double [mBlocks[number]->getGridElementCount()];
 
-	if(world_rank == 0) {
+	if(mWorldRank == 0) {
 		if(mBlocks[number]->isRealBlock()) {
-			result = mBlocks[number]->getCurrentState();
+			mBlocks[number]->getCurrentState(result);
 		}
 		else {
-			result = new double [mBlocks[number]->getLength() * mBlocks[number]->getWidth()];
-			MPI_Recv(result, mBlocks[number]->getLength() * mBlocks[number]->getWidth(), MPI_DOUBLE, mBlocks[number]->getNodeNumber(), 999, MPI_COMM_WORLD, &status);
+			MPI_Recv(result, mBlocks[number]->getGridElementCount(), MPI_DOUBLE, mBlocks[number]->getNodeNumber(), 999, MPI_COMM_WORLD, &status);
 		}
 
 		return result;
 	}
 	else {
 		if(mBlocks[number]->isRealBlock()) {
-			result = mBlocks[number]->getCurrentState();
-			MPI_Send(result, mBlocks[number]->getLength() * mBlocks[number]->getWidth(), MPI_DOUBLE, 0, 999, MPI_COMM_WORLD);
+			mBlocks[number]->getCurrentState(result);
+			MPI_Send(result, mBlocks[number]->getGridElementCount(), MPI_DOUBLE, 0, 999, MPI_COMM_WORLD);
 			delete result;
 			return NULL;
 		}
 	}
-	return NULL;*/
+	return NULL;
 }
 
 
@@ -115,7 +112,7 @@ void Domain::compute(char* saveFile) {
 		}
 	cout <<"Computation finished!" << endl;
 
-	if( flags & SAVE_FILE )
+	//if( flags & SAVE_FILE )
 		saveStateToFile(saveFile);
 
 }
@@ -719,11 +716,9 @@ int Domain::realBlockCount() {
 }
 
 void Domain::saveStateToFile(char* path) {
-	cout << endl << "SAVE STATE DOESN'T WORK" << endl;
-	return;
-	/*double** resultAll = collectDataFromNode();
+	double** resultAll = collectDataFromNode();
 
-	if( world_rank == 0 ) {
+	if( mWorldRank == 0 ) {
 		ofstream out;
 		out.open(path, ios::binary);
 
@@ -736,45 +731,18 @@ void Domain::saveStateToFile(char* path) {
 		out.write((char*)&version_minor, SIZE_INT);
 
 		out.write((char*)&currentTime, SIZE_DOUBLE);
-		out.write((char*)&blockCount, SIZE_INT);
 
-		//out << SAVE_FILE_CODE << endl;
-		//out << VERSION_MAJOR << endl;
-		//out << VERSION_MINOR << endl;
-		//out << currentTime << endl;
-		//out << blockCount << endl;
-
-		int length;
-		int width;
-
-		double value;
-
-		for (int i = 0; i < blockCount; ++i) {
-			length = mBlocks[i]->getLength();
-			width = mBlocks[i]->getWidth();
-
-			cout << length << "l " << width << "w ";
-
-			out.write((char*)&length, SIZE_INT);
-			out.write((char*)&width, SIZE_INT);
-
-			//out << mBlocks[i]->getLength() << " " << mBlocks[i]->getWidth() << endl;
-			for (int j = 0; j < mBlocks[i]->getLength() * mBlocks[i]->getWidth(); ++j) {
-				value = resultAll[i][j];
-				//out << resultAll[i][j] << " ";
-				out.write((char*)&(resultAll[i][j]), SIZE_DOUBLE);
-			}
-			out << endl;
+		for (int i = 0; i < mBlockCount; ++i) {
+			int count = mBlocks[i]->getGridElementCount();
+			out.write((char*)&resultAll[i], SIZE_DOUBLE * count);
 		}
-
-		out.close();
 	}
 
 	if( resultAll != NULL ) {
-		for (int i = 0; i < blockCount; ++i)
+		for (int i = 0; i < mBlockCount; ++i)
 			delete resultAll[i];
 		delete resultAll;
-	}*/
+	}
 }
 
 void Domain::loadStateFromFile(char* blockLocation, char* dataFile) {
