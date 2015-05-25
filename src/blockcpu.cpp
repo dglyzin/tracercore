@@ -554,7 +554,6 @@ void BlockCpu::createSolver(int solverIdx) {
 
 	switch (solverIdx) {
 		case EULER:
-			//mSolver = new EulerSolverCpu(count);
 			mSolver = new EulerSolverCpu(count);
 			break;
 		case RK4:
