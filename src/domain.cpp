@@ -158,7 +158,7 @@ void Domain::nextStep() {
 			mRejectedStepCount++;
 			cout<<"Step rejected!\n"<<endl;
 		}
-		mSolverInfo->getNewStep(timeStep, error,totalGridElements);
+		timeStep = mSolverInfo->getNewStep(timeStep, error,totalGridElements);
     }
 	else{ //constant step
 		confirmStep();
