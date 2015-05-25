@@ -179,6 +179,8 @@ public:
 	int getDeviceNumber() { return deviceNumber; }
 	int getNodeNumber() { return nodeNumber; }
 
+	int getDimension() { return dimension; }
+
 	void setFunctionNumber(unsigned short int* functionNumberData ) { return; }
 
 	double* addNewBlockBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength);
