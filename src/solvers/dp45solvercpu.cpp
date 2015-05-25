@@ -54,7 +54,7 @@ DP45SolverCpu::~DP45SolverCpu() {
 void DP45SolverCpu::prepareFSAL(double timeStep) {
 #pragma omp parallel for
 	for (int idx = 0; idx < mCount; idx++)
-		mArg[idx] = mState[idx] + a21 * timeStep * mTempStore7[idx];
+		mArg[idx] = mState[idx] + a21 * timeStep * mTempStore1[idx];
 }
 
 void DP45SolverCpu::copyState(double* result) {
@@ -83,7 +83,7 @@ void DP45SolverCpu::prepareArgument(int stage, double timeStep) {
 	else if (stage == 4)
 #pragma omp parallel for
 		for (int idx=0; idx<mCount; idx++)
-			mArg[idx] = mState[idx]+timeStep*(a61*mTempStore1[idx] + a62*mTempStore2[idx] + a63*mTempStore3[idx] + a64*mTempStore4[idx] +a65*mTempStore5[idx]);
+			mArg[idx] = mState[idx]+timeStep*(a71*mTempStore1[idx] + a73*mTempStore3[idx] + a74*mTempStore4[idx] + a75*mTempStore5[idx] +a76*mTempStore6[idx]);
 	else if (stage == 5)
 	{ //nothing to be done here before step is confirmed, moved to confirmStep
 	}
