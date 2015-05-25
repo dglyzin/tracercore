@@ -391,11 +391,14 @@ void Domain::readFromFile(char* path) {
 			mSolverInfo = new EulerSolver();
 			break;
 		case RK4:
-			cout << endl << "RK4 SOLVER NOT READY!" << endl;
-			mSolverInfo = NULL;
+			mSolverInfo = new RK4Solver();
+			break;
+		case DP45:
+			mSolverInfo = new DP45Solver();
 			break;
 		default:
 			mSolverInfo = new EulerSolver();
+			break;
 	}
 
 	readBlockCount(in);
