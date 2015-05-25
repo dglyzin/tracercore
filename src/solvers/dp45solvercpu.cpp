@@ -24,7 +24,16 @@ DP45SolverCpu::DP45SolverCpu(int _count) : DP45Solver(_count) {
 
     for (int idx = 0; idx < mCount; ++idx){
         mState[idx] = 0;
-        mTempStore1[idx] = 0;
+
+        mTempStore1[idx] = 1;
+        mTempStore2[idx] = 2;
+        mTempStore3[idx] = 3;
+        mTempStore4[idx] = 4;
+        mTempStore5[idx] = 5;
+        mTempStore6[idx] = 6;
+        mTempStore7[idx] = 7;
+
+        mArg[idx] = 0;
     }
 }
 
