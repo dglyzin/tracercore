@@ -48,11 +48,13 @@ public:
 	virtual double getNewStep(double timeStep, double error, int totalDomainElements) = 0;
 	virtual bool isErrorPermissible(double error, int totalDomainElements) = 0;
 
-	virtual double* getMState() = 0;
+	virtual void printToConsole(int zCount, int yCount, int xCount, int cellSize) = 0;
 
 protected:
   	int     mCount; //total number of elements in every array
   	double* mState;
+
+  	void printMatrix(double* matrix, int zCount, int yCount, int xCount, int cellSize);
 };
 
 #endif /* SOLVER_H_ */

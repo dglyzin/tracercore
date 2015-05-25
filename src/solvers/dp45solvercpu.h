@@ -21,6 +21,8 @@ public:
 
 	double getStepError(double timeStep, double aTol, double rTol);
 
+	void printToConsole(int zCount, int yCount, int xCount, int cellSize);
+
 private:
 	void prepareFSAL(double timeStep);
 };

@@ -18,6 +18,8 @@ public:
 	void copyState(double* result);
 
 	void prepareArgument(int stage, double timeStep);
+
+	void printToConsole(int zCount, int yCount, int xCount, int cellSize);
 };
 
 #endif /* SRC_SOLVERS_RK4SOLVERCPU_H_ */

@@ -56,3 +56,23 @@ void RK4SolverCpu::prepareArgument(int stage, double timeStep) {
 	}
 	else assert(0);
 }
+
+void RK4SolverCpu::printToConsole(int zCount, int yCount, int xCount, int cellSize) {
+	printf("mState: \n");
+	printMatrix(mState, zCount, yCount, xCount, cellSize);
+
+	printf("mTempStore1: \n");
+	printMatrix(mTempStore1, zCount, yCount, xCount, cellSize);
+
+	printf("mTempStore2: \n");
+	printMatrix(mTempStore2, zCount, yCount, xCount, cellSize);
+
+	printf("mTempStore3: \n");
+	printMatrix(mTempStore3, zCount, yCount, xCount, cellSize);
+
+	printf("mTempStore4: \n");
+	printMatrix(mTempStore4, zCount, yCount, xCount, cellSize);
+
+	printf("mArg: \n");
+	printMatrix(mArg, zCount, yCount, xCount, cellSize);
+}

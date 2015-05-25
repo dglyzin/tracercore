@@ -98,3 +98,33 @@ double DP45SolverCpu::getStepError(double timeStep, double aTol, double rTol){
 
 	return err;
 }
+
+
+void DP45SolverCpu::printToConsole(int zCount, int yCount, int xCount, int cellSize) {
+	printf("mState: \n");
+	printMatrix(mState, zCount, yCount, xCount, cellSize);
+
+	printf("mTempStore1: \n");
+	printMatrix(mTempStore1, zCount, yCount, xCount, cellSize);
+
+	printf("mTempStore2: \n");
+	printMatrix(mTempStore2, zCount, yCount, xCount, cellSize);
+
+	printf("mTempStore3: \n");
+	printMatrix(mTempStore3, zCount, yCount, xCount, cellSize);
+
+	printf("mTempStore4: \n");
+	printMatrix(mTempStore4, zCount, yCount, xCount, cellSize);
+
+	printf("mTempStore5: \n");
+	printMatrix(mTempStore5, zCount, yCount, xCount, cellSize);
+
+	printf("mTempStore6: \n");
+	printMatrix(mTempStore6, zCount, yCount, xCount, cellSize);
+
+	printf("mTempStore7: \n");
+	printMatrix(mTempStore7, zCount, yCount, xCount, cellSize);
+
+	printf("mArg: \n");
+	printMatrix(mArg, zCount, yCount, xCount, cellSize);
+}

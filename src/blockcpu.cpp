@@ -380,29 +380,31 @@ void BlockCpu::print() {
 
 
 	// TODO вывод информации о Solver'е
-	double* tmpMatrix = mSolver->getMState();
+	/*double* tmpMatrix = mSolver->getMState();
 
 	for (int i = 0; i < zCount; ++i) {
-			int zShift = xCount * yCount * i;
+		printf("z = %d\n", i);
+		int zShift = xCount * yCount * i;
 
-			for (int j = 0; j < yCount; ++j) {
-				int yShift = xCount * j;
+		for (int j = 0; j < yCount; ++j) {
+			int yShift = xCount * j;
 
-				for (int k = 0; k < xCount; ++k) {
-					int xShift = k;
-                    printf("(");
-					for (int l = 0; l < cellSize; ++l) {
-						int cellShift = l;
+			for (int k = 0; k < xCount; ++k) {
+				int xShift = k;
+				printf("(");
+				for (int l = 0; l < cellSize; ++l) {
+					int cellShift = l;
 
-						printf("%.2f ", tmpMatrix[ (zShift + yShift + xShift)*cellSize + cellShift ]);
+					printf("%.2f ", tmpMatrix[ (zShift + yShift + xShift)*cellSize + cellShift ]);
 
-					}
-					printf(") ");
 				}
-				printf("\n");
+				printf(") ");
 			}
 			printf("\n");
 		}
+		printf("\n");
+	}*/
+	mSolver->printToConsole(zCount, yCount, xCount, cellSize);
 
 	cout << endl;
 	cout << "Send border info (" << countSendSegmentBorder << ")" << endl;
@@ -552,6 +554,7 @@ void BlockCpu::createSolver(int solverIdx) {
 
 	switch (solverIdx) {
 		case EULER:
+			//mSolver = new EulerSolverCpu(count);
 			mSolver = new EulerSolverCpu(count);
 			break;
 		case RK4:

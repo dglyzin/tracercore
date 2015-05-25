@@ -32,3 +32,11 @@ void EulerSolverCpu::prepareArgument(int stage, double timeStep) {
 double* EulerSolverCpu::getMState() {
 	return mState;
 }
+
+void EulerSolverCpu::printToConsole(int zCount, int yCount, int xCount, int cellSize) {
+	printf("mState: \n");
+	printMatrix(mState, zCount, yCount, xCount, cellSize);
+
+	printf("mTempStore1: \n");
+	printMatrix(mTempStore1, zCount, yCount, xCount, cellSize);
+}
