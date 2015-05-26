@@ -176,8 +176,10 @@ private:
 	void readGridSteps(std::ifstream& in);
 	void readCellAndHaloSize(std::ifstream& in);
 	void readSolverIndex(std::ifstream& in);
+	void readSolverTolerance(std::ifstream& in);
 	void readBlockCount(std::ifstream& in);
 	void readConnectionCount(std::ifstream& in);
+
 
 	/*
 	 * Чтение блока

@@ -478,6 +478,14 @@ void Domain::readSolverIndex(std::ifstream& in){
 	cout << "Solver index:  " << mSolverIndex << endl;
 }
 
+void Domain::readSolverTolerance(std::ifstream& in){
+	in.read((char*)&mAtol, SIZE_DOUBLE);
+	cout << "Solver absolute tolerance:  " << mAtol << endl;
+	in.read((char*)&mRtol, SIZE_DOUBLE);
+	cout << "Solver relative tolerance:  " << mRtol << endl;
+}
+
+
 
 void Domain::readBlockCount(ifstream& in) {
 	in.read((char*)&mBlockCount, SIZE_INT);
