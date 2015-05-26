@@ -145,6 +145,7 @@ void Domain::nextStep() {
 
     if (mSolverInfo->isVariableStep()){
     	double error = collectError();
+    	printf("step error = %f\n", error);
 		if (mSolverInfo->isErrorPermissible(error,totalGridElements)){
 			confirmStep();
 			mAcceptedStepCount++;
@@ -156,6 +157,7 @@ void Domain::nextStep() {
 			cout<<"Step rejected!\n"<<endl;
 		}
 		timeStep = mSolverInfo->getNewStep(timeStep, error,totalGridElements);
+		printf("new time step = %f\n", timeStep);
     }
 	else{ //constant step
 		confirmStep();
@@ -826,7 +828,11 @@ void Domain::printStatisticsInfo(char* inputFile, char* outputFile, double calcT
 		count += mBlocks[i]->getGridElementCount();
 	}
 
-	printf("\n\nTime: %.2f\nElement count: %d\nPerformance: %.2f\n\n", calcTime, count, (double)(count) / calcTime);
+
+
+    printf("\n\nSteps accepted: %d\nSteps rejected: %d\n", mAcceptedStepCount, mRejectedStepCount);
+    int stepCount = mRejectedStepCount + mAcceptedStepCount;
+    printf("Time: %.2f\nElement count: %d\nPerformance: %.2f\n\n", calcTime, count, (double)(count) *stepCount / calcTime);
 
 	return;
 	/*if ( flags & STATISTICS ) {
