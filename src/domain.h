@@ -30,7 +30,7 @@ public:
 	/*
 	 * Полный расчет
 	 */
-	void compute(char* saveFile);
+	void compute(char* inputFile);
 
 	/*
 	 * Выполнение одной итерации (одного шага)

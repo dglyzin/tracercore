@@ -38,17 +38,6 @@ public:
 	void Am3() { return; }
 };*/
 
-int lastChar(char* source, char ch) {
-	int i = 0;
-	int index= 0;
-	while(source[i] != 0) {
-		if(source[i] == ch)
-			index = i;
-		i++;
-	}
-
-	return index;
-}
 
 int main(int argc, char * argv[]) {
 	/*
@@ -75,12 +64,12 @@ int main(int argc, char * argv[]) {
 
 	//int stepCount = atoi(argv[4]);
 	//double stopTime = atof(argv[5]);
-	char savePath[100];// = argv[6];
+	//char savePath[100];// = argv[6];
 	//char* loadFile = argv[7];
 	//char* statisticsFile = argv[8];
 
 	//printf("\n\n\n\n\n%d\n\n\n\n\n\n", lastChar(inputFile, '/'));
-	strncpy(savePath, inputFile, lastChar(inputFile, '/'));
+
 	//printf("\n\n\n%s\n\n\n\n", inputFile);
 
 	/*
@@ -96,7 +85,7 @@ int main(int argc, char * argv[]) {
 	// Получить текущее время
 	time1 = MPI_Wtime();
 	printf ("Running computations \n");
-	d->compute(savePath);
+	d->compute(inputFile);
 	// Получить текущее время
 	time2 = MPI_Wtime();
 

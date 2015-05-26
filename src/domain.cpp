@@ -11,6 +11,18 @@
 
 using namespace std;
 
+int lastChar(char* source, char ch) {
+	int i = 0;
+	int index= 0;
+	while(source[i] != 0) {
+		if(source[i] == ch)
+			index = i;
+		i++;
+	}
+
+	return index;
+}
+
 Domain::Domain(int _world_rank, int _world_size, char* inputFile, int _flags, int _stepCount, double _stopTime, char* loadFile) {
 	mWorldRank = _world_rank;
 	mWorldSize = _world_size;
@@ -95,7 +107,7 @@ double* Domain::getBlockCurrentState(int number) {
 
 
 
-void Domain::compute(char* saveFile) {
+void Domain::compute(char* inputFile) {
 	cout << endl << "Computation started..." << endl;
 	cout<< "Current time: "<<currentTime<<", finish time: "<<stopTime<< ", time step: " << timeStep<<endl;
 	cout <<(flags & STEP_EXECUTION)<<", solver stage count: " <<mSolverInfo->getStageCount()<<endl;
@@ -103,10 +115,10 @@ void Domain::compute(char* saveFile) {
 	if (mSolverInfo->isFSAL() )
 	    initSolvers();
 
-	if( flags & STEP_EXECUTION)
+	/*if( flags & STEP_EXECUTION)
 		for (int i = 0; i < mStepCount; i++)
 			nextStep();
-	else
+	else*/
 		while ( currentTime < stopTime ){
 			nextStep();
 			//cout<< currentTime<<" "<<stopTime<< " " << timeStep<<endl;
@@ -114,8 +126,13 @@ void Domain::compute(char* saveFile) {
 	cout <<"Computation finished!" << endl;
 
 	//if( flags & SAVE_FILE )
-		saveStateToFile( strcat( saveFile, "/project.bin" ) );
-	//printf("\n\n\n%s\n\n\n\n", strcat( saveFile, "/project.bin" ));
+	char saveFile[100];
+
+	strncpy(saveFile, inputFile, lastChar(inputFile, '/'));
+
+	sprintf(saveFile, "%s%s%f%s", saveFile, "/project-", currentTime, ".bin");
+	saveStateToFile( saveFile );
+	//printf("\n\n\n%s\n\n\n\n", saveFile);
 
 }
 
