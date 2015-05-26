@@ -75,16 +75,16 @@ void DP45Solver::confirmStep(double timestep){
 
 
 double DP45Solver::getNewStep(double timeStep, double error, int totalDomainElements){
-	//double err = sqrt(error/totalDomainElements);
-	//return timeStep * min( facmax, max( facmin, fac * pow(1.0/err,1.0/5.0) ) );
-	return timeStep;
+	double err = sqrt(error/totalDomainElements);
+	return timeStep * min( facmax, max( facmin, fac * pow(1.0/err,1.0/5.0) ) );
+	//return timeStep;
 }
 
 bool DP45Solver::isErrorPermissible(double error, int totalDomainElements){
-	//double err = sqrt(error/totalDomainElements);
-	//if (err < 1)
-	//	return true;
-	//else
-	//	return false;
-	return true;
+	double err = sqrt(error/totalDomainElements);
+	if (err < 1)
+		return true;
+	else
+		return false;
+	//return true;
 }
