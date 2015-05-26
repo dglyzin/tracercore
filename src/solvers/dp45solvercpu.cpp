@@ -51,7 +51,7 @@ DP45SolverCpu::~DP45SolverCpu() {
     delete mArg;
 }
 
-void DP45SolverCpu::prepareFSAL(double timeStep) {
+void DP45SolverCpu::prepareFSAL(double timeStep) { //must be NEW timestep
 #pragma omp parallel for
 	for (int idx = 0; idx < mCount; idx++)
 		mArg[idx] = mState[idx] + a21 * timeStep * mTempStore1[idx];
@@ -97,9 +97,9 @@ void DP45SolverCpu::prepareArgument(int stage, double timeStep) {
 
 double DP45SolverCpu::getStepError(double timeStep, double aTol, double rTol){
 	double err=0;
-#pragma omp parallel for reduction (+:err)
+//#pragma omp parallel for reduction (+:err)
 	for (int idx=0; idx<mCount; idx++){
-		double erri = timeStep * (e1 * mTempStore1[idx] + e3 * mTempStore3[idx] + e4 * mTempStore4[idx] +
+		double erri =  timeStep * (e1 * mTempStore1[idx] + e3 * mTempStore3[idx] + e4 * mTempStore4[idx] +
 	                            e5 * mTempStore5[idx] + e6 * mTempStore6[idx]+ e7 * mTempStore7[idx])
 	                          /(aTol + rTol * max(mArg[idx], mState[idx]));
 	   err += erri * erri;

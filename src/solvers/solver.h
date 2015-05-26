@@ -38,6 +38,7 @@ public:
     virtual void prepareArgument(int stage, double timeStep) = 0;
 
     virtual void confirmStep(double timestep) = 0;
+    virtual void rejectStep(double timestep) = 0;
 
     virtual double getStepError(double timeStep, double aTol, double rTol) = 0;
 

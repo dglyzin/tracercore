@@ -165,17 +165,19 @@ void Domain::nextStep() {
     if (mSolverInfo->isVariableStep()){
     	double error = collectError();
     	printf("step error = %f\n", error);
+    	timeStep = mSolverInfo->getNewStep(timeStep, error,totalGridElements);
 		if (mSolverInfo->isErrorPermissible(error,totalGridElements)){
-			confirmStep();
+			confirmStep(); //uses new timestep
 			mAcceptedStepCount++;
 			currentTime += timeStep;
 			//cout<<"Step accepted\n"<<endl;
 		}
 		else{
+			rejectStep(); //uses new timestep
 			mRejectedStepCount++;
 			cout<<"Step rejected!\n"<<endl;
 		}
-		timeStep = mSolverInfo->getNewStep(timeStep, error,totalGridElements);
+
 		printf("new time step = %f\n", timeStep);
     }
 	else{ //constant step
@@ -277,11 +279,21 @@ void Domain::computeOneStepCenter(int stage) {
 	processDeviceBlocksCenter(CPU, 0, stage);
 }
 
+
+//TODO next two methods are not parallel!
 void Domain::confirmStep() {
 	for (int i = 0; i < mBlockCount; ++i) {
 		mBlocks[i]->confirmStep(timeStep);
 	}
 }
+
+void Domain::rejectStep() {
+	for (int i = 0; i < mBlockCount; ++i) {
+		mBlocks[i]->rejectStep(timeStep);
+	}
+}
+
+
 
 double Domain::collectError() {
 	double err1, err2, err3;

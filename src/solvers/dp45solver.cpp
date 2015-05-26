@@ -74,6 +74,11 @@ void DP45Solver::confirmStep(double timestep){
 }
 
 
+void DP45Solver::rejectStep(double timestep){
+    prepareFSAL(timestep);
+}
+
+
 double DP45Solver::getNewStep(double timeStep, double error, int totalDomainElements){
 	double err = sqrt(error/totalDomainElements);
 	return timeStep * min( facmax, max( facmin, fac * pow(1.0/err,1.0/5.0) ) );

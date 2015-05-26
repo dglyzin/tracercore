@@ -100,6 +100,11 @@ void Block::confirmStep(double timestep) {
 	mSolver->confirmStep( timestep);
 }
 
+void Block::rejectStep(double timestep) {
+	mSolver->rejectStep( timestep);
+}
+
+
 void Block::freeMemory(int memory_alloc_type, double* memory) {
 	if(memory == NULL)
 		return;

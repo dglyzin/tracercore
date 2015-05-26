@@ -214,6 +214,7 @@ private:
 	double collectError();
 
 	void confirmStep();
+	void rejectStep();
 };
 
 #endif /* SRC_DOMAIN_H_ */

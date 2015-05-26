@@ -149,6 +149,7 @@ public:
 	virtual double getSolverStepError(double timeStep, double aTol, double rTol) = 0;
 
 	void confirmStep(double timestep);
+	void rejectStep(double timestep);
 
 	/*
 	 * Возвращает тип блока.
