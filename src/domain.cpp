@@ -818,7 +818,15 @@ void Domain::loadStateFromFile(char* blockLocation, char* dataFile) {
 }
 
 void Domain::printStatisticsInfo(char* inputFile, char* outputFile, double calcTime, char* statisticsFile) {
-	cout << endl << "PRINT STATISTIC INFO DOESN'T WORK" << endl;
+	//cout << endl << "PRINT STATISTIC INFO DOESN'T WORK" << endl;
+
+	int count = 0;
+	for (int i = 0; i < mBlockCount; ++i) {
+		count += mBlocks[i]->getGridElementCount();
+	}
+
+	printf("\n\nTime: %.2f\nElement count: %d\nPerformance: %.2f\n\n", calcTime, count, (double)(count) / calcTime);
+
 	return;
 	/*if ( flags & STATISTICS ) {
 		if( world_rank == 0 ) {
