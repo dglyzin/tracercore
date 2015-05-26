@@ -23,8 +23,9 @@ Domain::Domain(int _world_rank, int _world_size, char* inputFile, int _flags, in
 
 	mRepeatCount = 0;
 
+	readFromFile(inputFile);
 
-	flags = _flags;
+	/*flags = _flags;
 
 	if( flags & LOAD_FILE )
 		loadStateFromFile(inputFile, loadFile);
@@ -35,7 +36,7 @@ Domain::Domain(int _world_rank, int _world_size, char* inputFile, int _flags, in
 		stopTime = _stopTime;
 
 	if( flags & STEP_EXECUTION )
-		mStepCount = _stepCount;
+		mStepCount = _stepCount;*/
 
 	mAcceptedStepCount = 0;
 	mRejectedStepCount = 0;
@@ -113,7 +114,8 @@ void Domain::compute(char* saveFile) {
 	cout <<"Computation finished!" << endl;
 
 	//if( flags & SAVE_FILE )
-		//saveStateToFile(saveFile);
+		saveStateToFile( strcat( saveFile, "/project.bin" ) );
+	//printf("\n\n\n%s\n\n\n\n", strcat( saveFile, "/project.bin" ));
 
 }
 

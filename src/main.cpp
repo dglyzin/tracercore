@@ -70,24 +70,25 @@ int main(int argc, char * argv[]) {
 	double time1, time2;
 
 	char* inputFile = argv[1];
-	char* outputFile = argv[2];
-	int flags = atoi(argv[3]);
+	//char* outputFile = argv[2];
+	//int flags = atoi(argv[3]);
 
-	int stepCount = atoi(argv[4]);
-	double stopTime = atof(argv[5]);
-	char* savePath = argv[6];
-	char* loadFile = argv[7];
-	char* statisticsFile = argv[8];
+	//int stepCount = atoi(argv[4]);
+	//double stopTime = atof(argv[5]);
+	char savePath[100];// = argv[6];
+	//char* loadFile = argv[7];
+	//char* statisticsFile = argv[8];
 
-	printf("\n\n\n\n\n%d\n\n\n\n\n\n", lastChar(inputFile, '/'));
-	strncpy(inputFile, savePath, lastChar(inputFile, '/'));
+	//printf("\n\n\n\n\n%d\n\n\n\n\n\n", lastChar(inputFile, '/'));
+	strncpy(savePath, inputFile, lastChar(inputFile, '/'));
+	//printf("\n\n\n%s\n\n\n\n", inputFile);
 
 	/*
 	 * Создание основного управляющего класса.
 	 * Номер потока, количество потоков и путь к файлу с данными.
 	 */
 	printf ("DEBUG creating domain...\n ");
-	Domain* d = new Domain(world_rank, world_size, inputFile, flags, stepCount, stopTime, loadFile);
+	Domain* d = new Domain(world_rank, world_size, inputFile, 0, 0, 0, NULL);
 
 	/*
 	 * Вычисления.
@@ -105,13 +106,13 @@ int main(int argc, char * argv[]) {
 	 */
 	d->printBlocksToConsole();
 
-	d->printStatisticsInfo(inputFile, outputFile, time2 - time1, statisticsFile);
+	d->printStatisticsInfo(inputFile, NULL, time2 - time1, NULL);
 
 	/*
 	 * Сбор и вывод результата.
 	 * Передается второй аргумент командной строки - путь к файлу, в который будет записан результат.
 	 */
-	d->print(outputFile);
+	d->print(NULL);
 
 	delete d;
 
