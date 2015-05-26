@@ -38,6 +38,18 @@ public:
 	void Am3() { return; }
 };*/
 
+int lastChar(char* source, char ch) {
+	int i = 0;
+	int index= 0;
+	while(source[i] != 0) {
+		if(source[i] == ch)
+			index = i;
+		i++;
+	}
+
+	return index;
+}
+
 int main(int argc, char * argv[]) {
 	/*
 	 * Инициализация MPI
@@ -63,9 +75,12 @@ int main(int argc, char * argv[]) {
 
 	int stepCount = atoi(argv[4]);
 	double stopTime = atof(argv[5]);
-	char* saveFile = argv[6];
+	char* savePath = argv[6];
 	char* loadFile = argv[7];
 	char* statisticsFile = argv[8];
+
+	printf("\n\n\n\n\n%d\n\n\n\n\n\n", lastChar(inputFile, '/'));
+	strncpy(inputFile, savePath, lastChar(inputFile, '/'));
 
 	/*
 	 * Создание основного управляющего класса.
@@ -80,7 +95,7 @@ int main(int argc, char * argv[]) {
 	// Получить текущее время
 	time1 = MPI_Wtime();
 	printf ("Running computations \n");
-	d->compute("//home//tester//Tracer1//Heat_test2//state1");
+	d->compute(savePath);
 	// Получить текущее время
 	time2 = MPI_Wtime();
 

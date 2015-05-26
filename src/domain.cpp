@@ -113,7 +113,7 @@ void Domain::compute(char* saveFile) {
 	cout <<"Computation finished!" << endl;
 
 	//if( flags & SAVE_FILE )
-		saveStateToFile(saveFile);
+		//saveStateToFile(saveFile);
 
 }
 
