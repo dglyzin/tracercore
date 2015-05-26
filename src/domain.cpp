@@ -381,6 +381,7 @@ void Domain::readFromFile(char* path) {
 	readGridSteps(in);
 	readCellAndHaloSize(in);
 	readSolverIndex(in);
+	readSolverTolerance(in);
 
 
 	switch (mSolverIndex) {
