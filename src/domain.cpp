@@ -776,7 +776,7 @@ void Domain::saveStateToFile(char* path) {
 
 		for (int i = 0; i < mBlockCount; ++i) {
 			int count = mBlocks[i]->getGridElementCount();
-			out.write((char*)&resultAll[i], SIZE_DOUBLE * count);
+			out.write((char*)resultAll[i], SIZE_DOUBLE * count);
 		}
 	}
 
