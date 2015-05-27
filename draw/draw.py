@@ -71,5 +71,5 @@ for i in range( len(info) ) :
   total = info[i][4] * info[i][5] * info[i][6] * cellSize
   
   data = np.fromfile(bin, dtype=np.float64, count=total)
-  #data, = struct.unpack('d', bin.read(8))
-  print data
+  data = data.reshape([info[i][6], info[i][5], info[i][4], cellSize]);
+

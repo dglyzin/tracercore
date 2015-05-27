@@ -30,7 +30,7 @@ public:
 	/*
 	 * Полный расчет
 	 */
-	void compute(char* inputFile);
+	void compute();
 
 	/*
 	 * Выполнение одной итерации (одного шага)
@@ -79,6 +79,7 @@ public:
 	 */
 	int realBlockCount();
 
+	void saveState(char* inputFile);
 	void saveStateToFile(char* path);
 	void loadStateFromFile(char* blockLocation, char* dataFile);
 
@@ -167,6 +168,9 @@ private:
 	int mHaloSize;
 
 	int mRepeatCount;
+
+	int totalGridNodeCount;
+	int totalGridElementCount;
 
 	MPI_Status status;
 
