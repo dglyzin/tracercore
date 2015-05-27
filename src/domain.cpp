@@ -107,7 +107,7 @@ double* Domain::getBlockCurrentState(int number) {
 
 
 
-void Domain::compute(char* inputFile) {
+void Domain::compute() {
 	cout << endl << "Computation started..." << endl;
 	cout<< "Current time: "<<currentTime<<", finish time: "<<stopTime<< ", time step: " << timeStep<<endl;
 	cout <<(flags & STEP_EXECUTION)<<", solver stage count: " <<mSolverInfo->getStageCount()<<endl;
@@ -119,19 +119,13 @@ void Domain::compute(char* inputFile) {
 		for (int i = 0; i < mStepCount; i++)
 			nextStep();
 	else*/
-		while ( currentTime < stopTime ){
-			nextStep();
-			//cout<< currentTime<<" "<<stopTime<< " " << timeStep<<endl;
-		}
+	while ( currentTime < stopTime ){
+		nextStep();
+		//cout<< currentTime<<" "<<stopTime<< " " << timeStep<<endl;
+	}
 	cout <<"Computation finished!" << endl;
 
 	//if( flags & SAVE_FILE )
-	char saveFile[100];
-
-	strncpy(saveFile, inputFile, lastChar(inputFile, '/'));
-
-	sprintf(saveFile, "%s%s%f%s", saveFile, "/project-", currentTime, ".bin");
-	saveStateToFile( saveFile );
 	//printf("\n\n\n%s\n\n\n\n", saveFile);
 
 }
@@ -157,7 +151,7 @@ void Domain::computeStage(int stage) {
 
 
 void Domain::nextStep() {
-	int totalGridElements = getGridElementCount();
+	//int totalGridElements = getGridElementCount();
 	//последовательно выполняем все стадии метода
     for(int stage=0; stage < mSolverInfo->getStageCount(); stage++)
     	computeStage(stage);
@@ -165,8 +159,8 @@ void Domain::nextStep() {
     if (mSolverInfo->isVariableStep()){
     	double error = collectError();
     	printf("step error = %f\n", error);
-    	timeStep = mSolverInfo->getNewStep(timeStep, error,totalGridElements);
-		if (mSolverInfo->isErrorPermissible(error,totalGridElements)){
+    	timeStep = mSolverInfo->getNewStep(timeStep, error,totalGridElementCount);
+		if (mSolverInfo->isErrorPermissible(error,totalGridElementCount)){
 			confirmStep(); //uses new timestep
 			mAcceptedStepCount++;
 			currentTime += timeStep;
@@ -454,7 +448,10 @@ void Domain::readFromFile(char* path) {
 	for (int i = 0; i < mBlockCount; ++i)
 		mBlocks[i]->moveTempBorderVectorToBorderArray();
 
-	printBlocksToConsole();
+	totalGridNodeCount = getGridNodeCount();
+	totalGridElementCount = getGridElementCount();
+
+	//printBlocksToConsole();
 }
 
 void Domain::readFileStat(ifstream& in) {
@@ -755,6 +752,15 @@ int Domain::realBlockCount() {
 			count++;
 
 	return count;
+}
+
+void Domain::saveState(char* inputFile) {
+	char saveFile[100];
+
+	strncpy(saveFile, inputFile, lastChar(inputFile, '/'));
+
+	sprintf(saveFile, "%s%s%f%s", saveFile, "/project-", currentTime, ".bin");
+	saveStateToFile( saveFile );
 }
 
 void Domain::saveStateToFile(char* path) {

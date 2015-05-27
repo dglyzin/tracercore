@@ -85,15 +85,17 @@ int main(int argc, char * argv[]) {
 	// Получить текущее время
 	time1 = MPI_Wtime();
 	printf ("Running computations \n");
-	d->compute(inputFile);
+	d->compute();
 	// Получить текущее время
 	time2 = MPI_Wtime();
+
+	d->saveState(inputFile);
 
 	/*
 	 * Вывод информации о времени работы осуществляет только поток с номером 0.
 	 * Время работы -  разница между двумя отсечками, котрые были сделаны ранее.
 	 */
-	d->printBlocksToConsole();
+	//d->printBlocksToConsole();
 
 	d->printStatisticsInfo(inputFile, NULL, time2 - time1, NULL);
 
