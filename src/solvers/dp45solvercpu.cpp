@@ -97,7 +97,7 @@ void DP45SolverCpu::prepareArgument(int stage, double timeStep) {
 
 double DP45SolverCpu::getStepError(double timeStep, double aTol, double rTol){
 	double err=0;
-//#pragma omp parallel for reduction (+:err)
+#pragma omp parallel for reduction (+:err)
 	for (int idx=0; idx<mCount; idx++){
 		double erri =  timeStep * (e1 * mTempStore1[idx] + e3 * mTempStore3[idx] + e4 * mTempStore4[idx] +
 	                            e5 * mTempStore5[idx] + e6 * mTempStore6[idx]+ e7 * mTempStore7[idx])

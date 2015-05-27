@@ -47,10 +47,10 @@ protected:
     double* mTempStore4;
     double* mArg;
 
-    const double b1 = 1.0/6.0;
-    const double b2 = 1.0/3.0;
-    const double b3 = 1.0/3.0;
-    const double b4 = 1.0/6.0;
+    static const double b1 = 1.0/6.0;
+    static const double b2 = 1.0/3.0;
+    static const double b3 = 1.0/3.0;
+    static const double b4 = 1.0/6.0;
 };
 
 #endif /* SRC_SOLVERS_RK4SOLVER_H_ */

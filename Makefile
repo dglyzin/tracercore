@@ -1,8 +1,8 @@
 CC=mpiCC
-CFLAGS=-c -O3 -Wall -std=c++11
+CFLAGS=-c -O3 -Wall
 
 CUDACC=nvcc
-CUFLAGS=-c -O3 -std=c++11
+CUFLAGS=-c -O3
 CUDAINC=/usr/local/cuda/include
 CUDAARCH=-arch=sm_20
 
