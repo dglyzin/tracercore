@@ -764,13 +764,13 @@ void Domain::saveStateToFile(char* path) {
 		ofstream out;
 		out.open(path, ios::binary);
 
-		unsigned short int save_file_code = SAVE_FILE_CODE;
-		unsigned short int version_major = VERSION_MAJOR;
-		unsigned short int version_minor = VERSION_MINOR;
+		char save_file_code = SAVE_FILE_CODE;
+		char version_major = VERSION_MAJOR;
+		char version_minor = VERSION_MINOR;
 
-		out.write((char*)&save_file_code, SIZE_UN_SH_INT);
-		out.write((char*)&version_major, SIZE_UN_SH_INT);
-		out.write((char*)&version_minor, SIZE_UN_SH_INT);
+		out.write((char*)&save_file_code, SIZE_CHAR);
+		out.write((char*)&version_major, SIZE_CHAR);
+		out.write((char*)&version_minor, SIZE_CHAR);
 
 		out.write((char*)&currentTime, SIZE_DOUBLE);
 

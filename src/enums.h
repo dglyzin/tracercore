@@ -25,6 +25,7 @@ enum FLAGS {
 	STATISTICS = 0x10
 };
 
+#define SIZE_CHAR sizeof(char)
 #define SIZE_INT sizeof(int)
 #define SIZE_DOUBLE sizeof(double)
 #define SIZE_UN_SH_INT sizeof(unsigned short int)
