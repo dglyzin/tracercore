@@ -67,9 +67,13 @@ versionMajor, = struct.unpack('b', bin.read(1))
 versionMinor, = struct.unpack('b', bin.read(1))
 time, = struct.unpack('d', bin.read(8))
 
+z = sys.argv[3]
+
 for i in range( len(info) ) :
   total = info[i][4] * info[i][5] * info[i][6] * cellSize
   
   data = np.fromfile(bin, dtype=np.float64, count=total)
   data = data.reshape([info[i][6], info[i][5], info[i][4], cellSize]);
+  
+  print data[z]
 
