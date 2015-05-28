@@ -14,11 +14,11 @@ BlockGpu::BlockGpu(int _dimension, int _xCount, int _yCount, int _zCount,
 		int _nodeNumber, int _deviceNumber,
 		int _haloSize, int _cellSize,
 		unsigned short int* _initFuncNumber, unsigned short int* _compFuncNumber,
-		int _mSolverIndex) :
+		int _solverIdx, double _aTol, double _rTol) :
 				Block( _dimension, _xCount, _yCount, _zCount,
 				_xOffset, _yOffset, _zOffset,
 				_nodeNumber, _deviceNumber,
-				_haloSize, _cellSize ) {
+				_haloSize, _cellSize) {
 	
 	cudaSetDevice(deviceNumber);
 	
@@ -290,23 +290,23 @@ void BlockGpu::loadData(double* data) {
 	/*cudaMemcpy( matrix, data, sizeof(double) * length * width, cudaMemcpyHostToDevice );*/
 }
 
-void BlockGpu::createSolver(int solverIdx) {
+void BlockGpu::createSolver(int solverIdx, double _aTol, double _rTol) {
 	cudaSetDevice(deviceNumber);
 
 	int count = getGridElementCount();
 
 	switch (solverIdx) {
 		case EULER:
-			mSolver = new EulerSolverGpu(count);
+			mSolver = new EulerSolverGpu(count, _aTol, _rTol);
 			break;
 		case RK4:
-			mSolver = new RK4SolverGpu(count);
+			mSolver = new RK4SolverGpu(count, _aTol, _rTol);
 			break;
 		case DP45:
-			mSolver = new DP45SolverGpu(count);
+			mSolver = new DP45SolverGpu(count, _aTol, _rTol);
 			break;
 		default:
-			mSolver = new EulerSolverGpu(count);
+			mSolver = new EulerSolverGpu(count, _aTol, _rTol);
 			break;
 	}
 }

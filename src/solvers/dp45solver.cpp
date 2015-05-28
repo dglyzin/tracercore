@@ -14,7 +14,7 @@ DP45Solver::DP45Solver() : Solver() {
 			mTempStore5 = mTempStore6 = mTempStore7 = mArg = NULL;
 }
 
-DP45Solver::DP45Solver(int _count) : Solver(_count) {
+DP45Solver::DP45Solver(int _count, double _aTol, double _rTol) : Solver(_count, _aTol, _rTol) {
 	mTempStore1 = mTempStore2 = mTempStore3 = mTempStore4 =
 			mTempStore5 = mTempStore6 = mTempStore7 = mArg = NULL;
 }

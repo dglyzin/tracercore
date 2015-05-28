@@ -12,14 +12,14 @@
 
 class DP45SolverGpu: public DP45Solver {
 public:
-	DP45SolverGpu(int _count);
+	DP45SolverGpu(int _count, double _aTol, double _rTol);
 	virtual ~DP45SolverGpu();
 
 	void copyState(double* result);
 
 	void prepareArgument(int stage, double timeStep);
 
-	double getStepError(double timeStep, double aTol, double rTol);
+	double getStepError(double timeStep);
 
 private:
 	void prepareFSAL(double timeStep);

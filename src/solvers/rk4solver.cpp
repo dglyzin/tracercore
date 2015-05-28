@@ -11,7 +11,7 @@ RK4Solver::RK4Solver() : Solver() {
 	mTempStore1 = mTempStore2 = mTempStore3 = mTempStore4 = mArg = NULL;
 }
 
-RK4Solver::RK4Solver(int _count) : Solver(_count){
+RK4Solver::RK4Solver(int _count, double _aTol, double _rTol) : Solver(_count, _aTol, _rTol){
     //mCount = _count;
     mTempStore1 = mTempStore2 = mTempStore3 = mTempStore4 = mArg = NULL;
     /*mState = new double[mCount];

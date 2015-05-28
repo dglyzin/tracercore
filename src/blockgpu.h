@@ -34,7 +34,7 @@ private:
 	void computeStageBorder_2d(int stage, double time, double step) { std::cout << std::endl << "GPU compute border 2d" << std::endl; }
 	void computeStageBorder_3d(int stage, double time, double step) { std::cout << std::endl << "GPU compute border 3d" << std::endl; }
 
-	void createSolver(int solverIdx);
+	void createSolver(int solverIdx, double _aTol, double _rTol);
 
 	double* getNewBlockBorder(Block* neighbor, int borderLength, int& memoryType);
 	double* getNewExternalBorder(Block* neighbor, int borderLength, double* border, int& memoryType);
@@ -45,14 +45,12 @@ public:
 			int _nodeNumber, int _deviceNumber,
 			int _haloSize, int _cellSize,
 			unsigned short int* _initFuncNumber, unsigned short int* _compFuncNumber,
-			int _mSolverIndex);
+			int _solverIdx, double _aTol, double _rTol);
 	virtual ~BlockGpu();
 
 	bool isRealBlock() { return true; }
 
 	//void prepareStageData(int stage) { std::cout << std::endl << "GPU prepare data" << std::endl; }
-
-	double getSolverStepError(double timeStep, double aTol, double rTol) { return mSolver->getStepError(timeStep, aTol, rTol); }
 
 	int getBlockType() { return GPU; }
 

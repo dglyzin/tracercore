@@ -28,23 +28,21 @@ private:
 	void computeStageBorder_2d(int stage, double time, double step) { return; }
 	void computeStageBorder_3d(int stage, double time, double step) { return; }
 
-	void createSolver(int solverIdx) { return; }
+	void createSolver(int solverIdx, double _aTol, double _rTol) { return; }
 
 	double* getNewBlockBorder(Block* neighbor, int borderLength, int& memoryType) { return NULL; }
 	double* getNewExternalBorder(Block* neighbor, int borderLength, double* border, int& memoryType) { return NULL; }
 
 public:
 	BlockNull(int _dimension, int _xCount, int _yCount, int _zCount,
-				int _xOffset, int _yOffset, int _zOffset,
-				int _nodeNumber, int _deviceNumber,
-				int _haloSize, int _cellSize);
+			int _xOffset, int _yOffset, int _zOffset,
+			int _nodeNumber, int _deviceNumber,
+			int _haloSize, int _cellSize);
 	virtual ~BlockNull();
 
 	bool isRealBlock() { return false; }
 
 	//void prepareStageData(int stage) { return; }
-
-	double getSolverStepError(double timeStep, double aTol, double rTol) { return 0.0; }
 
 	int getBlockType() { return NULL_BLOCK; }
 

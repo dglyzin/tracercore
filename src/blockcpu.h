@@ -30,7 +30,7 @@ private:
 	void computeStageBorder_2d(int stage, double time, double step);
 	void computeStageBorder_3d(int stage, double time, double step);
 
-	void createSolver(int solverIdx);
+	void createSolver(int solverIdx, double _aTol, double _rTol);
 
 	double* getNewBlockBorder(Block* neighbor, int borderLength, int& memoryType);
 	double* getNewExternalBorder(Block* neighbor, int borderLength, double* border, int& memoryType);
@@ -41,15 +41,13 @@ public:
 			int _nodeNumber, int _deviceNumber,
 			int _haloSize, int _cellSize,
 			unsigned short int* _initFuncNumber, unsigned short int* _compFuncNumber,
-			int _solverIndex);
+			int _solverIdx, double _aTol, double _rTol);
 
 	~BlockCpu();
 
 	bool isRealBlock() { return true; }
 
 	//void prepareStageData(int stage);
-
-	double getSolverStepError(double timeStep, double aTol, double rTol);
 
 	int getBlockType() { return CPU; }
 

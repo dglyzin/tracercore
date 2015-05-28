@@ -12,14 +12,14 @@
 
 class DP45SolverCpu: public DP45Solver {
 public:
-	DP45SolverCpu(int _count);
+	DP45SolverCpu(int _count, double _aTol, double _rTol);
 	virtual ~DP45SolverCpu();
 
 	void copyState(double* result);
 
 	void prepareArgument(int stage, double timeStep);
 
-	double getStepError(double timeStep, double aTol, double rTol);
+	double getStepError(double timeStep);
 
 	void printToConsole(int zCount, int yCount, int xCount, int cellSize);
 

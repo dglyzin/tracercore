@@ -15,7 +15,7 @@
 class DP45Solver: public Solver {
 public:
 	DP45Solver();
-	DP45Solver(int _count);
+	DP45Solver(int _count, double _aTol, double _rTol);
 	virtual ~DP45Solver();
 
 	virtual void copyState(double* result) { return; }
@@ -30,7 +30,7 @@ public:
 	void confirmStep(double timestep);
 	void rejectStep(double timestep);
 
-	virtual double getStepError(double timeStep, double aTol, double rTol) { return 0.0; }
+	virtual double getStepError(double timeStep) { return 0.0; }
 
     bool isFSAL() { return true; }
     bool isVariableStep() { return true; }

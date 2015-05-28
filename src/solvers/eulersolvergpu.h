@@ -12,7 +12,7 @@
 
 class EulerSolverGpu: public EulerSolver {
 public:
-	EulerSolverGpu(int _count);
+	EulerSolverGpu(int _count, double _aTol, double _rTol);
 	virtual ~EulerSolverGpu();
 
 	void copyState(double* result);

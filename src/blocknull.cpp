@@ -14,7 +14,7 @@ BlockNull::BlockNull(int _dimension, int _xCount, int _yCount, int _zCount,
 				Block( _dimension, _xCount, _yCount, _zCount,
 				_xOffset, _yOffset, _zOffset,
 				_nodeNumber, _deviceNumber,
-				_haloSize, _cellSize ) {}
+				_haloSize, _cellSize) {}
 
 BlockNull::~BlockNull() {
 }

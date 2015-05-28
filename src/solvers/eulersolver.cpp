@@ -11,7 +11,7 @@ EulerSolver::EulerSolver() : Solver() {
 	mTempStore1 = NULL;
 }
 
-EulerSolver::EulerSolver(int _count) : Solver(_count) {
+EulerSolver::EulerSolver(int _count, double _aTol, double _rTol) : Solver(_count, _aTol, _rTol) {
 	mTempStore1 = NULL;
     /*mState = new double[mCount];
     mTempStore1 = new double[mCount];

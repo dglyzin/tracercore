@@ -218,7 +218,7 @@ double Domain::getDeviceError(int deviceType, int deviceNumber) {
         if( mBlocks[i]->getBlockType() == deviceType && mBlocks[i]->getDeviceNumber() == deviceNumber ) {
         	//cout << endl << "ERROR! PROCESS DEVICE!" << endl;
         	// TODO почему сумма?
-		    error+=mBlocks[i]->getSolverStepError(timeStep, mAtol, mRtol);
+		    error+=mBlocks[i]->getSolverStepError(timeStep);
 		}
 	return error;
 }
@@ -606,9 +606,9 @@ Block* Domain::readBlock(ifstream& in, int idx) {
 
 	if(node == mWorldRank){
 		if (deviceType==0)  //CPU BLOCK
-			resBlock = new BlockCpu(dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize, initFuncNumber, compFuncNumber, mSolverIndex);
+			resBlock = new BlockCpu(dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize, initFuncNumber, compFuncNumber, mSolverIndex, mAtol, mRtol);
 		else if (deviceType==1) //GPU BLOCK
-			resBlock = new BlockGpu(dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize, initFuncNumber, compFuncNumber, mSolverIndex);
+			resBlock = new BlockGpu(dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize, initFuncNumber, compFuncNumber, mSolverIndex, mAtol, mRtol);
 		else{
 			printf("Invalid block type!\n");
 			assert(false);
@@ -619,6 +619,8 @@ Block* Domain::readBlock(ifstream& in, int idx) {
 
 	delete initFuncNumber;
 	delete compFuncNumber;
+
+	//resBlock->createSolver(mSolverIndex, mAtol, mRtol);
 
 	return resBlock;
 }

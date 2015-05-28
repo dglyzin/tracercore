@@ -12,7 +12,7 @@
 
 class RK4SolverGpu: public RK4Solver {
 public:
-	RK4SolverGpu(int _count);
+	RK4SolverGpu(int _count, double _aTol, double _rTol);
 	virtual ~RK4SolverGpu();
 
 	void copyState(double* result);

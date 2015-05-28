@@ -23,7 +23,7 @@
 class Solver {
 public:
 	Solver();
-    Solver(int _count);
+    Solver(int _count, double _aTol, double _rTol);
     virtual ~Solver() { return; }
 
     virtual void copyState(double* result) = 0;
@@ -40,7 +40,7 @@ public:
     virtual void confirmStep(double timestep) = 0;
     virtual void rejectStep(double timestep) = 0;
 
-    virtual double getStepError(double timeStep, double aTol, double rTol) = 0;
+    virtual double getStepError(double timeStep) = 0;
 
     virtual bool isFSAL() = 0;
     virtual bool isVariableStep() = 0;
@@ -54,6 +54,9 @@ public:
 protected:
   	int     mCount; //total number of elements in every array
   	double* mState;
+
+  	double aTol;
+  	double rTol;
 
   	void printMatrix(double* matrix, int zCount, int yCount, int xCount, int cellSize);
 };

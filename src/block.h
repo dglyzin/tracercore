@@ -108,7 +108,7 @@ protected:
 	virtual void computeStageBorder_2d(int stage, double time, double step) = 0;
 	virtual void computeStageBorder_3d(int stage, double time, double step) = 0;
 
-	virtual void createSolver(int solverIdx) = 0;
+	virtual void createSolver(int solverIdx, double _aTol, double _rTol) = 0;
 
 	virtual double* getNewBlockBorder(Block* neighbor, int borderLength, int& memoryType) = 0;
 	virtual double* getNewExternalBorder(Block* neighbor, int borderLength, double* border, int& memoryType) = 0;
@@ -146,7 +146,7 @@ public:
 
 	void prepareArgument(int stage, double timestep );
 
-	virtual double getSolverStepError(double timeStep, double aTol, double rTol) = 0;
+	double getSolverStepError(double timeStep) { return mSolver != NULL ? mSolver->getStepError(timeStep) : 0.0; }
 
 	void confirmStep(double timestep);
 	void rejectStep(double timestep);

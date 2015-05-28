@@ -10,11 +10,16 @@
 Solver::Solver() {
 	mCount = 0;
 	mState = NULL;
+
+	aTol = rTol = 1;
 }
 
-Solver::Solver(int _count){
+Solver::Solver(int _count, double _aTol, double _rTol){
 	mCount = _count;
 	mState = NULL;
+
+	aTol = _aTol;
+	rTol = _rTol;
 }
 
 void Solver::printMatrix(double* matrix, int zCount, int yCount, int xCount, int cellSize) {

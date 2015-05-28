@@ -9,7 +9,7 @@
 
 using namespace std;
 
-DP45SolverCpu::DP45SolverCpu(int _count) : DP45Solver(_count) {
+DP45SolverCpu::DP45SolverCpu(int _count, double _aTol, double _rTol) : DP45Solver(_count, _aTol, _rTol) {
 	mState = new double [mCount];
 
 	mTempStore1 = new double [mCount];
@@ -95,7 +95,7 @@ void DP45SolverCpu::prepareArgument(int stage, double timeStep) {
 	else assert(0);
 }
 
-double DP45SolverCpu::getStepError(double timeStep, double aTol, double rTol){
+double DP45SolverCpu::getStepError(double timeStep){
 	double err=0;
 #pragma omp parallel for reduction (+:err)
 	for (int idx=0; idx<mCount; idx++){

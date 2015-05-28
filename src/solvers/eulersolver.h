@@ -13,7 +13,7 @@
 class EulerSolver: public Solver{
 public:
 	EulerSolver();
-	EulerSolver(int _count);
+	EulerSolver(int _count, double _aTol, double _rTol);
 	~EulerSolver();
 
 	virtual void copyState(double* result) { return; }
@@ -28,7 +28,7 @@ public:
 	void confirmStep(double timestep);
 	void rejectStep(double timestep){};
 
-	double getStepError(double timeStep, double aTol, double rTol) { return 0.0; }
+	double getStepError(double timeStep) { return 0.0; }
 
     bool isFSAL() { return false; }
     bool isVariableStep() { return false; }

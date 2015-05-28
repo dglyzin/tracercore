@@ -9,7 +9,7 @@
 
 using namespace std;
 
-DP45SolverGpu::DP45SolverGpu(int _count) : DP45Solver(_count) {
+DP45SolverGpu::DP45SolverGpu(int _count, double _aTol, double _rTol) : DP45Solver(_count, _aTol, _rTol) {
 	/*mState = new double [mCount];
 
 	mTempStore1 = new double [mCount];
@@ -146,7 +146,7 @@ void DP45SolverGpu::prepareArgument(int stage, double timeStep) {
 	}
 }
 
-double DP45SolverGpu::getStepError(double timeStep, double aTol, double rTol){
+double DP45SolverGpu::getStepError(double timeStep){
 	/*double err=0;
 #pragma omp parallel for reduction (+:err)
 	for (int idx=0; idx<mCount; idx++){

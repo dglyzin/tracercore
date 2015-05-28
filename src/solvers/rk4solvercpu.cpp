@@ -7,7 +7,7 @@
 
 #include "rk4solvercpu.h"
 
-RK4SolverCpu::RK4SolverCpu(int _count) : RK4Solver(_count) {
+RK4SolverCpu::RK4SolverCpu(int _count, double _aTol, double _rTol) : RK4Solver(_count, _aTol, _rTol) {
     mState = new double[mCount];
     mTempStore1 = new double[mCount];
     mTempStore2 = new double[mCount];

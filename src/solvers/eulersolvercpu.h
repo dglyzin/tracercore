@@ -12,7 +12,7 @@
 
 class EulerSolverCpu: public EulerSolver {
 public:
-	EulerSolverCpu(int _count);
+	EulerSolverCpu(int _count, double _aTol, double _rTol);
 	virtual ~EulerSolverCpu();
 
 	void copyState(double* result);

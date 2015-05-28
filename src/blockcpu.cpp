@@ -17,15 +17,14 @@ BlockCpu::BlockCpu(int _dimension, int _xCount, int _yCount, int _zCount,
 		int _nodeNumber, int _deviceNumber,
 		int _haloSize, int _cellSize,
 		unsigned short int* _initFuncNumber, unsigned short int* _compFuncNumber,
-		int _solverIndex) :
+		int _solverIdx, double _aTol, double _rTol) :
 				Block( _dimension, _xCount, _yCount, _zCount,
 				_xOffset, _yOffset, _zOffset,
 				_nodeNumber, _deviceNumber,
-				_haloSize, _cellSize ) {
+				_haloSize, _cellSize) {
 	cout << "Creating block..\n";
 
-	createSolver(_solverIndex );
-
+	createSolver(_solverIdx, _aTol, _rTol);
 
 	int count = getGridNodeCount();
 
@@ -326,10 +325,6 @@ void BlockCpu::computeStageBorder_3d(int stage, double time, double step) {
 	}
 }*/
 
-double BlockCpu::getSolverStepError(double timeStep, double aTol, double rTol) {
-	return mSolver->getStepError(timeStep, aTol, rTol);
-}
-
 
 void BlockCpu::getCurrentState(double* result) {
 	mSolver->copyState(result);
@@ -521,7 +516,7 @@ void BlockCpu::prepareBorder(int borderNumber, int zStart, int zStop, int yStart
 	}
 }
 
-void BlockCpu::createSolver(int solverIdx) {
+void BlockCpu::createSolver(int solverIdx, double _aTol, double _rTol) {
 	/*if      (solverIdx == EULER)
 		return new EulerSolver(count);
 	else if (solverIdx == RK4)
@@ -533,16 +528,16 @@ void BlockCpu::createSolver(int solverIdx) {
 
 	switch (solverIdx) {
 		case EULER:
-			mSolver = new EulerSolverCpu(count);
+			mSolver = new EulerSolverCpu(count, _aTol, _rTol);
 			break;
 		case RK4:
-			mSolver = new RK4SolverCpu(count);
+			mSolver = new RK4SolverCpu(count, _aTol, _rTol);
 			break;
 		case DP45:
-			mSolver = new DP45SolverCpu(count);
+			mSolver = new DP45SolverCpu(count, _aTol, _rTol);
 			break;
 		default:
-			mSolver = new EulerSolverCpu(count);
+			mSolver = new EulerSolverCpu(count, _aTol, _rTol);
 			break;
 	}
 }
