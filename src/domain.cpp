@@ -121,6 +121,7 @@ void Domain::compute() {
 	else*/
 	while ( currentTime < stopTime ){
 		nextStep();
+		printBlocksToConsole();
 		//cout<< currentTime<<" "<<stopTime<< " " << timeStep<<endl;
 	}
 	cout <<"Computation finished!" << endl;
@@ -451,7 +452,7 @@ void Domain::readFromFile(char* path) {
 	totalGridNodeCount = getGridNodeCount();
 	totalGridElementCount = getGridElementCount();
 
-	//printBlocksToConsole();
+	printBlocksToConsole();
 }
 
 void Domain::readFileStat(ifstream& in) {
