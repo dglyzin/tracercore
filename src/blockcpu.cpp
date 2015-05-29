@@ -81,7 +81,7 @@ BlockCpu::~BlockCpu() {
 	}
 }
 
-void BlockCpu::computeStageCenter_1d(int stage, double time, double step) {
+void BlockCpu::computeStageCenter_1d(int stage, double time) {
 # pragma omp parallel
 	{
 		double* result = mSolver->getStageResult(stage);
@@ -94,7 +94,7 @@ void BlockCpu::computeStageCenter_1d(int stage, double time, double step) {
 	}
 }
 
-void BlockCpu::computeStageCenter_2d(int stage, double time, double step) {
+void BlockCpu::computeStageCenter_2d(int stage, double time) {
 # pragma omp parallel
 	{
 		double* result = mSolver->getStageResult(stage);
@@ -111,7 +111,7 @@ void BlockCpu::computeStageCenter_2d(int stage, double time, double step) {
 	}
 }
 
-void BlockCpu::computeStageCenter_3d(int stage, double time, double step) {
+void BlockCpu::computeStageCenter_3d(int stage, double time) {
 # pragma omp parallel
 	{
 		double* result = mSolver->getStageResult(stage);
@@ -131,7 +131,7 @@ void BlockCpu::computeStageCenter_3d(int stage, double time, double step) {
 	}
 }
 
-void BlockCpu::computeStageBorder_1d(int stage, double time, double step) {
+void BlockCpu::computeStageBorder_1d(int stage, double time) {
 # pragma omp parallel
 	{
 		double* result = mSolver->getStageResult(stage);
@@ -150,7 +150,7 @@ void BlockCpu::computeStageBorder_1d(int stage, double time, double step) {
 	}
 }
 
-void BlockCpu::computeStageBorder_2d(int stage, double time, double step) {
+void BlockCpu::computeStageBorder_2d(int stage, double time) {
 # pragma omp parallel
 	{
 		double* result = mSolver->getStageResult(stage);
@@ -201,7 +201,7 @@ void BlockCpu::computeStageBorder_2d(int stage, double time, double step) {
 	}
 }
 
-void BlockCpu::computeStageBorder_3d(int stage, double time, double step) {
+void BlockCpu::computeStageBorder_3d(int stage, double time) {
 # pragma omp parallel
 	{
 		double* result = mSolver->getStageResult(stage);

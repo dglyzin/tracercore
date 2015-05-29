@@ -153,32 +153,32 @@ void Block::freeMemory(int memory_alloc_type, int* memory) {
 	}
 }
 
-void Block::computeStageCenter(int stage, double time, double step) {
+void Block::computeStageCenter(int stage, double time) {
 	switch (dimension) {
 		case 1:
-			computeStageCenter_1d(stage, time, step);
+			computeStageCenter_1d(stage, time);
 			break;
 		case 2:
-			computeStageCenter_2d(stage, time, step);
+			computeStageCenter_2d(stage, time);
 			break;
 		case 3:
-			computeStageCenter_3d(stage, time, step);
+			computeStageCenter_3d(stage, time);
 			break;
 		default:
 			break;
 	}
 }
 
-void Block::computeStageBorder(int stage, double time, double step) {
+void Block::computeStageBorder(int stage, double time) {
 	switch (dimension) {
 		case 1:
-			computeStageBorder_1d(stage, time, step);
+			computeStageBorder_1d(stage, time);
 			break;
 		case 2:
-			computeStageBorder_2d(stage, time, step);
+			computeStageBorder_2d(stage, time);
 			break;
 		case 3:
-			computeStageBorder_3d(stage, time, step);
+			computeStageBorder_3d(stage, time);
 			break;
 		default:
 			break;

@@ -193,7 +193,7 @@ void Domain::processDeviceBlocksBorder(int deviceType, int deviceNumber, int sta
 	for (int i = 0; i < mBlockCount; ++i)
         if( mBlocks[i]->getBlockType() == deviceType && mBlocks[i]->getDeviceNumber() == deviceNumber ) {
         	//cout << endl << "ERROR! PROCESS DEVICE!" << endl;
-		    mBlocks[i]->computeStageBorder(stage, currentTime, timeStep);
+		    mBlocks[i]->computeStageBorder(stage, currentTime);
 		}
 }
 
@@ -201,7 +201,7 @@ void Domain::processDeviceBlocksCenter(int deviceType, int deviceNumber, int sta
 	for (int i = 0; i < mBlockCount; ++i)
         if( mBlocks[i]->getBlockType() == deviceType && mBlocks[i]->getDeviceNumber() == deviceNumber ) {
         	//cout << endl << "ERROR! PROCESS DEVICE!" << endl;
-		    mBlocks[i]->computeStageCenter(stage, currentTime, timeStep);
+		    mBlocks[i]->computeStageCenter(stage, currentTime);
 		}
 }
 void Domain::prepareDeviceArgument(int deviceType, int deviceNumber, int stage) {
