@@ -95,7 +95,7 @@ int main(int argc, char * argv[]) {
 	 * Вывод информации о времени работы осуществляет только поток с номером 0.
 	 * Время работы -  разница между двумя отсечками, котрые были сделаны ранее.
 	 */
-	d->printBlocksToConsole();
+	//d->printBlocksToConsole();
 
 	d->printStatisticsInfo(inputFile, NULL, time2 - time1, NULL);
 

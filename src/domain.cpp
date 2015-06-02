@@ -110,7 +110,7 @@ double* Domain::getBlockCurrentState(int number) {
 void Domain::compute() {
 	cout << endl << "Computation started..." << endl;
 	cout<< "Current time: "<<currentTime<<", finish time: "<<stopTime<< ", time step: " << timeStep<<endl;
-	cout <<(flags & STEP_EXECUTION)<<", solver stage count: " <<mSolverInfo->getStageCount()<<endl;
+	cout <</*(flags & STEP_EXECUTION)<<*/"solver stage count: " <<mSolverInfo->getStageCount()<<endl;
 
 	if (mSolverInfo->isFSAL() )
 	    initSolvers();
@@ -121,7 +121,7 @@ void Domain::compute() {
 	else*/
 	while ( currentTime < stopTime ){
 		nextStep();
-		printBlocksToConsole();
+		//printBlocksToConsole();
 		//cout<< currentTime<<" "<<stopTime<< " " << timeStep<<endl;
 	}
 	cout <<"Computation finished!" << endl;
@@ -452,7 +452,7 @@ void Domain::readFromFile(char* path) {
 	totalGridNodeCount = getGridNodeCount();
 	totalGridElementCount = getGridElementCount();
 
-	printBlocksToConsole();
+	//printBlocksToConsole();
 }
 
 void Domain::readFileStat(ifstream& in) {
@@ -872,7 +872,7 @@ void Domain::printStatisticsInfo(char* inputFile, char* outputFile, double calcT
 
     printf("\n\nSteps accepted: %d\nSteps rejected: %d\n", mAcceptedStepCount, mRejectedStepCount);
     int stepCount = mRejectedStepCount + mAcceptedStepCount;
-    printf("Time: %.2f\nElement count: %d\nPerformance: %.2f\n\n", calcTime, count, (double)(count) *stepCount / calcTime);
+    printf("Time: %.2f\nElement count: %d\nPerformance: %.2f\n\n", calcTime, count, (double)(count) * stepCount / calcTime);
 
 	return;
 	/*if ( flags & STATISTICS ) {

@@ -378,7 +378,6 @@ void BlockCpu::print() {
 		}
 		printf("\n");
 	}*/
-	mSolver->printToConsole(zCount, yCount, xCount, cellSize);
 
 	cout << endl;
 	cout << "Send border info (" << countSendSegmentBorder << ")" << endl;
@@ -436,6 +435,8 @@ void BlockCpu::print() {
 		}
 	}
 	cout << endl;
+
+	mSolver->printToConsole(zCount, yCount, xCount, cellSize);
 
 	cout << "########################################################################################################################################################################################################" << endl;
 	cout << endl << endl;
@@ -540,6 +541,8 @@ void BlockCpu::createSolver(int solverIdx, double _aTol, double _rTol) {
 			mSolver = new EulerSolverCpu(count, _aTol, _rTol);
 			break;
 	}
+
+	printf("\n\n*******************************************************************************************************\n\n");
 }
 
 double* BlockCpu::getNewBlockBorder(Block* neighbor, int borderLength, int& memoryType) {
