@@ -30,13 +30,13 @@ EXECUTABLE=HS
 all: $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECT) cuda_func.o
-	$(CUDACC) -O3 $(CUDAARCH) $(MPILIB) -L$(USERFUNCLIB) -pg $(OBJECT) $(SRC)/cuda_func.o -o $(BIN)/$(EXECUTABLE) -Xcompiler -fopenmp
+	$(CUDACC) -O3 $(CUDAARCH) $(MPILIB) -L$(USERFUNCLIB) $(OBJECT) $(SRC)/cuda_func.o -o $(BIN)/$(EXECUTABLE) -Xcompiler -fopenmp
 
 .cpp.o:
-	$(CC) $(CFLAGS) -I$(CUDAINC) -fopenmp -pg $< -o $@
+	$(CC) $(CFLAGS) -I$(CUDAINC) -fopenmp $< -o $@
 
 cuda_func.o:
-	$(CUDACC) $(CUFLAGS) $(CUDAARCH) $(SRC)/cuda_func.cu -pg -o $(SRC)/cuda_func.o
+	$(CUDACC) $(CUFLAGS) $(CUDAARCH) $(SRC)/cuda_func.cu -o $(SRC)/cuda_func.o
 	
 clean:
 	rm -rf $(SRC)/*.o
