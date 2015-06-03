@@ -590,20 +590,20 @@ Block* Domain::readBlock(ifstream& in, int idx) {
 
 
 	cout << "Init func number:" << endl;
-	for (int idxY = 0; idxY < count[1]; ++idxY) {
+	/*for (int idxY = 0; idxY < count[1]; ++idxY) {
 		for (int idxX = 0; idxX < count[0]; ++idxX)
 		    cout << initFuncNumber[idxY*count[0]+idxX] << " ";
 		cout << endl;
 	}
-	cout << endl;
+	cout << endl;*/
 
 	cout << "Comp func number:" << endl;
-	for (int idxY = 0; idxY < count[1]; ++idxY) {
-			for (int idxX = 0; idxX < count[0]; ++idxX)
-			    cout << compFuncNumber[idxY*count[0]+idxX] << " ";
-			cout << endl;
-		}
+	/*for (int idxY = 0; idxY < count[1]; ++idxY) {
+		for (int idxX = 0; idxX < count[0]; ++idxX)
+			cout << compFuncNumber[idxY*count[0]+idxX] << " ";
 		cout << endl;
+	}
+	cout << endl;*/
 
 	if(node == mWorldRank){
 		if (deviceType==0)  //CPU BLOCK
