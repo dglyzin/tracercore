@@ -85,6 +85,8 @@ public:
 
 	void printStatisticsInfo(char* inputFile, char* outputFile, double calcTime, char* statisticsFile);
 
+	bool isNan();
+
 private:
 	/*
 	 * Массив блоков.

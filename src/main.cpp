@@ -89,6 +89,9 @@ int main(int argc, char * argv[]) {
 	// Получить текущее время
 	time2 = MPI_Wtime();
 
+	if(d->isNan())
+		printf("\n\n\n\nNAN!!!\n\n\n\n");
+
 	d->saveState(inputFile);
 
 	/*
