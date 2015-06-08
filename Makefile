@@ -1,8 +1,8 @@
 CC=mpiCC
-CFLAGS=-c -O3 -Wall -pg
+CFLAGS=-c -O3 -Wall
 
 CUDACC=nvcc
-CUFLAGS=-c -O3 -pg
+CUFLAGS=-c -O3
 CUDAINC=/usr/local/cuda/include
 CUDAARCH=-arch=sm_20
 
@@ -30,7 +30,7 @@ EXECUTABLE=HS
 all: $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECT) cuda_func.o
-	$(CUDACC) -O3 $(CUDAARCH) -pg $(MPILIB) -L$(USERFUNCLIB) $(OBJECT) $(SRC)/cuda_func.o -o $(BIN)/$(EXECUTABLE) -Xcompiler -fopenmp
+	$(CUDACC) -O3 $(CUDAARCH) $(MPILIB) -L$(USERFUNCLIB) $(OBJECT) $(SRC)/cuda_func.o -o $(BIN)/$(EXECUTABLE) -Xcompiler -fopenmp
 
 .cpp.o:
 	$(CC) $(CFLAGS) -I$(CUDAINC) -fopenmp $< -o $@
