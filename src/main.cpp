@@ -83,9 +83,10 @@ int main(int argc, char * argv[]) {
 	 * Вычисления.
 	 */
 	// Получить текущее время
-	//omp_set_num_threads(10);
-	time1 = MPI_Wtime();
+	//omp_set_num_threads(1);
+
 	printf ("Running computations \n");
+	time1 = MPI_Wtime();
 	d->compute();
 	// Получить текущее время
 	time2 = MPI_Wtime();
