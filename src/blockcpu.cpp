@@ -34,7 +34,7 @@ BlockCpu::BlockCpu(int _blockNumber, int _dimension, int _xCount, int _yCount, i
 		mCompFuncNumber[i] = _compFuncNumber[i];
 	}
 
-	getFuncArray(&mUserFuncs);
+	getFuncArray(&mUserFuncs, blockBorder);
 	getInitFuncArray(&mUserInitFuncs);
 	initDefaultParams(&mParams, &mParamsCount);
 
@@ -51,7 +51,7 @@ BlockCpu::BlockCpu(int _blockNumber, int _dimension, int _xCount, int _yCount, i
 	//mUserFuncs[0](newMatrix, matrix, 0.0, 2, 2, 0, mParams, NULL);
 	//printf("Func array points to %d \n", (long unsigned int) mUserInitFuncs );
 	double* matrix = mSolver->getStatePtr();
-	mUserInitFuncs[0](matrix,_initFuncNumber);
+	mUserInitFuncs[blockNumber](matrix,_initFuncNumber);
 	cout << "Initial values filled \n";
 
 }
