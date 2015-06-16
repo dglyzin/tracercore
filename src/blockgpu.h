@@ -40,7 +40,7 @@ private:
 	double* getNewExternalBorder(Block* neighbor, int borderLength, double* border, int& memoryType);
 
 public:
-	BlockGpu(int _dimension, int _xCount, int _yCount, int _zCount,
+	BlockGpu(int _blockNumber, int _dimension, int _xCount, int _yCount, int _zCount,
 			int _xOffset, int _yOffset, int _zOffset,
 			int _nodeNumber, int _deviceNumber,
 			int _haloSize, int _cellSize,

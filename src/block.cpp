@@ -8,10 +8,11 @@
 #include "block.h"
 
 
-Block::Block(int _dimension, int _xCount, int _yCount, int _zCount,
+Block::Block(int _blockNumber, int _dimension, int _xCount, int _yCount, int _zCount,
 		int _xOffset, int _yOffset, int _zOffset,
 		int _nodeNumber, int _deviceNumber,
 		int _haloSize, int _cellSize) {
+	blockNumber = _blockNumber;
 	dimension = _dimension;
 
 	switch (dimension) {
@@ -76,6 +77,8 @@ Block::Block(int _dimension, int _xCount, int _yCount, int _zCount,
 
 	mUserFuncs = NULL;
 	mUserInitFuncs = NULL;
+
+	mSolver = NULL;
 }
 
 Block::~Block() {

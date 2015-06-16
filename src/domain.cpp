@@ -607,16 +607,16 @@ Block* Domain::readBlock(ifstream& in, int idx) {
 
 	if(node == mWorldRank){
 		if (deviceType==0)  //CPU BLOCK
-			resBlock = new BlockCpu(dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize, initFuncNumber, compFuncNumber, mSolverIndex, mAtol, mRtol);
+			resBlock = new BlockCpu(idx, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize, initFuncNumber, compFuncNumber, mSolverIndex, mAtol, mRtol);
 		else if (deviceType==1) //GPU BLOCK
-			resBlock = new BlockGpu(dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize, initFuncNumber, compFuncNumber, mSolverIndex, mAtol, mRtol);
+			resBlock = new BlockGpu(idx, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize, initFuncNumber, compFuncNumber, mSolverIndex, mAtol, mRtol);
 		else{
 			printf("Invalid block type!\n");
 			assert(false);
 		}
 	}
 	else
-		resBlock =  new BlockNull(dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize);
+		resBlock =  new BlockNull(idx, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize);
 
 	delete initFuncNumber;
 	delete compFuncNumber;

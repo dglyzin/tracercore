@@ -34,6 +34,8 @@ class Block {
 protected:
 	Solver* mSolver;
 
+	int blockNumber;
+
 	int dimension;
 
 	int xCount;
@@ -119,7 +121,7 @@ protected:
 	int mParamsCount;
 
 public:
-	Block(int _dimension, int _xCount, int _yCount, int _zCount,
+	Block(int _blockNumber, int _dimension, int _xCount, int _yCount, int _zCount,
 			int _xOffset, int _yOffset, int _zOffset,
 			int _nodeNumber, int _deviceNumber,
 			int _haloSize, int _cellSize);
