@@ -34,7 +34,7 @@ BlockCpu::BlockCpu(int _blockNumber, int _dimension, int _xCount, int _yCount, i
 		mCompFuncNumber[i] = _compFuncNumber[i];
 	}
 
-	getFuncArray(&mUserFuncs, blockBorder);
+	getFuncArray(&mUserFuncs, blockNumber);
 	getInitFuncArray(&mUserInitFuncs);
 	initDefaultParams(&mParams, &mParamsCount);
 
