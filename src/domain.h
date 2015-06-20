@@ -35,7 +35,7 @@ public:
 	/*
 	 * Выполнение одной итерации (одного шага)
 	 */
-	void nextStep(char* inputFile);
+	void nextStep();
 
 	/*
 	 * Сбор и запись данных в файл.

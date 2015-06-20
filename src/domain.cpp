@@ -122,7 +122,16 @@ void Domain::compute(char* inputFile) {
 			nextStep();
 	else*/
 	while ( currentTime < stopTime ){
-		nextStep(inputFile);
+		nextStep();
+
+		if( saveInterval != 0 ) {
+			counterSaveTime += timeStep;
+
+			if( counterSaveTime > saveInterval ) {
+				counterSaveTime = 0;
+				saveState(inputFile);
+			}
+		}
 		//printBlocksToConsole();
 		//cout<< currentTime<<" "<<stopTime<< " " << timeStep<<endl;
 	}
@@ -153,7 +162,7 @@ void Domain::computeStage(int stage) {
 }
 
 
-void Domain::nextStep(char* inputFile) {
+void Domain::nextStep() {
 	//int totalGridElements = getGridElementCount();
 	//последовательно выполняем все стадии метода
     for(int stage=0; stage < mSolverInfo->getStageCount(); stage++)
@@ -183,18 +192,6 @@ void Domain::nextStep(char* inputFile) {
 		currentTime += timeStep;
 
 	}
-
-    if( saveInterval != 0 ) {
-    	counterSaveTime += timeStep;
-
-    	//printf("\n######### %f %f %f\n", counterSaveTime, saveInterval, currentTime);
-
-    	if( counterSaveTime > saveInterval ) {
-    		//printf("\n********* %f %f %f\n", counterSaveTime, saveInterval, currentTime);
-    		counterSaveTime = 0;
-    		saveState(inputFile);
-    	}
-    }
 }
 
 void Domain::prepareDeviceData(int deviceType, int deviceNumber, int stage) {
