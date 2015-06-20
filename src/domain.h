@@ -30,12 +30,12 @@ public:
 	/*
 	 * Полный расчет
 	 */
-	void compute();
+	void compute(char* inputFile);
 
 	/*
 	 * Выполнение одной итерации (одного шага)
 	 */
-	void nextStep();
+	void nextStep(char* inputFile);
 
 	/*
 	 * Сбор и запись данных в файл.
@@ -162,6 +162,7 @@ private:
 	double currentTime;
 
 	double saveInterval;
+	double counterSaveTime;
 
 	// TODO назначение?
 	double mDx, mDy, mDz;

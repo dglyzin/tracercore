@@ -35,6 +35,8 @@ Domain::Domain(int _world_rank, int _world_size, char* inputFile, int _flags, in
 
 	mRepeatCount = 0;
 
+	counterSaveTime = 0;
+
 	readFromFile(inputFile);
 
 	/*flags = _flags;
@@ -107,7 +109,7 @@ double* Domain::getBlockCurrentState(int number) {
 
 
 
-void Domain::compute() {
+void Domain::compute(char* inputFile) {
 	cout << endl << "Computation started..." << endl;
 	cout<< "Current time: "<<currentTime<<", finish time: "<<stopTime<< ", time step: " << timeStep<<endl;
 	cout <</*(flags & STEP_EXECUTION)<<*/"solver stage count: " <<mSolverInfo->getStageCount()<<endl;
@@ -120,7 +122,7 @@ void Domain::compute() {
 			nextStep();
 	else*/
 	while ( currentTime < stopTime ){
-		nextStep();
+		nextStep(inputFile);
 		//printBlocksToConsole();
 		//cout<< currentTime<<" "<<stopTime<< " " << timeStep<<endl;
 	}
@@ -151,7 +153,7 @@ void Domain::computeStage(int stage) {
 }
 
 
-void Domain::nextStep() {
+void Domain::nextStep(char* inputFile) {
 	//int totalGridElements = getGridElementCount();
 	//последовательно выполняем все стадии метода
     for(int stage=0; stage < mSolverInfo->getStageCount(); stage++)
@@ -181,6 +183,18 @@ void Domain::nextStep() {
 		currentTime += timeStep;
 
 	}
+
+    if( saveInterval != 0 ) {
+    	counterSaveTime += timeStep;
+
+    	//printf("\n######### %f %f %f\n", counterSaveTime, saveInterval, currentTime);
+
+    	if( counterSaveTime > saveInterval ) {
+    		//printf("\n********* %f %f %f\n", counterSaveTime, saveInterval, currentTime);
+    		counterSaveTime = 0;
+    		saveState(inputFile);
+    	}
+    }
 }
 
 void Domain::prepareDeviceData(int deviceType, int deviceNumber, int stage) {
@@ -758,11 +772,21 @@ int Domain::realBlockCount() {
 }
 
 void Domain::saveState(char* inputFile) {
+	//printf("\nsaveState %f %f %f\n", counterSaveTime, saveInterval, currentTime);
+
 	char saveFile[100];
 
-	strncpy(saveFile, inputFile, lastChar(inputFile, '/'));
+	int length = lastChar(inputFile, '/');
+
+	strncpy(saveFile, inputFile, length);
+	saveFile[ length ] = 0;
+
+	//printf("\nbefor save %f %f %f %s %s\n", counterSaveTime, saveInterval, currentTime, saveFile, inputFile);
 
 	sprintf(saveFile, "%s%s%f%s", saveFile, "/project-", currentTime, ".bin");
+
+	//printf("\nbefor save %f %f %f %s %s\n", counterSaveTime, saveInterval, currentTime, saveFile, inputFile);
+
 	saveStateToFile( saveFile );
 }
 

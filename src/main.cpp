@@ -87,7 +87,7 @@ int main(int argc, char * argv[]) {
 
 	printf ("Running computations \n");
 	time1 = MPI_Wtime();
-	d->compute();
+	d->compute(inputFile);
 	// Получить текущее время
 	time2 = MPI_Wtime();
 
