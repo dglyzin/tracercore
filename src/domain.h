@@ -109,10 +109,10 @@ private:
 	 * В рамках каждого класса реализуется солвер для цпу и солвер для гпу
 	 */
 	int mSolverIndex;
+
 	/*
 	 * Структура данных, возвращающая основные параметры солвера
 	 */
-	// TODO назначение?
 	Solver* mSolverInfo;
     double mAtol; //solver absolute tolerance
     double mRtol; //solver relative tolerance
@@ -141,8 +141,6 @@ private:
 	 * Размеры области
 	 * Вся область - прямоугольник, внутри которого гарантирвано размещаются все блоки.
 	 */
-	int lengthArea;
-	int widthArea;
 
 	int flags;
 
@@ -151,7 +149,6 @@ private:
 	double startTime;
 	double stopTime;
 
-	// TODO почему можем не принять?
 	double timeStep;
 	int mAcceptedStepCount;
 	int mRejectedStepCount;
@@ -162,7 +159,6 @@ private:
 	double saveInterval;
 	double counterSaveTime;
 
-	// TODO назначение?
 	double mDx, mDy, mDz;
 
 	int mCellSize;
