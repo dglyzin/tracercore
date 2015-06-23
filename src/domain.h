@@ -40,8 +40,6 @@ public:
 	/*
 	 * Сбор и запись данных в файл.
 	 */
-	void print(char* path);
-	void printAreaToConsole();
 	void printBlocksToConsole();
 
 	/*
