@@ -59,18 +59,6 @@ int main(int argc, char * argv[]) {
 	double time1, time2;
 
 	char* inputFile = argv[1];
-	//char* outputFile = argv[2];
-	//int flags = atoi(argv[3]);
-
-	//int stepCount = atoi(argv[4]);
-	//double stopTime = atof(argv[5]);
-	//char savePath[100];// = argv[6];
-	//char* loadFile = argv[7];
-	//char* statisticsFile = argv[8];
-
-	//printf("\n\n\n\n\n%d\n\n\n\n\n\n", lastChar(inputFile, '/'));
-
-	//printf("\n\n\n%s\n\n\n\n", inputFile);
 
 	/*
 	 * Создание основного управляющего класса.
@@ -82,13 +70,11 @@ int main(int argc, char * argv[]) {
 	/*
 	 * Вычисления.
 	 */
-	// Получить текущее время
 	//omp_set_num_threads(1);
 
 	printf ("Running computations \n");
 	time1 = MPI_Wtime();
 	d->compute(inputFile);
-	// Получить текущее время
 	time2 = MPI_Wtime();
 
 	if(d->isNan())
@@ -96,19 +82,13 @@ int main(int argc, char * argv[]) {
 
 	d->saveState(inputFile);
 
+	//d->printBlocksToConsole();
+
 	/*
 	 * Вывод информации о времени работы осуществляет только поток с номером 0.
 	 * Время работы -  разница между двумя отсечками, котрые были сделаны ранее.
 	 */
-	//d->printBlocksToConsole();
-
 	d->printStatisticsInfo(inputFile, NULL, time2 - time1, NULL);
-	//d->printBlocksToConsole();
-
-	/*
-	 * Сбор и вывод результата.
-	 * Передается второй аргумент командной строки - путь к файлу, в который будет записан результат.
-	 */
 
 	delete d;
 
