@@ -114,6 +114,9 @@ protected:
 	virtual void printParameters() = 0;
 	virtual void printComputeFunctionNumber() = 0;
 
+	void printSendBorderInfoArray(int* sendBorderInfoArray);
+	void printReceiveBorderInfoArray(int* recieveBorderInfoArray);
+
 	func_ptr_t* mUserFuncs;
 	initfunc_fill_ptr_t* mUserInitFuncs;
 	double* mParams;

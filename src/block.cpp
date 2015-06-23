@@ -316,3 +316,37 @@ void Block::printGeneralInformation() {
 	cout << "Cell size:   " << cellSize << endl;
 	cout << "Halo size:   " << haloSize << endl;
 }
+
+void Block::printSendBorderInfoArray(int* sendBorderInfoArray) {
+	cout << endl;
+	cout << "Send border info (" << countSendSegmentBorder << ")" << endl;
+	for (int i = 0; i < countSendSegmentBorder; ++i) {
+		int index = INTERCONNECT_COMPONENT_COUNT * i;
+		cout << "Block border #" << i << endl;
+		cout << "	Memory address: " << blockBorder[i] << endl;
+		cout << "	Memory type:    " << getMemoryTypeName( blockBorderMemoryAllocType[i] ) << endl;
+		cout << "	Side:           " << getSideName( sendBorderInfoArray[index + SIDE] ) << endl;
+		cout << "	mOffset:        " << sendBorderInfoArray[index + M_OFFSET] << endl;
+		cout << "	nOffset:        " << sendBorderInfoArray[index + N_OFFSET] << endl;
+		cout << "	mLength:        " << sendBorderInfoArray[index + M_LENGTH] << endl;
+		cout << "	nLength:        " << sendBorderInfoArray[index + N_LENGTH] << endl;
+		cout << endl;
+	}
+}
+
+void Block::printReceiveBorderInfoArray(int* receiveBorderInfoArray) {
+	cout << endl << endl;
+	cout << "Receive border info (" << countReceiveSegmentBorder << ")" << endl;
+	for (int i = 0; i < countReceiveSegmentBorder; ++i) {
+		int index = INTERCONNECT_COMPONENT_COUNT * i;
+		cout << "Block border #" << i << endl;
+		cout << "	Memory address: " << externalBorder[i] << endl;
+		cout << "	Memory type:    " << getMemoryTypeName( externalBorderMemoryAllocType[i] ) << endl;
+		cout << "	Side:           " << getSideName( receiveBorderInfoArray[index + SIDE] ) << endl;
+		cout << "	mOffset:        " << receiveBorderInfoArray[index + M_OFFSET] << endl;
+		cout << "	nOffset:        " << receiveBorderInfoArray[index + N_OFFSET] << endl;
+		cout << "	mLength:        " << receiveBorderInfoArray[index + M_LENGTH] << endl;
+		cout << "	nLength:        " << receiveBorderInfoArray[index + N_LENGTH] << endl;
+		cout << endl;
+	}
+}
