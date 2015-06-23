@@ -21,7 +21,7 @@ public:
 
 	double* getMState();
 
-	void printToConsole(int zCount, int yCount, int xCount, int cellSize);
+	void print(int zCount, int yCount, int xCount, int cellSize);
 };
 
 #endif /* SRC_SOLVERS_EULERSOLVERCPU_H_ */

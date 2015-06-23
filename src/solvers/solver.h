@@ -8,12 +8,14 @@
 #ifndef SOLVER_H_
 #define SOLVER_H_
 
-#include <stdlib.h>
-#include <omp.h>
-
-#include <stdlib.h>
 #include <cassert>
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <cmath>
 #include <math.h>
+#include <string.h>
+#include <iostream>
 
 #include <cuda.h>
 #include <cuda_runtime_api.h>
@@ -49,7 +51,7 @@ public:
 	virtual double getNewStep(double timeStep, double error, int totalDomainElements) = 0;
 	virtual bool isErrorPermissible(double error, int totalDomainElements) = 0;
 
-	virtual void printToConsole(int zCount, int yCount, int xCount, int cellSize) = 0;
+	virtual void print(int zCount, int yCount, int xCount, int cellSize) = 0;
 
 protected:
   	int     mCount; //total number of elements in every array

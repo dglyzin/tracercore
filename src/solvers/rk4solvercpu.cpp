@@ -57,7 +57,7 @@ void RK4SolverCpu::prepareArgument(int stage, double timeStep) {
 	else assert(0);
 }
 
-void RK4SolverCpu::printToConsole(int zCount, int yCount, int xCount, int cellSize) {
+void RK4SolverCpu::print(int zCount, int yCount, int xCount, int cellSize) {
 	printf("mState: \n");
 	printMatrix(mState, zCount, yCount, xCount, cellSize);
 

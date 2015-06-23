@@ -33,7 +33,7 @@ double* EulerSolverCpu::getMState() {
 	return mState;
 }
 
-void EulerSolverCpu::printToConsole(int zCount, int yCount, int xCount, int cellSize) {
+void EulerSolverCpu::print(int zCount, int yCount, int xCount, int cellSize) {
 	printf("mState: \n");
 	printMatrix(mState, zCount, yCount, xCount, cellSize);
 

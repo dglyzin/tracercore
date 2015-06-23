@@ -109,7 +109,7 @@ double DP45SolverCpu::getStepError(double timeStep){
 }
 
 
-void DP45SolverCpu::printToConsole(int zCount, int yCount, int xCount, int cellSize) {
+void DP45SolverCpu::print(int zCount, int yCount, int xCount, int cellSize) {
 	printf("mState: \n");
 	printMatrix(mState, zCount, yCount, xCount, cellSize);
 

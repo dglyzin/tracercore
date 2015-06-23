@@ -353,32 +353,6 @@ void BlockCpu::print() {
 	cout.setf(ios::fixed);
 
 
-	// TODO вывод информации о Solver'е
-	/*double* tmpMatrix = mSolver->getMState();
-
-	for (int i = 0; i < zCount; ++i) {
-		printf("z = %d\n", i);
-		int zShift = xCount * yCount * i;
-
-		for (int j = 0; j < yCount; ++j) {
-			int yShift = xCount * j;
-
-			for (int k = 0; k < xCount; ++k) {
-				int xShift = k;
-				printf("(");
-				for (int l = 0; l < cellSize; ++l) {
-					int cellShift = l;
-
-					printf("%.2f ", tmpMatrix[ (zShift + yShift + xShift)*cellSize + cellShift ]);
-
-				}
-				printf(") ");
-			}
-			printf("\n");
-		}
-		printf("\n");
-	}*/
-
 	cout << endl;
 	cout << "Send border info (" << countSendSegmentBorder << ")" << endl;
 	for (int i = 0; i < countSendSegmentBorder; ++i) {
@@ -436,7 +410,7 @@ void BlockCpu::print() {
 	}
 	cout << endl;
 
-	mSolver->printToConsole(zCount, yCount, xCount, cellSize);
+	mSolver->print(zCount, yCount, xCount, cellSize);
 
 	cout << "########################################################################################################################################################################################################" << endl;
 	cout << endl << endl;

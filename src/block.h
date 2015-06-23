@@ -8,13 +8,6 @@
 #ifndef SRC_BLOCK_H_
 #define SRC_BLOCK_H_
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <cmath>
-#include <math.h>
-#include <string.h>
-#include <iostream>
-
 #include <vector>
 
 #include <omp.h>

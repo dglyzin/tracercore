@@ -21,6 +21,8 @@ public:
 
 	double getStepError(double timeStep);
 
+	void print(int zCount, int yCount, int xCount, int cellSize) { std::cout << std::endl << "Solver DP45 GPU print don't work" << std::endl; }
+
 private:
 	void prepareFSAL(double timeStep);
 };
