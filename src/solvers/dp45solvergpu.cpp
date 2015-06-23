@@ -125,7 +125,6 @@ void DP45SolverGpu::prepareArgument(int stage, double timeStep) {
 			sumArray(mArg, mState, mArg, mCount);
 			break;
 
-			// TODO check!!
 		case 3: case 4:
 			multiplyByNumberAndSumArrays(mTempStore1, a61, mTempStore2, a62, mTempStore3, a63, mTempStore4, a64, mTempStore5, a65, mArg, mCount);
 			multiplyArrayByNumber(mArg, timeStep, mArg, mCount);
@@ -157,7 +156,6 @@ double DP45SolverGpu::getStepError(double timeStep){
 	}
 
 	return err;*/
-	//TODO shared memory??
 	//return 0;
 
 	/*
