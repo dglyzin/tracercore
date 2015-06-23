@@ -108,6 +108,12 @@ protected:
 	virtual double* getNewBlockBorder(Block* neighbor, int borderLength, int& memoryType) = 0;
 	virtual double* getNewExternalBorder(Block* neighbor, int borderLength, double* border, int& memoryType) = 0;
 
+	void printGeneralInformation();
+	virtual void printSendBorderInfo() = 0;
+	virtual void printReceiveBorderInfo() = 0;
+	virtual void printParameters() = 0;
+	virtual void printComputeFunctionNumber() = 0;
+
 	func_ptr_t* mUserFuncs;
 	initfunc_fill_ptr_t* mUserInitFuncs;
 	double* mParams;
@@ -154,7 +160,7 @@ public:
 	/*
 	 * Печатает информацию о блоке на консоль.
 	 */
-	virtual void print() = 0;
+	void print();
 
 	/*
 	 * Возвращает результурющую матрицу данного блока.

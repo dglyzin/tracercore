@@ -119,7 +119,7 @@ void BlockGpu::getCurrentState(double* result) {
 	//cudaMemcpy( result, matrix, count * sizeof(double), cudaMemcpyDeviceToHost );
 }
 
-void BlockGpu::print() {
+/*void BlockGpu::print() {
 	cudaSetDevice(deviceNumber);
 	
 	int* tmpSendBorderInfo = new int [ INTERCONNECT_COMPONENT_COUNT * countSendSegmentBorder ];
@@ -183,14 +183,14 @@ void BlockGpu::print() {
 	}
 
 	cout << endl << "GPU Параметры не выводятся!!!" << endl;
-	/*cout << "Parameters (" << mParamsCount << ")" << endl;
+	cout << "Parameters (" << mParamsCount << ")" << endl;
 	for (int i = 0; i < mParamsCount; ++i) {
 		cout << "	parameter #" << i << ":   " << mParams[i] << endl;
-	}*/
+	}
 
 
 	cout << endl << "GPU Информация о функциях не выводится!!!" << endl;
-	/*cout << "Compute function number" << endl;
+	cout << "Compute function number" << endl;
 	cout.setf(ios::fixed);
 	for (int i = 0; i < zCount; ++i) {
 		cout << "z = " << i << endl;
@@ -206,7 +206,7 @@ void BlockGpu::print() {
 			}
 			cout << endl;
 		}
-	}*/
+	}
 	cout << endl;
 
 	cout << "########################################################################################################################################################################################################" << endl;
@@ -214,6 +214,66 @@ void BlockGpu::print() {
 
 	delete tmpSendBorderInfo;
 	delete tmpReceiveBorderInfo;
+}*/
+
+void BlockGpu::printSendBorderInfo() {
+	cudaSetDevice(deviceNumber);
+
+	int* tmpSendBorderInfo = new int [ INTERCONNECT_COMPONENT_COUNT * countSendSegmentBorder ];
+	cudaMemcpy( tmpSendBorderInfo, sendBorderInfo, INTERCONNECT_COMPONENT_COUNT * countSendSegmentBorder * sizeof(int), cudaMemcpyDeviceToHost );
+
+	cout << endl;
+	cout << "Send border info (" << countSendSegmentBorder << ")" << endl;
+	for (int i = 0; i < countSendSegmentBorder; ++i) {
+		int index = INTERCONNECT_COMPONENT_COUNT * i;
+		cout << "Block border #" << i << endl;
+		cout << "	Memory address: " << blockBorder[i] << endl;
+		cout << "	Memory type:    " << getMemoryTypeName( blockBorderMemoryAllocType[i] ) << endl;
+		cout << "	Side:           " << getSideName( tmpSendBorderInfo[index + SIDE] ) << endl;
+		cout << "	mOffset:        " << tmpSendBorderInfo[index + M_OFFSET] << endl;
+		cout << "	nOffset:        " << tmpSendBorderInfo[index + N_OFFSET] << endl;
+		cout << "	mLength:        " << tmpSendBorderInfo[index + M_LENGTH] << endl;
+		cout << "	nLength:        " << tmpSendBorderInfo[index + N_LENGTH] << endl;
+		cout << endl;
+	}
+
+	delete tmpSendBorderInfo;
+}
+
+void BlockGpu::printReceiveBorderInfo() {
+	cudaSetDevice(deviceNumber);
+
+	int* tmpReceiveBorderInfo = new int [ INTERCONNECT_COMPONENT_COUNT * countSendSegmentBorder ];
+	cudaMemcpy( tmpReceiveBorderInfo, receiveBorderInfo, INTERCONNECT_COMPONENT_COUNT * countReceiveSegmentBorder * sizeof(int), cudaMemcpyDeviceToHost );
+
+	cout << endl << endl;
+	cout << "Receive border info (" << countReceiveSegmentBorder << ")" << endl;
+	for (int i = 0; i < countReceiveSegmentBorder; ++i) {
+		int index = INTERCONNECT_COMPONENT_COUNT * i;
+		cout << "Block border #" << i << endl;
+		cout << "	Memory address: " << externalBorder[i] << endl;
+		cout << "	Memory type:    " << getMemoryTypeName( externalBorderMemoryAllocType[i] ) << endl;
+		cout << "	Side:           " << getSideName( tmpReceiveBorderInfo[index + SIDE] ) << endl;
+		cout << "	mOffset:        " << tmpReceiveBorderInfo[index + M_OFFSET] << endl;
+		cout << "	nOffset:        " << tmpReceiveBorderInfo[index + N_OFFSET] << endl;
+		cout << "	mLength:        " << tmpReceiveBorderInfo[index + M_LENGTH] << endl;
+		cout << "	nLength:        " << tmpReceiveBorderInfo[index + N_LENGTH] << endl;
+		cout << endl;
+	}
+
+	delete tmpReceiveBorderInfo;
+}
+
+void BlockGpu::printParameters() {
+	cudaSetDevice(deviceNumber);
+
+	cout << endl << "GPU Параметры не выводятся!!!" << endl;
+}
+
+void BlockGpu::printComputeFunctionNumber() {
+	cudaSetDevice(deviceNumber);
+
+	cout << endl << "GPU Информация о функциях не выводится!!!" << endl;
 }
 
 void BlockGpu::moveTempBorderVectorToBorderArray() {

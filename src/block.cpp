@@ -7,6 +7,8 @@
 
 #include "block.h"
 
+using namespace std;
+
 
 Block::Block(int _blockNumber, int _dimension, int _xCount, int _yCount, int _zCount,
 		int _xOffset, int _yOffset, int _zOffset,
@@ -282,4 +284,35 @@ void Block::prepareStageData(int stage) {
 				break;
 		}
 	}
+}
+
+void Block::print() {
+	cout << "##################################################" << endl;
+
+	printGeneralInformation();
+	printSendBorderInfo();
+	printReceiveBorderInfo();
+	printParameters();
+	printComputeFunctionNumber();
+
+	mSolver->print(zCount, yCount, xCount, cellSize);
+
+	cout << "##################################################" << endl;
+}
+
+void Block::printGeneralInformation() {
+	cout << endl;
+	cout << "Block from node #" << nodeNumber << endl;
+	cout << "Dimension    " << dimension << endl;
+	cout << endl;
+	cout << "xCount:      " << xCount << endl;
+	cout << "yCount:      " << yCount << endl;
+	cout << "zCount:      " << zCount << endl;
+	cout << endl;
+	cout << "xOffset:     " << xOffset << endl;
+	cout << "yOffset:     " << yOffset << endl;
+	cout << "zOffset:     " << zOffset << endl;
+	cout << endl;
+	cout << "Cell size:   " << cellSize << endl;
+	cout << "Halo size:   " << haloSize << endl;
 }
