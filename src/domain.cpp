@@ -111,8 +111,8 @@ double* Domain::getBlockCurrentState(int number) {
 
 void Domain::compute(char* inputFile) {
 	cout << endl << "Computation started..." << endl;
-	cout<< "Current time: "<<currentTime<<", finish time: "<<stopTime<< ", time step: " << timeStep<<endl;
-	cout <</*(flags & STEP_EXECUTION)<<*/"solver stage count: " <<mSolverInfo->getStageCount()<<endl;
+	cout << "Current time: "<<currentTime<<", finish time: "<<stopTime<< ", time step: " << timeStep<<endl;
+	cout << "solver stage count: " << mSolverInfo->getStageCount() << endl;
 
 	if (mSolverInfo->isFSAL() )
 	    initSolvers();
@@ -132,14 +132,8 @@ void Domain::compute(char* inputFile) {
 				saveState(inputFile);
 			}
 		}
-		//printBlocksToConsole();
-		//cout<< currentTime<<" "<<stopTime<< " " << timeStep<<endl;
 	}
 	cout <<"Computation finished!" << endl;
-
-	//if( flags & SAVE_FILE )
-	//printf("\n\n\n%s\n\n\n\n", saveFile);
-
 }
 
 void Domain::initSolvers() {
