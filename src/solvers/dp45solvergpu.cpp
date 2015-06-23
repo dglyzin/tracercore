@@ -125,8 +125,14 @@ void DP45SolverGpu::prepareArgument(int stage, double timeStep) {
 			sumArray(mArg, mState, mArg, mCount);
 			break;
 
-		case 3: case 4:
+		case 3:
 			multiplyByNumberAndSumArrays(mTempStore1, a61, mTempStore2, a62, mTempStore3, a63, mTempStore4, a64, mTempStore5, a65, mArg, mCount);
+			multiplyArrayByNumber(mArg, timeStep, mArg, mCount);
+			sumArray(mArg, mState, mArg, mCount);
+			break;
+
+		case 4:
+			multiplyByNumberAndSumArrays(mTempStore1, a71, mTempStore3, a73, mTempStore4, a74, mTempStore5, a75, mTempStore6, a76, mArg, mCount);
 			multiplyArrayByNumber(mArg, timeStep, mArg, mCount);
 			sumArray(mArg, mState, mArg, mCount);
 			break;
