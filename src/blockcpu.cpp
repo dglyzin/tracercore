@@ -293,7 +293,7 @@ void BlockCpu::getCurrentState(double* result) {
 }
 
 void BlockCpu::printSendBorderInfo() {
-	cout << endl;
+	/*cout << endl;
 	cout << "Send border info (" << countSendSegmentBorder << ")" << endl;
 	for (int i = 0; i < countSendSegmentBorder; ++i) {
 		int index = INTERCONNECT_COMPONENT_COUNT * i;
@@ -306,11 +306,12 @@ void BlockCpu::printSendBorderInfo() {
 		cout << "	mLength:        " << sendBorderInfo[index + M_LENGTH] << endl;
 		cout << "	nLength:        " << sendBorderInfo[index + N_LENGTH] << endl;
 		cout << endl;
-	}
+	}*/
+	printSendBorderInfoArray(sendBorderInfo);
 }
 
 void BlockCpu::printReceiveBorderInfo() {
-	cout << endl << endl;
+	/*cout << endl << endl;
 	cout << "Receive border info (" << countReceiveSegmentBorder << ")" << endl;
 	for (int i = 0; i < countReceiveSegmentBorder; ++i) {
 		int index = INTERCONNECT_COMPONENT_COUNT * i;
@@ -323,7 +324,8 @@ void BlockCpu::printReceiveBorderInfo() {
 		cout << "	mLength:        " << receiveBorderInfo[index + M_LENGTH] << endl;
 		cout << "	nLength:        " << receiveBorderInfo[index + N_LENGTH] << endl;
 		cout << endl;
-	}
+	}*/
+	printReceiveBorderInfoArray(receiveBorderInfo);
 }
 
 void BlockCpu::printParameters() {
