@@ -52,16 +52,9 @@ public:
 
 	bool isRealBlock() { return true; }
 
-	//void prepareStageData(int stage);
-
 	int getBlockType() { return CPU; }
 
 	void getCurrentState(double* result);
-
-	//void print();
-
-	//double* addNewBlockBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength);
-	//double* addNewExternalBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength, double* border);
 
 	void moveTempBorderVectorToBorderArray();
 
