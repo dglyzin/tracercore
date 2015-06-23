@@ -103,6 +103,7 @@ int main(int argc, char * argv[]) {
 	//d->printBlocksToConsole();
 
 	d->printStatisticsInfo(inputFile, NULL, time2 - time1, NULL);
+	//d->printBlocksToConsole();
 
 	/*
 	 * Сбор и вывод результата.
