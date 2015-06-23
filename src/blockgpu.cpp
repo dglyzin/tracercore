@@ -222,7 +222,7 @@ void BlockGpu::printSendBorderInfo() {
 	int* tmpSendBorderInfo = new int [ INTERCONNECT_COMPONENT_COUNT * countSendSegmentBorder ];
 	cudaMemcpy( tmpSendBorderInfo, sendBorderInfo, INTERCONNECT_COMPONENT_COUNT * countSendSegmentBorder * sizeof(int), cudaMemcpyDeviceToHost );
 
-	cout << endl;
+	/*cout << endl;
 	cout << "Send border info (" << countSendSegmentBorder << ")" << endl;
 	for (int i = 0; i < countSendSegmentBorder; ++i) {
 		int index = INTERCONNECT_COMPONENT_COUNT * i;
@@ -235,7 +235,9 @@ void BlockGpu::printSendBorderInfo() {
 		cout << "	mLength:        " << tmpSendBorderInfo[index + M_LENGTH] << endl;
 		cout << "	nLength:        " << tmpSendBorderInfo[index + N_LENGTH] << endl;
 		cout << endl;
-	}
+	}*/
+
+	printSendBorderInfoArray(tmpSendBorderInfo);
 
 	delete tmpSendBorderInfo;
 }
@@ -246,7 +248,7 @@ void BlockGpu::printReceiveBorderInfo() {
 	int* tmpReceiveBorderInfo = new int [ INTERCONNECT_COMPONENT_COUNT * countSendSegmentBorder ];
 	cudaMemcpy( tmpReceiveBorderInfo, receiveBorderInfo, INTERCONNECT_COMPONENT_COUNT * countReceiveSegmentBorder * sizeof(int), cudaMemcpyDeviceToHost );
 
-	cout << endl << endl;
+	/*cout << endl << endl;
 	cout << "Receive border info (" << countReceiveSegmentBorder << ")" << endl;
 	for (int i = 0; i < countReceiveSegmentBorder; ++i) {
 		int index = INTERCONNECT_COMPONENT_COUNT * i;
@@ -259,7 +261,8 @@ void BlockGpu::printReceiveBorderInfo() {
 		cout << "	mLength:        " << tmpReceiveBorderInfo[index + M_LENGTH] << endl;
 		cout << "	nLength:        " << tmpReceiveBorderInfo[index + N_LENGTH] << endl;
 		cout << endl;
-	}
+	}*/
+	printReceiveBorderInfoArray(tmpReceiveBorderInfo);
 
 	delete tmpReceiveBorderInfo;
 }
