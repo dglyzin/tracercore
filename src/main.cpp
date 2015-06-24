@@ -82,7 +82,7 @@ int main(int argc, char * argv[]) {
 
 	d->saveState(inputFile);
 
-	d->printBlocksToConsole();
+	//d->printBlocksToConsole();
 
 	/*
 	 * Вывод информации о времени работы осуществляет только поток с номером 0.
