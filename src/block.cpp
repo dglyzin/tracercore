@@ -287,7 +287,7 @@ void Block::prepareStageData(int stage) {
 }
 
 void Block::print() {
-	cout << "##################################################" << endl;
+	cout << "####################################################################################################" << endl;
 
 	printGeneralInformation();
 	printSendBorderInfo();
@@ -297,7 +297,7 @@ void Block::print() {
 
 	mSolver->print(zCount, yCount, xCount, cellSize);
 
-	cout << "##################################################" << endl;
+	cout << "####################################################################################################" << endl;
 }
 
 void Block::printGeneralInformation() {
