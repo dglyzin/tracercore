@@ -59,6 +59,8 @@ int main(int argc, char * argv[]) {
 	double time1, time2;
 
 	char* inputFile = argv[1];
+	int flags = atoi(argv[2]);
+	char* saveFile = argv[3];
 
 	/*
 	 * Создание основного управляющего класса.
