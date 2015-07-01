@@ -79,7 +79,6 @@ public:
 
 	void saveState(char* inputFile);
 	void saveStateToFile(char* path);
-	void loadStateFromFile(char* blockLocation, char* dataFile);
 
 	void printStatisticsInfo(char* inputFile, char* outputFile, double calcTime, char* statisticsFile);
 
@@ -170,6 +169,9 @@ private:
 	int totalGridElementCount;
 
 	MPI_Status status;
+
+	void loadStateFromFile(char* blockLocation, char* dataFile);
+	void setStopTime(double _stopTime) { stopTime = _stopTime; }
 
 	void readFileStat(std::ifstream& in);
 	void readTimeSetting(std::ifstream& in);
