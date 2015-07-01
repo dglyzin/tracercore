@@ -60,7 +60,7 @@ int main(int argc, char * argv[]) {
 
 	char* inputFile = argv[1];
 	int flags = atoi(argv[2]);
-	double finishTme = atof(argv[3]);
+	double stopTme = atof(argv[3]);
 	char* saveFile = argv[4];
 
 	/*
