@@ -730,7 +730,7 @@ void Domain::saveStateToFile(char* path) {
 	}
 }
 
-void Domain::loadStateFromFile(char* blockLocation, char* dataFile) {
+void Domain::loadStateFromFile(char* dataFile) {
 	cout << endl << "LOAD STATE DOESN'T WORK" << endl;
 	return;
 	/*readFromFile(blockLocation);
@@ -880,4 +880,12 @@ bool Domain::isNan() {
 
 
 	return false;
+}
+
+void Domain::checkOptions(int flags, double _stopTime, char* saveFile) {
+	if( flags & TIME_EXECUTION )
+		setStopTime(_stopTime);
+
+	if( flags & LOAD_FILE )
+		loadStateFromFile(saveFile);
 }

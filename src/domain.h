@@ -84,6 +84,8 @@ public:
 
 	bool isNan();
 
+	void checkOptions(int flags, double _stopTime, char* saveFile);
+
 private:
 	/*
 	 * Массив блоков.
@@ -170,7 +172,7 @@ private:
 
 	MPI_Status status;
 
-	void loadStateFromFile(char* blockLocation, char* dataFile);
+	void loadStateFromFile(char* dataFile);
 	void setStopTime(double _stopTime) { stopTime = _stopTime; }
 
 	void readFileStat(std::ifstream& in);
