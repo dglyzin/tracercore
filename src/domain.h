@@ -23,7 +23,7 @@
 
 class Domain {
 public:
-	Domain(int _world_rank, int _world_size, char* inputFile, int _flags, int _stepCount, double _stopTime, char* loadFile);
+	Domain(int _world_rank, int _world_size, char* inputFile);
 
 	virtual ~Domain();
 

@@ -23,7 +23,7 @@ int lastChar(char* source, char ch) {
 	return index;
 }
 
-Domain::Domain(int _world_rank, int _world_size, char* inputFile, int _flags, int _stepCount, double _stopTime, char* loadFile) {
+Domain::Domain(int _world_rank, int _world_size, char* inputFile) {
 	mWorldRank = _world_rank;
 	mWorldSize = _world_size;
 

@@ -68,7 +68,7 @@ int main(int argc, char * argv[]) {
 	 * Номер потока, количество потоков и путь к файлу с данными.
 	 */
 	printf ("DEBUG creating domain...\n ");
-	Domain* d = new Domain(world_rank, world_size, inputFile, 0, 0, 0, NULL);
+	Domain* d = new Domain(world_rank, world_size, inputFile);
 	d->checkOptions(flags, stopTime, saveFile);
 
 	/*
