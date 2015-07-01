@@ -60,7 +60,8 @@ int main(int argc, char * argv[]) {
 
 	char* inputFile = argv[1];
 	int flags = atoi(argv[2]);
-	char* saveFile = argv[3];
+	double finishTme = atof(argv[3]);
+	char* saveFile = argv[4];
 
 	/*
 	 * Создание основного управляющего класса.
