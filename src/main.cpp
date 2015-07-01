@@ -60,7 +60,7 @@ int main(int argc, char * argv[]) {
 
 	char* inputFile = argv[1];
 	int flags = atoi(argv[2]);
-	double stopTme = atof(argv[3]);
+	double stopTime = atof(argv[3]);
 	char* saveFile = argv[4];
 
 	/*
@@ -69,6 +69,7 @@ int main(int argc, char * argv[]) {
 	 */
 	printf ("DEBUG creating domain...\n ");
 	Domain* d = new Domain(world_rank, world_size, inputFile, 0, 0, 0, NULL);
+	d->checkOptions(flags, stopTime, saveFile);
 
 	/*
 	 * Вычисления.
