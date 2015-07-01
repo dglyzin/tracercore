@@ -19,6 +19,7 @@ public:
 	virtual ~DP45Solver();
 
 	virtual void copyState(double* result) { return; }
+	virtual void loadState(double* data) { return; }
 
 	double* getStageSource(int stage);
 	double* getStageResult(int stage);

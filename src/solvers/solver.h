@@ -29,6 +29,7 @@ public:
     virtual ~Solver() { return; }
 
     virtual void copyState(double* result) = 0;
+    virtual void loadState(double* data) = 0;
 
     double* getStatePtr(){ return mState;}
 
