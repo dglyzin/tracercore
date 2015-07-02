@@ -47,6 +47,10 @@ void RK4SolverGpu::copyState(double* result) {
 	cudaMemcpy(result, mState, mCount * sizeof(double), cudaMemcpyDeviceToHost);
 }
 
+void RK4SolverGpu::loadState(doublr* data) {
+	cudaMemcpy(mState, data, mCount * sizeof(double), cudaMemcpyHostToDevice);
+}
+
 void RK4SolverGpu::prepareArgument(int stage, double timeStep) {
 
 	/*if      (stage == 0)
