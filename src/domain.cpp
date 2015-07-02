@@ -731,8 +731,8 @@ void Domain::saveStateToFile(char* path) {
 }
 
 void Domain::loadStateFromFile(char* dataFile) {
-	cout << endl << "LOAD STATE DOESN'T WORK" << endl;
-	return;
+	/*cout << endl << "LOAD STATE DOESN'T WORK" << endl;
+	return;*/
 	/*readFromFile(blockLocation);
 
 	ifstream in;
@@ -792,6 +792,36 @@ void Domain::loadStateFromFile(char* dataFile) {
 		mBlocks[i]->loadData(data);
 		delete data;
 	}*/
+
+	ifstream in;
+	in.open(dataFile, ios::binary);
+
+	char save_file_code;
+	char version_major;
+	char version_minor;
+	double fileCurrentTime;
+
+	in.read((char*)&save_file_code, SIZE_CHAR);
+	in.read((char*)&version_major, SIZE_CHAR);
+	in.read((char*)&version_minor, SIZE_CHAR);
+
+	in.read((char*)&fileCurrentTime, SIZE_DOUBLE);
+
+	printf("\n%d %d %d %f\n", save_file_code, version_major, version_minor, fileCurrentTime);
+
+	for (int i = 0; i < mBlockCount; ++i) {
+		if (mBlocks[i]->isRealBlock()) {
+			int total = mBlocks[i]->getGridElementCount();
+			double* data = new double[total];
+
+			in.read((char*)data, SIZE_DOUBLE*total);
+			mBlocks[i]->loadData(data);
+
+			delete data;
+		}
+	}
+
+	in.close();
 }
 
 void Domain::printStatisticsInfo(char* inputFile, char* outputFile, double calcTime, char* statisticsFile) {
