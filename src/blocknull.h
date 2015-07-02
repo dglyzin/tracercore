@@ -59,8 +59,6 @@ public:
 	//double* addNewExternalBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength, double* border) { return NULL; }
 
 	void moveTempBorderVectorToBorderArray() { return; }
-
-	void loadData(double* data) { return; }
 };
 
 #endif /* SRC_BLOCKNULL_H_ */
