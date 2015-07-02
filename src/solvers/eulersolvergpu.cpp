@@ -24,6 +24,10 @@ void EulerSolverGpu::copyState(double* result) {
 	cudaMemcpy(result, mState, mCount * sizeof(double), cudaMemcpyDeviceToHost);
 }
 
+void EulerSolverCpu::loadState(double* data) {
+	cudaMemcpy(mState, data, mCount * sizeof(double), cudaMemcpyHostToDevice);
+}
+
 void EulerSolverGpu::prepareArgument(int stage, double timeStep) {
 	multiplyArrayByNumber(mTempStore1, timeStep, mTempStore1, mCount);
 	sumArray(mState, mTempStore1, mTempStore1, mCount);

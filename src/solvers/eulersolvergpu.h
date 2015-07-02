@@ -16,6 +16,7 @@ public:
 	virtual ~EulerSolverGpu();
 
 	void copyState(double* result);
+	void loadState(double* data);
 
 	void prepareArgument(int stage, double timeStep);
 
