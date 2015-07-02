@@ -809,6 +809,8 @@ void Domain::loadStateFromFile(char* dataFile) {
 
 	printf("\n%d %d %d %f\n", save_file_code, version_major, version_minor, fileCurrentTime);
 
+	currentTime = fileCurrentTime;
+
 	for (int i = 0; i < mBlockCount; ++i) {
 		if (mBlocks[i]->isRealBlock()) {
 			int total = mBlocks[i]->getGridElementCount();
