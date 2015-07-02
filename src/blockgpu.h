@@ -67,8 +67,6 @@ public:
 	//double* addNewExternalBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength, double* border) { std::cout << std::endl << "GPU add new external border" << std::endl; return NULL; }
 
 	void moveTempBorderVectorToBorderArray();// { std::cout << std::endl << "GPU move array to vector" << std::endl; }
-
-	void loadData(double* data);
 };
 
 #endif /* SRC_BLOCKGPU_H_ */

@@ -344,15 +344,6 @@ void BlockGpu::moveTempBorderVectorToBorderArray() {
 	//delete tmpReceiveBorderInfo;
 }
 
-void BlockGpu::loadData(double* data) {
-	cudaSetDevice(deviceNumber);
-	
-	cout << endl << "GPU LOAD DATA NOT WORK!" << endl;
-	return;
-	
-	/*cudaMemcpy( matrix, data, sizeof(double) * length * width, cudaMemcpyHostToDevice );*/
-}
-
 void BlockGpu::createSolver(int solverIdx, double _aTol, double _rTol) {
 	cudaSetDevice(deviceNumber);
 

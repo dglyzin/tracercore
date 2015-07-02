@@ -350,3 +350,7 @@ void Block::printReceiveBorderInfoArray(int* receiveBorderInfoArray) {
 		cout << endl;
 	}
 }
+
+void Block::loadData(double* data) {
+	mSolver->loadState(data);
+}

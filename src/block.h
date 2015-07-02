@@ -193,7 +193,7 @@ public:
 
 	virtual void moveTempBorderVectorToBorderArray() = 0;
 
-	virtual void loadData(double* data) = 0;
+	void loadData(double* data);
 };
 
 #endif /* SRC_BLOCK_H_ */

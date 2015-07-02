@@ -401,13 +401,6 @@ void BlockCpu::moveTempBorderVectorToBorderArray() {
 	tempReceiveBorderInfo.clear();
 }
 
-void BlockCpu::loadData(double* data) {
-	/*cout << endl << "LOAD DATA NOT WORK!" << endl;
-	return;*/
-	/*for(int i = 0; i < length * width; i++)
-		matrix[i] = data[i];*/
-}
-
 void BlockCpu::prepareBorder(int borderNumber, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop) {
 	double* source = NULL;
 	// TODO ПРОВЕРИТЬ!!!! ПОЛУЧАТЬ ОТ СОЛВЕРА!!!

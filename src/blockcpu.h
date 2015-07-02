@@ -57,8 +57,6 @@ public:
 	void getCurrentState(double* result);
 
 	void moveTempBorderVectorToBorderArray();
-
-	void loadData(double* data);
 };
 
 #endif /* SRC_BLOCKCPU_H_ */
