@@ -74,6 +74,10 @@ void DP45SolverGpu::copyState(double* result) {
 	cudaMemcpy(result, mState, mCount * sizeof(double), cudaMemcpyDeviceToHost);
 }
 
+void DP45SolverGpu::loadState(double* data) {
+	cudaMemcpy(mState, data, mCount * sizeof(double), cudaMemcpyHostToDevice);
+}
+
 void DP45SolverGpu::prepareArgument(int stage, double timeStep) {
 
 	/*if      (stage == 0)

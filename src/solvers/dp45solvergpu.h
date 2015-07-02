@@ -16,6 +16,7 @@ public:
 	virtual ~DP45SolverGpu();
 
 	void copyState(double* result);
+	void loadState(double* data);
 
 	void prepareArgument(int stage, double timeStep);
 
