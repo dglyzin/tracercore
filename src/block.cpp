@@ -352,5 +352,6 @@ void Block::printReceiveBorderInfoArray(int* receiveBorderInfoArray) {
 }
 
 void Block::loadData(double* data) {
-	mSolver->loadState(data);
+	if(mSolver != NULL)
+		mSolver->loadState(data);
 }
