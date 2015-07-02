@@ -34,6 +34,11 @@ void RK4SolverCpu::copyState(double* result) {
 		result[idx] = mState[idx];
 }
 
+void RK4SolverCpu::loadState(double* data) {
+	for (int idx = 0; idx < mCount; ++idx)
+		mState[idx] = data[idx];
+}
+
 void RK4SolverCpu::prepareArgument(int stage, double timeStep) {
 
 	if      (stage == 0)
