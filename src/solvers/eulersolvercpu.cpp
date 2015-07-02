@@ -23,6 +23,11 @@ void EulerSolverCpu::copyState(double* result) {
 		result[idx] = mState[idx];
 }
 
+void EulerSolverCpu::loadState(double* data) {
+	for (int idx = 0; idx < mCount; ++idx)
+		mState[idx] = data[idx];
+}
+
 void EulerSolverCpu::prepareArgument(int stage, double timeStep) {
 #pragma omp parallel for
 	for (int idx = 0; idx < mCount; ++idx)
