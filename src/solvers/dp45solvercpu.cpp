@@ -62,6 +62,11 @@ void DP45SolverCpu::copyState(double* result) {
 		result[idx] = mState[idx];
 }
 
+void DP45SolverCpu::loadState(double* data) {
+	for (int idx = 0; idx < mCount; ++idx)
+		mState[idx] = data[idx];
+}
+
 void DP45SolverCpu::prepareArgument(int stage, double timeStep) {
 
 	if      (stage == 0)
