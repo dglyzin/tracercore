@@ -18,7 +18,7 @@
 
 class BlockNull: public Block {
 private:
-	void prepareBorder(int borderNumber, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop) { return; }
+	void prepareBorder(int borderNumber, int stage, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop) { return; }
 
 	void computeStageCenter_1d(int stage, double time) { return; }
 	void computeStageCenter_2d(int stage, double time) { return; }

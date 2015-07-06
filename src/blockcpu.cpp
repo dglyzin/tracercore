@@ -401,8 +401,8 @@ void BlockCpu::moveTempBorderVectorToBorderArray() {
 	tempReceiveBorderInfo.clear();
 }
 
-void BlockCpu::prepareBorder(int borderNumber, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop) {
-	double* source = NULL;
+void BlockCpu::prepareBorder(int borderNumber, int stage, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop) {
+	double* source = mSolver->getStageSource(stage);
 	// TODO ПРОВЕРИТЬ!!!! ПОЛУЧАТЬ ОТ СОЛВЕРА!!!
 	cout << endl << "source == NULL!!!!" << endl;
 	int index = 0;

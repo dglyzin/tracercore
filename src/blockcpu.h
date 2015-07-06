@@ -20,7 +20,7 @@
 
 class BlockCpu: public Block {
 private:
-	void prepareBorder(int borderNumber, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop);
+	void prepareBorder(int borderNumber, int stage, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop);
 
 	void computeStageCenter_1d(int stage, double time);
 	void computeStageCenter_2d(int stage, double time);

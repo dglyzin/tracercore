@@ -93,7 +93,7 @@ protected:
 	void freeMemory(int memory_alloc_type, double* memory);
 	void freeMemory(int memory_alloc_type, int* memory);
 
-	virtual void prepareBorder(int borderNumber, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop) = 0;
+	virtual void prepareBorder(int borderNumber, int stage, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop) = 0;
 
 	virtual void computeStageCenter_1d(int stage, double time) = 0;
 	virtual void computeStageCenter_2d(int stage, double time) = 0;

@@ -263,22 +263,22 @@ void Block::prepareStageData(int stage) {
 
 		switch (sendBorderInfo[index + SIDE]) {
 			case LEFT:
-				prepareBorder(i, mStart, mStop, nStart, nStop, 0, haloSize);
+				prepareBorder(i, stage, mStart, mStop, nStart, nStop, 0, haloSize);
 				break;
 			case RIGHT:
-				prepareBorder(i, mStart, mStop, nStart, nStop, xCount - haloSize, xCount);
+				prepareBorder(i, stage, mStart, mStop, nStart, nStop, xCount - haloSize, xCount);
 				break;
 			case FRONT:
-				prepareBorder(i, mStart, mStop, 0, haloSize, nStart, nStop);
+				prepareBorder(i, stage, mStart, mStop, 0, haloSize, nStart, nStop);
 				break;
 			case BACK:
-				prepareBorder(i, mStart, mStop, yCount - haloSize, yCount, nStart, nStop);
+				prepareBorder(i, stage, mStart, mStop, yCount - haloSize, yCount, nStart, nStop);
 				break;
 			case TOP:
-				prepareBorder(i, 0, haloSize, mStart, mStop, nStart, nStop);
+				prepareBorder(i, stage, 0, haloSize, mStart, mStop, nStart, nStop);
 				break;
 			case BOTTOM:
-				prepareBorder(i, zCount - haloSize, zCount, mStart, mStop, nStart, nStop);
+				prepareBorder(i, stage, zCount - haloSize, zCount, mStart, mStop, nStart, nStop);
 				break;
 			default:
 				break;

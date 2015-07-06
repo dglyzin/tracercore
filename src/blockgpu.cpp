@@ -413,7 +413,7 @@ double* BlockGpu::getNewExternalBorder(Block* neighbor, int borderLength, double
 	return tmpBorder;
 }
 
-void BlockGpu::prepareBorder(int borderNumber, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop) {
+void BlockGpu::prepareBorder(int borderNumber, int stage, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop) {
 	double* source = NULL;
 	cout << endl << "source == NULL!!!!" << endl;
 	prepareBorderCudaFunc(source, borderNumber, zStart, zStop, yStart, yStop, xStart, xStop, blockBorder, zCount, yCount, xCount, cellSize);
