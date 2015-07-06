@@ -132,6 +132,9 @@ void BlockCpu::computeStageCenter_3d(int stage, double time) {
 }
 
 void BlockCpu::computeStageBorder_1d(int stage, double time) {
+	/*char c;
+	cout << endl << endl << "before error?" << blockNumber << endl;
+	scanf("%c", &c);*/
 # pragma omp parallel
 	{
 		double* result = mSolver->getStageResult(stage);
@@ -148,6 +151,8 @@ void BlockCpu::computeStageBorder_1d(int stage, double time) {
 			mUserFuncs[ mCompFuncNumber[x] ](result, source, time, x, 0, 0, mParams, externalBorder);
 		}
 	}
+
+	/*scanf("%c", &c);*/
 }
 
 void BlockCpu::computeStageBorder_2d(int stage, double time) {

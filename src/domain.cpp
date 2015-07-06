@@ -152,6 +152,7 @@ void Domain::computeStage(int stage) {
 		mInterconnects[i]->wait();
 
 	computeOneStepBorder(stage);
+
 	prepareNextStageArgument(stage);
 }
 

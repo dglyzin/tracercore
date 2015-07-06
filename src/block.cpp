@@ -302,7 +302,7 @@ void Block::print() {
 
 void Block::printGeneralInformation() {
 	cout << endl;
-	cout << "Block from node #" << nodeNumber << endl;
+	cout << "Block #" << blockNumber << " from node #" << nodeNumber << endl;
 	cout << "Dimension    " << dimension << endl;
 	cout << endl;
 	cout << "xCount:      " << xCount << endl;
