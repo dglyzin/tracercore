@@ -71,14 +71,16 @@ int main(int argc, char * argv[]) {
 	Domain* d = new Domain(world_rank, world_size, inputFile);
 	d->checkOptions(flags, stopTime, saveFile);
 
-	d->printBlocksToConsole();
+	//d->printBlocksToConsole();
 
 	/*
 	 * Вычисления.
 	 */
 	//omp_set_num_threads(1);
 
-	printf ("Running computations \n");
+	//d->saveState(inputFile);
+
+	printf ("Running computations %d \n", world_rank);
 	time1 = MPI_Wtime();
 	d->compute(inputFile);
 	time2 = MPI_Wtime();

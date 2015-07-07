@@ -96,15 +96,18 @@ int Block::getGridElementCount() {
 }
 
 void Block::prepareArgument(int stage, double timestep){
-	mSolver->prepareArgument(stage, timestep);
+	if( mSolver != NULL )
+		mSolver->prepareArgument(stage, timestep);
 }
 
 void Block::confirmStep(double timestep) {
-	mSolver->confirmStep( timestep);
+	if( mSolver != NULL )
+		mSolver->confirmStep( timestep);
 }
 
 void Block::rejectStep(double timestep) {
-	mSolver->rejectStep( timestep);
+	if( mSolver != NULL )
+		mSolver->rejectStep( timestep);
 }
 
 

@@ -110,7 +110,7 @@ double* Domain::getBlockCurrentState(int number) {
 
 
 void Domain::compute(char* inputFile) {
-	cout << endl << "Computation started..." << endl;
+	cout << endl << "Computation started..." << mWorldRank << endl;
 	cout << "Current time: "<<currentTime<<", finish time: "<<stopTime<< ", time step: " << timeStep<<endl;
 	cout << "solver stage count: " << mSolverInfo->getStageCount() << endl;
 
@@ -133,7 +133,7 @@ void Domain::compute(char* inputFile) {
 			}
 		}
 	}
-	cout <<"Computation finished!" << endl;
+	cout <<"Computation finished!" << mWorldRank << endl;
 }
 
 void Domain::initSolvers() {
@@ -182,7 +182,7 @@ void Domain::nextStep() {
 		printf("new time step = %f\n", timeStep);
     }
 	else{ //constant step
-		confirmStep();
+	    confirmStep();
 		mAcceptedStepCount++;
 		currentTime += timeStep;
 
@@ -356,12 +356,12 @@ void Domain::readFromFile(char* path) {
 
 	mBlocks = new Block* [mBlockCount];
 
-	printf ("DEBUG reading blocks.\n ");
+	//printf ("DEBUG reading blocks.\n ");
 
 	for (int i = 0; i < mBlockCount; ++i)
 		mBlocks[i] = readBlock(in, i);
 
-	printf ("DEBUG blocks read.\n ");
+	//printf ("DEBUG blocks read.\n ");
 
 	readConnectionCount(in);
 
@@ -389,10 +389,10 @@ void Domain::readFileStat(ifstream& in) {
 	in.read((char*)&versionMajor, 1);
 	in.read((char*)&versionMinor, 1);
 
-	cout << endl;
+	/*cout << endl;
 	cout << "file type:     " << (unsigned int)fileType << endl;
 	cout << "version major: " << (unsigned int)versionMajor << endl;
-	cout << "version minor: " << (unsigned int)versionMinor << endl;
+	cout << "version minor: " << (unsigned int)versionMinor << endl;*/
 }
 
 void Domain::readTimeSetting(ifstream& in) {
@@ -400,15 +400,15 @@ void Domain::readTimeSetting(ifstream& in) {
 	in.read((char*)&stopTime, SIZE_DOUBLE);
 	in.read((char*)&timeStep, SIZE_DOUBLE);
 
-	cout << "start time:    " << startTime << endl;
+	/*cout << "start time:    " << startTime << endl;
 	cout << "stop time:     " << stopTime << endl;
-	cout << "step time:     " << timeStep << endl;
+	cout << "step time:     " << timeStep << endl;*/
 }
 
 void Domain::readSaveInterval(ifstream& in) {
 	in.read((char*)&saveInterval, SIZE_DOUBLE);
 
-	cout << "save interval: " << saveInterval << endl;
+	//cout << "save interval: " << saveInterval << endl;
 }
 
 void Domain::readGridSteps(ifstream& in) {
@@ -416,17 +416,17 @@ void Domain::readGridSteps(ifstream& in) {
 	in.read((char*)&mDy, SIZE_DOUBLE);
 	in.read((char*)&mDz, SIZE_DOUBLE);
 
-	cout << "dx:            " << mDx << endl;
+	/*cout << "dx:            " << mDx << endl;
 	cout << "dy:            " << mDy << endl;
-	cout << "dz:            " << mDz << endl;
+	cout << "dz:            " << mDz << endl;*/
 }
 
 void Domain::readCellAndHaloSize(ifstream& in) {
 	in.read((char*)&mCellSize, SIZE_INT);
 	in.read((char*)&mHaloSize, SIZE_INT);
 
-	cout << "cell size:     " << mCellSize << endl;
-	cout << "halo size:     " << mHaloSize << endl;
+	/*cout << "cell size:     " << mCellSize << endl;
+	cout << "halo size:     " << mHaloSize << endl;*/
 }
 
 
@@ -437,9 +437,9 @@ void Domain::readSolverIndex(std::ifstream& in){
 
 void Domain::readSolverTolerance(std::ifstream& in){
 	in.read((char*)&mAtol, SIZE_DOUBLE);
-	cout << "Solver absolute tolerance:  " << mAtol << endl;
+	//cout << "Solver absolute tolerance:  " << mAtol << endl;
 	in.read((char*)&mRtol, SIZE_DOUBLE);
-	cout << "Solver relative tolerance:  " << mRtol << endl;
+	//cout << "Solver relative tolerance:  " << mRtol << endl;
 }
 
 
@@ -447,13 +447,13 @@ void Domain::readSolverTolerance(std::ifstream& in){
 void Domain::readBlockCount(ifstream& in) {
 	in.read((char*)&mBlockCount, SIZE_INT);
 
-	cout << "block count:   " << mBlockCount << endl;
+	//cout << "block count:   " << mBlockCount << endl;
 }
 
 void Domain::readConnectionCount(ifstream& in) {
 	in.read((char*)&mConnectionCount, SIZE_INT);
 
-	cout << "connection count:   " << mConnectionCount << endl;
+	//cout << "connection count:   " << mConnectionCount << endl;
 }
 
 /*
@@ -489,21 +489,21 @@ Block* Domain::readBlock(ifstream& in, int idx) {
 	in.read((char*)&deviceType, SIZE_INT);
 	in.read((char*)&deviceNumber, SIZE_INT);
 
-	cout << endl;
+	/*cout << endl;
 	cout << "Block #" << idx << endl;
 	cout << "	dimension:     " << dimension << endl;
 	cout << "	node:          " << node << endl;
 	cout << "	device type:   " << deviceType << endl;
-	cout << "	device number: " << deviceNumber << endl;
+	cout << "	device number: " << deviceNumber << endl;*/
 
 	for (int j = 0; j < dimension; ++j) {
 		in.read((char*)&offset[j], SIZE_INT);
-		cout << "	offset" << j << ":           " << offset[j] << endl;
+		//cout << "	offset" << j << ":           " << offset[j] << endl;
 	}
 
 	for (int j = 0; j < dimension; ++j) {
 		in.read((char*)&count[j], SIZE_INT);
-		cout << "	count" << j << ":            " << count[j] << endl;
+		//cout << "	count" << j << ":            " << count[j] << endl;
 		total *= count[j];
 	}
 
@@ -514,7 +514,7 @@ Block* Domain::readBlock(ifstream& in, int idx) {
 	in.read((char*)compFuncNumber, total*SIZE_UN_SH_INT);
 
 
-	cout << "Init func number:" << endl;
+	//cout << "Init func number###:" << endl;
 	/*for (int idxY = 0; idxY < count[1]; ++idxY) {
 		for (int idxX = 0; idxX < count[0]; ++idxX)
 		    cout << initFuncNumber[idxY*count[0]+idxX] << " ";
@@ -522,7 +522,7 @@ Block* Domain::readBlock(ifstream& in, int idx) {
 	}
 	cout << endl;*/
 
-	cout << "Comp func number:" << endl;
+	//cout << "Comp func number:" << endl;
 	/*for (int idxY = 0; idxY < count[1]; ++idxY) {
 		for (int idxX = 0; idxX < count[0]; ++idxX)
 			cout << compFuncNumber[idxY*count[0]+idxX] << " ";
@@ -540,8 +540,9 @@ Block* Domain::readBlock(ifstream& in, int idx) {
 			assert(false);
 		}
 	}
-	else
+	else {
 		resBlock =  new BlockNull(idx, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize);
+	}
 
 	delete initFuncNumber;
 	delete compFuncNumber;
@@ -573,11 +574,11 @@ Interconnect* Domain::readConnection(ifstream& in) {
 
 	in.read((char*)&dimension, SIZE_INT);
 	cout << endl;
-	cout << "Interconnect #<NONE>" << endl;
+	//cout << "Interconnect #<NONE>" << endl;
 
 	for (int j = 0; j < dimension; ++j) {
 		in.read((char*)&length[j], SIZE_INT);
-		cout << "	length" << j << ":           " << length[j] << endl;
+		//cout << "	length" << j << ":           " << length[j] << endl;
 	}
 
 	in.read((char*)&sourceBlock, SIZE_INT);
@@ -585,19 +586,19 @@ Interconnect* Domain::readConnection(ifstream& in) {
 	in.read((char*)&sourceSide, SIZE_INT);
 	in.read((char*)&destinationSide, SIZE_INT);
 
-	cout << "	source block:      " << sourceBlock << endl;
+	/*cout << "	source block:      " << sourceBlock << endl;
 	cout << "	destination block: " << destinationBlock << endl;
 	cout << "	source side:       " << sourceSide << endl;
-	cout << "	destination side:  " << destinationSide << endl;
+	cout << "	destination side:  " << destinationSide << endl;*/
 
 	for (int j = 0; j < dimension; ++j) {
 		in.read((char*)&offsetSource[j], SIZE_INT);
-		cout << "	offsetSource" << j << ":            " << offsetSource[j] << endl;
+		//cout << "	offsetSource" << j << ":            " << offsetSource[j] << endl;
 	}
 
 	for (int j = 0; j < dimension; ++j) {
 		in.read((char*)&offsetDestination[j], SIZE_INT);
-		cout << "	offsetDestnation" << j << ":        " << offsetDestination[j] << endl;
+		//cout << "	offsetDestnation" << j << ":        " << offsetDestination[j] << endl;
 	}
 
 	double* sourceData = mBlocks[sourceBlock]->addNewBlockBorder(mBlocks[destinationBlock], getSide(sourceSide), offsetSource[0], offsetSource[1], length[0], length[1]);

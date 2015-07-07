@@ -447,8 +447,6 @@ void BlockCpu::createSolver(int solverIdx, double _aTol, double _rTol) {
 			mSolver = new EulerSolverCpu(count, _aTol, _rTol);
 			break;
 	}
-
-	printf("\n\n*******************************************************************************************************\n\n");
 }
 
 double* BlockCpu::getNewBlockBorder(Block* neighbor, int borderLength, int& memoryType) {
