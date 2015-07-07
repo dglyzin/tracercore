@@ -290,17 +290,19 @@ void Block::prepareStageData(int stage) {
 }
 
 void Block::print() {
-	cout << "####################################################################################################" << endl;
+	if(isRealBlock()) {
+		cout << "####################################################################################################" << endl;
 
-	printGeneralInformation();
-	printSendBorderInfo();
-	printReceiveBorderInfo();
-	printParameters();
-	printComputeFunctionNumber();
+		printGeneralInformation();
+		printSendBorderInfo();
+		printReceiveBorderInfo();
+		printParameters();
+		printComputeFunctionNumber();
 
-	mSolver->print(zCount, yCount, xCount, cellSize);
+		mSolver->print(zCount, yCount, xCount, cellSize);
 
-	cout << "####################################################################################################" << endl;
+		cout << "####################################################################################################" << endl;
+	}
 }
 
 void Block::printGeneralInformation() {
