@@ -71,7 +71,7 @@ int main(int argc, char * argv[]) {
 	Domain* d = new Domain(world_rank, world_size, inputFile);
 	d->checkOptions(flags, stopTime, saveFile);
 
-	//d->printBlocksToConsole();
+	d->printBlocksToConsole();
 
 	/*
 	 * Вычисления.
