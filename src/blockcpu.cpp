@@ -313,6 +313,16 @@ void BlockCpu::printSendBorderInfo() {
 		cout << endl;
 	}*/
 	printSendBorderInfoArray(sendBorderInfo);
+	/*for (int i = 0; i < countSendSegmentBorder; ++i) {
+		int count = sendBorderInfo[i * INTERCONNECT_COMPONENT_COUNT + M_LENGTH] * sendBorderInfo[i * INTERCONNECT_COMPONENT_COUNT + N_LENGTH];
+
+		printf("\nsend border #%d\n", i);
+		for (int j = 0; j < count; ++j) {
+			printf("%.2f ", blockBorder[i][j]);
+		}
+
+		printf("\n");
+	}*/
 }
 
 void BlockCpu::printReceiveBorderInfo() {
@@ -331,6 +341,16 @@ void BlockCpu::printReceiveBorderInfo() {
 		cout << endl;
 	}*/
 	printReceiveBorderInfoArray(receiveBorderInfo);
+	/*for (int i = 0; i < countReceiveSegmentBorder; ++i) {
+		int count = receiveBorderInfo[i * INTERCONNECT_COMPONENT_COUNT + M_LENGTH] * receiveBorderInfo[i * INTERCONNECT_COMPONENT_COUNT + N_LENGTH];
+
+		printf("\nrecv border #%d\n", i);
+		for (int j = 0; j < count; ++j) {
+			printf("%.2f ", externalBorder[i][j]);
+		}
+
+		printf("\n");
+	}*/
 }
 
 void BlockCpu::printParameters() {
