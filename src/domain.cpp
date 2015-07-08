@@ -576,7 +576,7 @@ Interconnect* Domain::readConnection(ifstream& in) {
 	cout << endl;
 	//cout << "Interconnect #<NONE>" << endl;
 
-	for (int j = 0; j < dimension; ++j) {
+	for (int j = 2-dimension; j < 2; ++j) {
 		in.read((char*)&length[j], SIZE_INT);
 		//cout << "	length" << j << ":           " << length[j] << endl;
 	}
@@ -591,12 +591,12 @@ Interconnect* Domain::readConnection(ifstream& in) {
 	cout << "	source side:       " << sourceSide << endl;
 	cout << "	destination side:  " << destinationSide << endl;*/
 
-	for (int j = 0; j < dimension; ++j) {
+	for (int j = 2-dimension; j < 2; ++j) {
 		in.read((char*)&offsetSource[j], SIZE_INT);
 		//cout << "	offsetSource" << j << ":            " << offsetSource[j] << endl;
 	}
 
-	for (int j = 0; j < dimension; ++j) {
+	for (int j = 2-dimension; j < 2; ++j) {
 		in.read((char*)&offsetDestination[j], SIZE_INT);
 		//cout << "	offsetDestnation" << j << ":        " << offsetDestination[j] << endl;
 	}
