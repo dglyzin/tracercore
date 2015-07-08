@@ -263,7 +263,8 @@ void Block::prepareStageData(int stage) {
 
 		int nStart = sendBorderInfo[ index + N_OFFSET ];
 		int nStop = nStart + sendBorderInfo[ index + N_LENGTH ];
-
+		cout<<"This is block "<<blockNumber<<"preparing data to send: "<< mStart<<" "<<mStop<<" "<<nStart<<" "<<nStop<<endl;
+		cout<< "side is "<<sendBorderInfo[index + SIDE]<<endl;
 		switch (sendBorderInfo[index + SIDE]) {
 			case LEFT:
 				prepareBorder(i, stage, mStart, mStop, nStart, nStop, 0, haloSize);

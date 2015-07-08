@@ -22,7 +22,7 @@ BlockCpu::BlockCpu(int _blockNumber, int _dimension, int _xCount, int _yCount, i
 				_xOffset, _yOffset, _zOffset,
 				_nodeNumber, _deviceNumber,
 				_haloSize, _cellSize) {
-	cout << "Creating block..\n";
+	cout << "Creating block "<<blockNumber<<"...\n";
 
 	createSolver(_solverIdx, _aTol, _rTol);
 
@@ -441,6 +441,7 @@ void BlockCpu::prepareBorder(int borderNumber, int stage, int zStart, int zStop,
 
 				for (int c = 0; c < cellSize; ++c) {
 					int cellShift = c;
+					printf("block %d is preparing border %d, x=%d, y=%d, z=%d\n", blockNumber, borderNumber, x,y,z);
 
 					blockBorder[borderNumber][index] = source[ (zShift + yShift + xShift)*cellSize + cellShift ];
 					index++;
