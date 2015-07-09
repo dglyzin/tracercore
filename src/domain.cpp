@@ -752,15 +752,15 @@ void Domain::loadStateFromFile(char* dataFile) {
 	currentTime = fileCurrentTime;
 
 	for (int i = 0; i < mBlockCount; ++i) {
+		int total = mBlocks[i]->getGridElementCount();
+		double* data = new double[total];
+		in.read((char*)data, SIZE_DOUBLE*total);
+
 		if (mBlocks[i]->isRealBlock()) {
-			int total = mBlocks[i]->getGridElementCount();
-			double* data = new double[total];
-
-			in.read((char*)data, SIZE_DOUBLE*total);
 			mBlocks[i]->loadData(data);
-
-			delete data;
 		}
+
+		delete data;
 	}
 
 	in.close();
@@ -769,16 +769,18 @@ void Domain::loadStateFromFile(char* dataFile) {
 void Domain::printStatisticsInfo(char* inputFile, char* outputFile, double calcTime, char* statisticsFile) {
 	//cout << endl << "PRINT STATISTIC INFO DOESN'T WORK" << endl;
 
-	int count = 0;
-	for (int i = 0; i < mBlockCount; ++i) {
-		count += mBlocks[i]->getGridElementCount();
+	if( mWorldRank == 0 ) {
+		int count = 0;
+		for (int i = 0; i < mBlockCount; ++i) {
+			count += mBlocks[i]->getGridElementCount();
+		}
+
+
+
+		printf("\n\nSteps accepted: %d\nSteps rejected: %d\n", mAcceptedStepCount, mRejectedStepCount);
+		int stepCount = mRejectedStepCount + mAcceptedStepCount;
+		printf("Time: %.2f\nElement count: %d\nPerformance: %.2f\n\n", calcTime, count, (double)(count) * stepCount / calcTime);
 	}
-
-
-
-    printf("\n\nSteps accepted: %d\nSteps rejected: %d\n", mAcceptedStepCount, mRejectedStepCount);
-    int stepCount = mRejectedStepCount + mAcceptedStepCount;
-    printf("Time: %.2f\nElement count: %d\nPerformance: %.2f\n\n", calcTime, count, (double)(count) * stepCount / calcTime);
 
 	return;
 	/*if ( flags & STATISTICS ) {

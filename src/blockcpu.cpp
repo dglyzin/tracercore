@@ -313,8 +313,8 @@ void BlockCpu::printSendBorderInfo() {
 		cout << endl;
 	}*/
 	printSendBorderInfoArray(sendBorderInfo);
-	/*for (int i = 0; i < countSendSegmentBorder; ++i) {
-		int count = sendBorderInfo[i * INTERCONNECT_COMPONENT_COUNT + M_LENGTH] * sendBorderInfo[i * INTERCONNECT_COMPONENT_COUNT + N_LENGTH];
+	for (int i = 0; i < countSendSegmentBorder; ++i) {
+		int count = sendBorderInfo[i * INTERCONNECT_COMPONENT_COUNT + M_LENGTH] * sendBorderInfo[i * INTERCONNECT_COMPONENT_COUNT + N_LENGTH] * cellSize;
 
 		printf("\nsend border #%d\n", i);
 		for (int j = 0; j < count; ++j) {
@@ -322,7 +322,7 @@ void BlockCpu::printSendBorderInfo() {
 		}
 
 		printf("\n");
-	}*/
+	}
 }
 
 void BlockCpu::printReceiveBorderInfo() {
@@ -341,8 +341,8 @@ void BlockCpu::printReceiveBorderInfo() {
 		cout << endl;
 	}*/
 	printReceiveBorderInfoArray(receiveBorderInfo);
-	/*for (int i = 0; i < countReceiveSegmentBorder; ++i) {
-		int count = receiveBorderInfo[i * INTERCONNECT_COMPONENT_COUNT + M_LENGTH] * receiveBorderInfo[i * INTERCONNECT_COMPONENT_COUNT + N_LENGTH];
+	for (int i = 0; i < countReceiveSegmentBorder; ++i) {
+		int count = receiveBorderInfo[i * INTERCONNECT_COMPONENT_COUNT + M_LENGTH] * receiveBorderInfo[i * INTERCONNECT_COMPONENT_COUNT + N_LENGTH] * cellSize;
 
 		printf("\nrecv border #%d\n", i);
 		for (int j = 0; j < count; ++j) {
@@ -350,7 +350,7 @@ void BlockCpu::printReceiveBorderInfo() {
 		}
 
 		printf("\n");
-	}*/
+	}
 }
 
 void BlockCpu::printParameters() {
