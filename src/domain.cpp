@@ -779,7 +779,7 @@ void Domain::printStatisticsInfo(char* inputFile, char* outputFile, double calcT
 
 		printf("\n\nSteps accepted: %d\nSteps rejected: %d\n", mAcceptedStepCount, mRejectedStepCount);
 		int stepCount = mRejectedStepCount + mAcceptedStepCount;
-		printf("Time: %.2f\nElement count: %d\nPerformance: %.2f\n\n", calcTime, count, (double)(count) * stepCount / calcTime);
+		printf("Time: %.2f\nElement count: %d\nPerformance (10^6): %.2f\n\n", calcTime, count, (double)(count) * stepCount / calcTime / 1000000);
 	}
 
 	return;
