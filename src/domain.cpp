@@ -773,6 +773,8 @@ void Domain::printStatisticsInfo(char* inputFile, char* outputFile, double calcT
 		int count = 0;
 		for (int i = 0; i < mBlockCount; ++i) {
 			count += mBlocks[i]->getGridElementCount();
+
+			mBlocks[i]->printGeneralInformation();
 		}
 
 
