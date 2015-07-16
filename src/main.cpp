@@ -78,7 +78,7 @@ int main(int argc, char * argv[]) {
 	 */
 	//omp_set_num_threads(1);
 
-	//d->saveState(inputFile);
+	d->saveState(inputFile);
 
 	printf ("Running computations %d \n", world_rank);
 	time1 = MPI_Wtime();
