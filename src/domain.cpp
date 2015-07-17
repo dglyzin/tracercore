@@ -787,7 +787,7 @@ void Domain::printStatisticsInfo(char* inputFile, char* outputFile, double calcT
 		//out.open("/home/frolov2/Tracer_project/stat", ios::app);
 
 		FILE* out;
-		out = fopen("/home/frolov2/Tracer_project/statistic", "wb+");
+		out = fopen("/home/frolov2/Tracer_project/statistic", "ab");
 
 		double speed = (double)(count) * stepCount / calcTime / 1000000;
 		int side = (int)sqrt( ( (double)count ) / mCellSize );
