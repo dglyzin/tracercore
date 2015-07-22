@@ -124,14 +124,14 @@ void Domain::compute(char* inputFile) {
 	while ( currentTime < stopTime ){
 		nextStep();
 
-		/*if( saveInterval != 0 ) {
+		if( saveInterval != 0 ) {
 			counterSaveTime += timeStep;
 
 			if( counterSaveTime > saveInterval ) {
 				counterSaveTime = 0;
 				saveState(inputFile);
 			}
-		}*/
+		}
 	}
 	cout <<"Computation finished!" << mWorldRank << endl;
 }
