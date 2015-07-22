@@ -41,3 +41,4 @@ cuda_func.o:
 clean:
 	rm -rf $(SRC)/*.o
 	rm -rf $(SRCSOL)/*.o
+	rm $(BIN)/$(EXECUTABLE)
