@@ -124,14 +124,14 @@ void Domain::compute(char* inputFile) {
 	while ( currentTime < stopTime ){
 		nextStep();
 
-		if( saveInterval != 0 ) {
+		/*if( saveInterval != 0 ) {
 			counterSaveTime += timeStep;
 
 			if( counterSaveTime > saveInterval ) {
 				counterSaveTime = 0;
 				saveState(inputFile);
 			}
-		}
+		}*/
 	}
 	cout <<"Computation finished!" << mWorldRank << endl;
 }
@@ -693,11 +693,7 @@ void Domain::saveState(char* inputFile) {
 	strncpy(saveFile, inputFile, length);
 	saveFile[ length ] = 0;
 
-	//printf("\nbefor save %f %f %f %s %s\n", counterSaveTime, saveInterval, currentTime, saveFile, inputFile);
-
 	sprintf(saveFile, "%s%s%f%s", saveFile, "/project-", currentTime, ".bin");
-
-	//printf("\nbefor save %f %f %f %s %s\n", counterSaveTime, saveInterval, currentTime, saveFile, inputFile);
 
 	saveStateToFile( saveFile );
 }
@@ -787,14 +783,14 @@ void Domain::printStatisticsInfo(char* inputFile, char* outputFile, double calcT
 		//out.open("/home/frolov2/Tracer_project/stat", ios::app);
 
 		FILE* out;
-		out = fopen("/home/frolov2/Tracer_project/statistic", "ab");
+		out = fopen("/home/frolov2/Tracer_project/statistic", "a");
 
 		double speed = (double)(count) * stepCount / calcTime / 1000000;
 		int side = (int)sqrt( ( (double)count ) / mCellSize );
 
 		//out << count << "\t" << mCellSize << "\t" << stepCount << "\t" << calcTime << "\t" << speed << endl;
 
-		fprintf(out, "%-12d %-8d   %-2d    %-12d    %-10.2f    %-10.2f", count, side, mCellSize, stepCount, calcTime, speed);
+		fprintf(out, "%-12d %-8d %-2d    %-2d    %-12d    %-10.2f    %-10.2f %s\n", count, side, mWorldSize, mCellSize, stepCount, calcTime, speed, inputFile);
 
 		fclose(out);
 	}
