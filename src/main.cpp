@@ -71,7 +71,7 @@ int main(int argc, char * argv[]) {
 	Domain* d = new Domain(world_rank, world_size, inputFile);
 	d->checkOptions(flags, stopTime, saveFile);
 
-	//d->printBlocksToConsole();
+	d->printBlocksToConsole();
 
 	/*
 	 * Вычисления.
@@ -90,9 +90,9 @@ int main(int argc, char * argv[]) {
 	if(d->isNan())
 		printf("\n\n\n\nNAN!!!\n\n\n\n");
 
-	//d->saveState(inputFile);
+	d->saveState(inputFile);
 
-	//d->printBlocksToConsole();
+	d->printBlocksToConsole();
 
 	/*
 	 * Вывод информации о времени работы осуществляет только поток с номером 0.

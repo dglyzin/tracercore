@@ -9,6 +9,8 @@
 #include "solvers/solver.h"
 #include <cassert>
 
+#include <mpi.h>
+
 using namespace std;
 
 int lastChar(char* source, char ch) {
@@ -121,8 +123,29 @@ void Domain::compute(char* inputFile) {
 		for (int i = 0; i < mStepCount; i++)
 			nextStep();
 	else*/
+
+	//int stepCount = (int)(stopTime / timeStep);
+	//int pitCount = (int)((double)(stepCount) / 100.0);
+	//int curStepCount = 0;
+
+	//double t1 = MPI_Wtime();
+	//double t2 = MPI_Wtime();
+
+	//FILE* out;
+	//out = fopen("/home/frolov2/Tracer_project/speed", "wt");
+
 	while ( currentTime < stopTime ){
 		nextStep();
+		/*curStepCount++;
+
+		if( curStepCount > pitCount ) {
+			curStepCount = 0;
+
+			t2 = MPI_Wtime();
+			printf("\ncurrent time: %f, speed time: %f, stepCount: %d, pitStep: %d\n", currentTime, t2 - t1, stepCount, pitCount);
+			fprintf(out, "%f %f\n", currentTime, t2 - t1);
+			t1 = MPI_Wtime();
+		}*/
 
 		if( saveInterval != 0 ) {
 			counterSaveTime += timeStep;
@@ -134,6 +157,8 @@ void Domain::compute(char* inputFile) {
 		}
 	}
 	cout <<"Computation finished!" << mWorldRank << endl;
+
+	//fclose(out);
 }
 
 void Domain::initSolvers() {
@@ -782,17 +807,15 @@ void Domain::printStatisticsInfo(char* inputFile, char* outputFile, double calcT
 		//ofstream out;
 		//out.open("/home/frolov2/Tracer_project/stat", ios::app);
 
-		FILE* out;
+		/*FILE* out;
 		out = fopen("/home/frolov2/Tracer_project/statistic", "a");
 
 		double speed = (double)(count) * stepCount / calcTime / 1000000;
 		int side = (int)sqrt( ( (double)count ) / mCellSize );
 
-		//out << count << "\t" << mCellSize << "\t" << stepCount << "\t" << calcTime << "\t" << speed << endl;
-
 		fprintf(out, "%-12d %-8d %-2d    %-2d    %-12d    %-10.2f    %-10.2f %s\n", count, side, mWorldSize, mCellSize, stepCount, calcTime, speed, inputFile);
 
-		fclose(out);
+		fclose(out);*/
 	}
 
 	return;
