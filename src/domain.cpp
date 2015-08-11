@@ -136,6 +136,7 @@ void Domain::compute(char* inputFile) {
 
 	while ( currentTime < stopTime ){
 		nextStep();
+		//printBlocksToConsole();
 		/*curStepCount++;
 
 		if( curStepCount > pitCount ) {

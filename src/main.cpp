@@ -87,9 +87,6 @@ int main(int argc, char * argv[]) {
 	time2 = MPI_Wtime();
 	printf("\n\nAFTER COMPUTE\n");
 
-	if(d->isNan())
-		printf("\n\n\n\nNAN!!!\n\n\n\n");
-
 	d->saveState(inputFile);
 
 	d->printBlocksToConsole();
@@ -99,6 +96,9 @@ int main(int argc, char * argv[]) {
 	 * Время работы -  разница между двумя отсечками, котрые были сделаны ранее.
 	 */
 	d->printStatisticsInfo(inputFile, NULL, time2 - time1, NULL);
+
+	if(d->isNan())
+		printf("\n\n\n\nNAN!!!\n\n\n\n");
 
 	delete d;
 

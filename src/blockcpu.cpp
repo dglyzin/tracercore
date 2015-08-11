@@ -441,7 +441,7 @@ void BlockCpu::prepareBorder(int borderNumber, int stage, int zStart, int zStop,
 
 				for (int c = 0; c < cellSize; ++c) {
 					int cellShift = c;
-					//printf("block %d is preparing border %d, x=%d, y=%d, z=%d\n", blockNumber, borderNumber, x,y,z);
+					//printf("block %d is preparing border %d, x=%d, y=%d, z=%d, index=%d\n", blockNumber, borderNumber, x,y,z, index);
 
 					blockBorder[borderNumber][index] = source[ (zShift + yShift + xShift)*cellSize + cellShift ];
 					index++;
