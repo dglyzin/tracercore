@@ -71,14 +71,14 @@ int main(int argc, char * argv[]) {
 	Domain* d = new Domain(world_rank, world_size, inputFile);
 	d->checkOptions(flags, stopTime, saveFile);
 
-	d->printBlocksToConsole();
+	//d->printBlocksToConsole();
 
 	/*
 	 * Вычисления.
 	 */
 	//omp_set_num_threads(1);
 
-	//d->saveState(inputFile);
+	d->saveState(inputFile);
 
 	printf("\n\nBEFORE COMPUTE\n");
 	printf ("Running computations %d \n", world_rank);
@@ -89,7 +89,7 @@ int main(int argc, char * argv[]) {
 
 	d->saveState(inputFile);
 
-	d->printBlocksToConsole();
+	//d->printBlocksToConsole();
 
 	/*
 	 * Вывод информации о времени работы осуществляет только поток с номером 0.
