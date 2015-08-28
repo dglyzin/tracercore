@@ -8,102 +8,60 @@
 #include "blockcpu.h"
 #include <cuda.h>
 #include <cuda_runtime_api.h>
+#include "userfuncs.h"
 
 using namespace std;
 
-BlockCpu::BlockCpu(int _length, int _width, int _lengthMove, int _widthMove, int _nodeNumber, int _deviceNumber) : Block(  _length, _width, _lengthMove, _widthMove, _nodeNumber, _deviceNumber  ) {
+BlockCpu::BlockCpu(int _blockNumber, int _dimension, int _xCount, int _yCount, int _zCount,
+		int _xOffset, int _yOffset, int _zOffset,
+		int _nodeNumber, int _deviceNumber,
+		int _haloSize, int _cellSize,
+		unsigned short int* _initFuncNumber, unsigned short int* _compFuncNumber,
+		int _solverIdx, double _aTol, double _rTol) :
+				Block( _blockNumber, _dimension, _xCount, _yCount, _zCount,
+				_xOffset, _yOffset, _zOffset,
+				_nodeNumber, _deviceNumber,
+				_haloSize, _cellSize) {
+	cout << "Creating block "<<blockNumber<<"...\n";
 
-	matrix = new double [length * width];
-	newMatrix = new double [length * width];
+	createSolver(_solverIdx, _aTol, _rTol);
 
-	for (int i = 0; i < length; ++i)
-		for (int j = 0; j < width; ++j)
-			matrix[i * width + j] = newMatrix[i * width + j] = 0;
+	int count = getGridNodeCount();
 
-	/*
-	 * Типы границ блока. Выделение памяти.
-	 * По умолчанию границы задаются функциями, то есть нет границ между блоками.
-	 */
-	sendBorderType = new int* [BORDER_COUNT];
+	mCompFuncNumber = new unsigned short int [count];
 
-	sendBorderType[TOP] = new int[width];
-	for(int i = 0; i < width; i++)
-		sendBorderType[TOP][i] = BY_FUNCTION;
+	for (int i = 0; i < count; ++i) {
+		mCompFuncNumber[i] = _compFuncNumber[i];
+	}
 
-	sendBorderType[LEFT] = new int[length];
-	for (int i = 0; i < length; ++i)
-		sendBorderType[LEFT][i] = BY_FUNCTION;
-
-	sendBorderType[BOTTOM] = new int[width];
-	for(int i = 0; i < width; i++)
-		sendBorderType[BOTTOM][i] = BY_FUNCTION;
-
-	sendBorderType[RIGHT] = new int[length];
-	for (int i = 0; i < length; ++i)
-		sendBorderType[RIGHT][i] = BY_FUNCTION;
+	getFuncArray(&mUserFuncs, blockNumber);
+	getInitFuncArray(&mUserInitFuncs);
+	initDefaultParams(&mParams, &mParamsCount);
 
 
-	receiveBorderType = new int* [BORDER_COUNT];
+	cout << "Default params ("<<mParamsCount<<"): ";
+	for (int idx=0;idx<mParamsCount; idx++)
+		cout <<mParams[idx] << " ";
+	cout << endl;
 
-	receiveBorderType[TOP] = new int[width];
-	for(int i = 0; i < width; i++)
-		receiveBorderType[TOP][i] = BY_FUNCTION;
+	cout << "functions loaded\n";
 
-	receiveBorderType[LEFT] = new int[length];
-	for (int i = 0; i < length; ++i)
-		receiveBorderType[LEFT][i] = BY_FUNCTION;
+	//printf("Func array points to %d \n", (long unsigned int) mUserFuncs );
 
-	receiveBorderType[BOTTOM] = new int[width];
-	for(int i = 0; i < width; i++)
-		receiveBorderType[BOTTOM][i] = BY_FUNCTION;
+	//mUserFuncs[0](newMatrix, matrix, 0.0, 2, 2, 0, mParams, NULL);
+	//printf("Func array points to %d \n", (long unsigned int) mUserInitFuncs );
+	double* matrix = mSolver->getStatePtr();
+	mUserInitFuncs[blockNumber](matrix,_initFuncNumber);
+	cout << "Initial values filled \n";
 
-	receiveBorderType[RIGHT] = new int[length];
-	for (int i = 0; i < length; ++i)
-		receiveBorderType[RIGHT][i] = BY_FUNCTION;
-	
-	
-	//result = new double [length * width];
 }
 
 BlockCpu::~BlockCpu() {
-	if(matrix != NULL)
-		delete matrix;
-	
-	if(newMatrix != NULL)
-		delete newMatrix;
-	
-	if(sendBorderType != NULL) {
-		if(sendBorderType[TOP] != NULL)
-			delete sendBorderType[TOP];
-		
-		if(sendBorderType[LEFT] != NULL)
-			delete sendBorderType[LEFT];
-		
-		if(sendBorderType[BOTTOM] != NULL)
-			delete sendBorderType[BOTTOM];
-		
-		if(sendBorderType[RIGHT] != NULL)
-			delete sendBorderType[RIGHT];
-		
-		delete sendBorderType;		
-	}
-	
-	if(receiveBorderType != NULL) {
-		if(receiveBorderType[TOP] != NULL)
-			delete receiveBorderType[TOP];
-		
-		if(receiveBorderType[LEFT] != NULL)
-			delete receiveBorderType[LEFT];
-		
-		if(receiveBorderType[BOTTOM] != NULL)
-			delete receiveBorderType[BOTTOM];
-		
-		if(receiveBorderType[RIGHT] != NULL)
-			delete receiveBorderType[RIGHT];
-		
-		delete receiveBorderType;		
-	}
-	
+	cout<<"Deleting block"<<endl;
+	releaseParams(mParams);
+	releaseFuncArray(mUserFuncs);
+	releaseInitFuncArray(mUserInitFuncs);
+	delete mSolver;
 	
 	if(blockBorder != NULL) {
 		for(int i = 0; i < countSendSegmentBorder; i++ )
@@ -113,9 +71,6 @@ BlockCpu::~BlockCpu() {
 		delete blockBorderMemoryAllocType;
 	}
 	
-	if(blockBorderMove != NULL)
-		delete blockBorderMove;
-	
 	
 	if(externalBorder != NULL) {
 		for(int i = 0; i < countReceiveSegmentBorder; i++ )
@@ -124,515 +79,427 @@ BlockCpu::~BlockCpu() {
 		delete externalBorder;
 		delete externalBorderMemoryAllocType;
 	}
-	
-	if(externalBorderMove != NULL)
-		delete externalBorderMove;
 }
 
-void BlockCpu::computeOneStep(double dX2, double dY2, double dT) {
-	/*
-	 * Теплопроводность
-	 */
-
-	/*
-	 * Параллельное вычисление на максимально возможном количестве потоков.
-	 * Максимально возможное количесвто потоков получается из-за самой библиотеки omp
-	 * Если явно не указывать, какое именно количесвто нитей необходимо создать, то будет создано макстимально возможное на данный момент.
-	 */
+void BlockCpu::computeStageCenter_1d(int stage, double time) {
 # pragma omp parallel
 	{
-		/*
-		 * Для решения задачи теплопроводности нам необходимо знать несколько значений.
-		 * Среди них
-		 * значение в ячейке выше
-		 * значение в ячейке слева
-		 * значение в ячейке снизу
-		 * значение в ячейке справа
-		 * текущее значение в данной ячейке
-		 *
-		 * остально данные передаются в функцию в качестве параметров.
-		 */
-	double top, left, bottom, right, cur;
-
+		double* result = mSolver->getStageResult(stage);
+		double* source = mSolver->getStageSource(stage);
 # pragma omp for
-	/*
-	 * Проходим по всем ячейкам матрицы.
-	 * Для каждой из них будет выполнен перерасчет.
-	 */
-	for (int i = 0; i < length; ++i)
-		for (int j = 0; j < width; ++j) {
-			/*
-			 * Если находимся на верхней границе блока.
-			 * В таком случае необходимо проверить тип границы и в зависимости от ответа принать решение.
-			 *
-			 * Стоит отличать границу реальную от границы с блоком.
-			 * Если граница реальна, то точка на границе может не иметь значения выше / значения ниже и так далее, так как это реально границе ВСЕЙ ОБЛАСТИ.
-			 * Если эта граница с другим блоком, то значение выше / ниже сущесвтуют, так как это не граница области.
-			 * Значит их нужно получить и использовать при ирасчете нового значения.
-			 */
-			
-			if( i == 0 )
-				/*
-				 * На данный момент есть только 2 типа границы. Функция и другой блок.
-				 * Поэтому использование else корректно.
-				 *
-				 * Если граница задана функцией, то это значит,
-				 * что наданном этапе в массиве externalBorder уже должны лежать свежие данные от функции.
-				 * В таком случае просто копируем данные из массива в матрицу. Для этой ячейки расчет окончен.
-				 *
-				 * Если это граница с другим блоком, то в top (значение в ячейке выше данной) записываем информацию с гранцы.
-				 * Но продолжаем расчет.
-				 */
-				if( receiveBorderType[TOP][j] == BY_FUNCTION ) {
-					newMatrix[i * width + j] = 100;
-					continue;
-				}
-				else
-					top = externalBorder[	receiveBorderType[TOP][j]	][j - externalBorderMove[	receiveBorderType[TOP][j]	]];
-			else
-				/*
-				 * Если находимся не на верхней границе блока, то есть возможность просто получить значение в ячейке выше данной.
-				 */
-				top = matrix[(i - 1) * width + j];
-
-
-			/*
-			 * Аналогично предыдущему случаю.
-			 * Только здесь проверка на левую границу блока.
-			 *
-			 * Рассуждения полностью совпадают со случаем верхней границы.
-			 */
-			if( j == 0 )
-				if( receiveBorderType[LEFT][i] == BY_FUNCTION ) {
-					newMatrix[i * width + j] = 10;
-					continue;
-				}
-				else
-					left = externalBorder[	receiveBorderType[LEFT][i]	][i - externalBorderMove[	receiveBorderType[LEFT][i]		]];
-			else
-				left = matrix[i * width + (j - 1)];
-
-
-			/*
-			 * Аналогично первому случаю.
-			 * Граница нижняя.
-			 */
-			if( i == length - 1 )
-				if( receiveBorderType[BOTTOM][j] == BY_FUNCTION ) {
-					newMatrix[i * width + j] = 10;
-					continue;
-				}
-				else
-					bottom = externalBorder[	receiveBorderType[BOTTOM][j]	][j - externalBorderMove[	receiveBorderType[BOTTOM][j]	]];
-			else
-				bottom = matrix[(i + 1) * width + j];
-
-
-			/*
-			 * Аналогично первому случаю.
-			 * Граница правая.
-			 */
-			if( j == width - 1 )
-				if( receiveBorderType[RIGHT][i] == BY_FUNCTION ) {
-					newMatrix[i * width + j] = 10;
-					continue;
-				}
-				else
-					right = externalBorder[	receiveBorderType[RIGHT][i]	][i - externalBorderMove[	receiveBorderType[RIGHT][i]	]];
-			else
-				right = matrix[i * width + (j + 1)];
-
-
-			/*
-			 * Текущее значение всегда (если вообще дошли до этого места) можно просто получить из матрицы.
-			 */
-			cur = matrix[i * width + j];
-
-			/*
-			 * Формула расчета для конкретной точки.
-			 */
-			newMatrix[i * width + j] = cur + dT * ( ( left - 2*cur + right )/dX2 + ( top - 2*cur + bottom )/dY2  );
+		for (int x = haloSize; x < xCount - haloSize; ++x) {
+			//cout << "Calc x_" << x << endl;
+			mUserFuncs[ mCompFuncNumber[x] ](result, source, time, x, 0, 0, mParams, externalBorder);
 		}
 	}
-/*
- * Указатель на старую матрицу запоминается
- * Новая матрица становится текущей
- * Память, занимаемая старой матрицей освобождается.
- */
-	double* tmp = matrix;
-
-	matrix = newMatrix;
-
-	newMatrix = tmp;
 }
 
-void BlockCpu::computeOneStepBorder(double dX2, double dY2, double dT) {
-	/*
-	 * Теплопроводность
-	 */
-
-	/*
-	 * Параллельное вычисление на максимально возможном количестве потоков.
-	 * Максимально возможное количесвто потоков получается из-за самой библиотеки omp
-	 * Если явно не указывать, какое именно количесвто нитей необходимо создать, то будет создано макстимально возможное на данный момент.
-	 */
+void BlockCpu::computeStageCenter_2d(int stage, double time) {
 # pragma omp parallel
 	{
-		/*
-		 * Для решения задачи теплопроводности нам необходимо знать несколько значений.
-		 * Среди них
-		 * значение в ячейке выше
-		 * значение в ячейке слева
-		 * значение в ячейке снизу
-		 * значение в ячейке справа
-		 * текущее значение в данной ячейке
-		 *
-		 * остально данные передаются в функцию в качестве параметров.
-		 */
-	double top, left, bottom, right, cur;
-
+		double* result = mSolver->getStageResult(stage);
+		double* source = mSolver->getStageSource(stage);
 # pragma omp for
-	/*
-	 * Проходим по всем ячейкам матрицы.
-	 * Для каждой из них будет выполнен перерасчет.
-	 */
-	for (int i = 0; i < length; ++i)
-		for (int j = 0; j < width; ++j) {
-			if( i != 0 && i != length - 1 && j != 0 && j != width - 1 )
-				continue;
-			
-			if( i == 0 )
-				if( receiveBorderType[TOP][j] == BY_FUNCTION ) {
-					newMatrix[i * width + j] = 100;
-					continue;
-				}
-				else
-					top = externalBorder[	receiveBorderType[TOP][j]	][j - externalBorderMove[	receiveBorderType[TOP][j]	]];
-			else
-				top = matrix[(i - 1) * width + j];
-
-
-			if( j == 0 )
-				if( receiveBorderType[LEFT][i] == BY_FUNCTION ) {
-					newMatrix[i * width + j] = 10;
-					continue;
-				}
-				else
-					left = externalBorder[	receiveBorderType[LEFT][i]	][i - externalBorderMove[	receiveBorderType[LEFT][i]		]];
-			else
-				left = matrix[i * width + (j - 1)];
-
-
-			if( i == length - 1 )
-				if( receiveBorderType[BOTTOM][j] == BY_FUNCTION ) {
-					newMatrix[i * width + j] = 10;
-					continue;
-				}
-				else
-					bottom = externalBorder[	receiveBorderType[BOTTOM][j]	][j - externalBorderMove[	receiveBorderType[BOTTOM][j]	]];
-			else
-				bottom = matrix[(i + 1) * width + j];
-
-
-			if( j == width - 1 )
-				if( receiveBorderType[RIGHT][i] == BY_FUNCTION ) {
-					newMatrix[i * width + j] = 10;
-					continue;
-				}
-				else
-					right = externalBorder[	receiveBorderType[RIGHT][i]	][i - externalBorderMove[	receiveBorderType[RIGHT][i]	]];
-			else
-				right = matrix[i * width + (j + 1)];
-
-
-			cur = matrix[i * width + j];
-			newMatrix[i * width + j] = cur + dT * ( ( left - 2*cur + right )/dX2 + ( top - 2*cur + bottom )/dY2  );
+		for (int y = haloSize; y < yCount - haloSize; ++y) {
+			int yShift = xCount * y;
+			for (int x = haloSize; x < xCount - haloSize; ++x) {
+				int xShift = x;
+				//cout << "Calc y_" << y << " x_" << x << endl;
+				mUserFuncs[ mCompFuncNumber[ yShift + xShift ] ](result, source, time, x, y, 0, mParams, externalBorder);
+			}
 		}
 	}
 }
 
-void BlockCpu::computeOneStepCenter(double dX2, double dY2, double dT) {
-	/*
-	 * Теплопроводность
-	 */
-
-	/*
-	 * Параллельное вычисление на максимально возможном количестве потоков.
-	 * Максимально возможное количесвто потоков получается из-за самой библиотеки omp
-	 * Если явно не указывать, какое именно количесвто нитей необходимо создать, то будет создано макстимально возможное на данный момент.
-	 */
+void BlockCpu::computeStageCenter_3d(int stage, double time) {
 # pragma omp parallel
 	{
-		/*
-		 * Для решения задачи теплопроводности нам необходимо знать несколько значений.
-		 * Среди них
-		 * значение в ячейке выше
-		 * значение в ячейке слева
-		 * значение в ячейке снизу
-		 * значение в ячейке справа
-		 * текущее значение в данной ячейке
-		 *
-		 * остально данные передаются в функцию в качестве параметров.
-		 */
-	double top, left, bottom, right, cur;
+		double* result = mSolver->getStageResult(stage);
+		double* source = mSolver->getStageSource(stage);
+# pragma omp for
+		for (int z = haloSize; z < zCount - haloSize; ++z) {
+			int zShift = yCount * xCount * z;
+			for (int y = haloSize; y < yCount - haloSize; ++y) {
+				int yShift = xCount * y;
+				for (int x = haloSize; x < xCount - haloSize; ++x) {
+					int xShift = x;
+					//cout << "Calc z_" << z << " y_" << y << " x_" << x << endl;
+					mUserFuncs[ mCompFuncNumber[ zShift + yShift + xShift ] ](result, source, time, x, y, z, mParams, externalBorder);
+				}
+			}
+		}
+	}
+}
+
+void BlockCpu::computeStageBorder_1d(int stage, double time) {
+	/*char c;
+	cout << endl << endl << "before error?" << blockNumber << endl;
+	scanf("%c", &c);*/
+# pragma omp parallel
+	{
+		double* result = mSolver->getStageResult(stage);
+		double* source = mSolver->getStageSource(stage);
+# pragma omp for
+		for (int x = 0; x < haloSize; ++x) {
+			//cout << "Border Calc x_" << x << endl;
+			mUserFuncs[ mCompFuncNumber[x] ](result, source, time, x, 0, 0, mParams, externalBorder);
+		}
 
 # pragma omp for
-	/*
-	 * Проходим по всем ячейкам матрицы.
-	 * Для каждой из них будет выполнен перерасчет.
-	 */
-	for (int i = 1; i < length - 1; ++i)
-		for (int j = 1; j < width - 1; ++j) {
-			top = matrix[(i - 1) * width + j];
-			left = matrix[i * width + (j - 1)];
-			bottom = matrix[(i + 1) * width + j];
-			right = matrix[i * width + (j + 1)];
+		for (int x = xCount - haloSize; x < xCount; ++x) {
+			//cout << "Border Calc x_" << x << endl;
+			mUserFuncs[ mCompFuncNumber[x] ](result, source, time, x, 0, 0, mParams, externalBorder);
+		}
+	}
 
-			cur = matrix[i * width + j];
+	/*scanf("%c", &c);*/
+}
 
-			newMatrix[i * width + j] = cur + dT * ( ( left - 2*cur + right )/dX2 + ( top - 2*cur + bottom )/dY2  );
+void BlockCpu::computeStageBorder_2d(int stage, double time) {
+# pragma omp parallel
+	{
+		double* result = mSolver->getStageResult(stage);
+		double* source = mSolver->getStageSource(stage);
+# pragma omp for
+		for (int x = 0; x < xCount; ++x) {
+			int xShift = x;
+			for (int y = 0; y < haloSize; ++y) {
+				int yShift = xCount * y;
+				//cout << "Calc y_" << y << " x_" << x << endl;
+				//printf("Calc y = %d, x = %d\n", y, x);
+				mUserFuncs[ mCompFuncNumber[ yShift + xShift ] ](result, source, time, x, y, 0, mParams, externalBorder);
+			}
+		}
+
+# pragma omp for
+		for (int x = 0; x < xCount; ++x) {
+			int xShift = x;
+			for (int y = yCount - haloSize; y < yCount; ++y) {
+				int yShift = xCount * y;
+				//cout << "Calc y_" << y << " x_" << x << endl;
+				//printf("Calc y = %d, x = %d\n", y, x);
+				mUserFuncs[ mCompFuncNumber[ yShift + xShift ] ](result, source, time, x, y, 0, mParams, externalBorder);
+			}
+		}
+
+# pragma omp for
+		for (int y = haloSize; y < yCount - haloSize; ++y) {
+			int yShift = xCount * y;
+			for (int x = 0; x < haloSize; ++x) {
+				int xShift = x;
+				//cout << "Calc y_" << y << " x_" << x << endl;
+				//printf("Calc y = %d, x = %d\n", y, x);
+				mUserFuncs[ mCompFuncNumber[ yShift + xShift ] ](result, source, time, x, y, 0, mParams, externalBorder);
+			}
+		}
+
+# pragma omp for
+		for (int y = haloSize; y < yCount - haloSize; ++y) {
+			int yShift = xCount * y;
+			for (int x = xCount - haloSize; x < xCount; ++x) {
+				int xShift = x;
+				//cout << "Calc y_" << y << " x_" << x << endl;
+				//printf("Calc y = %d, x = %d\n", y, x);
+				mUserFuncs[ mCompFuncNumber[ yShift + xShift ] ](result, source, time, x, y, 0, mParams, externalBorder);
+			}
 		}
 	}
 }
 
-void BlockCpu::prepareData() {
-	/*
-	 * Копирование данных из матрицы в массивы.
-	 * В дальнейшем эти массивы будет пеесылаться другим блокам.
-	 */
-	for (int i = 0; i < width; ++i)
-		if( sendBorderType[TOP][i] != BY_FUNCTION )
-			blockBorder[	sendBorderType[TOP][i]	][i - blockBorderMove[	sendBorderType[TOP][i]	]] = matrix[0 * width + i];
+void BlockCpu::computeStageBorder_3d(int stage, double time) {
+# pragma omp parallel
+	{
+		double* result = mSolver->getStageResult(stage);
+		double* source = mSolver->getStageSource(stage);
 
-	for (int i = 0; i < length; ++i)
-		if( sendBorderType[LEFT][i] != BY_FUNCTION )
-			blockBorder[	sendBorderType[LEFT][i]	][i - blockBorderMove[	sendBorderType[LEFT][i]	]] = matrix[i * width + 0];
-
-	for (int i = 0; i < width; ++i)
-		if( sendBorderType[BOTTOM][i] != BY_FUNCTION )
-			blockBorder[	sendBorderType[BOTTOM][i]	][i - blockBorderMove[	sendBorderType[BOTTOM][i]	]] = matrix[(length - 1) * width + i];
-
-	for (int i = 0; i < length; ++i)
-		if( sendBorderType[RIGHT][i] != BY_FUNCTION )
-			blockBorder[	sendBorderType[RIGHT][i]	][i - blockBorderMove[	sendBorderType[RIGHT][i]	]] = matrix[i * width + (width - 1)];
-}
-
-double* BlockCpu::getCurrentState() {
-	double* result = new double [length * width];
-
-	for(int i = 0; i < length * width; i++)
-		result[i] = matrix[i];
-
-	return result;
-}
-
-void BlockCpu::print() {
-	cout << "########################################################################################################################################################################################################" << endl;
-	
-	cout << endl;
-	cout << "BlockCpu from node #" << nodeNumber << endl;
-	cout << "Length:      " << length << endl;
-	cout << "Width :      " << width << endl;
-	cout << endl;
-	cout << "Length move: " << lengthMove << endl;
-	cout << "Width move:  " << widthMove << endl;
-	
-	cout << endl;
-	cout << "Block matrix:" << endl;
-	cout.setf(ios::fixed);
-	for(int i = 0; i < length; i++) {
-		for( int j = 0; j < width; j++ ) {
-			cout.width(7);
-			cout.precision(1);
-			cout << matrix[i * width + j];
+		for (int z = 0; z < haloSize; ++z) {
+			int zShift = yCount * xCount * z;
+	# pragma omp for
+			for (int y = 0; y < yCount; ++y) {
+				int yShift = xCount * y;
+				for (int x = 0; x < xCount; ++x) {
+					int xShift = x;
+					//cout << "Border Calc z_" << z << " y_" << y << " x_" << x << endl;
+					mUserFuncs[ mCompFuncNumber[ zShift + yShift + xShift ] ](result, source, time, x, y, z, mParams, externalBorder);
+				}
+			}
 		}
-		cout << endl;
+
+		for (int z = zCount - haloSize; z < zCount; ++z) {
+			int zShift = yCount * xCount * z;
+	# pragma omp for
+			for (int y = 0; y < yCount; ++y) {
+				int yShift = xCount * y;
+				for (int x = 0; x < xCount; ++x) {
+					int xShift = x;
+					//cout << "Border Calc z_" << z << " y_" << y << " x_" << x << endl;
+					mUserFuncs[ mCompFuncNumber[ zShift + yShift + xShift ] ](result, source, time, x, y, z, mParams, externalBorder);
+				}
+			}
+		}
+
+# pragma omp for
+		for (int z = haloSize; z < zCount - haloSize; ++z) {
+			int zShift = yCount * xCount * z;
+			for (int y = 0; y < haloSize; ++y) {
+				int yShift = xCount * y;
+				for (int x = 0; x < xCount; ++x) {
+					int xShift = x;
+					//cout << "Border Calc z_" << z << " y_" << y << " x_" << x << endl;
+					mUserFuncs[ mCompFuncNumber[ zShift + yShift + xShift ] ](result, source, time, x, y, z, mParams, externalBorder);
+				}
+			}
+		}
+
+# pragma omp for
+		for (int z = haloSize; z < zCount - haloSize; ++z) {
+			int zShift = yCount * xCount * z;
+			for (int y = yCount - haloSize; y < yCount; ++y) {
+				int yShift = xCount * y;
+				for (int x = 0; x < xCount; ++x) {
+					int xShift = x;
+					//cout << "Border Calc z_" << z << " y_" << y << " x_" << x << endl;
+					mUserFuncs[ mCompFuncNumber[ zShift + yShift + xShift ] ](result, source, time, x, y, z, mParams, externalBorder);
+				}
+			}
+		}
+
+# pragma omp for
+		for (int z = haloSize; z < zCount - haloSize; ++z) {
+			int zShift = yCount * xCount * z;
+			for (int y = haloSize; y < yCount - haloSize; ++y) {
+				int yShift = xCount * y;
+				for (int x = 0; x < haloSize; ++x) {
+					int xShift = x;
+					//cout << "Border Calc z_" << z << " y_" << y << " x_" << x << endl;
+					mUserFuncs[ mCompFuncNumber[ zShift + yShift + xShift ] ](result, source, time, x, y, z, mParams, externalBorder);
+				}
+			}
+		}
+
+# pragma omp for
+		for (int z = haloSize; z < zCount - haloSize; ++z) {
+			int zShift = yCount * xCount * z;
+			for (int y = haloSize; y < yCount - haloSize; ++y) {
+				int yShift = xCount * y;
+				for (int x = xCount - haloSize; x < xCount; ++x) {
+					int xShift = x;
+					//cout << "Border Calc z_" << z << " y_" << y << " x_" << x << endl;
+					mUserFuncs[ mCompFuncNumber[ zShift + yShift + xShift ] ](result, source, time, x, y, z, mParams, externalBorder);
+				}
+			}
+		}
 	}
-	
-	cout << endl;
-	cout << "TopSendBorderType" << endl;
-	for( int i =0; i < width; i++ ) {
-		cout.width(4);
-		cout << sendBorderType[TOP][i] << " ";
-	}
-	cout << endl;
+}
 
-	cout << endl;
-	cout << "LeftSendBorderType" << endl;
-	for( int i =0; i < length; i++ ) {
-		cout.width(4);
-		cout << sendBorderType[LEFT][i] << " ";
-	}
-	cout << endl;
 
-	cout << endl;
-	cout << "BottomSendBorderType" << endl;
-	for( int i =0; i < width; i++ ) {
-		cout.width(4);
-		cout << sendBorderType[BOTTOM][i] << " ";
-	}
-	cout << endl;
+void BlockCpu::getCurrentState(double* result) {
+	mSolver->copyState(result);
+}
 
-	cout << endl;
-	cout << "RightSendBorderType" << endl;
-	for( int i =0; i < length; i++ ) {
-		cout.width(4);
-		cout << sendBorderType[RIGHT][i] << " ";
-	}
-	cout << endl;
-
-	
-	cout << endl << endl;
-
-	
-	cout << endl;
-	cout << "TopRecieveBorderType" << endl;
-	for( int i =0; i < width; i++ ) {
-		cout.width(4);
-		cout << receiveBorderType[TOP][i] << " ";
-	}
-	cout << endl;
-
-	cout << endl;
-	cout << "LeftRecieveBorderType" << endl;
-	for( int i =0; i < length; i++ ) {
-		cout.width(4);
-		cout << receiveBorderType[LEFT][i] << " ";
-	}
-	cout << endl;
-
-	cout << endl;
-	cout << "BottomRecieveBorderType" << endl;
-	for( int i =0; i < width; i++ ) {
-		cout.width(4);
-		cout << receiveBorderType[BOTTOM][i] << " ";
-	}
-	cout << endl;
-
-	cout << endl;
-	cout << "RightRecieveBorderType" << endl;
-	for( int i =0; i < length; i++ ) {
-		cout.width(4);
-		cout << receiveBorderType[RIGHT][i] << " ";
-	}
-	cout << endl;
-
-	
-	cout << endl << endl;
-
-	
-	cout << endl;
+void BlockCpu::printSendBorderInfo() {
+	/*cout << endl;
+	cout << "Send border info (" << countSendSegmentBorder << ")" << endl;
 	for (int i = 0; i < countSendSegmentBorder; ++i) {
-		cout << "BlockBorder #" << i << endl;
+		int index = INTERCONNECT_COMPONENT_COUNT * i;
+		cout << "Block border #" << i << endl;
 		cout << "	Memory address: " << blockBorder[i] << endl;
-		cout << "	Border move:    " << blockBorderMove[i] << endl;
+		cout << "	Memory type:    " << getMemoryTypeName( blockBorderMemoryAllocType[i] ) << endl;
+		cout << "	Side:           " << getSideName( sendBorderInfo[index + SIDE] ) << endl;
+		cout << "	mOffset:        " << sendBorderInfo[index + M_OFFSET] << endl;
+		cout << "	nOffset:        " << sendBorderInfo[index + N_OFFSET] << endl;
+		cout << "	mLength:        " << sendBorderInfo[index + M_LENGTH] << endl;
+		cout << "	nLength:        " << sendBorderInfo[index + N_LENGTH] << endl;
 		cout << endl;
+	}*/
+	printSendBorderInfoArray(sendBorderInfo);
+	for (int i = 0; i < countSendSegmentBorder; ++i) {
+		int count = sendBorderInfo[i * INTERCONNECT_COMPONENT_COUNT + M_LENGTH] * sendBorderInfo[i * INTERCONNECT_COMPONENT_COUNT + N_LENGTH] * cellSize;
+
+		printf("\nsend border #%d\n", i);
+		for (int j = 0; j < count; ++j) {
+			printf("%.2f ", blockBorder[i][j]);
+		}
+
+		printf("\n");
 	}
-	
-	
-	cout << endl;
-	
-		
-	cout << endl;
+}
+
+void BlockCpu::printReceiveBorderInfo() {
+	/*cout << endl << endl;
+	cout << "Receive border info (" << countReceiveSegmentBorder << ")" << endl;
 	for (int i = 0; i < countReceiveSegmentBorder; ++i) {
-		cout << "ExternalBorder #" << i << endl;
+		int index = INTERCONNECT_COMPONENT_COUNT * i;
+		cout << "Block border #" << i << endl;
 		cout << "	Memory address: " << externalBorder[i] << endl;
-		cout << "	Border move:    " << externalBorderMove[i] << endl;
+		cout << "	Memory type:    " << getMemoryTypeName( externalBorderMemoryAllocType[i] ) << endl;
+		cout << "	Side:           " << getSideName( receiveBorderInfo[index + SIDE] ) << endl;
+		cout << "	mOffset:        " << receiveBorderInfo[index + M_OFFSET] << endl;
+		cout << "	nOffset:        " << receiveBorderInfo[index + N_OFFSET] << endl;
+		cout << "	mLength:        " << receiveBorderInfo[index + M_LENGTH] << endl;
+		cout << "	nLength:        " << receiveBorderInfo[index + N_LENGTH] << endl;
 		cout << endl;
-	}
+	}*/
+	printReceiveBorderInfoArray(receiveBorderInfo);
+	for (int i = 0; i < countReceiveSegmentBorder; ++i) {
+		int count = receiveBorderInfo[i * INTERCONNECT_COMPONENT_COUNT + M_LENGTH] * receiveBorderInfo[i * INTERCONNECT_COMPONENT_COUNT + N_LENGTH] * cellSize;
 
-	cout << "########################################################################################################################################################################################################" << endl;
+		printf("\nrecv border #%d\n", i);
+		for (int j = 0; j < count; ++j) {
+			printf("%.2f ", externalBorder[i][j]);
+		}
+
+		printf("\n");
+	}
+}
+
+void BlockCpu::printParameters() {
 	cout << endl << endl;
+	cout << "Parameters (" << mParamsCount << ")" << endl;
+	for (int i = 0; i < mParamsCount; ++i) {
+		cout << "	parameter #" << i << ":   " << mParams[i] << endl;
+	}
 }
 
-double* BlockCpu::addNewBlockBorder(Block* neighbor, int side, int move, int borderLength) {
-	if( checkValue(side, move + borderLength) ) {
-		printf("\nCritical error!\n");
-		exit(1);
+void BlockCpu::printComputeFunctionNumber() {
+	cout << endl << endl;
+	cout << "Compute function number" << endl;
+	cout.setf(ios::fixed);
+	for (int i = 0; i < zCount; ++i) {
+		cout << "z = " << i << endl;
+
+		int zShift = xCount * yCount * i;
+
+		for (int j = 0; j < yCount; ++j) {
+			int yShift = xCount * j;
+
+			for (int k = 0; k < xCount; ++k) {
+				int xShift = k;
+				cout << mCompFuncNumber[ zShift + yShift + xShift ] << " ";
+			}
+			cout << endl;
+		}
 	}
-
-	for (int i = 0; i < borderLength; ++i)
-		sendBorderType[side][i + move] = countSendSegmentBorder;
-
-	countSendSegmentBorder++;
-
-	double* newBlockBorder;
-
-	if( ( nodeNumber == neighbor->getNodeNumber() ) && isGPU( neighbor->getBlockType() ) ) {
-		cudaMallocHost ( (void**)&newBlockBorder, borderLength * sizeof(double) );
-		tempBlockBorderMemoryAllocType.push_back(CUDA_MALLOC_HOST);
-	}
-	else {
-		newBlockBorder = new double [borderLength];
-		tempBlockBorderMemoryAllocType.push_back(NEW);
-	}
-
-	tempBlockBorder.push_back(newBlockBorder);
-	tempBlockBorderMove.push_back(move);
-
-	return newBlockBorder;
-}
-
-double* BlockCpu::addNewExternalBorder(Block* neighbor, int side, int move, int borderLength, double* border) {
-	if( checkValue(side, move + borderLength) ) {
-		printf("\nCritical error!\n");
-		exit(1);
-	}
-
-	for (int i = 0; i < borderLength; ++i)
-		receiveBorderType[side][i + move] = countReceiveSegmentBorder;
-
-	countReceiveSegmentBorder++;
-
-	double* newExternalBorder;
-
-	if( nodeNumber == neighbor->getNodeNumber() ) {
-		newExternalBorder = border;
-		tempExternalBorderMemoryAllocType.push_back(NOT_ALLOC);
-	}
-	else {
-		newExternalBorder = new double [borderLength];
-		tempExternalBorderMemoryAllocType.push_back(NEW);
-	}
-
-	tempExternalBorder.push_back(newExternalBorder);
-	tempExternalBorderMove.push_back(move);
-
-	return newExternalBorder;
+	cout << endl;
 }
 
 void BlockCpu::moveTempBorderVectorToBorderArray() {
 	blockBorder = new double* [countSendSegmentBorder];
-	blockBorderMove = new int [countSendSegmentBorder];
 	blockBorderMemoryAllocType = new int [countSendSegmentBorder];
+	sendBorderInfo = new int [INTERCONNECT_COMPONENT_COUNT * countSendSegmentBorder];
 
 	externalBorder = new double* [countReceiveSegmentBorder];
-	externalBorderMove = new int [countReceiveSegmentBorder];
-	externalBorderMemoryAllocType = new int [countReceiveSegmentBorder];	
-	
+	externalBorderMemoryAllocType = new int [countReceiveSegmentBorder];
+	receiveBorderInfo = new int [INTERCONNECT_COMPONENT_COUNT * countReceiveSegmentBorder];
 
 	for (int i = 0; i < countSendSegmentBorder; ++i) {
 		blockBorder[i] = tempBlockBorder.at(i);
-		blockBorderMove[i] = tempBlockBorderMove.at(i);
 		blockBorderMemoryAllocType[i] = tempBlockBorderMemoryAllocType.at(i);
+
+		int index = INTERCONNECT_COMPONENT_COUNT * i;
+		sendBorderInfo[ index + SIDE ] = tempSendBorderInfo.at(index + 0);
+		sendBorderInfo[ index + M_OFFSET ] = tempSendBorderInfo.at(index + 1);
+		sendBorderInfo[ index + N_OFFSET ] = tempSendBorderInfo.at(index + 2);
+		sendBorderInfo[ index + M_LENGTH ] = tempSendBorderInfo.at(index + 3);
+		sendBorderInfo[ index + N_LENGTH ] = tempSendBorderInfo.at(index + 4);
 	}
 
 	for (int i = 0; i < countReceiveSegmentBorder; ++i) {
 		externalBorder[i] = tempExternalBorder.at(i);
-		externalBorderMove[i] = tempExternalBorderMove.at(i);
 		externalBorderMemoryAllocType[i] = tempExternalBorderMemoryAllocType.at(i);
+
+		int index = INTERCONNECT_COMPONENT_COUNT * i;
+		receiveBorderInfo[ index + SIDE ] = tempReceiveBorderInfo.at(index + 0);
+		receiveBorderInfo[ index + M_OFFSET ] = tempReceiveBorderInfo.at(index + 1);
+		receiveBorderInfo[ index + N_OFFSET ] = tempReceiveBorderInfo.at(index + 2);
+		receiveBorderInfo[ index + M_LENGTH ] = tempReceiveBorderInfo.at(index + 3);
+		receiveBorderInfo[ index + N_LENGTH ] = tempReceiveBorderInfo.at(index + 4);
 	}
 
 	tempBlockBorder.clear();
-	tempBlockBorderMove.clear();
 	tempExternalBorder.clear();
-	tempExternalBorderMove.clear();
 	
 	tempBlockBorderMemoryAllocType.clear();
 	tempExternalBorderMemoryAllocType.clear();
+
+	tempSendBorderInfo.clear();
+	tempReceiveBorderInfo.clear();
 }
 
-void BlockCpu::loadData(double* data) {
-	for(int i = 0; i < length * width; i++)
-		matrix[i] = data[i];
+void BlockCpu::prepareBorder(int borderNumber, int stage, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop) {
+	double* source = mSolver->getStageSource(stage);
+
+	int index = 0;
+	for (int z = zStart; z < zStop; ++z) {
+		int zShift = xCount * yCount * z;
+
+		for (int y = yStart; y < yStop; ++y) {
+			int yShift = xCount * y;
+
+			for (int x = xStart; x < xStop; ++x) {
+				int xShift = x;
+
+				for (int c = 0; c < cellSize; ++c) {
+					int cellShift = c;
+					//printf("block %d is preparing border %d, x=%d, y=%d, z=%d, index=%d\n", blockNumber, borderNumber, x,y,z, index);
+
+					blockBorder[borderNumber][index] = source[ (zShift + yShift + xShift)*cellSize + cellShift ];
+					index++;
+				}
+			}
+		}
+	}
+}
+
+void BlockCpu::createSolver(int solverIdx, double _aTol, double _rTol) {
+	int count = getGridElementCount();
+
+	switch (solverIdx) {
+		case EULER:
+			mSolver = new EulerSolverCpu(count, _aTol, _rTol);
+			break;
+		case RK4:
+			mSolver = new RK4SolverCpu(count, _aTol, _rTol);
+			break;
+		case DP45:
+			mSolver = new DP45SolverCpu(count, _aTol, _rTol);
+			break;
+		default:
+			mSolver = new EulerSolverCpu(count, _aTol, _rTol);
+			break;
+	}
+}
+
+double* BlockCpu::getNewBlockBorder(Block* neighbor, int borderLength, int& memoryType) {
+	double* tmpBorder;
+
+	if( ( nodeNumber == neighbor->getNodeNumber() ) && isGPU( neighbor->getBlockType() ) ) {
+		cudaMallocHost ( (void**)&tmpBorder, borderLength * sizeof(double) );
+		//tempBlockBorderMemoryAllocType.push_back(CUDA_MALLOC_HOST);
+		memoryType = CUDA_MALLOC_HOST;
+	}
+	else {
+		tmpBorder = new double [borderLength];
+		//tempBlockBorderMemoryAllocType.push_back(NEW);
+		memoryType = NEW;
+	}
+
+	return tmpBorder;
+}
+
+double* BlockCpu::getNewExternalBorder(Block* neighbor, int borderLength, double* border, int& memoryType) {
+	double* tmpBorder;
+
+	if( nodeNumber == neighbor->getNodeNumber() ) {
+		tmpBorder = border;
+		//tempExternalBorderMemoryAllocType.push_back(NOT_ALLOC);
+		memoryType = NOT_ALLOC;
+	}
+	else {
+		tmpBorder = new double [borderLength];
+		//tempExternalBorderMemoryAllocType.push_back(NEW);
+		memoryType = NEW;
+	}
+
+	return tmpBorder;
 }

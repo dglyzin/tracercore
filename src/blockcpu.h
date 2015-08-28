@@ -10,36 +10,53 @@
 
 #include "block.h"
 
+#include "solvers/eulersolvercpu.h"
+#include "solvers/rk4solvercpu.h"
+#include "solvers/dp45solvercpu.h"
+
 /*
  * Блок работы с данными на центральном процссоре.
  */
 
 class BlockCpu: public Block {
+private:
+	void prepareBorder(int borderNumber, int stage, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop);
+
+	void computeStageCenter_1d(int stage, double time);
+	void computeStageCenter_2d(int stage, double time);
+	void computeStageCenter_3d(int stage, double time);
+
+	void computeStageBorder_1d(int stage, double time);
+	void computeStageBorder_2d(int stage, double time);
+	void computeStageBorder_3d(int stage, double time);
+
+	void createSolver(int solverIdx, double _aTol, double _rTol);
+
+	double* getNewBlockBorder(Block* neighbor, int borderLength, int& memoryType);
+	double* getNewExternalBorder(Block* neighbor, int borderLength, double* border, int& memoryType);
+
+	void printSendBorderInfo();
+	void printReceiveBorderInfo();
+	void printParameters();
+	void printComputeFunctionNumber();
+
 public:
-	BlockCpu(int _length, int _width, int _lengthMove, int _widthMove, int _nodeNumber, int _deviceNumber);
+	BlockCpu(int _blockNumber, int _dimension, int _xCount, int _yCount, int _zCount,
+			int _xOffset, int _yOffset, int _zOffset,
+			int _nodeNumber, int _deviceNumber,
+			int _haloSize, int _cellSize,
+			unsigned short int* _initFuncNumber, unsigned short int* _compFuncNumber,
+			int _solverIdx, double _aTol, double _rTol);
 
 	~BlockCpu();
 
 	bool isRealBlock() { return true; }
 
-	void prepareData();
-
-	void computeOneStep(double dX2, double dY2, double dT);
-	void computeOneStepBorder(double dX2, double dY2, double dT);
-	void computeOneStepCenter(double dX2, double dY2, double dT);
-
 	int getBlockType() { return CPU; }
 
-	double* getCurrentState();
-
-	void print();
-
-	double* addNewBlockBorder(Block* neighbor, int side, int move, int borderLength);
-	double* addNewExternalBorder(Block* neighbor, int side, int move, int borderLength, double* border);
+	void getCurrentState(double* result);
 
 	void moveTempBorderVectorToBorderArray();
-
-	void loadData(double* data);
 };
 
 #endif /* SRC_BLOCKCPU_H_ */

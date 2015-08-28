@@ -83,6 +83,8 @@ else :
 	command = "srun -N" + str(thread) + " -n" + str(thread) + ' ' + fileToRun + ' ' + arg
 
 print command
+command ="export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./bin &&"+ command
+
 PIPE = subprocess.PIPE
 p = subprocess.Popen(command, shell=True, stdin=PIPE, stdout=PIPE, stderr=subprocess.STDOUT, close_fds=True)
 print p.stdout.read()

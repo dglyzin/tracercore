@@ -17,13 +17,48 @@
  */
 
 class BlockNull: public Block {
+private:
+	void prepareBorder(int borderNumber, int stage, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop) { return; }
+
+	void computeStageCenter_1d(int stage, double time) { return; }
+	void computeStageCenter_2d(int stage, double time) { return; }
+	void computeStageCenter_3d(int stage, double time) { return; }
+
+	void computeStageBorder_1d(int stage, double time) { return; }
+	void computeStageBorder_2d(int stage, double time) { return; }
+	void computeStageBorder_3d(int stage, double time) { return; }
+
+	void createSolver(int solverIdx, double _aTol, double _rTol) { return; }
+
+	double* getNewBlockBorder(Block* neighbor, int borderLength, int& memoryType) { return NULL; }
+	double* getNewExternalBorder(Block* neighbor, int borderLength, double* border, int& memoryType) { return NULL; }
+
+	void printSendBorderInfo() { return; }
+	void printReceiveBorderInfo() { return; }
+	void printParameters() { return; }
+	void printComputeFunctionNumber() { return; }
+
 public:
-	BlockNull(int _length, int _width, int _lengthMove, int _widthMove, int _nodeNumber, int _deviceNumber);
+	BlockNull(int _blockNumber, int _dimension, int _xCount, int _yCount, int _zCount,
+			int _xOffset, int _yOffset, int _zOffset,
+			int _nodeNumber, int _deviceNumber,
+			int _haloSize, int _cellSize);
 	virtual ~BlockNull();
 
 	bool isRealBlock() { return false; }
 
+	//void prepareStageData(int stage) { return; }
+
 	int getBlockType() { return NULL_BLOCK; }
+
+	void getCurrentState(double* result) { return; }
+
+	//void print() { return; }
+
+	//double* addNewBlockBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength) { return NULL; }
+	//double* addNewExternalBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength, double* border) { return NULL; }
+
+	void moveTempBorderVectorToBorderArray() { return; }
 };
 
 #endif /* SRC_BLOCKNULL_H_ */

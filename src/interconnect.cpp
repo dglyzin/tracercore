@@ -9,15 +9,10 @@
 
 using namespace std;
 
-Interconnect::Interconnect(int _sourceLocationNode, int _destinationLocationNode,
-		int _sourceType, int _destinationType,
-		int _borderLength,
+Interconnect::Interconnect(int _sourceLocationNode, int _destinationLocationNode, int _borderLength,
 		double* _sourceBlockBorder, double* _destinationExternalBorder) {
 	sourceLocationNode = _sourceLocationNode;
 	destinationLocationNode = _destinationLocationNode;
-
-	sourceType = _sourceType;
-	destinationType = _destinationType;
 
 	borderLength = _borderLength;
 
@@ -69,6 +64,13 @@ void Interconnect::sendRecv(int locationNode) {
 	/*
 	 * Если же это соединения вызовет поток, которые фактически не имет к нему отношения, то ничего не произойдет.
 	 */
+}
+
+void Interconnect::wait() {
+	if( flag ) {
+		MPI_Wait(request, status);
+		flag = false;
+	}
 }
 
 void Interconnect::print() {

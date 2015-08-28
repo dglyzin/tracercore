@@ -1,0 +1,36 @@
+1. Добавить в enums.h новую константу
+	enum SOLVER_TYPE { EULER, RK4, DP45 } - вот сюда
+2. Реализовать класс наследник Solver, для информации
+3. Реализовать классы наследники класса из п.2 для работы на ЦП и видеокарте
+4. В классах BlockCpu и BlockGpu дописать методы createSolver с использованием новой константы
+	switch (solverIdx) {
+	case EULER:
+		//mSolver = new EulerSolverCpu(count);
+		mSolver = new EulerSolverCpu(count);
+		break;
+	case RK4:
+		mSolver = new RK4SolverCpu(count);
+		break;
+	case DP45:
+		mSolver = new DP45SolverCpu(count);
+		break;
+	default:
+		mSolver = new EulerSolverCpu(count);
+		break;
+}
+5. В классе Domain добавить создание нового информатора
+	switch (solverIdx) {
+		case EULER:
+			//mSolver = new EulerSolverCpu(count);
+			mSolver = new EulerSolverCpu(count);
+			break;
+		case RK4:
+			mSolver = new RK4SolverCpu(count);
+			break;
+		case DP45:
+			mSolver = new DP45SolverCpu(count);
+			break;
+		default:
+			mSolver = new EulerSolverCpu(count);
+			break;
+	}
