@@ -8,18 +8,13 @@
 #ifndef SRC_BLOCK_H_
 #define SRC_BLOCK_H_
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <cmath>
-#include <math.h>
-#include <string.h>
-#include <iostream>
-
 #include <vector>
 
 #include <omp.h>
 
 #include "enums.h"
+#include "solvers/solver.h"
+#include "userfuncs.h"
 
 /*
  * Класс, отвечающий за обработку данных.
@@ -30,25 +25,24 @@
 class Block {
 
 protected:
-	/*
-	 * Матрица для вычислений.
-	 * Хранит текущее значения области.
-	 * Из нее получаются границы блока - для пересылки
-	 */
-	double* matrix;
-	double* newMatrix;
+	Solver* mSolver;
 
-	/*
-	 * Длина и ширина матрицы для вычислений.
-	 */
-	int length;
-	int width;
+	int blockNumber;
 
-	/*
-	 * Координаты блока в области
-	 */
-	int lengthMove;
-	int widthMove;
+	int dimension;
+
+	int xCount;
+	int yCount;
+	int zCount;
+
+	int xOffset;
+	int yOffset;
+	int zOffset;
+
+	unsigned short int* mCompFuncNumber;
+
+	int cellSize;
+	int haloSize;
 
 	/*
 	 * Тип устройства.
@@ -64,12 +58,11 @@ protected:
 	 */
 	int nodeNumber;
 
-	/*
-	 * Тип границы блока.
-	 * BY_FUNCTION - границы с другим блоком нет, значения даются функцией.
-	 */
-	int** sendBorderType;
-	int** receiveBorderType;
+	int* sendBorderInfo;
+	std::vector<int> tempSendBorderInfo;
+
+	int* receiveBorderInfo;
+	std::vector<int> tempReceiveBorderInfo;
 
 	/*
 	 * Граничные условия для других блоков,
@@ -77,10 +70,8 @@ protected:
 	 * Interconnect их забирает (должен знать откуда забирать).
 	 */
 	double** blockBorder;
-	int* blockBorderMove;
 	int* blockBorderMemoryAllocType;
 	std::vector<double*> tempBlockBorder;
-	std::vector<int> tempBlockBorderMove;
 	std::vector<int> tempBlockBorderMemoryAllocType;
 
 	/*
@@ -89,14 +80,9 @@ protected:
 	 * Первыми пишут Interconnect'ы, затем функции.
 	 */
 	double** externalBorder;
-	int* externalBorderMove;
 	int* externalBorderMemoryAllocType;
 	std::vector<double*> tempExternalBorder;
-	std::vector<int> tempExternalBorderMove;
 	std::vector<int> tempExternalBorderMemoryAllocType;
-
-
-	//double* result;
 
 	/*
 	 * Количество частей гранцы для пересылки и для получения
@@ -104,16 +90,43 @@ protected:
 	int countSendSegmentBorder;
 	int countReceiveSegmentBorder;
 
-	/*
-	 * Функция проверяет допустимость значений для данного блока
-	 */
-	bool checkValue(int side, int move);
-
 	void freeMemory(int memory_alloc_type, double* memory);
 	void freeMemory(int memory_alloc_type, int* memory);
 
+	virtual void prepareBorder(int borderNumber, int stage, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop) = 0;
+
+	virtual void computeStageCenter_1d(int stage, double time) = 0;
+	virtual void computeStageCenter_2d(int stage, double time) = 0;
+	virtual void computeStageCenter_3d(int stage, double time) = 0;
+
+	virtual void computeStageBorder_1d(int stage, double time) = 0;
+	virtual void computeStageBorder_2d(int stage, double time) = 0;
+	virtual void computeStageBorder_3d(int stage, double time) = 0;
+
+	virtual void createSolver(int solverIdx, double _aTol, double _rTol) = 0;
+
+	virtual double* getNewBlockBorder(Block* neighbor, int borderLength, int& memoryType) = 0;
+	virtual double* getNewExternalBorder(Block* neighbor, int borderLength, double* border, int& memoryType) = 0;
+
+	virtual void printSendBorderInfo() = 0;
+	virtual void printReceiveBorderInfo() = 0;
+	virtual void printParameters() = 0;
+	virtual void printComputeFunctionNumber() = 0;
+
+	void printSendBorderInfoArray(int* sendBorderInfoArray);
+	void printReceiveBorderInfoArray(int* recieveBorderInfoArray);
+
+	func_ptr_t* mUserFuncs;
+	initfunc_fill_ptr_t* mUserInitFuncs;
+	double* mParams;
+	int mParamsCount;
+
 public:
-	Block(int _length, int _width, int _lengthMove, int _widthMove, int _nodeNumber, int _deviceNumber);
+	Block(int _blockNumber, int _dimension, int _xCount, int _yCount, int _zCount,
+			int _xOffset, int _yOffset, int _zOffset,
+			int _nodeNumber, int _deviceNumber,
+			int _haloSize, int _cellSize);
+
 	virtual ~Block();
 
 	/*
@@ -121,64 +134,66 @@ public:
 	 * true - да, является
 	 * false - нет не является
 	 */
-	virtual bool isRealBlock() { return false; }
+	virtual bool isRealBlock() = 0;
+
+	virtual void initSolver() { return; }
 
 	/*
 	 * Выполняет подготовку данных.
 	 * Заполняет массивы границ для пересылки.
 	 */
-	virtual void prepareData() { return; }
+	void prepareStageData(int stage);
 
-	/*
-	 * Выполняет вычисления.
-	 */
-	virtual void computeOneStep(double dX2, double dY2, double dT) { return; }
+	void computeStageBorder(int stage, double time);
+	void computeStageCenter(int stage, double time);
 
-	virtual void computeOneStepBorder(double dX2, double dY2, double dT) { return; }
-	virtual void computeOneStepCenter(double dX2, double dY2, double dT) { return; }
+	void prepareArgument(int stage, double timestep );
 
-	virtual void swapMatrix() {
-		double* tmp = matrix;
-		matrix = newMatrix;
-		newMatrix = tmp;
-	}
+	double getSolverStepError(double timeStep) { return mSolver != NULL ? mSolver->getStepError(timeStep) : 0.0; }
+
+	void confirmStep(double timestep);
+	void rejectStep(double timestep);
 
 	/*
 	 * Возвращает тип блока.
 	 */
-	virtual int getBlockType() { return NULL_BLOCK; }
+	virtual int getBlockType() = 0;
 
 	/*
 	 * Печатает информацию о блоке на консоль.
 	 */
-	virtual void print() { return; }
+	void print();
+	void printGeneralInformation();
 
 	/*
 	 * Возвращает результурющую матрицу данного блока.
 	 */
-	virtual double* getCurrentState() { return NULL; }
+	virtual void getCurrentState(double* result) = 0;
 
-	int getLength() { return length; }
-	int getWidth() { return width; }
+	int getXCount() { return xCount; }
+	int getYCount() { return yCount; }
+	int getZCount() { return zCount; }
 
-	/*
-	 * Возвращает количество узлов области блока.
-	 */
-	int getCountGridNodes() { return length * width; }
+	int getXOffset() { return xOffset; }
+	int getYOffset() { return yOffset; }
+	int getZOffset() { return zOffset; }
 
-	int getLengthMove() { return lengthMove; }
-	int getWidthMove() { return widthMove; }
+	int getGridNodeCount();
+	int getGridElementCount();
 
 	int getDeviceNumber() { return deviceNumber; }
-
 	int getNodeNumber() { return nodeNumber; }
 
-	virtual double* addNewBlockBorder(Block* neighbor, int side, int move, int borderLength) { return NULL; }
-	virtual double* addNewExternalBorder(Block* neighbor, int side, int move, int borderLength, double* border) { return NULL; }
+	int getDimension() { return dimension; }
+	
+	void setFunctionNumber(unsigned short int* functionNumberData ) { return; }
 
-	virtual void moveTempBorderVectorToBorderArray() { return; }
+	double* addNewBlockBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength);
+	double* addNewExternalBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength, double* border);
 
-	virtual void loadData(double* data) { return; }
+	virtual void moveTempBorderVectorToBorderArray() = 0;
+
+	void loadData(double* data);
 };
 
 #endif /* SRC_BLOCK_H_ */
