@@ -10,9 +10,9 @@
 
 #include <fstream>
 #include <string.h>
-#include "blockcpu.h"
-#include "blockgpu.h"
-#include "blocknull.h"
+#include "blocks/blockcpu.h"
+#include "blocks/blockgpu.h"
+#include "blocks/blocknull.h"
 #include "interconnect.h"
 #include "solvers/solver.h"
 

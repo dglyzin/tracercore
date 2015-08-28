@@ -10,9 +10,9 @@
 
 #include "block.h"
 
-#include "solvers/eulersolvercpu.h"
-#include "solvers/rk4solvercpu.h"
-#include "solvers/dp45solvercpu.h"
+#include "../solvers/eulersolvercpu.h"
+#include "../solvers/rk4solvercpu.h"
+#include "../solvers/dp45solvercpu.h"
 
 /*
  * Блок работы с данными на центральном процссоре.

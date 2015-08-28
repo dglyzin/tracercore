@@ -8,6 +8,7 @@ CUDAARCH=-arch=sm_20
 
 SRC=src
 SRCSOL=$(SRC)/solvers
+SRCBLC=$(SRC)/blocks
 
 BIN=bin
 MPILIB=-I/usr/mpi/gcc/openmpi-1.8.4/include -L /usr/mpi/gcc/openmpi-1.8.4/lib -lmpi -lmpi_cxx
@@ -16,7 +17,7 @@ USERFUNCLIB=./bin -l userfuncs
 
 
 
-BLOCK=$(SRC)/block.cpp $(SRC)/blockcpu.cpp $(SRC)/blocknull.cpp $(SRC)/blockgpu.cpp
+BLOCK=$(SRCBLC)/block.cpp $(SRCBLC)/blockcpu.cpp $(SRCBLC)/blocknull.cpp $(SRCBLC)/blockgpu.cpp
 
 SOLVER=$(SRCSOL)/solver.cpp $(SRCSOL)/eulersolver.cpp $(SRCSOL)/rk4solver.cpp $(SRCSOL)/dp45solver.cpp $(SRCSOL)/eulersolvercpu.cpp $(SRCSOL)/rk4solvercpu.cpp $(SRCSOL)/dp45solvercpu.cpp $(SRCSOL)/eulersolvergpu.cpp $(SRCSOL)/rk4solvergpu.cpp $(SRCSOL)/dp45solvergpu.cpp
 
@@ -41,4 +42,5 @@ cuda_func.o:
 clean:
 	rm -rf $(SRC)/*.o
 	rm -rf $(SRCSOL)/*.o
+	rm -rf $(SRCBLC)/*.o
 	rm $(BIN)/$(EXECUTABLE)

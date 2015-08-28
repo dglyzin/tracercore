@@ -12,9 +12,9 @@
 
 #include <omp.h>
 
-#include "enums.h"
-#include "solvers/solver.h"
-#include "userfuncs.h"
+#include "../enums.h"
+#include "../solvers/solver.h"
+#include "../userfuncs.h"
 
 /*
  * Класс, отвечающий за обработку данных.

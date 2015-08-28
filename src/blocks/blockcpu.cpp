@@ -8,7 +8,7 @@
 #include "blockcpu.h"
 #include <cuda.h>
 #include <cuda_runtime_api.h>
-#include "userfuncs.h"
+//#include "userfuncs.h"
 
 using namespace std;
 
