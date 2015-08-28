@@ -19,11 +19,8 @@ BlockCpu2d::BlockCpu2d(int _blockNumber, int _dimension, int _xCount, int _yCoun
 				_haloSize, _cellSize,
 				_initFuncNumber, _compFuncNumber,
 				_solverIdx, _aTol, _rTol) {
-	// TODO Auto-generated constructor stub
-
 }
 
 BlockCpu2d::~BlockCpu2d() {
-	// TODO Auto-generated destructor stub
 }
 
