@@ -20,6 +20,9 @@ public:
 			int _solverIdx, double _aTol, double _rTol);
 
 	virtual ~BlockCpu1d();
+
+	void computeStageBorder(int stage, double time);
+	void computeStageCenter(int stage, double time);
 };
 
 #endif /* SRC_BLOCKS_BLOCKCPU1D_H_ */

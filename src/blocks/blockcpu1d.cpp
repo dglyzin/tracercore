@@ -24,3 +24,39 @@ BlockCpu1d::BlockCpu1d(int _blockNumber, int _dimension, int _xCount, int _yCoun
 BlockCpu1d::~BlockCpu1d() {
 }
 
+void BlockCpu1d::computeStageBorder(int stage, double time) {
+	//char c;
+	//cout << endl << endl << "before error?" << blockNumber << endl;
+	//scanf("%c", &c);
+# pragma omp parallel
+	{
+		double* result = mSolver->getStageResult(stage);
+		double* source = mSolver->getStageSource(stage);
+# pragma omp for
+		for (int x = 0; x < haloSize; ++x) {
+			//cout << "Border Calc x_" << x << endl;
+			mUserFuncs[ mCompFuncNumber[x] ](result, source, time, x, 0, 0, mParams, externalBorder);
+		}
+
+# pragma omp for
+		for (int x = xCount - haloSize; x < xCount; ++x) {
+			//cout << "Border Calc x_" << x << endl;
+			mUserFuncs[ mCompFuncNumber[x] ](result, source, time, x, 0, 0, mParams, externalBorder);
+		}
+	}
+
+	//scanf("%c", &c);
+}
+
+void BlockCpu1d::computeStageCenter(int stage, double time) {
+# pragma omp parallel
+	{
+		double* result = mSolver->getStageResult(stage);
+		double* source = mSolver->getStageSource(stage);
+# pragma omp for
+		for (int x = haloSize; x < xCount - haloSize; ++x) {
+			//cout << "Calc x_" << x << endl;
+			mUserFuncs[ mCompFuncNumber[x] ](result, source, time, x, 0, 0, mParams, externalBorder);
+		}
+	}
+}
