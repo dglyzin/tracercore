@@ -20,6 +20,9 @@ public:
 			int _solverIdx, double _aTol, double _rTol);
 
 	virtual ~BlockGpu1d();
+
+	void computeStageBorder(int stage, double time) { std::cout << std::endl << "GPU compute border 1d. Not implemented" << std::endl; }
+	void computeStageCenter(int stage, double time) { std::cout << std::endl << "GPU compute center 1d. Not implemented" << std::endl; }
 };
 
 #endif /* SRC_BLOCKS_BLOCKGPU1D_H_ */

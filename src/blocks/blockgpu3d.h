@@ -20,6 +20,9 @@ public:
 			int _solverIdx, double _aTol, double _rTol);
 
 	virtual ~BlockGpu3d();
+
+	void computeStageBorder(int stage, double time) { std::cout << std::endl << "GPU compute border 3d. Not implemented" << std::endl; }
+	void computeStageCenter(int stage, double time) { std::cout << std::endl << "GPU compute center 3d. Not implemented" << std::endl; }
 };
 
 #endif /* SRC_BLOCKS_BLOCKGPU3D_H_ */
