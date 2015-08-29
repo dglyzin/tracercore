@@ -558,9 +558,43 @@ Block* Domain::readBlock(ifstream& in, int idx) {
 
 	if(node == mWorldRank){
 		if (deviceType==0)  //CPU BLOCK
-			resBlock = new BlockCpu(idx, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize, initFuncNumber, compFuncNumber, mSolverIndex, mAtol, mRtol);
+			switch (dimension) {
+				case 1:
+					resBlock = new BlockCpu1d(idx, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize, initFuncNumber, compFuncNumber, mSolverIndex, mAtol, mRtol);
+					break;
+
+				case 2:
+					resBlock = new BlockCpu2d(idx, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize, initFuncNumber, compFuncNumber, mSolverIndex, mAtol, mRtol);
+					break;
+
+				case 3:
+					resBlock = new BlockCpu3d(idx, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize, initFuncNumber, compFuncNumber, mSolverIndex, mAtol, mRtol);
+					break;
+
+				default:
+					printf("Invalid block dimension!\n");
+					assert(false);
+					break;
+			}
 		else if (deviceType==1) //GPU BLOCK
-			resBlock = new BlockGpu(idx, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize, initFuncNumber, compFuncNumber, mSolverIndex, mAtol, mRtol);
+			switch (dimension) {
+				case 1:
+					resBlock = new BlockGpu1d(idx, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize, initFuncNumber, compFuncNumber, mSolverIndex, mAtol, mRtol);
+					break;
+
+				case 2:
+					resBlock = new BlockGpu2d(idx, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize, initFuncNumber, compFuncNumber, mSolverIndex, mAtol, mRtol);
+					break;
+
+				case 3:
+					resBlock = new BlockGpu3d(idx, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize, initFuncNumber, compFuncNumber, mSolverIndex, mAtol, mRtol);
+					break;
+
+				default:
+					printf("Invalid block dimension!\n");
+					assert(false);
+					break;
+			}
 		else{
 			printf("Invalid block type!\n");
 			assert(false);
