@@ -17,7 +17,7 @@ USERFUNCLIB=./bin -l userfuncs
 
 
 
-BLOCK=$(SRCBLC)/block.cpp $(SRCBLC)/blockcpu.cpp $(SRCBLC)/blocknull.cpp $(SRCBLC)/blockgpu.cpp $(SRCBLC)/blockcpu1d.cpp $(SRCBLC)/blockcpu2d.cpp $(SRCBLC)/blockcpu3d.cpp #$(SRCBLC)/blockgpu1d.cpp $(SRCBLC)/blockgpu2d.cpp $(SRCBLC)/blockgpu3d.cpp
+BLOCK=$(SRCBLC)/block.cpp $(SRCBLC)/blockcpu.cpp $(SRCBLC)/blocknull.cpp $(SRCBLC)/blockgpu.cpp $(SRCBLC)/blockcpu1d.cpp $(SRCBLC)/blockcpu2d.cpp $(SRCBLC)/blockcpu3d.cpp $(SRCBLC)/blockgpu1d.cpp $(SRCBLC)/blockgpu2d.cpp $(SRCBLC)/blockgpu3d.cpp
 
 SOLVER=$(SRCSOL)/solver.cpp $(SRCSOL)/eulersolver.cpp $(SRCSOL)/rk4solver.cpp $(SRCSOL)/dp45solver.cpp $(SRCSOL)/eulersolvercpu.cpp $(SRCSOL)/rk4solvercpu.cpp $(SRCSOL)/dp45solvercpu.cpp $(SRCSOL)/eulersolvergpu.cpp $(SRCSOL)/rk4solvergpu.cpp $(SRCSOL)/dp45solvergpu.cpp
 
