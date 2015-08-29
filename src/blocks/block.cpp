@@ -161,7 +161,7 @@ void Block::freeMemory(int memory_alloc_type, int* memory) {
 	}
 }
 
-void Block::computeStageCenter(int stage, double time) {
+/*void Block::computeStageCenter(int stage, double time) {
 	switch (dimension) {
 		case 1:
 			computeStageCenter_1d(stage, time);
@@ -191,7 +191,7 @@ void Block::computeStageBorder(int stage, double time) {
 		default:
 			break;
 	}
-}
+}*/
 
 double* Block::addNewBlockBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength) {
 	countSendSegmentBorder++;
