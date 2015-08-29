@@ -51,6 +51,7 @@ public:
 			int _haloSize, int _cellSize,
 			unsigned short int* _initFuncNumber, unsigned short int* _compFuncNumber,
 			int _solverIdx, double _aTol, double _rTol);
+
 	virtual ~BlockGpu();
 
 	bool isRealBlock() { return true; }
