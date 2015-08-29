@@ -81,7 +81,7 @@ BlockCpu::~BlockCpu() {
 	}
 }
 
-void BlockCpu::computeStageCenter_1d(int stage, double time) {
+/*void BlockCpu::computeStageCenter_1d(int stage, double time) {
 # pragma omp parallel
 	{
 		double* result = mSolver->getStageResult(stage);
@@ -132,9 +132,9 @@ void BlockCpu::computeStageCenter_3d(int stage, double time) {
 }
 
 void BlockCpu::computeStageBorder_1d(int stage, double time) {
-	/*char c;
-	cout << endl << endl << "before error?" << blockNumber << endl;
-	scanf("%c", &c);*/
+	//char c;
+	//cout << endl << endl << "before error?" << blockNumber << endl;
+	//scanf("%c", &c);
 # pragma omp parallel
 	{
 		double* result = mSolver->getStageResult(stage);
@@ -152,7 +152,7 @@ void BlockCpu::computeStageBorder_1d(int stage, double time) {
 		}
 	}
 
-	/*scanf("%c", &c);*/
+	//scanf("%c", &c);
 }
 
 void BlockCpu::computeStageBorder_2d(int stage, double time) {
@@ -290,7 +290,7 @@ void BlockCpu::computeStageBorder_3d(int stage, double time) {
 			}
 		}
 	}
-}
+}*/
 
 
 void BlockCpu::getCurrentState(double* result) {

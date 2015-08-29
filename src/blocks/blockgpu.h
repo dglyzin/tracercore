@@ -26,13 +26,13 @@ private:
 
 	void prepareBorder(int borderNumber, int stage, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop);
 
-	void computeStageCenter_1d(int stage, double time) { std::cout << std::endl << "GPU compute center 1d" << std::endl; }
+	/*void computeStageCenter_1d(int stage, double time) { std::cout << std::endl << "GPU compute center 1d" << std::endl; }
 	void computeStageCenter_2d(int stage, double time) { std::cout << std::endl << "GPU compute center 2d" << std::endl; }
 	void computeStageCenter_3d(int stage, double time) { std::cout << std::endl << "GPU compute center 3d" << std::endl; }
 
 	void computeStageBorder_1d(int stage, double time) { std::cout << std::endl << "GPU compute border 1d" << std::endl; }
 	void computeStageBorder_2d(int stage, double time) { std::cout << std::endl << "GPU compute border 2d" << std::endl; }
-	void computeStageBorder_3d(int stage, double time) { std::cout << std::endl << "GPU compute border 3d" << std::endl; }
+	void computeStageBorder_3d(int stage, double time) { std::cout << std::endl << "GPU compute border 3d" << std::endl; }*/
 
 	void createSolver(int solverIdx, double _aTol, double _rTol);
 
