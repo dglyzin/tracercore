@@ -905,23 +905,23 @@ void Domain::printStatisticsInfo(char* inputFile, char* outputFile, double calcT
 bool Domain::isNan() {
 	double** resultAll = collectDataFromNode();
 
-		if( mWorldRank == 0 ) {
-			for (int i = 0; i < mBlockCount; ++i) {
-				int count = mBlocks[i]->getGridElementCount();
+	if( mWorldRank == 0 ) {
+		for (int i = 0; i < mBlockCount; ++i) {
+			int count = mBlocks[i]->getGridElementCount();
 
-				for (int j = 0; j < count; ++j) {
-					if(isnan(resultAll[i][j]))
-						return true;
-				}
-
+			for (int j = 0; j < count; ++j) {
+				if(isnan(resultAll[i][j]))
+					return true;
 			}
-		}
 
-		if( resultAll != NULL ) {
-			for (int i = 0; i < mBlockCount; ++i)
-				delete resultAll[i];
-			delete resultAll;
 		}
+	}
+
+	if( resultAll != NULL ) {
+		for (int i = 0; i < mBlockCount; ++i)
+			delete resultAll[i];
+		delete resultAll;
+	}
 
 
 	return false;

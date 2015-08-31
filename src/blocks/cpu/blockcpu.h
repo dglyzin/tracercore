@@ -22,14 +22,6 @@ class BlockCpu: public Block {
 private:
 	void prepareBorder(int borderNumber, int stage, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop);
 
-	/*void computeStageCenter_1d(int stage, double time);
-	void computeStageCenter_2d(int stage, double time);
-	void computeStageCenter_3d(int stage, double time);
-
-	void computeStageBorder_1d(int stage, double time);
-	void computeStageBorder_2d(int stage, double time);
-	void computeStageBorder_3d(int stage, double time);*/
-
 	void createSolver(int solverIdx, double _aTol, double _rTol);
 
 	double* getNewBlockBorder(Block* neighbor, int borderLength, int& memoryType);
@@ -48,7 +40,7 @@ public:
 			unsigned short int* _initFuncNumber, unsigned short int* _compFuncNumber,
 			int _solverIdx, double _aTol, double _rTol);
 
-	~BlockCpu();
+	virtual ~BlockCpu();
 
 	bool isRealBlock() { return true; }
 
