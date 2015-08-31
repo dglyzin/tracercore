@@ -8,7 +8,7 @@
 #ifndef SRC_SOLVERS_RK4SOLVER_H_
 #define SRC_SOLVERS_RK4SOLVER_H_
 
-#include "solver.h"
+#include "../solver.h"
 
 class RK4Solver: public Solver {
 public:

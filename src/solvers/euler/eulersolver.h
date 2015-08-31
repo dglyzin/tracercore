@@ -8,7 +8,7 @@
 #ifndef SRC_SOLVERS_EULERSOLVER_H_
 #define SRC_SOLVERS_EULERSOLVER_H_
 
-#include "solver.h"
+#include "../solver.h"
 
 class EulerSolver: public Solver{
 public:

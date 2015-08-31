@@ -8,7 +8,7 @@
 #ifndef SRC_SOLVERS_DP45SOLVER_H_
 #define SRC_SOLVERS_DP45SOLVER_H_
 
-#include "solver.h"
+#include "../solver.h"
 
 #include <algorithm>
 

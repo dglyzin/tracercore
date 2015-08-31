@@ -10,9 +10,9 @@
 
 #include "../block.h"
 
-#include "../../solvers/eulersolvergpu.h"
-#include "../../solvers/rk4solvergpu.h"
-#include "../../solvers/dp45solvergpu.h"
+#include "../../solvers/euler/eulersolvergpu.h"
+#include "../../solvers/rk4/rk4solvergpu.h"
+#include "../../solvers/dp45/dp45solvergpu.h"
 
 /*
  * Класс обработки данных на видеокарте

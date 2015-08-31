@@ -7,10 +7,16 @@ CUDAINC=/usr/local/cuda/include
 CUDAARCH=-arch=sm_20
 
 SRC=src
+
 SRCSOL=$(SRC)/solvers
+SRCSOLEULER=$(SRCSOL)/euler
+SRCSOLRK4=$(SRCSOL)/rk4
+SRCSOLDP45=$(SRCSOL)/dp45
+
 SRCBLC=$(SRC)/blocks
 SRCBLCCPU=$(SRCBLC)/cpu
 SRCBLCGPU=$(SRCBLC)/gpu
+
 
 BIN=bin
 MPILIB=-I/usr/mpi/gcc/openmpi-1.8.4/include -L /usr/mpi/gcc/openmpi-1.8.4/lib -lmpi -lmpi_cxx
@@ -22,7 +28,12 @@ BLOCKCPU=$(SRCBLCCPU)/blockcpu.cpp $(SRCBLCCPU)/blockcpu1d.cpp $(SRCBLCCPU)/bloc
 BLOCKGPU=$(SRCBLCGPU)/blockgpu.cpp $(SRCBLCGPU)/blockgpu1d.cpp $(SRCBLCGPU)/blockgpu2d.cpp $(SRCBLCGPU)/blockgpu3d.cpp
 BLOCK=$(SRCBLC)/block.cpp $(SRCBLC)/blocknull.cpp $(BLOCKCPU) $(BLOCKGPU)
 
-SOLVER=$(SRCSOL)/solver.cpp $(SRCSOL)/eulersolver.cpp $(SRCSOL)/rk4solver.cpp $(SRCSOL)/dp45solver.cpp $(SRCSOL)/eulersolvercpu.cpp $(SRCSOL)/rk4solvercpu.cpp $(SRCSOL)/dp45solvercpu.cpp $(SRCSOL)/eulersolvergpu.cpp $(SRCSOL)/rk4solvergpu.cpp $(SRCSOL)/dp45solvergpu.cpp
+
+SOLVEREULER=$(SRCSOLEULER)/eulersolver.cpp $(SRCSOLEULER)/eulersolvercpu.cpp $(SRCSOLEULER)/eulersolvergpu.cpp
+SOLVERRK4=$(SRCSOLRK4)/rk4solver.cpp $(SRCSOLRK4)/rk4solvercpu.cpp $(SRCSOLRK4)/rk4solvergpu.cpp
+SOLVERDP45=$(SRCSOLDP45)/dp45solver.cpp $(SRCSOLDP45)/dp45solvercpu.cpp $(SRCSOLDP45)/dp45solvergpu.cpp
+SOLVER=$(SRCSOL)/solver.cpp $(SOLVEREULER) $(SOLVERRK4) $(SOLVERDP45)
+
 
 SOURCE=$(SRC)/main.cpp $(SRC)/domain.cpp $(SRC)/interconnect.cpp $(SRC)/enums.cpp $(BLOCK) $(SOLVER)
 
@@ -44,8 +55,14 @@ cuda_func.o:
 	
 clean:
 	rm -rf $(SRC)/*.o
+	
 	rm -rf $(SRCSOL)/*.o
+	rm -rf $(SRCSOLEULER)/*.o
+	rm -rf $(SRCSOLRK4)/*.o
+	rm -rf $(SRCSOLDP45)/*.o
+	
 	rm -rf $(SRCBLC)/*.o
 	rm -rf $(SRCBLCCPU)/*.o
 	rm -rf $(SRCBLCGPU)/*.o
+	
 	rm $(BIN)/$(EXECUTABLE)
