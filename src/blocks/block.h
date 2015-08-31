@@ -95,14 +95,6 @@ protected:
 
 	virtual void prepareBorder(int borderNumber, int stage, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop) = 0;
 
-	/*virtual void computeStageCenter_1d(int stage, double time) = 0;
-	virtual void computeStageCenter_2d(int stage, double time) = 0;
-	virtual void computeStageCenter_3d(int stage, double time) = 0;
-
-	virtual void computeStageBorder_1d(int stage, double time) = 0;
-	virtual void computeStageBorder_2d(int stage, double time) = 0;
-	virtual void computeStageBorder_3d(int stage, double time) = 0;*/
-
 	virtual void createSolver(int solverIdx, double _aTol, double _rTol) = 0;
 
 	virtual double* getNewBlockBorder(Block* neighbor, int borderLength, int& memoryType) = 0;
