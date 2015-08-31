@@ -8,11 +8,11 @@
 #ifndef SRC_BLOCKCPU_H_
 #define SRC_BLOCKCPU_H_
 
-#include "block.h"
+#include "../block.h"
 
-#include "../solvers/eulersolvercpu.h"
-#include "../solvers/rk4solvercpu.h"
-#include "../solvers/dp45solvercpu.h"
+#include "../../solvers/eulersolvercpu.h"
+#include "../../solvers/rk4solvercpu.h"
+#include "../../solvers/dp45solvercpu.h"
 
 /*
  * Блок работы с данными на центральном процссоре.

@@ -8,11 +8,11 @@
 #ifndef SRC_BLOCKGPU_H_
 #define SRC_BLOCKGPU_H_
 
-#include "block.h"
+#include "../block.h"
 
-#include "../solvers/eulersolvergpu.h"
-#include "../solvers/rk4solvergpu.h"
-#include "../solvers/dp45solvergpu.h"
+#include "../../solvers/eulersolvergpu.h"
+#include "../../solvers/rk4solvergpu.h"
+#include "../../solvers/dp45solvergpu.h"
 
 /*
  * Класс обработки данных на видеокарте

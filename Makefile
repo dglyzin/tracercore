@@ -9,6 +9,8 @@ CUDAARCH=-arch=sm_20
 SRC=src
 SRCSOL=$(SRC)/solvers
 SRCBLC=$(SRC)/blocks
+SRCBLCCPU=$(SRCBLC)/cpu
+SRCBLCGPU=$(SRCBLC)/gpu
 
 BIN=bin
 MPILIB=-I/usr/mpi/gcc/openmpi-1.8.4/include -L /usr/mpi/gcc/openmpi-1.8.4/lib -lmpi -lmpi_cxx
@@ -16,8 +18,9 @@ MPILIB=-I/usr/mpi/gcc/openmpi-1.8.4/include -L /usr/mpi/gcc/openmpi-1.8.4/lib -l
 USERFUNCLIB=./bin -l userfuncs
 
 
-
-BLOCK=$(SRCBLC)/block.cpp $(SRCBLC)/blockcpu.cpp $(SRCBLC)/blocknull.cpp $(SRCBLC)/blockgpu.cpp $(SRCBLC)/blockcpu1d.cpp $(SRCBLC)/blockcpu2d.cpp $(SRCBLC)/blockcpu3d.cpp $(SRCBLC)/blockgpu1d.cpp $(SRCBLC)/blockgpu2d.cpp $(SRCBLC)/blockgpu3d.cpp
+BLOCKCPU=$(SRCBLCCPU)/blockcpu.cpp $(SRCBLCCPU)/blockcpu1d.cpp $(SRCBLCCPU)/blockcpu2d.cpp $(SRCBLCCPU)/blockcpu3d.cpp
+BLOCKGPU=$(SRCBLCGPU)/blockgpu.cpp $(SRCBLCGPU)/blockgpu1d.cpp $(SRCBLCGPU)/blockgpu2d.cpp $(SRCBLCGPU)/blockgpu3d.cpp
+BLOCK=$(SRCBLC)/block.cpp $(SRCBLC)/blocknull.cpp $(BLOCKCPU) $(BLOCKGPU)
 
 SOLVER=$(SRCSOL)/solver.cpp $(SRCSOL)/eulersolver.cpp $(SRCSOL)/rk4solver.cpp $(SRCSOL)/dp45solver.cpp $(SRCSOL)/eulersolvercpu.cpp $(SRCSOL)/rk4solvercpu.cpp $(SRCSOL)/dp45solvercpu.cpp $(SRCSOL)/eulersolvergpu.cpp $(SRCSOL)/rk4solvergpu.cpp $(SRCSOL)/dp45solvergpu.cpp
 
@@ -43,4 +46,6 @@ clean:
 	rm -rf $(SRC)/*.o
 	rm -rf $(SRCSOL)/*.o
 	rm -rf $(SRCBLC)/*.o
+	rm -rf $(SRCBLCCPU)/*.o
+	rm -rf $(SRCBLCGPU)/*.o
 	rm $(BIN)/$(EXECUTABLE)
