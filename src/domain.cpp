@@ -139,8 +139,9 @@ void Domain::compute(char* inputFile) {
     if (mWorldRank == 0)
         setDbJobState(JS_RUNNING);
 
+    int userStatus = getDbUserStatus();
 
-	while ( currentTime < stopTime ){
+	while ((userStatus!=US_STOP) && ( currentTime < stopTime ) ){
 		nextStep();
 		//printBlocksToConsole();
 		/*curStepCount++;
@@ -155,6 +156,10 @@ void Domain::compute(char* inputFile) {
 		}*/
         int newPercentage = 100.0* (1.0 - (stopTime-currentTime) / computeInterval);
         if (newPercentage>percentage){
+            //check for termination request
+        	userStatus = getDbUserStatus();
+
+
             percentage = newPercentage;
             if (mWorldRank == 0)
                 setDbJobPercentage(percentage);

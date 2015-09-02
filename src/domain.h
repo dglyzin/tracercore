@@ -248,6 +248,9 @@ private:
 	}
 	void storeDbFileName(char* fname);
 
+	int getDbUserStatus(){
+		return dbConnGetUserStatus(mJobId);
+	}
 
 };
 

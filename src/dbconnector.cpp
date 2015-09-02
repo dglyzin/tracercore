@@ -99,3 +99,38 @@ void dbConnStoreFileName(int jobId, char* fname){
 		}
 
 }
+
+
+int dbConnGetUserStatus(int jobId){
+	int result = 0;
+	try {
+		  sql::Driver *driver;
+		  sql::Connection *con;
+		  sql::Statement *stmt;
+		  sql::ResultSet *res;
+		  /* Create a connection */
+		  driver = get_driver_instance();
+		  con = driver->connect("192.168.10.100", "cherry", "sho0ro0p");
+		  /* Connect to the MySQL test database */
+		  con->setSchema("cluster");
+		  //find total number of files
+
+		  stmt = con->createStatement();
+		  char stmtstring[512];
+		  sprintf(stmtstring, "SELECT userstatus AS Ustat FROM jobs WHERE id=%d", jobId);
+		  res = stmt->executeQuery(stmtstring);
+          if (res->next())
+		      result = res->getInt(1);
+		  delete stmt;
+		  delete res;
+		  delete con;
+		} catch (sql::SQLException &e) {
+		  cout << "# ERR: SQLException in " << __FILE__;
+		  cout << "(" << __FUNCTION__ << ") on line "   << __LINE__ << endl;
+		  cout << "# ERR: " << e.what();
+		  cout << " (MySQL error code: " << e.getErrorCode();
+		  cout << ", SQLState: " << e.getSQLState() << " )" << endl;
+		}
+	return result;
+
+}
