@@ -166,6 +166,7 @@ void Domain::compute(char* inputFile) {
 			if( counterSaveTime > saveInterval ) {
 				counterSaveTime = 0;
 				saveState(inputFile);
+				storeDbFileName(inputFile);
 			}
 		}
 	}
@@ -947,4 +948,20 @@ void Domain::checkOptions(int flags, double _stopTime, char* saveFile) {
 	if( flags & LOAD_FILE )
 		loadStateFromFile(saveFile);
 }
+
+
+void Domain::storeDbFileName(char* inputFile){
+    char saveFile[100];
+
+	int length = lastChar(inputFile, '/');
+
+	strncpy(saveFile, inputFile, length);
+	saveFile[ length ] = 0;
+
+	sprintf(saveFile, "%s%s%f%s", saveFile, "/project-", currentTime, ".bin");
+
+
+	dbConnStoreFileName(mJobId, saveFile);
+}
+
 

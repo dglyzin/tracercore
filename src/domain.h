@@ -246,7 +246,7 @@ private:
 	void setDbJobPercentage(int percentage){
         dbConnSetJobPercentage(mJobId, percentage);
 	}
-
+	void storeDbFileName(char* fname);
 
 
 };

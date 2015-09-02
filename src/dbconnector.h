@@ -10,5 +10,7 @@
 
 void dbConnSetJobState(int mJobID, int state);
 void dbConnSetJobPercentage(int mJobID, int state);
+void dbConnStoreFileName(int jobId, char* fname);
+
 
 #endif /* DBCONNECTOR_H_ */
