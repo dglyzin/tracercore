@@ -25,6 +25,7 @@
 
 #include "interconnect.h"
 #include "solvers/solver.h"
+#include "dbconnector.h"
 
 /*
  * Основной управляющий класс приложения.
@@ -33,7 +34,7 @@
 
 class Domain {
 public:
-	Domain(int _world_rank, int _world_size, char* inputFile);
+	Domain(int _world_rank, int _world_size, char* inputFile, int _jobId);
 
 	virtual ~Domain();
 
@@ -138,6 +139,11 @@ private:
 	 */
 	int mWorldSize;
 
+    /*
+     * Глобальный Id задачи для базы
+     */
+    int mJobId;
+
 	/*
 	 * Количество блоков
 	 */
@@ -230,6 +236,20 @@ private:
 
 	void confirmStep();
 	void rejectStep();
+
+	/*
+	 * Database status manipulations
+	 */
+	void setDbJobState(int state){
+        dbConnSetJobState(mJobId, state);
+	}
+	void setDbJobPercentage(int percentage){
+        dbConnSetJobPercentage(mJobId, percentage);
+	}
+
+
+
 };
+
 
 #endif /* SRC_DOMAIN_H_ */

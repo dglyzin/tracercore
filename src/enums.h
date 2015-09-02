@@ -47,6 +47,12 @@ enum BLOCK_TYPE { NULL_BLOCK, CPU, GPU };
  */
 enum MEMORY_ALLOC_TYPE { NOT_ALLOC, NEW, CUDA_MALLOC, CUDA_MALLOC_HOST };
 
+/*
+ * Статус задачи в базе
+ */
+
+enum JOB_STATE { JS_STARTED, JS_PREPROCESSING, JS_QUEUED, JS_RUNNING, JS_CANCELLED, JS_FINISHED, JS_FAILED  };
+
 
 int oppositeBorder(int side);
 

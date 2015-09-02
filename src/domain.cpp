@@ -25,9 +25,10 @@ int lastChar(char* source, char ch) {
 	return index;
 }
 
-Domain::Domain(int _world_rank, int _world_size, char* inputFile) {
+Domain::Domain(int _world_rank, int _world_size, char* inputFile, int _jobId) {
 	mWorldRank = _world_rank;
 	mWorldSize = _world_size;
+	mJobId = _jobId;
 
 	currentTime = 0;
 	mStepCount = 0;
@@ -133,6 +134,11 @@ void Domain::compute(char* inputFile) {
 
 	//FILE* out;
 	//out = fopen("/home/frolov2/Tracer_project/speed", "wt");
+    double computeInterval = stopTime - currentTime;
+    int percentage = 0;
+    if (mWorldRank == 0)
+        setDbJobState(JS_RUNNING);
+
 
 	while ( currentTime < stopTime ){
 		nextStep();
@@ -147,8 +153,14 @@ void Domain::compute(char* inputFile) {
 			fprintf(out, "%f %f\n", currentTime, t2 - t1);
 			t1 = MPI_Wtime();
 		}*/
+        int newPercentage = 100.0* (stopTime-currentTime) / computeInterval;
+        if (newPercentage>percentage){
+            percentage = newPercentage;
+            if (mWorldRank == 0)
+                setDbJobPercentage(percentage);
+        }
 
-		if( saveInterval != 0 ) {
+        if( saveInterval != 0 ) {
 			counterSaveTime += timeStep;
 
 			if( counterSaveTime > saveInterval ) {
@@ -158,7 +170,8 @@ void Domain::compute(char* inputFile) {
 		}
 	}
 	cout <<"Computation finished!" << mWorldRank << endl;
-
+	if (mWorldRank == 0)
+	    setDbJobState(JS_FINISHED);
 	//fclose(out);
 }
 
@@ -934,3 +947,4 @@ void Domain::checkOptions(int flags, double _stopTime, char* saveFile) {
 	if( flags & LOAD_FILE )
 		loadStateFromFile(saveFile);
 }
+
