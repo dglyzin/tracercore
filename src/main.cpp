@@ -26,17 +26,18 @@ int main(int argc, char * argv[]) {
 	 */
 	double time1, time2;
 
-	char* inputFile = argv[1];
-	int flags = atoi(argv[2]);
-	double stopTime = atof(argv[3]);
-	char* saveFile = argv[4];
+	int jobId = atoi(argv[1]);
+	char* inputFile = argv[2];
+	int flags = atoi(argv[3]);
+	double stopTime = atof(argv[4]);
+	char* saveFile = argv[5];
 
 	/*
 	 * Создание основного управляющего класса.
 	 * Номер потока, количество потоков и путь к файлу с данными.
 	 */
 	printf ("DEBUG creating domain...\n ");
-	Domain* d = new Domain(world_rank, world_size, inputFile);
+	Domain* d = new Domain(world_rank, world_size, inputFile, jobId);
 	d->checkOptions(flags, stopTime, saveFile);
 
 	//d->printBlocksToConsole();

@@ -19,7 +19,7 @@ SRCBLCGPU=$(SRCBLC)/gpu
 
 
 BIN=bin
-MPILIB=-I/usr/mpi/gcc/openmpi-1.8.4/include -L /usr/mpi/gcc/openmpi-1.8.4/lib -lmpi -lmpi_cxx
+MPILIB=-I/usr/mpi/gcc/openmpi-1.8.4/include -L /usr/mpi/gcc/openmpi-1.8.4/lib -lmpi -lmpi_cxx -lmysqlcppconn
 
 USERFUNCLIB=./bin -l userfuncs
 
@@ -35,7 +35,7 @@ SOLVERDP45=$(SRCSOLDP45)/dp45solver.cpp $(SRCSOLDP45)/dp45solvercpu.cpp $(SRCSOL
 SOLVER=$(SRCSOL)/solver.cpp $(SOLVEREULER) $(SOLVERRK4) $(SOLVERDP45)
 
 
-SOURCE=$(SRC)/main.cpp $(SRC)/domain.cpp $(SRC)/interconnect.cpp $(SRC)/enums.cpp $(BLOCK) $(SOLVER)
+SOURCE=$(SRC)/main.cpp $(SRC)/domain.cpp $(SRC)/interconnect.cpp $(SRC)/enums.cpp $(SRC)/dbconnector.cpp $(BLOCK) $(SOLVER)
 
 OBJECT=$(SOURCE:.cpp=.o)
 
