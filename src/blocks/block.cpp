@@ -50,6 +50,7 @@ Block::Block(int _blockNumber, int _dimension, int _xCount, int _yCount, int _zC
 			zOffset = _zOffset;
 
 			break;
+
 		default:
 			break;
 	}
