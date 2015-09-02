@@ -153,7 +153,7 @@ void Domain::compute(char* inputFile) {
 			fprintf(out, "%f %f\n", currentTime, t2 - t1);
 			t1 = MPI_Wtime();
 		}*/
-        int newPercentage = 100.0* (1.0 - (stopTime-currentTime) ) / computeInterval;
+        int newPercentage = 100.0* (1.0 - (stopTime-currentTime) / computeInterval);
         if (newPercentage>percentage){
             percentage = newPercentage;
             if (mWorldRank == 0)
