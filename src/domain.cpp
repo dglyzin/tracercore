@@ -139,8 +139,9 @@ void Domain::compute(char* inputFile) {
     if (mWorldRank == 0)
         setDbJobState(JS_RUNNING);
 
+    int userStatus = getDbUserStatus();
 
-	while ( currentTime < stopTime ){
+	while ((userStatus!=US_STOP) && ( currentTime < stopTime ) ){
 		nextStep();
 		//printBlocksToConsole();
 		/*curStepCount++;
@@ -155,6 +156,10 @@ void Domain::compute(char* inputFile) {
 		}*/
         int newPercentage = 100.0* (1.0 - (stopTime-currentTime) / computeInterval);
         if (newPercentage>percentage){
+            //check for termination request
+        	userStatus = getDbUserStatus();
+
+
             percentage = newPercentage;
             if (mWorldRank == 0)
                 setDbJobPercentage(percentage);
@@ -166,6 +171,7 @@ void Domain::compute(char* inputFile) {
 			if( counterSaveTime > saveInterval ) {
 				counterSaveTime = 0;
 				saveState(inputFile);
+				storeDbFileName(inputFile);
 			}
 		}
 	}
@@ -947,4 +953,20 @@ void Domain::checkOptions(int flags, double _stopTime, char* saveFile) {
 	if( flags & LOAD_FILE )
 		loadStateFromFile(saveFile);
 }
+
+
+void Domain::storeDbFileName(char* inputFile){
+    char saveFile[100];
+
+	int length = lastChar(inputFile, '/');
+
+	strncpy(saveFile, inputFile, length);
+	saveFile[ length ] = 0;
+
+	sprintf(saveFile, "%s%s%f%s", saveFile, "/project-", currentTime, ".bin");
+
+
+	dbConnStoreFileName(mJobId, saveFile);
+}
+
 
