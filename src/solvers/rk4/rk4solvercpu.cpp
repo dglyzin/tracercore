@@ -81,3 +81,7 @@ void RK4SolverCpu::print(int zCount, int yCount, int xCount, int cellSize) {
 	printf("mArg: \n");
 	printMatrix(mArg, zCount, yCount, xCount, cellSize);
 }
+
+double* RK4SolverCpu::getDenseOutput(Solver* secondState) {
+	return NULL;
+}

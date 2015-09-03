@@ -142,3 +142,7 @@ void DP45SolverCpu::print(int zCount, int yCount, int xCount, int cellSize) {
 	printf("mArg: \n");
 	printMatrix(mArg, zCount, yCount, xCount, cellSize);
 }
+
+double* DP45SolverCpu::getDenseOutput(Solver* secondState) {
+	return NULL;
+}
