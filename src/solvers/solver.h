@@ -54,7 +54,7 @@ public:
 
 	virtual void print(int zCount, int yCount, int xCount, int cellSize) = 0;
 
-	virtual double* getDencseOutput(Solver* secondState) = 0;
+	virtual double* getDenseOutput(Solver* secondState) = 0;
 
 protected:
   	int     mCount; //total number of elements in every array
