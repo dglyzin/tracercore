@@ -177,3 +177,7 @@ double DP45SolverGpu::getStepError(double timeStep){
 	return getStepErrorDP45(mTempStore1, e1, mTempStore3, e3, mTempStore4, e4, mTempStore5, e5, mTempStore6, e6, mTempStore7, e7, mState, mArg, timeStep, aTol, rTol, mCount);
 }
 
+double* DP45SolverGpu::getDenseOutput(Solver* secondState) {
+	return NULL;
+}
+
