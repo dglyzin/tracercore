@@ -49,16 +49,16 @@ void execSQL(char *sqlString){
 void dbConnSetJobState(int jobId, int state){
 	char stmtstring[256];
 	if (state == JS_FINISHED)
-	    sprintf(stmtstring, "UPDATE tasks SET `update`=1, state=%d,  date_end=NOW() WHERE id=%d", state, jobId);
+	    sprintf(stmtstring, "UPDATE tasks SET state=%d,  date_end=NOW() WHERE id=%d", state, jobId);
 	else
-	    sprintf(stmtstring, "UPDATE tasks SET `update`=1, state=%d WHERE id=%d", state, jobId);
+	    sprintf(stmtstring, "UPDATE tasks SET state=%d WHERE id=%d", state, jobId);
 
 	execSQL(stmtstring);
 }
 
 void dbConnSetJobPercentage(int jobId, int percentage){
 	char stmtstring[256];
-	sprintf(stmtstring, "UPDATE tasks SET `update`=1, readiness=%d WHERE id=%d", percentage, jobId);
+	sprintf(stmtstring, "UPDATE tasks SET readiness=%d WHERE id=%d", percentage, jobId);
 	execSQL(stmtstring);
 }
 
@@ -85,7 +85,7 @@ void dbConnStoreFileName(int jobId, char* fname){
 		  delete stmt;
 		  delete res;
 		  //insert row with filename
-          sprintf(stmtstring, "INSERT INTO task_results (num, filename, task_id) VALUES (%d, %s, '%d')", total, fname, jobId);
+          sprintf(stmtstring, "INSERT INTO task_results (num, filename, task_id) VALUES (%d, '%s', %d)", total, fname, jobId);
 		  stmt = con->createStatement();
 		  stmt->execute(stmtstring);
 		  delete stmt;
