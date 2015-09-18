@@ -188,6 +188,8 @@ private:
 
 	MPI_Status status;
 
+	Solver* mPreviousState;
+
 	void loadStateFromFile(char* dataFile);
 	void setStopTime(double _stopTime) { stopTime = _stopTime; }
 
@@ -236,6 +238,8 @@ private:
 
 	void confirmStep();
 	void rejectStep();
+
+	int getMaximumNumberSavedStates();
 
 	/*
 	 * Database status manipulations

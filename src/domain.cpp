@@ -57,6 +57,8 @@ Domain::Domain(int _world_rank, int _world_size, char* inputFile, int _jobId) {
 
 	mAcceptedStepCount = 0;
 	mRejectedStepCount = 0;
+
+
 }
 
 Domain::~Domain() {
@@ -944,6 +946,11 @@ bool Domain::isNan() {
 
 
 	return false;
+}
+
+int Domain::getMaximumNumberSavedStates() {
+
+	return 0;
 }
 
 void Domain::checkOptions(int flags, double _stopTime, char* saveFile) {
