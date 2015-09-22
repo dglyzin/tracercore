@@ -8,8 +8,13 @@
 #include "processingunit.h"
 
 ProcessingUnit::ProcessingUnit() {
-	// TODO Auto-generated constructor stub
+	doubleArrays.clear();
+	doublePointerArrays.clear();
 
+	intArrays.clear();
+	intPointerArrays.clear();
+
+	doublePinnedArrays.clear();
 }
 
 ProcessingUnit::~ProcessingUnit() {
