@@ -16,3 +16,34 @@ CPU::~CPU() {
 	// TODO Auto-generated destructor stub
 }
 
+double* CPU::getDoubleArray(int size) {
+	return new double [size];
+}
+
+double** CPU::getDoublePointerArray(int size) {
+	return new double* [size];
+}
+
+int* CPU::getIntArray(int size) {
+	return new int [size];
+}
+
+int** CPU::getIntPointerArray(int size) {
+	return new int* [size];
+}
+
+void CPU::deleteDeviceSpecificArray(double* toDelete) {
+	delete toDelete;
+}
+
+void CPU::deleteDeviceSpecificArray(double** toDelete) {
+	delete toDelete;
+}
+
+void CPU::deleteDeviceSpecificArray(int* toDelete) {
+	delete toDelete;
+}
+
+void CPU::deleteDeviceSpecificArray(int** toDelete) {
+	delete toDelete;
+}

@@ -64,11 +64,11 @@ private:
 
 
 
-	virtual void deleteIntArray(int* toDelete) = 0;
-	virtual void deleteIntPointerArray(int** toDelete) = 0;
+	virtual void deleteDeviceSpecificArray(double* toDelete) = 0;
+	virtual void deleteDeviceSpecificArray(double** toDelete) = 0;
 
-	virtual void deleteDoubleArray(double* toDelete) = 0;
-	virtual void deleteDoublePointerArray(double** toDelete) = 0;
+	virtual void deleteDeviceSpecificArray(int* toDelete) = 0;
+	virtual void deleteDeviceSpecificArray(int** toDelete) = 0;
 
 	void deleteDoublePinnedArray(double* toDelete);
 };

@@ -37,7 +37,7 @@ void ProcessingUnit::deleteAllDoubleArrays() {
 	list<double*>::iterator i;
 
 	for (i = doubleArrays.begin(); i < doubleArrays.end(); ++i) {
-		deleteDoubleArray(*i);
+		deleteDeviceSpecificArray(*i);
 	}
 
 	doubleArrays.clear();
@@ -47,7 +47,7 @@ void ProcessingUnit::deleteAllDoublePointerArrays() {
 	list<double**>::iterator i;
 
 	for (i = doublePointerArrays.begin(); i < doublePointerArrays.end(); ++i) {
-		deleteDoublePointerArray(*i);
+		deleteDeviceSpecificArray(*i);
 	}
 
 	doublePointerArrays.clear();
@@ -57,7 +57,7 @@ void ProcessingUnit::deleteAllIntArrays() {
 	list<int*>::iterator i;
 
 	for (i = intArrays.begin(); i < intArrays.end(); ++i) {
-		deleteIntArray(*i)
+		deleteDeviceSpecificArray(*i)
 	}
 
 	intArrays.clear();
@@ -67,7 +67,7 @@ void ProcessingUnit::deleteAllIntPonterArrays() {
 	list<int**>::iterator i;
 
 	for (i = intPointerArrays.begin(); i < intPointerArrays.end(); ++i) {
-		deleteIntPointerArray(*i)
+		deleteDeviceSpecificArray(*i)
 	}
 
 	intPointerArrays.clear();
