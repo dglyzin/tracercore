@@ -7,6 +7,8 @@
 
 #include "processingunit.h"
 
+using namespace std;
+
 ProcessingUnit::ProcessingUnit() {
 	doubleArrays.clear();
 	doublePointerArrays.clear();
@@ -19,6 +21,66 @@ ProcessingUnit::ProcessingUnit() {
 
 ProcessingUnit::~ProcessingUnit() {
 	// TODO Auto-generated destructor stub
+}
+
+void ProcessingUnit::deleteAllArrays() {
+	deleteAllDoubleArrays();
+	deleteAllDoublePointerArrays();
+
+	deleteAllIntArrays();
+	deleteAllIntPonterArrays();
+
+	deleteAllDoublePinnedArrays();
+}
+
+void ProcessingUnit::deleteAllDoubleArrays() {
+	list<double*>::iterator i;
+
+	for (i = doubleArrays.begin(); i < doubleArrays.end(); ++i) {
+		deleteDoubleArray(*i);
+	}
+
+	doubleArrays.clear();
+}
+
+void ProcessingUnit::deleteAllDoublePointerArrays() {
+	list<double**>::iterator i;
+
+	for (i = doublePointerArrays.begin(); i < doublePointerArrays.end(); ++i) {
+		deleteDoublePointerArray(*i);
+	}
+
+	doublePointerArrays.clear();
+}
+
+void ProcessingUnit::deleteAllIntArrays() {
+	list<int*>::iterator i;
+
+	for (i = intArrays.begin(); i < intArrays.end(); ++i) {
+		deleteIntArray(*i)
+	}
+
+	intArrays.clear();
+}
+
+void ProcessingUnit::deleteAllIntPonterArrays() {
+	list<int**>::iterator i;
+
+	for (i = intPointerArrays.begin(); i < intPointerArrays.end(); ++i) {
+		deleteIntPointerArray(*i)
+	}
+
+	intPointerArrays.clear();
+}
+
+void ProcessingUnit::deleteAllDoublePinnedArrays() {
+	list<double*>::iterator i;
+
+	for (i = doublePinnedArrays.begin(); i < doublePinnedArrays.end(); ++i) {
+		deleteAllDoublePinnedArrays(*i)
+	}
+
+	doublePinnedArrays.clear();
 }
 
 double* ProcessingUnit::newDoublePinnedArray(int size) {

@@ -40,6 +40,20 @@ private:
 
 	std::list<double*> doublePinnedArrays;
 
+
+
+	void deleteAllArrays();
+
+	void deleteAllDoubleArrays();
+	void deleteAllDoublePointerArrays();
+
+	void deleteAllIntArrays();
+	void deleteAllIntPonterArrays();
+
+	void deleteAllDoublePinnedArrays();
+
+
+
 	virtual double* getDoubleArray(int size) = 0;
 	virtual double** getDoublePointerArray(int size) = 0;
 
@@ -47,6 +61,8 @@ private:
 	virtual int** getIntPointerArray(int size) = 0;
 
 	double* getDoublePinnedArray(int size);
+
+
 
 	virtual void deleteIntArray(int* toDelete) = 0;
 	virtual void deleteIntPointerArray(int** toDelete) = 0;
