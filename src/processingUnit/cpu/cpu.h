@@ -18,11 +18,11 @@ public:
 
 	void prepareBorder(double* result, double* source, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop);
 
-	double* newDoubleArray(int size);
-	double** newDoublePointerArray(int size);
+	double* getDoubleArray(int size);
+	double** getDoublePointerArray(int size);
 
-	int* newIntArray(int size);
-	int** newIntPointerArray(int size);
+	int* getIntArray(int size);
+	int** getIntPointerArray(int size);
 };
 
 #endif /* SRC_PROCESSINGUNIT_CPU_CPU_H_ */
