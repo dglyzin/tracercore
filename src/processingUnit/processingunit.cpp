@@ -20,7 +20,7 @@ ProcessingUnit::ProcessingUnit() {
 }
 
 ProcessingUnit::~ProcessingUnit() {
-	// TODO Auto-generated destructor stub
+	deleteAllArrays();
 }
 
 void ProcessingUnit::deleteAllArrays() {
