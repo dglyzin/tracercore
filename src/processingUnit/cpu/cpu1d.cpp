@@ -16,3 +16,32 @@ CPU_1d::~CPU_1d() {
 	// TODO Auto-generated destructor stub
 }
 
+void CPU_1d::computeBorder(double* result, double** source, double time, double* parametrs, double** externalBorder, int zCount, int yCount, int xCount, int haloSize, double* mParams) {
+# pragma omp parallel
+	{
+# pragma omp for
+		for (int x = 0; x < haloSize; ++x) {
+			//cout << "Border Calc x_" << x << endl;
+			mUserFuncs[ mCompFuncNumber[x] ](result, source, time, x, 0, 0, mParams, externalBorder);
+		}
+
+# pragma omp for
+		for (int x = xCount - haloSize; x < xCount; ++x) {
+			//cout << "Border Calc x_" << x << endl;
+			mUserFuncs[ mCompFuncNumber[x] ](result, source, time, x, 0, 0, mParams, externalBorder);
+		}
+	}
+
+	//scanf("%c", &c);
+}
+
+void CPU_1d::computeCenter(double* result, double** source, double time, double* parametrs, double** externalBorder, int zCount, int yCount, int xCount, int haloSize, double* mParams) {
+# pragma omp parallel
+	{
+# pragma omp for
+		for (int x = haloSize; x < xCount - haloSize; ++x) {
+			//cout << "Calc x_" << x << endl;
+			mUserFuncs[ mCompFuncNumber[x] ](result, source, time, x, 0, 0, mParams, externalBorder);
+		}
+	}
+}

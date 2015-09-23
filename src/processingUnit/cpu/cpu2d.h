@@ -14,6 +14,9 @@ class CPU_2d: public CPU {
 public:
 	CPU_2d();
 	virtual ~CPU_2d();
+
+	void computeBorder(double* result, double** source, double time, double* parametrs, double** externalBorder);
+	void computeCenter(double* result, double** source, double time, double* parametrs, double** externalBorder);
 };
 
 #endif /* SRC_PROCESSINGUNIT_CPU_CPU2D_H_ */
