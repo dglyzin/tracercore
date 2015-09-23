@@ -16,7 +16,7 @@ public:
 	virtual void computeBorder(double* result, double** source, double time, double* parametrs, double** externalBorder) = 0;
 	virtual void computeCenter(double* result, double** source, double time, double* parametrs, double** externalBorder) = 0;
 
-	void prepareBorder(double* result, double* source, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop);
+	void prepareBorder(double* result, double* source, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop, int yCount, int xCount, int cellSize);
 
 
 	double* getDoubleArray(int size);
