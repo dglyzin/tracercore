@@ -15,8 +15,8 @@ public:
 	CPU_2d();
 	virtual ~CPU_2d();
 
-	void computeBorder(double* result, double** source, double time, double* parametrs, double** externalBorder);
-	void computeCenter(double* result, double** source, double time, double* parametrs, double** externalBorder);
+	void computeBorder(double* result, double** source, double time, double* parametrs, double** externalBorder, int zCount, int yCount, int xCount, int haloSize);
+	void computeCenter(double* result, double** source, double time, double* parametrs, double** externalBorder, int zCount, int yCount, int xCount, int haloSize);
 };
 
 #endif /* SRC_PROCESSINGUNIT_CPU_CPU2D_H_ */
