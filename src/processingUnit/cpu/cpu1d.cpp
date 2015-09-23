@@ -22,13 +22,13 @@ void CPU_1d::computeBorder(double* result, double** source, double time, double*
 # pragma omp for
 		for (int x = 0; x < haloSize; ++x) {
 			//cout << "Border Calc x_" << x << endl;
-			mUserFuncs[ mCompFuncNumber[x] ](result, source, time, x, 0, 0, mParams, externalBorder);
+			mUserFuncs[ mCompFuncNumber[x] ](result, source, time, x, 0, 0, parametrs, externalBorder);
 		}
 
 # pragma omp for
 		for (int x = xCount - haloSize; x < xCount; ++x) {
 			//cout << "Border Calc x_" << x << endl;
-			mUserFuncs[ mCompFuncNumber[x] ](result, source, time, x, 0, 0, mParams, externalBorder);
+			mUserFuncs[ mCompFuncNumber[x] ](result, source, time, x, 0, 0, parametrs, externalBorder);
 		}
 	}
 
@@ -41,7 +41,7 @@ void CPU_1d::computeCenter(double* result, double** source, double time, double*
 # pragma omp for
 		for (int x = haloSize; x < xCount - haloSize; ++x) {
 			//cout << "Calc x_" << x << endl;
-			mUserFuncs[ mCompFuncNumber[x] ](result, source, time, x, 0, 0, mParams, externalBorder);
+			mUserFuncs[ mCompFuncNumber[x] ](result, source, time, x, 0, 0, parametrs, externalBorder);
 		}
 	}
 }
