@@ -15,7 +15,7 @@
 class StepStorage {
 public:
 	StepStorage();
-	StepStorage(ProcessingUnit* pc, int count, double _aTol, double _rTol);
+	StepStorage(ProcessingUnit* pu, int count, double _aTol, double _rTol);
 	virtual ~StepStorage();
 
     void copyState(ProcessingUnit* pc, double* result);

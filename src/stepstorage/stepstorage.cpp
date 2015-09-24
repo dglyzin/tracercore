@@ -14,10 +14,10 @@ StepStorage::StepStorage() {
 	rTol = 0;
 }
 
-StepStorage::StepStorage(ProcessingUnit* pc, int count, double _aTol, double _rTol) {
+StepStorage::StepStorage(ProcessingUnit* pu, int count, double _aTol, double _rTol) {
 	mCount = count;
 
-	mState = pc->newDoubleArray(mCount);
+	mState = pu->newDoubleArray(mCount);
 
 	aTol = _aTol;
 	rTol = _rTol;

@@ -11,8 +11,8 @@ EulerStorage::EulerStorage() : StepStorage() {
 	mTempStore1 = NULL;
 }
 
-EulerStorage::EulerStorage(ProcessingUnit* pc, int count, double _aTol, double _rTol) : StepStorage(pc, count, _aTol, _rTol) {
-	mTempStore1 = pc->newDoubleArray(mCount);
+EulerStorage::EulerStorage(ProcessingUnit* pu, int count, double _aTol, double _rTol) : StepStorage(pc, count, _aTol, _rTol) {
+	mTempStore1 = pu->newDoubleArray(mCount);
 }
 
 EulerStorage::~EulerStorage() {

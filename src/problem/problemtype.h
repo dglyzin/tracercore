@@ -13,7 +13,7 @@
 
 class ProblemType {
 public:
-	ProblemType();
+	ProblemType(ProcessingUnit* pu);
 	virtual ~ProblemType();
 
 	virtual double* getSource(int stage, double time) = 0;

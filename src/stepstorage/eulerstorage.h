@@ -13,7 +13,7 @@
 class EulerStorage: public StepStorage {
 public:
 	EulerStorage();
-	EulerStorage(ProcessingUnit* pc, int count, double _aTol, double _rTol);
+	EulerStorage(ProcessingUnit* pu, int count, double _aTol, double _rTol);
 	virtual ~EulerStorage();
 
     double* getStageSource(int stage);
