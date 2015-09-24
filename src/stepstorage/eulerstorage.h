@@ -16,9 +16,6 @@ public:
 	EulerStorage(ProcessingUnit* pc, int count, double _aTol, double _rTol);
 	virtual ~EulerStorage();
 
-    void copyState(double* result);
-    void loadState(double* data);
-
     double* getStageSource(int stage);
     double* getStageResult(int stage);
 
@@ -39,6 +36,9 @@ public:
 	bool isErrorPermissible(double error, int totalDomainElements);
 
 	double* getDenseOutput(Solver* secondState);
+
+private:
+	double* mTempStore1;
 };
 
 #endif /* SRC_STEPSTORAGE_EULERSTORAGE_H_ */
