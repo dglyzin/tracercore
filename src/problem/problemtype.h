@@ -13,11 +13,14 @@
 
 class ProblemType {
 public:
-	ProblemType(ProcessingUnit* pu);
+	ProblemType();
 	virtual ~ProblemType();
 
 	virtual double* getSource(int stage, double time) = 0;
 	virtual double* getResult(int stage, double time) = 0;
+
+private:
+	StepStorage* createStageStorage(ProcessingUnit* pu, int solverType, int count, double aTol, double rTol);
 };
 
 #endif /* SRC_PROBLEM_PROBLEMTYPE_H_ */
