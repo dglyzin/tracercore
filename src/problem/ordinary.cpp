@@ -7,12 +7,18 @@
 
 #include "ordinary.h"
 
-Ordinary::Ordinary() {
-	// TODO Auto-generated constructor stub
-
+Ordinary::Ordinary(ProcessingUnit* pu, int solverType, int count, double aTol, double rTol) {
+	mStepStorage = createStageStorage(pu, solverType, count, aTol, rTol);
 }
 
 Ordinary::~Ordinary() {
 	// TODO Auto-generated destructor stub
 }
 
+double* Ordinary::getSource(int stage, double time) {
+	return mStepStorage->getStageSource(stage);
+}
+
+double* Ordinary::getResult(int stage, double time) {
+	return mStepStorage->getStageResult(stage);
+}

@@ -15,8 +15,11 @@ public:
 	Ordinary(ProcessingUnit* pu, int solverType, int count, double aTol, double rTol);
 	virtual ~Ordinary();
 
+	double* getSource(int stage, double time);
+	double* getResult(int stage, double time);
+
 private:
-	StepStorage* stepStorage;
+	StepStorage* mStepStorage;
 };
 
 #endif /* SRC_PROBLEM_ORDINARY_H_ */
