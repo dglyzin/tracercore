@@ -12,7 +12,7 @@ Ordinary::Ordinary(ProcessingUnit* pu, int solverType, int count, double aTol, d
 }
 
 Ordinary::~Ordinary() {
-	// TODO Auto-generated destructor stub
+	delete mStepStorage;
 }
 
 double* Ordinary::getSource(int stage, double time) {
