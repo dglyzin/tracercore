@@ -8,10 +8,13 @@
 #ifndef SRC_STEPSTORAGE_STEPSTORAGE_H_
 #define SRC_STEPSTORAGE_STEPSTORAGE_H_
 
+#include <stdlib.h>
+
 #include "../proceccingunit/processingunit.h"
 
 class StepStorage {
 public:
+	StepStorage();
 	StepStorage(ProcessingUnit* pc, int count, double _aTol, double _rTol);
 	virtual ~StepStorage();
 

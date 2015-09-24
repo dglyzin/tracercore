@@ -7,6 +7,13 @@
 
 #include "stepstorage.h"
 
+StepStorage::StepStorage() {
+	mCount = 0;
+	mState = NULL;
+	aTol = 0;
+	rTol = 0;
+}
+
 StepStorage::StepStorage(ProcessingUnit* pc, int count, double _aTol, double _rTol) {
 	mCount = count;
 
