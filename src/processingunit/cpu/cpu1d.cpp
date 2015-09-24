@@ -5,7 +5,7 @@
  *      Author: frolov
  */
 
-#include "cpu1d.h"
+#include "../../processingunit/cpu/cpu1d.h"
 
 CPU_1d::CPU_1d() {
 	// TODO Auto-generated constructor stub

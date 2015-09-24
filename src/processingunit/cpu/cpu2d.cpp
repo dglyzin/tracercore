@@ -5,7 +5,7 @@
  *      Author: frolov
  */
 
-#include "cpu2d.h"
+#include "../../processingunit/cpu/cpu2d.h"
 
 CPU_2d::CPU_2d() {
 	// TODO Auto-generated constructor stub

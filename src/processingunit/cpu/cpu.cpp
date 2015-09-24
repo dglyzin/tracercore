@@ -5,7 +5,7 @@
  *      Author: frolov
  */
 
-#include "cpu.h"
+#include "../../processingunit/cpu/cpu.h"
 
 CPU::CPU() {
 	// TODO Auto-generated constructor stub

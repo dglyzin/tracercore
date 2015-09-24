@@ -5,7 +5,7 @@
  *      Author: frolov
  */
 
-#include "cpu3d.h"
+#include "../../processingunit/cpu/cpu3d.h"
 
 CPU_3d::CPU_3d() {
 	// TODO Auto-generated constructor stub

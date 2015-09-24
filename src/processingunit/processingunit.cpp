@@ -5,7 +5,7 @@
  *      Author: frolov
  */
 
-#include "processingunit.h"
+#include "../processingunit/processingunit.h"
 
 using namespace std;
 
