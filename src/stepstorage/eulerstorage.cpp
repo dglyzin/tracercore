@@ -18,3 +18,35 @@ EulerStorage::EulerStorage(ProcessingUnit* pu, int count, double _aTol, double _
 EulerStorage::~EulerStorage() {
 	// TODO Auto-generated destructor stub
 }
+
+double* EulerStorage::getStageSource(int stahe) {
+	return mState;
+}
+
+double* EulerStorage::getStageResult(int stage) {
+	return mTempStore1;
+}
+
+double EulerStorage::getStageTimeStep(int stage) {
+	return 0.0;
+}
+
+void EulerStorage::prepareArgument(ProcessingUnit* pc, int stage, double timestep) {
+	pc->multiplyArrayByNumber(mTempStore1, mTempStore1, timestep, mCount);
+	pc->sumArrays(mTempStore1, mState, mTempStore1, mCount);
+}
+
+void EulerStorage::confirmStep(double timestep) {
+    double* temp = mState;
+    mState = mTempStore1;
+    mTempStore1 = temp;
+}
+
+void EulerStorage::rejectStep(double timestep) {
+	return;
+}
+
+double EulerStorage::getStepError(double timestep) {
+	return 0.0;
+}
+

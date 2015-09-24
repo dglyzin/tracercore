@@ -21,7 +21,7 @@ public:
 
     double getStageTimeStep(int stage);
 
-    void prepareArgument(int stage, double timeStep);
+    void prepareArgument(ProcessingUnit* pc, int stage, double timestep);
 
     void confirmStep(double timestep);
     void rejectStep(double timestep);

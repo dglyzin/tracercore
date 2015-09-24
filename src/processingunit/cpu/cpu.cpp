@@ -76,3 +76,17 @@ void CPU::copyArray(double* source, double* destination, int size) {
 		destination[i] = source[i];
 	}
 }
+
+void CPU::sumArrays(double* result, double* arg1, double* arg2, int size) {
+#pragma omp parallel for
+	for (int i = 0; i < size; ++i) {
+		result[i] = arg1[i] + arg2[i];
+	}
+}
+
+void CPU::multiplyArrayByNumber(double* result, double* arg, double factor, int size) {
+#pragma omp parallel for
+	for (int i = 0; i < size; ++i) {
+		result[i] = factor * arg[i];
+	}
+}

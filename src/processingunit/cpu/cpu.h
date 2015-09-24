@@ -8,6 +8,10 @@
 #ifndef SRC_PROCESSINGUNIT_CPU_CPU_H_
 #define SRC_PROCESSINGUNIT_CPU_CPU_H_
 
+#include <omp.h>
+
+#include "../processingunit.h"
+
 class CPU: public ProcessingUnit {
 public:
 	CPU();
@@ -33,6 +37,9 @@ public:
 	void deleteDeviceSpecificArray(int** toDelete);
 
 	void copyArray(double* source, double* destination, int size);
+
+	void sumArrays(double* result, double* arg1, double* arg2, int size);
+	void multiplyArrayByNumber(double* result, double* arg, double factor, int size);
 };
 
 #endif /* SRC_PROCESSINGUNIT_CPU_CPU_H_ */
