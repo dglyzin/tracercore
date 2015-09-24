@@ -25,10 +25,35 @@ int lastChar(char* source, char ch) {
 	return index;
 }
 
-Domain::Domain(int _world_rank, int _world_size, char* inputFile, int _jobId) {
-	mWorldRank = _world_rank;
-	mWorldSize = _world_size;
-	mJobId = _jobId;
+
+//TODO should be moved to mpi routines file
+//receives user status from python master process
+int getMasterUserStatus(){
+	int status;
+    MPI_Bcast(&status, 1, MPI_INT, 0, MPI_COMM_WORLD);
+    return status;
+}
+
+Domain::Domain(int _world_rank, int _world_size, char* inputFile) {
+    //Get worker communicator and determine if there is python master
+	mGlobalRank = _world_rank;
+
+	MPI_Comm_split(MPI_COMM_WORLD, 1, _world_rank, &mWorkerComm);
+
+	MPI_Comm_size(mWorkerComm, &mWorkerCommSize);
+	MPI_Comm_rank(mWorkerComm, &mWorkerRank);
+
+	if (mWorkerCommSize == _world_size)
+	    mPythonMaster = 0;
+	else if (mWorkerCommSize == _world_size - 1)
+		mPythonMaster = 1;
+	else{
+		mPythonMaster = 0;
+		printf("Communicator size error!");
+	}
+
+
+	//mJobId = _jobId;
 
 	currentTime = 0;
 	mStepCount = 0;
@@ -67,33 +92,37 @@ Domain::~Domain() {
 	for (int i = 0; i < mConnectionCount; ++i)
 		delete mInterconnects[i];
 	delete mInterconnects;
+	MPI_Comm_free(&mWorkerComm);
 }
 
 double** Domain::collectDataFromNode() {
 	double** resultAll = NULL;
 
-	if(mWorldRank == 0) {
+	if(mGlobalRank == 0) {
 		resultAll = new double* [mBlockCount];
 	}
 
 	for (int i = 0; i < mBlockCount; ++i) {
 		double* tmp = getBlockCurrentState(i);
 
-		if(mWorldRank == 0)
-			resultAll[i] = tmp;
+	if(mGlobalRank == 0)
+		resultAll[i] = tmp;
 	}
 
 	return resultAll;
 }
 
 double* Domain::getBlockCurrentState(int number) {
-	double* result = new double [mBlocks[number]->getGridElementCount()];
+	double* result;
 
-	if(mWorldRank == 0) {
+	if(mGlobalRank == 0) {
+		result = new double [mBlocks[number]->getGridElementCount()];
 		if(mBlocks[number]->isRealBlock()) {
 			mBlocks[number]->getCurrentState(result);
 		}
 		else {
+			//if domain 0 is master, then block-getnodenumber = rank in mpicommworld
+			//else this branch will not run
 			MPI_Recv(result, mBlocks[number]->getGridElementCount(), MPI_DOUBLE, mBlocks[number]->getNodeNumber(), 999, MPI_COMM_WORLD, &status);
 		}
 
@@ -101,7 +130,9 @@ double* Domain::getBlockCurrentState(int number) {
 	}
 	else {
 		if(mBlocks[number]->isRealBlock()) {
+			result = new double [mBlocks[number]->getGridElementCount()];
 			mBlocks[number]->getCurrentState(result);
+			//we send to global 0 no matter it is above ^^ or in python
 			MPI_Send(result, mBlocks[number]->getGridElementCount(), MPI_DOUBLE, 0, 999, MPI_COMM_WORLD);
 			delete result;
 			return NULL;
@@ -113,57 +144,39 @@ double* Domain::getBlockCurrentState(int number) {
 
 
 void Domain::compute(char* inputFile) {
-	cout << endl << "Computation started..." << mWorldRank << endl;
+	cout << endl << "Computation started..." << mWorkerRank << endl;
 	cout << "Current time: "<<currentTime<<", finish time: "<<stopTime<< ", time step: " << timeStep<<endl;
 	cout << "solver stage count: " << mSolverInfo->getStageCount() << endl;
 
 	if (mSolverInfo->isFSAL() )
 	    initSolvers();
 
-	/*if( flags & STEP_EXECUTION)
-		for (int i = 0; i < mStepCount; i++)
-			nextStep();
-	else*/
-
-	//int stepCount = (int)(stopTime / timeStep);
-	//int pitCount = (int)((double)(stepCount) / 100.0);
-	//int curStepCount = 0;
-
-	//double t1 = MPI_Wtime();
-	//double t2 = MPI_Wtime();
-
-	//FILE* out;
-	//out = fopen("/home/frolov2/Tracer_project/speed", "wt");
-    /*double computeInterval = stopTime - currentTime;
+	double computeInterval = stopTime - currentTime;
     int percentage = 0;
-    if (mWorldRank == 0)
-        setDbJobState(JS_RUNNING);
+    //if ((mWorkerRank == 0)&&(!mPythonMaster))
+    //    setDbJobState(JS_RUNNING);
 
-    int userStatus = getDbUserStatus();*/
+    int userStatus;
 
-	while (/*(userStatus!=US_STOP) && */( currentTime < stopTime ) ){
+    if (mPythonMaster)
+    	userStatus = getMasterUserStatus();
+    else
+    	userStatus = US_START;//getDbUserStatus();
+
+	while ((userStatus!=US_STOP) && ( currentTime < stopTime ) ){
 		nextStep();
 		//printBlocksToConsole();
-		/*curStepCount++;
 
-		if( curStepCount > pitCount ) {
-			curStepCount = 0;
-
-			t2 = MPI_Wtime();
-			printf("\ncurrent time: %f, speed time: %f, stepCount: %d, pitStep: %d\n", currentTime, t2 - t1, stepCount, pitCount);
-			fprintf(out, "%f %f\n", currentTime, t2 - t1);
-			t1 = MPI_Wtime();
-		}*/
-        /*int newPercentage = 100.0* (1.0 - (stopTime-currentTime) / computeInterval);
+		int newPercentage = 100.0* (1.0 - (stopTime-currentTime) / computeInterval);
         if (newPercentage>percentage){
             //check for termination request
-        	userStatus = getDbUserStatus();
-
+            if (mPythonMaster)
+        	    userStatus = getMasterUserStatus();
 
             percentage = newPercentage;
-            if (mWorldRank == 0)
-                setDbJobPercentage(percentage);
-        }*/
+            //if ((mWorkerRank == 0)&&(!mPythonMaster))
+            //    setDbJobPercentage(percentage);
+        }
 
         if( saveInterval != 0 ) {
 			counterSaveTime += timeStep;
@@ -171,14 +184,15 @@ void Domain::compute(char* inputFile) {
 			if( counterSaveTime > saveInterval ) {
 				counterSaveTime = 0;
 				saveState(inputFile);
-				//storeDbFileName(inputFile);
+				//if (!mPythonMaster)
+				//    storeDbFileName(inputFile);
 			}
 		}
 	}
-	cout <<"Computation finished!" << mWorldRank << endl;
-/*	if (mWorldRank == 0)
-	    setDbJobState(JS_FINISHED);*/
-	//fclose(out);
+	cout <<"Computation finished!" << mWorkerRank << endl;
+	//if ((mWorkerRank == 0)&&(!mPythonMaster))
+	//    setDbJobState(JS_FINISHED);
+
 }
 
 void Domain::initSolvers() {
@@ -189,7 +203,7 @@ void Domain::computeStage(int stage) {
 	prepareData(stage);
 
 	for (int i = 0; i < mConnectionCount; ++i)
-		mInterconnects[i]->sendRecv(mWorldRank);
+		mInterconnects[i]->sendRecv(mWorkerRank);
 
 	computeOneStepCenter(stage);
 
@@ -575,7 +589,7 @@ Block* Domain::readBlock(ifstream& in, int idx) {
 	}
 	cout << endl;*/
 
-	if(node == mWorldRank){
+	if(node == mWorkerRank){
 		if (deviceType==0)  //CPU BLOCK
 			switch (dimension) {
 				case 1:
@@ -780,7 +794,7 @@ void Domain::saveState(char* inputFile) {
 void Domain::saveStateToFile(char* path) {
 	double** resultAll = collectDataFromNode();
 
-	if( mWorldRank == 0 ) {
+	if( mGlobalRank == 0 ) {
 		ofstream out;
 		out.open(path, ios::binary);
 
@@ -844,7 +858,7 @@ void Domain::loadStateFromFile(char* dataFile) {
 void Domain::printStatisticsInfo(char* inputFile, char* outputFile, double calcTime, char* statisticsFile) {
 	//cout << endl << "PRINT STATISTIC INFO DOESN'T WORK" << endl;
 
-	if( mWorldRank == 0 ) {
+	if( mWorkerRank == 0 ) {
 		int count = 0;
 		for (int i = 0; i < mBlockCount; ++i) {
 			count += mBlocks[i]->getGridElementCount();
@@ -924,7 +938,7 @@ void Domain::printStatisticsInfo(char* inputFile, char* outputFile, double calcT
 bool Domain::isNan() {
 	double** resultAll = collectDataFromNode();
 
-	if( mWorldRank == 0 ) {
+	if( mWorkerRank == 0 ) {
 		for (int i = 0; i < mBlockCount; ++i) {
 			int count = mBlocks[i]->getGridElementCount();
 
@@ -954,7 +968,7 @@ void Domain::checkOptions(int flags, double _stopTime, char* saveFile) {
 		loadStateFromFile(saveFile);
 }
 
-
+/*
 void Domain::storeDbFileName(char* inputFile){
     char saveFile[100];
 
@@ -967,6 +981,6 @@ void Domain::storeDbFileName(char* inputFile){
 
 
 	dbConnStoreFileName(mJobId, saveFile);
-}
+}*/
 
 

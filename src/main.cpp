@@ -1,6 +1,8 @@
 #include <mpi.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <cmath>
+
 
 #include "domain.h"
 
@@ -21,23 +23,25 @@ int main(int argc, char * argv[]) {
 	MPI_Comm_size(MPI_COMM_WORLD, &world_size);
 	MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
 
+
 	/*
 	 * Переменные для расчета время работы.
 	 */
 	double time1, time2;
 
-	int jobId = atoi(argv[1]);
-	char* inputFile = argv[2];
-	int flags = atoi(argv[3]);
-	double stopTime = atof(argv[4]);
-	char* saveFile = argv[5];
+	//int jobId = atoi(argv[1]);
+	char* inputFile = argv[1];
+	int flags = atoi(argv[2]);
+	double stopTime = atof(argv[3]);
+	char* saveFile = argv[4];
 
 	/*
 	 * Создание основного управляющего класса.
 	 * Номер потока, количество потоков и путь к файлу с данными.
 	 */
+	printf ("SLURM JOB %s STARTED\n ", getenv("SLURM_JOB_ID"));
 	printf ("DEBUG creating domain...\n ");
-	Domain* d = new Domain(world_rank, world_size, inputFile, jobId);
+	Domain* d = new Domain(world_rank, world_size, inputFile);
 	d->checkOptions(flags, stopTime, saveFile);
 
 	//d->printBlocksToConsole();
