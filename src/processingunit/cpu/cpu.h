@@ -31,6 +31,8 @@ public:
 
 	void deleteDeviceSpecificArray(int* toDelete);
 	void deleteDeviceSpecificArray(int** toDelete);
+
+	void copyArray(double* source, double* destination, int size);
 };
 
 #endif /* SRC_PROCESSINGUNIT_CPU_CPU_H_ */

@@ -31,6 +31,8 @@ public:
 
 	double* newDoublePinnedArray(int size);
 
+	virtual void copyArray(double* source, double* destination, int size) = 0;
+
 private:
 	std::list<double*> doubleArrays;
 	std::list<double**> doublePointerArrays;

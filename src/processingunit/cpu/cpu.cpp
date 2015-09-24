@@ -70,3 +70,9 @@ void CPU::deleteDeviceSpecificArray(int* toDelete) {
 void CPU::deleteDeviceSpecificArray(int** toDelete) {
 	delete toDelete;
 }
+
+void CPU::copyArray(double* source, double* destination, int size) {
+	for (int i = 0; i < size; ++i) {
+		destination[i] = source[i];
+	}
+}
