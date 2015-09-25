@@ -11,7 +11,7 @@ EulerStorage::EulerStorage() : StepStorage() {
 	mTempStore1 = NULL;
 }
 
-EulerStorage::EulerStorage(ProcessingUnit* pu, int count, double _aTol, double _rTol) : StepStorage(pc, count, _aTol, _rTol) {
+EulerStorage::EulerStorage(ProcessingUnit* pu, int count, double _aTol, double _rTol) : StepStorage(pu, count, _aTol, _rTol) {
 	mTempStore1 = pu->newDoubleArray(mCount);
 }
 
@@ -50,3 +50,27 @@ double EulerStorage::getStepError(double timestep) {
 	return 0.0;
 }
 
+bool EulerStorage::isFSAL() {
+	return false;
+}
+
+bool EulerStorage::isVariableStep() {
+	return false;
+}
+
+int EulerStorage::getStageCount() {
+	return 1;
+}
+
+double EulerStorage::getNewStep(double timeStep, double error, int totalDomainElements) {
+	return 0.0;
+}
+
+bool EulerStorage::isErrorPermissible(double error, int totalDomainElements) {
+	return true;
+}
+
+double* EulerStorage::getDenseOutput(StepStorage* secondState) {
+	printf("\nEuler dense output DON'T WORK!\n");
+	return NULL;
+}
