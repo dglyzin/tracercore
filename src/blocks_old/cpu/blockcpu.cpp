@@ -5,7 +5,8 @@
  *      Author: frolov
  */
 
-#include "blockcpu.h"
+#include "../../blocks_old/cpu/blockcpu.h"
+
 #include <cuda.h>
 #include <cuda_runtime_api.h>
 //#include "userfuncs.h"

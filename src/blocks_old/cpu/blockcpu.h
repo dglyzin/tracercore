@@ -8,8 +8,7 @@
 #ifndef SRC_BLOCKCPU_H_
 #define SRC_BLOCKCPU_H_
 
-#include "../block.h"
-
+#include "../../blocks_old/block.h"
 #include "../../solvers/euler/eulersolvercpu.h"
 #include "../../solvers/rk4/rk4solvercpu.h"
 #include "../../solvers/dp45/dp45solvercpu.h"

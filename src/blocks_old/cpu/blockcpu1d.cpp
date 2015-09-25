@@ -5,7 +5,7 @@
  *      Author: frolov
  */
 
-#include "blockcpu1d.h"
+#include "../../blocks_old/cpu/blockcpu1d.h"
 
 BlockCpu1d::BlockCpu1d(int _blockNumber, int _dimension, int _xCount, int _yCount, int _zCount,
 		int _xOffset, int _yOffset, int _zOffset,

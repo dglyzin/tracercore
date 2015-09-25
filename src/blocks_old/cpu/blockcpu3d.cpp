@@ -5,7 +5,7 @@
  *      Author: frolov
  */
 
-#include "blockcpu3d.h"
+#include "../../blocks_old/cpu/blockcpu3d.h"
 
 BlockCpu3d::BlockCpu3d(int _blockNumber, int _dimension, int _xCount, int _yCount, int _zCount,
 		int _xOffset, int _yOffset, int _zOffset,

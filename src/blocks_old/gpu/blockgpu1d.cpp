@@ -5,7 +5,7 @@
  *      Author: frolov
  */
 
-#include "blockgpu1d.h"
+#include "../../blocks_old/gpu/blockgpu1d.h"
 
 BlockGpu1d::BlockGpu1d(int _blockNumber, int _dimension, int _xCount, int _yCount, int _zCount,
 		int _xOffset, int _yOffset, int _zOffset,

@@ -5,7 +5,7 @@
  *      Author: frolov
  */
 
-#include "blockgpu.h"
+#include "../../blocks_old/gpu/blockgpu.h"
 
 using namespace std;
 

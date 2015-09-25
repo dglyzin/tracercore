@@ -5,7 +5,7 @@
  *      Author: frolov
  */
 
-#include "block.h"
+#include "../blocks_old/block.h"
 
 using namespace std;
 

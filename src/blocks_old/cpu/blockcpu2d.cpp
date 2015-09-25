@@ -5,7 +5,7 @@
  *      Author: frolov
  */
 
-#include "blockcpu2d.h"
+#include "../../blocks_old/cpu/blockcpu2d.h"
 
 BlockCpu2d::BlockCpu2d(int _blockNumber, int _dimension, int _xCount, int _yCount, int _zCount,
 		int _xOffset, int _yOffset, int _zOffset,

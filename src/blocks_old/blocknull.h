@@ -8,7 +8,7 @@
 #ifndef SRC_BLOCKNULL_H_
 #define SRC_BLOCKNULL_H_
 
-#include "block.h"
+#include "../blocks_old/block.h"
 
 /*
  * Блок - загушка.

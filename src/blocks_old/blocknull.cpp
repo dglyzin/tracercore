@@ -5,7 +5,7 @@
  *      Author: frolov
  */
 
-#include "blocknull.h"
+#include "../blocks_old/blocknull.h"
 
 BlockNull::BlockNull(int _blockNumber, int _dimension, int _xCount, int _yCount, int _zCount,
 		int _xOffset, int _yOffset, int _zOffset,

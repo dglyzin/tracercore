@@ -11,17 +11,13 @@
 #include <fstream>
 #include <string.h>
 
-
-#include "blocks/cpu/blockcpu1d.h"
-#include "blocks/cpu/blockcpu2d.h"
-#include "blocks/cpu/blockcpu3d.h"
-
-#include "blocks/gpu/blockgpu1d.h"
-#include "blocks/gpu/blockgpu2d.h"
-#include "blocks/gpu/blockgpu3d.h"
-
-#include "blocks/blocknull.h"
-
+#include "blocks_old/blocknull.h"
+#include "blocks_old/cpu/blockcpu1d.h"
+#include "blocks_old/cpu/blockcpu2d.h"
+#include "blocks_old/cpu/blockcpu3d.h"
+#include "blocks_old/gpu/blockgpu1d.h"
+#include "blocks_old/gpu/blockgpu2d.h"
+#include "blocks_old/gpu/blockgpu3d.h"
 
 #include "interconnect.h"
 #include "solvers/solver.h"

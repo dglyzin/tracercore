@@ -8,7 +8,7 @@
 #ifndef SRC_BLOCKS_BLOCKGPU1D_H_
 #define SRC_BLOCKS_BLOCKGPU1D_H_
 
-#include "blockgpu.h"
+#include "../../blocks_old/gpu/blockgpu.h"
 
 class BlockGpu1d: public BlockGpu {
 public:

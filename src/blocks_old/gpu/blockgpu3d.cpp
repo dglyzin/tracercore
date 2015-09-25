@@ -5,7 +5,7 @@
  *      Author: frolov
  */
 
-#include "blockgpu3d.h"
+#include "../../blocks_old/gpu/blockgpu3d.h"
 
 BlockGpu3d::BlockGpu3d(int _blockNumber, int _dimension, int _xCount, int _yCount, int _zCount,
 		int _xOffset, int _yOffset, int _zOffset,
