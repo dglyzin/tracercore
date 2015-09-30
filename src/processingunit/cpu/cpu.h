@@ -30,11 +30,11 @@ public:
 	int** getIntPointerArray(int size);
 
 
-	void deleteDeviceSpecificArray(double* toDelete);
-	void deleteDeviceSpecificArray(double** toDelete);
+	void deallocDeviceSpecificArray(double* toDelete);
+	void deallocDeviceSpecificArray(double** toDelete);
 
-	void deleteDeviceSpecificArray(int* toDelete);
-	void deleteDeviceSpecificArray(int** toDelete);
+	void deallocDeviceSpecificArray(int* toDelete);
+	void deallocDeviceSpecificArray(int** toDelete);
 
 	void copyArray(double* source, double* destination, int size);
 

@@ -23,6 +23,8 @@ public:
 
 	virtual void prepareBorder(double* result, double* source, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop, int yCount, int xCount, int cellSize) = 0;
 
+
+
 	double* newDoubleArray(int size);
 	double** newDoublePointerArray(int size);
 
@@ -30,6 +32,18 @@ public:
 	int** newIntPointerArray(int size);
 
 	double* newDoublePinnedArray(int size);
+
+
+
+	void deleteDeviceSpecificArray(double* toDelete);
+	void deleteDeviceSpecificArray(double** toDelete);
+
+	void deleteDeviceSpecificArray(int* toDelete);
+	void deleteDeviceSpecificArray(int** toDelete);
+
+	void deleteDoublePinnedArray(double* toDelete);
+
+
 
 	virtual void copyArray(double* source, double* destination, int size) = 0;
 
@@ -47,18 +61,6 @@ private:
 
 
 
-	void deleteAllArrays();
-
-	void deleteAllDoubleArrays();
-	void deleteAllDoublePointerArrays();
-
-	void deleteAllIntArrays();
-	void deleteAllIntPonterArrays();
-
-	void deleteAllDoublePinnedArrays();
-
-
-
 	virtual double* getDoubleArray(int size) = 0;
 	virtual double** getDoublePointerArray(int size) = 0;
 
@@ -69,13 +71,25 @@ private:
 
 
 
-	virtual void deleteDeviceSpecificArray(double* toDelete) = 0;
-	virtual void deleteDeviceSpecificArray(double** toDelete) = 0;
+	virtual void deallocDeviceSpecificArray(double* toDelete) = 0;
+	virtual void deallocDeviceSpecificArray(double** toDelete) = 0;
 
-	virtual void deleteDeviceSpecificArray(int* toDelete) = 0;
-	virtual void deleteDeviceSpecificArray(int** toDelete) = 0;
+	virtual void deallocDeviceSpecificArray(int* toDelete) = 0;
+	virtual void deallocDeviceSpecificArray(int** toDelete) = 0;
 
-	void deleteDoublePinnedArray(double* toDelete);
+	void deallocDoublePinnedArray(double* toDelete);
+
+
+
+	void deleteAllArrays();
+
+	void deleteAllDoubleArrays();
+	void deleteAllDoublePointerArrays();
+
+	void deleteAllIntArrays();
+	void deleteAllIntPonterArrays();
+
+	void deleteAllDoublePinnedArrays();
 };
 
 #endif /* SRC_PROCESSINGUNIT_PROCESSINGUNIT_H_ */

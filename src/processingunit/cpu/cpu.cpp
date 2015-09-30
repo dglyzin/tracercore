@@ -55,19 +55,19 @@ int** CPU::getIntPointerArray(int size) {
 	return new int* [size];
 }
 
-void CPU::deleteDeviceSpecificArray(double* toDelete) {
+void CPU::deallocDeviceSpecificArray(double* toDelete) {
 	delete toDelete;
 }
 
-void CPU::deleteDeviceSpecificArray(double** toDelete) {
+void CPU::deallocDeviceSpecificArray(double** toDelete) {
 	delete toDelete;
 }
 
-void CPU::deleteDeviceSpecificArray(int* toDelete) {
+void CPU::deallocDeviceSpecificArray(int* toDelete) {
 	delete toDelete;
 }
 
-void CPU::deleteDeviceSpecificArray(int** toDelete) {
+void CPU::deallocDeviceSpecificArray(int** toDelete) {
 	delete toDelete;
 }
 

@@ -33,54 +33,44 @@ void ProcessingUnit::deleteAllArrays() {
 	deleteAllDoublePinnedArrays();
 }
 
-void ProcessingUnit::deleteAllDoubleArrays() {
-	list<double*>::iterator i;
+double* ProcessingUnit::newDoubleArray(int size) {
+	double* array;
 
-	for (i = doubleArrays.begin(); i < doubleArrays.end(); ++i) {
-		deleteDeviceSpecificArray(*i);
-	}
+	array = getDoubleArray(size);
 
-	doubleArrays.clear();
+	doubleArrays.push_back(array);
+
+	return array;
 }
 
-void ProcessingUnit::deleteAllDoublePointerArrays() {
-	list<double**>::iterator i;
+double** ProcessingUnit::newDoublePointerArray(int size) {
+	double** array;
 
-	for (i = doublePointerArrays.begin(); i < doublePointerArrays.end(); ++i) {
-		deleteDeviceSpecificArray(*i);
-	}
+	array = getDoublePointerArray(size);
 
-	doublePointerArrays.clear();
+	doublePointerArrays.push_back(array);
+
+	return array;
 }
 
-void ProcessingUnit::deleteAllIntArrays() {
-	list<int*>::iterator i;
+int* ProcessingUnit::newIntArray(int size) {
+	int* array;
 
-	for (i = intArrays.begin(); i < intArrays.end(); ++i) {
-		deleteDeviceSpecificArray(*i)
-	}
+	array = getIntArray(size);
 
-	intArrays.clear();
+	intArrays.push_back(array);
+
+	return array;
 }
 
-void ProcessingUnit::deleteAllIntPonterArrays() {
-	list<int**>::iterator i;
+int** ProcessingUnit::newIntPointerArray(int size) {
+	int** array;
 
-	for (i = intPointerArrays.begin(); i < intPointerArrays.end(); ++i) {
-		deleteDeviceSpecificArray(*i)
-	}
+	array = getIntPointerArray(size);
 
-	intPointerArrays.clear();
-}
+	intPointerArrays.push_back(array);
 
-void ProcessingUnit::deleteAllDoublePinnedArrays() {
-	list<double*>::iterator i;
-
-	for (i = doublePinnedArrays.begin(); i < doublePinnedArrays.end(); ++i) {
-		deleteAllDoublePinnedArrays(*i)
-	}
-
-	doublePinnedArrays.clear();
+	return array;
 }
 
 double* ProcessingUnit::newDoublePinnedArray(int size) {
@@ -93,6 +83,36 @@ double* ProcessingUnit::newDoublePinnedArray(int size) {
 	return array;
 }
 
+void ProcessingUnit::deleteDeviceSpecificArray(double* toDelete) {
+	doubleArrays.remove(toDelete);
+
+	deallocDeviceSpecificArray(toDelete);
+}
+
+void ProcessingUnit::deleteDeviceSpecificArray(double** toDelete) {
+	doublePointerArrays.remove(toDelete);
+
+	deallocDeviceSpecificArray(toDelete);
+}
+
+void ProcessingUnit::deleteDeviceSpecificArray(int* toDelete) {
+	intArrays.remove(toDelete);
+
+	deallocDeviceSpecificArray(toDelete);
+}
+
+void ProcessingUnit::deleteDeviceSpecificArray(int** toDelete) {
+	intPointerArrays.remove(toDelete);
+
+	deallocDeviceSpecificArray(toDelete);
+}
+
+void ProcessingUnit::deleteDoublePinnedArray(double* toDelete) {
+	doublePinnedArrays.remove(toDelete);
+
+	deallocDoublePinnedArray(toDelete);
+}
+
 double* ProcessingUnit::getDoublePinnedArray(int size) {
 	double* array;
 
@@ -101,6 +121,56 @@ double* ProcessingUnit::getDoublePinnedArray(int size) {
 	return array;
 }
 
-void ProcessingUnit::deleteDoublePinnedArray(double* toDelete) {
+void ProcessingUnit::deallocDoublePinnedArray(double* toDelete) {
 	cudaFreeHost(toDelete);
+}
+
+void ProcessingUnit::deleteAllDoubleArrays() {
+	list<double*>::iterator i;
+
+	for (i = doubleArrays.begin(); i < doubleArrays.end(); ++i) {
+		deallocDeviceSpecificArray(*i);
+	}
+
+	doubleArrays.clear();
+}
+
+void ProcessingUnit::deleteAllDoublePointerArrays() {
+	list<double**>::iterator i;
+
+	for (i = doublePointerArrays.begin(); i < doublePointerArrays.end(); ++i) {
+		deallocDeviceSpecificArray(*i);
+	}
+
+	doublePointerArrays.clear();
+}
+
+void ProcessingUnit::deleteAllIntArrays() {
+	list<int*>::iterator i;
+
+	for (i = intArrays.begin(); i < intArrays.end(); ++i) {
+		deallocDeviceSpecificArray(*i);
+	}
+
+	intArrays.clear();
+}
+
+void ProcessingUnit::deleteAllIntPonterArrays() {
+	list<int**>::iterator i;
+
+	for (i = intPointerArrays.begin(); i < intPointerArrays.end(); ++i) {
+		deallocDeviceSpecificArray(*i);
+	}
+
+	intPointerArrays.clear();
+}
+
+void ProcessingUnit::deleteAllDoublePinnedArrays() {
+	list<double*>::iterator i;
+
+	for (i = doublePinnedArrays.begin(); i < doublePinnedArrays.end(); ++i) {
+		deallocDoublePinnedArray(*i);
+	}
+
+	doublePinnedArrays.clear();
 }
