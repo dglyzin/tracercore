@@ -13,6 +13,8 @@
 
 #include <list>
 
+#include "../userfuncs.h"
+
 class ProcessingUnit {
 public:
 	ProcessingUnit();
@@ -50,7 +52,7 @@ public:
 	virtual void sumArrays(double* result, double* arg1, double* arg2, int size) = 0;
 	virtual void multiplyArrayByNumber(double* result, double* arg, double factor, int size) = 0;
 
-private:
+protected:
 	std::list<double*> doubleArrays;
 	std::list<double**> doublePointerArrays;
 
@@ -58,6 +60,11 @@ private:
 	std::list<int**> intPointerArrays;
 
 	std::list<double*> doublePinnedArrays;
+
+
+	func_ptr_t* mUserFuncs;
+	initfunc_fill_ptr_t* mUserInitFuncs;
+	unsigned short int* mCompFuncNumber;
 
 
 

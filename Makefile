@@ -17,6 +17,10 @@ SRCBLC=$(SRC)/blocks_old
 SRCBLCCPU=$(SRCBLC)/cpu
 SRCBLCGPU=$(SRCBLC)/gpu
 
+SRCPROCUNIT=$(SRC)/processingunit
+SRCPROCUNITCPU=$(SRCPROCUNIT)/cpu
+SRCPROCUNITGPU=$(SRCPROCUNIT)/gpu
+
 
 BIN=bin
 MPILIB=-I/usr/mpi/gcc/openmpi-1.8.4/include -L /usr/mpi/gcc/openmpi-1.8.4/lib -lmpi -lmpi_cxx -lmysqlcppconn
@@ -34,8 +38,12 @@ SOLVERRK4=$(SRCSOLRK4)/rk4solver.cpp $(SRCSOLRK4)/rk4solvercpu.cpp $(SRCSOLRK4)/
 SOLVERDP45=$(SRCSOLDP45)/dp45solver.cpp $(SRCSOLDP45)/dp45solvercpu.cpp $(SRCSOLDP45)/dp45solvergpu.cpp
 SOLVER=$(SRCSOL)/solver.cpp $(SOLVEREULER) $(SOLVERRK4) $(SOLVERDP45)
 
+PROCUNITCPU=$(SRCPROCUNITCPU)/cpu.cpp $(SRCPROCUNITCPU)/cpu1d.cpp $(SRCPROCUNITCPU)/cpu2d.cpp $(SRCPROCUNITCPU)/cpu3d.cpp
+PROCUNITGPU=
+PROCUNIT=$(SRCPROCUNIT)/processingunit.cpp $(PROCUNITCPU) $(PROCUNITGPU)
 
-SOURCE=$(SRC)/main.cpp $(SRC)/domain.cpp $(SRC)/interconnect.cpp $(SRC)/enums.cpp $(SRC)/dbconnector.cpp $(BLOCK) $(SOLVER)
+
+SOURCE=$(SRC)/main.cpp $(SRC)/domain.cpp $(SRC)/interconnect.cpp $(SRC)/enums.cpp $(SRC)/dbconnector.cpp $(BLOCK) $(SOLVER) $(PROCUNIT)
 
 OBJECT=$(SOURCE:.cpp=.o)
 
@@ -64,5 +72,9 @@ clean:
 	rm -rf $(SRCBLC)/*.o
 	rm -rf $(SRCBLCCPU)/*.o
 	rm -rf $(SRCBLCGPU)/*.o
+	
+	rm -rf $(SRCPROCUNIT)/*.o
+	rm -rf $(SRCPROCUNITCPU)/*.o
+	rm -rf $(SRCPROCUNITGPU)/*.o
 	
 	rm $(BIN)/$(EXECUTABLE)

@@ -128,7 +128,7 @@ void ProcessingUnit::deallocDoublePinnedArray(double* toDelete) {
 void ProcessingUnit::deleteAllDoubleArrays() {
 	list<double*>::iterator i;
 
-	for (i = doubleArrays.begin(); i < doubleArrays.end(); ++i) {
+	for (i = doubleArrays.begin(); i != doubleArrays.end(); ++i) {
 		deallocDeviceSpecificArray(*i);
 	}
 
@@ -138,7 +138,7 @@ void ProcessingUnit::deleteAllDoubleArrays() {
 void ProcessingUnit::deleteAllDoublePointerArrays() {
 	list<double**>::iterator i;
 
-	for (i = doublePointerArrays.begin(); i < doublePointerArrays.end(); ++i) {
+	for (i = doublePointerArrays.begin(); i != doublePointerArrays.end(); ++i) {
 		deallocDeviceSpecificArray(*i);
 	}
 
@@ -148,7 +148,7 @@ void ProcessingUnit::deleteAllDoublePointerArrays() {
 void ProcessingUnit::deleteAllIntArrays() {
 	list<int*>::iterator i;
 
-	for (i = intArrays.begin(); i < intArrays.end(); ++i) {
+	for (i = intArrays.begin(); i != intArrays.end(); ++i) {
 		deallocDeviceSpecificArray(*i);
 	}
 
@@ -158,7 +158,7 @@ void ProcessingUnit::deleteAllIntArrays() {
 void ProcessingUnit::deleteAllIntPonterArrays() {
 	list<int**>::iterator i;
 
-	for (i = intPointerArrays.begin(); i < intPointerArrays.end(); ++i) {
+	for (i = intPointerArrays.begin(); i != intPointerArrays.end(); ++i) {
 		deallocDeviceSpecificArray(*i);
 	}
 
@@ -168,7 +168,7 @@ void ProcessingUnit::deleteAllIntPonterArrays() {
 void ProcessingUnit::deleteAllDoublePinnedArrays() {
 	list<double*>::iterator i;
 
-	for (i = doublePinnedArrays.begin(); i < doublePinnedArrays.end(); ++i) {
+	for (i = doublePinnedArrays.begin(); i != doublePinnedArrays.end(); ++i) {
 		deallocDoublePinnedArray(*i);
 	}
 

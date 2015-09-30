@@ -26,7 +26,7 @@ void CPU_2d::computeBorder(double* result, double** source, double time, double*
 				int yShift = xCount * y;
 				//cout << "Calc y_" << y << " x_" << x << endl;
 				//printf("Calc y = %d, x = %d\n", y, x);
-				mUserFuncs[ mCompFuncNumber[ yShift + xShift ] ](result, source, time, x, y, 0, parametrs, externalBorder);
+				mUserFuncs[ mCompFuncNumber[ yShift + xShift ] ](result, source[0], time, x, y, 0, parametrs, externalBorder);
 			}
 		}
 
@@ -37,7 +37,7 @@ void CPU_2d::computeBorder(double* result, double** source, double time, double*
 				int yShift = xCount * y;
 				//cout << "Calc y_" << y << " x_" << x << endl;
 				//printf("Calc y = %d, x = %d\n", y, x);
-				mUserFuncs[ mCompFuncNumber[ yShift + xShift ] ](result, source, time, x, y, 0, parametrs, externalBorder);
+				mUserFuncs[ mCompFuncNumber[ yShift + xShift ] ](result, source[0], time, x, y, 0, parametrs, externalBorder);
 			}
 		}
 
@@ -48,7 +48,7 @@ void CPU_2d::computeBorder(double* result, double** source, double time, double*
 				int xShift = x;
 				//cout << "Calc y_" << y << " x_" << x << endl;
 				//printf("Calc y = %d, x = %d\n", y, x);
-				mUserFuncs[ mCompFuncNumber[ yShift + xShift ] ](result, source, time, x, y, 0, parametrs, externalBorder);
+				mUserFuncs[ mCompFuncNumber[ yShift + xShift ] ](result, source[0], time, x, y, 0, parametrs, externalBorder);
 			}
 		}
 
@@ -59,7 +59,7 @@ void CPU_2d::computeBorder(double* result, double** source, double time, double*
 				int xShift = x;
 				//cout << "Calc y_" << y << " x_" << x << endl;
 				//printf("Calc y = %d, x = %d\n", y, x);
-				mUserFuncs[ mCompFuncNumber[ yShift + xShift ] ](result, source, time, x, y, 0, parametrs, externalBorder);
+				mUserFuncs[ mCompFuncNumber[ yShift + xShift ] ](result, source[0], time, x, y, 0, parametrs, externalBorder);
 			}
 		}
 	}
@@ -74,7 +74,7 @@ void CPU_2d::computeCenter(double* result, double** source, double time, double*
 			for (int x = haloSize; x < xCount - haloSize; ++x) {
 				int xShift = x;
 				//cout << "Calc y_" << y << " x_" << x << endl;
-				mUserFuncs[ mCompFuncNumber[ yShift + xShift ] ](result, source, time, x, y, 0, parametrs, externalBorder);
+				mUserFuncs[ mCompFuncNumber[ yShift + xShift ] ](result, source[0], time, x, y, 0, parametrs, externalBorder);
 			}
 		}
 	}
