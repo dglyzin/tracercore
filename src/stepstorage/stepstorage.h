@@ -10,6 +10,8 @@
 
 #include <stdlib.h>
 
+#include <cassert>
+
 #include "../processingunit/processingunit.h"
 #include "../enums.h"
 
