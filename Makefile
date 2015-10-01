@@ -21,6 +21,10 @@ SRCPROCUNIT=$(SRC)/processingunit
 SRCPROCUNITCPU=$(SRCPROCUNIT)/cpu
 SRCPROCUNITGPU=$(SRCPROCUNIT)/gpu
 
+SRCSTEPSTORAGE=$(SRC)/stepstorage
+
+SRCPROBLEM=$(SRC)/problem
+
 
 BIN=bin
 MPILIB=-I/usr/mpi/gcc/openmpi-1.8.4/include -L /usr/mpi/gcc/openmpi-1.8.4/lib -lmpi -lmpi_cxx -lmysqlcppconn
@@ -42,8 +46,12 @@ PROCUNITCPU=$(SRCPROCUNITCPU)/cpu.cpp $(SRCPROCUNITCPU)/cpu1d.cpp $(SRCPROCUNITC
 PROCUNITGPU=
 PROCUNIT=$(SRCPROCUNIT)/processingunit.cpp $(PROCUNITCPU) $(PROCUNITGPU)
 
+STEPSTORAGE=$(SRCSTEPSTORAGE)/stepstorage.cpp $(SRCSTEPSTORAGE)/eulerstorage.cpp
 
-SOURCE=$(SRC)/main.cpp $(SRC)/domain.cpp $(SRC)/interconnect.cpp $(SRC)/enums.cpp $(SRC)/dbconnector.cpp $(BLOCK) $(SOLVER) $(PROCUNIT)
+PROBLEM=$(SRCPROBLEM)/problemtype.cpp $(SRCPROBLEM)/ordinary.cpp
+
+
+SOURCE=$(SRC)/main.cpp $(SRC)/domain.cpp $(SRC)/interconnect.cpp $(SRC)/enums.cpp $(SRC)/dbconnector.cpp $(BLOCK) $(SOLVER) $(PROCUNIT) $(STEPSTORAGE) $(PROBLEM)
 
 OBJECT=$(SOURCE:.cpp=.o)
 
@@ -76,5 +84,9 @@ clean:
 	rm -rf $(SRCPROCUNIT)/*.o
 	rm -rf $(SRCPROCUNITCPU)/*.o
 	rm -rf $(SRCPROCUNITGPU)/*.o
+	
+	rm -rf $(SRCSTEPSTORAGE)/*.o
+	
+	rm -rf $(SRCPROBLEM)/*.o
 	
 	rm $(BIN)/$(EXECUTABLE)
