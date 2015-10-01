@@ -26,13 +26,7 @@ int lastChar(char* source, char ch) {
 }
 
 
-//TODO should be moved to mpi routines file
-//receives user status from python master process
-int getMasterUserStatus(){
-	int status;
-    MPI_Bcast(&status, 1, MPI_INT, 0, MPI_COMM_WORLD);
-    return status;
-}
+
 
 Domain::Domain(int _world_rank, int _world_size, char* inputFile) {
     //Get worker communicator and determine if there is python master
@@ -112,6 +106,7 @@ double** Domain::collectDataFromNode() {
 	return resultAll;
 }
 
+//function to collect data from all blocks
 double* Domain::getBlockCurrentState(int number) {
 	double* result;
 
@@ -151,43 +146,60 @@ void Domain::compute(char* inputFile) {
 	if (mSolverInfo->isFSAL() )
 	    initSolvers();
 
+
+//	Порядок работы
+//	                1. WORLD+COMP                          2. WORLD ONLY
+//+	1. WORLD Bcast user-status, источник - world-0    |    +
+//+	             xx.  идет расчет шага, используется только COMP
+//пока нет	2. WORLD Allreduce compute-status                 |    +
+//пока нет       xx.  идет расчет ошибки, используется только COMP
+//+	5. accept/reject, comp-0 -> world-0               |    -
+//+	6. new timestep, comp-0 -> world-0                |    -
+//+	7. ready to collect data, comp-0 -> world-0       |    -
+//+	8. WORLD collect data                             |    +
+//  9. stop/continue comp-0 -> world-0                |    -
+
 	double computeInterval = stopTime - currentTime;
     int percentage = 0;
-    //if ((mWorkerRank == 0)&&(!mPythonMaster))
-    //    setDbJobState(JS_RUNNING);
 
-    int userStatus;
-
-    if (mPythonMaster)
-    	userStatus = getMasterUserStatus();
-    else
-    	userStatus = US_START;//getDbUserStatus();
+    //1.
+    int userStatus= US_START;
+    MPI_Bcast(&userStatus, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
 	while ((userStatus!=US_STOP) && ( currentTime < stopTime ) ){
 		nextStep();
+		if (mPythonMaster&& (mWorkerRank==0) ){
+		    MPI_Send(&mLastStepAccepted, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
+		    MPI_Send(&timeStep, 1, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD);
+		}
+
 		//printBlocksToConsole();
 
 		int newPercentage = 100.0* (1.0 - (stopTime-currentTime) / computeInterval);
         if (newPercentage>percentage){
             //check for termination request
-            if (mPythonMaster)
-        	    userStatus = getMasterUserStatus();
+        	MPI_Bcast(&userStatus, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
             percentage = newPercentage;
             //if ((mWorkerRank == 0)&&(!mPythonMaster))
             //    setDbJobPercentage(percentage);
         }
 
-        if( saveInterval != 0 ) {
-			counterSaveTime += timeStep;
+        counterSaveTime += timeStep;
 
-			if( counterSaveTime > saveInterval ) {
+        int readyToSave = ( saveInterval != 0 )&&( counterSaveTime > saveInterval );
+        if (mPythonMaster&& (mWorkerRank==0) )
+        	MPI_Send(&readyToSave, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
+
+        if( readyToSave ) {
 				counterSaveTime = 0;
 				saveState(inputFile);
-				//if (!mPythonMaster)
-				//    storeDbFileName(inputFile);
-			}
 		}
+        if (mPythonMaster&& (mWorkerRank==0) ){
+            int finishing = ( currentTime < stopTime );
+            MPI_Send(&finishing, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
+        }
+
 	}
 	cout <<"Computation finished!" << mWorkerRank << endl;
 	//if ((mWorkerRank == 0)&&(!mPythonMaster))
@@ -222,11 +234,18 @@ void Domain::nextStep() {
     for(int stage=0; stage < mSolverInfo->getStageCount(); stage++)
     	computeStage(stage);
 
+    //!!! Собрать мастеру ошибки
+    //!!! если ошибки нет, продолжать
     if (mSolverInfo->isVariableStep()){
+        // MPI inside!
     	double error = collectError();
+
     	printf("step error = %f\n", error);
+    	//!!! только 0, рассылать
     	timeStep = mSolverInfo->getNewStep(timeStep, error,totalGridElementCount);
-		if (mSolverInfo->isErrorPermissible(error,totalGridElementCount)){
+
+    	//!!! только 0, рассылать
+    	if (mSolverInfo->isErrorPermissible(error,totalGridElementCount)){
 			confirmStep(); //uses new timestep
 			mAcceptedStepCount++;
 			currentTime += timeStep;
@@ -341,12 +360,14 @@ void Domain::computeOneStepCenter(int stage) {
 
 //TODO next two methods are not parallel!
 void Domain::confirmStep() {
+	mLastStepAccepted = 1;
 	for (int i = 0; i < mBlockCount; ++i) {
 		mBlocks[i]->confirmStep(timeStep);
 	}
 }
 
 void Domain::rejectStep() {
+	mLastStepAccepted = 0;
 	for (int i = 0; i < mBlockCount; ++i) {
 		mBlocks[i]->rejectStep(timeStep);
 	}
@@ -705,7 +726,7 @@ Interconnect* Domain::readConnection(ifstream& in) {
 
 	//cout << endl << "ERROR sorceData = destinationData = NULL!!!" << endl;
 
-	return new Interconnect(sourceNode, destinationNode, borderLength, sourceData, destinationData);
+	return new Interconnect(sourceNode, destinationNode, borderLength, sourceData, destinationData, &mWorkerComm);
 }
 
 /*

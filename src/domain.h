@@ -184,6 +184,7 @@ private:
 
 	double saveInterval;
 	double counterSaveTime;
+	int mLastStepAccepted;
 
 	double mDx, mDy, mDz;
 

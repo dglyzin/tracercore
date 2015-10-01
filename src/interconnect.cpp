@@ -10,7 +10,7 @@
 using namespace std;
 
 Interconnect::Interconnect(int _sourceLocationNode, int _destinationLocationNode, int _borderLength,
-		double* _sourceBlockBorder, double* _destinationExternalBorder) {
+		double* _sourceBlockBorder, double* _destinationExternalBorder, MPI_Comm* _pworkerComm ) {
 	sourceLocationNode = _sourceLocationNode;
 	destinationLocationNode = _destinationLocationNode;
 
@@ -24,6 +24,8 @@ Interconnect::Interconnect(int _sourceLocationNode, int _destinationLocationNode
 	status = new MPI_Status();
 
 	flag = false;
+
+	mpWorkerComm = _pworkerComm;
 }
 
 Interconnect::~Interconnect() {
@@ -46,7 +48,7 @@ void Interconnect::sendRecv(int locationNode) {
 	 * Фактически этот поток РЕАЛЬНО содержить блок имеющий исходную информацию. Блок-источник.
 	 */
 	if(locationNode == sourceLocationNode) {
-		MPI_Isend(sourceBlockBorder, borderLength, MPI_DOUBLE, destinationLocationNode, 999, MPI_COMM_WORLD, request);
+		MPI_Isend(sourceBlockBorder, borderLength, MPI_DOUBLE, destinationLocationNode, 999, *mpWorkerComm, request);
 		flag = true;
 		return;
 	}
@@ -56,7 +58,7 @@ void Interconnect::sendRecv(int locationNode) {
 	 * Это поток РЕАЛЬНО имеет блок, которому необходима информация от другого блока.
 	 */
 	if(locationNode == destinationLocationNode) {
-		MPI_Irecv(destinationExternalBorder, borderLength, MPI_DOUBLE, sourceLocationNode, 999, MPI_COMM_WORLD, request);
+		MPI_Irecv(destinationExternalBorder, borderLength, MPI_DOUBLE, sourceLocationNode, 999, *mpWorkerComm, request);
 		flag = true;
 		return;
 	}

@@ -1,3 +1,28 @@
+В вычислениях может принимать участие специальный мастер-процесс на питоне
+либо работа идет без него.
+
+Без питон-мастера все общение идет через mpi_comm_world,
+иначе работники объединяются в отдельный коммуникатор comp
+
+Управление временем на совести comp-0 в любом случае
+
+
+Порядок работы
+                1. WORLD+COMP                          2. WORLD ONLY
+1. WORLD Bcast user-status, источник - world-0    |    +
+             xx.  идет расчет шага, используется только COMP
+2. WORLD Allreduce compute-status                 |    +
+             xx.  идет расчет ошибки, используется только COMP
+5. accept/reject, comp-0 -> world-0               |    -
+6. new timestep, comp-0 -> world-0                |    -
+7. ready to collect data, comp-0 -> world-0       |    -
+8. WORLD collect data                             |    +
+
+
+
+
+
+
 Решение идет так
 
 
