@@ -19,7 +19,7 @@ public:
 	virtual double* getSource(int stage, double time) = 0;
 	virtual double* getResult(int stage, double time) = 0;
 
-private:
+protected:
 	StepStorage* createStageStorage(ProcessingUnit* pu, int solverType, int count, double aTol, double rTol);
 };
 
