@@ -8,6 +8,8 @@
 #ifndef SRC_STEPSTORAGE_EULERSTORAGE_H_
 #define SRC_STEPSTORAGE_EULERSTORAGE_H_
 
+#include <stdio.h>
+
 #include "stepstorage.h"
 
 class EulerStorage: public StepStorage {
