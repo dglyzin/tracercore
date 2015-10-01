@@ -10,7 +10,8 @@
 
 #include <stdlib.h>
 
-#include "../proceccingunit/processingunit.h"
+#include "../processingunit/processingunit.h"
+#include "../enums.h"
 
 class StepStorage {
 public:
