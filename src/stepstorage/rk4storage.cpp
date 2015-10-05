@@ -89,7 +89,7 @@ void RK4Storage::prepareArgument(ProcessingUnit* pc, int stage, double timestep)
 			pc->sumArrays(mArg, mArg, mState, mCount);
 			break;
 		case 3:
-			pc->multiplyArrayByNumber(mTempStore1, mTempStore1, b1, mCount);
+			/*pc->multiplyArrayByNumber(mTempStore1, mTempStore1, b1, mCount);
 			pc->multiplyArrayByNumber(mTempStore2, mTempStore2, b2, mCount);
 			pc->multiplyArrayByNumber(mTempStore3, mTempStore3, b3, mCount);
 			pc->multiplyArrayByNumber(mTempStore4, mTempStore4, b4, mCount);
@@ -100,7 +100,17 @@ void RK4Storage::prepareArgument(ProcessingUnit* pc, int stage, double timestep)
 
 			pc->multiplyArrayByNumber(mArg, mArg, timestep, mCount);
 
-			pc->sumArrays(mArg, mArg, mState, mCount);
+			pc->sumArrays(mArg, mArg, mState, mCount);*/
+
+			pc->multiplyArrayByNumber(mArg, mTempStore1, b1, mCount);
+			pc->multiplyArrayByNumberAndSum(mArg, mTempStore2, b2, mArg, mCount);
+			pc->multiplyArrayByNumberAndSum(mArg, mTempStore3, b3, mArg, mCount);
+			pc->multiplyArrayByNumberAndSum(mArg, mTempStore4, b4, mArg, mCount);
+
+			pc->multiplyArrayByNumber(mArg, mArg, timestep, mCount);
+
+			pc->sumArrays(mArg, mState, mArg, mCount);
+
 			break;
 		default:
 			break;
