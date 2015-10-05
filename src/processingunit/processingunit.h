@@ -51,6 +51,7 @@ public:
 
 	virtual void sumArrays(double* result, double* arg1, double* arg2, int size) = 0;
 	virtual void multiplyArrayByNumber(double* result, double* arg, double factor, int size) = 0;
+	virtual void multiplyArrayByNumberAndSum(double* result, double* arg1, double factor, double* arg2, int size) = 0;
 
 protected:
 	std::list<double*> doubleArrays;

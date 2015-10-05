@@ -90,3 +90,10 @@ void CPU::multiplyArrayByNumber(double* result, double* arg, double factor, int 
 		result[i] = factor * arg[i];
 	}
 }
+
+void CPU::multiplyArrayByNumberAndSum(double* result, double* arg1, double factor, double* arg2, int size) {
+#pragma omp parallel for
+	for (int i = 0; i < size; ++i) {
+		result[i] = factor * arg1[i] + arg2[i];
+	}
+}
