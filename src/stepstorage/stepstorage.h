@@ -9,6 +9,7 @@
 #define SRC_STEPSTORAGE_STEPSTORAGE_H_
 
 #include <stdlib.h>
+#include <stdio.h>
 
 #include <cassert>
 
@@ -42,7 +43,7 @@ public:
     virtual bool isVariableStep() = 0;
     virtual int getStageCount() = 0;
 
-	virtual double getNewStep(double timeStep, double error, int totalDomainElements) = 0;
+	virtual double getNewStep(double timestep, double error, int totalDomainElements) = 0;
 	virtual bool isErrorPermissible(double error, int totalDomainElements) = 0;
 
 	virtual double* getDenseOutput(StepStorage* secondState) = 0;

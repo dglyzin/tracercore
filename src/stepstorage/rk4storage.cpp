@@ -116,3 +116,42 @@ void RK4Storage::prepareArgument(ProcessingUnit* pc, int stage, double timestep)
 			break;
 	}
 }
+
+void RK4Storage::confirmStep(double timestep) {
+	double* temp = mState;
+	mState = mArg;
+	mArg = temp;
+}
+
+void RK4Storage::rejectStep(double timestep) {
+	return;
+}
+
+double RK4Storage::getStepError(double timestep) {
+	return 0.0;
+}
+
+bool RK4Storage::isFSAL() {
+	return false;
+}
+
+bool RK4Storage::isVariableStep() {
+	return false;
+}
+
+int RK4Storage::getStageCount() {
+	return 4;
+}
+
+double RK4Storage::getNewStep(double timestep, double error, int totalDomainElements) {
+	return timestep;
+}
+
+bool RK4Storage::isErrorPermissible(double error, int totalDomainElements) {
+	return true;
+}
+
+double* RK4Storage::getDenseOutput(StepStorage* secondState) {
+	printf("\nRK4 dense output DON'T WORK!\n");
+	return NULL;
+}

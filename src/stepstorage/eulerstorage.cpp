@@ -62,8 +62,8 @@ int EulerStorage::getStageCount() {
 	return 1;
 }
 
-double EulerStorage::getNewStep(double timeStep, double error, int totalDomainElements) {
-	return 0.0;
+double EulerStorage::getNewStep(double timestep, double error, int totalDomainElements) {
+	return timestep;
 }
 
 bool EulerStorage::isErrorPermissible(double error, int totalDomainElements) {

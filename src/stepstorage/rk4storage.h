@@ -32,7 +32,7 @@ public:
     bool isVariableStep();
     int getStageCount();
 
-	double getNewStep(double timeStep, double error, int totalDomainElements);
+	double getNewStep(double timestep, double error, int totalDomainElements);
 	bool isErrorPermissible(double error, int totalDomainElements);
 
 	double* getDenseOutput(StepStorage* secondState);
