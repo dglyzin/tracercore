@@ -122,6 +122,84 @@ double DP45Storage::getStageTimeStep(int stage) {
 	}
 }
 
-void DP45Storage::prepareArgument(ProcessingUnit* pc, int stage, double timestep) {
+void DP45Storage::prepareArgument(ProcessingUnit* pu, int stage, double timestep) {
+	/*if      (stage == 0)
+	#pragma omp parallel for
+			for (int idx=0; idx<mCount; idx++)
+				mArg[idx] = mState[idx]+timeStep*(a31*mTempStore1[idx] + a32*mTempStore2[idx]);
+		else if (stage == 1)
+	#pragma omp parallel for
+			for (int idx=0; idx<mCount; idx++)
+				mArg[idx] = mState[idx]+timeStep*(a41*mTempStore1[idx] + a42*mTempStore2[idx] + a43*mTempStore3[idx]);
+		else if (stage == 2)
+	#pragma omp parallel for
+			for (int idx=0; idx<mCount; idx++)
+				mArg[idx] = mState[idx]+timeStep*(a51*mTempStore1[idx] + a52*mTempStore2[idx] + a53*mTempStore3[idx] + a54*mTempStore4[idx]);
+		else if (stage == 3)
+	#pragma omp parallel for
+			for (int idx=0; idx<mCount; idx++)
+				mArg[idx] = mState[idx]+timeStep*(a61*mTempStore1[idx] + a62*mTempStore2[idx] + a63*mTempStore3[idx] + a64*mTempStore4[idx] +a65*mTempStore5[idx]);
+		else if (stage == 4)
+	#pragma omp parallel for
+			for (int idx=0; idx<mCount; idx++)
+				mArg[idx] = mState[idx]+timeStep*(a71*mTempStore1[idx] + a73*mTempStore3[idx] + a74*mTempStore4[idx] + a75*mTempStore5[idx] +a76*mTempStore6[idx]);
+		else if (stage == 5)
+		{ //nothing to be done here before step is confirmed, moved to confirmStep
+		}
+		else if (stage == -1)
+	#pragma omp parallel for
+			for (int idx=0; idx<mCount; idx++)
+				mArg[idx] = mState[idx]+a21*timeStep*mTempStore1[idx];
 
+	else assert(0);*/
+
+	switch (stage) {
+		case 0:
+			pu->multiplyArrayByNumber(mArg, mTempStore1, a31, mCount);
+			pu->multiplyArrayByNumberAndSum(mArg, mTempStore2, a32, mArg, mCount);
+			pu->multiplyArrayByNumber(mArg, mArg, timestep, mCount);
+			pu->sumArrays(mArg, mArg, mState, mCount);
+			break;
+		case 1:
+			pu->multiplyArrayByNumber(mArg, mTempStore1, a41, mCount);
+			pu->multiplyArrayByNumberAndSum(mArg, mTempStore2, a42, mArg, mCount);
+			pu->multiplyArrayByNumberAndSum(mArg, mTempStore3, a43, mArg, mCount);
+			pu->multiplyArrayByNumber(mArg, mArg, timestep, mCount);
+			pu->sumArrays(mArg, mArg, mState, mCount);
+			break;
+		case 2:
+			pu->multiplyArrayByNumber(mArg, mTempStore1, a51, mCount);
+			pu->multiplyArrayByNumberAndSum(mArg, mTempStore2, a52, mArg, mCount);
+			pu->multiplyArrayByNumberAndSum(mArg, mTempStore3, a53, mArg, mCount);
+			pu->multiplyArrayByNumberAndSum(mArg, mTempStore4, a54, mArg, mCount);
+			pu->multiplyArrayByNumber(mArg, mArg, timestep, mCount);
+			pu->sumArrays(mArg, mArg, mState, mCount);
+			break;
+		case 3:
+			pu->multiplyArrayByNumber(mArg, mTempStore1, a61, mCount);
+			pu->multiplyArrayByNumberAndSum(mArg, mTempStore2, a62, mArg, mCount);
+			pu->multiplyArrayByNumberAndSum(mArg, mTempStore3, a63, mArg, mCount);
+			pu->multiplyArrayByNumberAndSum(mArg, mTempStore4, a64, mArg, mCount);
+			pu->multiplyArrayByNumberAndSum(mArg, mTempStore5, a65, mArg, mCount);
+			pu->multiplyArrayByNumber(mArg, mArg, timestep, mCount);
+			pu->sumArrays(mArg, mArg, mState, mCount);
+			break;
+		case 4:
+			pu->multiplyArrayByNumber(mArg, mTempStore1, a71, mCount);
+			pu->multiplyArrayByNumberAndSum(mArg, mTempStore3, a73, mArg, mCount);
+			pu->multiplyArrayByNumberAndSum(mArg, mTempStore4, a74, mArg, mCount);
+			pu->multiplyArrayByNumberAndSum(mArg, mTempStore5, a75, mArg, mCount);
+			pu->multiplyArrayByNumberAndSum(mArg, mTempStore6, a76, mArg, mCount);
+			pu->multiplyArrayByNumber(mArg, mArg, timestep, mCount);
+			pu->sumArrays(mArg, mArg, mState, mCount);
+			break;
+		case 5:
+			break;
+		case -1:
+			pu->multiplyArrayByNumberAndSum(mArg, mTempStore1, timestep*a21, mState, mCount);
+			break;
+		default:
+			assert(0);
+			break;
+	}
 }
