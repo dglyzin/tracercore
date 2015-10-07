@@ -117,13 +117,13 @@ void RK4Storage::prepareArgument(ProcessingUnit* pu, int stage, double timestep)
 	}
 }
 
-void RK4Storage::confirmStep(double timestep) {
+void RK4Storage::confirmStep(ProcessingUnit* pu, double timestep) {
 	double* temp = mState;
 	mState = mArg;
 	mArg = temp;
 }
 
-void RK4Storage::rejectStep(double timestep) {
+void RK4Storage::rejectStep(ProcessingUnit* pu, double timestep) {
 	return;
 }
 

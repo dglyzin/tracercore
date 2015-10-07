@@ -34,8 +34,8 @@ public:
 
     virtual void prepareArgument(ProcessingUnit* pu, int stage, double timestep) = 0;
 
-    virtual void confirmStep(double timestep) = 0;
-    virtual void rejectStep(double timestep) = 0;
+    virtual void confirmStep(ProcessingUnit* pu, double timestep) = 0;
+    virtual void rejectStep(ProcessingUnit* pu, double timestep) = 0;
 
     virtual double getStepError(double timeStep) = 0;
 

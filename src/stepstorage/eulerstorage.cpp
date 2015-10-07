@@ -31,18 +31,18 @@ double EulerStorage::getStageTimeStep(int stage) {
 	return 0.0;
 }
 
-void EulerStorage::prepareArgument(ProcessingUnit* pc, int stage, double timestep) {
+void EulerStorage::prepareArgument(ProcessingUnit* pu, int stage, double timestep) {
 	pu->multiplyArrayByNumber(mTempStore1, mTempStore1, timestep, mCount);
 	pu->sumArrays(mTempStore1, mState, mTempStore1, mCount);
 }
 
-void EulerStorage::confirmStep(double timestep) {
+void EulerStorage::confirmStep(ProcessingUnit* pu, double timestep) {
     double* temp = mState;
     mState = mTempStore1;
     mTempStore1 = temp;
 }
 
-void EulerStorage::rejectStep(double timestep) {
+void EulerStorage::rejectStep(ProcessingUnit* pu, double timestep) {
 	return;
 }
 

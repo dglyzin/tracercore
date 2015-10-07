@@ -36,6 +36,13 @@ DP45Storage::~DP45Storage() {
 	// TODO Auto-generated destructor stub
 }
 
+void DP45Storage::prepareFSAL(ProcessingUnit* pu, double timestep) {
+/*#pragma omp parallel for
+	for (int idx = 0; idx < mCount; idx++)
+		mArg[idx] = mState[idx] + a21 * timeStep * mTempStore1[idx];*/
+	pu->multiplyArrayByNumberAndSum(mArg, mTempStore1, a21 * timestep, mState, mCount);
+}
+
 double* DP45Storage::getStageSource(int stage) {
 	/*if      (stage == 0) return mArg;
 	else if (stage == 1) return mArg;
@@ -202,4 +209,20 @@ void DP45Storage::prepareArgument(ProcessingUnit* pu, int stage, double timestep
 			assert(0);
 			break;
 	}
+}
+
+void DP45Storage::confirmStep(ProcessingUnit* pu, double timestep) {
+    double* temp = mState;
+    mState = mArg;
+    mArg = temp;
+
+    temp = mTempStore7;
+    mTempStore7 = mTempStore1;
+    mTempStore1 = temp;
+
+    prepareFSAL(pu, timestep);
+}
+
+void DP45Storage::rejectStep(ProcessingUnit* pu, double timestep) {
+	prepareFSAL(pu, timestep);
 }

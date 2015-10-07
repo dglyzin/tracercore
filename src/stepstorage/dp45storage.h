@@ -23,8 +23,8 @@ public:
 
     void prepareArgument(ProcessingUnit* pu, int stage, double timestep);
 
-    void confirmStep(double timestep);
-    void rejectStep(double timestep);
+    void confirmStep(ProcessingUnit* pu, double timestep);
+    void rejectStep(ProcessingUnit* pu, double timestep);
 
     double getStepError(double timeStep);
 
@@ -62,7 +62,7 @@ private:
     static const double e5=-17253.0/339200.0, e6=22.0/525.0, e7=-1.0/40.0;
     static const double facmin=0.5, facmax = 2, fac = 0.9;
 
-    void prepareFSAL(double timestep);
+    void prepareFSAL(ProcessingUnit* pu, double timestep);
 };
 
 #endif /* SRC_STEPSTORAGE_DP45STORAGE_H_ */
