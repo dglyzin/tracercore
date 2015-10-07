@@ -7,6 +7,8 @@
 
 #include "../../processingunit/cpu/cpu.h"
 
+using namespace std;
+
 CPU::CPU() {
 	// TODO Auto-generated constructor stub
 
@@ -117,4 +119,18 @@ double CPU::sumArrayElements(double* arg, int size) {
 	}
 
 	return sum;
+}
+
+void CPU::maxElementsElementwise(double* result, double* arg1, double* arg2, int size) {
+#pragma omp parallel for
+	for (int i = 0; i < size; ++i) {
+		result[i] = max(arg1[i], arg2[i]);
+	}
+}
+
+void CPU::divisionArraysElementwise(double* result, double* arg1, double* arg2, int size) {
+#pragma omp parallel for
+	for (int i = 0; i < size; ++i) {
+		result[i] = arg1[i] / arg2[i];
+	}
 }
