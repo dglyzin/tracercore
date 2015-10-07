@@ -41,6 +41,7 @@ public:
 	void sumArrays(double* result, double* arg1, double* arg2, int size);
 	void multiplyArrayByNumber(double* result, double* arg, double factor, int size);
 	void multiplyArrayByNumberAndSum(double* result, double* arg1, double factor, double* arg2, int size);
+	double sumArrayElements(double* arg, int size);
 };
 
 #endif /* SRC_PROCESSINGUNIT_CPU_CPU_H_ */
