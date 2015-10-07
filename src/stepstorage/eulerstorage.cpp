@@ -46,7 +46,7 @@ void EulerStorage::rejectStep(ProcessingUnit* pu, double timestep) {
 	return;
 }
 
-double EulerStorage::getStepError(double timestep) {
+double EulerStorage::getStepError(ProcessingUnit* pu, double timestep) {
 	return 0.0;
 }
 

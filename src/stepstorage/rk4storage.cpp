@@ -127,7 +127,7 @@ void RK4Storage::rejectStep(ProcessingUnit* pu, double timestep) {
 	return;
 }
 
-double RK4Storage::getStepError(double timestep) {
+double RK4Storage::getStepError(ProcessingUnit* pu, double timestep) {
 	return 0.0;
 }
 

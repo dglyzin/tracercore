@@ -26,7 +26,7 @@ public:
     void confirmStep(ProcessingUnit* pu, double timestep);
     void rejectStep(ProcessingUnit* pu, double timestep);
 
-    double getStepError(double timeStep);
+    double getStepError(ProcessingUnit* pu, double timestep);
 
     bool isFSAL();
     bool isVariableStep();

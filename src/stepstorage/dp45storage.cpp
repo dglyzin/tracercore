@@ -226,3 +226,7 @@ void DP45Storage::confirmStep(ProcessingUnit* pu, double timestep) {
 void DP45Storage::rejectStep(ProcessingUnit* pu, double timestep) {
 	prepareFSAL(pu, timestep);
 }
+
+void DP45Storage::getStepError(ProcessingUnit* pu, double timestep) {
+
+}

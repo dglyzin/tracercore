@@ -37,7 +37,7 @@ public:
     virtual void confirmStep(ProcessingUnit* pu, double timestep) = 0;
     virtual void rejectStep(ProcessingUnit* pu, double timestep) = 0;
 
-    virtual double getStepError(double timeStep) = 0;
+    virtual double getStepError(ProcessingUnit* pu, double timestep) = 0;
 
     virtual bool isFSAL() = 0;
     virtual bool isVariableStep() = 0;
