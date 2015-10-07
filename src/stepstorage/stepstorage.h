@@ -32,7 +32,7 @@ public:
 
     virtual double getStageTimeStep(int stage) = 0;
 
-    virtual void prepareArgument(ProcessingUnit* pc, int stage, double timestep) = 0;
+    virtual void prepareArgument(ProcessingUnit* pu, int stage, double timestep) = 0;
 
     virtual void confirmStep(double timestep) = 0;
     virtual void rejectStep(double timestep) = 0;

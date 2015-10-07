@@ -32,8 +32,8 @@ double EulerStorage::getStageTimeStep(int stage) {
 }
 
 void EulerStorage::prepareArgument(ProcessingUnit* pc, int stage, double timestep) {
-	pc->multiplyArrayByNumber(mTempStore1, mTempStore1, timestep, mCount);
-	pc->sumArrays(mTempStore1, mState, mTempStore1, mCount);
+	pu->multiplyArrayByNumber(mTempStore1, mTempStore1, timestep, mCount);
+	pu->sumArrays(mTempStore1, mState, mTempStore1, mCount);
 }
 
 void EulerStorage::confirmStep(double timestep) {
