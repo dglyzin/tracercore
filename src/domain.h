@@ -10,6 +10,7 @@
 
 #include <fstream>
 #include <string.h>
+#include <mpi.h>
 
 #include "blocks_old/blocknull.h"
 #include "blocks_old/cpu/blockcpu1d.h"
@@ -21,7 +22,7 @@
 
 #include "interconnect.h"
 #include "solvers/solver.h"
-#include "dbconnector.h"
+//#include "dbconnector.h"
 
 /*
  * Основной управляющий класс приложения.
@@ -30,7 +31,7 @@
 
 class Domain {
 public:
-	Domain(int _world_rank, int _world_size, char* inputFile, int _jobId);
+	Domain(int _world_rank, int _world_size, char* inputFile);
 
 	virtual ~Domain();
 
@@ -125,20 +126,29 @@ private:
     double mAtol; //solver absolute tolerance
     double mRtol; //solver relative tolerance
 
+    /*
+     * Коммуникатор работников
+     * Может совпадать с MPI_COMM_WORLD, если нет питон-мастера
+     * либо это  MPI_COMM_WORLD без первого процесса
+     */
+    MPI_Comm mWorkerComm;
+    int mPythonMaster;
+
 	/*
 	 * Номер потока
 	 */
-	int mWorldRank;
+    int mGlobalRank;
+	int mWorkerRank;
 
 	/*
 	 * Количество потоков в целом
 	 */
-	int mWorldSize;
+	int mWorkerCommSize;
 
     /*
      * Глобальный Id задачи для базы
      */
-    int mJobId;
+    //int mJobId;
 
 	/*
 	 * Количество блоков
@@ -171,6 +181,7 @@ private:
 
 	double saveInterval;
 	double counterSaveTime;
+	int mLastStepAccepted;
 
 	double mDx, mDy, mDz;
 
@@ -240,17 +251,17 @@ private:
 	/*
 	 * Database status manipulations
 	 */
-	void setDbJobState(int state){
-        dbConnSetJobState(mJobId, state);
-	}
-	void setDbJobPercentage(int percentage){
-        dbConnSetJobPercentage(mJobId, percentage);
-	}
-	void storeDbFileName(char* fname);
+	//void setDbJobState(int state){
+    //    dbConnSetJobState(mJobId, state);
+	//}
+	//void setDbJobPercentage(int percentage){
+    //    dbConnSetJobPercentage(mJobId, percentage);
+	//}
+	//void storeDbFileName(char* fname);
 
-	int getDbUserStatus(){
-		return dbConnGetUserStatus(mJobId);
-	}
+	//int getDbUserStatus(){
+	//	return dbConnGetUserStatus(mJobId);
+	//}
 
 };
 
