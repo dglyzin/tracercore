@@ -7,6 +7,8 @@
 
 #include "dp45storage.h"
 
+using namespace std;
+
 DP45Storage::DP45Storage() : StepStorage() {
 	mTempStore1 = NULL;
 	mTempStore2 = NULL;
@@ -260,4 +262,34 @@ double DP45Storage::getStepError(ProcessingUnit* pu, double timestep) {
 	pu->multiplyArraysElementwise(temp, temp, temp, mCount);
 
 	return pu->sumArrayElements(temp, mCount);
+}
+
+bool DP45Storage::isFSAL() {
+	return true;
+}
+
+bool DP45Storage::isVariableStep() {
+	return true;
+}
+
+int DP45Storage::getStageCount() {
+	return 6;
+}
+
+double DP45Storage::getNewStep(double timestep, double error, int totalDomainElements) {
+	double err = sqrt(error/totalDomainElements);
+	return timestep * min( facmax, max( facmin, fac * pow(1.0 / err, 1.0 / 5.0) ) );
+}
+
+bool DP45Storage::isErrorPermissible(double error, int totalDomainElements) {
+	double err = sqrt(error/totalDomainElements);
+	if (err < 1)
+		return true;
+	else
+		return false;
+}
+
+double* DP45Storage::getDenseOutput(StepStorage* secondState) {
+	printf("\nDP45 dense output DON'T WORK!\n");
+	return NULL;
 }
