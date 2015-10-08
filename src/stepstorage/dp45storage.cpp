@@ -244,14 +244,14 @@ double DP45Storage::getStepError(ProcessingUnit* pu, double timestep) {
 
 	return err;*/
 
-	pu->multiplyArrayByNumber(temp, mTempStore1, e1, mCount);
-	pu->multiplyArrayByNumberAndSum(temp, mTempStore3, e3, temp, mCount);
-	pu->multiplyArrayByNumberAndSum(temp, mTempStore4, e4, temp, mCount);
-	pu->multiplyArrayByNumberAndSum(temp, mTempStore5, e5, temp, mCount);
-	pu->multiplyArrayByNumberAndSum(temp, mTempStore6, e6, temp, mCount);
-	pu->multiplyArrayByNumberAndSum(temp, mTempStore7, e7, temp, mCount);
+	pu->multiplyArrayByNumber(temp, mTempStore1, timestep*e1, mCount);
+	pu->multiplyArrayByNumberAndSum(temp, mTempStore3, timestep*e3, temp, mCount);
+	pu->multiplyArrayByNumberAndSum(temp, mTempStore4, timestep*e4, temp, mCount);
+	pu->multiplyArrayByNumberAndSum(temp, mTempStore5, timestep*e5, temp, mCount);
+	pu->multiplyArrayByNumberAndSum(temp, mTempStore6, timestep*e6, temp, mCount);
+	pu->multiplyArrayByNumberAndSum(temp, mTempStore7, timestep*e7, temp, mCount);
 
-	pu->multiplyArrayByNumber(temp, temp, timestep, mCount);
+	//pu->multiplyArrayByNumber(temp, temp, timestep, mCount);
 
 	pu->maxElementsElementwise(mArg, mArg, mState, mCount);
 	pu->multiplyArrayByNumber(mArg, mArg, rTol, mCount);
