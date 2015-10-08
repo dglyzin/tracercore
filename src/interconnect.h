@@ -23,7 +23,7 @@
 class Interconnect {
 public:
 	Interconnect(int _sourceLocationNode, int _destinationLocationNode, int _borderLength,
-			double* _sourceBlockBorder, double* _destinationExternalBorder);
+			double* _sourceBlockBorder, double* _destinationExternalBorder, MPI_Comm* _pworkerComm);
 	virtual ~Interconnect();
 
 	/*
@@ -39,6 +39,7 @@ public:
 	void wait();
 
 private:
+	MPI_Comm* mpWorkerComm;
 	/*
 	 * Номер потока с исходными данными
 	 */
