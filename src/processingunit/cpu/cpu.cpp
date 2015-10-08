@@ -141,3 +141,10 @@ void CPU::addNumberToArray(double* result, double* arg, double number, int size)
 		result[i] = arg[i] + number;
 	}
 }
+
+void CPU::multiplyArraysElementwise(double* result, double* arg1, double* arg2, int size) {
+#pragma omp parallel for
+	for (int i = 0; i < size; ++i) {
+		result[i] = arg1[i] * arg2[i];
+	}
+}

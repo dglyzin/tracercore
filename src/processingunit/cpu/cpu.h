@@ -47,6 +47,7 @@ public:
 	void divisionArraysElementwise(double* result, double* arg1, double* arg2, int size);
 
 	void addNumberToArray(double* result, double* arg, double number, int size);
+	void multiplyArraysElementwise(double* result, double* arg1, double* arg2, int size)
 };
 
 #endif /* SRC_PROCESSINGUNIT_CPU_CPU_H_ */

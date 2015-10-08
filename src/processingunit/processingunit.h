@@ -58,6 +58,7 @@ public:
 	virtual void divisionArraysElementwise(double* result, double* arg1, double* arg2, int size) = 0;
 
 	virtual void addNumberToArray(double* result, double* arg, double number, int size) = 0;
+	virtual void multiplyArraysElementwise(double* result, double* arg1, double* arg2, int size) = 0;
 
 protected:
 	std::list<double*> doubleArrays;
