@@ -134,3 +134,10 @@ void CPU::divisionArraysElementwise(double* result, double* arg1, double* arg2, 
 		result[i] = arg1[i] / arg2[i];
 	}
 }
+
+void CPU::addNumberToArray(double* result, double* arg, double number, int size) {
+#pragma omp parallel for
+	for (int i = 0; i < size; ++i) {
+		result[i] = arg[i] + number;
+	}
+}

@@ -45,6 +45,8 @@ public:
 	double sumArrayElements(double* arg, int size);
 	void maxElementsElementwise(double* result, double* arg1, double* arg2, int size);
 	void divisionArraysElementwise(double* result, double* arg1, double* arg2, int size);
+
+	void addNumberToArray(double* result, double* arg, double number, int size);
 };
 
 #endif /* SRC_PROCESSINGUNIT_CPU_CPU_H_ */
