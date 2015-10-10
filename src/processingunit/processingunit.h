@@ -20,8 +20,8 @@ public:
 	ProcessingUnit();
 	virtual ~ProcessingUnit();
 
-	virtual void computeBorder(double* result, double** source, double time, double* parametrs, double** externalBorder, int zCount, int yCount, int xCount, int haloSize) = 0;
-	virtual void computeCenter(double* result, double** source, double time, double* parametrs, double** externalBorder, int zCount, int yCount, int xCount, int haloSize) = 0;
+	virtual void computeBorder(func_ptr_t* mUserFuncs, unsigned short int* mCompFuncNumber, double* result, double** source, double time, double* parametrs, double** externalBorder, int zCount, int yCount, int xCount, int haloSize) = 0;
+	virtual void computeCenter(func_ptr_t* mUserFuncs, unsigned short int* mCompFuncNumber, double* result, double** source, double time, double* parametrs, double** externalBorder, int zCount, int yCount, int xCount, int haloSize) = 0;
 
 	virtual void prepareBorder(double* result, double* source, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop, int yCount, int xCount, int cellSize) = 0;
 
@@ -70,9 +70,9 @@ protected:
 	std::list<double*> doublePinnedArrays;
 
 
-	func_ptr_t* mUserFuncs;
-	initfunc_fill_ptr_t* mUserInitFuncs;
-	unsigned short int* mCompFuncNumber;
+	//func_ptr_t* mUserFuncs;
+	//initfunc_fill_ptr_t* mUserInitFuncs;
+	//unsigned short int* mCompFuncNumber;
 
 
 

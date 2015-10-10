@@ -16,7 +16,7 @@ CPU_1d::~CPU_1d() {
 	// TODO Auto-generated destructor stub
 }
 
-void CPU_1d::computeBorder(double* result, double** source, double time, double* parametrs, double** externalBorder, int zCount, int yCount, int xCount, int haloSize) {
+void CPU_1d::computeBorder(func_ptr_t* mUserFuncs, unsigned short int* mCompFuncNumber, double* result, double** source, double time, double* parametrs, double** externalBorder, int zCount, int yCount, int xCount, int haloSize) {
 # pragma omp parallel
 	{
 # pragma omp for
@@ -35,7 +35,7 @@ void CPU_1d::computeBorder(double* result, double** source, double time, double*
 	//scanf("%c", &c);
 }
 
-void CPU_1d::computeCenter(double* result, double** source, double time, double* parametrs, double** externalBorder, int zCount, int yCount, int xCount, int haloSize) {
+void CPU_1d::computeCenter(func_ptr_t* mUserFuncs, unsigned short int* mCompFuncNumber, double* result, double** source, double time, double* parametrs, double** externalBorder, int zCount, int yCount, int xCount, int haloSize) {
 # pragma omp parallel
 	{
 # pragma omp for

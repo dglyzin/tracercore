@@ -16,7 +16,7 @@ CPU_2d::~CPU_2d() {
 	// TODO Auto-generated destructor stub
 }
 
-void CPU_2d::computeBorder(double* result, double** source, double time, double* parametrs, double** externalBorder, int zCount, int yCount, int xCount, int haloSize) {
+void CPU_2d::computeBorder(func_ptr_t* mUserFuncs, unsigned short int* mCompFuncNumber, double* result, double** source, double time, double* parametrs, double** externalBorder, int zCount, int yCount, int xCount, int haloSize) {
 # pragma omp parallel
 	{
 # pragma omp for
@@ -65,7 +65,7 @@ void CPU_2d::computeBorder(double* result, double** source, double time, double*
 	}
 }
 
-void CPU_2d::computeCenter(double* result, double** source, double time, double* parametrs, double** externalBorder, int zCount, int yCount, int xCount, int haloSize) {
+void CPU_2d::computeCenter(func_ptr_t* mUserFuncs, unsigned short int* mCompFuncNumber, double* result, double** source, double time, double* parametrs, double** externalBorder, int zCount, int yCount, int xCount, int haloSize) {
 # pragma omp parallel
 	{
 # pragma omp for
