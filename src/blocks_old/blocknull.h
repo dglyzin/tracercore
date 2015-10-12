@@ -16,14 +16,14 @@
  * Остальные функции своей предка не переопределяет.
  */
 
-class BlockNull: public Block {
+class BlockNull: public Block_old {
 private:
 	void prepareBorder(int borderNumber, int stage, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop) { return; }
 
 	void createSolver(int solverIdx, double _aTol, double _rTol) { return; }
 
-	double* getNewBlockBorder(Block* neighbor, int borderLength, int& memoryType) { return NULL; }
-	double* getNewExternalBorder(Block* neighbor, int borderLength, double* border, int& memoryType) { return NULL; }
+	double* getNewBlockBorder(Block_old* neighbor, int borderLength, int& memoryType) { return NULL; }
+	double* getNewExternalBorder(Block_old* neighbor, int borderLength, double* border, int& memoryType) { return NULL; }
 
 	void printSendBorderInfo() { return; }
 	void printReceiveBorderInfo() { return; }

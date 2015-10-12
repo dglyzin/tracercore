@@ -10,7 +10,7 @@
 using namespace std;
 
 
-Block::Block(int _blockNumber, int _dimension, int _xCount, int _yCount, int _zCount,
+Block_old::Block_old(int _blockNumber, int _dimension, int _xCount, int _yCount, int _zCount,
 		int _xOffset, int _yOffset, int _zOffset,
 		int _nodeNumber, int _deviceNumber,
 		int _haloSize, int _cellSize) {
@@ -84,35 +84,35 @@ Block::Block(int _blockNumber, int _dimension, int _xCount, int _yCount, int _zC
 	mSolver = NULL;
 }
 
-Block::~Block() {
+Block_old::~Block_old() {
 
 }
 
-int Block::getGridNodeCount() {
+int Block_old::getGridNodeCount() {
 	return xCount * yCount * zCount;
 }
 
-int Block::getGridElementCount() {
+int Block_old::getGridElementCount() {
 	return getGridNodeCount() * cellSize;
 }
 
-void Block::prepareArgument(int stage, double timestep){
+void Block_old::prepareArgument(int stage, double timestep){
 	if( mSolver != NULL )
 		mSolver->prepareArgument(stage, timestep);
 }
 
-void Block::confirmStep(double timestep) {
+void Block_old::confirmStep(double timestep) {
 	if( mSolver != NULL )
 		mSolver->confirmStep( timestep);
 }
 
-void Block::rejectStep(double timestep) {
+void Block_old::rejectStep(double timestep) {
 	if( mSolver != NULL )
 		mSolver->rejectStep( timestep);
 }
 
 
-void Block::freeMemory(int memory_alloc_type, double* memory) {
+void Block_old::freeMemory(int memory_alloc_type, double* memory) {
 	if(memory == NULL)
 		return;
 	
@@ -137,7 +137,7 @@ void Block::freeMemory(int memory_alloc_type, double* memory) {
 	}
 }
 
-void Block::freeMemory(int memory_alloc_type, int* memory) {
+void Block_old::freeMemory(int memory_alloc_type, int* memory) {
 	if(memory == NULL)
 		return;
 	
@@ -194,7 +194,7 @@ void Block::computeStageBorder(int stage, double time) {
 	}
 }*/
 
-double* Block::addNewBlockBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength) {
+double* Block_old::addNewBlockBorder(Block_old* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength) {
 	countSendSegmentBorder++;
 
 	tempSendBorderInfo.push_back(side);
@@ -223,7 +223,7 @@ double* Block::addNewBlockBorder(Block* neighbor, int side, int mOffset, int nOf
 	return newBlockBorder;
 }
 
-double* Block::addNewExternalBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength, double* border) {
+double* Block_old::addNewExternalBorder(Block_old* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength, double* border) {
 	countReceiveSegmentBorder++;
 
 	tempReceiveBorderInfo.push_back(side);
@@ -252,7 +252,7 @@ double* Block::addNewExternalBorder(Block* neighbor, int side, int mOffset, int 
 	return newExternalBorder;
 }
 
-void Block::prepareStageData(int stage) {
+void Block_old::prepareStageData(int stage) {
 	for (int i = 0; i < countSendSegmentBorder; ++i) {
 		int index = INTERCONNECT_COMPONENT_COUNT * i;
 
@@ -291,7 +291,7 @@ void Block::prepareStageData(int stage) {
 	}
 }
 
-void Block::print() {
+void Block_old::print() {
 	if(isRealBlock()) {
 		cout << "####################################################################################################" << endl;
 
@@ -307,7 +307,7 @@ void Block::print() {
 	}
 }
 
-void Block::printGeneralInformation() {
+void Block_old::printGeneralInformation() {
 	cout << endl;
 	cout << "Block #" << blockNumber << " from node #" << nodeNumber << endl;
 	cout << "Dimension    " << dimension << endl;
@@ -324,7 +324,7 @@ void Block::printGeneralInformation() {
 	cout << "Halo size:   " << haloSize << endl;
 }
 
-void Block::printSendBorderInfoArray(int* sendBorderInfoArray) {
+void Block_old::printSendBorderInfoArray(int* sendBorderInfoArray) {
 	cout << endl;
 	cout << "Send border info (" << countSendSegmentBorder << ")" << endl;
 	for (int i = 0; i < countSendSegmentBorder; ++i) {
@@ -341,7 +341,7 @@ void Block::printSendBorderInfoArray(int* sendBorderInfoArray) {
 	}
 }
 
-void Block::printReceiveBorderInfoArray(int* receiveBorderInfoArray) {
+void Block_old::printReceiveBorderInfoArray(int* receiveBorderInfoArray) {
 	cout << endl << endl;
 	cout << "Receive border info (" << countReceiveSegmentBorder << ")" << endl;
 	for (int i = 0; i < countReceiveSegmentBorder; ++i) {
@@ -358,7 +358,7 @@ void Block::printReceiveBorderInfoArray(int* receiveBorderInfoArray) {
 	}
 }
 
-void Block::loadData(double* data) {
+void Block_old::loadData(double* data) {
 	if(mSolver != NULL)
 		mSolver->loadState(data);
 }

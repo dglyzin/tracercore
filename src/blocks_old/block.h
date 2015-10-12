@@ -22,7 +22,7 @@
  * Наследники: BlockCpu, BlockGpu, BlockNull
  */
 
-class Block {
+class Block_old {
 
 protected:
 	Solver* mSolver;
@@ -97,8 +97,8 @@ protected:
 
 	virtual void createSolver(int solverIdx, double _aTol, double _rTol) = 0;
 
-	virtual double* getNewBlockBorder(Block* neighbor, int borderLength, int& memoryType) = 0;
-	virtual double* getNewExternalBorder(Block* neighbor, int borderLength, double* border, int& memoryType) = 0;
+	virtual double* getNewBlockBorder(Block_old* neighbor, int borderLength, int& memoryType) = 0;
+	virtual double* getNewExternalBorder(Block_old* neighbor, int borderLength, double* border, int& memoryType) = 0;
 
 	virtual void printSendBorderInfo() = 0;
 	virtual void printReceiveBorderInfo() = 0;
@@ -114,12 +114,12 @@ protected:
 	int mParamsCount;
 
 public:
-	Block(int _blockNumber, int _dimension, int _xCount, int _yCount, int _zCount,
+	Block_old(int _blockNumber, int _dimension, int _xCount, int _yCount, int _zCount,
 			int _xOffset, int _yOffset, int _zOffset,
 			int _nodeNumber, int _deviceNumber,
 			int _haloSize, int _cellSize);
 
-	virtual ~Block();
+	virtual ~Block_old();
 
 	/*
 	 * Проверяет, является ли блок реальным для данного потока исполнения.
@@ -180,8 +180,8 @@ public:
 	
 	void setFunctionNumber(unsigned short int* functionNumberData ) { return; }
 
-	double* addNewBlockBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength);
-	double* addNewExternalBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength, double* border);
+	double* addNewBlockBorder(Block_old* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength);
+	double* addNewExternalBorder(Block_old* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength, double* border);
 
 	virtual void moveTempBorderVectorToBorderArray() = 0;
 

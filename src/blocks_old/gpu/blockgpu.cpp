@@ -15,7 +15,7 @@ BlockGpu::BlockGpu(int _blockNumber, int _dimension, int _xCount, int _yCount, i
 		int _haloSize, int _cellSize,
 		unsigned short int* _initFuncNumber, unsigned short int* _compFuncNumber,
 		int _solverIdx, double _aTol, double _rTol) :
-				Block( _blockNumber, _dimension, _xCount, _yCount, _zCount,
+				Block_old( _blockNumber, _dimension, _xCount, _yCount, _zCount,
 				_xOffset, _yOffset, _zOffset,
 				_nodeNumber, _deviceNumber,
 				_haloSize, _cellSize) {
@@ -365,7 +365,7 @@ void BlockGpu::createSolver(int solverIdx, double _aTol, double _rTol) {
 	}
 }
 
-double* BlockGpu::getNewBlockBorder(Block* neighbor, int borderLength, int& memoryType) {
+double* BlockGpu::getNewBlockBorder(Block_old* neighbor, int borderLength, int& memoryType) {
 	double* tmpBorder;
 
 	if( nodeNumber == neighbor->getNodeNumber() ) {
@@ -396,7 +396,7 @@ double* BlockGpu::getNewBlockBorder(Block* neighbor, int borderLength, int& memo
 	return tmpBorder;
 }
 
-double* BlockGpu::getNewExternalBorder(Block* neighbor, int borderLength, double* border, int& memoryType) {
+double* BlockGpu::getNewExternalBorder(Block_old* neighbor, int borderLength, double* border, int& memoryType) {
 	double* tmpBorder;
 
 	if( nodeNumber == neighbor->getNodeNumber() ) {

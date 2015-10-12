@@ -436,7 +436,7 @@ void Domain::readFromFile(char* path) {
 
 	readBlockCount(in);
 
-	mBlocks = new Block* [mBlockCount];
+	mBlocks = new Block_old* [mBlockCount];
 
 	//printf ("DEBUG reading blocks.\n ");
 
@@ -550,8 +550,8 @@ void Domain::readConnectionCount(ifstream& in) {
  * После чтения блок будет считать, что ни с кем не связан.
  * Не будет готовить информацию для пересылки и не будет считываеть ее из других источников.
  */
-Block* Domain::readBlock(ifstream& in, int idx) {
-	Block* resBlock;
+Block_old* Domain::readBlock(ifstream& in, int idx) {
+	Block_old* resBlock;
 	int dimension;
 	int node;
 	int deviceType;

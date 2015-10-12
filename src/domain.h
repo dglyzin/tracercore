@@ -101,7 +101,7 @@ private:
 	 * Содержит все блоки потока (реальные и нереальные).
 	 * Каждый поток исполнения содержит одинаковое количество блоков.
 	 */
-	Block** mBlocks;
+	Block_old** mBlocks;
 
 	/*
 	 * Массив соединений.
@@ -214,7 +214,7 @@ private:
 	/*
 	 * Чтение блока
 	 */
-	Block* readBlock(std::ifstream& in, int idx);
+	Block_old* readBlock(std::ifstream& in, int idx);
 
 	/*
 	 * Чтение соединения

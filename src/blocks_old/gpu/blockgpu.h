@@ -18,14 +18,14 @@
  * Класс обработки данных на видеокарте
  */
 
-class BlockGpu: public Block {
+class BlockGpu: public Block_old {
 private:
 	void prepareBorder(int borderNumber, int stage, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop);
 
 	void createSolver(int solverIdx, double _aTol, double _rTol);
 
-	double* getNewBlockBorder(Block* neighbor, int borderLength, int& memoryType);
-	double* getNewExternalBorder(Block* neighbor, int borderLength, double* border, int& memoryType);
+	double* getNewBlockBorder(Block_old* neighbor, int borderLength, int& memoryType);
+	double* getNewExternalBorder(Block_old* neighbor, int borderLength, double* border, int& memoryType);
 
 	void printSendBorderInfo();
 	void printReceiveBorderInfo();
