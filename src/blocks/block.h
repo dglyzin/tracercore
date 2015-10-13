@@ -28,6 +28,8 @@ protected:
 	ProcessingUnit *pc;
 
 	ProblemType* problem;
+
+
 };
 
 #endif /* SRC_BLOCKS_BLOCK_H_ */
