@@ -14,7 +14,7 @@
 
 class CPU: public ProcessingUnit {
 public:
-	CPU();
+	CPU(int _nodeNumber, int _deviceNumber);
 	virtual ~CPU();
 
 	//virtual void computeBorder(double* result, double** source, double time, double* parametrs, double** externalBorder, int zCount, int yCount, int xCount, int haloSize) = 0;

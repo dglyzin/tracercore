@@ -12,7 +12,7 @@
 
 class CPU_1d: public CPU {
 public:
-	CPU_1d();
+	CPU_1d(int _nodeNumber, int _deviceNumber);
 	virtual ~CPU_1d();
 
 	void computeBorder(func_ptr_t* mUserFuncs, unsigned short int* mCompFuncNumber, double* result, double** source, double time, double* parametrs, double** externalBorder, int zCount, int yCount, int xCount, int haloSize);

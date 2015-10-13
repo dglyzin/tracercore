@@ -17,7 +17,7 @@
 
 class ProcessingUnit {
 public:
-	ProcessingUnit();
+	ProcessingUnit(int _nodeNumber, int _deviceNumber);
 	virtual ~ProcessingUnit();
 
 	virtual void computeBorder(func_ptr_t* mUserFuncs, unsigned short int* mCompFuncNumber, double* result, double** source, double time, double* parametrs, double** externalBorder, int zCount, int yCount, int xCount, int haloSize) = 0;
@@ -61,6 +61,9 @@ public:
 	virtual void multiplyArraysElementwise(double* result, double* arg1, double* arg2, int size) = 0;
 
 protected:
+	int nodeNumber;
+	int deviceNumber;
+
 	std::list<double*> doubleArrays;
 	std::list<double**> doublePointerArrays;
 

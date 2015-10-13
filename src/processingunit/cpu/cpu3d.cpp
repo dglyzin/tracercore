@@ -7,7 +7,7 @@
 
 #include "../../processingunit/cpu/cpu3d.h"
 
-CPU_3d::CPU_3d() {
+CPU_3d::CPU_3d(int _nodeNumber, int _deviceNumber) : CPU(_nodeNumber, _deviceNumber) {
 	// TODO Auto-generated constructor stub
 
 }

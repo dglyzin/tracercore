@@ -9,7 +9,7 @@
 
 using namespace std;
 
-CPU::CPU() {
+CPU::CPU(int _nodeNumber, int _deviceNumber) : ProcessingUnit(_nodeNumber, _deviceNumber) {
 	// TODO Auto-generated constructor stub
 
 }
