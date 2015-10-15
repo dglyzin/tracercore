@@ -8,15 +8,13 @@
 #ifndef SRC_BLOCKS_BLOCK_H_
 #define SRC_BLOCKS_BLOCK_H_
 
-#include <vector>
-
 #include "../problem/ordinary.h"
 
 #include "../processingunit/processingunit.h"
 
 class Block {
 public:
-	Block();
+	Block(int _dimension, int _xCount, int _yCount, int _zCount, int _xOffset, int _yOffset, int _zOffset, int _cellSize, int _haloSize);
 	virtual ~Block();
 
 	void computeStageBorder(int stage, double time);
@@ -27,11 +25,6 @@ public:
 	void prepareStageData(int stage);
 
 protected:
-	ProcessingUnit *pc;
-
-	ProblemType* problem;
-
-
 	int dimension;
 
 	int xCount;
@@ -42,28 +35,8 @@ protected:
 	int yOffset;
 	int zOffset;
 
-
-	int* sendBorderInfo;
-	std::vector<int> tempSendBorderInfo;
-
-	int* receiveBorderInfo;
-	std::vector<int> tempReceiveBorderInfo;
-
-
-	double** blockBorder;
-	int* blockBorderMemoryAllocType;
-	std::vector<double*> tempBlockBorder;
-	std::vector<int> tempBlockBorderMemoryAllocType;
-
-
-	double** externalBorder;
-	int* externalBorderMemoryAllocType;
-	std::vector<double*> tempExternalBorder;
-	std::vector<int> tempExternalBorderMemoryAllocType;
-
-
-	int countSendSegmentBorder;
-	int countReceiveSegmentBorder;
+	int cellSize;
+	int haloSize;
 };
 
 #endif /* SRC_BLOCKS_BLOCK_H_ */
