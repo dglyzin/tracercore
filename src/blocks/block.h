@@ -37,6 +37,9 @@ protected:
 
 	int cellSize;
 	int haloSize;
+
+	int getGridNodeCount();
+	int getGridElementCount();
 };
 
 #endif /* SRC_BLOCKS_BLOCK_H_ */

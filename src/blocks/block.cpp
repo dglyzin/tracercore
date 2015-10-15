@@ -26,3 +26,10 @@ Block::~Block() {
 	// TODO Auto-generated destructor stub
 }
 
+int Block::getGridNodeCount() {
+	return xCount * yCount * zCount;
+}
+
+int Block::getGridElementCount() {
+	return getGridNodeCount() * cellSize;
+}
