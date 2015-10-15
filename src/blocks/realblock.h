@@ -23,6 +23,11 @@ private:
 	ProblemType* problem;
 
 
+	func_ptr_t* mUserFuncs;
+	initfunc_fill_ptr_t* mUserInitFuncs;
+	unsigned short int* mCompFuncNumber;
+
+
 	int* sendBorderInfo;
 	std::vector<int> tempSendBorderInfo;
 

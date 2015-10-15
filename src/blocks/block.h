@@ -17,12 +17,12 @@ public:
 	Block(int _dimension, int _xCount, int _yCount, int _zCount, int _xOffset, int _yOffset, int _zOffset, int _cellSize, int _haloSize);
 	virtual ~Block();
 
-	void computeStageBorder(int stage, double time);
-	void computeStageCenter(int stage, double time);
+	virtual void computeStageBorder(int stage, double time) = 0;
+	virtual void computeStageCenter(int stage, double time) = 0;
 
-	void prepareArgument(int stage, double timestep );
+	virtual void prepareArgument(int stage, double timestep ) = 0;
 
-	void prepareStageData(int stage);
+	virtual void prepareStageData(int stage) = 0;
 
 protected:
 	int dimension;
