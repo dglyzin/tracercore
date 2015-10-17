@@ -17,10 +17,35 @@ public:
 	RealBlock();
 	virtual ~RealBlock();
 
+	void computeStageBorder(int stage, double time);
+	void computeStageCenter(int stage, double time);
+
+	void prepareArgument(int stage, double timestep );
+
+	void prepareStageData(int stage);
+
+
+	bool isRealBlock();
+	int getBlockType();
+
+	double getStepError(double timeStep);
+
+	void confirmStep(double timestep);
+	void rejectStep(double timestep);
+
+	double* addNewBlockBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength);
+	double* addNewExternalBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength, double* border);
+
+	void moveTempBorderVectorToBorderArray();
+
+	void loadData(double* data);
+
 private:
-	ProcessingUnit* pc;
+	ProcessingUnit* pu;
 
 	ProblemType* problem;
+
+	double* mParams;
 
 
 	func_ptr_t* mUserFuncs;
