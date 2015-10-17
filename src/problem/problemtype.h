@@ -25,6 +25,9 @@ public:
 
 	virtual double getStepError(ProcessingUnit* pu, double timestep) = 0;
 
+	virtual void confirmStep(ProcessingUnit* pu, double timestep) = 0;
+	virtual void rejectStep(ProcessingUnit* pu, double timestep) = 0;
+
 protected:
 	StepStorage* createStageStorage(ProcessingUnit* pu, int solverType, int count, double aTol, double rTol);
 };

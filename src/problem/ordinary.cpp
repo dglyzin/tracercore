@@ -34,3 +34,11 @@ double* Ordinary::getCurrentStateStageData(int stage) {
 double Ordinary::getStepError(ProcessingUnit* pu, double timestep) {
 	return mStepStorage->getStepError(pu, timestep);
 }
+
+void Ordinary::confirmStep(ProcessingUnit* pu, double timestep) {
+	mStepStorage->confirmStep(pu, timestep);
+}
+
+void Ordinary::rejectStep(ProcessingUnit* pu, double timestep) {
+	mStepStorage->rejectStep(pu, timestep);
+}

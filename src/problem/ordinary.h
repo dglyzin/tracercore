@@ -24,6 +24,9 @@ public:
 
 	double getStepError(ProcessingUnit* pu, double timestep);
 
+	void confirmStep(ProcessingUnit* pu, double timestep);
+	void rejectStep(ProcessingUnit* pu, double timestep);
+
 private:
 	StepStorage* mStepStorage;
 };
