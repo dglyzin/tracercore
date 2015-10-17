@@ -22,6 +22,8 @@ public:
 
 	double* getCurrentStateStageData(int stage);
 
+	double getStepError(ProcessingUnit* pu, double timestep);
+
 private:
 	StepStorage* mStepStorage;
 };

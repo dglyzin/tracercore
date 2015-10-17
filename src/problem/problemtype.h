@@ -23,6 +23,8 @@ public:
 
 	virtual double* getCurrentStateStageData(int stage) = 0;
 
+	virtual double getStepError(ProcessingUnit* pu, double timestep) = 0;
+
 protected:
 	StepStorage* createStageStorage(ProcessingUnit* pu, int solverType, int count, double aTol, double rTol);
 };

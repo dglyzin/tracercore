@@ -30,3 +30,7 @@ void Ordinary::prepareArgument(ProcessingUnit* pu, int stage, double timestep) {
 double* Ordinary::getCurrentStateStageData(int stage) {
 	return mStepStorage->getStageSource(stage);
 }
+
+double Ordinary::getStepError(ProcessingUnit* pu, double timestep) {
+	return mStepStorage->getStepError(pu, timestep);
+}
