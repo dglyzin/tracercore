@@ -13,6 +13,8 @@
 
 #include <list>
 
+#include "../enums.h"
+
 #include "../userfuncs.h"
 
 class ProcessingUnit {
@@ -25,6 +27,8 @@ public:
 
 	virtual void prepareBorder(double* result, double* source, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop, int yCount, int xCount, int cellSize) = 0;
 
+
+	virtual int getType() = 0;
 
 
 	double* newDoubleArray(int size);

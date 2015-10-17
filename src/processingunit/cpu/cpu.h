@@ -22,6 +22,8 @@ public:
 
 	void prepareBorder(double* result, double* source, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop, int yCount, int xCount, int cellSize);
 
+	int getType();
+
 
 	double* getDoubleArray(int size);
 	double** getDoublePointerArray(int size);

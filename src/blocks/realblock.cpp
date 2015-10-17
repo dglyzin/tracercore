@@ -89,3 +89,8 @@ void RealBlock::prepareStageData(int stage) {
 bool RealBlock::isRealBlock() {
 	return true;
 }
+
+int RealBlock::getBlockType() {
+	//TODO изменит enums!!!
+	return 0;
+}

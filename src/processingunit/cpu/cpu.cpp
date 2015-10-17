@@ -41,6 +41,11 @@ void CPU::prepareBorder(double* result, double* source, int zStart, int zStop, i
 	}
 }
 
+int CPU::getType() {
+	//TODO изменить enums!!!
+	return 0;
+}
+
 double* CPU::getDoubleArray(int size) {
 	return new double [size];
 }
