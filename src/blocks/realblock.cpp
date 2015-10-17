@@ -96,7 +96,7 @@ int RealBlock::getBlockType() {
 }
 
 double RealBlock::getStepError(double timestep) {
-
+	return problem->getStepError(pu, timestep);
 }
 
 
