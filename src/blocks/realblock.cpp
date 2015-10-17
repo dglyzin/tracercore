@@ -99,4 +99,10 @@ double RealBlock::getStepError(double timestep) {
 	return problem->getStepError(pu, timestep);
 }
 
+void RealBlock::confirmStep(double timestep) {
+	problem->confirmStep(pu, timestep);
+}
 
+void RealBlock::rejectStep(double timestep) {
+	problem->rejectStep(pu, timestep);
+}
