@@ -85,3 +85,7 @@ void RealBlock::prepareStageData(int stage) {
 		}
 	}
 }
+
+bool RealBlock::isRealBlock() {
+	return true;
+}
