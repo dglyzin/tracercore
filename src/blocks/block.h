@@ -24,6 +24,25 @@ public:
 
 	virtual void prepareStageData(int stage) = 0;
 
+
+	virtual bool isRealBlock() = 0;
+	virtual int getBlockType() = 0;
+
+	virtual double getStepError(double timeStep) = 0;
+
+	virtual void confirmStep(double timestep) = 0;
+	virtual void rejectStep(double timestep) = 0;
+
+	virtual double* addNewBlockBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength) = 0;
+	virtual double* addNewExternalBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength, double* border) = 0;
+
+	virtual void moveTempBorderVectorToBorderArray() = 0;
+
+	virtual void loadData(double* data) = 0;
+
+	int getGridNodeCount();
+	int getGridElementCount();
+
 protected:
 	int dimension;
 
@@ -37,9 +56,6 @@ protected:
 
 	int cellSize;
 	int haloSize;
-
-	int getGridNodeCount();
-	int getGridElementCount();
 };
 
 #endif /* SRC_BLOCKS_BLOCK_H_ */
