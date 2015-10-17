@@ -22,3 +22,7 @@ double* Ordinary::getSource(int stage, double time) {
 double* Ordinary::getResult(int stage, double time) {
 	return mStepStorage->getStageResult(stage);
 }
+
+void Ordinary::prepareArgument(ProcessingUnit* pu, int stage, double timestep) {
+	mStepStorage->prepareArgument(pu, stage, timestep);
+}

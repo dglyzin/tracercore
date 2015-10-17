@@ -18,6 +18,8 @@ public:
 	double* getSource(int stage, double time);
 	double* getResult(int stage, double time);
 
+	void prepareArgument(ProcessingUnit* pu, int stage, double timestep);
+
 private:
 	StepStorage* mStepStorage;
 };
