@@ -20,6 +20,8 @@ public:
 
 	void prepareArgument(ProcessingUnit* pu, int stage, double timestep);
 
+	double* getCurrentStateStageData(int stage);
+
 private:
 	StepStorage* mStepStorage;
 };

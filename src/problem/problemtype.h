@@ -21,6 +21,8 @@ public:
 
 	virtual void prepareArgument(ProcessingUnit* pu, int stage, double timestep) = 0;
 
+	virtual double* getCurrentStateStageData(int stage) = 0;
+
 protected:
 	StepStorage* createStageStorage(ProcessingUnit* pu, int solverType, int count, double aTol, double rTol);
 };
