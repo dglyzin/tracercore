@@ -94,3 +94,9 @@ int RealBlock::getBlockType() {
 	//TODO изменит enums!!!
 	return 0;
 }
+
+double RealBlock::getStepError(double timestep) {
+
+}
+
+

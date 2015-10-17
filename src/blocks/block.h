@@ -28,7 +28,7 @@ public:
 	virtual bool isRealBlock() = 0;
 	virtual int getBlockType() = 0;
 
-	virtual double getStepError(double timeStep) = 0;
+	virtual double getStepError(double timestep) = 0;
 
 	virtual void confirmStep(double timestep) = 0;
 	virtual void rejectStep(double timestep) = 0;

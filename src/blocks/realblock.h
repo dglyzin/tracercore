@@ -28,7 +28,7 @@ public:
 	bool isRealBlock();
 	int getBlockType();
 
-	double getStepError(double timeStep);
+	double getStepError(double timestep);
 
 	void confirmStep(double timestep);
 	void rejectStep(double timestep);
