@@ -42,7 +42,7 @@ enum SOLVER_TYPE { EULER, RK4, DP45 };
  */
 enum BLOCK_TYPE { NULL_BLOCK, CPU, GPU };
 
-enum PROCESSING_UNIT_TYPE { CPU_UNIT, GPU_UNIT }
+enum PROCESSING_UNIT_TYPE { CPU_UNIT, GPU_UNIT };
 
 /*
  * Способ выделения памяти.
