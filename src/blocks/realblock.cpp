@@ -91,8 +91,7 @@ bool RealBlock::isRealBlock() {
 }
 
 int RealBlock::getBlockType() {
-	//TODO изменит enums!!!
-	return 0;
+	return pu->getType();
 }
 
 double RealBlock::getStepError(double timestep) {
