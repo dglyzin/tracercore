@@ -141,7 +141,7 @@ double* Domain::getBlockCurrentState(int number) {
 void Domain::compute(char* inputFile) {
 	cout << endl << "Computation started..." << mWorkerRank << endl;
 	cout << "Current time: "<<currentTime<<", finish time: "<<stopTime<< ", time step: " << timeStep<<endl;
-	cout << "solver stage count: " << mSolverInfo->getStageCount() << endl;
+	cout << "solver stage count!!!: " << mSolverInfo->getStageCount() << endl;
 
 	if (mSolverInfo->isFSAL() )
 	    initSolvers();
@@ -165,6 +165,8 @@ void Domain::compute(char* inputFile) {
     //1.
     int userStatus= US_START;
     MPI_Bcast(&userStatus, 1, MPI_INT, 0, MPI_COMM_WORLD);
+    cout<<"Initial user status received: "<< userStatus<< endl;
+
 
 	while ((userStatus!=US_STOP) && ( currentTime < stopTime ) ){
 		nextStep();
