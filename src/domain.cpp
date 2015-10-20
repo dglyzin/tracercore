@@ -197,6 +197,10 @@ void Domain::compute(char* inputFile) {
 		int readyToSave = ( saveInterval != 0 )&&( counterSaveTime > saveInterval );
 		if (mPythonMaster&& (mWorkerRank==0) )
 			MPI_Send(&readyToSave, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
+		if  (!(currentTime < stopTime ))
+            jobState = JS_FINISHED;
+        if (mPythonMaster&& (mWorkerRank==0) )
+            MPI_Send(&jobState, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
 
 		if( readyToSave ) {
 				counterSaveTime = 0;
@@ -207,10 +211,7 @@ void Domain::compute(char* inputFile) {
 
         //check for termination request
         MPI_Bcast(&userStatus, 1, MPI_INT, 0, MPI_COMM_WORLD);
-        if  (!(currentTime < stopTime ))
-            jobState = JS_FINISHED;
-        if (mPythonMaster&& (mWorkerRank==0) )
-            MPI_Send(&jobState, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
+
 
 	}
 	cout <<"Computation finished for worker #" << mWorkerRank << endl;
