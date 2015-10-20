@@ -188,8 +188,14 @@ void Domain::compute(char* inputFile) {
 		//creates and saves pictures, saves raw data and stores filenames to db
 
 		int newPercentage = 100.0* (1.0 - (stopTime-currentTime) / computeInterval);
-		if (newPercentage>percentage){
+		int percentChanged = newPercentage>percentage;
+		if (mPythonMaster&& (mWorkerRank==0) )
+			MPI_Send(&percentChanged, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
+
+		if (percentChanged){
 			percentage = newPercentage;
+			if (mPythonMaster&& (mWorkerRank==0) )
+				MPI_Send(&percentage, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
 		}
 
 		counterSaveTime += timeStep;
