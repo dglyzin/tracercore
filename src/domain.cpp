@@ -172,7 +172,7 @@ void Domain::compute(char* inputFile) {
     cout<<"Initial user status received: "<< userStatus<< endl;
 
 
-	while ((userStatus!=US_STOP) && ( currentTime < stopTime ) ){
+	while ((userStatus!=US_STOP) && ( jobState == JS_RUNNING ) ){
 		nextStep();
 		if (mPythonMaster&& (mWorkerRank==0) ){
 		    MPI_Send(&mLastStepAccepted, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
@@ -207,11 +207,10 @@ void Domain::compute(char* inputFile) {
 
         //check for termination request
         MPI_Bcast(&userStatus, 1, MPI_INT, 0, MPI_COMM_WORLD);
-        if (mPythonMaster&& (mWorkerRank==0) ){
-        	if  (!(currentTime < stopTime ))
-        	    jobState = JS_FINISHED;
+        if  (!(currentTime < stopTime ))
+            jobState = JS_FINISHED;
+        if (mPythonMaster&& (mWorkerRank==0) )
             MPI_Send(&jobState, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
-        }
 
 	}
 	cout <<"Computation finished for worker #" << mWorkerRank << endl;
