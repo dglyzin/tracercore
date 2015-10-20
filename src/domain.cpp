@@ -166,44 +166,56 @@ void Domain::compute(char* inputFile) {
 
     //1.
     int userStatus= US_START;
+    int jobState = JS_RUNNING;
     MPI_Bcast(&userStatus, 1, MPI_INT, 0, MPI_COMM_WORLD);
+    if (mPythonMaster&& (mWorkerRank==0) )
+        MPI_Send(&jobState, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
 
-	while ((userStatus!=US_STOP) && ( currentTime < stopTime ) ){
+    cout<<"Initial user status received: "<< userStatus<< endl;
+
+
+	while ((userStatus!=US_STOP) && ( jobState == JS_RUNNING ) ){
 		nextStep();
 		if (mPythonMaster&& (mWorkerRank==0) ){
 		    MPI_Send(&mLastStepAccepted, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
 		    MPI_Send(&timeStep, 1, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD);
+		    MPI_Send(&currentTime, 1, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD);
 		}
 
 		//printBlocksToConsole();
 
+        //here is the logic of collecting raw data to one node and saving it to disk
+		//worker 0 will do it if there is no python master
+		//if python master is present, it receives all the data for all blocks,
+		//creates and saves pictures, saves raw data and stores filenames to db
+
 		int newPercentage = 100.0* (1.0 - (stopTime-currentTime) / computeInterval);
-        if (newPercentage>percentage){
-            //check for termination request
-        	MPI_Bcast(&userStatus, 1, MPI_INT, 0, MPI_COMM_WORLD);
+		if (newPercentage>percentage){
+			percentage = newPercentage;
+		}
 
-            percentage = newPercentage;
-            //if ((mWorkerRank == 0)&&(!mPythonMaster))
-            //    setDbJobPercentage(percentage);
-        }
+		counterSaveTime += timeStep;
 
-        counterSaveTime += timeStep;
+		int readyToSave = ( saveInterval != 0 )&&( counterSaveTime > saveInterval );
+		if (mPythonMaster&& (mWorkerRank==0) )
+			MPI_Send(&readyToSave, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
 
-        int readyToSave = ( saveInterval != 0 )&&( counterSaveTime > saveInterval );
-        if (mPythonMaster&& (mWorkerRank==0) )
-        	MPI_Send(&readyToSave, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
-
-        if( readyToSave ) {
+		if( readyToSave ) {
 				counterSaveTime = 0;
 				saveState(inputFile);
 		}
-        if (mPythonMaster&& (mWorkerRank==0) ){
-            int finishing = ( currentTime < stopTime );
-            MPI_Send(&finishing, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
-        }
+
+
+
+        //check for termination request
+        MPI_Bcast(&userStatus, 1, MPI_INT, 0, MPI_COMM_WORLD);
+        if  (!(currentTime < stopTime ))
+            jobState = JS_FINISHED;
+        if (mPythonMaster&& (mWorkerRank==0) )
+            MPI_Send(&jobState, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
 
 	}
-	cout <<"Computation finished!" << mWorkerRank << endl;
+	cout <<"Computation finished for worker #" << mWorkerRank << endl;
 	//if ((mWorkerRank == 0)&&(!mPythonMaster))
 	//    setDbJobState(JS_FINISHED);
 
@@ -811,7 +823,7 @@ void Domain::saveState(char* inputFile) {
 
 	sprintf(saveFile, "%s%s%f%s", saveFile, "/project-", currentTime, ".bin");
 
-	saveStateToFile( saveFile );
+	//saveStateToFile( saveFile );
 }
 
 void Domain::saveStateToFile(char* path) {
@@ -961,7 +973,7 @@ void Domain::printStatisticsInfo(char* inputFile, char* outputFile, double calcT
 bool Domain::isNan() {
 	double** resultAll = collectDataFromNode();
 
-	if( mWorkerRank == 0 ) {
+	if( mGlobalRank == 0 ) {
 		for (int i = 0; i < mBlockCount; ++i) {
 			int count = mBlocks[i]->getGridElementCount();
 
