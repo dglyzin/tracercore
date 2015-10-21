@@ -106,3 +106,56 @@ void RealBlock::rejectStep(double timestep) {
 	problem->rejectStep(pu, timestep);
 }
 
+double* RealBlock::addNewBlockBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength) {
+	countSendSegmentBorder++;
+
+	tempSendBorderInfo.push_back(side);
+	tempSendBorderInfo.push_back(mOffset);
+	tempSendBorderInfo.push_back(nOffset);
+	tempSendBorderInfo.push_back(mLength);
+	tempSendBorderInfo.push_back(nLength);
+
+	int borderLength = mLength * nLength * cellSize * haloSize;
+
+	double* newBlockBorder = getNewBlockBorder(neighbor, borderLength);
+
+	/*if( ( nodeNumber == neighbor->getNodeNumber() ) && isGPU( neighbor->getBlockType() ) ) {
+		cudaMallocHost ( (void**)&newBlockBorder, borderLength * sizeof(double) );
+		tempBlockBorderMemoryAllocType.push_back(CUDA_MALLOC_HOST);
+	}
+	else {
+		newBlockBorder = new double [borderLength];
+		tempBlockBorderMemoryAllocType.push_back(NEW);
+	}*/
+
+	tempBlockBorder.push_back(newBlockBorder);
+
+	return newBlockBorder;
+}
+
+double* RealBlock::addNewExternalBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength, double* border) {
+	countReceiveSegmentBorder++;
+
+	tempReceiveBorderInfo.push_back(side);
+	tempReceiveBorderInfo.push_back(mOffset);
+	tempReceiveBorderInfo.push_back(nOffset);
+	tempReceiveBorderInfo.push_back(mLength);
+	tempReceiveBorderInfo.push_back(nLength);
+
+	int borderLength = mLength * nLength * cellSize * haloSize;
+
+	double* newExternalBorder = getNewExternalBorder(neighbor, borderLength, border);
+
+	/*if( nodeNumber == neighbor->getNodeNumber() ) {
+		newExternalBorder = border;
+		tempExternalBorderMemoryAllocType.push_back(NOT_ALLOC);
+	}
+	else {
+		newExternalBorder = new double [borderLength];
+		tempExternalBorderMemoryAllocType.push_back(NEW);
+	}*/
+
+	tempExternalBorder.push_back(newExternalBorder);
+
+	return newExternalBorder;
+}

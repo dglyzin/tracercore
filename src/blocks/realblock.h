@@ -61,15 +61,11 @@ private:
 
 
 	double** blockBorder;
-	int* blockBorderMemoryAllocType;
 	std::vector<double*> tempBlockBorder;
-	std::vector<int> tempBlockBorderMemoryAllocType;
 
 
 	double** externalBorder;
-	int* externalBorderMemoryAllocType;
 	std::vector<double*> tempExternalBorder;
-	std::vector<int> tempExternalBorderMemoryAllocType;
 
 
 	int countSendSegmentBorder;
