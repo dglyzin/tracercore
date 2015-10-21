@@ -128,6 +128,7 @@ double* Domain::getBlockCurrentState(int number) {
 			result = new double [mBlocks[number]->getGridElementCount()];
 			mBlocks[number]->getCurrentState(result);
 			//we send to global 0 no matter it is above ^^ or in python
+			//printf("Worker %d : sending %d doubles for block %d\n",mWorkerRank, mBlocks[number]->getGridElementCount(), number );
 			MPI_Send(result, mBlocks[number]->getGridElementCount(), MPI_DOUBLE, 0, 999, MPI_COMM_WORLD);
 			delete result;
 			return NULL;
@@ -828,7 +829,7 @@ void Domain::saveState(char* inputFile) {
 
 	sprintf(saveFile, "%s%s%f%s", saveFile, "/project-", currentTime, ".bin");
 
-	//saveStateToFile( saveFile );
+	saveStateToFile( saveFile );
 }
 
 void Domain::saveStateToFile(char* path) {
