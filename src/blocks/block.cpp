@@ -7,7 +7,9 @@
 
 #include "block.h"
 
-Block::Block(int _dimension, int _xCount, int _yCount, int _zCount, int _xOffset, int _yOffset, int _zOffset, int _cellSize, int _haloSize) {
+Block::Block(int _nodeNumber, int _dimension, int _xCount, int _yCount, int _zCount, int _xOffset, int _yOffset, int _zOffset, int _cellSize, int _haloSize) {
+	nodeNumber = _nodeNumber;
+
 	dimension = _dimension;
 
 	xCount = _xCount;
@@ -32,4 +34,8 @@ int Block::getGridNodeCount() {
 
 int Block::getGridElementCount() {
 	return getGridNodeCount() * cellSize;
+}
+
+int Block::getNodeNumber() {
+	return nodeNumber;
 }

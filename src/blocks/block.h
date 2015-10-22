@@ -14,7 +14,7 @@
 
 class Block {
 public:
-	Block(int _dimension, int _xCount, int _yCount, int _zCount, int _xOffset, int _yOffset, int _zOffset, int _cellSize, int _haloSize);
+	Block(int _nodeNumber, int _dimension, int _xCount, int _yCount, int _zCount, int _xOffset, int _yOffset, int _zOffset, int _cellSize, int _haloSize);
 	virtual ~Block();
 
 	virtual void computeStageBorder(int stage, double time) = 0;
@@ -43,7 +43,11 @@ public:
 	int getGridNodeCount();
 	int getGridElementCount();
 
+	int getNodeNumber();
+
 protected:
+	int nodeNumber;
+
 	int dimension;
 
 	int xCount;
