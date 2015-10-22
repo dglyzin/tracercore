@@ -16,6 +16,44 @@ RealBlock::~RealBlock() {
 	// TODO Auto-generated destructor stub
 }
 
+double* RealBlock::getNewBlockBorder(Block* neighbor, int borderLength) {
+	//double* tmpBorder;
+
+	if( ( nodeNumber == neighbor->getNodeNumber() ) && neighbor->isProcessingUnitGPU() ) {
+		//cudaMallocHost ( (void**)&tmpBorder, borderLength * sizeof(double) );
+		//tempBlockBorderMemoryAllocType.push_back(CUDA_MALLOC_HOST);
+		//memoryType = CUDA_MALLOC_HOST;
+		return pu->newDoublePinnedArray(borderLength);
+	}
+	else {
+		//tmpBorder = new double [borderLength];
+		//tempBlockBorderMemoryAllocType.push_back(NEW);
+		//memoryType = NEW;
+		return pu->newDoubleArray(borderLength);
+	}
+
+	//return tmpBorder;
+}
+
+double* RealBlock::getNewExternalBorder(Block* neighbor, int borderLength, double* border) {
+	//double* tmpBorder;
+
+	if( nodeNumber == neighbor->getNodeNumber() ) {
+		//tmpBorder = border;
+		//tempExternalBorderMemoryAllocType.push_back(NOT_ALLOC);
+		//memoryType = NOT_ALLOC;
+		return border;
+	}
+	else {
+		//tmpBorder = new double [borderLength];
+		//tempExternalBorderMemoryAllocType.push_back(NEW);
+		//memoryType = NEW;
+		return pu->newDoubleArray(borderLength);
+	}
+
+	//return tmpBorder;
+}
+
 void RealBlock::computeStageBorder(int stage, double time) {
 	double* result = problem->getResult(stage, time);
 	double* source = problem->getSource(stage, time);

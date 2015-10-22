@@ -73,6 +73,10 @@ private:
 
 	int countSendSegmentBorder;
 	int countReceiveSegmentBorder;
+
+
+	double* getNewBlockBorder(Block* neighbor, int borderLength);
+	double* getNewExternalBorder(Block* neighbor, int borderLength, double* border);
 };
 
 #endif /* SRC_BLOCKS_REALBLOCK_H_ */
