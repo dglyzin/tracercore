@@ -9,8 +9,7 @@
 
 using namespace std;
 
-ProcessingUnit::ProcessingUnit(int _nodeNumber, int _deviceNumber) {
-	nodeNumber = _nodeNumber;
+ProcessingUnit::ProcessingUnit(int _deviceNumber) {
 	deviceNumber = _deviceNumber;
 
 	doubleArrays.clear();

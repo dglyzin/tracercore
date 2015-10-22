@@ -7,7 +7,7 @@
 
 #include "../../processingunit/cpu/cpu2d.h"
 
-CPU_2d::CPU_2d(int _nodeNumber, int _deviceNumber) : CPU(_nodeNumber, _deviceNumber) {
+CPU_2d::CPU_2d(int _deviceNumber) : CPU(_deviceNumber) {
 	// TODO Auto-generated constructor stub
 
 }
