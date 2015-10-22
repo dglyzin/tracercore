@@ -130,6 +130,7 @@ double* Domain::getBlockCurrentState(int number) {
 			result = new double [mBlocks[number]->getGridElementCount()];
 			mBlocks[number]->getCurrentState(result);
 			//we send to global 0 no matter it is above ^^ or in python
+			//printf("Worker %d : sending %d doubles for block %d\n",mWorkerRank, mBlocks[number]->getGridElementCount(), number );
 			MPI_Send(result, mBlocks[number]->getGridElementCount(), MPI_DOUBLE, 0, 999, MPI_COMM_WORLD);
 			delete result;
 			return NULL;
@@ -190,8 +191,14 @@ void Domain::compute(char* inputFile) {
 		//creates and saves pictures, saves raw data and stores filenames to db
 
 		int newPercentage = 100.0* (1.0 - (stopTime-currentTime) / computeInterval);
-		if (newPercentage>percentage){
+		int percentChanged = newPercentage>percentage;
+		if (mPythonMaster&& (mWorkerRank==0) )
+			MPI_Send(&percentChanged, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
+
+		if (percentChanged){
 			percentage = newPercentage;
+			if (mPythonMaster&& (mWorkerRank==0) )
+				MPI_Send(&percentage, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
 		}
 
 		counterSaveTime += timeStep;
@@ -199,6 +206,10 @@ void Domain::compute(char* inputFile) {
 		int readyToSave = ( saveInterval != 0 )&&( counterSaveTime > saveInterval );
 		if (mPythonMaster&& (mWorkerRank==0) )
 			MPI_Send(&readyToSave, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
+		if  (!(currentTime < stopTime ))
+            jobState = JS_FINISHED;
+        if (mPythonMaster&& (mWorkerRank==0) )
+            MPI_Send(&jobState, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
 
 		if( readyToSave ) {
 				counterSaveTime = 0;
@@ -209,10 +220,7 @@ void Domain::compute(char* inputFile) {
 
         //check for termination request
         MPI_Bcast(&userStatus, 1, MPI_INT, 0, MPI_COMM_WORLD);
-        if  (!(currentTime < stopTime ))
-            jobState = JS_FINISHED;
-        if (mPythonMaster&& (mWorkerRank==0) )
-            MPI_Send(&jobState, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
+
 
 	}
 	cout <<"Computation finished for worker #" << mWorkerRank << endl;
@@ -823,7 +831,7 @@ void Domain::saveState(char* inputFile) {
 
 	sprintf(saveFile, "%s%s%f%s", saveFile, "/project-", currentTime, ".bin");
 
-	//saveStateToFile( saveFile );
+	saveStateToFile( saveFile );
 }
 
 void Domain::saveStateToFile(char* path) {
