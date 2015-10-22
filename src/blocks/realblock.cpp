@@ -94,6 +94,14 @@ int RealBlock::getBlockType() {
 	return pu->getType();
 }
 
+bool RealBlock::isProcessingUnitCPU() {
+	return pu->isCPU();
+}
+
+bool RealBlock::isProcessingUnitGPU() {
+	return pu->isGPU();
+}
+
 double RealBlock::getStepError(double timestep) {
 	return problem->getStepError(pu, timestep);
 }

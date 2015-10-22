@@ -28,6 +28,9 @@ public:
 	bool isRealBlock();
 	int getBlockType();
 
+	bool isProcessingUnitCPU();
+	bool isProcessingUnitGPU();
+
 	double getStepError(double timestep);
 
 	void confirmStep(double timestep);

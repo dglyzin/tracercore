@@ -28,6 +28,9 @@ public:
 	virtual bool isRealBlock() = 0;
 	virtual int getBlockType() = 0;
 
+	virtual bool isProcessingUnitCPU() = 0;
+	virtual bool isProcessingUnitGPU() = 0;
+
 	virtual double getStepError(double timestep) = 0;
 
 	virtual void confirmStep(double timestep) = 0;
