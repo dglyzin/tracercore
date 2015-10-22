@@ -24,6 +24,9 @@ public:
 
 	int getType();
 
+	bool isCPU();
+	bool isGPU();
+
 
 	double* getDoubleArray(int size);
 	double** getDoublePointerArray(int size);

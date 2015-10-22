@@ -30,6 +30,9 @@ public:
 
 	virtual int getType() = 0;
 
+	virtual bool isCPU() = 0;
+	virtual bool isGPU() = 0;
+
 
 	double* newDoubleArray(int size);
 	double** newDoublePointerArray(int size);

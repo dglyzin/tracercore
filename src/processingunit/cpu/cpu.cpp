@@ -45,6 +45,14 @@ int CPU::getType() {
 	return CPU_UNIT;
 }
 
+bool CPU::isCPU() {
+	return true;
+}
+
+bool CPU::isGPU() {
+	return false;
+}
+
 double* CPU::getDoubleArray(int size) {
 	return new double [size];
 }
