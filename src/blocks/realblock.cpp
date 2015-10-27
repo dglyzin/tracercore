@@ -248,3 +248,7 @@ void RealBlock::moveTempBorderVectorToBorderArray() {
 	tempSendBorderInfo.clear();
 	tempReceiveBorderInfo.clear();
 }
+
+void RealBlock::loadData(double* data) {
+	problem->loadData(pu, data);
+}
