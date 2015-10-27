@@ -42,6 +42,7 @@ public:
 	void moveTempBorderVectorToBorderArray();
 
 	void loadData(double* data);
+	void getCurrentState(double* result);
 
 private:
 	ProcessingUnit* pu;

@@ -42,6 +42,7 @@ public:
 	virtual void moveTempBorderVectorToBorderArray() = 0;
 
 	virtual void loadData(double* data) = 0;
+	virtual void getCurrentState(double* result) = 0;
 
 	int getGridNodeCount();
 	int getGridElementCount();
