@@ -205,3 +205,46 @@ double* RealBlock::addNewExternalBorder(Block* neighbor, int side, int mOffset, 
 
 	return newExternalBorder;
 }
+
+void RealBlock::moveTempBorderVectorToBorderArray() {
+	blockBorder = pu->getDoublePointerArray(countSendSegmentBorder);//new double* [countSendSegmentBorder];
+	//blockBorderMemoryAllocType = new int [countSendSegmentBorder];
+	sendBorderInfo = pu->getIntArray(INTERCONNECT_COMPONENT_COUNT * countSendSegmentBorder);//new int [INTERCONNECT_COMPONENT_COUNT * countSendSegmentBorder];
+
+	externalBorder = pu->getDoublePointerArray(countReceiveSegmentBorder);//new double* [countReceiveSegmentBorder];
+	//externalBorderMemoryAllocType = new int [countReceiveSegmentBorder];
+	receiveBorderInfo = pu->getIntArray(INTERCONNECT_COMPONENT_COUNT * countReceiveSegmentBorder);//new int [INTERCONNECT_COMPONENT_COUNT * countReceiveSegmentBorder];
+
+	for (int i = 0; i < countSendSegmentBorder; ++i) {
+		blockBorder[i] = tempBlockBorder.at(i);
+		//blockBorderMemoryAllocType[i] = tempBlockBorderMemoryAllocType.at(i);
+
+		int index = INTERCONNECT_COMPONENT_COUNT * i;
+		sendBorderInfo[ index + SIDE ] = tempSendBorderInfo.at(index + 0);
+		sendBorderInfo[ index + M_OFFSET ] = tempSendBorderInfo.at(index + 1);
+		sendBorderInfo[ index + N_OFFSET ] = tempSendBorderInfo.at(index + 2);
+		sendBorderInfo[ index + M_LENGTH ] = tempSendBorderInfo.at(index + 3);
+		sendBorderInfo[ index + N_LENGTH ] = tempSendBorderInfo.at(index + 4);
+	}
+
+	for (int i = 0; i < countReceiveSegmentBorder; ++i) {
+		externalBorder[i] = tempExternalBorder.at(i);
+		//externalBorderMemoryAllocType[i] = tempExternalBorderMemoryAllocType.at(i);
+
+		int index = INTERCONNECT_COMPONENT_COUNT * i;
+		receiveBorderInfo[ index + SIDE ] = tempReceiveBorderInfo.at(index + 0);
+		receiveBorderInfo[ index + M_OFFSET ] = tempReceiveBorderInfo.at(index + 1);
+		receiveBorderInfo[ index + N_OFFSET ] = tempReceiveBorderInfo.at(index + 2);
+		receiveBorderInfo[ index + M_LENGTH ] = tempReceiveBorderInfo.at(index + 3);
+		receiveBorderInfo[ index + N_LENGTH ] = tempReceiveBorderInfo.at(index + 4);
+	}
+
+	tempBlockBorder.clear();
+	tempExternalBorder.clear();
+
+	//tempBlockBorderMemoryAllocType.clear();
+	//tempExternalBorderMemoryAllocType.clear();
+
+	tempSendBorderInfo.clear();
+	tempReceiveBorderInfo.clear();
+}
