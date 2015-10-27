@@ -27,6 +27,8 @@ public:
 	void confirmStep(ProcessingUnit* pu, double timestep);
 	void rejectStep(ProcessingUnit* pu, double timestep);
 
+	void loadData(ProcessingUnit* pu, double* data);
+
 private:
 	StepStorage* mStepStorage;
 };

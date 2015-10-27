@@ -42,3 +42,7 @@ void Ordinary::confirmStep(ProcessingUnit* pu, double timestep) {
 void Ordinary::rejectStep(ProcessingUnit* pu, double timestep) {
 	mStepStorage->rejectStep(pu, timestep);
 }
+
+void Ordinary::loadData(ProcessingUnit* pu, double* data) {
+	mStepStorage->loadState(pu, data);
+}
