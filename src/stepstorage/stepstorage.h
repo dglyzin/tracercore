@@ -24,8 +24,8 @@ public:
 	StepStorage(ProcessingUnit* pu, int count, double _aTol, double _rTol);
 	virtual ~StepStorage();
 
-    void copyState(ProcessingUnit* pc, double* result);
-    void loadState(ProcessingUnit* pc, double* data);
+    void copyState(ProcessingUnit* pu, double* result);
+    void loadState(ProcessingUnit* pu, double* data);
 
     double* getStatePtr() { return mState;}
 

@@ -27,10 +27,10 @@ StepStorage::~StepStorage() {
 	// TODO Auto-generated destructor stub
 }
 
-void StepStorage::copyState(ProcessingUnit* pc, double* result) {
-	pc->copyArray(mState, result, mCount);
+void StepStorage::copyState(ProcessingUnit* pu, double* result) {
+	pu->copyArray(mState, result, mCount);
 }
 
-void StepStorage::loadState(ProcessingUnit* pc, double* data) {
-	pc->copyArray(data, mState, mCount);
+void StepStorage::loadState(ProcessingUnit* pu, double* data) {
+	pu->copyArray(data, mState, mCount);
 }
