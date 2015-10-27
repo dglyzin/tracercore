@@ -46,3 +46,7 @@ void Ordinary::rejectStep(ProcessingUnit* pu, double timestep) {
 void Ordinary::loadData(ProcessingUnit* pu, double* data) {
 	mStepStorage->loadState(pu, data);
 }
+
+void Ordinary::getCurrentState(ProcessingUnit* pu, double* result) {
+	mStepStorage->copyState(pu, result)
+}

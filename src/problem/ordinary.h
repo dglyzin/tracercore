@@ -28,6 +28,7 @@ public:
 	void rejectStep(ProcessingUnit* pu, double timestep);
 
 	void loadData(ProcessingUnit* pu, double* data);
+	void getCurrentState(ProcessingUnit* pu, double* result);
 
 private:
 	StepStorage* mStepStorage;

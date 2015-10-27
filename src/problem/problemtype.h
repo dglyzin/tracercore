@@ -29,6 +29,7 @@ public:
 	virtual void rejectStep(ProcessingUnit* pu, double timestep) = 0;
 
 	virtual void loadData(ProcessingUnit* pu, double* data) = 0;
+	virtual void getCurrentState(ProcessingUnit* pu, double* result) = 0;
 
 protected:
 	StepStorage* createStageStorage(ProcessingUnit* pu, int solverType, int count, double aTol, double rTol);
