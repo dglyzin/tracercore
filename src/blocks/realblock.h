@@ -10,11 +10,15 @@
 
 #include <vector>
 
+#include "../problem/ordinary.h"
+
+#include "../processingunit/processingunit.h"
+
 #include "block.h"
 
 class RealBlock: public Block {
 public:
-	RealBlock();
+	RealBlock(ProcessingUnit* _pu, int problemType, int solverType, double aTol, double rTol, int _nodeNumber, int _dimension, int _xCount, int _yCount, int _zCount, int _xOffset, int _yOffset, int _zOffset, int _cellSize, int _haloSize);
 	virtual ~RealBlock();
 
 	void computeStageBorder(int stage, double time);
