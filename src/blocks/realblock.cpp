@@ -16,6 +16,19 @@ RealBlock::RealBlock(ProcessingUnit* _pu, int problemType, int solverType,
 
 	problem = new Ordinary(pu, solverType, getGridElementCount(), aTol, rTol);
 
+	sendBorderInfo = NULL;
+	tempSendBorderInfo.clear();
+
+	receiveBorderInfo = NULL;
+	tempReceiveBorderInfo.clear();
+
+	blockBorder = NULL;
+	tempBlockBorder.clear();
+
+	externalBorder = NULL;
+	tempExternalBorder.clear();
+
+	countSendSegmentBorder = countReceiveSegmentBorder = 0;
 }
 
 RealBlock::~RealBlock() {
