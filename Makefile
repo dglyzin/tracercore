@@ -13,9 +13,13 @@ SRCSOLEULER=$(SRCSOL)/euler
 SRCSOLRK4=$(SRCSOL)/rk4
 SRCSOLDP45=$(SRCSOL)/dp45
 
-SRCBLC=$(SRC)/blocks_old
-SRCBLCCPU=$(SRCBLC)/cpu
-SRCBLCGPU=$(SRCBLC)/gpu
+SRCBLCOLD=$(SRC)/blocks_old
+SRCBLCOLDCPU=$(SRCBLCOLD)/cpu
+SRCBLCOLDGPU=$(SRCBLCOLD)/gpu
+
+
+SRCBLC=$(SRC)/blocks
+
 
 SRCPROCUNIT=$(SRC)/processingunit
 SRCPROCUNITCPU=$(SRCPROCUNIT)/cpu
@@ -32,9 +36,12 @@ MPILIB=-I/usr/mpi/gcc/openmpi-1.8.4/include -L /usr/mpi/gcc/openmpi-1.8.4/lib -l
 USERFUNCLIB=./bin -l userfuncs
 
 
-BLOCKCPU=$(SRCBLCCPU)/blockcpu.cpp $(SRCBLCCPU)/blockcpu1d.cpp $(SRCBLCCPU)/blockcpu2d.cpp $(SRCBLCCPU)/blockcpu3d.cpp
-BLOCKGPU=$(SRCBLCGPU)/blockgpu.cpp $(SRCBLCGPU)/blockgpu1d.cpp $(SRCBLCGPU)/blockgpu2d.cpp $(SRCBLCGPU)/blockgpu3d.cpp
-BLOCK=$(SRCBLC)/block.cpp $(SRCBLC)/blocknull.cpp $(BLOCKCPU) $(BLOCKGPU)
+BLOCKOLDCPU=$(SRCBLCOLDCPU)/blockcpu.cpp $(SRCBLCOLDCPU)/blockcpu1d.cpp $(SRCBLCOLDCPU)/blockcpu2d.cpp $(SRCBLCOLDCPU)/blockcpu3d.cpp
+BLOCKOLDGPU=$(SRCBLCOLDGPU)/blockgpu.cpp $(SRCBLCOLDGPU)/blockgpu1d.cpp $(SRCBLCOLDGPU)/blockgpu2d.cpp $(SRCBLCOLDGPU)/blockgpu3d.cpp
+BLOCKOLD=$(SRCBLCOLD)/block.cpp $(SRCBLCOLD)/blocknull.cpp $(BLOCKOLDCPU) $(BLOCKOLDGPU)
+
+
+BLOCK=$(SRCBLC)/block.cpp $(SRCBLC)/realblock.cpp
 
 
 SOLVEREULER=$(SRCSOLEULER)/eulersolver.cpp $(SRCSOLEULER)/eulersolvercpu.cpp $(SRCSOLEULER)/eulersolvergpu.cpp
@@ -51,7 +58,7 @@ STEPSTORAGE=$(SRCSTEPSTORAGE)/stepstorage.cpp $(SRCSTEPSTORAGE)/eulerstorage.cpp
 PROBLEM=$(SRCPROBLEM)/problemtype.cpp $(SRCPROBLEM)/ordinary.cpp
 
 
-SOURCE=$(SRC)/main.cpp $(SRC)/domain.cpp $(SRC)/interconnect.cpp $(SRC)/enums.cpp $(SRC)/dbconnector.cpp $(BLOCK) $(SOLVER) $(PROCUNIT) $(STEPSTORAGE) $(PROBLEM)
+SOURCE=$(SRC)/main.cpp $(SRC)/domain.cpp $(SRC)/interconnect.cpp $(SRC)/enums.cpp $(SRC)/dbconnector.cpp $(BLOCKOLD) $(BLOCK) $(SOLVER) $(PROCUNIT) $(STEPSTORAGE) $(PROBLEM)
 
 OBJECT=$(SOURCE:.cpp=.o)
 
@@ -77,9 +84,11 @@ clean:
 	rm -rf $(SRCSOLRK4)/*.o
 	rm -rf $(SRCSOLDP45)/*.o
 	
+	rm -rf $(SRCBLCOLD)/*.o
+	rm -rf $(SRCBLCOLDCPU)/*.o
+	rm -rf $(SRCBLCOLDGPU)/*.o
+	
 	rm -rf $(SRCBLC)/*.o
-	rm -rf $(SRCBLCCPU)/*.o
-	rm -rf $(SRCBLCGPU)/*.o
 	
 	rm -rf $(SRCPROCUNIT)/*.o
 	rm -rf $(SRCPROCUNITCPU)/*.o
