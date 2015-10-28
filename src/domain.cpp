@@ -164,7 +164,7 @@ void Domain::compute(char* inputFile) {
     int percentage = 0;
 
     //1.
-    int userStatus= US_START;
+    int userStatus= US_RUN;
     int jobState = JS_RUNNING;
     MPI_Bcast(&userStatus, 1, MPI_INT, 0, MPI_COMM_WORLD);
     if (mPythonMaster&& (mWorkerRank==0) )
