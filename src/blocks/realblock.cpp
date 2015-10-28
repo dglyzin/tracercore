@@ -207,13 +207,13 @@ double* RealBlock::addNewExternalBorder(Block* neighbor, int side, int mOffset, 
 }
 
 void RealBlock::moveTempBorderVectorToBorderArray() {
-	blockBorder = pu->getDoublePointerArray(countSendSegmentBorder);//new double* [countSendSegmentBorder];
+	blockBorder = pu->newDoublePointerArray(countSendSegmentBorder);//new double* [countSendSegmentBorder];
 	//blockBorderMemoryAllocType = new int [countSendSegmentBorder];
-	sendBorderInfo = pu->getIntArray(INTERCONNECT_COMPONENT_COUNT * countSendSegmentBorder);//new int [INTERCONNECT_COMPONENT_COUNT * countSendSegmentBorder];
+	sendBorderInfo = pu->newIntArray(INTERCONNECT_COMPONENT_COUNT * countSendSegmentBorder);//new int [INTERCONNECT_COMPONENT_COUNT * countSendSegmentBorder];
 
-	externalBorder = pu->getDoublePointerArray(countReceiveSegmentBorder);//new double* [countReceiveSegmentBorder];
+	externalBorder = pu->newDoublePointerArray(countReceiveSegmentBorder);//new double* [countReceiveSegmentBorder];
 	//externalBorderMemoryAllocType = new int [countReceiveSegmentBorder];
-	receiveBorderInfo = pu->getIntArray(INTERCONNECT_COMPONENT_COUNT * countReceiveSegmentBorder);//new int [INTERCONNECT_COMPONENT_COUNT * countReceiveSegmentBorder];
+	receiveBorderInfo = pu->newIntArray(INTERCONNECT_COMPONENT_COUNT * countReceiveSegmentBorder);//new int [INTERCONNECT_COMPONENT_COUNT * countReceiveSegmentBorder];
 
 	for (int i = 0; i < countSendSegmentBorder; ++i) {
 		blockBorder[i] = tempBlockBorder.at(i);
