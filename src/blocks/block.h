@@ -60,6 +60,9 @@ protected:
 
 	int cellSize;
 	int haloSize;
+
+private:
+	void setCountAndOffset();
 };
 
 #endif /* SRC_BLOCKS_BLOCK_H_ */
