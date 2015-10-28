@@ -11,7 +11,8 @@ RealBlock::RealBlock(int _nodeNumber, int _dimension,
 		int _xCount, int _yCount, int _zCount,
 		int _xOffset, int _yOffset, int _zOffset,
 		int _cellSize, int _haloSize,
-		ProcessingUnit* _pu, unsigned short int* _initFuncNumber, unsigned short int* _compFuncNumber,
+		int blockNubmer, ProcessingUnit* _pu,
+		unsigned short int* _initFuncNumber, unsigned short int* _compFuncNumber,
 		int problemType, int solverType, double aTol, double rTol) :
 		Block(_nodeNumber, _dimension, _xCount, _yCount, _zCount, _xOffset, _yOffset, _zOffset, _cellSize, _haloSize){
 	pu = _pu;

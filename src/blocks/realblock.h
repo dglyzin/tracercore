@@ -22,7 +22,8 @@ public:
 			int _xCount, int _yCount, int _zCount,
 			int _xOffset, int _yOffset, int _zOffset,
 			int _cellSize, int _haloSize,
-			ProcessingUnit* _pu, unsigned short int* _initFuncNumber, unsigned short int* _compFuncNumber,
+			int blockNubmer, ProcessingUnit* _pu,
+			unsigned short int* _initFuncNumber, unsigned short int* _compFuncNumber,
 			int problemType, int solverType, double aTol, double rTol);
 
 	virtual ~RealBlock();
