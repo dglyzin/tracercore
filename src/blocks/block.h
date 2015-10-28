@@ -8,10 +8,6 @@
 #ifndef SRC_BLOCKS_BLOCK_H_
 #define SRC_BLOCKS_BLOCK_H_
 
-#include "../problem/ordinary.h"
-
-#include "../processingunit/processingunit.h"
-
 class Block {
 public:
 	Block(int _nodeNumber, int _dimension, int _xCount, int _yCount, int _zCount, int _xOffset, int _yOffset, int _zOffset, int _cellSize, int _haloSize);
