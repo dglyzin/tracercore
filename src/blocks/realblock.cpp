@@ -32,6 +32,8 @@ RealBlock::RealBlock(int _nodeNumber, int _dimension,
 	tempExternalBorder.clear();
 
 	countSendSegmentBorder = countReceiveSegmentBorder = 0;
+
+
 }
 
 RealBlock::~RealBlock() {

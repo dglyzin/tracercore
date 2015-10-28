@@ -24,6 +24,7 @@ public:
 			int _cellSize, int _haloSize,
 			ProcessingUnit* _pu, unsigned short int* _initFuncNumber, unsigned short int* _compFuncNumber,
 			int problemType, int solverType, double aTol, double rTol);
+
 	virtual ~RealBlock();
 
 	void computeStageBorder(int stage, double time);
