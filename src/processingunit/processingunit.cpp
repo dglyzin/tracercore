@@ -130,7 +130,7 @@ void ProcessingUnit::deleteDoublePinnedArray(double* toDelete) {
 void ProcessingUnit::deleteUnsignedShortInt(unsigned short int* toDelete) {
 	unsignedShortIntArrays.remove(toDelete);
 
-	deallocUnsignedShortInt(toDelete);
+	deallocDeviceSpecificArray(toDelete);
 }
 
 double* ProcessingUnit::getDoublePinnedArray(int size) {
@@ -199,7 +199,7 @@ void ProcessingUnit::deleteAllUnsignedShortInt() {
 	list<unsigned short int*>::iterator i;
 
 	for (i = unsignedShortIntArrays.begin(); i != unsignedShortIntArrays.end(); ++i) {
-		deallocUnsignedShortInt(*i);
+		deallocDeviceSpecificArray(*i);
 	}
 
 	unsignedShortIntArrays.clear();
