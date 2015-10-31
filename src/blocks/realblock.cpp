@@ -11,7 +11,7 @@ RealBlock::RealBlock(int _nodeNumber, int _dimension,
 		int _xCount, int _yCount, int _zCount,
 		int _xOffset, int _yOffset, int _zOffset,
 		int _cellSize, int _haloSize,
-		int blockNubmer, ProcessingUnit* _pu,
+		int blockNumber, ProcessingUnit* _pu,
 		unsigned short int* _initFuncNumber, unsigned short int* _compFuncNumber,
 		int problemType, int solverType, double aTol, double rTol) :
 		Block(_nodeNumber, _dimension, _xCount, _yCount, _zCount, _xOffset, _yOffset, _zOffset, _cellSize, _haloSize){
@@ -36,8 +36,18 @@ RealBlock::RealBlock(int _nodeNumber, int _dimension,
 
 	int count = getGridNodeCount();
 
+	mCompFuncNumber = pu->newUnsignedShortIntArray(count);
+	mInitFuncNumber = pu->newUnsignedShortIntArray(count);
+
 	pu->copyArray(_compFuncNumber, mCompFuncNumber, count);
 	pu->copyArray(_initFuncNumber, mInitFuncNumber, count);
+
+
+	// TODO зачем mParamCount?
+	int mParamsCount = 0;
+	getFuncArray(&mUserFuncs, blockNumber);
+	getInitFuncArray(&mUserInitFuncs);
+	initDefaultParams(&mParams, &mParamsCount);
 }
 
 RealBlock::~RealBlock() {
