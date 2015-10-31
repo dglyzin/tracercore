@@ -34,7 +34,12 @@ RealBlock::RealBlock(int _nodeNumber, int _dimension,
 
 	countSendSegmentBorder = countReceiveSegmentBorder = 0;
 
+	int count = getGridNodeCount();
 
+	for (int i = 0; i < count; ++i) {
+		mCompFuncNumber[i] = _compFuncNumber[i];
+		mInitFuncNumber[i] = _initFuncNumber[i];
+	}
 }
 
 RealBlock::~RealBlock() {
