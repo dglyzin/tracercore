@@ -69,6 +69,10 @@ int** CPU::getIntPointerArray(int size) {
 	return new int* [size];
 }
 
+unsigned short int* CPU::getUnsignedShortIntArray(int size) {
+	return new unsigned short int [size];
+}
+
 void CPU::deallocDeviceSpecificArray(double* toDelete) {
 	delete toDelete;
 }
@@ -82,6 +86,10 @@ void CPU::deallocDeviceSpecificArray(int* toDelete) {
 }
 
 void CPU::deallocDeviceSpecificArray(int** toDelete) {
+	delete toDelete;
+}
+
+void CPU::deallocDeviceSpecificArray(unsigned short int* toDelete) {
 	delete toDelete;
 }
 

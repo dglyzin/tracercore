@@ -34,12 +34,17 @@ public:
 	int* getIntArray(int size);
 	int** getIntPointerArray(int size);
 
+	unsigned short int* getUnsignedShortIntArray(int size);
+
 
 	void deallocDeviceSpecificArray(double* toDelete);
 	void deallocDeviceSpecificArray(double** toDelete);
 
 	void deallocDeviceSpecificArray(int* toDelete);
 	void deallocDeviceSpecificArray(int** toDelete);
+
+	void deallocDeviceSpecificArray(unsigned short int* toDelete);
+
 
 	void copyArray(double* source, double* destination, int size);
 
