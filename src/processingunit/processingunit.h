@@ -94,7 +94,7 @@ protected:
 
 	double* getDoublePinnedArray(int size);
 
-	virtual unsigned short int* getUnsignedShortInt(int size) = 0;
+	virtual unsigned short int* getUnsignedShortIntArray(int size) = 0;
 
 
 
