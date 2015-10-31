@@ -19,6 +19,8 @@ ProcessingUnit::ProcessingUnit(int _deviceNumber) {
 	intPointerArrays.clear();
 
 	doublePinnedArrays.clear();
+
+	unsignedShortIntArrays.clear();
 }
 
 ProcessingUnit::~ProcessingUnit() {
@@ -85,6 +87,16 @@ double* ProcessingUnit::newDoublePinnedArray(int size) {
 	return array;
 }
 
+unsigned short int* ProcessingUnit::newUnsignedShortIntArray(int size) {
+	unsigned short int* array;
+
+	array = getUnsignedShortIntArray(size);
+
+	unsignedShortIntArrays.push_back(array);
+
+	return array;
+}
+
 void ProcessingUnit::deleteDeviceSpecificArray(double* toDelete) {
 	doubleArrays.remove(toDelete);
 
@@ -113,6 +125,12 @@ void ProcessingUnit::deleteDoublePinnedArray(double* toDelete) {
 	doublePinnedArrays.remove(toDelete);
 
 	deallocDoublePinnedArray(toDelete);
+}
+
+void ProcessingUnit::deleteUnsignedShortInt(unsigned short int* toDelete) {
+	unsignedShortIntArrays.remove(toDelete);
+
+	deallocUnsignedShortInt(toDelete);
 }
 
 double* ProcessingUnit::getDoublePinnedArray(int size) {
@@ -175,4 +193,14 @@ void ProcessingUnit::deleteAllDoublePinnedArrays() {
 	}
 
 	doublePinnedArrays.clear();
+}
+
+void ProcessingUnit::deleteAllUnsignedShortInt() {
+	list<unsigned short int*>::iterator i;
+
+	for (i = unsignedShortIntArrays.begin(); i != unsignedShortIntArrays.end(); ++i) {
+		deallocUnsignedShortInt(*i);
+	}
+
+	unsignedShortIntArrays.clear();
 }

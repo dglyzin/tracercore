@@ -42,6 +42,8 @@ public:
 
 	double* newDoublePinnedArray(int size);
 
+	unsigned short int* newUnsignedShortIntArray(int size);
+
 
 
 	void deleteDeviceSpecificArray(double* toDelete);
@@ -51,6 +53,8 @@ public:
 	void deleteDeviceSpecificArray(int** toDelete);
 
 	void deleteDoublePinnedArray(double* toDelete);
+
+	void deleteUnsignedShortInt(unsigned short int* toDelete);
 
 
 
@@ -78,10 +82,7 @@ protected:
 
 	std::list<double*> doublePinnedArrays;
 
-
-	//func_ptr_t* mUserFuncs;
-	//initfunc_fill_ptr_t* mUserInitFuncs;
-	//unsigned short int* mCompFuncNumber;
+	std::list<unsigned short int*> unsignedShortIntArrays;
 
 
 
@@ -93,6 +94,8 @@ protected:
 
 	double* getDoublePinnedArray(int size);
 
+	virtual unsigned short int* getUnsignedShortInt(int size) = 0;
+
 
 
 	virtual void deallocDeviceSpecificArray(double* toDelete) = 0;
@@ -102,6 +105,8 @@ protected:
 	virtual void deallocDeviceSpecificArray(int** toDelete) = 0;
 
 	void deallocDoublePinnedArray(double* toDelete);
+
+	virtual void deallocUnsignedShortInt(unsigned short int* toDelete) = 0;
 
 
 
@@ -114,6 +119,8 @@ protected:
 	void deleteAllIntPonterArrays();
 
 	void deleteAllDoublePinnedArrays();
+
+	void deleteAllUnsignedShortInt();
 };
 
 #endif /* SRC_PROCESSINGUNIT_PROCESSINGUNIT_H_ */
