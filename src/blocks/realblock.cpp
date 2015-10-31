@@ -36,10 +36,8 @@ RealBlock::RealBlock(int _nodeNumber, int _dimension,
 
 	int count = getGridNodeCount();
 
-	for (int i = 0; i < count; ++i) {
-		mCompFuncNumber[i] = _compFuncNumber[i];
-		mInitFuncNumber[i] = _initFuncNumber[i];
-	}
+	pu->copyArray(_compFuncNumber, mCompFuncNumber, count);
+	pu->copyArray(_initFuncNumber, mInitFuncNumber, count);
 }
 
 RealBlock::~RealBlock() {
