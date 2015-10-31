@@ -106,7 +106,7 @@ protected:
 
 	void deallocDoublePinnedArray(double* toDelete);
 
-	virtual void deallocUnsignedShortInt(unsigned short int* toDelete) = 0;
+	virtual void deallocDeviceSpecificArray(unsigned short int* toDelete) = 0;
 
 
 
