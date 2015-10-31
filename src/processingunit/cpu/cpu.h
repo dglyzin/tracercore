@@ -47,6 +47,7 @@ public:
 
 
 	void copyArray(double* source, double* destination, int size);
+	void copyArray(unsigned short int* source, unsigned short int* destination, int size);
 
 	void sumArrays(double* result, double* arg1, double* arg2, int size);
 	void multiplyArrayByNumber(double* result, double* arg, double factor, int size);

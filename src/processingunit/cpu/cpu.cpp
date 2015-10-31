@@ -99,6 +99,12 @@ void CPU::copyArray(double* source, double* destination, int size) {
 	}
 }
 
+void CPU::copyArray(unsigned short int* source, unsigned short int* destination, int size) {
+	for (int i = 0; i < size; ++i) {
+		destination[i] = source[i];
+	}
+}
+
 void CPU::sumArrays(double* result, double* arg1, double* arg2, int size) {
 #pragma omp parallel for
 	for (int i = 0; i < size; ++i) {

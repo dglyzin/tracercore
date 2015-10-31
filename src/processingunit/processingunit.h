@@ -59,6 +59,7 @@ public:
 
 
 	virtual void copyArray(double* source, double* destination, int size) = 0;
+	virtual void copyArray(unsigned short int* source, unsigned short int* destination, int size) = 0;
 
 	virtual void sumArrays(double* result, double* arg1, double* arg2, int size) = 0;
 	virtual void multiplyArrayByNumber(double* result, double* arg, double factor, int size) = 0;
