@@ -50,3 +50,7 @@ void Ordinary::loadData(ProcessingUnit* pu, double* data) {
 void Ordinary::getCurrentState(ProcessingUnit* pu, double* result) {
 	mStepStorage->copyState(pu, result);
 }
+
+double* Ordinary::getCurrentStatePointer() {
+	return mStepStorage->getStatePointer();
+}

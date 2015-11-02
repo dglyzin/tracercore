@@ -30,6 +30,8 @@ public:
 	void loadData(ProcessingUnit* pu, double* data);
 	void getCurrentState(ProcessingUnit* pu, double* result);
 
+	double* getCurrentStatePointer();
+
 private:
 	StepStorage* mStepStorage;
 };
