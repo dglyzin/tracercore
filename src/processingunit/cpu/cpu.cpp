@@ -41,6 +41,10 @@ void CPU::prepareBorder(double* result, double* source, int zStart, int zStop, i
 	}
 }
 
+void CPU::initState(double* state, initfunc_fill_ptr_t* userInitFuncs, unsigned short int* initFuncNumber, int blockNumber, double time) {
+	userInitFuncs[blockNumber](state, initFuncNumber);
+}
+
 int CPU::getType() {
 	return CPU_UNIT;
 }
