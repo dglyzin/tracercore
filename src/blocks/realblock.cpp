@@ -11,11 +11,13 @@ RealBlock::RealBlock(int _nodeNumber, int _dimension,
 		int _xCount, int _yCount, int _zCount,
 		int _xOffset, int _yOffset, int _zOffset,
 		int _cellSize, int _haloSize,
-		int blockNumber, ProcessingUnit* _pu,
+		int _blockNumber, ProcessingUnit* _pu,
 		unsigned short int* _initFuncNumber, unsigned short int* _compFuncNumber,
 		int problemType, int solverType, double aTol, double rTol) :
 		Block(_nodeNumber, _dimension, _xCount, _yCount, _zCount, _xOffset, _yOffset, _zOffset, _cellSize, _haloSize){
 	pu = _pu;
+
+	blockNumber = _blockNumber;
 
 	int elementCount = getGridElementCount();
 	problem = new Ordinary(pu, solverType, elementCount, aTol, rTol);
@@ -48,6 +50,9 @@ RealBlock::RealBlock(int _nodeNumber, int _dimension,
 	getFuncArray(&mUserFuncs, blockNumber);
 	getInitFuncArray(&mUserInitFuncs);
 	initDefaultParams(&mParams, &mParamsCount);
+
+	double* matrix = problem->getCurrentStatePointer();
+	mUserInitFuncs[blockNumber](matrix, mInitFuncNumber);
 }
 
 RealBlock::~RealBlock() {
