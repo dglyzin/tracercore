@@ -27,7 +27,7 @@ public:
     void copyState(ProcessingUnit* pu, double* result);
     void loadState(ProcessingUnit* pu, double* data);
 
-    double* getStatePtr() { return mState;}
+    double* getStatePointer() { return mState;}
 
     virtual double* getStageSource(int stage) = 0;
     virtual double* getStageResult(int stage) = 0;
