@@ -51,8 +51,9 @@ RealBlock::RealBlock(int _nodeNumber, int _dimension,
 	getInitFuncArray(&mUserInitFuncs);
 	initDefaultParams(&mParams, &mParamsCount);
 
-	double* matrix = problem->getCurrentStatePointer();
-	mUserInitFuncs[blockNumber](matrix, mInitFuncNumber);
+	double* state = problem->getCurrentStatePointer();
+	pu->initState(state, mUserInitFuncs, mInitFuncNumber, blockNumber, 0.0);
+	//mUserInitFuncs[blockNumber](matrix, mInitFuncNumber);
 }
 
 RealBlock::~RealBlock() {
