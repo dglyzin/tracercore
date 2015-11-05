@@ -41,7 +41,7 @@ BLOCKOLDGPU=$(SRCBLCOLDGPU)/blockgpu.cpp $(SRCBLCOLDGPU)/blockgpu1d.cpp $(SRCBLC
 BLOCKOLD=$(SRCBLCOLD)/block.cpp $(SRCBLCOLD)/blocknull.cpp $(BLOCKOLDCPU) $(BLOCKOLDGPU)
 
 
-BLOCK=$(SRCBLC)/block.cpp $(SRCBLC)/realblock.cpp
+BLOCK=$(SRCBLC)/block.cpp $(SRCBLC)/realblock.cpp $(SRCBLC)/nullblock.cpp
 
 
 SOLVEREULER=$(SRCSOLEULER)/eulersolver.cpp $(SRCSOLEULER)/eulersolvercpu.cpp $(SRCSOLEULER)/eulersolvergpu.cpp
