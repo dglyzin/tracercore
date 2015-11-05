@@ -11,6 +11,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "../enums.h"
+
 #include "block.h"
 
 class NullBlock: public Block {
