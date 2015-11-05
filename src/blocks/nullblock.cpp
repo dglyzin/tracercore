@@ -17,3 +17,66 @@ NullBlock::~NullBlock() {
 	// TODO Auto-generated destructor stub
 }
 
+void NullBlock::computeStageBorder(int stage, double time) {
+	return;
+}
+
+void NullBlock::computeStageCenter(int stage, double time) {
+	return;
+}
+
+void NullBlock::prepareArgument(int stage, double timestep) {
+	return;
+}
+
+void NullBlock::prepareStageData(int stage) {
+	return;
+}
+
+bool NullBlock::isRealBlock() {
+	return false;
+}
+
+int NullBlock::getBlockType() {
+	return NOT_UNIT;
+}
+
+bool NullBlock::isProcessingUnitCPU() {
+	return false;
+}
+
+bool NullBlock::isProcessingUnitGPU() {
+	return false;
+}
+
+double NullBlock::getStepError(double timestep) {
+	return 0.0;
+}
+
+void NullBlock::confirmStep(double timestep) {
+	return;
+}
+
+void NullBlock::rejectStep(double timestep) {
+	return;
+}
+
+double* NullBlock::addNewBlockBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength) {
+	return NULL;
+}
+
+double* NullBlock::addNewExternalBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength, double* border) {
+	return NULL;
+}
+
+void NullBlock::moveTempBorderVectorToBorderArray() {
+	return;
+}
+
+void NullBlock::loadData(double* data) {
+	return;
+}
+
+void NullBlock::getCurrentState(double* result) {
+	return;
+}
