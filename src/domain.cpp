@@ -572,7 +572,7 @@ void Domain::readConnectionCount(ifstream& in) {
  * Не будет готовить информацию для пересылки и не будет считываеть ее из других источников.
  */
 Block* Domain::readBlock(ifstream& in, int idx) {
-	Block_old* resBlock;
+	Block* resBlock;
 	int dimension;
 	int node;
 	int deviceType;
@@ -637,15 +637,15 @@ Block* Domain::readBlock(ifstream& in, int idx) {
 		if (deviceType==0)  //CPU BLOCK
 			switch (dimension) {
 				case 1:
-					resBlock = new BlockCpu1d(idx, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize, initFuncNumber, compFuncNumber, mSolverIndex, mAtol, mRtol);
+					//resBlock = new BlockCpu1d(idx, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize, initFuncNumber, compFuncNumber, mSolverIndex, mAtol, mRtol);
 					break;
 
 				case 2:
-					resBlock = new BlockCpu2d(idx, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize, initFuncNumber, compFuncNumber, mSolverIndex, mAtol, mRtol);
+					//resBlock = new BlockCpu2d(idx, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize, initFuncNumber, compFuncNumber, mSolverIndex, mAtol, mRtol);
 					break;
 
 				case 3:
-					resBlock = new BlockCpu3d(idx, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize, initFuncNumber, compFuncNumber, mSolverIndex, mAtol, mRtol);
+					//resBlock = new BlockCpu3d(idx, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize, initFuncNumber, compFuncNumber, mSolverIndex, mAtol, mRtol);
 					break;
 
 				default:
@@ -656,15 +656,15 @@ Block* Domain::readBlock(ifstream& in, int idx) {
 		else if (deviceType==1) //GPU BLOCK
 			switch (dimension) {
 				case 1:
-					resBlock = new BlockGpu1d(idx, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize, initFuncNumber, compFuncNumber, mSolverIndex, mAtol, mRtol);
+					//resBlock = new BlockGpu1d(idx, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize, initFuncNumber, compFuncNumber, mSolverIndex, mAtol, mRtol);
 					break;
 
 				case 2:
-					resBlock = new BlockGpu2d(idx, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize, initFuncNumber, compFuncNumber, mSolverIndex, mAtol, mRtol);
+					//resBlock = new BlockGpu2d(idx, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize, initFuncNumber, compFuncNumber, mSolverIndex, mAtol, mRtol);
 					break;
 
 				case 3:
-					resBlock = new BlockGpu3d(idx, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize, initFuncNumber, compFuncNumber, mSolverIndex, mAtol, mRtol);
+					//resBlock = new BlockGpu3d(idx, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize, initFuncNumber, compFuncNumber, mSolverIndex, mAtol, mRtol);
 					break;
 
 				default:
@@ -678,7 +678,7 @@ Block* Domain::readBlock(ifstream& in, int idx) {
 		}
 	}
 	else {
-		resBlock =  new BlockNull(idx, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize);
+		//resBlock =  new BlockNull(idx, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize);
 	}
 
 	delete initFuncNumber;
