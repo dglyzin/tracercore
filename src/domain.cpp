@@ -324,7 +324,7 @@ double Domain::getDeviceError(int deviceType, int deviceNumber) {
 	for (int i = 0; i < mBlockCount; ++i)
         if( mBlocks[i]->getBlockType() == deviceType && mBlocks[i]->getDeviceNumber() == deviceNumber ) {
         	//cout << endl << "ERROR! PROCESS DEVICE!" << endl;
-		    error+=mBlocks[i]->getSolverStepError(timeStep);
+		    error+=mBlocks[i]->getStepError(timeStep);
 		}
 	return error;
 }
@@ -421,9 +421,10 @@ double Domain::collectError() {
 }
 
 void Domain::printBlocksToConsole() {
-	for (int i = 0; i < mBlockCount; ++i) {
+	/*for (int i = 0; i < mBlockCount; ++i) {
 		mBlocks[i]->print();
-	}
+	}*/
+	printf("\nPRINT BLOCKS TO CONSOLE DON'T WORK!!!\n");
 }
 
 void Domain::readFromFile(char* path) {
@@ -570,7 +571,7 @@ void Domain::readConnectionCount(ifstream& in) {
  * После чтения блок будет считать, что ни с кем не связан.
  * Не будет готовить информацию для пересылки и не будет считываеть ее из других источников.
  */
-Block_old* Domain::readBlock(ifstream& in, int idx) {
+Block* Domain::readBlock(ifstream& in, int idx) {
 	Block_old* resBlock;
 	int dimension;
 	int node;

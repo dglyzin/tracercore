@@ -12,13 +12,16 @@
 #include <string.h>
 #include <mpi.h>
 
-#include "blocks_old/blocknull.h"
+/*#include "blocks_old/blocknull.h"
 #include "blocks_old/cpu/blockcpu1d.h"
 #include "blocks_old/cpu/blockcpu2d.h"
 #include "blocks_old/cpu/blockcpu3d.h"
 #include "blocks_old/gpu/blockgpu1d.h"
 #include "blocks_old/gpu/blockgpu2d.h"
-#include "blocks_old/gpu/blockgpu3d.h"
+#include "blocks_old/gpu/blockgpu3d.h"*/
+
+#include "blocks/realblock.h"
+#include "blocks/nullblock.h"
 
 #include "interconnect.h"
 #include "solvers/solver.h"
@@ -101,7 +104,7 @@ private:
 	 * Содержит все блоки потока (реальные и нереальные).
 	 * Каждый поток исполнения содержит одинаковое количество блоков.
 	 */
-	Block_old** mBlocks;
+	Block** mBlocks;
 
 	/*
 	 * Массив соединений.
@@ -214,7 +217,7 @@ private:
 	/*
 	 * Чтение блока
 	 */
-	Block_old* readBlock(std::ifstream& in, int idx);
+	Block* readBlock(std::ifstream& in, int idx);
 
 	/*
 	 * Чтение соединения
