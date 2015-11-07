@@ -37,6 +37,10 @@ void ProcessingUnit::deleteAllArrays() {
 	deleteAllDoublePinnedArrays();
 }
 
+int ProcessingUnit::getDeviceNumber() {
+	return deviceNumber;
+}
+
 double* ProcessingUnit::newDoubleArray(int size) {
 	double* array;
 

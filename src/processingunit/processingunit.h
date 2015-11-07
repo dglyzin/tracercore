@@ -35,6 +35,8 @@ public:
 	virtual bool isCPU() = 0;
 	virtual bool isGPU() = 0;
 
+	int getDeviceNumber();
+
 
 	double* newDoubleArray(int size);
 	double** newDoublePointerArray(int size);
