@@ -125,7 +125,7 @@ private:
 	/*
 	 * Структура данных, возвращающая основные параметры солвера
 	 */
-	Solver* mSolverInfo;
+	StepStorage* mSolverInfo;
     double mAtol; //solver absolute tolerance
     double mRtol; //solver relative tolerance
 

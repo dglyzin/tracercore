@@ -442,22 +442,22 @@ void Domain::readFromFile(char* path) {
 
 	switch (mSolverIndex) {
 		case EULER:
-			mSolverInfo = new EulerSolver();
+			mSolverInfo = new EulerStorage();
 			break;
 		case RK4:
-			mSolverInfo = new RK4Solver();
+			mSolverInfo = new RK4Storage();
 			break;
 		case DP45:
-			mSolverInfo = new DP45Solver();
+			mSolverInfo = new DP45Storage();
 			break;
 		default:
-			mSolverInfo = new EulerSolver();
+			mSolverInfo = new EulerStorage();
 			break;
 	}
 
 	readBlockCount(in);
 
-	mBlocks = new Block_old* [mBlockCount];
+	mBlocks = new Block* [mBlockCount];
 
 	//printf ("DEBUG reading blocks.\n ");
 
