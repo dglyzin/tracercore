@@ -38,6 +38,10 @@ int NullBlock::getBlockType() {
 	return NOT_UNIT;
 }
 
+int NullBlock::getDeviceNumber() {
+	return -1;
+}
+
 bool NullBlock::isProcessingUnitCPU() {
 	return false;
 }

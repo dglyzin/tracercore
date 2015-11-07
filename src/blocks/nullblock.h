@@ -30,6 +30,7 @@ public:
 
 	bool isRealBlock();
 	int getBlockType();
+	int getDeviceNumber();
 
 	bool isProcessingUnitCPU();
 	bool isProcessingUnitGPU();

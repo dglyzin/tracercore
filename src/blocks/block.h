@@ -23,6 +23,7 @@ public:
 
 	virtual bool isRealBlock() = 0;
 	virtual int getBlockType() = 0;
+	virtual int getDeviceNumber() = 0;
 
 	virtual bool isProcessingUnitCPU() = 0;
 	virtual bool isProcessingUnitGPU() = 0;
