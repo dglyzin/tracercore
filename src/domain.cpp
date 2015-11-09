@@ -907,7 +907,7 @@ void Domain::printStatisticsInfo(char* inputFile, char* outputFile, double calcT
 		for (int i = 0; i < mBlockCount; ++i) {
 			count += mBlocks[i]->getGridElementCount();
 
-			mBlocks[i]->printGeneralInformation();
+			//mBlocks[i]->printGeneralInformation();
 		}
 
 
