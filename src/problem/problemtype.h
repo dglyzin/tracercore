@@ -10,6 +10,8 @@
 
 #include "../processingunit/processingunit.h"
 #include "../stepstorage/eulerstorage.h"
+#include "../stepstorage/rk4storage.h"
+#include "../stepstorage/dp45storage.h"
 
 class ProblemType {
 public:
