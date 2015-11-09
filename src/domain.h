@@ -98,6 +98,10 @@ public:
 	void checkOptions(int flags, double _stopTime, char* saveFile);
 
 private:
+	ProcessingUnit* cpu;
+	ProcessingUnit* gpu1;
+	ProcessingUnit* gpu2;
+	ProcessingUnit* gpu3;
 	/*
 	 * Массив блоков.
 	 * Массив указателей на блоки.

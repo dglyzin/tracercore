@@ -77,7 +77,10 @@ Domain::Domain(int _world_rank, int _world_size, char* inputFile) {
 	mAcceptedStepCount = 0;
 	mRejectedStepCount = 0;
 
-
+	cpu = new CPU(0);
+	gpu1 = NULL;
+	gpu2 = NULL;
+	gpu3 = NULL;
 }
 
 Domain::~Domain() {
