@@ -1027,6 +1027,22 @@ void Domain::checkOptions(int flags, double _stopTime, char* saveFile) {
 		loadStateFromFile(saveFile);
 }
 
+void Domain::createProcessigUnit() {
+	switch (dimension) {
+		case 1:
+			cpu = new CPU_1d(0);
+			break;
+		case 2:
+			cpu = new CPU_2d(0);
+			break;
+		case 3:
+			cpu = new CPU_3d(0);
+			break;
+		default:
+			break;
+	}
+}
+
 /*
 void Domain::storeDbFileName(char* inputFile){
     char saveFile[100];
