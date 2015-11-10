@@ -103,9 +103,9 @@ public:
 
 private:
 	ProcessingUnit* cpu;
+	ProcessingUnit* gpu0;
 	ProcessingUnit* gpu1;
 	ProcessingUnit* gpu2;
-	ProcessingUnit* gpu3;
 	/*
 	 * Массив блоков.
 	 * Массив указателей на блоки.

@@ -62,9 +62,9 @@ Domain::Domain(int _world_rank, int _world_size, char* inputFile) {
 	dimension = 0;
 
 	cpu = NULL;
+	gpu0 = NULL;
 	gpu1 = NULL;
 	gpu2 = NULL;
-	gpu3 = NULL;
 
 	readFromFile(inputFile);
 
@@ -441,9 +441,8 @@ void Domain::readFromFile(char* path) {
 	readSaveInterval(in);
 	readGridSteps(in);
 
-	int dimension;
-
 	in.read((char*)&dimension, SIZE_INT);
+	createProcessigUnit();
 
 	readCellAndHaloSize(in);
 	readSolverIndex(in);
@@ -643,42 +642,36 @@ Block* Domain::readBlock(ifstream& in, int idx) {
 	}
 	cout << endl;*/
 
+	ProcessingUnit* pc = NULL;;
+
 	if(node == mWorkerRank){
 		if (deviceType==0)  //CPU BLOCK
-			switch (dimension) {
-				case 1:
-					//resBlock = new BlockCpu1d(idx, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize, initFuncNumber, compFuncNumber, mSolverIndex, mAtol, mRtol);
-					break;
-
-				case 2:
-					//resBlock = new BlockCpu2d(idx, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize, initFuncNumber, compFuncNumber, mSolverIndex, mAtol, mRtol);
-					break;
-
-				case 3:
-					//resBlock = new BlockCpu3d(idx, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize, initFuncNumber, compFuncNumber, mSolverIndex, mAtol, mRtol);
+			switch (deviceNumber) {
+				case 0:
+					pc = cpu;
 					break;
 
 				default:
-					printf("Invalid block dimension!\n");
+					printf("Invalid block device number for CPU!\n");
 					assert(false);
 					break;
 			}
 		else if (deviceType==1) //GPU BLOCK
-			switch (dimension) {
+			switch (deviceNumber) {
+				case 0:
+					pc = gpu0;
+					break;
+
 				case 1:
-					//resBlock = new BlockGpu1d(idx, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize, initFuncNumber, compFuncNumber, mSolverIndex, mAtol, mRtol);
+					pc = gpu0;
 					break;
 
 				case 2:
-					//resBlock = new BlockGpu2d(idx, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize, initFuncNumber, compFuncNumber, mSolverIndex, mAtol, mRtol);
-					break;
-
-				case 3:
-					//resBlock = new BlockGpu3d(idx, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize, initFuncNumber, compFuncNumber, mSolverIndex, mAtol, mRtol);
+					pc = gpu1;
 					break;
 
 				default:
-					printf("Invalid block dimension!\n");
+					printf("Invalid block device number for GPU!\n");
 					assert(false);
 					break;
 			}
