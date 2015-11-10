@@ -642,7 +642,7 @@ Block* Domain::readBlock(ifstream& in, int idx) {
 	}
 	cout << endl;*/
 
-	ProcessingUnit* pc = NULL;;
+	ProcessingUnit* pc = NULL;
 
 	if(node == mWorkerRank){
 		if (deviceType==0)  //CPU BLOCK
@@ -682,6 +682,7 @@ Block* Domain::readBlock(ifstream& in, int idx) {
 	}
 	else {
 		//resBlock =  new BlockNull(idx, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize);
+		resBlock = new NullBlock(idx, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], mCellSize, mHaloSize);
 	}
 
 	delete initFuncNumber;
