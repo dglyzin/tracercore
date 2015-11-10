@@ -432,6 +432,11 @@ void Domain::readFromFile(char* path) {
 	readTimeSetting(in);
 	readSaveInterval(in);
 	readGridSteps(in);
+
+	int dimension;
+
+	in.read((char*)&dimension, SIZE_INT);
+
 	readCellAndHaloSize(in);
 	readSolverIndex(in);
 	readSolverTolerance(in);
