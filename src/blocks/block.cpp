@@ -10,7 +10,7 @@
 Block::Block(int _nodeNumber, int _dimension, int _xCount, int _yCount, int _zCount, int _xOffset, int _yOffset, int _zOffset, int _cellSize, int _haloSize) {
 	nodeNumber = _nodeNumber;
 
-	dimension = _dimension;
+	//dimension = _dimension;
 
 	xCount = _xCount;
 	yCount = _yCount;
@@ -23,7 +23,7 @@ Block::Block(int _nodeNumber, int _dimension, int _xCount, int _yCount, int _zCo
 	cellSize = _cellSize;
 	haloSize = _haloSize;
 
-	setCountAndOffset();
+	setCountAndOffset(_dimension);
 }
 
 Block::~Block() {
@@ -42,7 +42,7 @@ int Block::getNodeNumber() {
 	return nodeNumber;
 }
 
-void Block::setCountAndOffset() {
+void Block::setCountAndOffset(int dimension) {
 	switch (dimension) {
 		case 1:
 			//xCount = _xCount;

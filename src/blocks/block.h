@@ -49,7 +49,7 @@ public:
 protected:
 	int nodeNumber;
 
-	int dimension;
+	//int dimension;
 
 	int xCount;
 	int yCount;
@@ -63,7 +63,7 @@ protected:
 	int haloSize;
 
 private:
-	void setCountAndOffset();
+	void setCountAndOffset(int dimension);
 };
 
 #endif /* SRC_BLOCKS_BLOCK_H_ */
