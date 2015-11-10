@@ -104,14 +104,14 @@ ProblemType* RealBlock::createProblem(int problemType, int solverType, double aT
 
 	switch (problemType) {
 		case ORDINARY:
-			return Ordinary(pu, solverType, elementCount, aTol, rTol);
+			return new Ordinary(pu, solverType, elementCount, aTol, rTol);
 
 		case DELAY:
 			printf("\nDELAY PROBLEM TYPE NOT READY!!!\n");
 			break;
 
 		default:
-			return Ordinary(pu, solverType, elementCount, aTol, rTol);
+			return new Ordinary(pu, solverType, elementCount, aTol, rTol);
 	}
 }
 
