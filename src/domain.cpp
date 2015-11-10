@@ -642,13 +642,13 @@ Block* Domain::readBlock(ifstream& in, int idx) {
 	}
 	cout << endl;*/
 
-	ProcessingUnit* pc = NULL;
-
 	if(node == mWorkerRank){
+		ProcessingUnit* pu = NULL;
+
 		if (deviceType==0)  //CPU BLOCK
 			switch (deviceNumber) {
 				case 0:
-					pc = cpu;
+					pu = cpu;
 					break;
 
 				default:
@@ -659,15 +659,15 @@ Block* Domain::readBlock(ifstream& in, int idx) {
 		else if (deviceType==1) //GPU BLOCK
 			switch (deviceNumber) {
 				case 0:
-					pc = gpu0;
+					pu = gpu0;
 					break;
 
 				case 1:
-					pc = gpu0;
+					pu = gpu0;
 					break;
 
 				case 2:
-					pc = gpu1;
+					pu = gpu1;
 					break;
 
 				default:
@@ -679,10 +679,19 @@ Block* Domain::readBlock(ifstream& in, int idx) {
 			printf("Invalid block type!\n");
 			assert(false);
 		}
+
+		printf("\nPROBLEM TYPE ALWAYS = ORDINARY!!!\n");
+
+		resBlock = new RealBlock(mWorkerRank, dimension,
+				count[0], count[1], count[2],
+				offset[0], offset[1], offset[2],
+				mCellSize, mHaloSize,
+				idx, pu, initFuncNumber, compFuncNumber,
+				ORDINARY, mSolverIndex, mAtol, mRtol);
 	}
 	else {
 		//resBlock =  new BlockNull(idx, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize);
-		resBlock = new NullBlock(idx, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], mCellSize, mHaloSize);
+		resBlock = new NullBlock(mWorkerRank, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], mCellSize, mHaloSize);
 	}
 
 	delete initFuncNumber;
