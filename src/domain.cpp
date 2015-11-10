@@ -59,6 +59,13 @@ Domain::Domain(int _world_rank, int _world_size, char* inputFile) {
 
 	counterSaveTime = 0;
 
+	dimension = 0;
+
+	cpu = NULL;
+	gpu1 = NULL;
+	gpu2 = NULL;
+	gpu3 = NULL;
+
 	readFromFile(inputFile);
 
 	/*flags = _flags;
@@ -76,11 +83,6 @@ Domain::Domain(int _world_rank, int _world_size, char* inputFile) {
 
 	mAcceptedStepCount = 0;
 	mRejectedStepCount = 0;
-
-	cpu = NULL;
-	gpu1 = NULL;
-	gpu2 = NULL;
-	gpu3 = NULL;
 }
 
 Domain::~Domain() {
