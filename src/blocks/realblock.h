@@ -93,6 +93,8 @@ private:
 
 	double* getNewBlockBorder(Block* neighbor, int borderLength);
 	double* getNewExternalBorder(Block* neighbor, int borderLength, double* border);
+
+	ProblemType* createProblem(int problemType, int solverType, double aTol, double rTol);
 };
 
 #endif /* SRC_BLOCKS_REALBLOCK_H_ */

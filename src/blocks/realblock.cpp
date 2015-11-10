@@ -19,8 +19,9 @@ RealBlock::RealBlock(int _nodeNumber, int _dimension,
 
 	blockNumber = _blockNumber;
 
-	int elementCount = getGridElementCount();
-	problem = new Ordinary(pu, solverType, elementCount, aTol, rTol);
+	/*int elementCount = getGridElementCount();
+	problem = new Ordinary(pu, solverType, elementCount, aTol, rTol);*/
+	problem = createProblem(problemType, solverType, aTol, rTol);
 
 	sendBorderInfo = NULL;
 	tempSendBorderInfo.clear();
@@ -96,6 +97,22 @@ double* RealBlock::getNewExternalBorder(Block* neighbor, int borderLength, doubl
 	}
 
 	//return tmpBorder;
+}
+
+ProblemType* RealBlock::createProblem(int problemType, int solverType, double aTol, double rTol) {
+	int elementCount = getGridElementCount();
+
+	switch (problemType) {
+		case ORDINARY:
+			return Ordinary(pu, solverType, elementCount, aTol, rTol);
+
+		case DELAY:
+			printf("\nDELAY PROBLEM TYPE NOT READY!!!\n");
+			break;
+
+		default:
+			return Ordinary(pu, solverType, elementCount, aTol, rTol);
+	}
 }
 
 void RealBlock::computeStageBorder(int stage, double time) {
