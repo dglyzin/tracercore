@@ -24,7 +24,11 @@
 #include "blocks/nullblock.h"
 
 #include "interconnect.h"
-#include "solvers/solver.h"
+
+#include "processingunit/cpu/cpu1d.h"
+#include "processingunit/cpu/cpu2d.h"
+#include "processingunit/cpu/cpu3d.h"
+//#include "solvers/solver.h"
 //#include "dbconnector.h"
 
 /*
@@ -204,7 +208,7 @@ private:
 
 	MPI_Status status;
 
-	Solver* mPreviousState;
+	//Solver* mPreviousState;
 
 	void loadStateFromFile(char* dataFile);
 	void setStopTime(double _stopTime) { stopTime = _stopTime; }
@@ -256,6 +260,8 @@ private:
 	void rejectStep();
 
 	int getMaximumNumberSavedStates();
+
+	void createProcessigUnit();
 
 	/*
 	 * Database status manipulations
