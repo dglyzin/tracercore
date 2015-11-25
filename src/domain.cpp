@@ -763,7 +763,9 @@ Interconnect* Domain::readConnection(ifstream& in) {
 
 	//cout << endl << "ERROR sorceData = destinationData = NULL!!!" << endl;
 
-	//TODO delete here!!! Временные массивы для сдвигов и размеров
+	delete length;
+	delete offsetSource;
+	delete offsetDestination;
 
 	return new Interconnect(sourceNode, destinationNode, borderLength, sourceData, destinationData, &mWorkerComm);
 }
