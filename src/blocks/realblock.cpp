@@ -241,6 +241,8 @@ double* RealBlock::addNewBlockBorder(Block* neighbor, int side, int mOffset, int
 
 	tempBlockBorder.push_back(newBlockBorder);
 
+	//printf("\nBorder %d %d %d\n", nodeNumber, blockNumber, newBlockBorder);
+
 	return newBlockBorder;
 }
 
@@ -267,6 +269,8 @@ double* RealBlock::addNewExternalBorder(Block* neighbor, int side, int mOffset, 
 	}*/
 
 	tempExternalBorder.push_back(newExternalBorder);
+
+	//printf("\nExternal %d %d %d\n", nodeNumber, blockNumber, newExternalBorder);
 
 	return newExternalBorder;
 }

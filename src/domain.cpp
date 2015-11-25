@@ -297,6 +297,7 @@ void Domain::nextStep() {
 void Domain::prepareDeviceData(int deviceType, int deviceNumber, int stage) {
 	for (int i = 0; i < mBlockCount; ++i)
 		if( mBlocks[i]->getBlockType() == deviceType && mBlocks[i]->getDeviceNumber() == deviceNumber ) {
+			printf("\nSuccses\n");
 			mBlocks[i]->prepareStageData(stage);
 		}
 }
@@ -338,50 +339,50 @@ double Domain::getDeviceError(int deviceType, int deviceNumber) {
 
 void Domain::prepareData(int stage) {
 #pragma omp task
-	prepareDeviceData(GPU, 0, stage);
+	prepareDeviceData(GPU_UNIT, 0, stage);
 #pragma omp task
-	prepareDeviceData(GPU, 1, stage);
+	prepareDeviceData(GPU_UNIT, 1, stage);
 #pragma omp task
-	prepareDeviceData(GPU, 2, stage);
+	prepareDeviceData(GPU_UNIT, 2, stage);
 
-	prepareDeviceData(CPU, 0, stage);
+	prepareDeviceData(CPU_UNIT, 0, stage);
 
 #pragma omp taskwait
 }
 
 void Domain::computeOneStepBorder(int stage) {
 #pragma omp task
-	processDeviceBlocksBorder(GPU, 0, stage);
+	processDeviceBlocksBorder(GPU_UNIT, 0, stage);
 #pragma omp task
-	processDeviceBlocksBorder(GPU, 1, stage);
+	processDeviceBlocksBorder(GPU_UNIT, 1, stage);
 #pragma omp task
-	processDeviceBlocksBorder(GPU, 2, stage);
+	processDeviceBlocksBorder(GPU_UNIT, 2, stage);
 
-	processDeviceBlocksBorder(CPU, 0, stage);
+	processDeviceBlocksBorder(CPU_UNIT, 0, stage);
 }
 
 void Domain::prepareNextStageArgument(int stage) {
 #pragma omp task
-	prepareDeviceArgument(GPU, 0, stage);
+	prepareDeviceArgument(GPU_UNIT, 0, stage);
 #pragma omp task
-	prepareDeviceArgument(GPU, 1, stage);
+	prepareDeviceArgument(GPU_UNIT, 1, stage);
 #pragma omp task
-	prepareDeviceArgument(GPU, 2, stage);
+	prepareDeviceArgument(GPU_UNIT, 2, stage);
 
-	prepareDeviceArgument(CPU, 0, stage);
+	prepareDeviceArgument(CPU_UNIT, 0, stage);
 }
 
 
 
 void Domain::computeOneStepCenter(int stage) {
 #pragma omp task
-	processDeviceBlocksCenter(GPU, 0, stage);
+	processDeviceBlocksCenter(GPU_UNIT, 0, stage);
 #pragma omp task
-	processDeviceBlocksCenter(GPU, 1, stage);
+	processDeviceBlocksCenter(GPU_UNIT, 1, stage);
 #pragma omp task
-	processDeviceBlocksCenter(GPU, 2, stage);
+	processDeviceBlocksCenter(GPU_UNIT, 2, stage);
 
-	processDeviceBlocksCenter(CPU, 0, stage);
+	processDeviceBlocksCenter(CPU_UNIT, 0, stage);
 }
 
 
@@ -426,10 +427,10 @@ double Domain::collectError() {
 }
 
 void Domain::printBlocksToConsole() {
-	/*for (int i = 0; i < mBlockCount; ++i) {
-		mBlocks[i]->print();
-	}*/
-	printf("\nPRINT BLOCKS TO CONSOLE DON'T WORK!!!\n");
+	for (int i = 0; i < mBlockCount; ++i) {
+		if (mBlocks[i]->isRealBlock())
+			mBlocks[i]->printToConsole();
+	}
 }
 
 void Domain::readFromFile(char* path) {
@@ -468,12 +469,8 @@ void Domain::readFromFile(char* path) {
 
 	mBlocks = new Block* [mBlockCount];
 
-	//printf ("DEBUG reading blocks.\n ");
-
 	for (int i = 0; i < mBlockCount; ++i)
 		mBlocks[i] = readBlock(in, i);
-
-	//printf ("DEBUG blocks read.\n ");
 
 	readConnectionCount(in);
 
@@ -482,9 +479,9 @@ void Domain::readFromFile(char* path) {
 	for (int i = 0; i < mConnectionCount; ++i)
 		mInterconnects[i] = readConnection(in);
 
-
 	for (int i = 0; i < mBlockCount; ++i)
 		mBlocks[i]->moveTempBorderVectorToBorderArray();
+
 
 	totalGridNodeCount = getGridNodeCount();
 	totalGridElementCount = getGridElementCount();
@@ -544,7 +541,7 @@ void Domain::readCellAndHaloSize(ifstream& in) {
 
 void Domain::readSolverIndex(std::ifstream& in){
 	in.read((char*)&mSolverIndex, SIZE_INT);
-	cout << "Solver index:  " << mSolverIndex << endl;
+	//cout << "Solver index:  " << mSolverIndex << endl;
 }
 
 void Domain::readSolverTolerance(std::ifstream& in){
@@ -723,7 +720,7 @@ Interconnect* Domain::readConnection(ifstream& in) {
 	offsetDestination[0] = offsetDestination[1] = 0;
 
 	in.read((char*)&dimension, SIZE_INT);
-	cout << endl;
+	//cout << endl;
 	//cout << "Interconnect #<NONE>" << endl;
 
 	for (int j = 2-dimension; j < 2; ++j) {
@@ -761,6 +758,8 @@ Interconnect* Domain::readConnection(ifstream& in) {
 	int borderLength = length[0] * length[1] * mCellSize * mHaloSize;
 
 	//cout << endl << "ERROR sorceData = destinationData = NULL!!!" << endl;
+
+	//TODO delete here!!! Временные массивы для сдвигов и размеров
 
 	return new Interconnect(sourceNode, destinationNode, borderLength, sourceData, destinationData, &mWorkerComm);
 }
@@ -834,7 +833,7 @@ int Domain::realBlockCount() {
 }
 
 void Domain::saveState(char* inputFile) {
-	//printf("\nsaveState %f %f %f\n", counterSaveTime, saveInterval, currentTime);
+	printf("\nsaveState %f %f %f\n", counterSaveTime, saveInterval, currentTime);
 
 	char saveFile[100];
 
@@ -1018,7 +1017,6 @@ bool Domain::isNan() {
 }
 
 int Domain::getMaximumNumberSavedStates() {
-
 	return 0;
 }
 

@@ -51,7 +51,11 @@ int main(int argc, char * argv[]) {
 	 */
 	//omp_set_num_threads(1);
 
+	printf("\n\n%d BEFORE SAVE\n", world_rank);
+
 	d->saveState(inputFile);
+
+	printf("\n\n%d AFTER SAVE\n", world_rank);
 
 	printf("\n\nBEFORE COMPUTE\n");
 	printf ("Running computations %d \n", world_rank);
