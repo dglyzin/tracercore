@@ -106,8 +106,10 @@ double** Domain::collectDataFromNode() {
 	for (int i = 0; i < mBlockCount; ++i) {
 		double* tmp = getBlockCurrentState(i);
 
-	if(mGlobalRank == 0)
-		resultAll[i] = tmp;
+		//printf("\n%d %d %d\n", mWorkerRank, mGlobalRank, i);
+
+		if(mGlobalRank == 0)
+			resultAll[i] = tmp;
 	}
 
 	return resultAll;
@@ -125,6 +127,7 @@ double* Domain::getBlockCurrentState(int number) {
 		else {
 			//if domain 0 is master, then block-getnodenumber = rank in mpicommworld
 			//else this branch will not run
+			//printf("\n### nodeNumber: %d\n", mBlocks[number]->getNodeNumber());
 			MPI_Recv(result, mBlocks[number]->getGridElementCount(), MPI_DOUBLE, mBlocks[number]->getNodeNumber(), 999, MPI_COMM_WORLD, &status);
 		}
 
@@ -132,6 +135,7 @@ double* Domain::getBlockCurrentState(int number) {
 	}
 	else {
 		if(mBlocks[number]->isRealBlock()) {
+			//printf("\n\n*** %d %d\n\n", number, mWorkerRank);
 			result = new double [mBlocks[number]->getGridElementCount()];
 			mBlocks[number]->getCurrentState(result);
 			//we send to global 0 no matter it is above ^^ or in python
@@ -297,7 +301,7 @@ void Domain::nextStep() {
 void Domain::prepareDeviceData(int deviceType, int deviceNumber, int stage) {
 	for (int i = 0; i < mBlockCount; ++i)
 		if( mBlocks[i]->getBlockType() == deviceType && mBlocks[i]->getDeviceNumber() == deviceNumber ) {
-			printf("\nSuccses\n");
+			//printf("\nSuccses\n");
 			mBlocks[i]->prepareStageData(stage);
 		}
 }
@@ -679,7 +683,7 @@ Block* Domain::readBlock(ifstream& in, int idx) {
 
 		printf("\nPROBLEM TYPE ALWAYS = ORDINARY!!!\n");
 
-		resBlock = new RealBlock(mWorkerRank, dimension,
+		resBlock = new RealBlock(node, dimension,
 				count[0], count[1], count[2],
 				offset[0], offset[1], offset[2],
 				mCellSize, mHaloSize,
@@ -688,7 +692,7 @@ Block* Domain::readBlock(ifstream& in, int idx) {
 	}
 	else {
 		//resBlock =  new BlockNull(idx, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize);
-		resBlock = new NullBlock(mWorkerRank, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], mCellSize, mHaloSize);
+		resBlock = new NullBlock(node, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], mCellSize, mHaloSize);
 	}
 
 	delete initFuncNumber;
@@ -833,13 +837,14 @@ int Domain::realBlockCount() {
 }
 
 void Domain::saveState(char* inputFile) {
-	printf("\nsaveState %f %f %f\n", counterSaveTime, saveInterval, currentTime);
+	//printf("\nsaveState %f %f %f\n", counterSaveTime, saveInterval, currentTime);
 
 	char saveFile[100];
 
 	int length = lastChar(inputFile, '/');
 
 	strncpy(saveFile, inputFile, length);
+
 	saveFile[ length ] = 0;
 
 	sprintf(saveFile, "%s%s%f%s", saveFile, "/project-", currentTime, ".bin");
