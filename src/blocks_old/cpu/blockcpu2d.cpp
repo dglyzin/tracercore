@@ -28,7 +28,7 @@ void BlockCpu2d::computeStageBorder(int stage, double time) {
 # pragma omp parallel
 	{
 		double* result = mSolver->getStageResult(stage);
-		double* source = mSolver->getStageSource(stage);
+		double* source0 = mSolver->getStageSource(stage);
 # pragma omp for
 		for (int x = 0; x < xCount; ++x) {
 			int xShift = x;
@@ -36,7 +36,7 @@ void BlockCpu2d::computeStageBorder(int stage, double time) {
 				int yShift = xCount * y;
 				//cout << "Calc y_" << y << " x_" << x << endl;
 				//printf("Calc y = %d, x = %d\n", y, x);
-				mUserFuncs[ mCompFuncNumber[ yShift + xShift ] ](result, source, time, x, y, 0, mParams, externalBorder);
+				mUserFuncs[ mCompFuncNumber[ yShift + xShift ] ](result, &source0, time, x, y, 0, mParams, externalBorder);
 			}
 		}
 
@@ -47,7 +47,7 @@ void BlockCpu2d::computeStageBorder(int stage, double time) {
 				int yShift = xCount * y;
 				//cout << "Calc y_" << y << " x_" << x << endl;
 				//printf("Calc y = %d, x = %d\n", y, x);
-				mUserFuncs[ mCompFuncNumber[ yShift + xShift ] ](result, source, time, x, y, 0, mParams, externalBorder);
+				mUserFuncs[ mCompFuncNumber[ yShift + xShift ] ](result, &source0, time, x, y, 0, mParams, externalBorder);
 			}
 		}
 
@@ -58,7 +58,7 @@ void BlockCpu2d::computeStageBorder(int stage, double time) {
 				int xShift = x;
 				//cout << "Calc y_" << y << " x_" << x << endl;
 				//printf("Calc y = %d, x = %d\n", y, x);
-				mUserFuncs[ mCompFuncNumber[ yShift + xShift ] ](result, source, time, x, y, 0, mParams, externalBorder);
+				mUserFuncs[ mCompFuncNumber[ yShift + xShift ] ](result, &source0, time, x, y, 0, mParams, externalBorder);
 			}
 		}
 
@@ -69,7 +69,7 @@ void BlockCpu2d::computeStageBorder(int stage, double time) {
 				int xShift = x;
 				//cout << "Calc y_" << y << " x_" << x << endl;
 				//printf("Calc y = %d, x = %d\n", y, x);
-				mUserFuncs[ mCompFuncNumber[ yShift + xShift ] ](result, source, time, x, y, 0, mParams, externalBorder);
+				mUserFuncs[ mCompFuncNumber[ yShift + xShift ] ](result, &source0, time, x, y, 0, mParams, externalBorder);
 			}
 		}
 	}
@@ -79,14 +79,14 @@ void BlockCpu2d::computeStageCenter(int stage, double time) {
 # pragma omp parallel
 	{
 		double* result = mSolver->getStageResult(stage);
-		double* source = mSolver->getStageSource(stage);
+		double* source0 = mSolver->getStageSource(stage);
 # pragma omp for
 		for (int y = haloSize; y < yCount - haloSize; ++y) {
 			int yShift = xCount * y;
 			for (int x = haloSize; x < xCount - haloSize; ++x) {
 				int xShift = x;
 				//cout << "Calc y_" << y << " x_" << x << endl;
-				mUserFuncs[ mCompFuncNumber[ yShift + xShift ] ](result, source, time, x, y, 0, mParams, externalBorder);
+				mUserFuncs[ mCompFuncNumber[ yShift + xShift ] ](result, &source0, time, x, y, 0, mParams, externalBorder);
 			}
 		}
 	}

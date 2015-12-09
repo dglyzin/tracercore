@@ -28,7 +28,7 @@ void BlockCpu3d::computeStageBorder(int stage, double time) {
 # pragma omp parallel
 	{
 		double* result = mSolver->getStageResult(stage);
-		double* source = mSolver->getStageSource(stage);
+		double* source0 = mSolver->getStageSource(stage);
 
 		for (int z = 0; z < haloSize; ++z) {
 			int zShift = yCount * xCount * z;
@@ -38,7 +38,7 @@ void BlockCpu3d::computeStageBorder(int stage, double time) {
 				for (int x = 0; x < xCount; ++x) {
 					int xShift = x;
 					//cout << "Border Calc z_" << z << " y_" << y << " x_" << x << endl;
-					mUserFuncs[ mCompFuncNumber[ zShift + yShift + xShift ] ](result, source, time, x, y, z, mParams, externalBorder);
+					mUserFuncs[ mCompFuncNumber[ zShift + yShift + xShift ] ](result, &source0, time, x, y, z, mParams, externalBorder);
 				}
 			}
 		}
@@ -51,7 +51,7 @@ void BlockCpu3d::computeStageBorder(int stage, double time) {
 				for (int x = 0; x < xCount; ++x) {
 					int xShift = x;
 					//cout << "Border Calc z_" << z << " y_" << y << " x_" << x << endl;
-					mUserFuncs[ mCompFuncNumber[ zShift + yShift + xShift ] ](result, source, time, x, y, z, mParams, externalBorder);
+					mUserFuncs[ mCompFuncNumber[ zShift + yShift + xShift ] ](result, &source0, time, x, y, z, mParams, externalBorder);
 				}
 			}
 		}
@@ -64,7 +64,7 @@ void BlockCpu3d::computeStageBorder(int stage, double time) {
 				for (int x = 0; x < xCount; ++x) {
 					int xShift = x;
 					//cout << "Border Calc z_" << z << " y_" << y << " x_" << x << endl;
-					mUserFuncs[ mCompFuncNumber[ zShift + yShift + xShift ] ](result, source, time, x, y, z, mParams, externalBorder);
+					mUserFuncs[ mCompFuncNumber[ zShift + yShift + xShift ] ](result, &source0, time, x, y, z, mParams, externalBorder);
 				}
 			}
 		}
@@ -77,7 +77,7 @@ void BlockCpu3d::computeStageBorder(int stage, double time) {
 				for (int x = 0; x < xCount; ++x) {
 					int xShift = x;
 					//cout << "Border Calc z_" << z << " y_" << y << " x_" << x << endl;
-					mUserFuncs[ mCompFuncNumber[ zShift + yShift + xShift ] ](result, source, time, x, y, z, mParams, externalBorder);
+					mUserFuncs[ mCompFuncNumber[ zShift + yShift + xShift ] ](result, &source0, time, x, y, z, mParams, externalBorder);
 				}
 			}
 		}
@@ -90,7 +90,7 @@ void BlockCpu3d::computeStageBorder(int stage, double time) {
 				for (int x = 0; x < haloSize; ++x) {
 					int xShift = x;
 					//cout << "Border Calc z_" << z << " y_" << y << " x_" << x << endl;
-					mUserFuncs[ mCompFuncNumber[ zShift + yShift + xShift ] ](result, source, time, x, y, z, mParams, externalBorder);
+					mUserFuncs[ mCompFuncNumber[ zShift + yShift + xShift ] ](result, &source0, time, x, y, z, mParams, externalBorder);
 				}
 			}
 		}
@@ -103,7 +103,7 @@ void BlockCpu3d::computeStageBorder(int stage, double time) {
 				for (int x = xCount - haloSize; x < xCount; ++x) {
 					int xShift = x;
 					//cout << "Border Calc z_" << z << " y_" << y << " x_" << x << endl;
-					mUserFuncs[ mCompFuncNumber[ zShift + yShift + xShift ] ](result, source, time, x, y, z, mParams, externalBorder);
+					mUserFuncs[ mCompFuncNumber[ zShift + yShift + xShift ] ](result, &source0, time, x, y, z, mParams, externalBorder);
 				}
 			}
 		}
@@ -114,7 +114,7 @@ void BlockCpu3d::computeStageCenter(int stage, double time) {
 # pragma omp parallel
 	{
 		double* result = mSolver->getStageResult(stage);
-		double* source = mSolver->getStageSource(stage);
+		double* source0 = mSolver->getStageSource(stage);
 # pragma omp for
 		for (int z = haloSize; z < zCount - haloSize; ++z) {
 			int zShift = yCount * xCount * z;
@@ -123,7 +123,7 @@ void BlockCpu3d::computeStageCenter(int stage, double time) {
 				for (int x = haloSize; x < xCount - haloSize; ++x) {
 					int xShift = x;
 					//cout << "Calc z_" << z << " y_" << y << " x_" << x << endl;
-					mUserFuncs[ mCompFuncNumber[ zShift + yShift + xShift ] ](result, source, time, x, y, z, mParams, externalBorder);
+					mUserFuncs[ mCompFuncNumber[ zShift + yShift + xShift ] ](result, &source0, time, x, y, z, mParams, externalBorder);
 				}
 			}
 		}
