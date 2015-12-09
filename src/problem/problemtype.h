@@ -39,7 +39,7 @@ public:
 protected:
 	StepStorage* createStageStorage(ProcessingUnit* pu, int solverType, int count, double aTol, double rTol);
 
-	double** sourceStorage;
+	double** mSourceStorage;
 };
 
 #endif /* SRC_PROBLEM_PROBLEMTYPE_H_ */

@@ -8,7 +8,7 @@
 #include "problemtype.h"
 
 ProblemType::ProblemType() {
-	sourceStorage = NULL;
+	mSourceStorage = NULL;
 }
 
 ProblemType::~ProblemType() {
