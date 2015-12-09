@@ -58,7 +58,7 @@ STEPSTORAGE=$(SRCSTEPSTORAGE)/stepstorage.cpp $(SRCSTEPSTORAGE)/eulerstorage.cpp
 PROBLEM=$(SRCPROBLEM)/problemtype.cpp $(SRCPROBLEM)/ordinary.cpp
 
 
-SOURCE=$(SRC)/main.cpp $(SRC)/domain.cpp $(SRC)/interconnect.cpp $(SRC)/enums.cpp $(SRC)/dbconnector.cpp $(BLOCKOLD) $(BLOCK) $(SOLVER) $(PROCUNIT) $(STEPSTORAGE) $(PROBLEM)
+SOURCE=$(SRC)/main.cpp $(SRC)/domain.cpp $(SRC)/interconnect.cpp $(SRC)/enums.cpp $(SRC)/dbconnector.cpp $(BLOCK) $(PROCUNIT) $(STEPSTORAGE) $(PROBLEM)
 
 OBJECT=$(SOURCE:.cpp=.o)
 
@@ -78,15 +78,6 @@ cuda_func.o:
 	
 clean:
 	rm -rf $(SRC)/*.o
-	
-	rm -rf $(SRCSOL)/*.o
-	rm -rf $(SRCSOLEULER)/*.o
-	rm -rf $(SRCSOLRK4)/*.o
-	rm -rf $(SRCSOLDP45)/*.o
-	
-	rm -rf $(SRCBLCOLD)/*.o
-	rm -rf $(SRCBLCOLDCPU)/*.o
-	rm -rf $(SRCBLCOLDGPU)/*.o
 	
 	rm -rf $(SRCBLC)/*.o
 	
