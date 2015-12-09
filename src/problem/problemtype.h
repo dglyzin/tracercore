@@ -19,7 +19,7 @@ public:
 	ProblemType();
 	virtual ~ProblemType();
 
-	virtual double* getSource(int stage, double time) = 0;
+	virtual double** getSource(int stage, double time) = 0;
 	virtual double* getResult(int stage, double time) = 0;
 
 	virtual void prepareArgument(ProcessingUnit* pu, int stage, double timestep) = 0;
