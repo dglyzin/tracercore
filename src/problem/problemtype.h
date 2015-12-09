@@ -38,6 +38,8 @@ public:
 
 protected:
 	StepStorage* createStageStorage(ProcessingUnit* pu, int solverType, int count, double aTol, double rTol);
+
+	double** sourceStorage;
 };
 
 #endif /* SRC_PROBLEM_PROBLEMTYPE_H_ */

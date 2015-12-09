@@ -9,14 +9,20 @@
 
 Ordinary::Ordinary(ProcessingUnit* pu, int solverType, int count, double aTol, double rTol) {
 	mStepStorage = createStageStorage(pu, solverType, count, aTol, rTol);
+
+	sourceStorage = new double* [1];
 }
 
 Ordinary::~Ordinary() {
 	delete mStepStorage;
+
+	delete sourceStorage;
 }
 
 double** Ordinary::getSource(int stage, double time) {
-	return mStepStorage->getStageSource(stage);
+	sourceStorage[0] = mStepStorage->getStageSource(stage);
+
+	return sourceStorage;
 }
 
 double* Ordinary::getResult(int stage, double time) {

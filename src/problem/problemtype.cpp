@@ -8,8 +8,7 @@
 #include "problemtype.h"
 
 ProblemType::ProblemType() {
-	// TODO Auto-generated constructor stub
-
+	sourceStorage = NULL;
 }
 
 ProblemType::~ProblemType() {
