@@ -227,7 +227,7 @@ private:
 	/*
 	 * Чтение блока
 	 */
-	Block* readBlock(std::ifstream& in, int idx);
+	Block* readBlock(std::ifstream& in, int idx, int dimension);
 
 	/*
 	 * Чтение соединения
