@@ -93,7 +93,13 @@ Domain::~Domain() {
 	for (int i = 0; i < mConnectionCount; ++i)
 		delete mInterconnects[i];
 	delete mInterconnects;
+
 	MPI_Comm_free(&mWorkerComm);
+
+	/*delete cpu;
+	delete gpu0;
+	delete gpu1;
+	delete gpu2;*/
 }
 
 double** Domain::collectDataFromNode() {
