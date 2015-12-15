@@ -8,9 +8,6 @@
 #ifndef SRC_STEPSTORAGE_STEPSTORAGE_H_
 #define SRC_STEPSTORAGE_STEPSTORAGE_H_
 
-#include <stdlib.h>
-#include <stdio.h>
-
 #include <math.h>
 
 #include <cassert>
