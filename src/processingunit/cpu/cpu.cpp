@@ -131,17 +131,6 @@ void CPU::multiplyArrayByNumberAndSum(double* result, double* arg1, double facto
 }
 
 double CPU::sumArrayElements(double* arg, int size) {
-	/*double err=0;
-#pragma omp parallel for reduction (+:err)
-	for (int idx=0; idx<mCount; idx++){
-		double erri =  timeStep * (e1 * mTempStore1[idx] + e3 * mTempStore3[idx] + e4 * mTempStore4[idx] +
-	                            e5 * mTempStore5[idx] + e6 * mTempStore6[idx]+ e7 * mTempStore7[idx])
-	                          /(aTol/* + rTol * max(mArg[idx], mState[idx])*///);
-	/*   err += erri * erri;
-	}
-
-	return err;*/
-
 	double sum = 0;
 #pragma omp parallel for reduction (+:sum)
 	for (int i = 0; i < size; ++i) {
