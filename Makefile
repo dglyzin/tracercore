@@ -8,18 +8,7 @@ CUDAARCH=-arch=sm_20
 
 SRC=src
 
-SRCSOL=$(SRC)/solvers
-SRCSOLEULER=$(SRCSOL)/euler
-SRCSOLRK4=$(SRCSOL)/rk4
-SRCSOLDP45=$(SRCSOL)/dp45
-
-SRCBLCOLD=$(SRC)/blocks_old
-SRCBLCOLDCPU=$(SRCBLCOLD)/cpu
-SRCBLCOLDGPU=$(SRCBLCOLD)/gpu
-
-
 SRCBLC=$(SRC)/blocks
-
 
 SRCPROCUNIT=$(SRC)/processingunit
 SRCPROCUNITCPU=$(SRCPROCUNIT)/cpu
@@ -35,19 +24,7 @@ MPILIB=-I/usr/mpi/gcc/openmpi-1.8.4/include -L /usr/mpi/gcc/openmpi-1.8.4/lib -l
 
 USERFUNCLIB=./bin -l userfuncs
 
-
-BLOCKOLDCPU=$(SRCBLCOLDCPU)/blockcpu.cpp $(SRCBLCOLDCPU)/blockcpu1d.cpp $(SRCBLCOLDCPU)/blockcpu2d.cpp $(SRCBLCOLDCPU)/blockcpu3d.cpp
-BLOCKOLDGPU=$(SRCBLCOLDGPU)/blockgpu.cpp $(SRCBLCOLDGPU)/blockgpu1d.cpp $(SRCBLCOLDGPU)/blockgpu2d.cpp $(SRCBLCOLDGPU)/blockgpu3d.cpp
-BLOCKOLD=$(SRCBLCOLD)/block.cpp $(SRCBLCOLD)/blocknull.cpp $(BLOCKOLDCPU) $(BLOCKOLDGPU)
-
-
 BLOCK=$(SRCBLC)/block.cpp $(SRCBLC)/realblock.cpp $(SRCBLC)/nullblock.cpp
-
-
-SOLVEREULER=$(SRCSOLEULER)/eulersolver.cpp $(SRCSOLEULER)/eulersolvercpu.cpp $(SRCSOLEULER)/eulersolvergpu.cpp
-SOLVERRK4=$(SRCSOLRK4)/rk4solver.cpp $(SRCSOLRK4)/rk4solvercpu.cpp $(SRCSOLRK4)/rk4solvergpu.cpp
-SOLVERDP45=$(SRCSOLDP45)/dp45solver.cpp $(SRCSOLDP45)/dp45solvercpu.cpp $(SRCSOLDP45)/dp45solvergpu.cpp
-SOLVER=$(SRCSOL)/solver.cpp $(SOLVEREULER) $(SOLVERRK4) $(SOLVERDP45)
 
 PROCUNITCPU=$(SRCPROCUNITCPU)/cpu.cpp $(SRCPROCUNITCPU)/cpu1d.cpp $(SRCPROCUNITCPU)/cpu2d.cpp $(SRCPROCUNITCPU)/cpu3d.cpp
 PROCUNITGPU=
