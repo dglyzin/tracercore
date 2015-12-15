@@ -15,7 +15,7 @@ CPU::CPU(int _deviceNumber) : ProcessingUnit(_deviceNumber) {
 }
 
 CPU::~CPU() {
-	// TODO Auto-generated destructor stub
+	//printf("\nCPU des \n");
 }
 
 void CPU::prepareBorder(double* result, double* source, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop, int yCount, int xCount, int cellSize) {
