@@ -13,7 +13,6 @@ CPU_2d::CPU_2d(int _deviceNumber) : CPU(_deviceNumber) {
 }
 
 CPU_2d::~CPU_2d() {
-	// TODO Auto-generated destructor stub
 }
 
 void CPU_2d::computeBorder(func_ptr_t* mUserFuncs, unsigned short int* mCompFuncNumber, double* result, double** source, double time, double* parametrs, double** externalBorder, int zCount, int yCount, int xCount, int haloSize) {
