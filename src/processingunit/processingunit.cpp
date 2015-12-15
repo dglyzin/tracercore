@@ -24,7 +24,6 @@ ProcessingUnit::ProcessingUnit(int _deviceNumber) {
 }
 
 ProcessingUnit::~ProcessingUnit() {
-	deleteAllArrays();
 }
 
 void ProcessingUnit::deleteAllArrays() {

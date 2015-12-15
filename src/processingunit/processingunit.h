@@ -11,6 +11,9 @@
 #include <cuda.h>
 #include <cuda_runtime_api.h>
 
+#include <stdlib.h>
+#include <stdio.h>
+
 #include <list>
 
 #include "../enums.h"
