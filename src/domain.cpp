@@ -96,10 +96,14 @@ Domain::~Domain() {
 
 	MPI_Comm_free(&mWorkerComm);
 
-	/*delete cpu;
-	delete gpu0;
-	delete gpu1;
-	delete gpu2;*/
+	if(cpu)
+		delete cpu;
+	/*if(gpu0)
+		delete gpu0;
+	if(gpu1)
+		delete gpu1;
+	if(gpu2)
+		delete gpu2;*/
 }
 
 double** Domain::collectDataFromNode() {
