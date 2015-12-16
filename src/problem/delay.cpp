@@ -9,7 +9,7 @@
 
 Delay::Delay(ProcessingUnit* pu, int solverType, int count, double aTol, double rTol, int _delayCount) {
 	//TODO fix!!! реализация функции для ProcessingUnit!!!
-	int maxStorageCount = 1;
+	maxStorageCount = 1;
 
 	mStepStorage = new StepStorage* [maxStorageCount];
 
@@ -23,6 +23,12 @@ Delay::Delay(ProcessingUnit* pu, int solverType, int count, double aTol, double 
 }
 
 Delay::~Delay() {
-	// TODO Auto-generated destructor stub
+	for (int i = 0; i < maxStorageCount; ++i) {
+		delete mStepStorage[i];
+	}
+
+	delete mSourceStorage;
+
+	delete mSourceStorage;
 }
 
