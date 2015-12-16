@@ -36,6 +36,8 @@ private:
 	StepStorage** mStepStorage;
 
 	int delayCount;
+
+	int maxStorageCount;
 };
 
 #endif /* SRC_PROBLEM_DELAY_H_ */
