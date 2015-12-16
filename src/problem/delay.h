@@ -12,7 +12,7 @@
 
 class Delay: public ProblemType {
 public:
-	Delay(ProcessingUnit* pu, int solverType, int count, double aTol, double rTol);
+	Delay(ProcessingUnit* pu, int solverType, int count, double aTol, double rTol, int _delayCount);
 	virtual ~Delay();
 
 	double** getSource(int stage, double time);
@@ -34,6 +34,8 @@ public:
 
 private:
 	StepStorage** mStepStorage;
+
+	int delayCount;
 };
 
 #endif /* SRC_PROBLEM_DELAY_H_ */
