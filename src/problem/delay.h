@@ -12,7 +12,7 @@
 
 class Delay: public ProblemType {
 public:
-	Delay();
+	Delay(ProcessingUnit* pu, int solverType, int count, double aTol, double rTol);
 	virtual ~Delay();
 
 	double** getSource(int stage, double time);

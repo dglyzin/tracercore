@@ -7,8 +7,7 @@
 
 #include "delay.h"
 
-Delay::Delay() {
-	// TODO Auto-generated constructor stub
+Delay::Delay(ProcessingUnit* pu, int solverType, int count, double aTol, double rTol) {
 
 }
 
