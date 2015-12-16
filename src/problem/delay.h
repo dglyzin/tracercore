@@ -14,6 +14,26 @@ class Delay: public ProblemType {
 public:
 	Delay();
 	virtual ~Delay();
+
+	double** getSource(int stage, double time);
+	double* getResult(int stage, double time);
+
+	void prepareArgument(ProcessingUnit* pu, int stage, double timestep);
+
+	double* getCurrentStateStageData(int stage);
+
+	double getStepError(ProcessingUnit* pu, double timestep);
+
+	void confirmStep(ProcessingUnit* pu, double timestep);
+	void rejectStep(ProcessingUnit* pu, double timestep);
+
+	void loadData(ProcessingUnit* pu, double* data);
+	void getCurrentState(ProcessingUnit* pu, double* result);
+
+	double* getCurrentStatePointer();
+
+private:
+	StepStorage** mStepStorage;
 };
 
 #endif /* SRC_PROBLEM_DELAY_H_ */
