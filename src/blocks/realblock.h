@@ -11,6 +11,7 @@
 #include <vector>
 
 #include "../problem/ordinary.h"
+#include "../problem/delay.h"
 
 #include "../processingunit/processingunit.h"
 
