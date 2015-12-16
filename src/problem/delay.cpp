@@ -32,3 +32,44 @@ Delay::~Delay() {
 	delete mSourceStorage;
 }
 
+double** Delay::getSource(int stage, double time) {
+	mSourceStorage[0] = mStepStorage->getStageSource(stage);
+
+	return mSourceStorage;
+}
+
+double* Delay::getResult(int stage, double time) {
+	return mStepStorage->getStageResult(stage);
+}
+
+void Delay::prepareArgument(ProcessingUnit* pu, int stage, double timestep) {
+	mStepStorage->prepareArgument(pu, stage, timestep);
+}
+
+double* Delay::getCurrentStateStageData(int stage) {
+	return mStepStorage->getStageSource(stage);
+}
+
+double Delay::getStepError(ProcessingUnit* pu, double timestep) {
+	return mStepStorage->getStepError(pu, timestep);
+}
+
+void Delay::confirmStep(ProcessingUnit* pu, double timestep) {
+	mStepStorage->confirmStep(pu, timestep);
+}
+
+void Delay::rejectStep(ProcessingUnit* pu, double timestep) {
+	mStepStorage->rejectStep(pu, timestep);
+}
+
+void Delay::loadData(ProcessingUnit* pu, double* data) {
+	mStepStorage->loadState(pu, data);
+}
+
+void Delay::getCurrentState(ProcessingUnit* pu, double* result) {
+	mStepStorage->copyState(pu, result);
+}
+
+double* Delay::getCurrentStatePointer() {
+	return mStepStorage->getStatePointer();
+}
