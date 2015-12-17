@@ -27,7 +27,7 @@ Delay::~Delay() {
 		delete mStepStorage[i];
 	}
 
-	delete mSourceStorage;
+	delete mStepStorage;
 
 	delete mSourceStorage;
 }
