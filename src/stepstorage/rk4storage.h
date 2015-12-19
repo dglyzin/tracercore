@@ -35,7 +35,7 @@ public:
 	double getNewStep(double timestep, double error, int totalDomainElements);
 	bool isErrorPermissible(double error, int totalDomainElements);
 
-	double* getDenseOutput(StepStorage* secondState);
+	void getDenseOutput(StepStorage* secondState, double* result)
 
 private:
     double* mTempStore1;

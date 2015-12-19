@@ -45,7 +45,7 @@ public:
 	virtual double getNewStep(double timestep, double error, int totalDomainElements) = 0;
 	virtual bool isErrorPermissible(double error, int totalDomainElements) = 0;
 
-	virtual void getDenseOutput(StepStorage* secondState) = 0;
+	virtual void getDenseOutput(StepStorage* secondState, double* result) = 0;
 
 protected:
   	int     mCount;
