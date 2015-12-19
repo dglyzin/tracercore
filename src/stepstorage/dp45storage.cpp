@@ -289,7 +289,7 @@ bool DP45Storage::isErrorPermissible(double error, int totalDomainElements) {
 		return false;
 }
 
-double* DP45Storage::getDenseOutput(StepStorage* secondState) {
+void getDenseOutput(StepStorage* secondState, double* result) {
 	printf("\nDP45 dense output DON'T WORK!\n");
 	return NULL;
 }
