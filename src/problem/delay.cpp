@@ -43,7 +43,8 @@ double** Delay::getSource(int stage, double time) {
 }
 
 double* Delay::getResult(int stage, double time) {
-	return mStepStorage->getStageResult(stage);
+	int resultStorageNumber = getResultStorageNumber(time);
+	return mStepStorage[resultStorageNumber]->getStageResult(stage);
 }
 
 void Delay::prepareArgument(ProcessingUnit* pu, int stage, double timestep) {
@@ -76,4 +77,9 @@ void Delay::getCurrentState(ProcessingUnit* pu, double* result) {
 
 double* Delay::getCurrentStatePointer() {
 	return mStepStorage->getStatePointer();
+}
+
+int Delay::getResultStorageNumber(double time) {
+	printf("\nget result storage number don't work!!!\n");
+	return 0;
 }

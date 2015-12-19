@@ -38,6 +38,9 @@ private:
 	int delayCount;
 
 	int maxStorageCount;
+
+
+	int getResultStorageNumber(double time);
 };
 
 #endif /* SRC_PROBLEM_DELAY_H_ */
