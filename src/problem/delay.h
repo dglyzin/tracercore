@@ -40,6 +40,7 @@ private:
 	int maxStorageCount;
 
 
+	int getSourceStorageNumber(double time);
 	int getResultStorageNumber(double time);
 };
 

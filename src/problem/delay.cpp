@@ -79,6 +79,11 @@ double* Delay::getCurrentStatePointer() {
 	return mStepStorage->getStatePointer();
 }
 
+int Delay::getSourceStorageNumber(double time) {
+	printf("\nget source storage number don't work!!!\n");
+	return 0;
+}
+
 int Delay::getResultStorageNumber(double time) {
 	printf("\nget result storage number don't work!!!\n");
 	return 0;
