@@ -153,5 +153,4 @@ bool RK4Storage::isErrorPermissible(double error, int totalDomainElements) {
 
 void getDenseOutput(StepStorage* secondState, double* result) {
 	printf("\nRK4 dense output DON'T WORK!\n");
-	return NULL;
 }
