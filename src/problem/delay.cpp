@@ -37,7 +37,8 @@ double** Delay::getSource(int stage, double time) {
 	mSourceStorage[0] = mStepStorage[sourceStorageNumber]->getStageSource(stage);
 
 	for (int i = 0; i < delayCount; ++i) {
-		//mSourceStorage[i + 1] = mStepStorage[3]->getDenseOutput()
+		int sourceStorageNumberDelay = getSourceStorageNumberDelay(time, i);
+		//mSourceStorage[i + 1] = mStepStorage[3]->getDenseOutput();
 	}
 
 	return mSourceStorage;
@@ -82,6 +83,11 @@ double* Delay::getCurrentStatePointer() {
 
 int Delay::getSourceStorageNumber(double time) {
 	printf("\nget source storage number don't work!!!\n");
+	return 0;
+}
+
+int Delay::getSourceStorageNumberDelay(double time, int delayNumber) {
+	printf("\nget source storage number for delay don't work!!!\n");
 	return 0;
 }
 
