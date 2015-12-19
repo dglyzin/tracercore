@@ -33,7 +33,11 @@ Delay::~Delay() {
 }
 
 double** Delay::getSource(int stage, double time) {
-	mSourceStorage[0] = mStepStorage->getStageSource(stage);
+	//mSourceStorage[0] = some storage->getStageSource(stage);
+
+	for (int i = 0; i < delayCount; ++i) {
+		//mSourceStorage[i + 1] = mStepStorage[3]->getDenseOutput()
+	}
 
 	return mSourceStorage;
 }
