@@ -19,7 +19,7 @@ Delay::Delay(ProcessingUnit* pu, int solverType, int count, double aTol, double 
 
 	delayCount = _delayCount;
 
-	mSourceStorage = new double* [delayCount];
+	mSourceStorage = new double* [delayCount + 1];
 }
 
 Delay::~Delay() {
