@@ -70,6 +70,6 @@ bool EulerStorage::isErrorPermissible(double error, int totalDomainElements) {
 	return true;
 }
 
-void getDenseOutput(StepStorage* secondState, double* result) {
+void EulerStorage::getDenseOutput(StepStorage* secondState, double* result) {
 	printf("\nEuler dense output DON'T WORK!\n");
 }
