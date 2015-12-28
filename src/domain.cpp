@@ -931,7 +931,7 @@ void Domain::printStatisticsInfo(char* inputFile, char* outputFile, double calcT
 	//cout << endl << "PRINT STATISTIC INFO DOESN'T WORK" << endl;
 
 	if( mWorkerRank == 0 ) {
-		int count = 0;©
+		int count = 0;
 		for (int i = 0; i < mBlockCount; ++i) {
 			count += mBlocks[i]->getGridElementCount();
 
