@@ -38,7 +38,8 @@ double** Delay::getSource(int stage, double time) {
 
 	for (int i = 0; i < delayCount; ++i) {
 		int sourceStorageNumberDelay = getSourceStorageNumberDelay(time, i);
-		//mSourceStorage[i + 1] mStepStorage[sourceStorageNumberDelay]->getDenseOutput();
+		int sourceStorageNumberDelayForDenseOutput = getSourceStorageNumberDelayForDenseOutput(time, i);
+		mStepStorage[sourceStorageNumberDelay]->getDenseOutput( mStepStorage[sourceStorageNumberDelayForDenseOutput], mSourceStorage[i+1] );
 	}
 
 	return mSourceStorage;
@@ -96,6 +97,11 @@ int Delay::getSourceStorageNumber(double time) {
 
 int Delay::getSourceStorageNumberDelay(double time, int delayNumber) {
 	printf("\nget source storage number for delay don't work!!!\n");
+	return 0;
+}
+
+int Delay::getSourceStorageNumberDelayForDenseOutput(double time, int delayNumber) {
+	printf("\nget source storage number for delay & for Dense output don't work!!!\n");
 	return 0;
 }
 

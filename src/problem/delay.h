@@ -42,6 +42,7 @@ private:
 
 	int getSourceStorageNumber(double time);
 	int getSourceStorageNumberDelay(double time, int delayNumber);
+	int getSourceStorageNumberDelayForDenseOutput(double time, int delayNumber);
 	int getResultStorageNumber(double time);
 	int getCurrentStorageNumber();
 };
