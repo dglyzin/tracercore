@@ -43,6 +43,7 @@ private:
 	int getSourceStorageNumber(double time);
 	int getSourceStorageNumberDelay(double time, int delayNumber);
 	int getResultStorageNumber(double time);
+	int getCurrentStorageNumber();
 };
 
 #endif /* SRC_PROBLEM_DELAY_H_ */

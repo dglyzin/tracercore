@@ -50,35 +50,43 @@ double* Delay::getResult(int stage, double time) {
 }
 
 void Delay::prepareArgument(ProcessingUnit* pu, int stage, double timestep) {
-	mStepStorage->prepareArgument(pu, stage, timestep);
+	int currentStorageNumber = getCurrentStorageNumber();
+	mStepStorage[currentStorageNumber]->prepareArgument(pu, stage, timestep);
 }
 
 double* Delay::getCurrentStateStageData(int stage) {
-	return mStepStorage->getStageSource(stage);
+	int currentStorageNumber = getCurrentStorageNumber();
+	return mStepStorage[currentStorageNumber]->getStageSource(stage);
 }
 
 double Delay::getStepError(ProcessingUnit* pu, double timestep) {
-	return mStepStorage->getStepError(pu, timestep);
+	int currentStorageNumber = getCurrentStorageNumber();
+	return mStepStorage[currentStorageNumber]->getStepError(pu, timestep);
 }
 
 void Delay::confirmStep(ProcessingUnit* pu, double timestep) {
-	mStepStorage->confirmStep(pu, timestep);
+	int currentStorageNumber = getCurrentStorageNumber();
+	mStepStorage[currentStorageNumber]->confirmStep(pu, timestep);
 }
 
 void Delay::rejectStep(ProcessingUnit* pu, double timestep) {
-	mStepStorage->rejectStep(pu, timestep);
+	int currentStorageNumber = getCurrentStorageNumber();
+	mStepStorage[currentStorageNumber]->rejectStep(pu, timestep);
 }
 
 void Delay::loadData(ProcessingUnit* pu, double* data) {
-	mStepStorage->loadState(pu, data);
+	int currentStorageNumber = getCurrentStorageNumber();
+	mStepStorage[currentStorageNumber]->loadState(pu, data);
 }
 
 void Delay::getCurrentState(ProcessingUnit* pu, double* result) {
-	mStepStorage->copyState(pu, result);
+	int currentStorageNumber = getCurrentStorageNumber();
+	mStepStorage[currentStorageNumber]->copyState(pu, result);
 }
 
 double* Delay::getCurrentStatePointer() {
-	return mStepStorage->getStatePointer();
+	int currentStorageNumber = getCurrentStorageNumber();
+	return mStepStorage[currentStorageNumber]->getStatePointer();
 }
 
 int Delay::getSourceStorageNumber(double time) {
@@ -93,5 +101,10 @@ int Delay::getSourceStorageNumberDelay(double time, int delayNumber) {
 
 int Delay::getResultStorageNumber(double time) {
 	printf("\nget result storage number don't work!!!\n");
+	return 0;
+}
+
+int Delay::getCurrentStorageNumber() {
+	printf("\nget current storage number don't work!!!\n");
 	return 0;
 }
