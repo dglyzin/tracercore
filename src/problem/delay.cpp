@@ -108,8 +108,7 @@ int Delay::getSourceStorageNumberDelayForDenseOutput(double time, int delayNumbe
 }
 
 int Delay::getResultStorageNumber() {
-	printf("\nget result storage number don't work!!!\n");
-	return 0;
+	return ++currentStorageNumber;
 }
 
 int Delay::getCurrentStorageNumber() {
