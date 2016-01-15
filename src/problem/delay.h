@@ -46,7 +46,6 @@ private:
 	int getSourceStorageNumberDelay(double time, int delayNumber);
 	int getSourceStorageNumberDelayForDenseOutput(double time, int delayNumber);
 	int getResultStorageNumber();
-	int getCurrentStorageNumber();
 };
 
 #endif /* SRC_PROBLEM_DELAY_H_ */
