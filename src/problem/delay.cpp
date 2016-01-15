@@ -108,7 +108,7 @@ int Delay::getSourceStorageNumberDelayForDenseOutput(double time, int delayNumbe
 }
 
 int Delay::getResultStorageNumber() {
-	return ++currentStorageNumber;
+	return (++currentStorageNumber) % maxStorageCount;
 }
 
 int Delay::getCurrentStorageNumber() {
