@@ -19,13 +19,13 @@ Ordinary::~Ordinary() {
 	delete mSourceStorage;
 }
 
-double** Ordinary::getSource(int stage, double time) {
+double** Ordinary::getSource(int stage) {
 	mSourceStorage[0] = mStepStorage->getStageSource(stage);
 
 	return mSourceStorage;
 }
 
-double* Ordinary::getResult(int stage, double time) {
+double* Ordinary::getResult(int stage) {
 	return mStepStorage->getStageResult(stage);
 }
 

@@ -116,8 +116,8 @@ ProblemType* RealBlock::createProblem(int problemType, int solverType, double aT
 }
 
 void RealBlock::computeStageBorder(int stage, double time) {
-	double* result = problem->getResult(stage, time);
-	double** source = problem->getSource(stage, time);
+	double* result = problem->getResult(stage);
+	double** source = problem->getSource(stage);
 
 	//printf("\nsource must be double**. => source - &source. Error here\n");
 	//TODO исправить в ProblemType тип возвращаемого значения для getSource
@@ -125,8 +125,8 @@ void RealBlock::computeStageBorder(int stage, double time) {
 }
 
 void RealBlock::computeStageCenter(int stage, double time) {
-	double* result = problem->getResult(stage, time);
-	double** source = problem->getSource(stage, time);
+	double* result = problem->getResult(stage);
+	double** source = problem->getSource(stage);
 
 	//printf("\nsource must be double**. => source - &source. Error here\n");
 	//TODO исправить в ProblemType тип возвращаемого значения для getSource

@@ -34,8 +34,8 @@ Delay::~Delay() {
 	delete mSourceStorage;
 }
 
-double** Delay::getSource(int stage, double time) {
-	int sourceStorageNumber = getSourceStorageNumber(time);
+double** Delay::getSource(int stage) {
+	/*int sourceStorageNumber = getSourceStorageNumber(time);
 	mSourceStorage[0] = mStepStorage[sourceStorageNumber]->getStageSource(stage);
 
 	for (int i = 0; i < delayCount; ++i) {
@@ -44,10 +44,11 @@ double** Delay::getSource(int stage, double time) {
 		mStepStorage[sourceStorageNumberDelay]->getDenseOutput( mStepStorage[sourceStorageNumberDelayForDenseOutput], mSourceStorage[i+1] );
 	}
 
-	return mSourceStorage;
+	return mSourceStorage;*/
+	return NULL;
 }
 
-double* Delay::getResult(int stage, double time) {
+double* Delay::getResult(int stage) {
 	int resultStorageNumber = getResultStorageNumber();
 	return mStepStorage[resultStorageNumber]->getStageResult(stage);
 }

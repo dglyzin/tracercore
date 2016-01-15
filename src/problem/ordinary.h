@@ -15,8 +15,8 @@ public:
 	Ordinary(ProcessingUnit* pu, int solverType, int count, double aTol, double rTol);
 	virtual ~Ordinary();
 
-	double** getSource(int stage, double time);
-	double* getResult(int stage, double time);
+	double** getSource(int stage);
+	double* getResult(int stage);
 
 	void prepareArgument(ProcessingUnit* pu, int stage, double timestep);
 
