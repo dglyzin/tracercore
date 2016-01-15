@@ -39,6 +39,8 @@ private:
 
 	int maxStorageCount;
 
+	int currentStorageNumber;
+
 
 	int getSourceStorageNumber(double time);
 	int getSourceStorageNumberDelay(double time, int delayNumber);
