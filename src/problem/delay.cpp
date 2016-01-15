@@ -48,47 +48,39 @@ double** Delay::getSource(int stage, double time) {
 }
 
 double* Delay::getResult(int stage, double time) {
-	int resultStorageNumber = getResultStorageNumber(time);
+	int resultStorageNumber = getResultStorageNumber();
 	return mStepStorage[resultStorageNumber]->getStageResult(stage);
 }
 
 void Delay::prepareArgument(ProcessingUnit* pu, int stage, double timestep) {
-	int currentStorageNumber = getCurrentStorageNumber();
 	mStepStorage[currentStorageNumber]->prepareArgument(pu, stage, timestep);
 }
 
 double* Delay::getCurrentStateStageData(int stage) {
-	int currentStorageNumber = getCurrentStorageNumber();
 	return mStepStorage[currentStorageNumber]->getStageSource(stage);
 }
 
 double Delay::getStepError(ProcessingUnit* pu, double timestep) {
-	int currentStorageNumber = getCurrentStorageNumber();
 	return mStepStorage[currentStorageNumber]->getStepError(pu, timestep);
 }
 
 void Delay::confirmStep(ProcessingUnit* pu, double timestep) {
-	int currentStorageNumber = getCurrentStorageNumber();
 	mStepStorage[currentStorageNumber]->confirmStep(pu, timestep);
 }
 
 void Delay::rejectStep(ProcessingUnit* pu, double timestep) {
-	int currentStorageNumber = getCurrentStorageNumber();
 	mStepStorage[currentStorageNumber]->rejectStep(pu, timestep);
 }
 
 void Delay::loadData(ProcessingUnit* pu, double* data) {
-	int currentStorageNumber = getCurrentStorageNumber();
 	mStepStorage[currentStorageNumber]->loadState(pu, data);
 }
 
 void Delay::getCurrentState(ProcessingUnit* pu, double* result) {
-	int currentStorageNumber = getCurrentStorageNumber();
 	mStepStorage[currentStorageNumber]->copyState(pu, result);
 }
 
 double* Delay::getCurrentStatePointer() {
-	int currentStorageNumber = getCurrentStorageNumber();
 	return mStepStorage[currentStorageNumber]->getStatePointer();
 }
 
