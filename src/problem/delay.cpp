@@ -67,6 +67,7 @@ double Delay::getStepError(ProcessingUnit* pu, double timestep) {
 
 void Delay::confirmStep(ProcessingUnit* pu, double timestep) {
 	mStepStorage[currentStorageNumber]->confirmStep(pu, timestep);
+	currentStorageNumber = (currentStorageNumber + 1) % maxStorageCount;
 }
 
 void Delay::rejectStep(ProcessingUnit* pu, double timestep) {
@@ -86,8 +87,7 @@ double* Delay::getCurrentStatePointer() {
 }
 
 int Delay::getSourceStorageNumber(double time) {
-	printf("\nget source storage number don't work!!!\n");
-	return 0;
+	return currentStorageNumber = (currentStorageNumber - 1) % maxStorageCount;
 }
 
 int Delay::getSourceStorageNumberDelay(double time, int delayNumber) {
@@ -101,5 +101,5 @@ int Delay::getSourceStorageNumberDelayForDenseOutput(double time, int delayNumbe
 }
 
 int Delay::getResultStorageNumber() {
-	return (++currentStorageNumber) % maxStorageCount;
+	return currentStorageNumber;
 }
