@@ -879,6 +879,7 @@ void Domain::saveStateToFile(char* path) {
 		out.write((char*)&version_minor, SIZE_CHAR);
 
 		out.write((char*)&currentTime, SIZE_DOUBLE);
+		out.write((char*)&timeStep, SIZE_DOUBLE);
 
 		for (int i = 0; i < mBlockCount; ++i) {
 			int count = mBlocks[i]->getGridElementCount();
@@ -907,6 +908,7 @@ void Domain::loadStateFromFile(char* dataFile) {
 	in.read((char*)&version_minor, SIZE_CHAR);
 
 	in.read((char*)&fileCurrentTime, SIZE_DOUBLE);
+	in.read((char*)&timeStep, SIZE_DOUBLE);
 
 	printf("\n%d %d %d %f\n", save_file_code, version_major, version_minor, fileCurrentTime);
 
