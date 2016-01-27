@@ -40,6 +40,8 @@ public:
 
 	virtual void print(int zCount, int yCount, int xCount, int cellSize) { return; }
 
+	virtual double* getDenseOutput(Solver* secondState) { return NULL; }
+
 protected:
     double* mTempStore1;
 

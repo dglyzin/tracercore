@@ -45,3 +45,7 @@ void EulerSolverCpu::print(int zCount, int yCount, int xCount, int cellSize) {
 	printf("mTempStore1: \n");
 	printMatrix(mTempStore1, zCount, yCount, xCount, cellSize);
 }
+
+double* EulerSolverCpu::getDenseOutput(Solver* secondState) {
+	return NULL;
+}

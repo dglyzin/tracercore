@@ -24,6 +24,8 @@ public:
 
 	void print(int zCount, int yCount, int xCount, int cellSize) { std::cout << std::endl << "Solver DP45 GPU print don't work" << std::endl; }
 
+	double* getDenseOutput(Solver* secondState);
+
 private:
 	void prepareFSAL(double timeStep);
 };

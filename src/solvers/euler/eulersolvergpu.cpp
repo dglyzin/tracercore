@@ -33,3 +33,6 @@ void EulerSolverGpu::prepareArgument(int stage, double timeStep) {
 	sumArray(mState, mTempStore1, mTempStore1, mCount);
 }
 
+double* EulerSolverGpu::getDenseOutput(Solver* secondState) {
+	return NULL;
+}

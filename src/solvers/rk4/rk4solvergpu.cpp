@@ -114,3 +114,7 @@ void RK4SolverGpu::prepareArgument(int stage, double timeStep) {
 			break;
 	}
 }
+
+double* RK4SolverGpu::getDenseOutput(Solver* secondState) {
+	return NULL;
+}

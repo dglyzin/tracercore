@@ -21,6 +21,8 @@ public:
 	void prepareArgument(int stage, double timeStep);
 
 	void print(int zCount, int yCount, int xCount, int cellSize) { std::cout << std::endl << "Solver RK4 GPU print don't work" << std::endl; }
+
+	double* getDenseOutput(Solver* secondState);
 };
 
 #endif /* RK4SOLVERGPU_H_ */

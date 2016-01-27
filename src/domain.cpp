@@ -59,6 +59,13 @@ Domain::Domain(int _world_rank, int _world_size, char* inputFile) {
 
 	counterSaveTime = 0;
 
+	dimension = 0;
+
+	cpu = NULL;
+	gpu0 = NULL;
+	gpu1 = NULL;
+	gpu2 = NULL;
+
 	readFromFile(inputFile);
 
 	/*flags = _flags;
@@ -86,7 +93,17 @@ Domain::~Domain() {
 	for (int i = 0; i < mConnectionCount; ++i)
 		delete mInterconnects[i];
 	delete mInterconnects;
+
 	MPI_Comm_free(&mWorkerComm);
+
+	if(cpu)
+		delete cpu;
+	/*if(gpu0)
+		delete gpu0;
+	if(gpu1)
+		delete gpu1;
+	if(gpu2)
+		delete gpu2;*/
 }
 
 double** Domain::collectDataFromNode() {
@@ -99,8 +116,10 @@ double** Domain::collectDataFromNode() {
 	for (int i = 0; i < mBlockCount; ++i) {
 		double* tmp = getBlockCurrentState(i);
 
-	if(mGlobalRank == 0)
-		resultAll[i] = tmp;
+		//printf("\n%d %d %d\n", mWorkerRank, mGlobalRank, i);
+
+		if(mGlobalRank == 0)
+			resultAll[i] = tmp;
 	}
 
 	return resultAll;
@@ -118,6 +137,7 @@ double* Domain::getBlockCurrentState(int number) {
 		else {
 			//if domain 0 is master, then block-getnodenumber = rank in mpicommworld
 			//else this branch will not run
+			//printf("\n### nodeNumber: %d\n", mBlocks[number]->getNodeNumber());
 			MPI_Recv(result, mBlocks[number]->getGridElementCount(), MPI_DOUBLE, mBlocks[number]->getNodeNumber(), 999, MPI_COMM_WORLD, &status);
 		}
 
@@ -125,6 +145,7 @@ double* Domain::getBlockCurrentState(int number) {
 	}
 	else {
 		if(mBlocks[number]->isRealBlock()) {
+			//printf("\n\n*** %d %d\n\n", number, mWorkerRank);
 			result = new double [mBlocks[number]->getGridElementCount()];
 			mBlocks[number]->getCurrentState(result);
 			//we send to global 0 no matter it is above ^^ or in python
@@ -290,6 +311,7 @@ void Domain::nextStep() {
 void Domain::prepareDeviceData(int deviceType, int deviceNumber, int stage) {
 	for (int i = 0; i < mBlockCount; ++i)
 		if( mBlocks[i]->getBlockType() == deviceType && mBlocks[i]->getDeviceNumber() == deviceNumber ) {
+			//printf("\nSuccses\n");
 			mBlocks[i]->prepareStageData(stage);
 		}
 }
@@ -322,7 +344,7 @@ double Domain::getDeviceError(int deviceType, int deviceNumber) {
 	for (int i = 0; i < mBlockCount; ++i)
         if( mBlocks[i]->getBlockType() == deviceType && mBlocks[i]->getDeviceNumber() == deviceNumber ) {
         	//cout << endl << "ERROR! PROCESS DEVICE!" << endl;
-		    error+=mBlocks[i]->getSolverStepError(timeStep);
+		    error+=mBlocks[i]->getStepError(timeStep);
 		}
 	return error;
 }
@@ -331,50 +353,50 @@ double Domain::getDeviceError(int deviceType, int deviceNumber) {
 
 void Domain::prepareData(int stage) {
 #pragma omp task
-	prepareDeviceData(GPU, 0, stage);
+	prepareDeviceData(GPU_UNIT, 0, stage);
 #pragma omp task
-	prepareDeviceData(GPU, 1, stage);
+	prepareDeviceData(GPU_UNIT, 1, stage);
 #pragma omp task
-	prepareDeviceData(GPU, 2, stage);
+	prepareDeviceData(GPU_UNIT, 2, stage);
 
-	prepareDeviceData(CPU, 0, stage);
+	prepareDeviceData(CPU_UNIT, 0, stage);
 
 #pragma omp taskwait
 }
 
 void Domain::computeOneStepBorder(int stage) {
 #pragma omp task
-	processDeviceBlocksBorder(GPU, 0, stage);
+	processDeviceBlocksBorder(GPU_UNIT, 0, stage);
 #pragma omp task
-	processDeviceBlocksBorder(GPU, 1, stage);
+	processDeviceBlocksBorder(GPU_UNIT, 1, stage);
 #pragma omp task
-	processDeviceBlocksBorder(GPU, 2, stage);
+	processDeviceBlocksBorder(GPU_UNIT, 2, stage);
 
-	processDeviceBlocksBorder(CPU, 0, stage);
+	processDeviceBlocksBorder(CPU_UNIT, 0, stage);
 }
 
 void Domain::prepareNextStageArgument(int stage) {
 #pragma omp task
-	prepareDeviceArgument(GPU, 0, stage);
+	prepareDeviceArgument(GPU_UNIT, 0, stage);
 #pragma omp task
-	prepareDeviceArgument(GPU, 1, stage);
+	prepareDeviceArgument(GPU_UNIT, 1, stage);
 #pragma omp task
-	prepareDeviceArgument(GPU, 2, stage);
+	prepareDeviceArgument(GPU_UNIT, 2, stage);
 
-	prepareDeviceArgument(CPU, 0, stage);
+	prepareDeviceArgument(CPU_UNIT, 0, stage);
 }
 
 
 
 void Domain::computeOneStepCenter(int stage) {
 #pragma omp task
-	processDeviceBlocksCenter(GPU, 0, stage);
+	processDeviceBlocksCenter(GPU_UNIT, 0, stage);
 #pragma omp task
-	processDeviceBlocksCenter(GPU, 1, stage);
+	processDeviceBlocksCenter(GPU_UNIT, 1, stage);
 #pragma omp task
-	processDeviceBlocksCenter(GPU, 2, stage);
+	processDeviceBlocksCenter(GPU_UNIT, 2, stage);
 
-	processDeviceBlocksCenter(CPU, 0, stage);
+	processDeviceBlocksCenter(CPU_UNIT, 0, stage);
 }
 
 
@@ -420,7 +442,8 @@ double Domain::collectError() {
 
 void Domain::printBlocksToConsole() {
 	for (int i = 0; i < mBlockCount; ++i) {
-		mBlocks[i]->print();
+		if (mBlocks[i]->isRealBlock())
+			mBlocks[i]->printToConsole();
 	}
 }
 
@@ -433,10 +456,9 @@ void Domain::readFromFile(char* path) {
 	readSaveInterval(in);
 	readGridSteps(in);
 
-	int dimension;
-
 	in.read((char*)&dimension, SIZE_INT);
-    //printf("DIM = %d \n\n", dimension);
+	createProcessigUnit();
+
 	readCellAndHaloSize(in);
 	readSolverIndex(in);
 	readSolverTolerance(in);
@@ -444,16 +466,16 @@ void Domain::readFromFile(char* path) {
 
 	switch (mSolverIndex) {
 		case EULER:
-			mSolverInfo = new EulerSolver();
+			mSolverInfo = new EulerStorage();
 			break;
 		case RK4:
-			mSolverInfo = new RK4Solver();
+			mSolverInfo = new RK4Storage();
 			break;
 		case DP45:
-			mSolverInfo = new DP45Solver();
+			mSolverInfo = new DP45Storage();
 			break;
 		default:
-			mSolverInfo = new EulerSolver();
+			mSolverInfo = new EulerStorage();
 			break;
 	}
 
@@ -461,12 +483,8 @@ void Domain::readFromFile(char* path) {
 
 	mBlocks = new Block* [mBlockCount];
 
-	//printf ("DEBUG reading blocks.\n ");
-
 	for (int i = 0; i < mBlockCount; ++i)
 		mBlocks[i] = readBlock(in, i, dimension);
-
-	//printf ("DEBUG blocks read.\n ");
 
 	readConnectionCount(in);
 
@@ -475,9 +493,9 @@ void Domain::readFromFile(char* path) {
 	for (int i = 0; i < mConnectionCount; ++i)
 		mInterconnects[i] = readConnection(in);
 
-
 	for (int i = 0; i < mBlockCount; ++i)
 		mBlocks[i]->moveTempBorderVectorToBorderArray();
+
 
 	totalGridNodeCount = getGridNodeCount();
 	totalGridElementCount = getGridElementCount();
@@ -537,7 +555,7 @@ void Domain::readCellAndHaloSize(ifstream& in) {
 
 void Domain::readSolverIndex(std::ifstream& in){
 	in.read((char*)&mSolverIndex, SIZE_INT);
-	cout << "Solver index:  " << mSolverIndex << endl;
+	//cout << "Solver index:  " << mSolverIndex << endl;
 }
 
 void Domain::readSolverTolerance(std::ifstream& in){
@@ -575,6 +593,7 @@ void Domain::readConnectionCount(ifstream& in) {
  */
 Block* Domain::readBlock(ifstream& in, int idx, int dimension) {
 	Block* resBlock;
+
 	int node;
 	int deviceType;
 	int deviceNumber;
@@ -586,6 +605,7 @@ Block* Domain::readBlock(ifstream& in, int idx, int dimension) {
 	offset[0] = offset[1] = offset[2] = 0;
 
 	int total = 1;
+
 
 	in.read((char*)&node, SIZE_INT);
 	in.read((char*)&deviceType, SIZE_INT);
@@ -633,41 +653,35 @@ Block* Domain::readBlock(ifstream& in, int idx, int dimension) {
 	cout << endl;*/
 
 	if(node == mWorkerRank){
+		ProcessingUnit* pu = NULL;
+
 		if (deviceType==0)  //CPU BLOCK
-			switch (dimension) {
-				case 1:
-					resBlock = new BlockCpu1d(idx, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize, initFuncNumber, compFuncNumber, mSolverIndex, mAtol, mRtol);
-					break;
-
-				case 2:
-					resBlock = new BlockCpu2d(idx, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize, initFuncNumber, compFuncNumber, mSolverIndex, mAtol, mRtol);
-					break;
-
-				case 3:
-					resBlock = new BlockCpu3d(idx, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize, initFuncNumber, compFuncNumber, mSolverIndex, mAtol, mRtol);
+			switch (deviceNumber) {
+				case 0:
+					pu = cpu;
 					break;
 
 				default:
-					printf("Invalid block dimension!\n");
+					printf("Invalid block device number for CPU!\n");
 					assert(false);
 					break;
 			}
 		else if (deviceType==1) //GPU BLOCK
-			switch (dimension) {
+			switch (deviceNumber) {
+				case 0:
+					pu = gpu0;
+					break;
+
 				case 1:
-					resBlock = new BlockGpu1d(idx, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize, initFuncNumber, compFuncNumber, mSolverIndex, mAtol, mRtol);
+					pu = gpu0;
 					break;
 
 				case 2:
-					resBlock = new BlockGpu2d(idx, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize, initFuncNumber, compFuncNumber, mSolverIndex, mAtol, mRtol);
-					break;
-
-				case 3:
-					resBlock = new BlockGpu3d(idx, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize, initFuncNumber, compFuncNumber, mSolverIndex, mAtol, mRtol);
+					pu = gpu1;
 					break;
 
 				default:
-					printf("Invalid block dimension!\n");
+					printf("Invalid block device number for GPU!\n");
 					assert(false);
 					break;
 			}
@@ -675,9 +689,19 @@ Block* Domain::readBlock(ifstream& in, int idx, int dimension) {
 			printf("Invalid block type!\n");
 			assert(false);
 		}
+
+		printf("\nPROBLEM TYPE ALWAYS = ORDINARY!!!\n");
+
+		resBlock = new RealBlock(node, dimension,
+				count[0], count[1], count[2],
+				offset[0], offset[1], offset[2],
+				mCellSize, mHaloSize,
+				idx, pu, initFuncNumber, compFuncNumber,
+				ORDINARY, mSolverIndex, mAtol, mRtol);
 	}
 	else {
-		resBlock =  new BlockNull(idx, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize);
+		//resBlock =  new BlockNull(idx, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize);
+		resBlock = new NullBlock(node, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], mCellSize, mHaloSize);
 	}
 
 	delete initFuncNumber;
@@ -709,7 +733,7 @@ Interconnect* Domain::readConnection(ifstream& in) {
 	offsetDestination[0] = offsetDestination[1] = 0;
 
 	in.read((char*)&dimension, SIZE_INT);
-	cout << endl;
+	//cout << endl;
 	//cout << "Interconnect #<NONE>" << endl;
 
 	for (int j = 2-dimension; j < 2; ++j) {
@@ -747,6 +771,10 @@ Interconnect* Domain::readConnection(ifstream& in) {
 	int borderLength = length[0] * length[1] * mCellSize * mHaloSize;
 
 	//cout << endl << "ERROR sorceData = destinationData = NULL!!!" << endl;
+
+	delete length;
+	delete offsetSource;
+	delete offsetDestination;
 
 	return new Interconnect(sourceNode, destinationNode, borderLength, sourceData, destinationData, &mWorkerComm);
 }
@@ -827,6 +855,7 @@ void Domain::saveState(char* inputFile) {
 	int length = lastChar(inputFile, '/');
 
 	strncpy(saveFile, inputFile, length);
+
 	saveFile[ length ] = 0;
 
 	sprintf(saveFile, "%s%s%f%s", saveFile, "/project-", currentTime, ".bin");
@@ -908,10 +937,8 @@ void Domain::printStatisticsInfo(char* inputFile, char* outputFile, double calcT
 		for (int i = 0; i < mBlockCount; ++i) {
 			count += mBlocks[i]->getGridElementCount();
 
-			mBlocks[i]->printGeneralInformation();
+			//mBlocks[i]->printGeneralInformation();
 		}
-
-
 
 		printf("\n\nSteps accepted: %d\nSteps rejected: %d\n", mAcceptedStepCount, mRejectedStepCount);
 		int stepCount = mRejectedStepCount + mAcceptedStepCount;
@@ -1005,12 +1032,32 @@ bool Domain::isNan() {
 	return false;
 }
 
+int Domain::getMaximumNumberSavedStates() {
+	return 0;
+}
+
 void Domain::checkOptions(int flags, double _stopTime, char* saveFile) {
 	if( flags & TIME_EXECUTION )
 		setStopTime(_stopTime);
 
 	if( flags & LOAD_FILE )
 		loadStateFromFile(saveFile);
+}
+
+void Domain::createProcessigUnit() {
+	switch (dimension) {
+		case 1:
+			cpu = new CPU_1d(0);
+			break;
+		case 2:
+			cpu = new CPU_2d(0);
+			break;
+		case 3:
+			cpu = new CPU_3d(0);
+			break;
+		default:
+			break;
+	}
 }
 
 /*

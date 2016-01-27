@@ -21,6 +21,8 @@ public:
 	void prepareArgument(int stage, double timeStep);
 
 	void print(int zCount, int yCount, int xCount, int cellSize) { std::cout << std::endl << "Solver Euler GPU print don't work" << std::endl; }
+
+	double* getDenseOutput(Solver* secondState);
 };
 
 #endif /* SRC_SOLVERS_EULERSOLVERGPU_H_ */

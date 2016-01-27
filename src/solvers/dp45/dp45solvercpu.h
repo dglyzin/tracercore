@@ -24,6 +24,8 @@ public:
 
 	void print(int zCount, int yCount, int xCount, int cellSize);
 
+	double* getDenseOutput(Solver* secondState);
+
 private:
 	void prepareFSAL(double timeStep);
 };

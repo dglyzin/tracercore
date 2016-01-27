@@ -12,19 +12,23 @@
 #include <string.h>
 #include <mpi.h>
 
-#include "blocks/cpu/blockcpu1d.h"
-#include "blocks/cpu/blockcpu2d.h"
-#include "blocks/cpu/blockcpu3d.h"
+/*#include "blocks_old/blocknull.h"
+#include "blocks_old/cpu/blockcpu1d.h"
+#include "blocks_old/cpu/blockcpu2d.h"
+#include "blocks_old/cpu/blockcpu3d.h"
+#include "blocks_old/gpu/blockgpu1d.h"
+#include "blocks_old/gpu/blockgpu2d.h"
+#include "blocks_old/gpu/blockgpu3d.h"*/
 
-#include "blocks/gpu/blockgpu1d.h"
-#include "blocks/gpu/blockgpu2d.h"
-#include "blocks/gpu/blockgpu3d.h"
-
-#include "blocks/blocknull.h"
-
+#include "blocks/realblock.h"
+#include "blocks/nullblock.h"
 
 #include "interconnect.h"
-#include "solvers/solver.h"
+
+#include "processingunit/cpu/cpu1d.h"
+#include "processingunit/cpu/cpu2d.h"
+#include "processingunit/cpu/cpu3d.h"
+//#include "solvers/solver.h"
 //#include "dbconnector.h"
 
 /*
@@ -98,6 +102,10 @@ public:
 	void checkOptions(int flags, double _stopTime, char* saveFile);
 
 private:
+	ProcessingUnit* cpu;
+	ProcessingUnit* gpu0;
+	ProcessingUnit* gpu1;
+	ProcessingUnit* gpu2;
 	/*
 	 * Массив блоков.
 	 * Массив указателей на блоки.
@@ -125,7 +133,7 @@ private:
 	/*
 	 * Структура данных, возвращающая основные параметры солвера
 	 */
-	Solver* mSolverInfo;
+	StepStorage* mSolverInfo;
     double mAtol; //solver absolute tolerance
     double mRtol; //solver relative tolerance
 
@@ -168,6 +176,8 @@ private:
 	 * Вся область - прямоугольник, внутри которого гарантирвано размещаются все блоки.
 	 */
 
+	int dimension;
+
 	int flags;
 
 	int mStepCount;
@@ -197,6 +207,8 @@ private:
 	int totalGridElementCount;
 
 	MPI_Status status;
+
+	//Solver* mPreviousState;
 
 	void loadStateFromFile(char* dataFile);
 	void setStopTime(double _stopTime) { stopTime = _stopTime; }
@@ -246,6 +258,10 @@ private:
 
 	void confirmStep();
 	void rejectStep();
+
+	int getMaximumNumberSavedStates();
+
+	void createProcessigUnit();
 
 	/*
 	 * Database status manipulations
