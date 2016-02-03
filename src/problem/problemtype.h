@@ -36,6 +36,9 @@ public:
 
 	virtual double* getCurrentStatePointer() = 0;
 
+	virtual double* saveState(char* path) = 0;
+	virtual double* loadState(char* path) = 0;
+
 protected:
 	StepStorage* createStageStorage(ProcessingUnit* pu, int solverType, int count, double aTol, double rTol);
 
