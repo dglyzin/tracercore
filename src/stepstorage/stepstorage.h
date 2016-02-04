@@ -23,8 +23,11 @@ public:
 
     void copyState(ProcessingUnit* pu, double* result);
 
-    void save(ProcessingUnit* pu, char* path);
-    void load(ProcessingUnit* pu, char* path);
+    void saveState(ProcessingUnit* pu, char* path);
+    void loadState(ProcessingUnit* pu, char* path);
+
+	void saveStateWithTempStore(ProcessingUnit* pu, char* path);
+    void loadStateWithTempStore(ProcessingUnit* pu, char* path);
 
     double* getStatePointer() { return mState; }
 
