@@ -31,21 +31,28 @@ void StepStorage::copyState(ProcessingUnit* pu, double* result) {
 	pu->copyArray(mState, result, mCount);
 }
 
-void StepStorage::saveState(ProcessingUnit* pu, char* path) {
-	saveMState(pu, path);
+void StepStorage::saveState(ProcessingUnit* pu, std::ofstream& out) {
+	saveMState(pu, out);
 }
 
-void StepStorage::loadState(ProcessingUnit* pu, char* path) {
-	loadMState(pu, path);
+void StepStorage::loadState(ProcessingUnit* pu, std::ifstream& in) {
+	loadMState(pu, in);
 }
 
-void StepStorage::saveStateWithTempStore(ProcessingUnit* pu, char* path) {
-	saveMState(pu, path);
-	saveMTempStores(pu, path);
+void StepStorage::saveStateWithTempStore(ProcessingUnit* pu, std::ofstream& out) {
+	saveMState(pu, out);
+	saveMTempStores(pu, out);
 }
 
-void StepStorage::loadStateWithTempStore(ProcessingUnit* pu, char* path) {
-	loadMState(pu, path);
-	loadMTempStores(pu, path);
+void StepStorage::loadStateWithTempStore(ProcessingUnit* pu, std::ifstream& in) {
+	loadMState(pu, in);
+	loadMTempStores(pu, in);
 }
 
+void StepStorage::saveMState(ProcessingUnit* pu, std::ofstream& out) {
+	double* toSave = new double [mCount];
+
+	pu->copyArray(mState, toSave, mCount);
+
+	out.write((char*), SIZE_DOUBLE * count);
+}
