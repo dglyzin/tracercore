@@ -60,7 +60,10 @@ protected:
   	double rTol;
 
   	void saveMState(ProcessingUnit* pu, char* path);
+  	void loadMState(ProcessingUnit* pu, char* path);
+
   	virtual void saveMTempStores(ProcessingUnit* pu, char* path) = 0;
+  	virtual void loadMTempStores(ProcessingUnit* pu, char* path) = 0;
 };
 
 #endif /* SRC_STEPSTORAGE_STEPSTORAGE_H_ */
