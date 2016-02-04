@@ -54,5 +54,7 @@ void StepStorage::saveMState(ProcessingUnit* pu, std::ofstream& out) {
 
 	pu->copyArray(mState, toSave, mCount);
 
-	out.write((char*), SIZE_DOUBLE * count);
+	out.write((char*)toSave, SIZE_DOUBLE * mCount);
+
+	delete toSave;
 }
