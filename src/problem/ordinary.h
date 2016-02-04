@@ -32,6 +32,9 @@ public:
 
 	double* getCurrentStatePointer();
 
+	void saveState(char* path);
+	void loadState(char* path);
+
 private:
 	StepStorage* mStepStorage;
 };

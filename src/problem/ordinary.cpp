@@ -60,3 +60,12 @@ void Ordinary::getCurrentState(ProcessingUnit* pu, double* result) {
 double* Ordinary::getCurrentStatePointer() {
 	return mStepStorage->getStatePointer();
 }
+
+void Ordinary::saveState(ProcessingUnit* pu, char* path) {
+	int count;
+	double* tmpState = new double [count];
+	mStepStorage->copyState();
+
+	out.write((char*), SIZE_DOUBLE * count);
+	delete tmpState;
+}
