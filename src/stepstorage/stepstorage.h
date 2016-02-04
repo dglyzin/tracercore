@@ -26,7 +26,7 @@ public:
     virtual void save(ProcessingUnit* pu, char* path) = 0;
     virtual void load(ProcessingUnit* pu, char* path) = 0;
 
-    double* getStatePointer() { return mState;}
+    double* getStatePointer() { return mState; }
 
     virtual double* getStageSource(int stage) = 0;
     virtual double* getStageResult(int stage) = 0;
