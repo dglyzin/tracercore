@@ -12,6 +12,8 @@
 
 #include <cassert>
 
+#include <fstream>
+
 #include "../processingunit/processingunit.h"
 #include "../enums.h"
 
@@ -23,11 +25,11 @@ public:
 
     void copyState(ProcessingUnit* pu, double* result);
 
-    void saveState(ProcessingUnit* pu, char* path);
-    void loadState(ProcessingUnit* pu, char* path);
+    void saveState(ProcessingUnit* pu, std::ofstream& out);
+    void loadState(ProcessingUnit* pu, std::ifstream& in);
 
-	void saveStateWithTempStore(ProcessingUnit* pu, char* path);
-    void loadStateWithTempStore(ProcessingUnit* pu, char* path);
+	void saveStateWithTempStore(ProcessingUnit* pu, std::ofstream& out);
+    void loadStateWithTempStore(ProcessingUnit* pu, std::ifstream& in);
 
     double* getStatePointer() { return mState; }
 
@@ -59,11 +61,11 @@ protected:
   	double aTol;
   	double rTol;
 
-  	void saveMState(ProcessingUnit* pu, char* path);
-  	void loadMState(ProcessingUnit* pu, char* path);
+  	void saveMState(ProcessingUnit* pu, std::ofstream& out);
+  	void loadMState(ProcessingUnit* pu, std::ifstream& in);
 
-  	virtual void saveMTempStores(ProcessingUnit* pu, char* path) = 0;
-  	virtual void loadMTempStores(ProcessingUnit* pu, char* path) = 0;
+  	virtual void saveMTempStores(ProcessingUnit* pu, std::ofstream& out) = 0;
+  	virtual void loadMTempStores(ProcessingUnit* pu, std::ifstream& in) = 0;
 };
 
 #endif /* SRC_STEPSTORAGE_STEPSTORAGE_H_ */
