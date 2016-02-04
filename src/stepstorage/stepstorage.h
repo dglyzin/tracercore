@@ -58,6 +58,9 @@ protected:
 
   	double aTol;
   	double rTol;
+
+  	void saveMState(ProcessingUnit* pu, char* path);
+  	virtual void saveMTempStores(ProcessingUnit* pu, char* path) = 0;
 };
 
 #endif /* SRC_STEPSTORAGE_STEPSTORAGE_H_ */
