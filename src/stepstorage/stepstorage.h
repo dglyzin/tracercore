@@ -22,7 +22,9 @@ public:
 	virtual ~StepStorage();
 
     void copyState(ProcessingUnit* pu, double* result);
-    void loadState(ProcessingUnit* pu, double* data);
+
+    virtual void save(ProcessingUnit* pu, char* path) = 0;
+    virtual void load(ProcessingUnit* pu, char* path) = 0;
 
     double* getStatePointer() { return mState;}
 
