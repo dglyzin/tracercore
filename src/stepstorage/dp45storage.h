@@ -65,6 +65,9 @@ private:
     static const double facmin=0.5, facmax = 2, fac = 0.9;
 
     void prepareFSAL(ProcessingUnit* pu, double timestep);
+
+	void saveMTempStores(ProcessingUnit* pu, std::ofstream& out);
+	void loadMTempStores(ProcessingUnit* pu, std::ifstream& in);
 };
 
 #endif /* SRC_STEPSTORAGE_DP45STORAGE_H_ */
