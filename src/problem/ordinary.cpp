@@ -7,6 +7,8 @@
 
 #include "ordinary.h"
 
+using namespace std;
+
 Ordinary::Ordinary(ProcessingUnit* pu, int solverType, int count, double aTol, double rTol) {
 	mStepStorage = createStageStorage(pu, solverType, count, aTol, rTol);
 
@@ -50,7 +52,7 @@ void Ordinary::rejectStep(ProcessingUnit* pu, double timestep) {
 }
 
 void Ordinary::loadData(ProcessingUnit* pu, double* data) {
-	mStepStorage->loadState(pu, data);
+	//mStepStorage->loadState(pu, data);
 }
 
 void Ordinary::getCurrentState(ProcessingUnit* pu, double* result) {
@@ -61,11 +63,10 @@ double* Ordinary::getCurrentStatePointer() {
 	return mStepStorage->getStatePointer();
 }
 
-void Ordinary::saveState(ProcessingUnit* pu, char* path) {
-	int count;
-	double* tmpState = new double [count];
-	mStepStorage->copyState();
+void Ordinary::saveState(ProcessingUnit* pu, ofstream& out) {
+	mStepStorage->saveState(pu, out);
+}
 
-	out.write((char*), SIZE_DOUBLE * count);
-	delete tmpState;
+void Ordinary::loadState(ProcessingUnit* pu, ifstream& in) {
+	mStepStorage->loadState(pu, in);
 }
