@@ -34,6 +34,24 @@ Delay::~Delay() {
 	delete mSourceStorage;
 }
 
+int Delay::getSourceStorageNumber(double time) {
+	return currentStorageNumber = (currentStorageNumber - 1) % maxStorageCount;
+}
+
+int Delay::getSourceStorageNumberDelay(double time, int delayNumber) {
+	printf("\nget source storage number for delay don't work!!!\n");
+	return 0;
+}
+
+int Delay::getSourceStorageNumberDelayForDenseOutput(double time, int delayNumber) {
+	printf("\nget source storage number for delay & for Dense output don't work!!!\n");
+	return 0;
+}
+
+int Delay::getResultStorageNumber() {
+	return currentStorageNumber;
+}
+
 double** Delay::getSource(int stage) {
 	/*int sourceStorageNumber = getSourceStorageNumber(time);
 	mSourceStorage[0] = mStepStorage[sourceStorageNumber]->getStageSource(stage);
@@ -84,22 +102,4 @@ void Delay::getCurrentState(ProcessingUnit* pu, double* result) {
 
 double* Delay::getCurrentStatePointer() {
 	return mStepStorage[currentStorageNumber]->getStatePointer();
-}
-
-int Delay::getSourceStorageNumber(double time) {
-	return currentStorageNumber = (currentStorageNumber - 1) % maxStorageCount;
-}
-
-int Delay::getSourceStorageNumberDelay(double time, int delayNumber) {
-	printf("\nget source storage number for delay don't work!!!\n");
-	return 0;
-}
-
-int Delay::getSourceStorageNumberDelayForDenseOutput(double time, int delayNumber) {
-	printf("\nget source storage number for delay & for Dense output don't work!!!\n");
-	return 0;
-}
-
-int Delay::getResultStorageNumber() {
-	return currentStorageNumber;
 }
