@@ -29,6 +29,24 @@ RK4Storage::~RK4Storage() {
 	// TODO Auto-generated destructor stub
 }
 
+void RK4Storage::saveMTempStores(ProcessingUnit* pu, std::ofstream& out) {
+	pu->saveArray(mTempStore1, mCount, out);
+	pu->saveArray(mTempStore2, mCount, out);
+	pu->saveArray(mTempStore3, mCount, out);
+	pu->saveArray(mTempStore4, mCount, out);
+
+	pu->saveArray(mArg, mCount, out);
+}
+
+void RK4Storage::loadMTempStores(ProcessingUnit* pu, std::ifstream& in) {
+	pu->loadArray(mTempStore1, mCount, in);
+	pu->loadArray(mTempStore2, mCount, in);
+	pu->loadArray(mTempStore3, mCount, in);
+	pu->loadArray(mTempStore4, mCount, in);
+
+	pu->loadArray(mArg, mCount, in);
+}
+
 double* RK4Storage::getStageSource(int stage) {
 	switch (stage) {
 		case 0:
