@@ -39,6 +39,9 @@ public:
 
 private:
 	double* mTempStore1;
+
+	void saveMTempStores(ProcessingUnit* pu, std::ofstream& out);
+	void loadMTempStores(ProcessingUnit* pu, std::ifstream& in);
 };
 
 #endif /* SRC_STEPSTORAGE_EULERSTORAGE_H_ */
