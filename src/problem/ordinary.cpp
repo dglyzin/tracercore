@@ -53,6 +53,7 @@ void Ordinary::rejectStep(ProcessingUnit* pu, double timestep) {
 
 void Ordinary::loadData(ProcessingUnit* pu, double* data) {
 	//mStepStorage->loadState(pu, data);
+	printf("\nLOAD DATA ORDINARY DEPRICATED!!!\n");
 }
 
 void Ordinary::getCurrentState(ProcessingUnit* pu, double* result) {
