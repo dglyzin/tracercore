@@ -29,7 +29,8 @@ public:
 	bool isCPU();
 	bool isGPU();
 
-
+// TODO в protected?
+	// ********************************************************************************
 	double* getDoubleArray(int size);
 	double** getDoublePointerArray(int size);
 
@@ -46,6 +47,8 @@ public:
 	void deallocDeviceSpecificArray(int** toDelete);
 
 	void deallocDeviceSpecificArray(unsigned short int* toDelete);
+
+	// ********************************************************************************
 
 
 	void copyArray(double* source, double* destination, int size);
