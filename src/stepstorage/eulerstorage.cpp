@@ -19,6 +19,14 @@ EulerStorage::~EulerStorage() {
 	// TODO Auto-generated destructor stub
 }
 
+void EulerStorage::saveMTempStores(ProcessingUnit* pu, std::ofstream& out) {
+	pu->saveArray(mTempStore1, mCount, out);
+}
+
+void EulerStorage::loadMTempStores(ProcessingUnit* pu, std::ifstream& in) {
+	pu->loadArray(mTempStore1, mCount, in);
+}
+
 double* EulerStorage::getStageSource(int stahe) {
 	return mState;
 }
@@ -72,12 +80,4 @@ bool EulerStorage::isErrorPermissible(double error, int totalDomainElements) {
 
 void EulerStorage::getDenseOutput(StepStorage* secondState, double* result) {
 	printf("\nEuler dense output DON'T WORK!\n");
-}
-
-void EulerStorage::saveMTempStores(ProcessingUnit* pu, std::ofstream& out) {
-	pu->saveArray(mTempStore1, mCount, out);
-}
-
-void EulerStorage::loadMTempStores(ProcessingUnit* pu, std::ifstream& in) {
-	pu->loadArray(mTempStore1, mCount, in);
 }
