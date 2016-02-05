@@ -7,6 +7,8 @@
 
 #include "delay.h"
 
+using namespace std;
+
 Delay::Delay(ProcessingUnit* pu, int solverType, int count, double aTol, double rTol, int _delayCount) {
 	//TODO fix!!! реализация функции для ProcessingUnit!!!
 	maxStorageCount = 1;
@@ -102,4 +104,12 @@ void Delay::getCurrentState(ProcessingUnit* pu, double* result) {
 
 double* Delay::getCurrentStatePointer() {
 	return mStepStorage[currentStorageNumber]->getStatePointer();
+}
+
+void Delay::saveState(ProcessingUnit* pu, ofstream& out) {
+	//mStepStorage->saveState(pu, out);
+}
+
+void Delay::loadState(ProcessingUnit* pu, ifstream& in) {
+	//mStepStorage->loadState(pu, in);
 }
