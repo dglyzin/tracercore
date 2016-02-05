@@ -59,10 +59,10 @@ void StepStorage::saveMState(ProcessingUnit* pu, std::ofstream& out) {
 	delete toSave;
 }
 
-void StepStorage::loadMState(ProcessingUnit* pu, std::ifstream& out) {
+void StepStorage::loadMState(ProcessingUnit* pu, std::ifstream& in) {
 	double* toLoad = new double [mCount];
 
-	out.read((char*)toLoad, SIZE_DOUBLE * mCount);
+	in.read((char*)toLoad, SIZE_DOUBLE * mCount);
 
 	pu->copyArray(toLoad, mState, mCount);
 
