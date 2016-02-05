@@ -63,8 +63,8 @@ public:
 	void multiplyArraysElementwise(double* result, double* arg1, double* arg2, int size);
 
 
-	void saveArray(double* array, std::ofstream& out);
-	void loadArray(double* array, std::ifstream& in);
+	void saveArray(double* array, int size, std::ofstream& out);
+	void loadArray(double* array, int size, std::ifstream& in);
 };
 
 #endif /* SRC_PROCESSINGUNIT_CPU_CPU_H_ */
