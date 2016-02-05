@@ -44,6 +44,9 @@ public:
 	virtual void loadData(double* data) = 0;
 	virtual void getCurrentState(double* result) = 0;
 
+	virtual void saveState(std::ofstream& out) = 0;
+	virtual void loadState(std::ifstream& in) = 0;
+
 	int getGridNodeCount();
 	int getGridElementCount();
 
