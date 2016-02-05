@@ -32,6 +32,9 @@ public:
 
 	double* getCurrentStatePointer();
 
+	void saveState(ProcessingUnit* pu, std::ofstream& out);
+	void loadState(ProcessingUnit* pu, std::ifstream& in);
+
 private:
 	StepStorage** mStepStorage;
 
