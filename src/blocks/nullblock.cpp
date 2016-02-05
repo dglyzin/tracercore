@@ -7,6 +7,8 @@
 
 #include "nullblock.h"
 
+using namespace std;
+
 NullBlock::NullBlock(int _nodeNumber, int _dimension, int _xCount, int _yCount, int _zCount, int _xOffset, int _yOffset, int _zOffset, int _cellSize, int _haloSize) :
 		Block(_nodeNumber, _dimension, _xCount, _yCount, _zCount, _xOffset, _yOffset, _zOffset, _cellSize, _haloSize){
 }
@@ -79,5 +81,13 @@ void NullBlock::loadData(double* data) {
 }
 
 void NullBlock::getCurrentState(double* result) {
+	return;
+}
+
+void NullBlock::saveState(ofstream& out) {
+	return;
+}
+
+void NullBlock::loadState(ifstream& in) {
 	return;
 }
