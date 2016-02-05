@@ -57,6 +57,9 @@ public:
 	void loadData(double* data);
 	void getCurrentState(double* result);
 
+	void saveState(std::ofstream& out);
+	void loadState(std::ifstream& in);
+
 private:
 	ProcessingUnit* pu;
 

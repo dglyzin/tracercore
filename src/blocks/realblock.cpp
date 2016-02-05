@@ -7,6 +7,8 @@
 
 #include "realblock.h"
 
+using namespace std;
+
 RealBlock::RealBlock(int _nodeNumber, int _dimension,
 		int _xCount, int _yCount, int _zCount,
 		int _xOffset, int _yOffset, int _zOffset,
@@ -324,4 +326,12 @@ void RealBlock::loadData(double* data) {
 
 void RealBlock::getCurrentState(double* result) {
 	problem->getCurrentState(pu, result);
+}
+
+void RealBlock::saveState(ofstream& out) {
+	problem->saveState(pu, out);
+}
+
+void RealBlock::loadState(ifstream& in) {
+	problem->loadState(pu, in);
 }
