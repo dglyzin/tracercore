@@ -27,6 +27,14 @@ StepStorage::~StepStorage() {
 	// TODO Auto-generated destructor stub
 }
 
+void StepStorage::saveMState(ProcessingUnit* pu, std::ofstream& out) {
+	pu->saveArray(mState, mCount, out);
+}
+
+void StepStorage::loadMState(ProcessingUnit* pu, std::ifstream& in) {
+	pu->loadArray(mState, mCount, in);
+}
+
 void StepStorage::copyState(ProcessingUnit* pu, double* result) {
 	pu->copyArray(mState, result, mCount);
 }
@@ -47,26 +55,4 @@ void StepStorage::saveStateWithTempStore(ProcessingUnit* pu, std::ofstream& out)
 void StepStorage::loadStateWithTempStore(ProcessingUnit* pu, std::ifstream& in) {
 	loadMState(pu, in);
 	loadMTempStores(pu, in);
-}
-
-void StepStorage::saveMState(ProcessingUnit* pu, std::ofstream& out) {
-	/*double* toSave = new double [mCount];
-
-	pu->copyArray(mState, toSave, mCount);
-
-	out.write((char*)toSave, SIZE_DOUBLE * mCount);
-
-	delete toSave;*/
-	pu->saveArray(mState, mCount, out);
-}
-
-void StepStorage::loadMState(ProcessingUnit* pu, std::ifstream& in) {
-	/*double* toLoad = new double [mCount];
-
-	in.read((char*)toLoad, SIZE_DOUBLE * mCount);
-
-	pu->copyArray(toLoad, mState, mCount);
-
-	delete toLoad;*/
-	pu->loadArray(mState, mCount, in);
 }
