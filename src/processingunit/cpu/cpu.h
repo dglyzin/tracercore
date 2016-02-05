@@ -61,6 +61,10 @@ public:
 
 	void addNumberToArray(double* result, double* arg, double number, int size);
 	void multiplyArraysElementwise(double* result, double* arg1, double* arg2, int size);
+
+
+	void saveArray(double* array, std::ofstream& out);
+	void loadArray(double* array, std::ifstream& in);
 };
 
 #endif /* SRC_PROCESSINGUNIT_CPU_CPU_H_ */
