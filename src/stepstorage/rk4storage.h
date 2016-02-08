@@ -49,8 +49,8 @@ private:
     static const double b3 = 1.0/3.0;
     static const double b4 = 1.0/6.0;
 
-	void saveMTempStores(ProcessingUnit* pu, std::ofstream& out);
-	void loadMTempStores(ProcessingUnit* pu, std::ifstream& in);
+	void saveMTempStores(ProcessingUnit* pu, char* path);
+	void loadMTempStores(ProcessingUnit* pu, char* path);
 };
 
 #endif /* SRC_STEPSTORAGE_RK4STORAGE_H_ */

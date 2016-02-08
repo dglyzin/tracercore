@@ -27,32 +27,32 @@ StepStorage::~StepStorage() {
 	// TODO Auto-generated destructor stub
 }
 
-void StepStorage::saveMState(ProcessingUnit* pu, std::ofstream& out) {
-	pu->saveArray(mState, mCount, out);
+void StepStorage::saveMState(ProcessingUnit* pu, char* path) {
+	pu->saveArray(mState, mCount, path);
 }
 
-void StepStorage::loadMState(ProcessingUnit* pu, std::ifstream& in) {
-	pu->loadArray(mState, mCount, in);
+void StepStorage::loadMState(ProcessingUnit* pu, char* path) {
+	pu->loadArray(mState, mCount, path);
 }
 
 void StepStorage::copyState(ProcessingUnit* pu, double* result) {
 	pu->copyArray(mState, result, mCount);
 }
 
-void StepStorage::saveState(ProcessingUnit* pu, std::ofstream& out) {
-	saveMState(pu, out);
+void StepStorage::saveState(ProcessingUnit* pu, char* path) {
+	saveMState(pu, path);
 }
 
-void StepStorage::loadState(ProcessingUnit* pu, std::ifstream& in) {
-	loadMState(pu, in);
+void StepStorage::loadState(ProcessingUnit* pu, char* path) {
+	loadMState(pu, path);
 }
 
-void StepStorage::saveStateWithTempStore(ProcessingUnit* pu, std::ofstream& out) {
-	saveMState(pu, out);
-	saveMTempStores(pu, out);
+void StepStorage::saveStateWithTempStore(ProcessingUnit* pu, char* path) {
+	saveMState(pu, path);
+	saveMTempStores(pu, path);
 }
 
-void StepStorage::loadStateWithTempStore(ProcessingUnit* pu, std::ifstream& in) {
-	loadMState(pu, in);
-	loadMTempStores(pu, in);
+void StepStorage::loadStateWithTempStore(ProcessingUnit* pu, char* path) {
+	loadMState(pu, path);
+	loadMTempStores(pu, path);
 }

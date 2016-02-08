@@ -80,8 +80,8 @@ public:
 	virtual void multiplyArraysElementwise(double* result, double* arg1, double* arg2, int size) = 0;
 
 
-	virtual void saveArray(double* array, int size, std::ofstream& out) = 0;
-	virtual void loadArray(double* array, int size, std::ifstream& in) = 0;
+	virtual void saveArray(double* array, int size, char* path) = 0;
+	virtual void loadArray(double* array, int size, char* path) = 0;
 
 protected:
 	int deviceNumber;

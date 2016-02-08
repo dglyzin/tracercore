@@ -66,8 +66,8 @@ private:
 
     void prepareFSAL(ProcessingUnit* pu, double timestep);
 
-	void saveMTempStores(ProcessingUnit* pu, std::ofstream& out);
-	void loadMTempStores(ProcessingUnit* pu, std::ifstream& in);
+	void saveMTempStores(ProcessingUnit* pu, char* path);
+	void loadMTempStores(ProcessingUnit* pu, char* path);
 };
 
 #endif /* SRC_STEPSTORAGE_DP45STORAGE_H_ */

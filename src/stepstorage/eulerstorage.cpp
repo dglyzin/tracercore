@@ -19,12 +19,12 @@ EulerStorage::~EulerStorage() {
 	// TODO Auto-generated destructor stub
 }
 
-void EulerStorage::saveMTempStores(ProcessingUnit* pu, std::ofstream& out) {
-	pu->saveArray(mTempStore1, mCount, out);
+void EulerStorage::saveMTempStores(ProcessingUnit* pu, char* path) {
+	pu->saveArray(mTempStore1, mCount, path);
 }
 
-void EulerStorage::loadMTempStores(ProcessingUnit* pu, std::ifstream& in) {
-	pu->loadArray(mTempStore1, mCount, in);
+void EulerStorage::loadMTempStores(ProcessingUnit* pu, char* path) {
+	pu->loadArray(mTempStore1, mCount, path);
 }
 
 double* EulerStorage::getStageSource(int stahe) {

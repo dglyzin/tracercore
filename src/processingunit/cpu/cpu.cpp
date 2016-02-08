@@ -168,10 +168,16 @@ void CPU::multiplyArraysElementwise(double* result, double* arg1, double* arg2, 
 	}
 }
 
-void CPU::saveArray(double* array, int size, ofstream& out) {
+void CPU::saveArray(double* array, int size, char* path) {
+	ofstream out;
+	out.open(path);
 	out.write((char*)array, SIZE_DOUBLE * size);
+	out.close();
 }
 
-void CPU::loadArray(double* array, int size, ifstream& in) {
+void CPU::loadArray(double* array, int size, char* path) {
+	ifstream in;
+	in.open(path);
 	in.read((char*)array, SIZE_DOUBLE * size);
+	in.close();
 }

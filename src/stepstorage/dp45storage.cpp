@@ -48,28 +48,28 @@ void DP45Storage::prepareFSAL(ProcessingUnit* pu, double timestep) {
 	pu->multiplyArrayByNumberAndSum(mArg, mTempStore1, a21 * timestep, mState, mCount);
 }
 
-void DP45Storage::saveMTempStores(ProcessingUnit* pu, std::ofstream& out) {
-	pu->saveArray(mTempStore1, mCount, out);
-	pu->saveArray(mTempStore2, mCount, out);
-	pu->saveArray(mTempStore3, mCount, out);
-	pu->saveArray(mTempStore4, mCount, out);
-	pu->saveArray(mTempStore5, mCount, out);
-	pu->saveArray(mTempStore6, mCount, out);
-	pu->saveArray(mTempStore7, mCount, out);
+void DP45Storage::saveMTempStores(ProcessingUnit* pu, char* path) {
+	pu->saveArray(mTempStore1, mCount, path);
+	pu->saveArray(mTempStore2, mCount, path);
+	pu->saveArray(mTempStore3, mCount, path);
+	pu->saveArray(mTempStore4, mCount, path);
+	pu->saveArray(mTempStore5, mCount, path);
+	pu->saveArray(mTempStore6, mCount, path);
+	pu->saveArray(mTempStore7, mCount, path);
 
-	pu->saveArray(mArg, mCount, out);
+	pu->saveArray(mArg, mCount, path);
 }
 
-void DP45Storage::loadMTempStores(ProcessingUnit* pu, std::ifstream& in) {
-	pu->loadArray(mTempStore1, mCount, in);
-	pu->loadArray(mTempStore2, mCount, in);
-	pu->loadArray(mTempStore3, mCount, in);
-	pu->loadArray(mTempStore4, mCount, in);
-	pu->loadArray(mTempStore5, mCount, in);
-	pu->loadArray(mTempStore6, mCount, in);
-	pu->loadArray(mTempStore7, mCount, in);
+void DP45Storage::loadMTempStores(ProcessingUnit* pu, char* path) {
+	pu->loadArray(mTempStore1, mCount, path);
+	pu->loadArray(mTempStore2, mCount, path);
+	pu->loadArray(mTempStore3, mCount, path);
+	pu->loadArray(mTempStore4, mCount, path);
+	pu->loadArray(mTempStore5, mCount, path);
+	pu->loadArray(mTempStore6, mCount, path);
+	pu->loadArray(mTempStore7, mCount, path);
 
-	pu->loadArray(mArg, mCount, in);
+	pu->loadArray(mArg, mCount, path);
 }
 
 double* DP45Storage::getStageSource(int stage) {

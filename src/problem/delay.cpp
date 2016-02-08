@@ -106,10 +106,10 @@ double* Delay::getCurrentStatePointer() {
 	return mStepStorage[currentStorageNumber]->getStatePointer();
 }
 
-void Delay::saveState(ProcessingUnit* pu, ofstream& out) {
-	//mStepStorage->saveState(pu, out);
+void Delay::saveState(ProcessingUnit* pu, char* path) {
+	//mStepStorage->saveState(pu, path);
 }
 
-void Delay::loadState(ProcessingUnit* pu, ifstream& in) {
-	//mStepStorage->loadState(pu, in);
+void Delay::loadState(ProcessingUnit* pu, char* path) {
+	//mStepStorage->loadState(pu, path);
 }

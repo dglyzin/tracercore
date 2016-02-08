@@ -29,22 +29,22 @@ RK4Storage::~RK4Storage() {
 	// TODO Auto-generated destructor stub
 }
 
-void RK4Storage::saveMTempStores(ProcessingUnit* pu, std::ofstream& out) {
-	pu->saveArray(mTempStore1, mCount, out);
-	pu->saveArray(mTempStore2, mCount, out);
-	pu->saveArray(mTempStore3, mCount, out);
-	pu->saveArray(mTempStore4, mCount, out);
+void RK4Storage::saveMTempStores(ProcessingUnit* pu, char* path) {
+	pu->saveArray(mTempStore1, mCount, path);
+	pu->saveArray(mTempStore2, mCount, path);
+	pu->saveArray(mTempStore3, mCount, path);
+	pu->saveArray(mTempStore4, mCount, path);
 
-	pu->saveArray(mArg, mCount, out);
+	pu->saveArray(mArg, mCount, path);
 }
 
-void RK4Storage::loadMTempStores(ProcessingUnit* pu, std::ifstream& in) {
-	pu->loadArray(mTempStore1, mCount, in);
-	pu->loadArray(mTempStore2, mCount, in);
-	pu->loadArray(mTempStore3, mCount, in);
-	pu->loadArray(mTempStore4, mCount, in);
+void RK4Storage::loadMTempStores(ProcessingUnit* pu, char* path) {
+	pu->loadArray(mTempStore1, mCount, path);
+	pu->loadArray(mTempStore2, mCount, path);
+	pu->loadArray(mTempStore3, mCount, path);
+	pu->loadArray(mTempStore4, mCount, path);
 
-	pu->loadArray(mArg, mCount, in);
+	pu->loadArray(mArg, mCount, path);
 }
 
 double* RK4Storage::getStageSource(int stage) {

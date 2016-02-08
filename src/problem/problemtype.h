@@ -36,8 +36,8 @@ public:
 
 	virtual double* getCurrentStatePointer() = 0;
 
-	virtual void saveState(ProcessingUnit* pu, std::ofstream& out) = 0;
-	virtual void loadState(ProcessingUnit* pu, std::ifstream& in) = 0;
+	virtual void saveState(ProcessingUnit* pu, char* path) = 0;
+	virtual void loadState(ProcessingUnit* pu, char* path) = 0;
 
 protected:
 	StepStorage* createStageStorage(ProcessingUnit* pu, int solverType, int count, double aTol, double rTol);

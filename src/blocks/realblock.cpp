@@ -328,10 +328,10 @@ void RealBlock::getCurrentState(double* result) {
 	problem->getCurrentState(pu, result);
 }
 
-void RealBlock::saveState(ofstream& out) {
-	problem->saveState(pu, out);
+void RealBlock::saveState(char* path) {
+	problem->saveState(pu, path);
 }
 
-void RealBlock::loadState(ifstream& in) {
-	problem->loadState(pu, in);
+void RealBlock::loadState(char* path) {
+	problem->loadState(pu, path);
 }
