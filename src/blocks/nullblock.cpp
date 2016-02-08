@@ -84,10 +84,10 @@ void NullBlock::getCurrentState(double* result) {
 	return;
 }
 
-void NullBlock::saveState(ofstream& out) {
+void NullBlock::saveState(char* path) {
 	return;
 }
 
-void NullBlock::loadState(ifstream& in) {
+void NullBlock::loadState(char* path) {
 	return;
 }

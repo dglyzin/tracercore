@@ -48,8 +48,8 @@ public:
 	void loadData(double* data);
 	void getCurrentState(double* result);
 
-	void saveState(std::ofstream& out);
-	void loadState(std::ifstream& in);
+	void saveState(char* path);
+	void loadState(char* path);
 };
 
 #endif /* SRC_BLOCKS_NULLBLOCK_H_ */
