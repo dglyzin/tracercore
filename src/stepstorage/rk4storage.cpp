@@ -7,6 +7,8 @@
 
 #include "rk4storage.h"
 
+using namespace std;
+
 RK4Storage::RK4Storage() : StepStorage() {
 	mTempStore1 = NULL;
 	mTempStore2 = NULL;

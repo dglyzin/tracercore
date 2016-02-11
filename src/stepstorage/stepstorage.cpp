@@ -7,6 +7,8 @@
 
 #include "stepstorage.h"
 
+using namespace std;
+
 StepStorage::StepStorage() {
 	mCount = 0;
 	mState = NULL;

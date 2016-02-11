@@ -7,6 +7,8 @@
 
 #include "eulerstorage.h"
 
+using namespace std;
+
 EulerStorage::EulerStorage() : StepStorage() {
 	mTempStore1 = NULL;
 }
