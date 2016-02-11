@@ -88,6 +88,6 @@ void NullBlock::saveState(char* path) {
 	return;
 }
 
-void NullBlock::loadState(char* path) {
+void NullBlock::loadState(ifstream& in) {
 	return;
 }

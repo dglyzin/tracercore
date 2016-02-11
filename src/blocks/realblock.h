@@ -58,7 +58,7 @@ public:
 	void getCurrentState(double* result);
 
 	void saveState(char* path);
-	void loadState(char* path);
+	void loadState(std::ifstream& in);
 
 private:
 	ProcessingUnit* pu;

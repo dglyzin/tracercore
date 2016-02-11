@@ -332,6 +332,6 @@ void RealBlock::saveState(char* path) {
 	problem->saveState(pu, path);
 }
 
-void RealBlock::loadState(char* path) {
-	problem->loadState(pu, path);
+void RealBlock::loadState(ifstream& in) {
+	problem->loadState(pu, in);
 }

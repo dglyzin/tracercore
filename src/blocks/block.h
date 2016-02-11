@@ -10,6 +10,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <fstream>
 
 class Block {
 public:
@@ -45,7 +46,7 @@ public:
 	virtual void getCurrentState(double* result) = 0;
 
 	virtual void saveState(char* path) = 0;
-	virtual void loadState(char* path) = 0;
+	virtual void loadState(std::ifstream& in) = 0;
 
 	int getGridNodeCount();
 	int getGridElementCount();

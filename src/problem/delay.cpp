@@ -110,6 +110,6 @@ void Delay::saveState(ProcessingUnit* pu, char* path) {
 	//mStepStorage->saveState(pu, path);
 }
 
-void Delay::loadState(ProcessingUnit* pu, char* path) {
+void Delay::loadState(ProcessingUnit* pu, std::ifstream& in) {
 	//mStepStorage->loadState(pu, path);
 }

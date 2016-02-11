@@ -67,7 +67,7 @@ public:
 
 
 	void saveArray(double* array, int size, char* path);
-	void loadArray(double* array, int size, char* path);
+	void loadArray(double* array, int size, std::ifstream& in);
 };
 
 #endif /* SRC_PROCESSINGUNIT_CPU_CPU_H_ */

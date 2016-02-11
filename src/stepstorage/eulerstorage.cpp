@@ -23,8 +23,8 @@ void EulerStorage::saveMTempStores(ProcessingUnit* pu, char* path) {
 	pu->saveArray(mTempStore1, mCount, path);
 }
 
-void EulerStorage::loadMTempStores(ProcessingUnit* pu, char* path) {
-	pu->loadArray(mTempStore1, mCount, path);
+void EulerStorage::loadMTempStores(ProcessingUnit* pu, ifstream& in) {
+	pu->loadArray(mTempStore1, mCount, in);
 }
 
 double* EulerStorage::getStageSource(int stahe) {

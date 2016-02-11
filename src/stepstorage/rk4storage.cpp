@@ -38,13 +38,13 @@ void RK4Storage::saveMTempStores(ProcessingUnit* pu, char* path) {
 	pu->saveArray(mArg, mCount, path);
 }
 
-void RK4Storage::loadMTempStores(ProcessingUnit* pu, char* path) {
-	pu->loadArray(mTempStore1, mCount, path);
-	pu->loadArray(mTempStore2, mCount, path);
-	pu->loadArray(mTempStore3, mCount, path);
-	pu->loadArray(mTempStore4, mCount, path);
+void RK4Storage::loadMTempStores(ProcessingUnit* pu, ifstream& in) {
+	pu->loadArray(mTempStore1, mCount, in);
+	pu->loadArray(mTempStore2, mCount, in);
+	pu->loadArray(mTempStore3, mCount, in);
+	pu->loadArray(mTempStore4, mCount, in);
 
-	pu->loadArray(mArg, mCount, path);
+	pu->loadArray(mArg, mCount, in);
 }
 
 double* RK4Storage::getStageSource(int stage) {

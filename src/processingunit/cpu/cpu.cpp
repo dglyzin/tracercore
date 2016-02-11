@@ -175,9 +175,6 @@ void CPU::saveArray(double* array, int size, char* path) {
 	out.close();
 }
 
-void CPU::loadArray(double* array, int size, char* path) {
-	ifstream in;
-	in.open(path);
+void CPU::loadArray(double* array, int size, ifstream& in) {
 	in.read((char*)array, SIZE_DOUBLE * size);
-	in.close();
 }

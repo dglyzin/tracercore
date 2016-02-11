@@ -68,6 +68,6 @@ void Ordinary::saveState(ProcessingUnit* pu, char* path) {
 	mStepStorage->saveState(pu, path);
 }
 
-void Ordinary::loadState(ProcessingUnit* pu, char* path) {
-	mStepStorage->loadState(pu, path);
+void Ordinary::loadState(ProcessingUnit* pu, ifstream& in) {
+	mStepStorage->loadState(pu, in);
 }

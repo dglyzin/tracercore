@@ -83,7 +83,7 @@ public:
 
 
 	virtual void saveArray(double* array, int size, char* path) = 0;
-	virtual void loadArray(double* array, int size, char* path) = 0;
+	virtual void loadArray(double* array, int size, std::ifstream& in) = 0;
 
 protected:
 	int deviceNumber;

@@ -26,10 +26,10 @@ public:
     void copyState(ProcessingUnit* pu, double* result);
 
     void saveState(ProcessingUnit* pu, char* path);
-    void loadState(ProcessingUnit* pu, char* path);
+    void loadState(ProcessingUnit* pu, std::ifstream& in);
 
 	void saveStateWithTempStore(ProcessingUnit* pu, char* path);
-    void loadStateWithTempStore(ProcessingUnit* pu, char* path);
+    void loadStateWithTempStore(ProcessingUnit* pu, std::ifstream& in);
 
     double* getStatePointer() { return mState; }
 
@@ -62,10 +62,10 @@ protected:
   	double rTol;
 
   	void saveMState(ProcessingUnit* pu, char* path);
-  	void loadMState(ProcessingUnit* pu, char* path);
+  	void loadMState(ProcessingUnit* pu, std::ifstream& in);
 
   	virtual void saveMTempStores(ProcessingUnit* pu, char* path) = 0;
-  	virtual void loadMTempStores(ProcessingUnit* pu, char* path) = 0;
+  	virtual void loadMTempStores(ProcessingUnit* pu, std::ifstream& in) = 0;
 };
 
 #endif /* SRC_STEPSTORAGE_STEPSTORAGE_H_ */
