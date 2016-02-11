@@ -16,6 +16,8 @@
 
 #include <list>
 
+#include <fstream>
+
 #include "../enums.h"
 
 #include "../userfuncs.h"
