@@ -95,7 +95,7 @@ void Delay::rejectStep(ProcessingUnit* pu, double timestep) {
 }
 
 void Delay::loadData(ProcessingUnit* pu, double* data) {
-	mStepStorage[currentStorageNumber]->loadState(pu, data);
+	//mStepStorage[currentStorageNumber]->loadState(pu, data);
 }
 
 void Delay::getCurrentState(ProcessingUnit* pu, double* result) {
