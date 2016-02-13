@@ -673,11 +673,11 @@ Block* Domain::readBlock(ifstream& in, int idx, int dimension) {
 					break;
 
 				case 1:
-					pu = gpu0;
+					pu = gpu1;
 					break;
 
 				case 2:
-					pu = gpu1;
+					pu = gpu2;
 					break;
 
 				default:
