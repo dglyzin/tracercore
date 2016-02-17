@@ -89,5 +89,5 @@ void NullBlock::saveState(char* path) {
 }
 
 void NullBlock::loadState(ifstream& in) {
-	return;
+	in.seekg(getGridElementCount(), ios::cur);
 }
