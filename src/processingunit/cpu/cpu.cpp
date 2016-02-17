@@ -170,7 +170,7 @@ void CPU::multiplyArraysElementwise(double* result, double* arg1, double* arg2, 
 
 void CPU::saveArray(double* array, int size, char* path) {
 	ofstream out;
-	out.open(path);
+	out.open(path, ios::binary | ios::app);
 	out.write((char*)array, SIZE_DOUBLE * size);
 	out.close();
 }
