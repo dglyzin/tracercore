@@ -8,10 +8,6 @@
 #ifndef SRC_DOMAIN_H_
 #define SRC_DOMAIN_H_
 
-#include <fstream>
-#include <string.h>
-#include <mpi.h>
-
 #include "blocks/realblock.h"
 #include "blocks/nullblock.h"
 
