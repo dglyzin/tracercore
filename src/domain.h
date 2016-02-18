@@ -12,14 +12,6 @@
 #include <string.h>
 #include <mpi.h>
 
-/*#include "blocks_old/blocknull.h"
-#include "blocks_old/cpu/blockcpu1d.h"
-#include "blocks_old/cpu/blockcpu2d.h"
-#include "blocks_old/cpu/blockcpu3d.h"
-#include "blocks_old/gpu/blockgpu1d.h"
-#include "blocks_old/gpu/blockgpu2d.h"
-#include "blocks_old/gpu/blockgpu3d.h"*/
-
 #include "blocks/realblock.h"
 #include "blocks/nullblock.h"
 
@@ -28,8 +20,6 @@
 #include "processingunit/cpu/cpu1d.h"
 #include "processingunit/cpu/cpu2d.h"
 #include "processingunit/cpu/cpu3d.h"
-//#include "solvers/solver.h"
-//#include "dbconnector.h"
 
 /*
  * Основной управляющий класс приложения.
