@@ -76,11 +76,18 @@ void Interconnect::wait() {
 }
 
 void Interconnect::print() {
-	cout << endl;
+	/*cout << endl;
 	cout << "Interconnect" << endl;
 	cout << "	Source node               : " << sourceLocationNode << endl;
 	cout << "	Destination node          : " << destinationLocationNode << endl;
 	cout << "	Source memory address     : " << sourceBlockBorder << endl;
 	cout << "	Destination memory address: " << destinationExternalBorder << endl;
-	cout << endl;
+	cout << endl;*/
+
+	printf("\nInterconnect\n"
+			"	Source node               : %d\n"
+			"	Destination node          : %d\n"
+			"	Source memory address     : %d\n"
+			"	Destination memory address: %d\n"
+			"\n", sourceLocationNode, destinationLocationNode, sourceBlockBorder, destinationExternalBorder);
 }

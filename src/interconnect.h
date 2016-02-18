@@ -12,8 +12,6 @@
 
 #include <mpi.h>
 
-#include "iostream"
-
 #include "enums.h"
 
 /*
