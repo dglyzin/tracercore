@@ -13,7 +13,6 @@ int main(int argc, char * argv[]) {
 	/*
 	 * Инициализация MPI
 	 */
-
 	MPI_Init(NULL, NULL);
 
 	/*
@@ -44,25 +43,15 @@ int main(int argc, char * argv[]) {
 	Domain* d = new Domain(world_rank, world_size, inputFile);
 	d->checkOptions(flags, stopTime, saveFile);
 
-	//d->printBlocksToConsole();
-
 	/*
 	 * Вычисления.
 	 */
-	//omp_set_num_threads(1);
-
-	printf("\n\n%d BEFORE SAVE\n", world_rank);
-
 	d->saveState(inputFile);
 
-	printf("\n\n%d AFTER SAVE\n", world_rank);
-
-	printf("\n\nBEFORE COMPUTE\n");
 	printf ("Running computations %d \n", world_rank);
 	time1 = MPI_Wtime();
 	d->compute(inputFile);
 	time2 = MPI_Wtime();
-	printf("\n\nAFTER COMPUTE\n");
 
 	d->saveState(inputFile);
 
