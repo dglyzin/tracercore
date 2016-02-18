@@ -1,13 +1,4 @@
-#include <mpi.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <cmath>
-
-
 #include "domain.h"
-
-using namespace std;
-
 
 int main(int argc, char * argv[]) {
 	/*
@@ -54,8 +45,6 @@ int main(int argc, char * argv[]) {
 	time2 = MPI_Wtime();
 
 	domain->saveState(inputFile);
-
-	//d->printBlocksToConsole();
 
 	/*
 	 * Вывод информации о времени работы осуществляет только поток с номером 0.
