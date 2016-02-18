@@ -43,7 +43,7 @@ int Block::getNodeNumber() {
 }
 
 void Block::printToConsole() {
-	printf("\n"
+	printf("\nBlock\n"
 			"Node number: %d\n"
 			"xCount:      %d\n"
 			"yCount:      %d\n"
