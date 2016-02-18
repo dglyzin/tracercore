@@ -40,20 +40,20 @@ int main(int argc, char * argv[]) {
 	 */
 	printf ("SLURM JOB %s STARTED\n ", getenv("SLURM_JOB_ID"));
 	printf ("DEBUG creating domain...\n ");
-	Domain* d = new Domain(world_rank, world_size, inputFile);
-	d->checkOptions(flags, stopTime, saveFile);
+	Domain* domain = new Domain(world_rank, world_size, inputFile);
+	domain->checkOptions(flags, stopTime, saveFile);
 
 	/*
 	 * Вычисления.
 	 */
-	d->saveState(inputFile);
+	domain->saveState(inputFile);
 
 	printf ("Running computations %d \n", world_rank);
 	time1 = MPI_Wtime();
-	d->compute(inputFile);
+	domain->compute(inputFile);
 	time2 = MPI_Wtime();
 
-	d->saveState(inputFile);
+	domain->saveState(inputFile);
 
 	//d->printBlocksToConsole();
 
@@ -61,12 +61,12 @@ int main(int argc, char * argv[]) {
 	 * Вывод информации о времени работы осуществляет только поток с номером 0.
 	 * Время работы -  разница между двумя отсечками, котрые были сделаны ранее.
 	 */
-	d->printStatisticsInfo(inputFile, NULL, time2 - time1, NULL);
+	domain->printStatisticsInfo(inputFile, NULL, time2 - time1, NULL);
 
-	if(d->isNan())
+	if(domain->isNan())
 		printf("\n\n\n\nNAN!!!\n\n\n\n");
 
-	delete d;
+	delete domain;
 
 	/*
 	 * Завершение MPI
