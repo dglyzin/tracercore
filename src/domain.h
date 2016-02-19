@@ -10,7 +10,10 @@
 
 #include "blocks/realblock.h"
 #include "blocks/nullblock.h"
-#include "interconnect/interconnect.h"
+
+#include "interconnect/transferinterconnect/transferinterconnectsend.h"
+#include "interconnect/transferinterconnect/transferinterconnectrecv.h"
+#include "interconnect/nontransferinterconnect.h"
 
 #include "processingunit/cpu/cpu1d.h"
 #include "processingunit/cpu/cpu2d.h"
