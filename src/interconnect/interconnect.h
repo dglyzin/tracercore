@@ -15,7 +15,6 @@
 /*
  * Класс, отвечающий за пересылку данных между блоками.
  */
-
 class Interconnect {
 public:
 	Interconnect(int _sourceLocationNode, int _destinationLocationNode);
@@ -29,12 +28,6 @@ public:
 private:
 	int sourceLocationNode;
 	int destinationLocationNode;
-
-	/*
-	 * Длина пересылаемого блока.
-	 * Длина границы между блоками.
-	 */
-
 };
 
 #endif /* SRC_INTERCONNECT_INTERCONNECT_H_ */
