@@ -18,6 +18,8 @@ SRCSTEPSTORAGE=$(SRC)/stepstorage
 
 SRCPROBLEM=$(SRC)/problem
 
+SRCINTERCONNECT=$(SRC)/interconnect
+
 
 BIN=bin
 MPILIB=-I/usr/mpi/gcc/openmpi-1.8.4/include -L /usr/mpi/gcc/openmpi-1.8.4/lib -lmpi -lmpi_cxx -lmysqlcppconn
@@ -34,8 +36,10 @@ STEPSTORAGE=$(SRCSTEPSTORAGE)/stepstorage.cpp $(SRCSTEPSTORAGE)/eulerstorage.cpp
 
 PROBLEM=$(SRCPROBLEM)/problemtype.cpp $(SRCPROBLEM)/ordinary.cpp $(SRCPROBLEM)/delay.cpp
 
+INTERCONNECT=$(SRCINTERCONNECT)/interconnect.cpp
 
-SOURCE=$(SRC)/main.cpp $(SRC)/domain.cpp $(SRC)/interconnect.cpp $(SRC)/enums.cpp $(SRC)/dbconnector.cpp $(BLOCK) $(PROCUNIT) $(STEPSTORAGE) $(PROBLEM)
+
+SOURCE=$(SRC)/main.cpp $(SRC)/domain.cpp $(SRC)/enums.cpp $(SRC)/dbconnector.cpp $(BLOCK) $(PROCUNIT) $(STEPSTORAGE) $(PROBLEM) $(INTERCONNECT)
 
 OBJECT=$(SOURCE:.cpp=.o)
 
@@ -65,5 +69,7 @@ clean:
 	rm -rf $(SRCSTEPSTORAGE)/*.o
 	
 	rm -rf $(SRCPROBLEM)/*.o
+	
+	rm -rf $(SRCINTERCONNECT)/*.o
 	
 	rm $(BIN)/$(EXECUTABLE)

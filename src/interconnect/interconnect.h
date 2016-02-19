@@ -5,14 +5,14 @@
  *      Author: frolov
  */
 
-#ifndef SRC_INTERCONNECT_H_
-#define SRC_INTERCONNECT_H_
+#ifndef SRC_INTERCONNECT_INTERCONNECT_H_
+#define SRC_INTERCONNECT_INTERCONNECT_H_
 
 #include <stdio.h>
 
 #include <mpi.h>
 
-#include "enums.h"
+#include "../enums.h"
 
 /*
  * Класс, отвечающий за пересылку данных между блоками.
@@ -73,4 +73,4 @@ private:
 	bool flag;
 };
 
-#endif /* SRC_INTERCONNECT_H_ */
+#endif /* SRC_INTERCONNECT_INTERCONNECT_H_ */

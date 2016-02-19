@@ -10,8 +10,7 @@
 
 #include "blocks/realblock.h"
 #include "blocks/nullblock.h"
-
-#include "interconnect.h"
+#include "interconnect/interconnect.h"
 
 #include "processingunit/cpu/cpu1d.h"
 #include "processingunit/cpu/cpu2d.h"
