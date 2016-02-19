@@ -18,3 +18,6 @@ TransferInterconnectSend::TransferInterconnectSend(int _sourceLocationNode,
 TransferInterconnectSend::~TransferInterconnectSend() {
 }
 
+void TransferInterconnectSend::transfer() {
+	MPI_Isend(sourceBlockBorder, borderLength, MPI_DOUBLE, destinationLocationNode, 999, *mpWorkerComm, request);
+}

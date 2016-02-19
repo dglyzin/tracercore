@@ -16,6 +16,8 @@ public:
 			double* _sourceBlockBorder, MPI_Comm* _pworkerComm);
 	virtual ~TransferInterconnectSend();
 
+	void transfer();
+
 private:
 	double* sourceBlockBorder;
 };
