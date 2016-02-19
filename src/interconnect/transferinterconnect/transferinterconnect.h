@@ -19,7 +19,7 @@ public:
 
 	void wait();
 
-private:
+protected:
 	MPI_Comm* mpWorkerComm;
 
 	int borderLength;

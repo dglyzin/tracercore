@@ -25,7 +25,7 @@ public:
 
 	void print();
 
-private:
+protected:
 	int sourceLocationNode;
 	int destinationLocationNode;
 };
