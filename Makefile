@@ -19,6 +19,7 @@ SRCSTEPSTORAGE=$(SRC)/stepstorage
 SRCPROBLEM=$(SRC)/problem
 
 SRCINTERCONNECT=$(SRC)/interconnect
+SRCINTERONNECTTRANSFER=$(SRCINTERCONNECT)/transferinterconnect
 
 
 BIN=bin
@@ -36,7 +37,7 @@ STEPSTORAGE=$(SRCSTEPSTORAGE)/stepstorage.cpp $(SRCSTEPSTORAGE)/eulerstorage.cpp
 
 PROBLEM=$(SRCPROBLEM)/problemtype.cpp $(SRCPROBLEM)/ordinary.cpp $(SRCPROBLEM)/delay.cpp
 
-INTERCONNECT=$(SRCINTERCONNECT)/interconnect.cpp
+INTERCONNECT=$(SRCINTERCONNECT)/interconnect.cpp $(SRCINTERCONNECT)/nontransferinterconnect.cpp $(SRCINTERONNECTTRANSFER)/transferinterconnectsend.cpp $(SRCINTERONNECTTRANSFER)/transferinterconnectrecv.cpp
 
 
 SOURCE=$(SRC)/main.cpp $(SRC)/domain.cpp $(SRC)/enums.cpp $(SRC)/dbconnector.cpp $(BLOCK) $(PROCUNIT) $(STEPSTORAGE) $(PROBLEM) $(INTERCONNECT)
