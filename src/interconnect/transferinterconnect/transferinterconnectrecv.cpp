@@ -18,3 +18,7 @@ TransferInterconnectRecv::TransferInterconnectRecv(int _sourceLocationNode,
 TransferInterconnectRecv::~TransferInterconnectRecv() {
 }
 
+void TransferInterconnectRecv::transfer() {
+	MPI_Irecv(destinationExternalBorder, borderLength, MPI_DOUBLE, sourceLocationNode, 999, *mpWorkerComm, request);
+}
+

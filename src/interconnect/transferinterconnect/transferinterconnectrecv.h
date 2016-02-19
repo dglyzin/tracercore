@@ -16,6 +16,8 @@ public:
 			double* _destinationExternalBorder, MPI_Comm* _pworkerComm);
 	virtual ~TransferInterconnectRecv();
 
+	void transfer();
+
 private:
 	double* destinationExternalBorder;
 };
