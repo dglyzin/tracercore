@@ -83,7 +83,8 @@ public:
 	void saveState(char* inputFile);
 	void saveStateToFile(char* path);
 
-	void printStatisticsInfo(char* inputFile, char* outputFile, double calcTime, char* statisticsFile);
+	void printStatisticsInfo(char* inputFile, char* outputFile, double calcTime,
+			char* statisticsFile);
 
 	bool isNan();
 
@@ -122,21 +123,21 @@ private:
 	 * Структура данных, возвращающая основные параметры солвера
 	 */
 	StepStorage* mSolverInfo;
-    double mAtol; //solver absolute tolerance
-    double mRtol; //solver relative tolerance
+	double mAtol; //solver absolute tolerance
+	double mRtol; //solver relative tolerance
 
-    /*
-     * Коммуникатор работников
-     * Может совпадать с MPI_COMM_WORLD, если нет питон-мастера
-     * либо это  MPI_COMM_WORLD без первого процесса
-     */
-    MPI_Comm mWorkerComm;
-    int mPythonMaster;
+	/*
+	 * Коммуникатор работников
+	 * Может совпадать с MPI_COMM_WORLD, если нет питон-мастера
+	 * либо это  MPI_COMM_WORLD без первого процесса
+	 */
+	MPI_Comm mWorkerComm;
+	int mPythonMaster;
 
 	/*
 	 * Номер потока
 	 */
-    int mGlobalRank;
+	int mGlobalRank;
 	int mWorkerRank;
 
 	/*
@@ -144,11 +145,10 @@ private:
 	 */
 	int mWorkerCommSize;
 
-    /*
-     * Глобальный Id задачи для базы
-     */
-    //int mJobId;
-
+	/*
+	 * Глобальный Id задачи для базы
+	 */
+	//int mJobId;
 	/*
 	 * Количество блоков
 	 */
@@ -177,7 +177,6 @@ private:
 	int mAcceptedStepCount;
 	int mRejectedStepCount;
 
-
 	double currentTime;
 
 	double saveInterval;
@@ -199,7 +198,9 @@ private:
 	//Solver* mPreviousState;
 
 	void loadStateFromFile(char* dataFile);
-	void setStopTime(double _stopTime) { stopTime = _stopTime; }
+	void setStopTime(double _stopTime) {
+		stopTime = _stopTime;
+	}
 
 	void readFileStat(std::ifstream& in);
 	void readTimeSetting(std::ifstream& in);
@@ -210,7 +211,6 @@ private:
 	void readSolverTolerance(std::ifstream& in);
 	void readBlockCount(std::ifstream& in);
 	void readConnectionCount(std::ifstream& in);
-
 
 	/*
 	 * Чтение блока
@@ -251,22 +251,22 @@ private:
 
 	void createProcessigUnit();
 
+	Interconnect* getInterconnect(int sourceNode, int destinationNode,
+			int borderLength, double* sourceData, double* destinationData);
+
 	/*
 	 * Database status manipulations
 	 */
 	//void setDbJobState(int state){
-    //    dbConnSetJobState(mJobId, state);
+	//    dbConnSetJobState(mJobId, state);
 	//}
 	//void setDbJobPercentage(int percentage){
-    //    dbConnSetJobPercentage(mJobId, percentage);
+	//    dbConnSetJobPercentage(mJobId, percentage);
 	//}
 	//void storeDbFileName(char* fname);
-
 	//int getDbUserStatus(){
 	//	return dbConnGetUserStatus(mJobId);
 	//}
-
 };
-
 
 #endif /* SRC_DOMAIN_H_ */

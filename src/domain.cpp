@@ -15,9 +15,9 @@ using namespace std;
 
 int lastChar(char* source, char ch) {
 	int i = 0;
-	int index= 0;
-	while(source[i] != 0) {
-		if(source[i] == ch)
+	int index = 0;
+	while (source[i] != 0) {
+		if (source[i] == ch)
 			index = i;
 		i++;
 	}
@@ -25,11 +25,8 @@ int lastChar(char* source, char ch) {
 	return index;
 }
 
-
-
-
 Domain::Domain(int _world_rank, int _world_size, char* inputFile) {
-    //Get worker communicator and determine if there is python master
+	//Get worker communicator and determine if there is python master
 	mGlobalRank = _world_rank;
 
 	MPI_Comm_split(MPI_COMM_WORLD, 1, _world_rank, &mWorkerComm);
@@ -38,14 +35,13 @@ Domain::Domain(int _world_rank, int _world_size, char* inputFile) {
 	MPI_Comm_rank(mWorkerComm, &mWorkerRank);
 
 	if (mWorkerCommSize == _world_size)
-	    mPythonMaster = 0;
+		mPythonMaster = 0;
 	else if (mWorkerCommSize == _world_size - 1)
 		mPythonMaster = 1;
-	else{
+	else {
 		mPythonMaster = 0;
 		printf("Communicator size error!");
 	}
-
 
 	//mJobId = _jobId;
 
@@ -70,16 +66,16 @@ Domain::Domain(int _world_rank, int _world_size, char* inputFile) {
 
 	/*flags = _flags;
 
-	if( flags & LOAD_FILE )
-		loadStateFromFile(inputFile, loadFile);
-	else
-		readFromFile(inputFile);
+	 if( flags & LOAD_FILE )
+	 loadStateFromFile(inputFile, loadFile);
+	 else
+	 readFromFile(inputFile);
 
-	if( flags & TIME_EXECUTION )
-		stopTime = _stopTime;
+	 if( flags & TIME_EXECUTION )
+	 stopTime = _stopTime;
 
-	if( flags & STEP_EXECUTION )
-		mStepCount = _stepCount;*/
+	 if( flags & STEP_EXECUTION )
+	 mStepCount = _stepCount;*/
 
 	mAcceptedStepCount = 0;
 	mRejectedStepCount = 0;
@@ -96,21 +92,21 @@ Domain::~Domain() {
 
 	MPI_Comm_free(&mWorkerComm);
 
-	if(cpu)
+	if (cpu)
 		delete cpu;
 	/*if(gpu0)
-		delete gpu0;
-	if(gpu1)
-		delete gpu1;
-	if(gpu2)
-		delete gpu2;*/
+	 delete gpu0;
+	 if(gpu1)
+	 delete gpu1;
+	 if(gpu2)
+	 delete gpu2;*/
 }
 
 double** Domain::collectDataFromNode() {
 	double** resultAll = NULL;
 
-	if(mGlobalRank == 0) {
-		resultAll = new double* [mBlockCount];
+	if (mGlobalRank == 0) {
+		resultAll = new double*[mBlockCount];
 	}
 
 	for (int i = 0; i < mBlockCount; ++i) {
@@ -118,7 +114,7 @@ double** Domain::collectDataFromNode() {
 
 		//printf("\n%d %d %d\n", mWorkerRank, mGlobalRank, i);
 
-		if(mGlobalRank == 0)
+		if (mGlobalRank == 0)
 			resultAll[i] = tmp;
 	}
 
@@ -129,28 +125,29 @@ double** Domain::collectDataFromNode() {
 double* Domain::getBlockCurrentState(int number) {
 	double* result;
 
-	if(mGlobalRank == 0) {
-		result = new double [mBlocks[number]->getGridElementCount()];
-		if(mBlocks[number]->isRealBlock()) {
+	if (mGlobalRank == 0) {
+		result = new double[mBlocks[number]->getGridElementCount()];
+		if (mBlocks[number]->isRealBlock()) {
 			mBlocks[number]->getCurrentState(result);
-		}
-		else {
+		} else {
 			//if domain 0 is master, then block-getnodenumber = rank in mpicommworld
 			//else this branch will not run
 			//printf("\n### nodeNumber: %d\n", mBlocks[number]->getNodeNumber());
-			MPI_Recv(result, mBlocks[number]->getGridElementCount(), MPI_DOUBLE, mBlocks[number]->getNodeNumber(), 999, MPI_COMM_WORLD, &status);
+			MPI_Recv(result, mBlocks[number]->getGridElementCount(), MPI_DOUBLE,
+					mBlocks[number]->getNodeNumber(), 999, MPI_COMM_WORLD,
+					&status);
 		}
 
 		return result;
-	}
-	else {
-		if(mBlocks[number]->isRealBlock()) {
+	} else {
+		if (mBlocks[number]->isRealBlock()) {
 			//printf("\n\n*** %d %d\n\n", number, mWorkerRank);
-			result = new double [mBlocks[number]->getGridElementCount()];
+			result = new double[mBlocks[number]->getGridElementCount()];
 			mBlocks[number]->getCurrentState(result);
 			//we send to global 0 no matter it is above ^^ or in python
 			//printf("Worker %d : sending %d doubles for block %d\n",mWorkerRank, mBlocks[number]->getGridElementCount(), number );
-			MPI_Send(result, mBlocks[number]->getGridElementCount(), MPI_DOUBLE, 0, 999, MPI_COMM_WORLD);
+			MPI_Send(result, mBlocks[number]->getGridElementCount(), MPI_DOUBLE,
+					0, 999, MPI_COMM_WORLD);
 			delete result;
 			return NULL;
 		}
@@ -158,16 +155,14 @@ double* Domain::getBlockCurrentState(int number) {
 	return NULL;
 }
 
-
-
 void Domain::compute(char* inputFile) {
 	cout << endl << "Computation started..." << mWorkerRank << endl;
-	cout << "Current time: "<<currentTime<<", finish time: "<<stopTime<< ", time step: " << timeStep<<endl;
+	cout << "Current time: " << currentTime << ", finish time: " << stopTime
+			<< ", time step: " << timeStep << endl;
 	cout << "solver stage count: " << mSolverInfo->getStageCount() << endl;
 
-	if (mSolverInfo->isFSAL() )
-	    initSolvers();
-
+	if (mSolverInfo->isFSAL())
+		initSolvers();
 
 //	Порядок работы
 //	                1. WORLD+COMP                          2. WORLD ONLY
@@ -182,67 +177,65 @@ void Domain::compute(char* inputFile) {
 //  9. stop/continue comp-0 -> world-0                |    -
 
 	double computeInterval = stopTime - currentTime;
-    int percentage = 0;
+	int percentage = 0;
 
-    //1.
-    int userStatus= US_RUN;
-    int jobState = JS_RUNNING;
-    MPI_Bcast(&userStatus, 1, MPI_INT, 0, MPI_COMM_WORLD);
-    if (mPythonMaster&& (mWorkerRank==0) )
-        MPI_Send(&jobState, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
+	//1.
+	int userStatus = US_RUN;
+	int jobState = JS_RUNNING;
+	MPI_Bcast(&userStatus, 1, MPI_INT, 0, MPI_COMM_WORLD);
+	if (mPythonMaster && (mWorkerRank == 0))
+		MPI_Send(&jobState, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
 
-    cout<<"Initial user status received: "<< userStatus<< endl;
+	cout << "Initial user status received: " << userStatus << endl;
 
-
-	while ((userStatus!=US_STOP) && ( jobState == JS_RUNNING ) ){
+	while ((userStatus != US_STOP) && (jobState == JS_RUNNING)) {
 		nextStep();
-		if (mPythonMaster&& (mWorkerRank==0) ){
-		    MPI_Send(&mLastStepAccepted, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
-		    MPI_Send(&timeStep, 1, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD);
-		    MPI_Send(&currentTime, 1, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD);
+		if (mPythonMaster && (mWorkerRank == 0)) {
+			MPI_Send(&mLastStepAccepted, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
+			MPI_Send(&timeStep, 1, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD);
+			MPI_Send(&currentTime, 1, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD);
 		}
 
 		//printBlocksToConsole();
 
-        //here is the logic of collecting raw data to one node and saving it to disk
+		//here is the logic of collecting raw data to one node and saving it to disk
 		//worker 0 will do it if there is no python master
 		//if python master is present, it receives all the data for all blocks,
 		//creates and saves pictures, saves raw data and stores filenames to db
 
-		int newPercentage = 100.0* (1.0 - (stopTime-currentTime) / computeInterval);
-		int percentChanged = newPercentage>percentage;
-		if (mPythonMaster&& (mWorkerRank==0) )
+		int newPercentage = 100.0
+				* (1.0 - (stopTime - currentTime) / computeInterval);
+		int percentChanged = newPercentage > percentage;
+		if (mPythonMaster && (mWorkerRank == 0))
 			MPI_Send(&percentChanged, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
 
-		if (percentChanged){
+		if (percentChanged) {
 			percentage = newPercentage;
-			if (mPythonMaster&& (mWorkerRank==0) )
+			if (mPythonMaster && (mWorkerRank == 0))
 				MPI_Send(&percentage, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
 		}
 
 		counterSaveTime += timeStep;
 
-		int readyToSave = ( saveInterval != 0 )&&( counterSaveTime > saveInterval );
-		if (mPythonMaster&& (mWorkerRank==0) )
+		int readyToSave = (saveInterval != 0)
+				&& (counterSaveTime > saveInterval);
+		if (mPythonMaster && (mWorkerRank == 0))
 			MPI_Send(&readyToSave, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
-		if  (!(currentTime < stopTime ))
-            jobState = JS_FINISHED;
-        if (mPythonMaster&& (mWorkerRank==0) )
-            MPI_Send(&jobState, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
+		if (!(currentTime < stopTime))
+			jobState = JS_FINISHED;
+		if (mPythonMaster && (mWorkerRank == 0))
+			MPI_Send(&jobState, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
 
-		if( readyToSave ) {
-				counterSaveTime = 0;
-				saveState(inputFile);
+		if (readyToSave) {
+			counterSaveTime = 0;
+			saveState(inputFile);
 		}
 
-
-
-        //check for termination request
-        MPI_Bcast(&userStatus, 1, MPI_INT, 0, MPI_COMM_WORLD);
-
+		//check for termination request
+		MPI_Bcast(&userStatus, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
 	}
-	cout <<"Computation finished for worker #" << mWorkerRank << endl;
+	cout << "Computation finished for worker #" << mWorkerRank << endl;
 	//if ((mWorkerRank == 0)&&(!mPythonMaster))
 	//    setDbJobState(JS_FINISHED);
 
@@ -268,40 +261,38 @@ void Domain::computeStage(int stage) {
 	prepareNextStageArgument(stage);
 }
 
-
 void Domain::nextStep() {
 	//int totalGridElements = getGridElementCount();
 	//последовательно выполняем все стадии метода
-    for(int stage=0; stage < mSolverInfo->getStageCount(); stage++)
-    	computeStage(stage);
+	for (int stage = 0; stage < mSolverInfo->getStageCount(); stage++)
+		computeStage(stage);
 
-    //!!! Собрать мастеру ошибки
-    //!!! если ошибки нет, продолжать
-    if (mSolverInfo->isVariableStep()){
-        // MPI inside!
-    	double error = collectError();
+	//!!! Собрать мастеру ошибки
+	//!!! если ошибки нет, продолжать
+	if (mSolverInfo->isVariableStep()) {
+		// MPI inside!
+		double error = collectError();
 
-    	printf("step error = %f\n", error);
-    	//!!! только 0, рассылать
-    	timeStep = mSolverInfo->getNewStep(timeStep, error,totalGridElementCount);
+		printf("step error = %f\n", error);
+		//!!! только 0, рассылать
+		timeStep = mSolverInfo->getNewStep(timeStep, error,
+				totalGridElementCount);
 
-    	//!!! только 0, рассылать
-    	if (mSolverInfo->isErrorPermissible(error,totalGridElementCount)){
+		//!!! только 0, рассылать
+		if (mSolverInfo->isErrorPermissible(error, totalGridElementCount)) {
 			confirmStep(); //uses new timestep
 			mAcceptedStepCount++;
 			currentTime += timeStep;
 			//cout<<"Step accepted\n"<<endl;
-		}
-		else{
+		} else {
 			rejectStep(); //uses new timestep
 			mRejectedStepCount++;
-			cout<<"Step rejected!\n"<<endl;
+			cout << "Step rejected!\n" << endl;
 		}
 
 		printf("new time step = %f\n", timeStep);
-    }
-	else{ //constant step
-	    confirmStep();
+	} else { //constant step
+		confirmStep();
 		mAcceptedStepCount++;
 		currentTime += timeStep;
 
@@ -310,46 +301,52 @@ void Domain::nextStep() {
 
 void Domain::prepareDeviceData(int deviceType, int deviceNumber, int stage) {
 	for (int i = 0; i < mBlockCount; ++i)
-		if( mBlocks[i]->getBlockType() == deviceType && mBlocks[i]->getDeviceNumber() == deviceNumber ) {
+		if (mBlocks[i]->getBlockType() == deviceType
+				&& mBlocks[i]->getDeviceNumber() == deviceNumber) {
 			//printf("\nSuccses\n");
 			mBlocks[i]->prepareStageData(stage);
 		}
 }
 
-void Domain::processDeviceBlocksBorder(int deviceType, int deviceNumber, int stage) {
+void Domain::processDeviceBlocksBorder(int deviceType, int deviceNumber,
+		int stage) {
 	for (int i = 0; i < mBlockCount; ++i)
-        if( mBlocks[i]->getBlockType() == deviceType && mBlocks[i]->getDeviceNumber() == deviceNumber ) {
-        	//cout << endl << "ERROR! PROCESS DEVICE!" << endl;
-		    mBlocks[i]->computeStageBorder(stage, currentTime);
+		if (mBlocks[i]->getBlockType() == deviceType
+				&& mBlocks[i]->getDeviceNumber() == deviceNumber) {
+			//cout << endl << "ERROR! PROCESS DEVICE!" << endl;
+			mBlocks[i]->computeStageBorder(stage, currentTime);
 		}
 }
 
-void Domain::processDeviceBlocksCenter(int deviceType, int deviceNumber, int stage) {
+void Domain::processDeviceBlocksCenter(int deviceType, int deviceNumber,
+		int stage) {
 	for (int i = 0; i < mBlockCount; ++i)
-        if( mBlocks[i]->getBlockType() == deviceType && mBlocks[i]->getDeviceNumber() == deviceNumber ) {
-        	//cout << endl << "ERROR! PROCESS DEVICE!" << endl;
-		    mBlocks[i]->computeStageCenter(stage, currentTime);
+		if (mBlocks[i]->getBlockType() == deviceType
+				&& mBlocks[i]->getDeviceNumber() == deviceNumber) {
+			//cout << endl << "ERROR! PROCESS DEVICE!" << endl;
+			mBlocks[i]->computeStageCenter(stage, currentTime);
 		}
 }
-void Domain::prepareDeviceArgument(int deviceType, int deviceNumber, int stage) {
+void Domain::prepareDeviceArgument(int deviceType, int deviceNumber,
+		int stage) {
 	for (int i = 0; i < mBlockCount; ++i)
-        if( mBlocks[i]->getBlockType() == deviceType && mBlocks[i]->getDeviceNumber() == deviceNumber ) {
-        	//cout << endl << "ERROR! PROCESS DEVICE!" << endl;
-		    mBlocks[i]->prepareArgument(stage, timeStep);
+		if (mBlocks[i]->getBlockType() == deviceType
+				&& mBlocks[i]->getDeviceNumber() == deviceNumber) {
+			//cout << endl << "ERROR! PROCESS DEVICE!" << endl;
+			mBlocks[i]->prepareArgument(stage, timeStep);
 		}
 }
 
 double Domain::getDeviceError(int deviceType, int deviceNumber) {
-	double error=0;
+	double error = 0;
 	for (int i = 0; i < mBlockCount; ++i)
-        if( mBlocks[i]->getBlockType() == deviceType && mBlocks[i]->getDeviceNumber() == deviceNumber ) {
-        	//cout << endl << "ERROR! PROCESS DEVICE!" << endl;
-		    error+=mBlocks[i]->getStepError(timeStep);
+		if (mBlocks[i]->getBlockType() == deviceType
+				&& mBlocks[i]->getDeviceNumber() == deviceNumber) {
+			//cout << endl << "ERROR! PROCESS DEVICE!" << endl;
+			error += mBlocks[i]->getStepError(timeStep);
 		}
 	return error;
 }
-
-
 
 void Domain::prepareData(int stage) {
 #pragma omp task
@@ -386,8 +383,6 @@ void Domain::prepareNextStageArgument(int stage) {
 	prepareDeviceArgument(CPU_UNIT, 0, stage);
 }
 
-
-
 void Domain::computeOneStepCenter(int stage) {
 #pragma omp task
 	processDeviceBlocksCenter(GPU_UNIT, 0, stage);
@@ -398,7 +393,6 @@ void Domain::computeOneStepCenter(int stage) {
 
 	processDeviceBlocksCenter(CPU_UNIT, 0, stage);
 }
-
 
 //TODO next two methods are not parallel!
 void Domain::confirmStep() {
@@ -415,12 +409,10 @@ void Domain::rejectStep() {
 	}
 }
 
-
-
 double Domain::collectError() {
 	double err1, err2, err3;
-	err1=err2=err3=0;
-    //1. Get total error for current node
+	err1 = err2 = err3 = 0;
+	//1. Get total error for current node
 #pragma omp task
 	err1 = getDeviceError(GPU, 0);
 #pragma omp task
@@ -433,8 +425,8 @@ double Domain::collectError() {
 #pragma omp taskwait
 	nodeError += err1 + err2 + err3;
 
-    //2. Collect errors from all nodes
-    double totalError = nodeError;
+	//2. Collect errors from all nodes
+	double totalError = nodeError;
 
 	//TODO MPI_ALLREDUCE
 	return totalError;
@@ -456,46 +448,44 @@ void Domain::readFromFile(char* path) {
 	readSaveInterval(in);
 	readGridSteps(in);
 
-	in.read((char*)&dimension, SIZE_INT);
+	in.read((char*) &dimension, SIZE_INT);
 	createProcessigUnit();
 
 	readCellAndHaloSize(in);
 	readSolverIndex(in);
 	readSolverTolerance(in);
 
-
 	switch (mSolverIndex) {
-		case EULER:
-			mSolverInfo = new EulerStorage();
-			break;
-		case RK4:
-			mSolverInfo = new RK4Storage();
-			break;
-		case DP45:
-			mSolverInfo = new DP45Storage();
-			break;
-		default:
-			mSolverInfo = new EulerStorage();
-			break;
+	case EULER:
+		mSolverInfo = new EulerStorage();
+		break;
+	case RK4:
+		mSolverInfo = new RK4Storage();
+		break;
+	case DP45:
+		mSolverInfo = new DP45Storage();
+		break;
+	default:
+		mSolverInfo = new EulerStorage();
+		break;
 	}
 
 	readBlockCount(in);
 
-	mBlocks = new Block* [mBlockCount];
+	mBlocks = new Block*[mBlockCount];
 
 	for (int i = 0; i < mBlockCount; ++i)
 		mBlocks[i] = readBlock(in, i, dimension);
 
 	readConnectionCount(in);
 
-	mInterconnects = new Interconnect* [mConnectionCount];
+	mInterconnects = new Interconnect*[mConnectionCount];
 
 	for (int i = 0; i < mConnectionCount; ++i)
 		mInterconnects[i] = readConnection(in);
 
 	for (int i = 0; i < mBlockCount; ++i)
 		mBlocks[i]->moveTempBorderVectorToBorderArray();
-
 
 	totalGridNodeCount = getGridNodeCount();
 	totalGridElementCount = getGridElementCount();
@@ -508,73 +498,70 @@ void Domain::readFileStat(ifstream& in) {
 	char versionMajor;
 	char versionMinor;
 
-	in.read((char*)&fileType, 1);
-	in.read((char*)&versionMajor, 1);
-	in.read((char*)&versionMinor, 1);
+	in.read((char*) &fileType, 1);
+	in.read((char*) &versionMajor, 1);
+	in.read((char*) &versionMinor, 1);
 
 	/*cout << endl;
-	cout << "file type:     " << (unsigned int)fileType << endl;
-	cout << "version major: " << (unsigned int)versionMajor << endl;
-	cout << "version minor: " << (unsigned int)versionMinor << endl;*/
+	 cout << "file type:     " << (unsigned int)fileType << endl;
+	 cout << "version major: " << (unsigned int)versionMajor << endl;
+	 cout << "version minor: " << (unsigned int)versionMinor << endl;*/
 }
 
 void Domain::readTimeSetting(ifstream& in) {
-	in.read((char*)&startTime, SIZE_DOUBLE);
-	in.read((char*)&stopTime, SIZE_DOUBLE);
-	in.read((char*)&timeStep, SIZE_DOUBLE);
+	in.read((char*) &startTime, SIZE_DOUBLE);
+	in.read((char*) &stopTime, SIZE_DOUBLE);
+	in.read((char*) &timeStep, SIZE_DOUBLE);
 
 	/*cout << "start time:    " << startTime << endl;
-	cout << "stop time:     " << stopTime << endl;
-	cout << "step time:     " << timeStep << endl;*/
+	 cout << "stop time:     " << stopTime << endl;
+	 cout << "step time:     " << timeStep << endl;*/
 }
 
 void Domain::readSaveInterval(ifstream& in) {
-	in.read((char*)&saveInterval, SIZE_DOUBLE);
+	in.read((char*) &saveInterval, SIZE_DOUBLE);
 
 	//cout << "save interval: " << saveInterval << endl;
 }
 
 void Domain::readGridSteps(ifstream& in) {
-	in.read((char*)&mDx, SIZE_DOUBLE);
-	in.read((char*)&mDy, SIZE_DOUBLE);
-	in.read((char*)&mDz, SIZE_DOUBLE);
+	in.read((char*) &mDx, SIZE_DOUBLE);
+	in.read((char*) &mDy, SIZE_DOUBLE);
+	in.read((char*) &mDz, SIZE_DOUBLE);
 
 	/*cout << "dx:            " << mDx << endl;
-	cout << "dy:            " << mDy << endl;
-	cout << "dz:            " << mDz << endl;*/
+	 cout << "dy:            " << mDy << endl;
+	 cout << "dz:            " << mDz << endl;*/
 }
 
 void Domain::readCellAndHaloSize(ifstream& in) {
-	in.read((char*)&mCellSize, SIZE_INT);
-	in.read((char*)&mHaloSize, SIZE_INT);
+	in.read((char*) &mCellSize, SIZE_INT);
+	in.read((char*) &mHaloSize, SIZE_INT);
 
 	/*cout << "cell size:     " << mCellSize << endl;
-	cout << "halo size:     " << mHaloSize << endl;*/
+	 cout << "halo size:     " << mHaloSize << endl;*/
 }
 
-
-void Domain::readSolverIndex(std::ifstream& in){
-	in.read((char*)&mSolverIndex, SIZE_INT);
+void Domain::readSolverIndex(std::ifstream& in) {
+	in.read((char*) &mSolverIndex, SIZE_INT);
 	//cout << "Solver index:  " << mSolverIndex << endl;
 }
 
-void Domain::readSolverTolerance(std::ifstream& in){
-	in.read((char*)&mAtol, SIZE_DOUBLE);
+void Domain::readSolverTolerance(std::ifstream& in) {
+	in.read((char*) &mAtol, SIZE_DOUBLE);
 	//cout << "Solver absolute tolerance:  " << mAtol << endl;
-	in.read((char*)&mRtol, SIZE_DOUBLE);
+	in.read((char*) &mRtol, SIZE_DOUBLE);
 	//cout << "Solver relative tolerance:  " << mRtol << endl;
 }
 
-
-
 void Domain::readBlockCount(ifstream& in) {
-	in.read((char*)&mBlockCount, SIZE_INT);
+	in.read((char*) &mBlockCount, SIZE_INT);
 
 	//cout << "block count:   " << mBlockCount << endl;
 }
 
 void Domain::readConnectionCount(ifstream& in) {
-	in.read((char*)&mConnectionCount, SIZE_INT);
+	in.read((char*) &mConnectionCount, SIZE_INT);
 
 	//cout << "connection count:   " << mConnectionCount << endl;
 }
@@ -606,102 +593,98 @@ Block* Domain::readBlock(ifstream& in, int idx, int dimension) {
 
 	int total = 1;
 
-
-	in.read((char*)&node, SIZE_INT);
-	in.read((char*)&deviceType, SIZE_INT);
-	in.read((char*)&deviceNumber, SIZE_INT);
+	in.read((char*) &node, SIZE_INT);
+	in.read((char*) &deviceType, SIZE_INT);
+	in.read((char*) &deviceNumber, SIZE_INT);
 
 	/*cout << endl;
-	cout << "Block #" << idx << endl;
-	cout << "	dimension:     " << dimension << endl;
-	cout << "	node:          " << node << endl;
-	cout << "	device type:   " << deviceType << endl;
-	cout << "	device number: " << deviceNumber << endl;*/
+	 cout << "Block #" << idx << endl;
+	 cout << "	dimension:     " << dimension << endl;
+	 cout << "	node:          " << node << endl;
+	 cout << "	device type:   " << deviceType << endl;
+	 cout << "	device number: " << deviceNumber << endl;*/
 
 	for (int j = 0; j < dimension; ++j) {
-		in.read((char*)&offset[j], SIZE_INT);
+		in.read((char*) &offset[j], SIZE_INT);
 		//cout << "	offset" << j << ":           " << offset[j] << endl;
 	}
 
 	for (int j = 0; j < dimension; ++j) {
-		in.read((char*)&count[j], SIZE_INT);
+		in.read((char*) &count[j], SIZE_INT);
 		//cout << "	count" << j << ":            " << count[j] << endl;
 		total *= count[j];
 	}
 
-	unsigned short int* initFuncNumber = new unsigned short int [total];
-	unsigned short int* compFuncNumber = new unsigned short int [total];
+	unsigned short int* initFuncNumber = new unsigned short int[total];
+	unsigned short int* compFuncNumber = new unsigned short int[total];
 
-	in.read((char*)initFuncNumber, total*SIZE_UN_SH_INT);
-	in.read((char*)compFuncNumber, total*SIZE_UN_SH_INT);
-
+	in.read((char*) initFuncNumber, total * SIZE_UN_SH_INT);
+	in.read((char*) compFuncNumber, total * SIZE_UN_SH_INT);
 
 	//cout << "Init func number###:" << endl;
 	/*for (int idxY = 0; idxY < count[1]; ++idxY) {
-		for (int idxX = 0; idxX < count[0]; ++idxX)
-		    cout << initFuncNumber[idxY*count[0]+idxX] << " ";
-		cout << endl;
-	}
-	cout << endl;*/
+	 for (int idxX = 0; idxX < count[0]; ++idxX)
+	 cout << initFuncNumber[idxY*count[0]+idxX] << " ";
+	 cout << endl;
+	 }
+	 cout << endl;*/
 
 	//cout << "Comp func number:" << endl;
 	/*for (int idxY = 0; idxY < count[1]; ++idxY) {
-		for (int idxX = 0; idxX < count[0]; ++idxX)
-			cout << compFuncNumber[idxY*count[0]+idxX] << " ";
-		cout << endl;
-	}
-	cout << endl;*/
+	 for (int idxX = 0; idxX < count[0]; ++idxX)
+	 cout << compFuncNumber[idxY*count[0]+idxX] << " ";
+	 cout << endl;
+	 }
+	 cout << endl;*/
 
-	if(node == mWorkerRank){
+	if (node == mWorkerRank) {
 		ProcessingUnit* pu = NULL;
 
-		if (deviceType==0)  //CPU BLOCK
+		if (deviceType == 0)  //CPU BLOCK
 			switch (deviceNumber) {
-				case 0:
-					pu = cpu;
-					break;
+			case 0:
+				pu = cpu;
+				break;
 
-				default:
-					printf("Invalid block device number for CPU!\n");
-					assert(false);
-					break;
+			default:
+				printf("Invalid block device number for CPU!\n");
+				assert(false);
+				break;
 			}
-		else if (deviceType==1) //GPU BLOCK
+		else if (deviceType == 1) //GPU BLOCK
 			switch (deviceNumber) {
-				case 0:
-					pu = gpu0;
-					break;
+			case 0:
+				pu = gpu0;
+				break;
 
-				case 1:
-					pu = gpu1;
-					break;
+			case 1:
+				pu = gpu1;
+				break;
 
-				case 2:
-					pu = gpu2;
-					break;
+			case 2:
+				pu = gpu2;
+				break;
 
-				default:
-					printf("Invalid block device number for GPU!\n");
-					assert(false);
-					break;
+			default:
+				printf("Invalid block device number for GPU!\n");
+				assert(false);
+				break;
 			}
-		else{
+		else {
 			printf("Invalid block type!\n");
 			assert(false);
 		}
 
 		printf("\nPROBLEM TYPE ALWAYS = ORDINARY!!!\n");
 
-		resBlock = new RealBlock(node, dimension,
-				count[0], count[1], count[2],
-				offset[0], offset[1], offset[2],
-				mCellSize, mHaloSize,
-				idx, pu, initFuncNumber, compFuncNumber,
-				ORDINARY, mSolverIndex, mAtol, mRtol);
-	}
-	else {
+		resBlock = new RealBlock(node, dimension, count[0], count[1], count[2],
+				offset[0], offset[1], offset[2], mCellSize, mHaloSize, idx, pu,
+				initFuncNumber, compFuncNumber, ORDINARY, mSolverIndex, mAtol,
+				mRtol);
+	} else {
 		//resBlock =  new BlockNull(idx, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize);
-		resBlock = new NullBlock(node, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], mCellSize, mHaloSize);
+		resBlock = new NullBlock(node, dimension, count[0], count[1], count[2],
+				offset[0], offset[1], offset[2], mCellSize, mHaloSize);
 	}
 
 	delete initFuncNumber;
@@ -732,38 +715,42 @@ Interconnect* Domain::readConnection(ifstream& in) {
 	int* offsetDestination = new int[2];
 	offsetDestination[0] = offsetDestination[1] = 0;
 
-	in.read((char*)&dimension, SIZE_INT);
+	in.read((char*) &dimension, SIZE_INT);
 	//cout << endl;
 	//cout << "Interconnect #<NONE>" << endl;
 
-	for (int j = 2-dimension; j < 2; ++j) {
-		in.read((char*)&length[j], SIZE_INT);
+	for (int j = 2 - dimension; j < 2; ++j) {
+		in.read((char*) &length[j], SIZE_INT);
 		//cout << "	length" << j << ":           " << length[j] << endl;
 	}
 
-	in.read((char*)&sourceBlock, SIZE_INT);
-	in.read((char*)&destinationBlock, SIZE_INT);
-	in.read((char*)&sourceSide, SIZE_INT);
-	in.read((char*)&destinationSide, SIZE_INT);
+	in.read((char*) &sourceBlock, SIZE_INT);
+	in.read((char*) &destinationBlock, SIZE_INT);
+	in.read((char*) &sourceSide, SIZE_INT);
+	in.read((char*) &destinationSide, SIZE_INT);
 
 	/*cout << "	source block:      " << sourceBlock << endl;
-	cout << "	destination block: " << destinationBlock << endl;
-	cout << "	source side:       " << sourceSide << endl;
-	cout << "	destination side:  " << destinationSide << endl;*/
+	 cout << "	destination block: " << destinationBlock << endl;
+	 cout << "	source side:       " << sourceSide << endl;
+	 cout << "	destination side:  " << destinationSide << endl;*/
 
-	for (int j = 2-dimension; j < 2; ++j) {
-		in.read((char*)&offsetSource[j], SIZE_INT);
+	for (int j = 2 - dimension; j < 2; ++j) {
+		in.read((char*) &offsetSource[j], SIZE_INT);
 		//cout << "	offsetSource" << j << ":            " << offsetSource[j] << endl;
 	}
 
-	for (int j = 2-dimension; j < 2; ++j) {
-		in.read((char*)&offsetDestination[j], SIZE_INT);
+	for (int j = 2 - dimension; j < 2; ++j) {
+		in.read((char*) &offsetDestination[j], SIZE_INT);
 		//cout << "	offsetDestnation" << j << ":        " << offsetDestination[j] << endl;
 	}
 
-	double* sourceData = mBlocks[sourceBlock]->addNewBlockBorder(mBlocks[destinationBlock], getSide(sourceSide), offsetSource[0], offsetSource[1], length[0], length[1]);
-	double* destinationData = mBlocks[destinationBlock]->addNewExternalBorder(mBlocks[sourceBlock], getSide(destinationSide),
-			offsetDestination[0], offsetDestination[1], length[0], length[1], sourceData);
+	double* sourceData = mBlocks[sourceBlock]->addNewBlockBorder(
+			mBlocks[destinationBlock], getSide(sourceSide), offsetSource[0],
+			offsetSource[1], length[0], length[1]);
+	double* destinationData = mBlocks[destinationBlock]->addNewExternalBorder(
+			mBlocks[sourceBlock], getSide(destinationSide),
+			offsetDestination[0], offsetDestination[1], length[0], length[1],
+			sourceData);
 
 	int sourceNode = mBlocks[sourceBlock]->getNodeNumber();
 	int destinationNode = mBlocks[destinationBlock]->getNodeNumber();
@@ -777,18 +764,7 @@ Interconnect* Domain::readConnection(ifstream& in) {
 	delete offsetDestination;
 
 	//return new Interconnect(sourceNode, destinationNode, borderLength, sourceData, destinationData, &mWorkerComm);
-	if(sourceNode == destinationNode)
-		return new NonTransferInterconnect(sourceNode, destinationNode);
-
-	if(mWorkerRank == sourceNode) {
-		return new TransferInterconnectSend(sourceNode, destinationNode, borderLength, sourceData, &mWorkerComm);
-	}
-
-	if(mWorkerRank == destinationNode) {
-		return new TransferInterconnectRecv(sourceNode, destinationNode, borderLength, destinationData, &mWorkerComm);;
-	}
-
-	return new NonTransferInterconnect(sourceNode, destinationNode);
+	return getInterconnect(sourceNode, destinationNode, borderLength, sourceData, destinationData);
 }
 
 /*
@@ -829,7 +805,7 @@ int Domain::getRepeatCount() {
 int Domain::getCpuBlockCount() {
 	int count = 0;
 	for (int i = 0; i < mBlockCount; ++i)
-		if( isCPU(mBlocks[i]->getBlockType()) )
+		if (isCPU(mBlocks[i]->getBlockType()))
 			count++;
 
 	return count;
@@ -841,7 +817,7 @@ int Domain::getCpuBlockCount() {
 int Domain::getGpuBlockCount() {
 	int count = 0;
 	for (int i = 0; i < mBlockCount; ++i)
-		if(isGPU(mBlocks[i]->getBlockType()))
+		if (isGPU(mBlocks[i]->getBlockType()))
 			count++;
 
 	return count;
@@ -853,7 +829,7 @@ int Domain::getGpuBlockCount() {
 int Domain::realBlockCount() {
 	int count = 0;
 	for (int i = 0; i < mBlockCount; ++i)
-		if( mBlocks[i]->isRealBlock() )
+		if (mBlocks[i]->isRealBlock())
 			count++;
 
 	return count;
@@ -868,17 +844,44 @@ void Domain::saveState(char* inputFile) {
 
 	strncpy(saveFile, inputFile, length);
 
-	saveFile[ length ] = 0;
+	saveFile[length] = 0;
 
 	sprintf(saveFile, "%s%s%f%s", saveFile, "/project-", currentTime, ".bin");
 
-	saveStateToFile( saveFile );
+	saveStateToFile(saveFile);
 }
 
 void Domain::saveStateToFile(char* path) {
 	/*double** resultAll = collectDataFromNode();
 
-	if( mGlobalRank == 0 ) {
+	 if( mGlobalRank == 0 ) {
+	 ofstream out;
+	 out.open(path, ios::binary);
+
+	 char save_file_code = SAVE_FILE_CODE;
+	 char version_major = VERSION_MAJOR;
+	 char version_minor = VERSION_MINOR;
+
+	 out.write((char*)&save_file_code, SIZE_CHAR);
+	 out.write((char*)&version_major, SIZE_CHAR);
+	 out.write((char*)&version_minor, SIZE_CHAR);
+
+	 out.write((char*)&currentTime, SIZE_DOUBLE);
+	 out.write((char*)&timeStep, SIZE_DOUBLE);
+
+	 for (int i = 0; i < mBlockCount; ++i) {
+	 int count = mBlocks[i]->getGridElementCount();
+	 out.write((char*)resultAll[i], SIZE_DOUBLE * count);
+	 }
+	 }
+
+	 if( resultAll != NULL ) {
+	 for (int i = 0; i < mBlockCount; ++i)
+	 delete resultAll[i];
+	 delete resultAll;
+	 }*/
+
+	if (mGlobalRank == 0) {
 		ofstream out;
 		out.open(path, ios::binary);
 
@@ -886,39 +889,12 @@ void Domain::saveStateToFile(char* path) {
 		char version_major = VERSION_MAJOR;
 		char version_minor = VERSION_MINOR;
 
-		out.write((char*)&save_file_code, SIZE_CHAR);
-		out.write((char*)&version_major, SIZE_CHAR);
-		out.write((char*)&version_minor, SIZE_CHAR);
+		out.write((char*) &save_file_code, SIZE_CHAR);
+		out.write((char*) &version_major, SIZE_CHAR);
+		out.write((char*) &version_minor, SIZE_CHAR);
 
-		out.write((char*)&currentTime, SIZE_DOUBLE);
-		out.write((char*)&timeStep, SIZE_DOUBLE);
-
-		for (int i = 0; i < mBlockCount; ++i) {
-			int count = mBlocks[i]->getGridElementCount();
-			out.write((char*)resultAll[i], SIZE_DOUBLE * count);
-		}
-	}
-
-	if( resultAll != NULL ) {
-		for (int i = 0; i < mBlockCount; ++i)
-			delete resultAll[i];
-		delete resultAll;
-	}*/
-
-	if( mGlobalRank == 0 ) {
-		ofstream out;
-		out.open(path, ios::binary);
-
-		char save_file_code = SAVE_FILE_CODE;
-		char version_major = VERSION_MAJOR;
-		char version_minor = VERSION_MINOR;
-
-		out.write((char*)&save_file_code, SIZE_CHAR);
-		out.write((char*)&version_major, SIZE_CHAR);
-		out.write((char*)&version_minor, SIZE_CHAR);
-
-		out.write((char*)&currentTime, SIZE_DOUBLE);
-		out.write((char*)&timeStep, SIZE_DOUBLE);
+		out.write((char*) &currentTime, SIZE_DOUBLE);
+		out.write((char*) &timeStep, SIZE_DOUBLE);
 
 		out.close();
 	}
@@ -931,38 +907,37 @@ void Domain::saveStateToFile(char* path) {
 
 void Domain::loadStateFromFile(char* dataFile) {
 	/*ifstream in;
-	in.open(dataFile, ios::binary);
+	 in.open(dataFile, ios::binary);
 
-	char save_file_code;
-	char version_major;
-	char version_minor;
-	double fileCurrentTime;
+	 char save_file_code;
+	 char version_major;
+	 char version_minor;
+	 double fileCurrentTime;
 
-	in.read((char*)&save_file_code, SIZE_CHAR);
-	in.read((char*)&version_major, SIZE_CHAR);
-	in.read((char*)&version_minor, SIZE_CHAR);
+	 in.read((char*)&save_file_code, SIZE_CHAR);
+	 in.read((char*)&version_major, SIZE_CHAR);
+	 in.read((char*)&version_minor, SIZE_CHAR);
 
-	in.read((char*)&fileCurrentTime, SIZE_DOUBLE);
-	in.read((char*)&timeStep, SIZE_DOUBLE);
+	 in.read((char*)&fileCurrentTime, SIZE_DOUBLE);
+	 in.read((char*)&timeStep, SIZE_DOUBLE);
 
-	printf("\n%d %d %d %f\n", save_file_code, version_major, version_minor, fileCurrentTime);
+	 printf("\n%d %d %d %f\n", save_file_code, version_major, version_minor, fileCurrentTime);
 
-	currentTime = fileCurrentTime;
+	 currentTime = fileCurrentTime;
 
-	for (int i = 0; i < mBlockCount; ++i) {
-		int total = mBlocks[i]->getGridElementCount();
-		double* data = new double[total];
-		in.read((char*)data, SIZE_DOUBLE*total);
+	 for (int i = 0; i < mBlockCount; ++i) {
+	 int total = mBlocks[i]->getGridElementCount();
+	 double* data = new double[total];
+	 in.read((char*)data, SIZE_DOUBLE*total);
 
-		if (mBlocks[i]->isRealBlock()) {
-			mBlocks[i]->loadData(data);
-		}
+	 if (mBlocks[i]->isRealBlock()) {
+	 mBlocks[i]->loadData(data);
+	 }
 
-		delete data;
-	}
+	 delete data;
+	 }
 
-	in.close();*/
-
+	 in.close();*/
 
 	ifstream in;
 	in.open(dataFile, ios::binary);
@@ -972,35 +947,36 @@ void Domain::loadStateFromFile(char* dataFile) {
 	char version_minor;
 	double fileCurrentTime;
 
-	in.read((char*)&save_file_code, SIZE_CHAR);
-	in.read((char*)&version_major, SIZE_CHAR);
-	in.read((char*)&version_minor, SIZE_CHAR);
+	in.read((char*) &save_file_code, SIZE_CHAR);
+	in.read((char*) &version_major, SIZE_CHAR);
+	in.read((char*) &version_minor, SIZE_CHAR);
 
-	in.read((char*)&fileCurrentTime, SIZE_DOUBLE);
-	in.read((char*)&timeStep, SIZE_DOUBLE);
+	in.read((char*) &fileCurrentTime, SIZE_DOUBLE);
+	in.read((char*) &timeStep, SIZE_DOUBLE);
 
 	currentTime = fileCurrentTime;
 
 	for (int i = 0; i < mBlockCount; ++i) {
 		/*int total = mBlocks[i]->getGridElementCount();
-		double* data = new double[total];
-		in.read((char*)data, SIZE_DOUBLE*total);
+		 double* data = new double[total];
+		 in.read((char*)data, SIZE_DOUBLE*total);
 
-		if (mBlocks[i]->isRealBlock()) {
-			mBlocks[i]->loadData(data);
-		}
+		 if (mBlocks[i]->isRealBlock()) {
+		 mBlocks[i]->loadData(data);
+		 }
 
-		delete data;*/
+		 delete data;*/
 		mBlocks[i]->loadState(in);
 	}
 
 	in.close();
 }
 
-void Domain::printStatisticsInfo(char* inputFile, char* outputFile, double calcTime, char* statisticsFile) {
+void Domain::printStatisticsInfo(char* inputFile, char* outputFile,
+		double calcTime, char* statisticsFile) {
 	//cout << endl << "PRINT STATISTIC INFO DOESN'T WORK" << endl;
 
-	if( mWorkerRank == 0 ) {
+	if (mWorkerRank == 0) {
 		int count = 0;
 		for (int i = 0; i < mBlockCount; ++i) {
 			count += mBlocks[i]->getGridElementCount();
@@ -1008,94 +984,96 @@ void Domain::printStatisticsInfo(char* inputFile, char* outputFile, double calcT
 			//mBlocks[i]->printGeneralInformation();
 		}
 
-		printf("\n\nSteps accepted: %d\nSteps rejected: %d\n", mAcceptedStepCount, mRejectedStepCount);
+		printf("\n\nSteps accepted: %d\nSteps rejected: %d\n",
+				mAcceptedStepCount, mRejectedStepCount);
 		int stepCount = mRejectedStepCount + mAcceptedStepCount;
-		printf("Time: %.2f\nElement count: %d\nPerformance (10^6): %.2f\n\n", calcTime, count, (double)(count) * stepCount / calcTime / 1000000);
+		printf("Time: %.2f\nElement count: %d\nPerformance (10^6): %.2f\n\n",
+				calcTime, count,
+				(double) (count) * stepCount / calcTime / 1000000);
 
 		//ofstream out;
 		//out.open("/home/frolov2/Tracer_project/stat", ios::app);
 
 		/*FILE* out;
-		out = fopen("/home/frolov2/Tracer_project/statistic", "a");
+		 out = fopen("/home/frolov2/Tracer_project/statistic", "a");
 
-		double speed = (double)(count) * stepCount / calcTime / 1000000;
-		int side = (int)sqrt( ( (double)count ) / mCellSize );
+		 double speed = (double)(count) * stepCount / calcTime / 1000000;
+		 int side = (int)sqrt( ( (double)count ) / mCellSize );
 
-		fprintf(out, "%-12d %-8d %-2d    %-2d    %-12d    %-10.2f    %-10.2f %s\n", count, side, mWorldSize, mCellSize, stepCount, calcTime, speed, inputFile);
+		 fprintf(out, "%-12d %-8d %-2d    %-2d    %-12d    %-10.2f    %-10.2f %s\n", count, side, mWorldSize, mCellSize, stepCount, calcTime, speed, inputFile);
 
-		fclose(out);*/
+		 fclose(out);*/
 	}
 
 	return;
 	/*if ( flags & STATISTICS ) {
-		if( world_rank == 0 ) {
-			int countGridNodes = getCountGridNodes();
-			int repeatCount = getRepeatCount();
-			double speed = (double)(countGridNodes) * repeatCount / calcTime / 1000000;
+	 if( world_rank == 0 ) {
+	 int countGridNodes = getCountGridNodes();
+	 int repeatCount = getRepeatCount();
+	 double speed = (double)(countGridNodes) * repeatCount / calcTime / 1000000;
 
-			int* devices = new int[world_size * 2];
-			devices[0] = getCpuBlocksCount();
-			devices[1] = getGpuBlocksCount();
+	 int* devices = new int[world_size * 2];
+	 devices[0] = getCpuBlocksCount();
+	 devices[1] = getGpuBlocksCount();
 
-			for (int i = 1; i < world_size; ++i) {
-				MPI_Recv(devices + 2 * i, 1, MPI_INT, i, 999, MPI_COMM_WORLD, &status);
-				MPI_Recv(devices + 2 * i + 1, 1, MPI_INT, i, 999, MPI_COMM_WORLD, &status);
-			}
+	 for (int i = 1; i < world_size; ++i) {
+	 MPI_Recv(devices + 2 * i, 1, MPI_INT, i, 999, MPI_COMM_WORLD, &status);
+	 MPI_Recv(devices + 2 * i + 1, 1, MPI_INT, i, 999, MPI_COMM_WORLD, &status);
+	 }
 
-			ofstream out;
-			out.open(statisticsFile, ios::app);
+	 ofstream out;
+	 out.open(statisticsFile, ios::app);
 
-			out << "############################################################" << endl;
-			out.precision(5);
-			out << endl <<
-					"Input file:   " << inputFile << endl <<
-					"Output file:  " << outputFile << endl <<
-					"Node count:   " << countGridNodes << endl <<
-					"Repeat count: " << repeatCount << endl <<
-					"Time:         " << calcTime << endl <<
-					"Speed (10^6): " << speed << endl <<
-					endl;
+	 out << "############################################################" << endl;
+	 out.precision(5);
+	 out << endl <<
+	 "Input file:   " << inputFile << endl <<
+	 "Output file:  " << outputFile << endl <<
+	 "Node count:   " << countGridNodes << endl <<
+	 "Repeat count: " << repeatCount << endl <<
+	 "Time:         " << calcTime << endl <<
+	 "Speed (10^6): " << speed << endl <<
+	 endl;
 
-			for (int i = 0; i < world_size; ++i)
-				out << "Thread #" << i << " CPU blocks: " << devices[2 * i] << " GPU blocks: " << devices[2 * i + 1] << endl << endl;
+	 for (int i = 0; i < world_size; ++i)
+	 out << "Thread #" << i << " CPU blocks: " << devices[2 * i] << " GPU blocks: " << devices[2 * i + 1] << endl << endl;
 
-			out << "############################################################" << endl;
+	 out << "############################################################" << endl;
 
-			out.close();
+	 out.close();
 
-			delete devices;
-		}
-		else {
-			int cpuCount = getCpuBlocksCount();
-			int gpuCount = getGpuBlocksCount();
+	 delete devices;
+	 }
+	 else {
+	 int cpuCount = getCpuBlocksCount();
+	 int gpuCount = getGpuBlocksCount();
 
-			MPI_Send(&cpuCount, 1, MPI_INT, 0, 999, MPI_COMM_WORLD);
-			MPI_Send(&gpuCount, 1, MPI_INT, 0, 999, MPI_COMM_WORLD);
-		}
-	}*/
+	 MPI_Send(&cpuCount, 1, MPI_INT, 0, 999, MPI_COMM_WORLD);
+	 MPI_Send(&gpuCount, 1, MPI_INT, 0, 999, MPI_COMM_WORLD);
+	 }
+	 }*/
 }
 
 bool Domain::isNan() {
 	double** resultAll = collectDataFromNode();
 
-	if( mGlobalRank == 0 ) {
+	if (mGlobalRank == 0) {
 		for (int i = 0; i < mBlockCount; ++i) {
 			int count = mBlocks[i]->getGridElementCount();
 
 			for (int j = 0; j < count; ++j) {
-				if(isnan(resultAll[i][j]))
+				if (isnan(resultAll[i][j]))
 					return true;
 			}
 
 		}
 	}
 
-	if( resultAll != NULL ) {
+	if (resultAll != NULL) {
 		for (int i = 0; i < mBlockCount; ++i)
 			delete resultAll[i];
 		delete resultAll;
 	}
-
 
 	return false;
 }
@@ -1105,42 +1083,59 @@ int Domain::getMaximumNumberSavedStates() {
 }
 
 void Domain::checkOptions(int flags, double _stopTime, char* saveFile) {
-	if( flags & TIME_EXECUTION )
+	if (flags & TIME_EXECUTION)
 		setStopTime(_stopTime);
 
-	if( flags & LOAD_FILE )
+	if (flags & LOAD_FILE)
 		loadStateFromFile(saveFile);
 }
 
 void Domain::createProcessigUnit() {
 	switch (dimension) {
-		case 1:
-			cpu = new CPU_1d(0);
-			break;
-		case 2:
-			cpu = new CPU_2d(0);
-			break;
-		case 3:
-			cpu = new CPU_3d(0);
-			break;
-		default:
-			break;
+	case 1:
+		cpu = new CPU_1d(0);
+		break;
+	case 2:
+		cpu = new CPU_2d(0);
+		break;
+	case 3:
+		cpu = new CPU_3d(0);
+		break;
+	default:
+		break;
 	}
 }
 
+Interconnect* Domain::getInterconnect(int sourceNode, int destinationNode,
+		int borderLength, double* sourceData, double* destinationData) {
+	if (sourceNode == destinationNode)
+			return new NonTransferInterconnect(sourceNode, destinationNode);
+
+	if (mWorkerRank == sourceNode) {
+		return new TransferInterconnectSend(sourceNode, destinationNode,
+				borderLength, sourceData, &mWorkerComm);
+	}
+
+	if (mWorkerRank == destinationNode) {
+		return new TransferInterconnectRecv(sourceNode, destinationNode,
+				borderLength, destinationData, &mWorkerComm);;
+	}
+
+	return new NonTransferInterconnect(sourceNode, destinationNode);
+}
+
 /*
-void Domain::storeDbFileName(char* inputFile){
-    char saveFile[100];
+ void Domain::storeDbFileName(char* inputFile){
+ char saveFile[100];
 
-	int length = lastChar(inputFile, '/');
+ int length = lastChar(inputFile, '/');
 
-	strncpy(saveFile, inputFile, length);
-	saveFile[ length ] = 0;
+ strncpy(saveFile, inputFile, length);
+ saveFile[ length ] = 0;
 
-	sprintf(saveFile, "%s%s%f%s", saveFile, "/project-", currentTime, ".bin");
+ sprintf(saveFile, "%s%s%f%s", saveFile, "/project-", currentTime, ".bin");
 
 
-	dbConnStoreFileName(mJobId, saveFile);
-}*/
-
+ dbConnStoreFileName(mJobId, saveFile);
+ }*/
 
