@@ -28,3 +28,7 @@ TransferInterconnect::~TransferInterconnect() {
 		delete status;
 }
 
+void TransferInterconnect::wait() {
+	MPI_Wait(request, status);
+}
+
