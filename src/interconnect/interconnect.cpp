@@ -9,31 +9,12 @@
 
 using namespace std;
 
-Interconnect::Interconnect(int _sourceLocationNode, int _destinationLocationNode, int _borderLength,
-		double* _sourceBlockBorder, double* _destinationExternalBorder, MPI_Comm* _pworkerComm ) {
+Interconnect::Interconnect(int _sourceLocationNode, int _destinationLocationNode) {
 	sourceLocationNode = _sourceLocationNode;
 	destinationLocationNode = _destinationLocationNode;
-
-	borderLength = _borderLength;
-
-	sourceBlockBorder = _sourceBlockBorder;
-	destinationExternalBorder = _destinationExternalBorder;
-
-	request = new MPI_Request();
-
-	status = new MPI_Status();
-
-	flag = false;
-
-	mpWorkerComm = _pworkerComm;
 }
 
 Interconnect::~Interconnect() {
-	if( request != NULL )
-		delete request;
-
-	if( status != NULL )
-		delete status;
 }
 
 void Interconnect::sendRecv(int locationNode) {
