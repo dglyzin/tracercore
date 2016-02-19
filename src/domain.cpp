@@ -256,7 +256,7 @@ void Domain::computeStage(int stage) {
 	prepareData(stage);
 
 	for (int i = 0; i < mConnectionCount; ++i)
-		mInterconnects[i]->sendRecv(mWorkerRank);
+		mInterconnects[i]->transfer();
 
 	computeOneStepCenter(stage);
 
@@ -776,7 +776,19 @@ Interconnect* Domain::readConnection(ifstream& in) {
 	delete offsetSource;
 	delete offsetDestination;
 
-	return new Interconnect(sourceNode, destinationNode, borderLength, sourceData, destinationData, &mWorkerComm);
+	//return new Interconnect(sourceNode, destinationNode, borderLength, sourceData, destinationData, &mWorkerComm);
+	if(sourceNode == destinationNode)
+		return new NonTransferInterconnect(sourceNode, destinationNode);
+
+	if(mWorkerRank == sourceNode) {
+		return new TransferInterconnectSend(sourceNode, destinationNode, borderLength, sourceData, &mWorkerComm);
+	}
+
+	if(mWorkerRank == destinationNode) {
+		return new TransferInterconnectRecv(sourceNode, destinationNode, borderLength, destinationData, &mWorkerComm);;
+	}
+
+	return new NonTransferInterconnect(sourceNode, destinationNode);
 }
 
 /*
