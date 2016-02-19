@@ -87,7 +87,7 @@ void Interconnect::print() {
 	printf("\nInterconnect\n"
 			"	Source node               : %d\n"
 			"	Destination node          : %d\n"
-			"	Source memory address     : %d\n"
-			"	Destination memory address: %d\n"
+			"	Source memory address     : %p\n"
+			"	Destination memory address: %p\n"
 			"\n", sourceLocationNode, destinationLocationNode, sourceBlockBorder, destinationExternalBorder);
 }
