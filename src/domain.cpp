@@ -64,19 +64,6 @@ Domain::Domain(int _world_rank, int _world_size, char* inputFile) {
 
 	readFromFile(inputFile);
 
-	/*flags = _flags;
-
-	 if( flags & LOAD_FILE )
-	 loadStateFromFile(inputFile, loadFile);
-	 else
-	 readFromFile(inputFile);
-
-	 if( flags & TIME_EXECUTION )
-	 stopTime = _stopTime;
-
-	 if( flags & STEP_EXECUTION )
-	 mStepCount = _stepCount;*/
-
 	mAcceptedStepCount = 0;
 	mRejectedStepCount = 0;
 }
@@ -852,35 +839,6 @@ void Domain::saveState(char* inputFile) {
 }
 
 void Domain::saveStateToFile(char* path) {
-	/*double** resultAll = collectDataFromNode();
-
-	 if( mGlobalRank == 0 ) {
-	 ofstream out;
-	 out.open(path, ios::binary);
-
-	 char save_file_code = SAVE_FILE_CODE;
-	 char version_major = VERSION_MAJOR;
-	 char version_minor = VERSION_MINOR;
-
-	 out.write((char*)&save_file_code, SIZE_CHAR);
-	 out.write((char*)&version_major, SIZE_CHAR);
-	 out.write((char*)&version_minor, SIZE_CHAR);
-
-	 out.write((char*)&currentTime, SIZE_DOUBLE);
-	 out.write((char*)&timeStep, SIZE_DOUBLE);
-
-	 for (int i = 0; i < mBlockCount; ++i) {
-	 int count = mBlocks[i]->getGridElementCount();
-	 out.write((char*)resultAll[i], SIZE_DOUBLE * count);
-	 }
-	 }
-
-	 if( resultAll != NULL ) {
-	 for (int i = 0; i < mBlockCount; ++i)
-	 delete resultAll[i];
-	 delete resultAll;
-	 }*/
-
 	if (mGlobalRank == 0) {
 		ofstream out;
 		out.open(path, ios::binary);
@@ -906,39 +864,6 @@ void Domain::saveStateToFile(char* path) {
 }
 
 void Domain::loadStateFromFile(char* dataFile) {
-	/*ifstream in;
-	 in.open(dataFile, ios::binary);
-
-	 char save_file_code;
-	 char version_major;
-	 char version_minor;
-	 double fileCurrentTime;
-
-	 in.read((char*)&save_file_code, SIZE_CHAR);
-	 in.read((char*)&version_major, SIZE_CHAR);
-	 in.read((char*)&version_minor, SIZE_CHAR);
-
-	 in.read((char*)&fileCurrentTime, SIZE_DOUBLE);
-	 in.read((char*)&timeStep, SIZE_DOUBLE);
-
-	 printf("\n%d %d %d %f\n", save_file_code, version_major, version_minor, fileCurrentTime);
-
-	 currentTime = fileCurrentTime;
-
-	 for (int i = 0; i < mBlockCount; ++i) {
-	 int total = mBlocks[i]->getGridElementCount();
-	 double* data = new double[total];
-	 in.read((char*)data, SIZE_DOUBLE*total);
-
-	 if (mBlocks[i]->isRealBlock()) {
-	 mBlocks[i]->loadData(data);
-	 }
-
-	 delete data;
-	 }
-
-	 in.close();*/
-
 	ifstream in;
 	in.open(dataFile, ios::binary);
 
@@ -957,15 +882,6 @@ void Domain::loadStateFromFile(char* dataFile) {
 	currentTime = fileCurrentTime;
 
 	for (int i = 0; i < mBlockCount; ++i) {
-		/*int total = mBlocks[i]->getGridElementCount();
-		 double* data = new double[total];
-		 in.read((char*)data, SIZE_DOUBLE*total);
-
-		 if (mBlocks[i]->isRealBlock()) {
-		 mBlocks[i]->loadData(data);
-		 }
-
-		 delete data;*/
 		mBlocks[i]->loadState(in);
 	}
 
