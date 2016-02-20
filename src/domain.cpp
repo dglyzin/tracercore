@@ -973,7 +973,7 @@ void Domain::loadStateFromFile(char* dataFile) {
 }
 
 void Domain::printStatisticsInfo(char* inputFile, char* outputFile,
-		double calcTime, char* statisticsFile) {
+	double calcTime, char* statisticsFile) {
 	//cout << endl << "PRINT STATISTIC INFO DOESN'T WORK" << endl;
 
 	if (mWorkerRank == 0) {
