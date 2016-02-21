@@ -40,8 +40,8 @@ int Utils::lastChar(const char* source, char ch, int num) {
 	return -1;
 }
 
-void Utils::copyToLastChar(char* result, const char* source, char ch) {
-	int length = Utils::lastChar(source, ch) + 1;
+void Utils::copyToLastChar(char* result, const char* source, char ch, int num) {
+	int length = Utils::lastChar(source, ch, num) + 1;
 
 	strncpy(result, source, length);
 

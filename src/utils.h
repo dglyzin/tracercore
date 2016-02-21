@@ -16,7 +16,7 @@ public:
 	virtual ~Utils();
 
 	static int lastChar(const char* source, char ch, int num = 1);
-	static void copyToLastChar(char* result, const char* source, char ch);
+	static void copyToLastChar(char* result, const char* source, char ch, int num = 1);
 	static void cutToLastButOneChar(char* result, const char* source, char ch);
 	static void cutFromLastToEnd(char* result, const char* source, char ch);
 };
