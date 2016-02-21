@@ -9,6 +9,7 @@
 #define SRC_PROCESSINGUNIT_CPU_CPU_H_
 
 #include <omp.h>
+#include <math.h>
 
 #include "../processingunit.h"
 
@@ -68,6 +69,8 @@ public:
 
 	void saveArray(double* array, int size, char* path);
 	void loadArray(double* array, int size, std::ifstream& in);
+
+	bool isNan(double* array, int size);
 };
 
 #endif /* SRC_PROCESSINGUNIT_CPU_CPU_H_ */

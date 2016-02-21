@@ -178,3 +178,12 @@ void CPU::saveArray(double* array, int size, char* path) {
 void CPU::loadArray(double* array, int size, ifstream& in) {
 	in.read((char*)array, SIZE_DOUBLE * size);
 }
+
+bool CPU::isNan(double* array, int size) {
+	for (int i = 0; i < size; ++i) {
+		if( isnan(array[i]) )
+			return true;
+	}
+
+	return false;
+}
