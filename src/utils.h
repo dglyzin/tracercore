@@ -17,7 +17,7 @@ public:
 
 	static int lastChar(const char* source, char ch, int num = 1);
 	static void copyToLastChar(char* result, const char* source, char ch, int num = 1);
-	static void copyFromLastToEnd(char* result, const char* source, char ch);
+	static void copyFromLastToEnd(char* result, const char* source, char ch, int num = 1);
 };
 
 #endif /* SRC_UTILS_H_ */
