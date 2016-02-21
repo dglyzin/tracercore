@@ -19,6 +19,8 @@
 #include "processingunit/cpu/cpu2d.h"
 #include "processingunit/cpu/cpu3d.h"
 
+#include "utils.h"
+
 /*
  * Основной управляющий класс приложения.
  * Создает блоки (BlockCpu, BlockGpu, BlockNull) и их соединения (Interconnect).

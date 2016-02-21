@@ -40,7 +40,7 @@ PROBLEM=$(SRCPROBLEM)/problemtype.cpp $(SRCPROBLEM)/ordinary.cpp $(SRCPROBLEM)/d
 INTERCONNECT=$(SRCINTERCONNECT)/interconnect.cpp $(SRCINTERONNECTTRANSFER)/transferinterconnect.cpp $(SRCINTERCONNECT)/nontransferinterconnect.cpp $(SRCINTERONNECTTRANSFER)/transferinterconnectsend.cpp $(SRCINTERONNECTTRANSFER)/transferinterconnectrecv.cpp
 
 
-SOURCE=$(SRC)/main.cpp $(SRC)/domain.cpp $(SRC)/enums.cpp $(SRC)/dbconnector.cpp $(BLOCK) $(PROCUNIT) $(STEPSTORAGE) $(PROBLEM) $(INTERCONNECT)
+SOURCE=$(SRC)/main.cpp $(SRC)/domain.cpp $(SRC)/enums.cpp $(SRC)/utils.cpp $(SRC)/dbconnector.cpp $(BLOCK) $(PROCUNIT) $(STEPSTORAGE) $(PROBLEM) $(INTERCONNECT)
 
 OBJECT=$(SOURCE:.cpp=.o)
 

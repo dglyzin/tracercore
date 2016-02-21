@@ -10,18 +10,6 @@
 
 using namespace std;
 
-int lastChar(char* source, char ch) {
-	int i = 0;
-	int index = 0;
-	while (source[i] != 0) {
-		if (source[i] == ch)
-			index = i;
-		i++;
-	}
-
-	return index;
-}
-
 Domain::Domain(int _world_rank, int _world_size, char* inputFile) {
 	//Get worker communicator and determine if there is python master
 	mGlobalRank = _world_rank;
@@ -822,9 +810,9 @@ int Domain::realBlockCount() {
 void Domain::saveState(char* inputFile) {
 	//printf("\nsaveState %f %f %f\n", counterSaveTime, saveInterval, currentTime);
 
-	char saveFile[100];
+	char saveFile[250];
 
-	int length = lastChar(inputFile, '/');
+	int length = Utils::lastChar(inputFile, '/');
 
 	strncpy(saveFile, inputFile, length);
 
