@@ -812,11 +812,12 @@ void Domain::saveState(char* inputFile) {
 
 	char saveFile[250];
 
-	int length = Utils::lastChar(inputFile, '/');
+	/*int length = Utils::lastChar(inputFile, '/');
 
 	strncpy(saveFile, inputFile, length);
 
-	saveFile[length] = 0;
+	saveFile[length] = 0;*/
+	Utils::cutToLastChar(saveFile, inputFile, '/');
 
 	sprintf(saveFile, "%s%s%f%s", saveFile, "/project-", currentTime, ".bin");
 

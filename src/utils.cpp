@@ -16,7 +16,7 @@ Utils::~Utils() {
 	// TODO Auto-generated destructor stub
 }
 
-int Utils::lastChar(char* source, char ch) {
+int Utils::lastChar(const char* source, char ch) {
 	int i = 0;
 	int index = 0;
 	while (source[i] != 0) {
@@ -26,4 +26,12 @@ int Utils::lastChar(char* source, char ch) {
 	}
 
 	return index;
+}
+
+void Utils::cutToLastChar(char* result, const char* source, char ch) {
+	int length = Utils::lastChar(source, ch);
+
+	strncpy(result, source, length);
+
+	result[length] = 0;
 }
