@@ -33,6 +33,8 @@ public:
 
     double* getStatePointer();
 
+    bool isNan(ProcessingUnit* pu);
+
     virtual double* getStageSource(int stage) = 0;
     virtual double* getStageResult(int stage) = 0;
 

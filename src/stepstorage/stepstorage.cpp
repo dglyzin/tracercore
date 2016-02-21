@@ -63,4 +63,6 @@ double* StepStorage::getStatePointer() {
 	return mState;
 }
 
-
+bool StepStorage::isNan(ProcessingUnit* pu) {
+	return pu->isNan(mState, mCount);
+}
