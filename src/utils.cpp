@@ -48,12 +48,7 @@ void Utils::copyToLastChar(char* result, const char* source, char ch, int num) {
 	result[length] = 0;
 }
 
-void Utils::cutToLastButOneChar(char* result, const char* source, char ch) {
-	copyToLastChar(result, source, ch);
-	copyToLastChar(result, result, ch);
-}
-
-void Utils::cutFromLastToEnd(char* result, const char* source, char ch) {
+void Utils::copyFromLastToEnd(char* result, const char* source, char ch) {
 	int pos = Utils::lastChar(source, ch);
 	int length = strlen(source);
 
