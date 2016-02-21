@@ -907,19 +907,28 @@ void Domain::printStatisticsInfo(char* inputFile, char* outputFile,
 
 		 fclose(out);*/
 
-		/*char statFile[250];
-		Utils::cutToLastButOneChar(statFile, inputFile, '/');
+		char statFile[250];
+		Utils::copyToLastChar(statFile, inputFile, '/', 2);
 
-		sprintf(statFile, "%s%s", statFile, "/statistic");
+		sprintf(statFile, "%s%s", statFile, "statistic");
 
 		FILE* out;
 		out = fopen(statFile, "a");
 
 		int side = (int)sqrt( ( (double)count ) / mCellSize );
 
-		fprintf(out, "%-12d %-8d %-2d    %-2d    %-12d    %-10.2f    %-10.2f %s\n", count, side, mWorkerCommSize, mCellSize, stepCount, calcTime, speed, inputFile);
+		char in[20];
+		Utils::copyFromLastToEnd(in, inputFile, '/', 2);
 
-		fclose(out);*/
+		fprintf(out, "Element count: %d"
+					 "Side (square): %d"
+					 "Thread count:  %d"
+					 "Cell size:     %d"
+					 "Step count:    %d"
+					 "Calc time:     %.2f"
+					 "Speed:         %.2f\n\n", count, side, mWorkerCommSize, mCellSize, stepCount, calcTime, speed);
+
+		fclose(out);
 	}
 
 	return;
