@@ -113,3 +113,7 @@ void Delay::saveState(ProcessingUnit* pu, char* path) {
 void Delay::loadState(ProcessingUnit* pu, std::ifstream& in) {
 	//mStepStorage->loadState(pu, path);
 }
+
+bool Delay::isNan(ProcessingUnit* pu) {
+	return false;
+}

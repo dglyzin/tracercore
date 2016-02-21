@@ -35,6 +35,8 @@ public:
 	void saveState(ProcessingUnit* pu, char* path);
 	void loadState(ProcessingUnit* pu, std::ifstream& in);
 
+	bool isNan(ProcessingUnit* pu);
+
 private:
 	StepStorage** mStepStorage;
 

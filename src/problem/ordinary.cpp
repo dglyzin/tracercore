@@ -71,3 +71,7 @@ void Ordinary::saveState(ProcessingUnit* pu, char* path) {
 void Ordinary::loadState(ProcessingUnit* pu, ifstream& in) {
 	mStepStorage->loadState(pu, in);
 }
+
+bool Ordinary::isNan(ProcessingUnit* pu) {
+	return mStepStorage->isNan(pu);
+}
