@@ -6,10 +6,7 @@
  */
 
 #include "domain.h"
-//#include "solvers/solver.h"
 #include <cassert>
-
-#include <mpi.h>
 
 using namespace std;
 
