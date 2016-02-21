@@ -91,3 +91,7 @@ void NullBlock::saveState(char* path) {
 void NullBlock::loadState(ifstream& in) {
 	in.seekg(getGridElementCount() * SIZE_DOUBLE, ios::cur);
 }
+
+bool NullBlock::isNan() {
+	return false;
+}

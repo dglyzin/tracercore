@@ -335,3 +335,11 @@ void RealBlock::saveState(char* path) {
 void RealBlock::loadState(ifstream& in) {
 	problem->loadState(pu, in);
 }
+
+bool RealBlock::isNan() {
+	if( problem->isNan(pu) ) {
+		printf("\nBlock #%d, Node number = %d: NAN VALUE!\n", blockNumber, nodeNumber);
+		return true;
+	}
+	return false;
+}

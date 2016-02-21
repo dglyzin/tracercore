@@ -60,6 +60,8 @@ public:
 	void saveState(char* path);
 	void loadState(std::ifstream& in);
 
+	bool isNan();
+
 private:
 	ProcessingUnit* pu;
 
