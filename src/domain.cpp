@@ -817,9 +817,9 @@ void Domain::saveState(char* inputFile) {
 	strncpy(saveFile, inputFile, length);
 
 	saveFile[length] = 0;*/
-	Utils::cutToLastChar(saveFile, inputFile, '/');
+	Utils::copyToLastChar(saveFile, inputFile, '/');
 
-	sprintf(saveFile, "%s%s%f%s", saveFile, "/project-", currentTime, ".bin");
+	sprintf(saveFile, "%s%s%f%s", saveFile, "project-", currentTime, ".bin");
 
 	saveStateToFile(saveFile);
 }
@@ -886,12 +886,13 @@ void Domain::printStatisticsInfo(char* inputFile, char* outputFile,
 			//mBlocks[i]->printGeneralInformation();
 		}
 
+		int stepCount = mRejectedStepCount + mAcceptedStepCount;
+		double speed = (double)(count) * stepCount / calcTime / 1000000;
+
 		printf("\n\nSteps accepted: %d\nSteps rejected: %d\n",
 				mAcceptedStepCount, mRejectedStepCount);
-		int stepCount = mRejectedStepCount + mAcceptedStepCount;
 		printf("Time: %.2f\nElement count: %d\nPerformance (10^6): %.2f\n\n",
-				calcTime, count,
-				(double) (count) * stepCount / calcTime / 1000000);
+				calcTime, count, speed);
 
 		//ofstream out;
 		//out.open("/home/frolov2/Tracer_project/stat", ios::app);
@@ -905,6 +906,20 @@ void Domain::printStatisticsInfo(char* inputFile, char* outputFile,
 		 fprintf(out, "%-12d %-8d %-2d    %-2d    %-12d    %-10.2f    %-10.2f %s\n", count, side, mWorldSize, mCellSize, stepCount, calcTime, speed, inputFile);
 
 		 fclose(out);*/
+
+		/*char statFile[250];
+		Utils::cutToLastButOneChar(statFile, inputFile, '/');
+
+		sprintf(statFile, "%s%s", statFile, "/statistic");
+
+		FILE* out;
+		out = fopen(statFile, "a");
+
+		int side = (int)sqrt( ( (double)count ) / mCellSize );
+
+		fprintf(out, "%-12d %-8d %-2d    %-2d    %-12d    %-10.2f    %-10.2f %s\n", count, side, mWorkerCommSize, mCellSize, stepCount, calcTime, speed, inputFile);
+
+		fclose(out);*/
 	}
 
 	return;
