@@ -968,6 +968,10 @@ void Domain::printStatisticsInfo(char* inputFile, char* outputFile,
 }
 
 bool Domain::isNan() {
+	for (int i = 0; i < mBlockCount; ++i) {
+		mBlocks[i]->isNan();
+	}
+
 	double** resultAll = collectDataFromNode();
 
 	if (mGlobalRank == 0) {
