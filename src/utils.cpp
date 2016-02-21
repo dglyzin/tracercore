@@ -49,7 +49,7 @@ void Utils::copyToLastChar(char* result, const char* source, char ch, int num) {
 }
 
 void Utils::copyFromLastToEnd(char* result, const char* source, char ch) {
-	int pos = Utils::lastChar(source, ch);
+	int pos = Utils::lastChar(source, ch, 2) + 1;
 	int length = strlen(source);
 
 	strncpy(result, source+pos, length - pos);
