@@ -50,10 +50,10 @@ int main(int argc, char * argv[]) {
 	 * Вывод информации о времени работы осуществляет только поток с номером 0.
 	 * Время работы -  разница между двумя отсечками, котрые были сделаны ранее.
 	 */
-	domain->printStatisticsInfo(inputFile, NULL, time2 - time1, NULL);
-
 	if(domain->isNan())
 		printf("\n\n\n\nNAN!!!\n\n\n\n");
+
+	domain->printStatisticsInfo(inputFile, NULL, time2 - time1, NULL);
 
 	delete domain;
 
