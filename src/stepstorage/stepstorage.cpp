@@ -58,3 +58,9 @@ void StepStorage::loadStateWithTempStore(ProcessingUnit* pu, ifstream& in) {
 	loadMState(pu, in);
 	loadMTempStores(pu, in);
 }
+
+double* StepStorage::getStatePointer() {
+	return mState;
+}
+
+

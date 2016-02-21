@@ -31,7 +31,7 @@ public:
 	void saveStateWithTempStore(ProcessingUnit* pu, char* path);
     void loadStateWithTempStore(ProcessingUnit* pu, std::ifstream& in);
 
-    double* getStatePointer() { return mState; }
+    double* getStatePointer();
 
     virtual double* getStageSource(int stage) = 0;
     virtual double* getStageResult(int stage) = 0;
