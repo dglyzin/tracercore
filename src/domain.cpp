@@ -917,7 +917,7 @@ void Domain::printStatisticsInfo(char* inputFile, char* outputFile,
 
 		int side = (int)sqrt( ( (double)count ) / mCellSize );
 
-		char in[20];
+		char in[50];
 		Utils::copyFromLastToEnd(in, inputFile, '/', 2);
 
 		fprintf(out, "Element count: %d\n"
