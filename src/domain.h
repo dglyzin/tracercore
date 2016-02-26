@@ -224,9 +224,6 @@ private:
 	 */
 	Interconnect* readConnection(std::ifstream& in);
 
-	double** collectDataFromNode();
-	double* getBlockCurrentState(int number);
-
 	void initSolvers();
 
 	void prepareDeviceData(int deviceType, int deviceNumber, int stage);

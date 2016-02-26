@@ -74,59 +74,6 @@ Domain::~Domain() {
 	 delete gpu2;*/
 }
 
-double** Domain::collectDataFromNode() {
-	double** resultAll = NULL;
-
-	if (mGlobalRank == 0) {
-		resultAll = new double*[mBlockCount];
-	}
-
-	for (int i = 0; i < mBlockCount; ++i) {
-		double* tmp = getBlockCurrentState(i);
-
-		//printf("\n%d %d %d\n", mWorkerRank, mGlobalRank, i);
-
-		if (mGlobalRank == 0)
-			resultAll[i] = tmp;
-	}
-
-	return resultAll;
-}
-
-//function to collect data from all blocks
-double* Domain::getBlockCurrentState(int number) {
-	double* result;
-
-	if (mGlobalRank == 0) {
-		result = new double[mBlocks[number]->getGridElementCount()];
-		if (mBlocks[number]->isRealBlock()) {
-			mBlocks[number]->getCurrentState(result);
-		} else {
-			//if domain 0 is master, then block-getnodenumber = rank in mpicommworld
-			//else this branch will not run
-			//printf("\n### nodeNumber: %d\n", mBlocks[number]->getNodeNumber());
-			MPI_Recv(result, mBlocks[number]->getGridElementCount(), MPI_DOUBLE,
-					mBlocks[number]->getNodeNumber(), 999, MPI_COMM_WORLD,
-					&status);
-		}
-
-		return result;
-	} else {
-		if (mBlocks[number]->isRealBlock()) {
-			//printf("\n\n*** %d %d\n\n", number, mWorkerRank);
-			result = new double[mBlocks[number]->getGridElementCount()];
-			mBlocks[number]->getCurrentState(result);
-			//we send to global 0 no matter it is above ^^ or in python
-			//printf("Worker %d : sending %d doubles for block %d\n",mWorkerRank, mBlocks[number]->getGridElementCount(), number );
-			MPI_Send(result, mBlocks[number]->getGridElementCount(), MPI_DOUBLE,
-					0, 999, MPI_COMM_WORLD);
-			delete result;
-			return NULL;
-		}
-	}
-	return NULL;
-}
-
 void Domain::compute(char* inputFile) {
 	cout << endl << "Computation started..." << mWorkerRank << endl;
 	cout << "Current time: " << currentTime << ", finish time: " << stopTime
@@ -981,31 +928,15 @@ void Domain::printStatisticsInfo(char* inputFile, char* outputFile,
 }
 
 bool Domain::isNan() {
+	bool flag = false;
+
 	for (int i = 0; i < mBlockCount; ++i) {
-		mBlocks[i]->isNan();
-	}
-
-	double** resultAll = collectDataFromNode();
-
-	if (mGlobalRank == 0) {
-		for (int i = 0; i < mBlockCount; ++i) {
-			int count = mBlocks[i]->getGridElementCount();
-
-			for (int j = 0; j < count; ++j) {
-				if (isnan(resultAll[i][j]))
-					return true;
-			}
-
+		if( mBlocks[i]->isNan() ) {
+			flag = true;
 		}
 	}
 
-	if (resultAll != NULL) {
-		for (int i = 0; i < mBlockCount; ++i)
-			delete resultAll[i];
-		delete resultAll;
-	}
-
-	return false;
+	return flag;
 }
 
 int Domain::getMaximumNumberSavedStates() {
