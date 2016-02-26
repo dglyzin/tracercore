@@ -898,14 +898,14 @@ void Domain::printStatisticsInfo(char* inputFile, char* outputFile,
 		//out.open("/home/frolov2/Tracer_project/stat", ios::app);
 
 		/*FILE* out;
-		 out = fopen("/home/frolov2/Tracer_project/statistic", "a");
+		out = fopen("/home/frolov2/Tracer_project/statistic", "a");
 
-		 double speed = (double)(count) * stepCount / calcTime / 1000000;
-		 int side = (int)sqrt( ( (double)count ) / mCellSize );
+		double speed = (double)(count) * stepCount / calcTime / 1000000;
+		int side = (int)sqrt( ( (double)count ) / mCellSize );
 
-		 fprintf(out, "%-12d %-8d %-2d    %-2d    %-12d    %-10.2f    %-10.2f %s\n", count, side, mWorldSize, mCellSize, stepCount, calcTime, speed, inputFile);
+		fprintf(out, "%-12d %-8d %-2d    %-2d    %-12d    %-10.2f    %-10.2f %s\n", count, side, mWorldSize, mCellSize, stepCount, calcTime, speed, inputFile);
 
-		 fclose(out);*/
+		fclose(out);*/
 
 		char statFile[250];
 		Utils::copyToLastChar(statFile, inputFile, '/', 2);
@@ -920,13 +920,13 @@ void Domain::printStatisticsInfo(char* inputFile, char* outputFile,
 		char in[20];
 		Utils::copyFromLastToEnd(in, inputFile, '/', 2);
 
-		fprintf(out, "Element count: %d"
-					 "Side (square): %d"
-					 "Thread count:  %d"
-					 "Cell size:     %d"
-					 "Step count:    %d"
-					 "Calc time:     %.2f"
-					 "Speed:         %.2f\n\n", count, side, mWorkerCommSize, mCellSize, stepCount, calcTime, speed);
+		fprintf(out, "Element count: %d\n"
+					 "Side (square): %d\n"
+					 "Thread count:  %d\n"
+					 "Cell size:     %d\n"
+					 "Step count:    %d\n"
+					 "Calc time:     %.2f\n"
+					 "Speed:         %.2f\n\n\n", count, side, mWorkerCommSize, mCellSize, stepCount, calcTime, speed);
 
 		fclose(out);
 	}
