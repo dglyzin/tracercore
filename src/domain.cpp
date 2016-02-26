@@ -926,7 +926,7 @@ void Domain::printStatisticsInfo(char* inputFile, char* outputFile,
 					 "Cell size:     %d\n"
 					 "Step count:    %d\n"
 					 "Calc time:     %.2f\n"
-					 "Speed:         %.2f\n\n\n", count, side, mWorkerCommSize, mCellSize, stepCount, calcTime, speed);
+					 "Speed:         %.2f\n\n\n\n", count, side, mWorkerCommSize, mCellSize, stepCount, calcTime, speed);
 
 		fclose(out);
 	}
