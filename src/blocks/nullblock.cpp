@@ -9,8 +9,11 @@
 
 using namespace std;
 
-NullBlock::NullBlock(int _nodeNumber, int _dimension, int _xCount, int _yCount, int _zCount, int _xOffset, int _yOffset, int _zOffset, int _cellSize, int _haloSize) :
-		Block(_nodeNumber, _dimension, _xCount, _yCount, _zCount, _xOffset, _yOffset, _zOffset, _cellSize, _haloSize){
+NullBlock::NullBlock(int _nodeNumber, int _dimension, int _xCount, int _yCount,
+		int _zCount, int _xOffset, int _yOffset, int _zOffset, int _cellSize,
+		int _haloSize) :
+		Block(_nodeNumber, _dimension, _xCount, _yCount, _zCount, _xOffset,
+				_yOffset, _zOffset, _cellSize, _haloSize) {
 }
 
 NullBlock::~NullBlock() {
@@ -64,11 +67,13 @@ void NullBlock::rejectStep(double timestep) {
 	return;
 }
 
-double* NullBlock::addNewBlockBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength) {
+double* NullBlock::addNewBlockBorder(Block* neighbor, int side, int mOffset,
+		int nOffset, int mLength, int nLength) {
 	return NULL;
 }
 
-double* NullBlock::addNewExternalBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength, double* border) {
+double* NullBlock::addNewExternalBorder(Block* neighbor, int side, int mOffset,
+		int nOffset, int mLength, int nLength, double* border) {
 	return NULL;
 }
 

@@ -7,7 +7,9 @@
 
 #include "block.h"
 
-Block::Block(int _nodeNumber, int _dimension, int _xCount, int _yCount, int _zCount, int _xOffset, int _yOffset, int _zOffset, int _cellSize, int _haloSize) {
+Block::Block(int _nodeNumber, int _dimension, int _xCount, int _yCount,
+		int _zCount, int _xOffset, int _yOffset, int _zOffset, int _cellSize,
+		int _haloSize) {
 	nodeNumber = _nodeNumber;
 
 	//dimension = _dimension;
@@ -53,45 +55,46 @@ void Block::printToConsole() {
 			"zOffset:     %d\n"
 			"Cell size:   %d\n"
 			"Halo size:   %d\n"
-			"\n", nodeNumber, xCount, yCount, zCount, xOffset, yOffset, zOffset, cellSize, haloSize);
+			"\n", nodeNumber, xCount, yCount, zCount, xOffset, yOffset, zOffset,
+			cellSize, haloSize);
 }
 
 void Block::setCountAndOffset(int dimension) {
 	switch (dimension) {
-		case 1:
-			//xCount = _xCount;
-			yCount = 1;
-			zCount = 1;
+	case 1:
+		//xCount = _xCount;
+		yCount = 1;
+		zCount = 1;
 
-			//xOffset = _xOffset;
-			yOffset = 0;
-			zOffset = 0;
+		//xOffset = _xOffset;
+		yOffset = 0;
+		zOffset = 0;
 
-			break;
+		break;
 
-		case 2:
-			//xCount = _xCount;
-			//yCount = _yCount;
-			zCount = 1;
+	case 2:
+		//xCount = _xCount;
+		//yCount = _yCount;
+		zCount = 1;
 
-			//xOffset = _xOffset;
-			//yOffset = _yOffset;
-			zOffset = 0;
+		//xOffset = _xOffset;
+		//yOffset = _yOffset;
+		zOffset = 0;
 
-			break;
+		break;
 
-		case 3:
-			//xCount = _xCount;
-			//yCount = _yCount;
-			//zCount = _zCount;
+	case 3:
+		//xCount = _xCount;
+		//yCount = _yCount;
+		//zCount = _zCount;
 
-			//xOffset = _xOffset;
-			//yOffset = _yOffset;
-			//zOffset = _zOffset;
+		//xOffset = _xOffset;
+		//yOffset = _yOffset;
+		//zOffset = _zOffset;
 
-			break;
+		break;
 
-		default:
-			break;
-		}
+	default:
+		break;
+	}
 }
