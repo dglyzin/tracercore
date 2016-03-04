@@ -61,40 +61,40 @@ void Block::printToConsole() {
 
 void Block::setCountAndOffset(int dimension) {
 	switch (dimension) {
-	case 1:
-		//xCount = _xCount;
-		yCount = 1;
-		zCount = 1;
+		case 1:
+			//xCount = _xCount;
+			yCount = 1;
+			zCount = 1;
 
-		//xOffset = _xOffset;
-		yOffset = 0;
-		zOffset = 0;
+			//xOffset = _xOffset;
+			yOffset = 0;
+			zOffset = 0;
 
-		break;
+			break;
 
-	case 2:
-		//xCount = _xCount;
-		//yCount = _yCount;
-		zCount = 1;
+		case 2:
+			//xCount = _xCount;
+			//yCount = _yCount;
+			zCount = 1;
 
-		//xOffset = _xOffset;
-		//yOffset = _yOffset;
-		zOffset = 0;
+			//xOffset = _xOffset;
+			//yOffset = _yOffset;
+			zOffset = 0;
 
-		break;
+			break;
 
-	case 3:
-		//xCount = _xCount;
-		//yCount = _yCount;
-		//zCount = _zCount;
+		case 3:
+			//xCount = _xCount;
+			//yCount = _yCount;
+			//zCount = _zCount;
 
-		//xOffset = _xOffset;
-		//yOffset = _yOffset;
-		//zOffset = _zOffset;
+			//xOffset = _xOffset;
+			//yOffset = _yOffset;
+			//zOffset = _zOffset;
 
-		break;
+			break;
 
-	default:
-		break;
+		default:
+			break;
 	}
 }
