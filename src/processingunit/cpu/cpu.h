@@ -32,26 +32,6 @@ public:
 	bool isCPU();
 	bool isGPU();
 
-// TODO в protected?
-	// ********************************************************************************
-	double* getDoubleArray(int size);
-	double** getDoublePointerArray(int size);
-
-	int* getIntArray(int size);
-	int** getIntPointerArray(int size);
-
-	unsigned short int* getUnsignedShortIntArray(int size);
-
-	void deallocDeviceSpecificArray(double* toDelete);
-	void deallocDeviceSpecificArray(double** toDelete);
-
-	void deallocDeviceSpecificArray(int* toDelete);
-	void deallocDeviceSpecificArray(int** toDelete);
-
-	void deallocDeviceSpecificArray(unsigned short int* toDelete);
-
-	// ********************************************************************************
-
 	void copyArray(double* source, double* destination, int size);
 	void copyArray(unsigned short int* source, unsigned short int* destination, int size);
 
@@ -70,6 +50,23 @@ public:
 	void loadArray(double* array, int size, std::ifstream& in);
 
 	bool isNan(double* array, int size);
+
+protected:
+	double* getDoubleArray(int size);
+	double** getDoublePointerArray(int size);
+
+	int* getIntArray(int size);
+	int** getIntPointerArray(int size);
+
+	unsigned short int* getUnsignedShortIntArray(int size);
+
+	void deallocDeviceSpecificArray(double* toDelete);
+	void deallocDeviceSpecificArray(double** toDelete);
+
+	void deallocDeviceSpecificArray(int* toDelete);
+	void deallocDeviceSpecificArray(int** toDelete);
+
+	void deallocDeviceSpecificArray(unsigned short int* toDelete);
 };
 
 #endif /* SRC_PROCESSINGUNIT_CPU_CPU_H_ */
