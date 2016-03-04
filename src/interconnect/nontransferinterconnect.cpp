@@ -7,8 +7,7 @@
 
 #include "nontransferinterconnect.h"
 
-NonTransferInterconnect::NonTransferInterconnect(int _sourceLocationNode,
-		int _destinationLocationNode) :
+NonTransferInterconnect::NonTransferInterconnect(int _sourceLocationNode, int _destinationLocationNode) :
 		Interconnect(_sourceLocationNode, _destinationLocationNode) {
 }
 

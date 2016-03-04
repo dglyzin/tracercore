@@ -9,14 +9,11 @@
 
 using namespace std;
 
-RealBlock::RealBlock(int _nodeNumber, int _dimension, int _xCount, int _yCount,
-		int _zCount, int _xOffset, int _yOffset, int _zOffset, int _cellSize,
-		int _haloSize, int _blockNumber, ProcessingUnit* _pu,
-		unsigned short int* _initFuncNumber,
-		unsigned short int* _compFuncNumber, int problemType, int solverType,
+RealBlock::RealBlock(int _nodeNumber, int _dimension, int _xCount, int _yCount, int _zCount, int _xOffset, int _yOffset,
+		int _zOffset, int _cellSize, int _haloSize, int _blockNumber, ProcessingUnit* _pu,
+		unsigned short int* _initFuncNumber, unsigned short int* _compFuncNumber, int problemType, int solverType,
 		double aTol, double rTol) :
-		Block(_nodeNumber, _dimension, _xCount, _yCount, _zCount, _xOffset,
-				_yOffset, _zOffset, _cellSize, _haloSize) {
+		Block(_nodeNumber, _dimension, _xCount, _yCount, _zCount, _xOffset, _yOffset, _zOffset, _cellSize, _haloSize) {
 	pu = _pu;
 
 	blockNumber = _blockNumber;
@@ -65,8 +62,7 @@ RealBlock::~RealBlock() {
 double* RealBlock::getNewBlockBorder(Block* neighbor, int borderLength) {
 	//double* tmpBorder;
 
-	if ((nodeNumber == neighbor->getNodeNumber())
-			&& neighbor->isProcessingUnitGPU()) {
+	if ((nodeNumber == neighbor->getNodeNumber()) && neighbor->isProcessingUnitGPU()) {
 		//cudaMallocHost ( (void**)&tmpBorder, borderLength * sizeof(double) );
 		//tempBlockBorderMemoryAllocType.push_back(CUDA_MALLOC_HOST);
 		//memoryType = CUDA_MALLOC_HOST;
@@ -81,8 +77,7 @@ double* RealBlock::getNewBlockBorder(Block* neighbor, int borderLength) {
 	//return tmpBorder;
 }
 
-double* RealBlock::getNewExternalBorder(Block* neighbor, int borderLength,
-		double* border) {
+double* RealBlock::getNewExternalBorder(Block* neighbor, int borderLength, double* border) {
 	//double* tmpBorder;
 
 	if (nodeNumber == neighbor->getNodeNumber()) {
@@ -100,8 +95,7 @@ double* RealBlock::getNewExternalBorder(Block* neighbor, int borderLength,
 	//return tmpBorder;
 }
 
-ProblemType* RealBlock::createProblem(int problemType, int solverType,
-		double aTol, double rTol) {
+ProblemType* RealBlock::createProblem(int problemType, int solverType, double aTol, double rTol) {
 	int elementCount = getGridElementCount();
 
 	switch (problemType) {
@@ -123,8 +117,8 @@ void RealBlock::computeStageBorder(int stage, double time) {
 
 	//printf("\nsource must be double**. => source - &source. Error here\n");
 	//TODO исправить в ProblemType тип возвращаемого значения для getSource
-	pu->computeBorder(mUserFuncs, mCompFuncNumber, result, source, time,
-			mParams, externalBorder, zCount, yCount, xCount, haloSize);
+	pu->computeBorder(mUserFuncs, mCompFuncNumber, result, source, time, mParams, externalBorder, zCount, yCount,
+			xCount, haloSize);
 }
 
 void RealBlock::computeStageCenter(int stage, double time) {
@@ -133,8 +127,8 @@ void RealBlock::computeStageCenter(int stage, double time) {
 
 	//printf("\nsource must be double**. => source - &source. Error here\n");
 	//TODO исправить в ProblemType тип возвращаемого значения для getSource
-	pu->computeCenter(mUserFuncs, mCompFuncNumber, result, source, time,
-			mParams, externalBorder, zCount, yCount, xCount, haloSize);
+	pu->computeCenter(mUserFuncs, mCompFuncNumber, result, source, time, mParams, externalBorder, zCount, yCount,
+			xCount, haloSize);
 }
 
 void RealBlock::prepareArgument(int stage, double timestep) {
@@ -161,34 +155,30 @@ void RealBlock::prepareStageData(int stage) {
 		switch (sendBorderInfo[index + SIDE]) {
 			case LEFT:
 				//prepareBorder(i, stage, mStart, mStop, nStart, nStop, 0, haloSize);
-				pu->prepareBorder(result, source, mStart, mStop, nStart, nStop,
-						0, haloSize, yCount, xCount, cellSize);
+				pu->prepareBorder(result, source, mStart, mStop, nStart, nStop, 0, haloSize, yCount, xCount, cellSize);
 				break;
 			case RIGHT:
 				//prepareBorder(i, stage, mStart, mStop, nStart, nStop, xCount - haloSize, xCount);
-				pu->prepareBorder(result, source, mStart, mStop, nStart, nStop,
-						xCount - haloSize, xCount, yCount, xCount, cellSize);
+				pu->prepareBorder(result, source, mStart, mStop, nStart, nStop, xCount - haloSize, xCount, yCount,
+						xCount, cellSize);
 				break;
 			case FRONT:
 				//prepareBorder(i, stage, mStart, mStop, 0, haloSize, nStart, nStop);
-				pu->prepareBorder(result, source, mStart, mStop, 0, haloSize,
-						nStart, nStop, yCount, xCount, cellSize);
+				pu->prepareBorder(result, source, mStart, mStop, 0, haloSize, nStart, nStop, yCount, xCount, cellSize);
 				break;
 			case BACK:
 				//prepareBorder(i, stage, mStart, mStop, yCount - haloSize, yCount, nStart, nStop);
-				pu->prepareBorder(result, source, mStart, mStop,
-						yCount - haloSize, yCount, nStart, nStop, yCount,
+				pu->prepareBorder(result, source, mStart, mStop, yCount - haloSize, yCount, nStart, nStop, yCount,
 						xCount, cellSize);
 				break;
 			case TOP:
 				//prepareBorder(i, stage, 0, haloSize, mStart, mStop, nStart, nStop);
-				pu->prepareBorder(result, source, 0, haloSize, mStart, mStop,
-						nStart, nStop, yCount, xCount, cellSize);
+				pu->prepareBorder(result, source, 0, haloSize, mStart, mStop, nStart, nStop, yCount, xCount, cellSize);
 				break;
 			case BOTTOM:
 				//prepareBorder(i, stage, zCount - haloSize, zCount, mStart, mStop, nStart, nStop);
-				pu->prepareBorder(result, source, zCount - haloSize, zCount,
-						mStart, mStop, nStart, nStop, yCount, xCount, cellSize);
+				pu->prepareBorder(result, source, zCount - haloSize, zCount, mStart, mStop, nStart, nStop, yCount,
+						xCount, cellSize);
 				break;
 			default:
 				break;
@@ -228,8 +218,7 @@ void RealBlock::rejectStep(double timestep) {
 	problem->rejectStep(pu, timestep);
 }
 
-double* RealBlock::addNewBlockBorder(Block* neighbor, int side, int mOffset,
-		int nOffset, int mLength, int nLength) {
+double* RealBlock::addNewBlockBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength) {
 	countSendSegmentBorder++;
 
 	tempSendBorderInfo.push_back(side);
@@ -258,8 +247,8 @@ double* RealBlock::addNewBlockBorder(Block* neighbor, int side, int mOffset,
 	return newBlockBorder;
 }
 
-double* RealBlock::addNewExternalBorder(Block* neighbor, int side, int mOffset,
-		int nOffset, int mLength, int nLength, double* border) {
+double* RealBlock::addNewExternalBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength,
+		double* border) {
 	countReceiveSegmentBorder++;
 
 	tempReceiveBorderInfo.push_back(side);
@@ -270,8 +259,7 @@ double* RealBlock::addNewExternalBorder(Block* neighbor, int side, int mOffset,
 
 	int borderLength = mLength * nLength * cellSize * haloSize;
 
-	double* newExternalBorder = getNewExternalBorder(neighbor, borderLength,
-			border);
+	double* newExternalBorder = getNewExternalBorder(neighbor, borderLength, border);
 
 	/*if( nodeNumber == neighbor->getNodeNumber() ) {
 	 newExternalBorder = border;
@@ -290,15 +278,13 @@ double* RealBlock::addNewExternalBorder(Block* neighbor, int side, int mOffset,
 }
 
 void RealBlock::moveTempBorderVectorToBorderArray() {
-	blockBorder = pu->newDoublePointerArray(countSendSegmentBorder);//new double* [countSendSegmentBorder];
+	blockBorder = pu->newDoublePointerArray(countSendSegmentBorder);		//new double* [countSendSegmentBorder];
 	//blockBorderMemoryAllocType = new int [countSendSegmentBorder];
-	sendBorderInfo = pu->newIntArray(
-			INTERCONNECT_COMPONENT_COUNT * countSendSegmentBorder);	//new int [INTERCONNECT_COMPONENT_COUNT * countSendSegmentBorder];
+	sendBorderInfo = pu->newIntArray(INTERCONNECT_COMPONENT_COUNT * countSendSegmentBorder);//new int [INTERCONNECT_COMPONENT_COUNT * countSendSegmentBorder];
 
-	externalBorder = pu->newDoublePointerArray(countReceiveSegmentBorder);//new double* [countReceiveSegmentBorder];
+	externalBorder = pu->newDoublePointerArray(countReceiveSegmentBorder);	//new double* [countReceiveSegmentBorder];
 	//externalBorderMemoryAllocType = new int [countReceiveSegmentBorder];
-	receiveBorderInfo = pu->newIntArray(
-			INTERCONNECT_COMPONENT_COUNT * countReceiveSegmentBorder);//new int [INTERCONNECT_COMPONENT_COUNT * countReceiveSegmentBorder];
+	receiveBorderInfo = pu->newIntArray(INTERCONNECT_COMPONENT_COUNT * countReceiveSegmentBorder);//new int [INTERCONNECT_COMPONENT_COUNT * countReceiveSegmentBorder];
 
 	for (int i = 0; i < countSendSegmentBorder; ++i) {
 		blockBorder[i] = tempBlockBorder.at(i);
@@ -318,14 +304,10 @@ void RealBlock::moveTempBorderVectorToBorderArray() {
 
 		int index = INTERCONNECT_COMPONENT_COUNT * i;
 		receiveBorderInfo[index + SIDE] = tempReceiveBorderInfo.at(index + 0);
-		receiveBorderInfo[index + M_OFFSET] = tempReceiveBorderInfo.at(
-				index + 1);
-		receiveBorderInfo[index + N_OFFSET] = tempReceiveBorderInfo.at(
-				index + 2);
-		receiveBorderInfo[index + M_LENGTH] = tempReceiveBorderInfo.at(
-				index + 3);
-		receiveBorderInfo[index + N_LENGTH] = tempReceiveBorderInfo.at(
-				index + 4);
+		receiveBorderInfo[index + M_OFFSET] = tempReceiveBorderInfo.at(index + 1);
+		receiveBorderInfo[index + N_OFFSET] = tempReceiveBorderInfo.at(index + 2);
+		receiveBorderInfo[index + M_LENGTH] = tempReceiveBorderInfo.at(index + 3);
+		receiveBorderInfo[index + N_LENGTH] = tempReceiveBorderInfo.at(index + 4);
 	}
 
 	tempBlockBorder.clear();
@@ -356,8 +338,7 @@ void RealBlock::loadState(ifstream& in) {
 
 bool RealBlock::isNan() {
 	if (problem->isNan(pu)) {
-		printf("\nBlock #%d, Node number = %d: NAN VALUE!\n", blockNumber,
-				nodeNumber);
+		printf("\nBlock #%d, Node number = %d: NAN VALUE!\n", blockNumber, nodeNumber);
 		return true;
 	}
 	return false;

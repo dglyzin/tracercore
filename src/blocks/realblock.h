@@ -19,12 +19,10 @@
 
 class RealBlock: public Block {
 public:
-	RealBlock(int _nodeNumber, int _dimension, int _xCount, int _yCount,
-			int _zCount, int _xOffset, int _yOffset, int _zOffset,
-			int _cellSize, int _haloSize, int _blockNumber, ProcessingUnit* _pu,
-			unsigned short int* _initFuncNumber,
-			unsigned short int* _compFuncNumber, int problemType,
-			int solverType, double aTol, double rTol);
+	RealBlock(int _nodeNumber, int _dimension, int _xCount, int _yCount, int _zCount, int _xOffset, int _yOffset,
+			int _zOffset, int _cellSize, int _haloSize, int _blockNumber, ProcessingUnit* _pu,
+			unsigned short int* _initFuncNumber, unsigned short int* _compFuncNumber, int problemType, int solverType,
+			double aTol, double rTol);
 
 	virtual ~RealBlock();
 
@@ -47,10 +45,9 @@ public:
 	void confirmStep(double timestep);
 	void rejectStep(double timestep);
 
-	double* addNewBlockBorder(Block* neighbor, int side, int mOffset,
-			int nOffset, int mLength, int nLength);
-	double* addNewExternalBorder(Block* neighbor, int side, int mOffset,
-			int nOffset, int mLength, int nLength, double* border);
+	double* addNewBlockBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength);
+	double* addNewExternalBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength,
+			double* border);
 
 	void moveTempBorderVectorToBorderArray();
 
@@ -92,11 +89,9 @@ private:
 	int countReceiveSegmentBorder;
 
 	double* getNewBlockBorder(Block* neighbor, int borderLength);
-	double* getNewExternalBorder(Block* neighbor, int borderLength,
-			double* border);
+	double* getNewExternalBorder(Block* neighbor, int borderLength, double* border);
 
-	ProblemType* createProblem(int problemType, int solverType, double aTol,
-			double rTol);
+	ProblemType* createProblem(int problemType, int solverType, double aTol, double rTol);
 };
 
 #endif /* SRC_BLOCKS_REALBLOCK_H_ */

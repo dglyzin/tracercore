@@ -201,8 +201,7 @@ void ProcessingUnit::deleteAllDoublePinnedArrays() {
 void ProcessingUnit::deleteAllUnsignedShortInt() {
 	list<unsigned short int*>::iterator i;
 
-	for (i = unsignedShortIntArrays.begin(); i != unsignedShortIntArrays.end();
-			++i) {
+	for (i = unsignedShortIntArrays.begin(); i != unsignedShortIntArrays.end(); ++i) {
 		deallocDeviceSpecificArray(*i);
 	}
 

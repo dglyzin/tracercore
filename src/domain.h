@@ -85,8 +85,7 @@ public:
 	void saveState(char* inputFile);
 	void saveStateToFile(char* path);
 
-	void printStatisticsInfo(char* inputFile, char* outputFile, double calcTime,
-			char* statisticsFile);
+	void printStatisticsInfo(char* inputFile, char* outputFile, double calcTime, char* statisticsFile);
 
 	bool isNan();
 
@@ -250,8 +249,8 @@ private:
 
 	void createProcessigUnit();
 
-	Interconnect* getInterconnect(int sourceNode, int destinationNode,
-			int borderLength, double* sourceData, double* destinationData);
+	Interconnect* getInterconnect(int sourceNode, int destinationNode, int borderLength, double* sourceData,
+			double* destinationData);
 
 	/*
 	 * Database status manipulations

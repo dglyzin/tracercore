@@ -7,8 +7,8 @@
 
 #include "transferinterconnect.h"
 
-TransferInterconnect::TransferInterconnect(int _sourceLocationNode,
-		int _destinationLocationNode, int _borderLength, MPI_Comm* _pworkerComm) :
+TransferInterconnect::TransferInterconnect(int _sourceLocationNode, int _destinationLocationNode, int _borderLength,
+		MPI_Comm* _pworkerComm) :
 		Interconnect(_sourceLocationNode, _destinationLocationNode) {
 	borderLength = _borderLength;
 

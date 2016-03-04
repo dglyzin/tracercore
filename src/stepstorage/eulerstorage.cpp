@@ -9,11 +9,13 @@
 
 using namespace std;
 
-EulerStorage::EulerStorage() : StepStorage() {
+EulerStorage::EulerStorage() :
+		StepStorage() {
 	mTempStore1 = NULL;
 }
 
-EulerStorage::EulerStorage(ProcessingUnit* pu, int count, double _aTol, double _rTol) : StepStorage(pu, count, _aTol, _rTol) {
+EulerStorage::EulerStorage(ProcessingUnit* pu, int count, double _aTol, double _rTol) :
+		StepStorage(pu, count, _aTol, _rTol) {
 	mTempStore1 = pu->newDoubleArray(mCount);
 }
 
@@ -47,9 +49,9 @@ void EulerStorage::prepareArgument(ProcessingUnit* pu, int stage, double timeste
 }
 
 void EulerStorage::confirmStep(ProcessingUnit* pu, double timestep) {
-    double* temp = mState;
-    mState = mTempStore1;
-    mTempStore1 = temp;
+	double* temp = mState;
+	mState = mTempStore1;
+	mTempStore1 = temp;
 }
 
 void EulerStorage::rejectStep(ProcessingUnit* pu, double timestep) {

@@ -40,8 +40,7 @@ public:
 
 	virtual double getStageTimeStep(int stage) = 0;
 
-	virtual void prepareArgument(ProcessingUnit* pu, int stage,
-			double timestep) = 0;
+	virtual void prepareArgument(ProcessingUnit* pu, int stage, double timestep) = 0;
 
 	virtual void confirmStep(ProcessingUnit* pu, double timestep) = 0;
 	virtual void rejectStep(ProcessingUnit* pu, double timestep) = 0;
@@ -52,8 +51,7 @@ public:
 	virtual bool isVariableStep() = 0;
 	virtual int getStageCount() = 0;
 
-	virtual double getNewStep(double timestep, double error,
-			int totalDomainElements) = 0;
+	virtual double getNewStep(double timestep, double error, int totalDomainElements) = 0;
 	virtual bool isErrorPermissible(double error, int totalDomainElements) = 0;
 
 	virtual void getDenseOutput(StepStorage* secondState, double* result) = 0;

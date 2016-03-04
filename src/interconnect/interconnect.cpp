@@ -9,8 +9,7 @@
 
 using namespace std;
 
-Interconnect::Interconnect(int _sourceLocationNode,
-		int _destinationLocationNode) {
+Interconnect::Interconnect(int _sourceLocationNode, int _destinationLocationNode) {
 	sourceLocationNode = _sourceLocationNode;
 	destinationLocationNode = _destinationLocationNode;
 }
@@ -81,6 +80,5 @@ void Interconnect::print() {
 
 void Interconnect::printNodeLocationInformation() {
 	printf("   Source node               : %d\n"
-			"   Destination node          : %d\n", sourceLocationNode,
-			destinationLocationNode);
+			"   Destination node          : %d\n", sourceLocationNode, destinationLocationNode);
 }

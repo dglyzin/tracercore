@@ -14,9 +14,8 @@
 
 class Block {
 public:
-	Block(int _nodeNumber, int _dimension, int _xCount, int _yCount,
-			int _zCount, int _xOffset, int _yOffset, int _zOffset,
-			int _cellSize, int _haloSize);
+	Block(int _nodeNumber, int _dimension, int _xCount, int _yCount, int _zCount, int _xOffset, int _yOffset,
+			int _zOffset, int _cellSize, int _haloSize);
 	virtual ~Block();
 
 	virtual void computeStageBorder(int stage, double time) = 0;
@@ -38,10 +37,10 @@ public:
 	virtual void confirmStep(double timestep) = 0;
 	virtual void rejectStep(double timestep) = 0;
 
-	virtual double* addNewBlockBorder(Block* neighbor, int side, int mOffset,
-			int nOffset, int mLength, int nLength) = 0;
-	virtual double* addNewExternalBorder(Block* neighbor, int side, int mOffset,
-			int nOffset, int mLength, int nLength, double* border) = 0;
+	virtual double* addNewBlockBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength,
+			int nLength) = 0;
+	virtual double* addNewExternalBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength,
+			double* border) = 0;
 
 	virtual void moveTempBorderVectorToBorderArray() = 0;
 

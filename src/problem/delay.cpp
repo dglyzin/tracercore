@@ -9,8 +9,7 @@
 
 using namespace std;
 
-Delay::Delay(ProcessingUnit* pu, int solverType, int count, double aTol,
-		double rTol, int _delayCount) {
+Delay::Delay(ProcessingUnit* pu, int solverType, int count, double aTol, double rTol, int _delayCount) {
 	//TODO fix!!! реализация функции для ProcessingUnit!!!
 	maxStorageCount = 1;
 
@@ -46,10 +45,8 @@ int Delay::getSourceStorageNumberDelay(double time, int delayNumber) {
 	return 0;
 }
 
-int Delay::getSourceStorageNumberDelayForDenseOutput(double time,
-		int delayNumber) {
-	printf(
-			"\nget source storage number for delay & for Dense output don't work!!!\n");
+int Delay::getSourceStorageNumberDelayForDenseOutput(double time, int delayNumber) {
+	printf("\nget source storage number for delay & for Dense output don't work!!!\n");
 	return 0;
 }
 

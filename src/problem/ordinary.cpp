@@ -9,8 +9,7 @@
 
 using namespace std;
 
-Ordinary::Ordinary(ProcessingUnit* pu, int solverType, int count, double aTol,
-		double rTol) {
+Ordinary::Ordinary(ProcessingUnit* pu, int solverType, int count, double aTol, double rTol) {
 	mStepStorage = createStageStorage(pu, solverType, count, aTol, rTol);
 
 	mSourceStorage = new double*[1];

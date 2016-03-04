@@ -16,21 +16,21 @@ public:
 	EulerStorage(ProcessingUnit* pu, int count, double _aTol, double _rTol);
 	virtual ~EulerStorage();
 
-    double* getStageSource(int stage);
-    double* getStageResult(int stage);
+	double* getStageSource(int stage);
+	double* getStageResult(int stage);
 
-    double getStageTimeStep(int stage);
+	double getStageTimeStep(int stage);
 
-    void prepareArgument(ProcessingUnit* pu, int stage, double timestep);
+	void prepareArgument(ProcessingUnit* pu, int stage, double timestep);
 
-    void confirmStep(ProcessingUnit* pu, double timestep);
-    void rejectStep(ProcessingUnit* pu, double timestep);
+	void confirmStep(ProcessingUnit* pu, double timestep);
+	void rejectStep(ProcessingUnit* pu, double timestep);
 
-    double getStepError(ProcessingUnit* pu, double timestep);
+	double getStepError(ProcessingUnit* pu, double timestep);
 
-    bool isFSAL();
-    bool isVariableStep();
-    int getStageCount();
+	bool isFSAL();
+	bool isVariableStep();
+	int getStageCount();
 
 	double getNewStep(double timestep, double error, int totalDomainElements);
 	bool isErrorPermissible(double error, int totalDomainElements);

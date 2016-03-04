@@ -12,8 +12,7 @@
 
 class TransferInterconnectRecv: public TransferInterconnect {
 public:
-	TransferInterconnectRecv(int _sourceLocationNode,
-			int _destinationLocationNode, int _borderLength,
+	TransferInterconnectRecv(int _sourceLocationNode, int _destinationLocationNode, int _borderLength,
 			double* _destinationExternalBorder, MPI_Comm* _pworkerComm);
 	virtual ~TransferInterconnectRecv();
 

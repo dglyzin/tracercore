@@ -76,8 +76,7 @@ Domain::~Domain() {
 
 void Domain::compute(char* inputFile) {
 	cout << endl << "Computation started..." << mWorkerRank << endl;
-	cout << "Current time: " << currentTime << ", finish time: " << stopTime
-			<< ", time step: " << timeStep << endl;
+	cout << "Current time: " << currentTime << ", finish time: " << stopTime << ", time step: " << timeStep << endl;
 	cout << "solver stage count: " << mSolverInfo->getStageCount() << endl;
 
 	if (mSolverInfo->isFSAL())
@@ -122,8 +121,7 @@ void Domain::compute(char* inputFile) {
 		//if python master is present, it receives all the data for all blocks,
 		//creates and saves pictures, saves raw data and stores filenames to db
 
-		int newPercentage = 100.0
-				* (1.0 - (stopTime - currentTime) / computeInterval);
+		int newPercentage = 100.0 * (1.0 - (stopTime - currentTime) / computeInterval);
 		int percentChanged = newPercentage > percentage;
 		if (mPythonMaster && (mWorkerRank == 0))
 			MPI_Send(&percentChanged, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
@@ -136,8 +134,7 @@ void Domain::compute(char* inputFile) {
 
 		counterSaveTime += timeStep;
 
-		int readyToSave = (saveInterval != 0)
-				&& (counterSaveTime > saveInterval);
+		int readyToSave = (saveInterval != 0) && (counterSaveTime > saveInterval);
 		if (mPythonMaster && (mWorkerRank == 0))
 			MPI_Send(&readyToSave, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
 		if (!(currentTime < stopTime))
@@ -194,8 +191,7 @@ void Domain::nextStep() {
 
 		printf("step error = %f\n", error);
 		//!!! только 0, рассылать
-		timeStep = mSolverInfo->getNewStep(timeStep, error,
-				totalGridElementCount);
+		timeStep = mSolverInfo->getNewStep(timeStep, error, totalGridElementCount);
 
 		//!!! только 0, рассылать
 		if (mSolverInfo->isErrorPermissible(error, totalGridElementCount)) {
@@ -220,37 +216,30 @@ void Domain::nextStep() {
 
 void Domain::prepareDeviceData(int deviceType, int deviceNumber, int stage) {
 	for (int i = 0; i < mBlockCount; ++i)
-		if (mBlocks[i]->getBlockType() == deviceType
-				&& mBlocks[i]->getDeviceNumber() == deviceNumber) {
+		if (mBlocks[i]->getBlockType() == deviceType && mBlocks[i]->getDeviceNumber() == deviceNumber) {
 			//printf("\nSuccses\n");
 			mBlocks[i]->prepareStageData(stage);
 		}
 }
 
-void Domain::processDeviceBlocksBorder(int deviceType, int deviceNumber,
-		int stage) {
+void Domain::processDeviceBlocksBorder(int deviceType, int deviceNumber, int stage) {
 	for (int i = 0; i < mBlockCount; ++i)
-		if (mBlocks[i]->getBlockType() == deviceType
-				&& mBlocks[i]->getDeviceNumber() == deviceNumber) {
+		if (mBlocks[i]->getBlockType() == deviceType && mBlocks[i]->getDeviceNumber() == deviceNumber) {
 			//cout << endl << "ERROR! PROCESS DEVICE!" << endl;
 			mBlocks[i]->computeStageBorder(stage, currentTime);
 		}
 }
 
-void Domain::processDeviceBlocksCenter(int deviceType, int deviceNumber,
-		int stage) {
+void Domain::processDeviceBlocksCenter(int deviceType, int deviceNumber, int stage) {
 	for (int i = 0; i < mBlockCount; ++i)
-		if (mBlocks[i]->getBlockType() == deviceType
-				&& mBlocks[i]->getDeviceNumber() == deviceNumber) {
+		if (mBlocks[i]->getBlockType() == deviceType && mBlocks[i]->getDeviceNumber() == deviceNumber) {
 			//cout << endl << "ERROR! PROCESS DEVICE!" << endl;
 			mBlocks[i]->computeStageCenter(stage, currentTime);
 		}
 }
-void Domain::prepareDeviceArgument(int deviceType, int deviceNumber,
-		int stage) {
+void Domain::prepareDeviceArgument(int deviceType, int deviceNumber, int stage) {
 	for (int i = 0; i < mBlockCount; ++i)
-		if (mBlocks[i]->getBlockType() == deviceType
-				&& mBlocks[i]->getDeviceNumber() == deviceNumber) {
+		if (mBlocks[i]->getBlockType() == deviceType && mBlocks[i]->getDeviceNumber() == deviceNumber) {
 			//cout << endl << "ERROR! PROCESS DEVICE!" << endl;
 			mBlocks[i]->prepareArgument(stage, timeStep);
 		}
@@ -259,8 +248,7 @@ void Domain::prepareDeviceArgument(int deviceType, int deviceNumber,
 double Domain::getDeviceError(int deviceType, int deviceNumber) {
 	double error = 0;
 	for (int i = 0; i < mBlockCount; ++i)
-		if (mBlocks[i]->getBlockType() == deviceType
-				&& mBlocks[i]->getDeviceNumber() == deviceNumber) {
+		if (mBlocks[i]->getBlockType() == deviceType && mBlocks[i]->getDeviceNumber() == deviceNumber) {
 			//cout << endl << "ERROR! PROCESS DEVICE!" << endl;
 			error += mBlocks[i]->getStepError(timeStep);
 		}
@@ -596,14 +584,12 @@ Block* Domain::readBlock(ifstream& in, int idx, int dimension) {
 
 		printf("\nPROBLEM TYPE ALWAYS = ORDINARY!!!\n");
 
-		resBlock = new RealBlock(node, dimension, count[0], count[1], count[2],
-				offset[0], offset[1], offset[2], mCellSize, mHaloSize, idx, pu,
-				initFuncNumber, compFuncNumber, ORDINARY, mSolverIndex, mAtol,
-				mRtol);
+		resBlock = new RealBlock(node, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2],
+				mCellSize, mHaloSize, idx, pu, initFuncNumber, compFuncNumber, ORDINARY, mSolverIndex, mAtol, mRtol);
 	} else {
 		//resBlock =  new BlockNull(idx, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize);
-		resBlock = new NullBlock(node, dimension, count[0], count[1], count[2],
-				offset[0], offset[1], offset[2], mCellSize, mHaloSize);
+		resBlock = new NullBlock(node, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2],
+				mCellSize, mHaloSize);
 	}
 
 	delete initFuncNumber;
@@ -663,13 +649,10 @@ Interconnect* Domain::readConnection(ifstream& in) {
 		//cout << "	offsetDestnation" << j << ":        " << offsetDestination[j] << endl;
 	}
 
-	double* sourceData = mBlocks[sourceBlock]->addNewBlockBorder(
-			mBlocks[destinationBlock], getSide(sourceSide), offsetSource[0],
-			offsetSource[1], length[0], length[1]);
-	double* destinationData = mBlocks[destinationBlock]->addNewExternalBorder(
-			mBlocks[sourceBlock], getSide(destinationSide),
-			offsetDestination[0], offsetDestination[1], length[0], length[1],
-			sourceData);
+	double* sourceData = mBlocks[sourceBlock]->addNewBlockBorder(mBlocks[destinationBlock], getSide(sourceSide),
+			offsetSource[0], offsetSource[1], length[0], length[1]);
+	double* destinationData = mBlocks[destinationBlock]->addNewExternalBorder(mBlocks[sourceBlock],
+			getSide(destinationSide), offsetDestination[0], offsetDestination[1], length[0], length[1], sourceData);
 
 	int sourceNode = mBlocks[sourceBlock]->getNodeNumber();
 	int destinationNode = mBlocks[destinationBlock]->getNodeNumber();
@@ -683,8 +666,7 @@ Interconnect* Domain::readConnection(ifstream& in) {
 	delete offsetDestination;
 
 	//return new Interconnect(sourceNode, destinationNode, borderLength, sourceData, destinationData, &mWorkerComm);
-	return getInterconnect(sourceNode, destinationNode, borderLength,
-			sourceData, destinationData);
+	return getInterconnect(sourceNode, destinationNode, borderLength, sourceData, destinationData);
 }
 
 /*
@@ -822,8 +804,7 @@ void Domain::loadStateFromFile(char* dataFile) {
 	in.close();
 }
 
-void Domain::printStatisticsInfo(char* inputFile, char* outputFile,
-		double calcTime, char* statisticsFile) {
+void Domain::printStatisticsInfo(char* inputFile, char* outputFile, double calcTime, char* statisticsFile) {
 	//cout << endl << "PRINT STATISTIC INFO DOESN'T WORK" << endl;
 
 	if (mWorkerRank == 0) {
@@ -837,10 +818,8 @@ void Domain::printStatisticsInfo(char* inputFile, char* outputFile,
 		int stepCount = mRejectedStepCount + mAcceptedStepCount;
 		double speed = (double) (count) * stepCount / calcTime / 1000000;
 
-		printf("\n\nSteps accepted: %d\nSteps rejected: %d\n",
-				mAcceptedStepCount, mRejectedStepCount);
-		printf("Time: %.2f\nElement count: %d\nPerformance (10^6): %.2f\n\n",
-				calcTime, count, speed);
+		printf("\n\nSteps accepted: %d\nSteps rejected: %d\n", mAcceptedStepCount, mRejectedStepCount);
+		printf("Time: %.2f\nElement count: %d\nPerformance (10^6): %.2f\n\n", calcTime, count, speed);
 
 		//ofstream out;
 		//out.open("/home/frolov2/Tracer_project/stat", ios::app);
@@ -874,8 +853,7 @@ void Domain::printStatisticsInfo(char* inputFile, char* outputFile,
 				"Cell size:     %d\n"
 				"Step count:    %d\n"
 				"Calc time:     %.2f\n"
-				"Speed:         %.2f\n\n\n\n", count, side, mWorkerCommSize,
-				mCellSize, stepCount, calcTime, speed);
+				"Speed:         %.2f\n\n\n\n", count, side, mWorkerCommSize, mCellSize, stepCount, calcTime, speed);
 
 		fclose(out);
 	}
@@ -969,19 +947,17 @@ void Domain::createProcessigUnit() {
 	}
 }
 
-Interconnect* Domain::getInterconnect(int sourceNode, int destinationNode,
-		int borderLength, double* sourceData, double* destinationData) {
+Interconnect* Domain::getInterconnect(int sourceNode, int destinationNode, int borderLength, double* sourceData,
+		double* destinationData) {
 	if (sourceNode == destinationNode)
 		return new NonTransferInterconnect(sourceNode, destinationNode);
 
 	if (mWorkerRank == sourceNode) {
-		return new TransferInterconnectSend(sourceNode, destinationNode,
-				borderLength, sourceData, &mWorkerComm);
+		return new TransferInterconnectSend(sourceNode, destinationNode, borderLength, sourceData, &mWorkerComm);
 	}
 
 	if (mWorkerRank == destinationNode) {
-		return new TransferInterconnectRecv(sourceNode, destinationNode,
-				borderLength, destinationData, &mWorkerComm);;
+		return new TransferInterconnectRecv(sourceNode, destinationNode, borderLength, destinationData, &mWorkerComm);;
 	}
 
 	return new NonTransferInterconnect(sourceNode, destinationNode);
