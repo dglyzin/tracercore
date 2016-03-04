@@ -12,7 +12,8 @@
 
 class TransferInterconnectSend: public TransferInterconnect {
 public:
-	TransferInterconnectSend(int _sourceLocationNode, int _destinationLocationNode, int _borderLength,
+	TransferInterconnectSend(int _sourceLocationNode,
+			int _destinationLocationNode, int _borderLength,
 			double* _sourceBlockBorder, MPI_Comm* _pworkerComm);
 	virtual ~TransferInterconnectSend();
 

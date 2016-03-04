@@ -375,18 +375,18 @@ void Domain::readFromFile(char* path) {
 	readSolverTolerance(in);
 
 	switch (mSolverIndex) {
-	case EULER:
-		mSolverInfo = new EulerStorage();
-		break;
-	case RK4:
-		mSolverInfo = new RK4Storage();
-		break;
-	case DP45:
-		mSolverInfo = new DP45Storage();
-		break;
-	default:
-		mSolverInfo = new EulerStorage();
-		break;
+		case EULER:
+			mSolverInfo = new EulerStorage();
+			break;
+		case RK4:
+			mSolverInfo = new RK4Storage();
+			break;
+		case DP45:
+			mSolverInfo = new DP45Storage();
+			break;
+		default:
+			mSolverInfo = new EulerStorage();
+			break;
 	}
 
 	readBlockCount(in);
@@ -561,33 +561,33 @@ Block* Domain::readBlock(ifstream& in, int idx, int dimension) {
 
 		if (deviceType == 0)  //CPU BLOCK
 			switch (deviceNumber) {
-			case 0:
-				pu = cpu;
-				break;
+				case 0:
+					pu = cpu;
+					break;
 
-			default:
-				printf("Invalid block device number for CPU!\n");
-				assert(false);
-				break;
+				default:
+					printf("Invalid block device number for CPU!\n");
+					assert(false);
+					break;
 			}
 		else if (deviceType == 1) //GPU BLOCK
 			switch (deviceNumber) {
-			case 0:
-				pu = gpu0;
-				break;
+				case 0:
+					pu = gpu0;
+					break;
 
-			case 1:
-				pu = gpu1;
-				break;
+				case 1:
+					pu = gpu1;
+					break;
 
-			case 2:
-				pu = gpu2;
-				break;
+				case 2:
+					pu = gpu2;
+					break;
 
-			default:
-				printf("Invalid block device number for GPU!\n");
-				assert(false);
-				break;
+				default:
+					printf("Invalid block device number for GPU!\n");
+					assert(false);
+					break;
 			}
 		else {
 			printf("Invalid block type!\n");
@@ -683,7 +683,8 @@ Interconnect* Domain::readConnection(ifstream& in) {
 	delete offsetDestination;
 
 	//return new Interconnect(sourceNode, destinationNode, borderLength, sourceData, destinationData, &mWorkerComm);
-	return getInterconnect(sourceNode, destinationNode, borderLength, sourceData, destinationData);
+	return getInterconnect(sourceNode, destinationNode, borderLength,
+			sourceData, destinationData);
 }
 
 /*
@@ -761,9 +762,9 @@ void Domain::saveState(char* inputFile) {
 
 	/*int length = Utils::lastChar(inputFile, '/');
 
-	strncpy(saveFile, inputFile, length);
+	 strncpy(saveFile, inputFile, length);
 
-	saveFile[length] = 0;*/
+	 saveFile[length] = 0;*/
 	Utils::copyToLastChar(saveFile, inputFile, '/');
 
 	sprintf(saveFile, "%s%s%f%s", saveFile, "project-", currentTime, ".bin");
@@ -822,7 +823,7 @@ void Domain::loadStateFromFile(char* dataFile) {
 }
 
 void Domain::printStatisticsInfo(char* inputFile, char* outputFile,
-	double calcTime, char* statisticsFile) {
+		double calcTime, char* statisticsFile) {
 	//cout << endl << "PRINT STATISTIC INFO DOESN'T WORK" << endl;
 
 	if (mWorkerRank == 0) {
@@ -834,7 +835,7 @@ void Domain::printStatisticsInfo(char* inputFile, char* outputFile,
 		}
 
 		int stepCount = mRejectedStepCount + mAcceptedStepCount;
-		double speed = (double)(count) * stepCount / calcTime / 1000000;
+		double speed = (double) (count) * stepCount / calcTime / 1000000;
 
 		printf("\n\nSteps accepted: %d\nSteps rejected: %d\n",
 				mAcceptedStepCount, mRejectedStepCount);
@@ -845,14 +846,14 @@ void Domain::printStatisticsInfo(char* inputFile, char* outputFile,
 		//out.open("/home/frolov2/Tracer_project/stat", ios::app);
 
 		/*FILE* out;
-		out = fopen("/home/frolov2/Tracer_project/statistic", "a");
+		 out = fopen("/home/frolov2/Tracer_project/statistic", "a");
 
-		double speed = (double)(count) * stepCount / calcTime / 1000000;
-		int side = (int)sqrt( ( (double)count ) / mCellSize );
+		 double speed = (double)(count) * stepCount / calcTime / 1000000;
+		 int side = (int)sqrt( ( (double)count ) / mCellSize );
 
-		fprintf(out, "%-12d %-8d %-2d    %-2d    %-12d    %-10.2f    %-10.2f %s\n", count, side, mWorldSize, mCellSize, stepCount, calcTime, speed, inputFile);
+		 fprintf(out, "%-12d %-8d %-2d    %-2d    %-12d    %-10.2f    %-10.2f %s\n", count, side, mWorldSize, mCellSize, stepCount, calcTime, speed, inputFile);
 
-		fclose(out);*/
+		 fclose(out);*/
 
 		char statFile[250];
 		Utils::copyToLastChar(statFile, inputFile, '/', 2);
@@ -862,18 +863,19 @@ void Domain::printStatisticsInfo(char* inputFile, char* outputFile,
 		FILE* out;
 		out = fopen(statFile, "a");
 
-		int side = (int)sqrt( ( (double)count ) / mCellSize );
+		int side = (int) sqrt(((double) count) / mCellSize);
 
 		char in[50];
 		Utils::copyFromLastToEnd(in, inputFile, '/', 2);
 
 		fprintf(out, "Element count: %d\n"
-					 "Side (square): %d\n"
-					 "Thread count:  %d\n"
-					 "Cell size:     %d\n"
-					 "Step count:    %d\n"
-					 "Calc time:     %.2f\n"
-					 "Speed:         %.2f\n\n\n\n", count, side, mWorkerCommSize, mCellSize, stepCount, calcTime, speed);
+				"Side (square): %d\n"
+				"Thread count:  %d\n"
+				"Cell size:     %d\n"
+				"Step count:    %d\n"
+				"Calc time:     %.2f\n"
+				"Speed:         %.2f\n\n\n\n", count, side, mWorkerCommSize,
+				mCellSize, stepCount, calcTime, speed);
 
 		fclose(out);
 	}
@@ -931,7 +933,7 @@ bool Domain::isNan() {
 	bool flag = false;
 
 	for (int i = 0; i < mBlockCount; ++i) {
-		if( mBlocks[i]->isNan() ) {
+		if (mBlocks[i]->isNan()) {
 			flag = true;
 		}
 	}
@@ -953,24 +955,24 @@ void Domain::checkOptions(int flags, double _stopTime, char* saveFile) {
 
 void Domain::createProcessigUnit() {
 	switch (dimension) {
-	case 1:
-		cpu = new CPU_1d(0);
-		break;
-	case 2:
-		cpu = new CPU_2d(0);
-		break;
-	case 3:
-		cpu = new CPU_3d(0);
-		break;
-	default:
-		break;
+		case 1:
+			cpu = new CPU_1d(0);
+			break;
+		case 2:
+			cpu = new CPU_2d(0);
+			break;
+		case 3:
+			cpu = new CPU_3d(0);
+			break;
+		default:
+			break;
 	}
 }
 
 Interconnect* Domain::getInterconnect(int sourceNode, int destinationNode,
 		int borderLength, double* sourceData, double* destinationData) {
 	if (sourceNode == destinationNode)
-			return new NonTransferInterconnect(sourceNode, destinationNode);
+		return new NonTransferInterconnect(sourceNode, destinationNode);
 
 	if (mWorkerRank == sourceNode) {
 		return new TransferInterconnectSend(sourceNode, destinationNode,

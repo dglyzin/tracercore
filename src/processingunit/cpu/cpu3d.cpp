@@ -7,7 +7,8 @@
 
 #include "../../processingunit/cpu/cpu3d.h"
 
-CPU_3d::CPU_3d(int _deviceNumber) : CPU(_deviceNumber) {
+CPU_3d::CPU_3d(int _deviceNumber) :
+		CPU(_deviceNumber) {
 	// TODO Auto-generated constructor stub
 
 }
@@ -15,31 +16,38 @@ CPU_3d::CPU_3d(int _deviceNumber) : CPU(_deviceNumber) {
 CPU_3d::~CPU_3d() {
 }
 
-void CPU_3d::computeBorder(func_ptr_t* mUserFuncs, unsigned short int* mCompFuncNumber, double* result, double** source, double time, double* parametrs, double** externalBorder, int zCount, int yCount, int xCount, int haloSize) {
+void CPU_3d::computeBorder(func_ptr_t* mUserFuncs,
+		unsigned short int* mCompFuncNumber, double* result, double** source,
+		double time, double* parametrs, double** externalBorder, int zCount,
+		int yCount, int xCount, int haloSize) {
 # pragma omp parallel
 	{
 		for (int z = 0; z < haloSize; ++z) {
 			int zShift = yCount * xCount * z;
-	# pragma omp for
+# pragma omp for
 			for (int y = 0; y < yCount; ++y) {
 				int yShift = xCount * y;
 				for (int x = 0; x < xCount; ++x) {
 					int xShift = x;
 					//cout << "Border Calc z_" << z << " y_" << y << " x_" << x << endl;
-					mUserFuncs[ mCompFuncNumber[ zShift + yShift + xShift ] ](result, source, time, x, y, z, parametrs, externalBorder);
+					mUserFuncs[mCompFuncNumber[zShift + yShift + xShift]](
+							result, source, time, x, y, z, parametrs,
+							externalBorder);
 				}
 			}
 		}
 
 		for (int z = zCount - haloSize; z < zCount; ++z) {
 			int zShift = yCount * xCount * z;
-	# pragma omp for
+# pragma omp for
 			for (int y = 0; y < yCount; ++y) {
 				int yShift = xCount * y;
 				for (int x = 0; x < xCount; ++x) {
 					int xShift = x;
 					//cout << "Border Calc z_" << z << " y_" << y << " x_" << x << endl;
-					mUserFuncs[ mCompFuncNumber[ zShift + yShift + xShift ] ](result, source, time, x, y, z, parametrs, externalBorder);
+					mUserFuncs[mCompFuncNumber[zShift + yShift + xShift]](
+							result, source, time, x, y, z, parametrs,
+							externalBorder);
 				}
 			}
 		}
@@ -52,7 +60,9 @@ void CPU_3d::computeBorder(func_ptr_t* mUserFuncs, unsigned short int* mCompFunc
 				for (int x = 0; x < xCount; ++x) {
 					int xShift = x;
 					//cout << "Border Calc z_" << z << " y_" << y << " x_" << x << endl;
-					mUserFuncs[ mCompFuncNumber[ zShift + yShift + xShift ] ](result, source, time, x, y, z, parametrs, externalBorder);
+					mUserFuncs[mCompFuncNumber[zShift + yShift + xShift]](
+							result, source, time, x, y, z, parametrs,
+							externalBorder);
 				}
 			}
 		}
@@ -65,7 +75,9 @@ void CPU_3d::computeBorder(func_ptr_t* mUserFuncs, unsigned short int* mCompFunc
 				for (int x = 0; x < xCount; ++x) {
 					int xShift = x;
 					//cout << "Border Calc z_" << z << " y_" << y << " x_" << x << endl;
-					mUserFuncs[ mCompFuncNumber[ zShift + yShift + xShift ] ](result, source, time, x, y, z, parametrs, externalBorder);
+					mUserFuncs[mCompFuncNumber[zShift + yShift + xShift]](
+							result, source, time, x, y, z, parametrs,
+							externalBorder);
 				}
 			}
 		}
@@ -78,7 +90,9 @@ void CPU_3d::computeBorder(func_ptr_t* mUserFuncs, unsigned short int* mCompFunc
 				for (int x = 0; x < haloSize; ++x) {
 					int xShift = x;
 					//cout << "Border Calc z_" << z << " y_" << y << " x_" << x << endl;
-					mUserFuncs[ mCompFuncNumber[ zShift + yShift + xShift ] ](result, source, time, x, y, z, parametrs, externalBorder);
+					mUserFuncs[mCompFuncNumber[zShift + yShift + xShift]](
+							result, source, time, x, y, z, parametrs,
+							externalBorder);
 				}
 			}
 		}
@@ -91,14 +105,19 @@ void CPU_3d::computeBorder(func_ptr_t* mUserFuncs, unsigned short int* mCompFunc
 				for (int x = xCount - haloSize; x < xCount; ++x) {
 					int xShift = x;
 					//cout << "Border Calc z_" << z << " y_" << y << " x_" << x << endl;
-					mUserFuncs[ mCompFuncNumber[ zShift + yShift + xShift ] ](result, source, time, x, y, z, parametrs, externalBorder);
+					mUserFuncs[mCompFuncNumber[zShift + yShift + xShift]](
+							result, source, time, x, y, z, parametrs,
+							externalBorder);
 				}
 			}
 		}
 	}
 }
 
-void CPU_3d::computeCenter(func_ptr_t* mUserFuncs, unsigned short int* mCompFuncNumber, double* result, double** source, double time, double* parametrs, double** externalBorder, int zCount, int yCount, int xCount, int haloSize) {
+void CPU_3d::computeCenter(func_ptr_t* mUserFuncs,
+		unsigned short int* mCompFuncNumber, double* result, double** source,
+		double time, double* parametrs, double** externalBorder, int zCount,
+		int yCount, int xCount, int haloSize) {
 # pragma omp parallel
 	{
 # pragma omp for
@@ -109,7 +128,9 @@ void CPU_3d::computeCenter(func_ptr_t* mUserFuncs, unsigned short int* mCompFunc
 				for (int x = haloSize; x < xCount - haloSize; ++x) {
 					int xShift = x;
 					//cout << "Calc z_" << z << " y_" << y << " x_" << x << endl;
-					mUserFuncs[ mCompFuncNumber[ zShift + yShift + xShift ] ](result, source, time, x, y, z, parametrs, externalBorder);
+					mUserFuncs[mCompFuncNumber[zShift + yShift + xShift]](
+							result, source, time, x, y, z, parametrs,
+							externalBorder);
 				}
 			}
 		}

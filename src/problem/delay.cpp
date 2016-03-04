@@ -9,11 +9,12 @@
 
 using namespace std;
 
-Delay::Delay(ProcessingUnit* pu, int solverType, int count, double aTol, double rTol, int _delayCount) {
+Delay::Delay(ProcessingUnit* pu, int solverType, int count, double aTol,
+		double rTol, int _delayCount) {
 	//TODO fix!!! реализация функции для ProcessingUnit!!!
 	maxStorageCount = 1;
 
-	mStepStorage = new StepStorage* [maxStorageCount];
+	mStepStorage = new StepStorage*[maxStorageCount];
 
 	for (int i = 0; i < maxStorageCount; ++i) {
 		mStepStorage[i] = createStageStorage(pu, solverType, count, aTol, rTol);
@@ -21,7 +22,7 @@ Delay::Delay(ProcessingUnit* pu, int solverType, int count, double aTol, double 
 
 	delayCount = _delayCount;
 
-	mSourceStorage = new double* [delayCount + 1];
+	mSourceStorage = new double*[delayCount + 1];
 
 	currentStorageNumber = 0;
 }
@@ -45,8 +46,10 @@ int Delay::getSourceStorageNumberDelay(double time, int delayNumber) {
 	return 0;
 }
 
-int Delay::getSourceStorageNumberDelayForDenseOutput(double time, int delayNumber) {
-	printf("\nget source storage number for delay & for Dense output don't work!!!\n");
+int Delay::getSourceStorageNumberDelayForDenseOutput(double time,
+		int delayNumber) {
+	printf(
+			"\nget source storage number for delay & for Dense output don't work!!!\n");
 	return 0;
 }
 
@@ -56,15 +59,15 @@ int Delay::getResultStorageNumber() {
 
 double** Delay::getSource(int stage) {
 	/*int sourceStorageNumber = getSourceStorageNumber(time);
-	mSourceStorage[0] = mStepStorage[sourceStorageNumber]->getStageSource(stage);
+	 mSourceStorage[0] = mStepStorage[sourceStorageNumber]->getStageSource(stage);
 
-	for (int i = 0; i < delayCount; ++i) {
-		int sourceStorageNumberDelay = getSourceStorageNumberDelay(time, i);
-		int sourceStorageNumberDelayForDenseOutput = getSourceStorageNumberDelayForDenseOutput(time, i);
-		mStepStorage[sourceStorageNumberDelay]->getDenseOutput( mStepStorage[sourceStorageNumberDelayForDenseOutput], mSourceStorage[i+1] );
-	}
+	 for (int i = 0; i < delayCount; ++i) {
+	 int sourceStorageNumberDelay = getSourceStorageNumberDelay(time, i);
+	 int sourceStorageNumberDelayForDenseOutput = getSourceStorageNumberDelayForDenseOutput(time, i);
+	 mStepStorage[sourceStorageNumberDelay]->getDenseOutput( mStepStorage[sourceStorageNumberDelayForDenseOutput], mSourceStorage[i+1] );
+	 }
 
-	return mSourceStorage;*/
+	 return mSourceStorage;*/
 	return NULL;
 }
 

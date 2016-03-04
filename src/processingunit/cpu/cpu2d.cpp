@@ -7,7 +7,8 @@
 
 #include "../../processingunit/cpu/cpu2d.h"
 
-CPU_2d::CPU_2d(int _deviceNumber) : CPU(_deviceNumber) {
+CPU_2d::CPU_2d(int _deviceNumber) :
+		CPU(_deviceNumber) {
 	// TODO Auto-generated constructor stub
 
 }
@@ -15,7 +16,10 @@ CPU_2d::CPU_2d(int _deviceNumber) : CPU(_deviceNumber) {
 CPU_2d::~CPU_2d() {
 }
 
-void CPU_2d::computeBorder(func_ptr_t* mUserFuncs, unsigned short int* mCompFuncNumber, double* result, double** source, double time, double* parametrs, double** externalBorder, int zCount, int yCount, int xCount, int haloSize) {
+void CPU_2d::computeBorder(func_ptr_t* mUserFuncs,
+		unsigned short int* mCompFuncNumber, double* result, double** source,
+		double time, double* parametrs, double** externalBorder, int zCount,
+		int yCount, int xCount, int haloSize) {
 # pragma omp parallel
 	{
 # pragma omp for
@@ -25,7 +29,8 @@ void CPU_2d::computeBorder(func_ptr_t* mUserFuncs, unsigned short int* mCompFunc
 				int yShift = xCount * y;
 				//cout << "Calc y_" << y << " x_" << x << endl;
 				//printf("Calc y = %d, x = %d\n", y, x);
-				mUserFuncs[ mCompFuncNumber[ yShift + xShift ] ](result, source, time, x, y, 0, parametrs, externalBorder);
+				mUserFuncs[mCompFuncNumber[yShift + xShift]](result, source,
+						time, x, y, 0, parametrs, externalBorder);
 			}
 		}
 
@@ -36,7 +41,8 @@ void CPU_2d::computeBorder(func_ptr_t* mUserFuncs, unsigned short int* mCompFunc
 				int yShift = xCount * y;
 				//cout << "Calc y_" << y << " x_" << x << endl;
 				//printf("Calc y = %d, x = %d\n", y, x);
-				mUserFuncs[ mCompFuncNumber[ yShift + xShift ] ](result, source, time, x, y, 0, parametrs, externalBorder);
+				mUserFuncs[mCompFuncNumber[yShift + xShift]](result, source,
+						time, x, y, 0, parametrs, externalBorder);
 			}
 		}
 
@@ -47,7 +53,8 @@ void CPU_2d::computeBorder(func_ptr_t* mUserFuncs, unsigned short int* mCompFunc
 				int xShift = x;
 				//cout << "Calc y_" << y << " x_" << x << endl;
 				//printf("Calc y = %d, x = %d\n", y, x);
-				mUserFuncs[ mCompFuncNumber[ yShift + xShift ] ](result, source, time, x, y, 0, parametrs, externalBorder);
+				mUserFuncs[mCompFuncNumber[yShift + xShift]](result, source,
+						time, x, y, 0, parametrs, externalBorder);
 			}
 		}
 
@@ -58,13 +65,17 @@ void CPU_2d::computeBorder(func_ptr_t* mUserFuncs, unsigned short int* mCompFunc
 				int xShift = x;
 				//cout << "Calc y_" << y << " x_" << x << endl;
 				//printf("Calc y = %d, x = %d\n", y, x);
-				mUserFuncs[ mCompFuncNumber[ yShift + xShift ] ](result, source, time, x, y, 0, parametrs, externalBorder);
+				mUserFuncs[mCompFuncNumber[yShift + xShift]](result, source,
+						time, x, y, 0, parametrs, externalBorder);
 			}
 		}
 	}
 }
 
-void CPU_2d::computeCenter(func_ptr_t* mUserFuncs, unsigned short int* mCompFuncNumber, double* result, double** source, double time, double* parametrs, double** externalBorder, int zCount, int yCount, int xCount, int haloSize) {
+void CPU_2d::computeCenter(func_ptr_t* mUserFuncs,
+		unsigned short int* mCompFuncNumber, double* result, double** source,
+		double time, double* parametrs, double** externalBorder, int zCount,
+		int yCount, int xCount, int haloSize) {
 # pragma omp parallel
 	{
 # pragma omp for
@@ -73,7 +84,8 @@ void CPU_2d::computeCenter(func_ptr_t* mUserFuncs, unsigned short int* mCompFunc
 			for (int x = haloSize; x < xCount - haloSize; ++x) {
 				int xShift = x;
 				//cout << "Calc y_" << y << " x_" << x << endl;
-				mUserFuncs[ mCompFuncNumber[ yShift + xShift ] ](result, source, time, x, y, 0, parametrs, externalBorder);
+				mUserFuncs[mCompFuncNumber[yShift + xShift]](result, source,
+						time, x, y, 0, parametrs, externalBorder);
 			}
 		}
 	}

@@ -21,9 +21,12 @@ public:
 	//virtual void computeBorder(double* result, double** source, double time, double* parametrs, double** externalBorder, int zCount, int yCount, int xCount, int haloSize) = 0;
 	//virtual void computeCenter(double* result, double** source, double time, double* parametrs, double** externalBorder, int zCount, int yCount, int xCount, int haloSize) = 0;
 
-	void prepareBorder(double* result, double* source, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop, int yCount, int xCount, int cellSize);
+	void prepareBorder(double* result, double* source, int zStart, int zStop,
+			int yStart, int yStop, int xStart, int xStop, int yCount,
+			int xCount, int cellSize);
 
-	void initState(double* state, initfunc_fill_ptr_t* userInitFuncs, unsigned short int* initFuncNumber, int blockNumber, double time);
+	void initState(double* state, initfunc_fill_ptr_t* userInitFuncs,
+			unsigned short int* initFuncNumber, int blockNumber, double time);
 
 	int getType();
 
@@ -40,7 +43,6 @@ public:
 
 	unsigned short int* getUnsignedShortIntArray(int size);
 
-
 	void deallocDeviceSpecificArray(double* toDelete);
 	void deallocDeviceSpecificArray(double** toDelete);
 
@@ -51,21 +53,25 @@ public:
 
 	// ********************************************************************************
 
-
 	void copyArray(double* source, double* destination, int size);
-	void copyArray(unsigned short int* source, unsigned short int* destination, int size);
+	void copyArray(unsigned short int* source, unsigned short int* destination,
+			int size);
 
 	void sumArrays(double* result, double* arg1, double* arg2, int size);
-	void multiplyArrayByNumber(double* result, double* arg, double factor, int size);
-	void multiplyArrayByNumberAndSum(double* result, double* arg1, double factor, double* arg2, int size);
+	void multiplyArrayByNumber(double* result, double* arg, double factor,
+			int size);
+	void multiplyArrayByNumberAndSum(double* result, double* arg1,
+			double factor, double* arg2, int size);
 
 	double sumArrayElements(double* arg, int size);
-	void maxElementsElementwise(double* result, double* arg1, double* arg2, int size);
-	void divisionArraysElementwise(double* result, double* arg1, double* arg2, int size);
+	void maxElementsElementwise(double* result, double* arg1, double* arg2,
+			int size);
+	void divisionArraysElementwise(double* result, double* arg1, double* arg2,
+			int size);
 
 	void addNumberToArray(double* result, double* arg, double number, int size);
-	void multiplyArraysElementwise(double* result, double* arg1, double* arg2, int size);
-
+	void multiplyArraysElementwise(double* result, double* arg1, double* arg2,
+			int size);
 
 	void saveArray(double* array, int size, char* path);
 	void loadArray(double* array, int size, std::ifstream& in);

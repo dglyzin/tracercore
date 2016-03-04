@@ -12,7 +12,8 @@
 
 class Ordinary: public ProblemType {
 public:
-	Ordinary(ProcessingUnit* pu, int solverType, int count, double aTol, double rTol);
+	Ordinary(ProcessingUnit* pu, int solverType, int count, double aTol,
+			double rTol);
 	virtual ~Ordinary();
 
 	double** getSource(int stage);

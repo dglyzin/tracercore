@@ -15,8 +15,16 @@ public:
 	CPU_1d(int _deviceNumber);
 	virtual ~CPU_1d();
 
-	void computeBorder(func_ptr_t* mUserFuncs, unsigned short int* mCompFuncNumber, double* result, double** source, double time, double* parametrs, double** externalBorder, int zCount, int yCount, int xCount, int haloSize);
-	void computeCenter(func_ptr_t* mUserFuncs, unsigned short int* mCompFuncNumber, double* result, double** source, double time, double* parametrs, double** externalBorder, int zCount, int yCount, int xCount, int haloSize);
+	void computeBorder(func_ptr_t* mUserFuncs,
+			unsigned short int* mCompFuncNumber, double* result,
+			double** source, double time, double* parametrs,
+			double** externalBorder, int zCount, int yCount, int xCount,
+			int haloSize);
+	void computeCenter(func_ptr_t* mUserFuncs,
+			unsigned short int* mCompFuncNumber, double* result,
+			double** source, double time, double* parametrs,
+			double** externalBorder, int zCount, int yCount, int xCount,
+			int haloSize);
 };
 #endif /* SRC_PROCESSINGUNIT_CPU_CPU1D_H_ */
 

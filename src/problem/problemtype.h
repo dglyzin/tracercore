@@ -22,7 +22,8 @@ public:
 	virtual double** getSource(int stage) = 0;
 	virtual double* getResult(int stage) = 0;
 
-	virtual void prepareArgument(ProcessingUnit* pu, int stage, double timestep) = 0;
+	virtual void prepareArgument(ProcessingUnit* pu, int stage,
+			double timestep) = 0;
 
 	virtual double* getCurrentStateStageData(int stage) = 0;
 
@@ -42,7 +43,8 @@ public:
 	virtual bool isNan(ProcessingUnit* pu) = 0;
 
 protected:
-	StepStorage* createStageStorage(ProcessingUnit* pu, int solverType, int count, double aTol, double rTol);
+	StepStorage* createStageStorage(ProcessingUnit* pu, int solverType,
+			int count, double aTol, double rTol);
 
 	double** mSourceStorage;
 };

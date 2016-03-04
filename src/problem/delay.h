@@ -12,7 +12,8 @@
 
 class Delay: public ProblemType {
 public:
-	Delay(ProcessingUnit* pu, int solverType, int count, double aTol, double rTol, int _delayCount);
+	Delay(ProcessingUnit* pu, int solverType, int count, double aTol,
+			double rTol, int _delayCount);
 	virtual ~Delay();
 
 	double** getSource(int stage);
@@ -45,7 +46,6 @@ private:
 	int maxStorageCount;
 
 	int currentStorageNumber;
-
 
 	int getSourceStorageNumber(double time);
 	int getSourceStorageNumberDelay(double time, int delayNumber);

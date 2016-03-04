@@ -12,7 +12,8 @@
 
 class NonTransferInterconnect: public Interconnect {
 public:
-	NonTransferInterconnect(int _sourceLocationNode, int _destinationLocationNode);
+	NonTransferInterconnect(int _sourceLocationNode,
+			int _destinationLocationNode);
 	virtual ~NonTransferInterconnect();
 
 	void transfer();

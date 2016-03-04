@@ -27,13 +27,24 @@ public:
 	ProcessingUnit(int _deviceNumber);
 	virtual ~ProcessingUnit();
 
-	virtual void computeBorder(func_ptr_t* mUserFuncs, unsigned short int* mCompFuncNumber, double* result, double** source, double time, double* parametrs, double** externalBorder, int zCount, int yCount, int xCount, int haloSize) = 0;
-	virtual void computeCenter(func_ptr_t* mUserFuncs, unsigned short int* mCompFuncNumber, double* result, double** source, double time, double* parametrs, double** externalBorder, int zCount, int yCount, int xCount, int haloSize) = 0;
+	virtual void computeBorder(func_ptr_t* mUserFuncs,
+			unsigned short int* mCompFuncNumber, double* result,
+			double** source, double time, double* parametrs,
+			double** externalBorder, int zCount, int yCount, int xCount,
+			int haloSize) = 0;
+	virtual void computeCenter(func_ptr_t* mUserFuncs,
+			unsigned short int* mCompFuncNumber, double* result,
+			double** source, double time, double* parametrs,
+			double** externalBorder, int zCount, int yCount, int xCount,
+			int haloSize) = 0;
 
-	virtual void prepareBorder(double* result, double* source, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop, int yCount, int xCount, int cellSize) = 0;
+	virtual void prepareBorder(double* result, double* source, int zStart,
+			int zStop, int yStart, int yStop, int xStart, int xStop, int yCount,
+			int xCount, int cellSize) = 0;
 
-	virtual void initState(double* state, initfunc_fill_ptr_t* userInitFuncs, unsigned short int* initFuncNumber, int blockNumber, double time) = 0;
-
+	virtual void initState(double* state, initfunc_fill_ptr_t* userInitFuncs,
+			unsigned short int* initFuncNumber, int blockNumber,
+			double time) = 0;
 
 	virtual int getType() = 0;
 
@@ -41,7 +52,6 @@ public:
 	virtual bool isGPU() = 0;
 
 	int getDeviceNumber();
-
 
 	double* newDoubleArray(int size);
 	double** newDoublePointerArray(int size);
@@ -53,8 +63,6 @@ public:
 
 	unsigned short int* newUnsignedShortIntArray(int size);
 
-
-
 	void deleteDeviceSpecificArray(double* toDelete);
 	void deleteDeviceSpecificArray(double** toDelete);
 
@@ -65,22 +73,27 @@ public:
 
 	void deleteUnsignedShortInt(unsigned short int* toDelete);
 
-
-
 	virtual void copyArray(double* source, double* destination, int size) = 0;
-	virtual void copyArray(unsigned short int* source, unsigned short int* destination, int size) = 0;
+	virtual void copyArray(unsigned short int* source,
+			unsigned short int* destination, int size) = 0;
 
-	virtual void sumArrays(double* result, double* arg1, double* arg2, int size) = 0;
-	virtual void multiplyArrayByNumber(double* result, double* arg, double factor, int size) = 0;
-	virtual void multiplyArrayByNumberAndSum(double* result, double* arg1, double factor, double* arg2, int size) = 0;
+	virtual void sumArrays(double* result, double* arg1, double* arg2,
+			int size) = 0;
+	virtual void multiplyArrayByNumber(double* result, double* arg,
+			double factor, int size) = 0;
+	virtual void multiplyArrayByNumberAndSum(double* result, double* arg1,
+			double factor, double* arg2, int size) = 0;
 
 	virtual double sumArrayElements(double* arg, int size) = 0;
-	virtual void maxElementsElementwise(double* result, double* arg1, double* arg2, int size) = 0;
-	virtual void divisionArraysElementwise(double* result, double* arg1, double* arg2, int size) = 0;
+	virtual void maxElementsElementwise(double* result, double* arg1,
+			double* arg2, int size) = 0;
+	virtual void divisionArraysElementwise(double* result, double* arg1,
+			double* arg2, int size) = 0;
 
-	virtual void addNumberToArray(double* result, double* arg, double number, int size) = 0;
-	virtual void multiplyArraysElementwise(double* result, double* arg1, double* arg2, int size) = 0;
-
+	virtual void addNumberToArray(double* result, double* arg, double number,
+			int size) = 0;
+	virtual void multiplyArraysElementwise(double* result, double* arg1,
+			double* arg2, int size) = 0;
 
 	virtual void saveArray(double* array, int size, char* path) = 0;
 	virtual void loadArray(double* array, int size, std::ifstream& in) = 0;
@@ -100,8 +113,6 @@ protected:
 
 	std::list<unsigned short int*> unsignedShortIntArrays;
 
-
-
 	virtual double* getDoubleArray(int size) = 0;
 	virtual double** getDoublePointerArray(int size) = 0;
 
@@ -112,8 +123,6 @@ protected:
 
 	virtual unsigned short int* getUnsignedShortIntArray(int size) = 0;
 
-
-
 	virtual void deallocDeviceSpecificArray(double* toDelete) = 0;
 	virtual void deallocDeviceSpecificArray(double** toDelete) = 0;
 
@@ -123,8 +132,6 @@ protected:
 	void deallocDoublePinnedArray(double* toDelete);
 
 	virtual void deallocDeviceSpecificArray(unsigned short int* toDelete) = 0;
-
-
 
 	void deleteAllArrays();
 

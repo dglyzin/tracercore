@@ -13,7 +13,6 @@ int main(int argc, char * argv[]) {
 	MPI_Comm_size(MPI_COMM_WORLD, &world_size);
 	MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
 
-
 	/*
 	 * Переменные для расчета время работы.
 	 */
@@ -29,8 +28,8 @@ int main(int argc, char * argv[]) {
 	 * Создание основного управляющего класса.
 	 * Номер потока, количество потоков и путь к файлу с данными.
 	 */
-	printf ("SLURM JOB %s STARTED\n ", getenv("SLURM_JOB_ID"));
-	printf ("DEBUG creating domain...\n ");
+	printf("SLURM JOB %s STARTED\n ", getenv("SLURM_JOB_ID"));
+	printf("DEBUG creating domain...\n ");
 	Domain* domain = new Domain(world_rank, world_size, inputFile);
 	domain->checkOptions(flags, stopTime, saveFile);
 
@@ -39,7 +38,7 @@ int main(int argc, char * argv[]) {
 	 */
 	domain->saveState(inputFile);
 
-	printf ("Running computations %d \n", world_rank);
+	printf("Running computations %d \n", world_rank);
 	time1 = MPI_Wtime();
 	domain->compute(inputFile);
 	time2 = MPI_Wtime();
@@ -50,7 +49,7 @@ int main(int argc, char * argv[]) {
 	 * Вывод информации о времени работы осуществляет только поток с номером 0.
 	 * Время работы -  разница между двумя отсечками, котрые были сделаны ранее.
 	 */
-	if(domain->isNan())
+	if (domain->isNan())
 		printf("\n\n\n\nNAN!!!\n\n\n\n");
 
 	domain->printStatisticsInfo(inputFile, NULL, time2 - time1, NULL);
