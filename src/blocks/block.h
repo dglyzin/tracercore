@@ -62,8 +62,6 @@ public:
 protected:
 	int nodeNumber;
 
-	//int dimension;
-
 	int xCount;
 	int yCount;
 	int zCount;
