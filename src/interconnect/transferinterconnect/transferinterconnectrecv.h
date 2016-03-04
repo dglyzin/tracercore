@@ -20,6 +20,9 @@ public:
 
 private:
 	double* destinationExternalBorder;
+
+	void printTypeInformation();
+	void printMemoryAddresInformation();
 };
 
 #endif /* SRC_INTERCONNECT_TRANSFERINTERCONNECT_TRANSFERINTERCONNECTRECV_H_ */

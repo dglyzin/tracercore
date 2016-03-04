@@ -20,4 +20,13 @@ TransferInterconnectSend::~TransferInterconnectSend() {
 
 void TransferInterconnectSend::transfer() {
 	MPI_Isend(sourceBlockBorder, borderLength, MPI_DOUBLE, destinationLocationNode, 999, *mpWorkerComm, request);
+	//MPI_Send(sourceBlockBorder, borderLength, MPI_DOUBLE, destinationLocationNode, 999, *mpWorkerComm);
+}
+
+void TransferInterconnectSend::printTypeInformation() {
+	printf("Transfer send interconnect\n");
+}
+
+void TransferInterconnectSend::printMemoryAddresInformation() {
+	printf("   Source memory address     : %p\n", sourceBlockBorder);
 }

@@ -20,6 +20,9 @@ public:
 
 private:
 	double* sourceBlockBorder;
+
+	void printTypeInformation();
+	void printMemoryAddresInformation();
 };
 
 #endif /* SRC_INTERCONNECT_TRANSFERINTERCONNECT_TRANSFERINTERCONNECTSEND_H_ */

@@ -17,6 +17,10 @@ public:
 
 	void transfer();
 	void wait();
+
+protected:
+	void printTypeInformation();
+	void printMemoryAddresInformation();
 };
 
 #endif /* SRC_INTERCONNECT_NONTRANSFERINTERCONNECT_H_ */

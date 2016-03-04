@@ -22,3 +22,11 @@ void NonTransferInterconnect::wait() {
 void NonTransferInterconnect::transfer() {
 	return;
 }
+
+void NonTransferInterconnect::printTypeInformation() {
+	printf("Non transfer interconnect\n");
+}
+
+void NonTransferInterconnect::printMemoryAddresInformation() {
+	return;
+}

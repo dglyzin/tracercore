@@ -31,4 +31,3 @@ TransferInterconnect::~TransferInterconnect() {
 void TransferInterconnect::wait() {
 	MPI_Wait(request, status);
 }
-

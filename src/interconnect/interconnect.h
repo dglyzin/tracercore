@@ -28,6 +28,11 @@ public:
 protected:
 	int sourceLocationNode;
 	int destinationLocationNode;
+
+	void printNodeLocationInformation();
+
+	virtual void printTypeInformation() = 0;
+	virtual void printMemoryAddresInformation() = 0;
 };
 
 #endif /* SRC_INTERCONNECT_INTERCONNECT_H_ */
