@@ -8,12 +8,9 @@
 #include "utils.h"
 
 Utils::Utils() {
-	// TODO Auto-generated constructor stub
-
 }
 
 Utils::~Utils() {
-	// TODO Auto-generated destructor stub
 }
 
 int Utils::lastChar(const char* source, char ch, int num) {

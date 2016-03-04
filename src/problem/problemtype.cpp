@@ -12,7 +12,6 @@ ProblemType::ProblemType() {
 }
 
 ProblemType::~ProblemType() {
-	// TODO Auto-generated destructor stub
 }
 
 StepStorage* ProblemType::createStageStorage(ProcessingUnit* pu, int solverType, int count, double aTol, double rTol) {

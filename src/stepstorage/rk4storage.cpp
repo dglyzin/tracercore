@@ -30,7 +30,6 @@ RK4Storage::RK4Storage(ProcessingUnit* pu, int count, double _aTol, double _rTol
 }
 
 RK4Storage::~RK4Storage() {
-	// TODO Auto-generated destructor stub
 }
 
 void RK4Storage::saveMTempStores(ProcessingUnit* pu, char* path) {

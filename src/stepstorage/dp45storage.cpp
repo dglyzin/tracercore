@@ -40,7 +40,6 @@ DP45Storage::DP45Storage(ProcessingUnit* pu, int count, double _aTol, double _rT
 }
 
 DP45Storage::~DP45Storage() {
-	// TODO Auto-generated destructor stub
 }
 
 void DP45Storage::prepareFSAL(ProcessingUnit* pu, double timestep) {

@@ -9,8 +9,6 @@
 
 CPU_3d::CPU_3d(int _deviceNumber) :
 		CPU(_deviceNumber) {
-	// TODO Auto-generated constructor stub
-
 }
 
 CPU_3d::~CPU_3d() {

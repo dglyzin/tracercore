@@ -26,7 +26,6 @@ StepStorage::StepStorage(ProcessingUnit* pu, int count, double _aTol, double _rT
 }
 
 StepStorage::~StepStorage() {
-	// TODO Auto-generated destructor stub
 }
 
 void StepStorage::saveMState(ProcessingUnit* pu, char* path) {

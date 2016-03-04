@@ -11,8 +11,6 @@ using namespace std;
 
 CPU::CPU(int _deviceNumber) :
 		ProcessingUnit(_deviceNumber) {
-	// TODO Auto-generated constructor stub
-
 }
 
 CPU::~CPU() {

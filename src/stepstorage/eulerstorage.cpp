@@ -20,7 +20,6 @@ EulerStorage::EulerStorage(ProcessingUnit* pu, int count, double _aTol, double _
 }
 
 EulerStorage::~EulerStorage() {
-	// TODO Auto-generated destructor stub
 }
 
 void EulerStorage::saveMTempStores(ProcessingUnit* pu, char* path) {
