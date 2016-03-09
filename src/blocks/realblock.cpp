@@ -279,3 +279,8 @@ bool RealBlock::isNan() {
 	}
 	return false;
 }
+
+void RealBlock::print() {
+	printGeneralInformation();
+
+}

@@ -40,17 +40,21 @@ int Block::getNodeNumber() {
 	return nodeNumber;
 }
 
-void Block::printToConsole() {
+void Block::print() {
+	printGeneralInformation();
+}
+
+void Block::printGeneralInformation() {
 	printf("\nBlock\n"
-			"Node number: %d\n"
-			"xCount:      %d\n"
-			"yCount:      %d\n"
-			"zCount:      %d\n"
-			"xOffset:     %d\n"
-			"yOffset:     %d\n"
-			"zOffset:     %d\n"
-			"Cell size:   %d\n"
-			"Halo size:   %d\n"
+			"   Node number: %d\n"
+			"   xCount:      %d\n"
+			"   yCount:      %d\n"
+			"   zCount:      %d\n"
+			"   xOffset:     %d\n"
+			"   yOffset:     %d\n"
+			"   zOffset:     %d\n"
+			"   Cell size:   %d\n"
+			"   Halo size:   %d\n"
 			"\n", nodeNumber, xCount, yCount, zCount, xOffset, yOffset, zOffset, cellSize, haloSize);
 }
 

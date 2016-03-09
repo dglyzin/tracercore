@@ -342,7 +342,7 @@ double Domain::collectError() {
 void Domain::printBlocksToConsole() {
 	for (int i = 0; i < mBlockCount; ++i) {
 		if (mBlocks[i]->isRealBlock())
-			mBlocks[i]->printToConsole();
+			mBlocks[i]->print();
 	}
 }
 

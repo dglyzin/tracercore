@@ -57,7 +57,7 @@ public:
 
 	int getNodeNumber();
 
-	void printToConsole();
+	virtual void print();
 
 protected:
 	int nodeNumber;
@@ -72,6 +72,8 @@ protected:
 
 	int cellSize;
 	int haloSize;
+
+	void printGeneralInformation();
 
 private:
 	void setCountAndOffset(int dimension);
