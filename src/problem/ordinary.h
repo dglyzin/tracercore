@@ -37,6 +37,8 @@ public:
 
 	bool isNan(ProcessingUnit* pu);
 
+	void print(ProcessingUnit* pu, double* array, int zCount, int yCount, int xCount, int haloSize);
+
 private:
 	StepStorage* mStepStorage;
 };

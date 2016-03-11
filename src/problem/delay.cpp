@@ -117,3 +117,7 @@ void Delay::loadState(ProcessingUnit* pu, std::ifstream& in) {
 bool Delay::isNan(ProcessingUnit* pu) {
 	return false;
 }
+
+void Delay::print(ProcessingUnit* pu, double* array, int zCount, int yCount, int xCount, int haloSize) {
+	return;
+}

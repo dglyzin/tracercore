@@ -75,3 +75,7 @@ void Ordinary::loadState(ProcessingUnit* pu, ifstream& in) {
 bool Ordinary::isNan(ProcessingUnit* pu) {
 	return mStepStorage->isNan(pu);
 }
+
+void Ordinary::print(ProcessingUnit* pu, double* array, int zCount, int yCount, int xCount, int haloSize) {
+
+}
