@@ -56,6 +56,8 @@ public:
 
 	virtual void getDenseOutput(StepStorage* secondState, double* result) = 0;
 
+	virtual void print(ProcessingUnit* pu, double* array, int zCount, int yCount, int xCount, int haloSize) = 0;
+
 protected:
 	int mCount;
 	double* mState;
