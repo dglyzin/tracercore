@@ -18,9 +18,6 @@ public:
 	CPU(int _deviceNumber);
 	virtual ~CPU();
 
-	//virtual void computeBorder(double* result, double** source, double time, double* parametrs, double** externalBorder, int zCount, int yCount, int xCount, int haloSize) = 0;
-	//virtual void computeCenter(double* result, double** source, double time, double* parametrs, double** externalBorder, int zCount, int yCount, int xCount, int haloSize) = 0;
-
 	void prepareBorder(double* result, double* source, int zStart, int zStop, int yStart, int yStop, int xStart,
 			int xStop, int yCount, int xCount, int cellSize);
 
