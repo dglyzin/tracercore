@@ -36,7 +36,7 @@ public:
 	bool isErrorPermissible(double error, int totalDomainElements);
 
 	void getDenseOutput(StepStorage* secondState, double* result);
-	void print(ProcessingUnit* pu, double* array, int zCount, int yCount, int xCount, int haloSize);
+	void print(ProcessingUnit* pu, int zCount, int yCount, int xCount, int haloSize);
 
 private:
 	double* mTempStore1;

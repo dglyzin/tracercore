@@ -281,5 +281,5 @@ bool RealBlock::isNan() {
 }
 
 void RealBlock::printData() {
-
+	problem->print(pu, zCount, yCount, xCount, haloSize);
 }

@@ -41,7 +41,7 @@ public:
 
 	virtual bool isNan(ProcessingUnit* pu) = 0;
 
-	virtual void print(ProcessingUnit* pu, double* array, int zCount, int yCount, int xCount, int haloSize) = 0;
+	virtual void print(ProcessingUnit* pu, int zCount, int yCount, int xCount, int haloSize) = 0;
 
 protected:
 	StepStorage* createStageStorage(ProcessingUnit* pu, int solverType, int count, double aTol, double rTol);

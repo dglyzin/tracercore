@@ -178,7 +178,7 @@ void RK4Storage::getDenseOutput(StepStorage* secondState, double* result) {
 	printf("\nRK4 dense output DON'T WORK!\n");
 }
 
-void RK4Storage::print(ProcessingUnit* pu, double* array, int zCount, int yCount, int xCount, int haloSize) {
+void RK4Storage::print(ProcessingUnit* pu, int zCount, int yCount, int xCount, int haloSize) {
 	printf("mState:\n");
 	pu->printArray(mState, zCount, yCount, xCount, haloSize);
 
