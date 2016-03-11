@@ -96,6 +96,7 @@ private:
 	ProblemType* createProblem(int problemType, int solverType, double aTol, double rTol);
 
 	void printGeneralInformation();
+	void printBorderInfo();
 	void printData();
 };
 

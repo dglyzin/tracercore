@@ -283,6 +283,7 @@ bool RealBlock::isNan() {
 void RealBlock::print() {
 	printf("################################################################################");
 	printGeneralInformation();
+	printBorderInfo();
 	printData();
 	printf("################################################################################");
 	printf("\n\n\n");
@@ -300,6 +301,25 @@ void RealBlock::printGeneralInformation() {
 			"   Cell size:   %d\n"
 			"   Halo size:   %d\n"
 			"\n", blockNumber, nodeNumber, xCount, yCount, zCount, xOffset, yOffset, zOffset, cellSize, haloSize);
+}
+
+void RealBlock::printBorderInfo() {
+	int index = 0;
+
+	printf("Send border info\n");
+	for (int i = 0; i < countSendSegmentBorder; ++i) {
+		index = INTERCONNECT_COMPONENT_COUNT * i;
+		printf("Border #%d\n"
+				"   Side    : %s\n"
+				"   M_Offset: %d\n"
+				"   N_Offset: %d\n"
+				"   M_Length: %d\n"
+				"   N_Length: %d\n"
+				"   Address : %p\n"
+				"\n", i, getSideName(sendBorderInfo[index + SIDE]), sendBorderInfo[index + M_OFFSET],
+				sendBorderInfo[index + N_OFFSET], sendBorderInfo[index + M_LENGTH], sendBorderInfo[index + N_LENGTH],
+				blockBorder[i]);
+	}
 }
 
 void RealBlock::printData() {
