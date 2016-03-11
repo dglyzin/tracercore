@@ -323,5 +323,5 @@ void RealBlock::printBorderInfo() {
 }
 
 void RealBlock::printData() {
-	problem->print(pu, zCount, yCount, xCount, haloSize);
+	problem->print(pu, zCount, yCount, xCount, cellSize);
 }

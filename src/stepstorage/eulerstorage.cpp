@@ -85,10 +85,10 @@ void EulerStorage::getDenseOutput(StepStorage* secondState, double* result) {
 	printf("\nEuler dense output DON'T WORK!\n");
 }
 
-void EulerStorage::print(ProcessingUnit* pu, int zCount, int yCount, int xCount, int haloSize) {
+void EulerStorage::print(ProcessingUnit* pu, int zCount, int yCount, int xCount, int cellSize) {
 	printf("mState:\n");
-	pu->printArray(mState, zCount, yCount, xCount, haloSize);
+	pu->printArray(mState, zCount, yCount, xCount, cellSize);
 
 	printf("\nmTempStore1:\n");
-	pu->printArray(mTempStore1, zCount, yCount, xCount, haloSize);
+	pu->printArray(mTempStore1, zCount, yCount, xCount, cellSize);
 }

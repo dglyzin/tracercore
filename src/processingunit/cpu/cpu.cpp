@@ -98,42 +98,42 @@ void CPU::deallocDeviceSpecificArray(unsigned short int* toDelete) {
 	delete toDelete;
 }
 
-void CPU::printCell(double* array, int haloSize) {
+void CPU::printCell(double* array, int cellSize) {
 	printf("(");
 	printf("%5.2f", array[0]);
 
-	for (int h = 1; h < haloSize; ++h) {
+	for (int h = 1; h < cellSize; ++h) {
 		printf(", %5.2f", array[h]);
 	}
 	printf(")");
 }
 
-void CPU::printArray1d(double* array, int xCount, int haloSize) {
-	printCell(array, haloSize);
+void CPU::printArray1d(double* array, int xCount, int cellSize) {
+	printCell(array, cellSize);
 
 	int shift = 0;
 	for (int x = 1; x < xCount; ++x) {
 		printf(" ");
 		shift = x;
-		printCell(array + shift, haloSize);
+		printCell(array + shift, cellSize);
 	}
 	printf("\n");
 }
 
-void CPU::printArray2d(double* array, int yCount, int xCount, int haloSize) {
+void CPU::printArray2d(double* array, int yCount, int xCount, int cellSize) {
 	int shift = 0;
 	for (int y = 0; y < yCount; ++y) {
 		shift = xCount * y;
-		printArray1d(array + shift, xCount, haloSize);
+		printArray1d(array + shift, xCount, cellSize);
 	}
 }
 
-void CPU::printArray3d(double* array, int zCount, int yCount, int xCount, int haloSize) {
+void CPU::printArray3d(double* array, int zCount, int yCount, int xCount, int cellSize) {
 	int shift = 0;
 	for (int z = 0; z < zCount; ++z) {
 		printf("z = %d", z);
 		shift = yCount * xCount * z;
-		printArray2d(array + shift, yCount, xCount, haloSize);
+		printArray2d(array + shift, yCount, xCount, cellSize);
 		printf("\n");
 	}
 }

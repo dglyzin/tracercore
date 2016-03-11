@@ -80,6 +80,6 @@ void CPU_2d::computeCenter(func_ptr_t* mUserFuncs, unsigned short int* mCompFunc
 	}
 }
 
-void CPU_2d::printArray(double* array, int zCount, int yCount, int xCount, int haloSize) {
-	printArray2d(array, yCount, xCount, haloSize);
+void CPU_2d::printArray(double* array, int zCount, int yCount, int xCount, int cellSize) {
+	printArray2d(array, yCount, xCount, cellSize);
 }

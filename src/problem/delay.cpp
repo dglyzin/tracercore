@@ -118,6 +118,6 @@ bool Delay::isNan(ProcessingUnit* pu) {
 	return false;
 }
 
-void Delay::print(ProcessingUnit* pu, int zCount, int yCount, int xCount, int haloSize) {
+void Delay::print(ProcessingUnit* pu, int zCount, int yCount, int xCount, int cellSize) {
 	return;
 }

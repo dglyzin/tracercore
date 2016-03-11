@@ -86,7 +86,7 @@ public:
 
 	virtual bool isNan(double* array, int size) = 0;
 
-	virtual void printArray(double* array, int zCount, int yCount, int xCount, int haloSize) = 0;
+	virtual void printArray(double* array, int zCount, int yCount, int xCount, int cellSize) = 0;
 
 protected:
 	int deviceNumber;

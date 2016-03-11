@@ -177,22 +177,22 @@ void RK4Storage::getDenseOutput(StepStorage* secondState, double* result) {
 	printf("\nRK4 dense output DON'T WORK!\n");
 }
 
-void RK4Storage::print(ProcessingUnit* pu, int zCount, int yCount, int xCount, int haloSize) {
+void RK4Storage::print(ProcessingUnit* pu, int zCount, int yCount, int xCount, int cellSize) {
 	printf("mState:\n");
-	pu->printArray(mState, zCount, yCount, xCount, haloSize);
+	pu->printArray(mState, zCount, yCount, xCount, cellSize);
 
 	printf("\nmTempStore1:\n");
-	pu->printArray(mTempStore1, zCount, yCount, xCount, haloSize);
+	pu->printArray(mTempStore1, zCount, yCount, xCount, cellSize);
 
 	printf("\nmTempStore2:\n");
-	pu->printArray(mTempStore2, zCount, yCount, xCount, haloSize);
+	pu->printArray(mTempStore2, zCount, yCount, xCount, cellSize);
 
 	printf("\nmTempStore3:\n");
-	pu->printArray(mTempStore3, zCount, yCount, xCount, haloSize);
+	pu->printArray(mTempStore3, zCount, yCount, xCount, cellSize);
 
 	printf("\nmTempStore4:\n");
-	pu->printArray(mTempStore4, zCount, yCount, xCount, haloSize);
+	pu->printArray(mTempStore4, zCount, yCount, xCount, cellSize);
 
 	printf("\nmArg:\n");
-	pu->printArray(mArg, zCount, yCount, xCount, haloSize);
+	pu->printArray(mArg, zCount, yCount, xCount, cellSize);
 }
