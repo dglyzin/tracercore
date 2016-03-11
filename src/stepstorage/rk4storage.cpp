@@ -71,9 +71,9 @@ double* RK4Storage::getStageResult(int stage) {
 			return mTempStore1;
 		case 1:
 			return mTempStore2;
-		case 3:
+		case 2:
 			return mTempStore3;
-		case 4:
+		case 3:
 			return mTempStore4;
 		default:
 			assert(0);
