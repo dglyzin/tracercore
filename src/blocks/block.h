@@ -74,6 +74,7 @@ protected:
 	int haloSize;
 
 	void printGeneralInformation();
+	virtual void printData() = 0;
 
 private:
 	void setCountAndOffset(int dimension);

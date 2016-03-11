@@ -97,3 +97,7 @@ void NullBlock::loadState(ifstream& in) {
 bool NullBlock::isNan() {
 	return false;
 }
+
+void NullBlock::printData() {
+	return;
+}

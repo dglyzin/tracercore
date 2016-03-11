@@ -123,3 +123,7 @@ void CPU_3d::computeCenter(func_ptr_t* mUserFuncs, unsigned short int* mCompFunc
 		}
 	}
 }
+
+void CPU_3d::printArray(double* array, int zCount, int yCount, int xCount, int haloSize) {
+	printArray3d(array, zCount, yCount, xCount, haloSize);
+}

@@ -42,6 +42,7 @@ int Block::getNodeNumber() {
 
 void Block::print() {
 	printGeneralInformation();
+	printData();
 }
 
 void Block::printGeneralInformation() {

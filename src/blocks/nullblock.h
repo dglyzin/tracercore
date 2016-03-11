@@ -53,6 +53,9 @@ public:
 	void loadState(std::ifstream& in);
 
 	bool isNan();
+
+protected:
+	void printData();
 };
 
 #endif /* SRC_BLOCKS_NULLBLOCK_H_ */

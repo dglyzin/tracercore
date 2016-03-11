@@ -59,7 +59,8 @@ public:
 
 	bool isNan();
 
-	void print();
+protected:
+	void printData();
 
 private:
 	ProcessingUnit* pu;

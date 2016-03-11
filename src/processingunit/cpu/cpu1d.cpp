@@ -45,3 +45,7 @@ void CPU_1d::computeCenter(func_ptr_t* mUserFuncs, unsigned short int* mCompFunc
 		}
 	}
 }
+
+void CPU_1d::printArray(double* array, int zCount, int yCount, int xCount, int haloSize) {
+	printArray1d(array, xCount, haloSize);
+}
