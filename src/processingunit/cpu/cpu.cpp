@@ -98,6 +98,46 @@ void CPU::deallocDeviceSpecificArray(unsigned short int* toDelete) {
 	delete toDelete;
 }
 
+void CPU::printCell(double* array, int haloSize) {
+	printf("(");
+	printf("%5.2f", array[0]);
+
+	for (int h = 1; h < haloSize; ++h) {
+		printf(", %5.2f", array[h]);
+	}
+	printf(")");
+}
+
+void CPU::printArray1d(double* array, int xCount, int haloSize) {
+	printCell(array, haloSize);
+
+	int shift = 0;
+	for (int x = 1; x < xCount; ++x) {
+		printf(" ");
+		shift = x;
+		printCell(array + shift, haloSize);
+	}
+	printf("\n");
+}
+
+void CPU::printArray2d(double* array, int yCount, int xCount, int haloSize) {
+	int shift = 0;
+	for (int y = 0; y < yCount; ++y) {
+		shift = xCount * y;
+		printArray1d(array + shift, xCount, haloSize);
+	}
+}
+
+void CPU::printArray3d(double* array, int zCount, int yCount, int xCount, int haloSize) {
+	int shift = 0;
+	for (int z = 0; z < zCount; ++z) {
+		printf("z = %d", z);
+		shift = yCount * xCount * z;
+		printArray2d(array + shift, yCount, xCount, haloSize);
+		printf("\n");
+	}
+}
+
 void CPU::copyArray(double* source, double* destination, int size) {
 	for (int i = 0; i < size; ++i) {
 		destination[i] = source[i];

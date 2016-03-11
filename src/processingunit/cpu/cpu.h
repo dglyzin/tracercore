@@ -64,6 +64,11 @@ protected:
 	void deallocDeviceSpecificArray(int** toDelete);
 
 	void deallocDeviceSpecificArray(unsigned short int* toDelete);
+
+	void printCell(double* array, int haloSize);
+	void printArray1d(double* array, int xCount, int haloSize);
+	void printArray2d(double* array, int yCount, int xCount, int haloSize);
+	void printArray3d(double* array, int zCount, int yCount, int xCount, int haloSize);
 };
 
 #endif /* SRC_PROCESSINGUNIT_CPU_CPU_H_ */
