@@ -162,7 +162,7 @@ void Domain::initSolvers() {
 }
 
 void Domain::computeStage(int stage) {
-	printBlocksToConsole();
+	//printBlocksToConsole();
 
 	prepareData(stage);
 
@@ -323,13 +323,13 @@ double Domain::collectError() {
 	err1 = err2 = err3 = 0;
 	//1. Get total error for current node
 #pragma omp task
-	err1 = getDeviceError(GPU, 0);
+	err1 = getDeviceError(GPU_UNIT, 0);
 #pragma omp task
-	err2 = getDeviceError(GPU, 1);
+	err2 = getDeviceError(GPU_UNIT, 1);
 #pragma omp task
-	err3 = getDeviceError(GPU, 2);
+	err3 = getDeviceError(GPU_UNIT, 2);
 
-	double nodeError = getDeviceError(CPU, 0);
+	double nodeError = getDeviceError(CPU_UNIT, 0);
 
 #pragma omp taskwait
 	nodeError += err1 + err2 + err3;
