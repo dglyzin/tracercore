@@ -177,3 +177,23 @@ bool RK4Storage::isErrorPermissible(double error, int totalDomainElements) {
 void RK4Storage::getDenseOutput(StepStorage* secondState, double* result) {
 	printf("\nRK4 dense output DON'T WORK!\n");
 }
+
+void RK4Storage::print(ProcessingUnit* pu, double* array, int zCount, int yCount, int xCount, int haloSize) {
+	printf("mState:\n");
+	pu->printArray(mState, zCount, yCount, xCount, haloSize);
+
+	printf("mTempStore1:\n");
+	pu->printArray(mTempStore1, zCount, yCount, xCount, haloSize);
+
+	printf("mTempStore2:\n");
+	pu->printArray(mTempStore2, zCount, yCount, xCount, haloSize);
+
+	printf("mTempStore3:\n");
+	pu->printArray(mTempStore3, zCount, yCount, xCount, haloSize);
+
+	printf("mTempStore4:\n");
+	pu->printArray(mTempStore4, zCount, yCount, xCount, haloSize);
+
+	printf("mArg:\n");
+	pu->printArray(mArg, zCount, yCount, xCount, haloSize);
+}
