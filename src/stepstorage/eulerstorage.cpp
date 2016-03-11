@@ -89,6 +89,6 @@ void EulerStorage::print(ProcessingUnit* pu, int zCount, int yCount, int xCount,
 	printf("mState:\n");
 	pu->printArray(mState, zCount, yCount, xCount, haloSize);
 
-	printf("mTempStore1:\n");
+	printf("\nmTempStore1:\n");
 	pu->printArray(mTempStore1, zCount, yCount, xCount, haloSize);
 }

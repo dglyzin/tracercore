@@ -43,6 +43,7 @@ int Block::getNodeNumber() {
 void Block::print() {
 	printGeneralInformation();
 	printData();
+	printf("\n\n");
 }
 
 void Block::printGeneralInformation() {

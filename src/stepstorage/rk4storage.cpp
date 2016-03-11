@@ -182,18 +182,18 @@ void RK4Storage::print(ProcessingUnit* pu, int zCount, int yCount, int xCount, i
 	printf("mState:\n");
 	pu->printArray(mState, zCount, yCount, xCount, haloSize);
 
-	printf("mTempStore1:\n");
+	printf("\nmTempStore1:\n");
 	pu->printArray(mTempStore1, zCount, yCount, xCount, haloSize);
 
-	printf("mTempStore2:\n");
+	printf("\nmTempStore2:\n");
 	pu->printArray(mTempStore2, zCount, yCount, xCount, haloSize);
 
-	printf("mTempStore3:\n");
+	printf("\nmTempStore3:\n");
 	pu->printArray(mTempStore3, zCount, yCount, xCount, haloSize);
 
-	printf("mTempStore4:\n");
+	printf("\nmTempStore4:\n");
 	pu->printArray(mTempStore4, zCount, yCount, xCount, haloSize);
 
-	printf("mArg:\n");
+	printf("\nmArg:\n");
 	pu->printArray(mArg, zCount, yCount, xCount, haloSize);
 }

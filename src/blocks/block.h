@@ -57,7 +57,7 @@ public:
 
 	int getNodeNumber();
 
-	virtual void print();
+	void print();
 
 protected:
 	int nodeNumber;

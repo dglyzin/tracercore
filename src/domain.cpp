@@ -162,6 +162,8 @@ void Domain::initSolvers() {
 }
 
 void Domain::computeStage(int stage) {
+	printBlocksToConsole();
+
 	prepareData(stage);
 
 	for (int i = 0; i < mConnectionCount; ++i)
