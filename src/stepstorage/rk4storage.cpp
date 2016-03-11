@@ -59,7 +59,6 @@ double* RK4Storage::getStageSource(int stage) {
 		case 3:
 			return mArg;
 		default:
-			// TODO реально надо assert?
 			assert(0);
 			return NULL;
 	}
