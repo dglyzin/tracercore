@@ -280,6 +280,28 @@ bool RealBlock::isNan() {
 	return false;
 }
 
+void RealBlock::print() {
+	printf("################################################################################");
+	printGeneralInformation();
+	printData();
+	printf("################################################################################");
+	printf("\n\n\n");
+}
+
+void RealBlock::printGeneralInformation() {
+	printf("\nBlock #%d\n"
+			"   Node number: %d\n"
+			"   xCount:      %d\n"
+			"   yCount:      %d\n"
+			"   zCount:      %d\n"
+			"   xOffset:     %d\n"
+			"   yOffset:     %d\n"
+			"   zOffset:     %d\n"
+			"   Cell size:   %d\n"
+			"   Halo size:   %d\n"
+			"\n", blockNumber, nodeNumber, xCount, yCount, zCount, xOffset, yOffset, zOffset, cellSize, haloSize);
+}
+
 void RealBlock::printData() {
 	problem->print(pu, zCount, yCount, xCount, haloSize);
 }

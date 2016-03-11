@@ -59,8 +59,7 @@ public:
 
 	bool isNan();
 
-protected:
-	void printData();
+	void print();
 
 private:
 	ProcessingUnit* pu;
@@ -95,6 +94,9 @@ private:
 	double* getNewExternalBorder(Block* neighbor, int borderLength, double* border);
 
 	ProblemType* createProblem(int problemType, int solverType, double aTol, double rTol);
+
+	void printGeneralInformation();
+	void printData();
 };
 
 #endif /* SRC_BLOCKS_REALBLOCK_H_ */

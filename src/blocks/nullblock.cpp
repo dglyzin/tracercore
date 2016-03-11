@@ -98,6 +98,6 @@ bool NullBlock::isNan() {
 	return false;
 }
 
-void NullBlock::printData() {
+void NullBlock::print() {
 	return;
 }

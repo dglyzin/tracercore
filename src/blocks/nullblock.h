@@ -54,8 +54,7 @@ public:
 
 	bool isNan();
 
-protected:
-	void printData();
+	void print();
 };
 
 #endif /* SRC_BLOCKS_NULLBLOCK_H_ */
