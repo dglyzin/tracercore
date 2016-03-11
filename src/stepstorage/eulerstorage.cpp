@@ -84,3 +84,11 @@ bool EulerStorage::isErrorPermissible(double error, int totalDomainElements) {
 void EulerStorage::getDenseOutput(StepStorage* secondState, double* result) {
 	printf("\nEuler dense output DON'T WORK!\n");
 }
+
+void EulerStorage::print(ProcessingUnit* pu, double* array, int zCount, int yCount, int xCount, int haloSize) {
+	printf("mState:\n");
+	pu->printArray(mState, zCount, yCount, xCount, haloSize);
+
+	printf("mTempStore1:\n");
+	pu->printArray(mTempStore1, zCount, yCount, xCount, haloSize);
+}
