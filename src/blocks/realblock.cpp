@@ -320,6 +320,25 @@ void RealBlock::printBorderInfo() {
 				sendBorderInfo[index + N_OFFSET], sendBorderInfo[index + M_LENGTH], sendBorderInfo[index + N_LENGTH],
 				blockBorder[i]);
 	}
+
+	printf("\n");
+
+	printf("Receive border info\n");
+	for (int i = 0; i < countReceiveSegmentBorder; ++i) {
+		index = INTERCONNECT_COMPONENT_COUNT * i;
+		printf("Border #%d\n"
+				"   Side    : %s\n"
+				"   M_Offset: %d\n"
+				"   N_Offset: %d\n"
+				"   M_Length: %d\n"
+				"   N_Length: %d\n"
+				"   Address : %p\n"
+				"\n", i, getSideName(sendBorderInfo[index + SIDE]), receiveBorderInfo[index + M_OFFSET],
+				receiveBorderInfo[index + N_OFFSET], receiveBorderInfo[index + M_LENGTH],
+				receiveBorderInfo[index + N_LENGTH], externalBorder[i]);
+	}
+
+	printf("\n");
 }
 
 void RealBlock::printData() {
