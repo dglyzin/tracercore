@@ -80,9 +80,9 @@ char* getMemoryTypeName(int type) {
 }
 
 bool isCPU(int type) {
-	return type == CPU;
+	return type == CPU_UNIT;
 }
 
 bool isGPU(int type) {
-	return type == GPU;
+	return type == GPU_UNIT;
 }

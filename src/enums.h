@@ -41,14 +41,6 @@ enum SOLVER_TYPE {
 	EULER, RK4, DP45
 };
 
-/*
- * Типы блоков.
- * Центральный процессов или одна их трех видеокарт.
- */
-enum BLOCK_TYPE {
-	NULL_BLOCK, CPU, GPU
-};
-
 enum PROCESSING_UNIT_TYPE {
 	CPU_UNIT, GPU_UNIT, NOT_UNIT
 };
