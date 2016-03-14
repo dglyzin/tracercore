@@ -52,9 +52,9 @@ enum PROBLEM_TYPE {
 /*
  * Способ выделения памяти.
  */
-enum MEMORY_ALLOC_TYPE {
+/*enum MEMORY_ALLOC_TYPE {
 	NOT_ALLOC, NEW, CUDA_MALLOC, CUDA_MALLOC_HOST
-};
+};*/
 
 /*
  * Статус задачи в базе
@@ -73,7 +73,7 @@ int getSide(int number);
 
 char* getSideName(int side);
 
-char* getMemoryTypeName(int type);
+//char* getMemoryTypeName(int type);
 
 bool isCPU(int type);
 bool isGPU(int type);

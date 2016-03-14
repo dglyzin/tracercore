@@ -64,7 +64,7 @@ char* getSideName(int side) {
 	}
 }
 
-char* getMemoryTypeName(int type) {
+/*char* getMemoryTypeName(int type) {
 	switch (type) {
 		case NOT_ALLOC:
 			return (char*) "NOT_ALLOC";
@@ -77,7 +77,7 @@ char* getMemoryTypeName(int type) {
 		default:
 			return (char*) "ERROR MEMORY TYPE";
 	}
-}
+}*/
 
 bool isCPU(int type) {
 	return type == CPU_UNIT;
