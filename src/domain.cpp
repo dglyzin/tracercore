@@ -162,7 +162,8 @@ void Domain::initSolvers() {
 }
 
 void Domain::computeStage(int stage) {
-	//printBlocksToConsole();
+	/*printf("\nstage #%d\n", stage);
+	printBlocksToConsole();*/
 
 	prepareData(stage);
 
@@ -192,8 +193,6 @@ void Domain::nextStep() {
 		double error = collectError();
 
 		printf("step error = %f\n", error);
-		//!!! только 0, рассылать
-		timeStep = mSolverInfo->getNewStep(timeStep, error, totalGridElementCount);
 
 		//!!! только 0, рассылать
 		if (mSolverInfo->isErrorPermissible(error, totalGridElementCount)) {
@@ -206,6 +205,9 @@ void Domain::nextStep() {
 			mRejectedStepCount++;
 			cout << "Step rejected!\n" << endl;
 		}
+
+		//!!! только 0, рассылать
+		timeStep = mSolverInfo->getNewStep(timeStep, error, totalGridElementCount);
 
 		printf("new time step = %f\n", timeStep);
 	} else { //constant step
