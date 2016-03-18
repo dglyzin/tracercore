@@ -753,7 +753,7 @@ void Domain::saveState(char* inputFile) {
 	 saveFile[length] = 0;*/
 	Utils::copyToLastChar(saveFile, inputFile, '/');
 
-	sprintf(saveFile, "%s%s%f%s", saveFile, "project-", currentTime, ".bin");
+	sprintf(saveFile, "%s%s%.8f%s", saveFile, "project-", currentTime, ".bin");
 
 	saveStateToFile(saveFile);
 }
