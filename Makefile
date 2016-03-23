@@ -23,7 +23,7 @@ SRCINTERONNECTTRANSFER=$(SRCINTERCONNECT)/transferinterconnect
 
 
 BIN=bin
-MPILIB=-I/usr/mpi/gcc/openmpi-1.8.4/include -L /usr/mpi/gcc/openmpi-1.8.4/lib -lmpi -lmpi_cxx #-lmysqlcppconn
+MPILIB=-I/usr/mpi/gcc/openmpi-1.8.4/include -L /usr/mpi/gcc/openmpi-1.8.4/lib -lmpi -lmpi_cxx
 
 USERFUNCLIB=./bin -l userfuncs
 
