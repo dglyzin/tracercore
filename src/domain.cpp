@@ -163,7 +163,7 @@ void Domain::initSolvers() {
 
 void Domain::computeStage(int stage) {
 	/*printf("\nstage #%d\n", stage);
-	printBlocksToConsole();*/
+	 printBlocksToConsole();*/
 
 	prepareData(stage);
 
@@ -344,8 +344,14 @@ double Domain::collectError() {
 }
 
 void Domain::printBlocksToConsole() {
-	for (int i = 0; i < mBlockCount; ++i) {
-		mBlocks[i]->print();
+	for (int i = 0; i < mWorkerCommSize; ++i) {
+		if (mWorkerRank == i) {
+			for (int j = 0; j < mBlockCount; ++j) {
+				mBlocks[j]->print();
+			}
+		}
+
+		MPI_Barrier(mWorkerComm);
 	}
 }
 

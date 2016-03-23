@@ -52,6 +52,8 @@ int main(int argc, char * argv[]) {
 	if (domain->isNan())
 		printf("\n\n\n\nNAN!!!\n\n\n\n");
 
+	//domain->printBlocksToConsole();
+
 	domain->printStatisticsInfo(inputFile, NULL, time2 - time1, NULL);
 
 	delete domain;
