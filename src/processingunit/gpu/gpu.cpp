@@ -25,3 +25,15 @@ void GPU::initState(double* state, initfunc_fill_ptr_t* userInitFuncs, unsigned 
 	//userInitFuncs[blockNumber](state, initFuncNumber);
 	printf("\nGPU init state DON'T WORK! Не понятен механизм работы\n");
 }
+
+int GPU::getType() {
+	return GPU_UNIT;
+}
+
+bool GPU::isCPU() {
+	return false;
+}
+
+bool GPU::isGPU() {
+	return true;
+}
