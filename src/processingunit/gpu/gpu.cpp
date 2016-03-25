@@ -15,3 +15,7 @@ GPU::~GPU() {
 	deleteAllArrays();
 }
 
+void GPU::prepareBorder(double* result, double* source, int zStart, int zStop, int yStart, int yStop, int xStart,
+		int xStop, int yCount, int xCount, int cellSize) {
+	printf("\nGPU prepare border DON'T WORK!\n");
+}
