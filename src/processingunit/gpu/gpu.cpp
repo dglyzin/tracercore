@@ -77,3 +77,23 @@ unsigned short int* GPU::getUnsignedShortIntArray(int size) {
 
 	return array;
 }
+
+void GPU::deallocDeviceSpecificArray(double* toDelete) {
+	cudaFree(toDelete);
+}
+
+void GPU::deallocDeviceSpecificArray(double** toDelete) {
+	cudaFree(toDelete);
+}
+
+void GPU::deallocDeviceSpecificArray(int* toDelete) {
+	cudaFree(toDelete);
+}
+
+void GPU::deallocDeviceSpecificArray(int** toDelete) {
+	cudaFree(toDelete);
+}
+
+void GPU::deallocDeviceSpecificArray(unsigned short int* toDelete) {
+	cudaFree(toDelete);
+}
