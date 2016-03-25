@@ -53,3 +53,19 @@ double** GPU::getDoublePointerArray(int size) {
 
 	return array;
 }
+
+int* GPU::getIntArray(int size) {
+	int* array;
+
+	cudaMalloc((void**) &array, size * sizeof(int));
+
+	return array;
+}
+
+int** GPU::getIntPointerArray(int size) {
+	int** array;
+
+	cudaMalloc((void**) &array, size * sizeof(int*));
+
+	return array;
+}
