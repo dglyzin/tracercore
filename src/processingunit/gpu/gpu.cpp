@@ -37,3 +37,19 @@ bool GPU::isCPU() {
 bool GPU::isGPU() {
 	return true;
 }
+
+double* GPU::getDoubleArray(int size) {
+	double* array;
+
+	cudaMalloc((void**) &array, size * sizeof(double));
+
+	return array;
+}
+
+double** GPU::getDoublePointerArray(int size) {
+	double* array;
+
+	cudaMalloc((void**) &array, size * sizeof(double*));
+
+	return array;
+}
