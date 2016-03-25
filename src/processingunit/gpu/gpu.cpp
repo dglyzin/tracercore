@@ -47,7 +47,7 @@ double* GPU::getDoubleArray(int size) {
 }
 
 double** GPU::getDoublePointerArray(int size) {
-	double* array;
+	double** array;
 
 	cudaMalloc((void**) &array, size * sizeof(double*));
 

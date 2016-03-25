@@ -8,6 +8,8 @@
 #ifndef SRC_PROCESSINGUNIT_GPU_GPU_H_
 #define SRC_PROCESSINGUNIT_GPU_GPU_H_
 
+#include "../processingunit.h"
+
 class GPU: public ProcessingUnit {
 public:
 	GPU(int _deviceNumber);
