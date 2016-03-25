@@ -7,11 +7,11 @@
 
 #include "gpu.h"
 
-Gpu::Gpu(int _deviceNumber) :
+GPU::GPU(int _deviceNumber) :
 		ProcessingUnit(_deviceNumber) {
 }
 
-Gpu::~Gpu() {
+GPU::~GPU() {
 	deleteAllArrays();
 }
 

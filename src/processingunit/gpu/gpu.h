@@ -8,10 +8,10 @@
 #ifndef SRC_PROCESSINGUNIT_GPU_GPU_H_
 #define SRC_PROCESSINGUNIT_GPU_GPU_H_
 
-class Gpu: public ProcessingUnit {
+class GPU: public ProcessingUnit {
 public:
-	Gpu(int _deviceNumber);
-	virtual ~Gpu();
+	GPU(int _deviceNumber);
+	virtual ~GPU();
 
 	void prepareBorder(double* result, double* source, int zStart, int zStop, int yStart, int yStop, int xStart,
 			int xStop, int yCount, int xCount, int cellSize);
