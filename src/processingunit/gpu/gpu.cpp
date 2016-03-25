@@ -69,3 +69,11 @@ int** GPU::getIntPointerArray(int size) {
 
 	return array;
 }
+
+unsigned short int* GPU::getUnsignedShortIntArray(int size) {
+	unsigned short int* array;
+
+	cudaMalloc((void**) &array, size * sizeof(unsigned short int));
+
+	return array;
+}
