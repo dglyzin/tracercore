@@ -19,3 +19,9 @@ void GPU::prepareBorder(double* result, double* source, int zStart, int zStop, i
 		int xStop, int yCount, int xCount, int cellSize) {
 	printf("\nGPU prepare border DON'T WORK!\n");
 }
+
+void GPU::initState(double* state, initfunc_fill_ptr_t* userInitFuncs, unsigned short int* initFuncNumber,
+		int blockNumber, double time) {
+	//userInitFuncs[blockNumber](state, initFuncNumber);
+	printf("\nGPU init state DON'T WORK! Не понятен механизм работы\n");
+}
