@@ -7,12 +7,11 @@
 
 #include "gpu.h"
 
-Gpu::Gpu() {
-	// TODO Auto-generated constructor stub
-
+Gpu::Gpu(int _deviceNumber) :
+		ProcessingUnit(_deviceNumber) {
 }
 
 Gpu::~Gpu() {
-	// TODO Auto-generated destructor stub
+	deleteAllArrays();
 }
 

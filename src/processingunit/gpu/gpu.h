@@ -10,7 +10,7 @@
 
 class Gpu: public ProcessingUnit {
 public:
-	Gpu();
+	Gpu(int _deviceNumber);
 	virtual ~Gpu();
 
 	void prepareBorder(double* result, double* source, int zStart, int zStop, int yStart, int yStop, int xStart,
