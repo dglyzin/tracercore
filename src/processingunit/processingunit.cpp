@@ -136,6 +136,17 @@ void ProcessingUnit::deleteUnsignedShortInt(unsigned short int* toDelete) {
 	deallocDeviceSpecificArray(toDelete);
 }
 
+void ProcessingUnit::saveArray(double* array, int size, char* path) {
+	ofstream out;
+	out.open(path, ios::binary | ios::app);
+	writeArray(array, size, out);
+	out.close();
+}
+
+void ProcessingUnit::loadArray(double* array, int size, std::ifstream& in) {
+	readArray(array, size, in);
+}
+
 double* ProcessingUnit::getDoublePinnedArray(int size) {
 	double* array;
 

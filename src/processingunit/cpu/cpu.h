@@ -43,9 +43,6 @@ public:
 	void addNumberToArray(double* result, double* arg, double number, int size);
 	void multiplyArraysElementwise(double* result, double* arg1, double* arg2, int size);
 
-	void saveArray(double* array, int size, char* path);
-	void loadArray(double* array, int size, std::ifstream& in);
-
 	bool isNan(double* array, int size);
 
 protected:
@@ -64,6 +61,9 @@ protected:
 	void deallocDeviceSpecificArray(int** toDelete);
 
 	void deallocDeviceSpecificArray(unsigned short int* toDelete);
+
+	void writeArray(double* array, int size, std::ofstream& out);
+	void readArray(double* array, int size, std::ifstream& in);
 
 	void printCell(double* array, int cellSize);
 	void printArray1d(double* array, int xCount, int cellSize);

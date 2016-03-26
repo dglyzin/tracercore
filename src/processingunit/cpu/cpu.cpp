@@ -209,14 +209,11 @@ void CPU::multiplyArraysElementwise(double* result, double* arg1, double* arg2, 
 	}
 }
 
-void CPU::saveArray(double* array, int size, char* path) {
-	ofstream out;
-	out.open(path, ios::binary | ios::app);
+void CPU::writeArray(double* array, int size, std::ofstream& out) {
 	out.write((char*) array, SIZE_DOUBLE * size);
-	out.close();
 }
 
-void CPU::loadArray(double* array, int size, ifstream& in) {
+void CPU::readArray(double* array, int size, ifstream& in) {
 	in.read((char*) array, SIZE_DOUBLE * size);
 }
 

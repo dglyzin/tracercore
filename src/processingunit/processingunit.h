@@ -81,8 +81,8 @@ public:
 	virtual void addNumberToArray(double* result, double* arg, double number, int size) = 0;
 	virtual void multiplyArraysElementwise(double* result, double* arg1, double* arg2, int size) = 0;
 
-	virtual void saveArray(double* array, int size, char* path) = 0;
-	virtual void loadArray(double* array, int size, std::ifstream& in) = 0;
+	void saveArray(double* array, int size, char* path);
+	void loadArray(double* array, int size, std::ifstream& in);
 
 	virtual bool isNan(double* array, int size) = 0;
 
@@ -132,6 +132,9 @@ protected:
 	void deleteAllDoublePinnedArrays();
 
 	void deleteAllUnsignedShortInt();
+
+	virtual void writeArray(double* array, int size, std::ofstream& out) = 0;
+	virtual void readArray(double* array, int size, std::ifstream& in) = 0;
 };
 
 #endif /* SRC_PROCESSINGUNIT_PROCESSINGUNIT_H_ */
