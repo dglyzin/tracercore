@@ -56,6 +56,13 @@ __global__ void sumArrayElementsCuda(double* array, double* result, int size) {
         result[blockIdx.x] = data[0]; 
 }
 
+__global__ void maxElementsElementwiseCuda(double* result, double* arg1, double* arg2, int size) {
+	int	idx = BLOCK_SIZE * blockIdx.x + threadIdx.x;
+	
+	if( idx < size )
+		result[idx] = max( arg1[idx] + arg2[idx] );
+}
+
 __global__ void forGetStepErrorDP45(double* mTempStore1, double e1,
 		double* mTempStore3, double e3, double* mTempStore4, double e4,
 		double* mTempStore5, double e5, double* mTempStore6, double e6,
@@ -170,6 +177,13 @@ double sumArrayElementsGPU(double* arg, int size); {
 	cudaFree(sumDevice);
 	
 	return sumHost;
+}
+
+void maxElementsElementwiseGPU(double* result, double* arg1, double* arg2, int size) {
+	dim3 threads ( BLOCK_SIZE );
+	dim3 blocks  ( (int)ceil((double)arrayLength / threads.x) );
+		
+	maxElementsElementwiseGPU <<< blocks, threads >>> ( result, arg1, arg2, size);
 }
 
 double getStepErrorDP45(double* mTempStore1, double e1,
