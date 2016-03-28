@@ -14,7 +14,7 @@ __global__ void copyArrayCuda (unsigned short int* source, unsigned short int* d
 		destination[idx] = source[idx];
 }
 
-__global__ void sumDoubleArray (double* arg1, double* arg2, double* result, int arrayLength) {
+__global__ void sumArrayCuda (double* result, double* arg1, double* arg2, int size) {
 	int	idx = BLOCK_SIZE * blockIdx.x + threadIdx.x;
 	
 	if( idx < arrayLength )
@@ -161,11 +161,11 @@ void copyArrayGPU(unsigned short int* source, unsigned short int* destination, i
 	copyArrayCuda <<< blocks, threads >>> ( source, destination, size);
 }
 
-void sumArray(double* arg1, double* arg2, double* result, int arrayLength) {
+void sumArraysGPU(double* result, double* arg1, double* arg2, int size) {
 	dim3 threads ( BLOCK_SIZE );
-	dim3 blocks  ( (int)ceil((double)arrayLength / threads.x) );
+	dim3 blocks  ( (int)ceil((double)size / threads.x) );
 	
-	sumDoubleArray <<< blocks, threads >>> ( arg1, arg2, result, arrayLength);
+	sumArrayCuda <<< blocks, threads >>> ( result, arg1, arg2, size);
 }
 
 void multiplyArrayByNumber(double* array, double value, double* result, int arrayLength) {

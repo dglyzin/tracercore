@@ -13,7 +13,7 @@
 void copyArrayGPU(double* source, double* destination, int size);
 void copyArrayGPU(unsigned short int* source, unsigned short int* destination, int size);
 
-void sumArraysGPU(double* arg1, double* arg2, double* result, int arrayLength);
+void sumArraysGPU(double* result, double* arg1, double* arg2, int size);
 
 void multiplyArrayByNumberGPU(double* array, double value, double* result, int arrayLength);
 
