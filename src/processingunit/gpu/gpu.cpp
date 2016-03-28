@@ -46,6 +46,10 @@ void GPU::copyArray(unsigned short int* source, unsigned short int* destination,
 	copyArrayGPU(source, destination, size);
 }
 
+void GPU::sumArrays(double* result, double* arg1, double* arg2, int size) {
+	sumArraysGPU(result, arg1, arg2, size);
+}
+
 double* GPU::getDoubleArray(int size) {
 	double* array;
 
