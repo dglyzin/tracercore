@@ -63,10 +63,10 @@ protected:
 
 	void deallocDeviceSpecificArray(unsigned short int* toDelete);
 
-	void printCell(double* array, int cellSize);
+	/*void printCell(double* array, int cellSize);
 	void printArray1d(double* array, int xCount, int cellSize);
 	void printArray2d(double* array, int yCount, int xCount, int cellSize);
-	void printArray3d(double* array, int zCount, int yCount, int xCount, int cellSize);
+	void printArray3d(double* array, int zCount, int yCount, int xCount, int cellSize);*/
 };
 
 #endif /* SRC_PROCESSINGUNIT_GPU_GPU_H_ */
