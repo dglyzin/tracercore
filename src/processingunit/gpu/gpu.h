@@ -9,6 +9,7 @@
 #define SRC_PROCESSINGUNIT_GPU_GPU_H_
 
 #include "../processingunit.h"
+#include "../../cuda_func.h"
 
 class GPU: public ProcessingUnit {
 public:
