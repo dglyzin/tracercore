@@ -17,7 +17,7 @@ __global__ void copyArrayCuda (unsigned short int* source, unsigned short int* d
 __global__ void sumArrayCuda (double* result, double* arg1, double* arg2, int size) {
 	int	idx = BLOCK_SIZE * blockIdx.x + threadIdx.x;
 	
-	if( idx < arrayLength )
+	if( idx < size )
 		result[idx] = arg1[idx] + arg2[idx];
 }
 
@@ -177,7 +177,7 @@ void multiplyArrayByNumberGPU(double* result, double* arg, double factor, int si
 
 void multiplyArrayByNumberAndSumGPU(double* result, double* arg1, double factor, double* arg2, int size) {
 	dim3 threads ( BLOCK_SIZE );
-	dim3 blocks  ( (int)ceil((double)arrayLength / threads.x) );
+	dim3 blocks  ( (int)ceil((double)size / threads.x) );
 	
 	multiplyArrayByNumberAndSumCuda <<< blocks, threads >>> ( result, arg1, factor, arg2, size);
 }
