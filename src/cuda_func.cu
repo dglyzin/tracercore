@@ -35,19 +35,18 @@ __global__ void multiplyArrayByNumberAndSumCuda(double* result, double* arg1, do
 		result[idx] = factor * arg1[idx] + arg2[idx];
 }
 
-
-
-__global__ void sumElementOfDoubleArray(double* array, double* result, int arrayLength) {
+__global__ void sumArrayElementsCuda(double* array, double* result, int size) {
     __shared__ double data[BLOCK_SIZE];
     
     int tid=threadIdx.x; 
     int idx=blockIdx.x*blockDim.x+threadIdx.x;
     
-    data[tid] = ( idx < arrayLength ) ? array[idx] : 0;
+    data[tid] = ( idx < size ) ? array[idx] : 0;
 
-    __syncthreads();// ждем пока все нити(потоки) скопируют данные. 
+    // ждем пока все нити(потоки) скопируют данные
+    __syncthreads();
  
-    for(int s = blockDim.x/2; s > 0; s = s/2) { 
+    for(int s = blockDim.x / 2; s > 0; s = s / 2) { 
         if (tid < s)
         	data[tid] += data[ tid + s ]; 
         __syncthreads(); 
@@ -145,14 +144,14 @@ void multiplyArrayByNumberGPU(double* result, double* arg, double factor, int si
 	dim3 threads ( BLOCK_SIZE );
 	dim3 blocks  ( (int)ceil((double)size / threads.x) );
 	
-	multiplyDoubleArrayByNumber <<< blocks, threads >>> ( result, arg, factor, size);
+	multiplyArrayByNumberCuda <<< blocks, threads >>> ( result, arg, factor, size);
 }
 
 void multiplyArrayByNumberAndSumGPU(double* result, double* arg1, double factor, double* arg2, int size) {
 	dim3 threads ( BLOCK_SIZE );
 	dim3 blocks  ( (int)ceil((double)arrayLength / threads.x) );
 	
-	multiplyByNumberAndSumDoubleArrays <<< blocks, threads >>> ( result, arg1, factor, arg2, size);
+	multiplyArrayByNumberAndSumCuda <<< blocks, threads >>> ( result, arg1, factor, arg2, size);
 }
 
 
@@ -169,16 +168,16 @@ void computeBorder() {
 	printf("\nCompute border GPU\n");
 }
 
-double sumElementOfArray(double* array, int arrayLength) {
+double sumArrayElementsGPU(double* arg, int size); {
 	double sumHost;
 	double* sumDevice;
 	
 	cudaMalloc( (void**)&sumDevice, 1 * sizeof(double) );
 	
 	dim3 threads ( BLOCK_SIZE );
-	dim3 blocks  ( (int)ceil((double)arrayLength / threads.x) );
+	dim3 blocks  ( (int)ceil((double)size / threads.x) );
 		
-	sumElementOfDoubleArray <<< blocks, threads >>> ( array, sumDevice, arrayLength );
+	sumArrayElementsCuda <<< blocks, threads >>> ( arg, sumDevice, size );
 	
 	cudaMemcpy(&sumHost, sumDevice, 1 * sizeof(double), cudaMemcpyDeviceToHost);
 	cudaFree(sumDevice);
