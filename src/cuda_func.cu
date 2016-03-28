@@ -155,19 +155,6 @@ void multiplyArrayByNumberAndSumGPU(double* result, double* arg1, double factor,
 }
 
 
-
-void prepareBorderCudaFunc(double* source, int borderNumber, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop, double** blockBorder, int zCount, int yCount, int xCount, int cellSize) {
-	prepareBorderDevice <<< 1, 1 >>> (source, borderNumber, zStart, zStop, yStart, yStop, xStart, xStop, blockBorder, zCount, yCount, xCount, cellSize);
-}
-
-void computeCenter() {
-	printf("\nCompute center GPU\n");
-}
-
-void computeBorder() {
-	printf("\nCompute border GPU\n");
-}
-
 double sumArrayElementsGPU(double* arg, int size); {
 	double sumHost;
 	double* sumDevice;
@@ -207,6 +194,19 @@ double getStepErrorDP45(double* mTempStore1, double e1,
 	
 	return errorHost;
 }
+
+void prepareBorderCudaFunc(double* source, int borderNumber, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop, double** blockBorder, int zCount, int yCount, int xCount, int cellSize) {
+	prepareBorderDevice <<< 1, 1 >>> (source, borderNumber, zStart, zStop, yStart, yStop, xStart, xStop, blockBorder, zCount, yCount, xCount, cellSize);
+}
+
+void computeCenter() {
+	printf("\nCompute center GPU\n");
+}
+
+void computeBorder() {
+	printf("\nCompute border GPU\n");
+}
+
 /*
  * Функция ядра
  * Копирование данных из матрицы в массив.
