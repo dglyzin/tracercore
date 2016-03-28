@@ -21,11 +21,11 @@ __global__ void sumArrayCuda (double* result, double* arg1, double* arg2, int si
 		result[idx] = arg1[idx] + arg2[idx];
 }
 
-__global__ void multiplyDoubleArrayByNumber (double* array, double value, double* result, int arrayLength) {
+__global__ void multiplyArrayByNumberCuda (double* result, double* arg, double factor, int size) {
 	int	idx = BLOCK_SIZE * blockIdx.x + threadIdx.x;
 	
-	if( idx < arrayLength )
-		result[idx] = array[idx] * value;
+	if( idx < size )
+		result[idx] = arg[idx] * factor;
 }
 
 __global__ void multiplyByNumberAndSumDoubleArrays(double* array1, double value1, double* array2, double value2, double* result, int arrayLength) {
@@ -168,13 +168,12 @@ void sumArraysGPU(double* result, double* arg1, double* arg2, int size) {
 	sumArrayCuda <<< blocks, threads >>> ( result, arg1, arg2, size);
 }
 
-void multiplyArrayByNumber(double* array, double value, double* result, int arrayLength) {
+void multiplyArrayByNumberGPU(double* result, double* arg, double factor, int size) {
 	dim3 threads ( BLOCK_SIZE );
-	dim3 blocks  ( (int)ceil((double)arrayLength / threads.x) );
+	dim3 blocks  ( (int)ceil((double)size / threads.x) );
 	
-	multiplyDoubleArrayByNumber <<< blocks, threads >>> ( array, value, result, arrayLength);
+	multiplyDoubleArrayByNumber <<< blocks, threads >>> ( result, arg, factor, size);
 }
-
 
 void multiplyByNumberAndSumArrays(double* array1, double value1, double* array2, double value2, double* result, int arrayLength) {
 	dim3 threads ( BLOCK_SIZE );
