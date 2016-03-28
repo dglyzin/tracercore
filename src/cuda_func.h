@@ -19,6 +19,7 @@ void multiplyArrayByNumberAndSumGPU(double* result, double* arg1, double factor,
 
 double sumArrayElementsGPU(double* arg, int size);
 void maxElementsElementwiseGPU(double* result, double* arg1, double* arg2, int size);
+void divisionArraysElementwiseGPU(double* result, double* arg1, double* arg2, int size);
 
 double getStepErrorDP45(double* mTempStore1, double e1, double* mTempStore3, double e3, double* mTempStore4, double e4,
 		double* mTempStore5, double e5, double* mTempStore6, double e6, double* mTempStore7, double e7, double* mState,
