@@ -58,6 +58,10 @@ void GPU::multiplyArrayByNumberAndSum(double* result, double* arg1, double facto
 	multiplyArrayByNumberAndSum(result, arg1, factor, arg2, size);
 }
 
+double GPU::sumArrayElements(double* arg, int size) {
+	return sumArrayElementsGPU(arg, size);
+}
+
 double* GPU::getDoubleArray(int size) {
 	double* array;
 
