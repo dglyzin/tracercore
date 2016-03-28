@@ -60,7 +60,7 @@ __global__ void maxElementsElementwiseCuda(double* result, double* arg1, double*
 	int	idx = BLOCK_SIZE * blockIdx.x + threadIdx.x;
 	
 	if( idx < size )
-		result[idx] = max( arg1[idx] + arg2[idx] );
+		result[idx] = max( arg1[idx], arg2[idx] );
 }
 
 __global__ void divisionArraysElementwiseCuda(double* result, double* arg1, double* arg2, int size) {
@@ -183,7 +183,7 @@ void multiplyArrayByNumberAndSumGPU(double* result, double* arg1, double factor,
 }
 
 
-double sumArrayElementsGPU(double* arg, int size); {
+double sumArrayElementsGPU(double* arg, int size) {
 	double sumHost;
 	double* sumDevice;
 	
@@ -228,28 +228,6 @@ void multiplyArraysElementwiseGPU(double* result, double* arg1, double* arg2, in
 	multiplyArraysElementwiseCuda <<< blocks, threads >>> ( result, arg1, arg2, size);
 }
 
-double getStepErrorDP45(double* mTempStore1, double e1,
-		double* mTempStore3, double e3, double* mTempStore4, double e4,
-		double* mTempStore5, double e5, double* mTempStore6, double e6,
-		double* mTempStore7, double e7, double* mState, double* mArg,
-		double timeStep, double aTol, double rTol, double mCount) {
-	
-	double errorHost;
-	double* errorDevice;
-	
-	cudaMalloc( (void**)&errorDevice, 1 * sizeof(double) );
-	
-	dim3 threads ( BLOCK_SIZE );
-	dim3 blocks  ( (int)ceil((double)mCount / threads.x) );
-		
-	forGetStepErrorDP45 <<< blocks, threads >>> ( mTempStore1, e1, mTempStore3, e3, mTempStore4, e4, mTempStore5, e5, mTempStore6, e6, mTempStore7, e7, mState, mArg, timeStep, aTol, rTol, mCount, mTempStore1 );
-	sumElementOfDoubleArray <<< blocks, threads >>> ( mTempStore1, errorDevice, mCount );
-	
-	cudaMemcpy(&errorHost, errorDevice, 1 * sizeof(double), cudaMemcpyDeviceToHost);
-	cudaFree(errorDevice);
-	
-	return errorHost;
-}
 
 void prepareBorderCudaFunc(double* source, int borderNumber, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop, double** blockBorder, int zCount, int yCount, int xCount, int cellSize) {
 	prepareBorderDevice <<< 1, 1 >>> (source, borderNumber, zStart, zStop, yStart, yStop, xStart, xStop, blockBorder, zCount, yCount, xCount, cellSize);
