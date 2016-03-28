@@ -169,14 +169,6 @@ void CPU::multiplyArraysElementwise(double* result, double* arg1, double* arg2, 
 	}
 }
 
-void CPU::writeArray(double* array, int size, std::ofstream& out) {
-	out.write((char*) array, SIZE_DOUBLE * size);
-}
-
-void CPU::readArray(double* array, int size, ifstream& in) {
-	in.read((char*) array, SIZE_DOUBLE * size);
-}
-
 bool CPU::isNan(double* array, int size) {
 	for (int i = 0; i < size; ++i) {
 		if (isnan(array[i]))
@@ -184,4 +176,12 @@ bool CPU::isNan(double* array, int size) {
 	}
 
 	return false;
+}
+
+void CPU::writeArray(double* array, int size, std::ofstream& out) {
+	out.write((char*) array, SIZE_DOUBLE * size);
+}
+
+void CPU::readArray(double* array, int size, ifstream& in) {
+	in.read((char*) array, SIZE_DOUBLE * size);
 }
