@@ -62,6 +62,10 @@ double GPU::sumArrayElements(double* arg, int size) {
 	return sumArrayElementsGPU(arg, size);
 }
 
+void GPU::maxElementsElementwise(double* result, double* arg1, double* arg2, int size) {
+	maxElementsElementwiseGPU(result, arg1, arg2, size);
+}
+
 double* GPU::getDoubleArray(int size) {
 	double* array;
 
