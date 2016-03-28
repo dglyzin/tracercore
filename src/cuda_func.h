@@ -10,9 +10,6 @@
 
 #include "enums.h"
 
-void assignArrayGPU(int* array, int value, int arrayLength);
-void assignArrayGPU(double* array, double value, int arrayLength);
-
 void copyArrayGPU(int* dest, int* source, int arrayLength);
 void copyArrayGPU(double* dest, double* source, int arrayLength);
 
