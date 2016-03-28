@@ -53,6 +53,7 @@ void GPU::sumArrays(double* result, double* arg1, double* arg2, int size) {
 void GPU::multiplyArrayByNumber(double* result, double* arg, double factor, int size) {
 	multiplyArrayByNumberGPU(result, arg, factor, size);
 }
+
 void GPU::multiplyArrayByNumberAndSum(double* result, double* arg1, double factor, double* arg2, int size) {
 	multiplyArrayByNumberAndSum(result, arg1, factor, arg2, size);
 }
