@@ -1,17 +1,17 @@
 #include "cuda_func.h"
 
-__global__ void copyIntArray (int* dest, int* source, int arrayLength) {
+__global__ void copyArrayCuda (double* source, double* destination, int size) {
 	int	idx = BLOCK_SIZE * blockIdx.x + threadIdx.x;
 	
-	if( idx < arrayLength )
-		dest[idx] = source[idx];
+	if( idx < size )
+		destination[idx] = source[idx];
 }
 
-__global__ void copyDoubleArray (double* dest, double* source, int arrayLength) {
+__global__ void copyArrayCuda (unsigned short int* source, unsigned short int* destination, int size) {
 	int	idx = BLOCK_SIZE * blockIdx.x + threadIdx.x;
 	
-	if( idx < arrayLength )
-		dest[idx] = source[idx];
+	if( idx < size )
+		destination[idx] = source[idx];
 }
 
 __global__ void sumDoubleArray (double* arg1, double* arg2, double* result, int arrayLength) {
@@ -27,8 +27,6 @@ __global__ void multiplyDoubleArrayByNumber (double* array, double value, double
 	if( idx < arrayLength )
 		result[idx] = array[idx] * value;
 }
-
-
 
 __global__ void multiplyByNumberAndSumDoubleArrays(double* array1, double value1, double* array2, double value2, double* result, int arrayLength) {
 	int	idx = BLOCK_SIZE * blockIdx.x + threadIdx.x;
@@ -148,33 +146,19 @@ __global__ void prepareBorderDevice(double* source, int borderNumber, int zStart
 }
 
 
-void assignArray(int* array, int value, int arrayLength) {
+
+void copyArrayGPU(double* source, double* destination, int size) {
 	dim3 threads ( BLOCK_SIZE );
-	dim3 blocks  ( (int)ceil((double)arrayLength / threads.x) );
+	dim3 blocks  ( (int)ceil((double)size / threads.x) );
 	
-	assignIntArray <<< blocks, threads >>> ( array, value, arrayLength);
+	copyArrayCuda <<< blocks, threads >>> ( source, destination, size);
 }
 
-void assignArray(double* array, double value, int arrayLength) {
+void copyArrayGPU(unsigned short int* source, unsigned short int* destination, int size) {
 	dim3 threads ( BLOCK_SIZE );
-	dim3 blocks  ( (int)ceil((double)arrayLength / threads.x) );
+	dim3 blocks  ( (int)ceil((double)size / threads.x) );
 	
-	assignDoubleArray <<< blocks, threads >>> ( array, value, arrayLength);
-}
-
-void copyArray(int* dest, int* source, int arrayLength) {
-	dim3 threads ( BLOCK_SIZE );
-	dim3 blocks  ( (int)ceil((double)arrayLength / threads.x) );
-	
-	copyIntArray <<< blocks, threads >>> ( dest, source, arrayLength);
-}
-
-
-void copyArray(double* dest, double* source, int arrayLength) {
-	dim3 threads ( BLOCK_SIZE );
-	dim3 blocks  ( (int)ceil((double)arrayLength / threads.x) );
-	
-	copyDoubleArray <<< blocks, threads >>> ( dest, source, arrayLength);
+	copyArrayCuda <<< blocks, threads >>> ( source, destination, size);
 }
 
 void sumArray(double* arg1, double* arg2, double* result, int arrayLength) {

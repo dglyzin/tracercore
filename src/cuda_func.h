@@ -10,8 +10,8 @@
 
 #include "enums.h"
 
-void copyArrayGPU(int* dest, int* source, int arrayLength);
-void copyArrayGPU(double* dest, double* source, int arrayLength);
+void copyArrayGPU(double* source, double* destination, int size);
+void copyArrayGPU(unsigned short int* source, unsigned short int* destination, int size);
 
 void sumArraysGPU(double* arg1, double* arg2, double* result, int arrayLength);
 
