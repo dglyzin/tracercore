@@ -39,11 +39,11 @@ bool GPU::isGPU() {
 }
 
 void GPU::copyArray(double* source, double* destination, int size) {
-
+	copyArrayGPU(source, destination, size);
 }
 
 void GPU::copyArray(unsigned short int* source, unsigned short int* destination, int size) {
-
+	copyArrayGPU(source, destination, size);
 }
 
 double* GPU::getDoubleArray(int size) {
