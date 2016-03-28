@@ -70,6 +70,10 @@ void GPU::divisionArraysElementwise(double* result, double* arg1, double* arg2, 
 	divisionArraysElementwiseGPU(result, arg1, arg2, size);
 }
 
+void GPU::addNumberToArray(double* result, double* arg, double number, int size) {
+	addNumberToArrayGPU(result, arg, number, size);
+}
+
 double* GPU::getDoubleArray(int size) {
 	double* array;
 
