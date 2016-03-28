@@ -97,3 +97,13 @@ void GPU::deallocDeviceSpecificArray(int** toDelete) {
 void GPU::deallocDeviceSpecificArray(unsigned short int* toDelete) {
 	cudaFree(toDelete);
 }
+
+void GPU::copyArray(double* source, double* destination, int size) {
+	copyArray()
+}
+
+void GPU::copyArray(unsigned short int* source, unsigned short int* destination, int size) {
+	for (int i = 0; i < size; ++i) {
+		destination[i] = source[i];
+	}
+}

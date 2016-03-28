@@ -10,15 +10,15 @@
 
 #include "enums.h"
 
-void assignArray(int* array, int value, int arrayLength);
-void assignArray(double* array, double value, int arrayLength);
+void assignArrayGPU(int* array, int value, int arrayLength);
+void assignArrayGPU(double* array, double value, int arrayLength);
 
-void copyArray(int* dest, int* source, int arrayLength);
-void copyArray(double* dest, double* source, int arrayLength);
+void copyArrayGPU(int* dest, int* source, int arrayLength);
+void copyArrayGPU(double* dest, double* source, int arrayLength);
 
-void sumArray(double* arg1, double* arg2, double* result, int arrayLength);
+void sumArraysGPU(double* arg1, double* arg2, double* result, int arrayLength);
 
-void multiplyArrayByNumber(double* array, double value, double* result, int arrayLength);
+void multiplyArrayByNumberGPU(double* array, double value, double* result, int arrayLength);
 
 void multiplyByNumberAndSumArrays(double* array1, double value1, double* array2, double value2, double* result,
 		int arrayLength);
