@@ -78,6 +78,10 @@ void GPU::multiplyArraysElementwise(double* result, double* arg1, double* arg2, 
 	multiplyArraysElementwiseGPU(result, arg1, arg2, size);
 }
 
+bool GPU::isNan(double* array, int size) {
+	return isNanGPU(array, size);
+}
+
 double* GPU::getDoubleArray(int size) {
 	double* array;
 

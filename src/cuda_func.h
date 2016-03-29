@@ -24,6 +24,7 @@ void divisionArraysElementwiseGPU(double* result, double* arg1, double* arg2, in
 void addNumberToArrayGPU(double* result, double* arg, double number, int size);
 void multiplyArraysElementwiseGPU(double* result, double* arg1, double* arg2, int size);
 
+bool isNanGPU(double* array, int size);
 
 void prepareBorderCudaFunc(double* source, int borderNumber, int zStart, int zStop, int yStart, int yStop, int xStart,
 		int xStop, double** blockBorder, int zCount, int yCount, int xCount, int cellSize);

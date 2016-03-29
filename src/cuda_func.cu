@@ -84,6 +84,27 @@ __global__ void multiplyArraysElementwiseCuda(double* result, double* arg1, doub
 		result[idx] = arg1[idx] * arg2[idx];
 }
 
+__global__ void isNanCuda(double* array, bool* result, int size) {
+    __shared__ bool data[BLOCK_SIZE];
+    
+    int tid=threadIdx.x; 
+    int idx=blockIdx.x*blockDim.x+threadIdx.x;
+    
+    data[tid] = ( idx < size ) ? isnan(array[idx]) : 0;
+
+    // ждем пока все нити(потоки) скопируют данные
+    __syncthreads();
+ 
+    for(int s = blockDim.x / 2; s > 0; s = s / 2) { 
+        if (tid < s)
+        	data[tid] |= data[ tid + s ]; 
+        __syncthreads(); 
+    }
+    
+    if ( tid==0 ) 
+        result[blockIdx.x] = data[0];
+}
+
 __global__ void forGetStepErrorDP45(double* mTempStore1, double e1,
 		double* mTempStore3, double e3, double* mTempStore4, double e4,
 		double* mTempStore5, double e5, double* mTempStore6, double e6,
@@ -226,6 +247,23 @@ void multiplyArraysElementwiseGPU(double* result, double* arg1, double* arg2, in
 	dim3 blocks  ( (int)ceil((double)size / threads.x) );
 		
 	multiplyArraysElementwiseCuda <<< blocks, threads >>> ( result, arg1, arg2, size);
+}
+
+bool isNanGPU(double* array, int size) {
+	bool isNanHost;
+	bool* isNanDevice;
+	
+	cudaMalloc( (void**)&isNanDevice, 1 * sizeof(bool) );
+	
+	dim3 threads ( BLOCK_SIZE );
+	dim3 blocks  ( (int)ceil((double)size / threads.x) );
+		
+	isNanCuda <<< blocks, threads >>> ( array, isNanDevice, size );
+	
+	cudaMemcpy(&isNanHost, isNanDevice, 1 * sizeof(bool), cudaMemcpyDeviceToHost);
+	cudaFree(isNanDevice);
+	
+	return isNanHost;
 }
 
 
