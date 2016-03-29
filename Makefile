@@ -30,7 +30,7 @@ USERFUNCLIB=./bin -l userfuncs
 BLOCK=$(SRCBLC)/block.cpp $(SRCBLC)/realblock.cpp $(SRCBLC)/nullblock.cpp
 
 PROCUNITCPU=$(SRCPROCUNITCPU)/cpu.cpp $(SRCPROCUNITCPU)/cpu1d.cpp $(SRCPROCUNITCPU)/cpu2d.cpp $(SRCPROCUNITCPU)/cpu3d.cpp
-PROCUNITGPU=#$(SRCPROCUNITGPU)/gpu.cpp
+PROCUNITGPU=$(SRCPROCUNITGPU)/gpu.cpp
 PROCUNIT=$(SRCPROCUNIT)/processingunit.cpp $(PROCUNITCPU) $(PROCUNITGPU)
 
 STEPSTORAGE=$(SRCSTEPSTORAGE)/stepstorage.cpp $(SRCSTEPSTORAGE)/eulerstorage.cpp $(SRCSTEPSTORAGE)/rk4storage.cpp $(SRCSTEPSTORAGE)/dp45storage.cpp
