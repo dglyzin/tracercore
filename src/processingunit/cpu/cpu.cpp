@@ -178,7 +178,7 @@ bool CPU::isNan(double* array, int size) {
 	return false;
 }
 
-void CPU::writeArray(double* array, int size, std::ofstream& out) {
+void CPU::writeArray(double* array, int size, ofstream& out) {
 	out.write((char*) array, SIZE_DOUBLE * size);
 }
 
