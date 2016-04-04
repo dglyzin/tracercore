@@ -7,6 +7,8 @@
 
 #include "gpu.h"
 
+using namespace std;
+
 GPU::GPU(int _deviceNumber) :
 		ProcessingUnit(_deviceNumber) {
 }
@@ -140,4 +142,24 @@ void GPU::deallocDeviceSpecificArray(int** toDelete) {
 
 void GPU::deallocDeviceSpecificArray(unsigned short int* toDelete) {
 	cudaFree(toDelete);
+}
+
+void GPU::writeArray(double* array, int size, ofstream& out) {
+	double* tmpArray = new double [size];
+
+	cudaMemcpy(array, tmpArray, size * sizeof(double), cudaMemcpyDeviceToHost);
+
+	out.write((char*) tmpArray, SIZE_DOUBLE * size);
+
+	delete tmpArray;
+}
+
+void GPU::readArray(double* array, int size, ifstream& in) {
+	double* tmpArray = new double [size];
+
+	in.read((char*) tmpArray, SIZE_DOUBLE * size);
+
+	cudaMemcpy(tmpArray, array, size * sizeof(double), cudaMemcpyHostToDevice);
+
+	delete tmpArray;
 }

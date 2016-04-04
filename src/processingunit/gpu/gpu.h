@@ -63,6 +63,9 @@ protected:
 
 	void deallocDeviceSpecificArray(unsigned short int* toDelete);
 
+	void writeArray(double* array, int size, std::ofstream& out);
+	void readArray(double* array, int size, std::ifstream& in);
+
 	/*void printCell(double* array, int cellSize);
 	void printArray1d(double* array, int xCount, int cellSize);
 	void printArray2d(double* array, int yCount, int xCount, int cellSize);
