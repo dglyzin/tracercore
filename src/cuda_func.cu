@@ -123,7 +123,8 @@ __global__ void forGetStepErrorDP45(double* mTempStore1, double e1,
 
 
 
-__global__ void prepareBorderDevice(double* source, int borderNumber, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop, double** blockBorder, int zCount, int yCount, int xCount, int cellSize) {	
+__global__ void prepareBorderDevice(double* result, double* source, int zStart, int zStop, int yStart, int yStop, int xStart,
+		int xStop, int yCount, int xCount, int cellSize) {	
 	/*int zShift;
 	int yShift;
 	int xShift;
@@ -145,7 +146,7 @@ __global__ void prepareBorderDevice(double* source, int borderNumber, int zStart
 				}
 	}*/
 	
-	int index = 0;
+	/*int index = 0;
 	for (int z = zStart; z < zStop; ++z) {
 		int zShift = xCount * yCount * z;
 
@@ -159,6 +160,27 @@ __global__ void prepareBorderDevice(double* source, int borderNumber, int zStart
 					int cellShift = c;
 
 					blockBorder[borderNumber][index] = source[ (zShift + yShift + xShift)*cellSize + cellShift ];
+					index++;
+				}
+			}
+		}
+	}*/
+	
+	int index = 0;
+	for (int z = zStart; z < zStop; ++z) {
+		int zShift = xCount * yCount * z;
+
+		for (int y = yStart; y < yStop; ++y) {
+			int yShift = xCount * y;
+
+			for (int x = xStart; x < xStop; ++x) {
+				int xShift = x;
+
+				for (int c = 0; c < cellSize; ++c) {
+					int cellShift = c;
+					//printf("block %d is preparing border %d, x=%d, y=%d, z=%d, index=%d\n", blockNumber, borderNumber, x,y,z, index);
+
+					result[index] = source[(zShift + yShift + xShift) * cellSize + cellShift];
 					index++;
 				}
 			}
@@ -267,8 +289,9 @@ bool isNanGPU(double* array, int size) {
 }
 
 
-void prepareBorderCudaFunc(double* source, int borderNumber, int zStart, int zStop, int yStart, int yStop, int xStart, int xStop, double** blockBorder, int zCount, int yCount, int xCount, int cellSize) {
-	prepareBorderDevice <<< 1, 1 >>> (source, borderNumber, zStart, zStop, yStart, yStop, xStart, xStop, blockBorder, zCount, yCount, xCount, cellSize);
+void prepareBorderGPU(double* result, double* source, int zStart, int zStop, int yStart, int yStop, int xStart,
+		int xStop, int yCount, int xCount, int cellSize) {
+	prepareBorderDevice <<< 1, 1 >>> (result, source, zStart, zStop, yStart, yStop, xStart, xStop, yCount, xCount, cellSize);
 }
 
 void computeCenter() {
