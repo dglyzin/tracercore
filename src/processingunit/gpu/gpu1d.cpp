@@ -7,10 +7,10 @@
 
 #include "gpu1d.h"
 
-GPU_1D::GPU_1D(int _deviceNumber) :
+GPU_1d::GPU_1d(int _deviceNumber) :
 		GPU(_deviceNumber) {
 }
 
-GPU_1D::~GPU_1D() {
+GPU_1d::~GPU_1d() {
 }
 

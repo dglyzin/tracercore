@@ -10,10 +10,10 @@
 
 #include "gpu.h"
 
-class GPU_1D: public GPU {
+class GPU_1d: public GPU {
 public:
-	GPU_1D(int _deviceNumber);
-	virtual ~GPU_1D();
+	GPU_1d(int _deviceNumber);
+	virtual ~GPU_1d();
 
 	void computeBorder(func_ptr_t* mUserFuncs, unsigned short int* mCompFuncNumber, double* result, double** source,
 			double time, double* parametrs, double** externalBorder, int zCount, int yCount, int xCount, int haloSize);
