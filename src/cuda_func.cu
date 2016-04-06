@@ -253,11 +253,11 @@ void prepareBorderGPU(double* result, double* source, int zStart, int zStop, int
 	prepareBorderDevice <<< 1, 1 >>> (result, source, zStart, zStop, yStart, yStop, xStart, xStop, yCount, xCount, cellSize);
 }
 
-void computeCenter() {
+void computeCenterGPU_1d() {
 	printf("\nCompute center GPU\n");
 }
 
-void computeBorder() {
+void computeBorderGPU_1d() {
 	printf("\nCompute border GPU\n");
 }
 

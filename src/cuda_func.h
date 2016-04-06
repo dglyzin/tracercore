@@ -28,7 +28,8 @@ bool isNanGPU(double* array, int size);
 
 void prepareBorderGPU(double* result, double* source, int zStart, int zStop, int yStart, int yStop, int xStart,
 		int xStop, int yCount, int xCount, int cellSize);
-void computeCenter();
-void computeBorder();
+
+void computeCenterGPU_1d();
+void computeBorderGPU_1d();
 
 #endif
