@@ -133,7 +133,7 @@ __global__ void computeBorderGPU_1d(func_ptr_t* mUserFuncs, unsigned short int* 
 		double time, double* parametrs, double** externalBorder, int zCount, int yCount, int xCount, int haloSize) {
 	int	idx = BLOCK_SIZE * blockIdx.x + threadIdx.x;
 	
-	if( idx < size )
+	if( idx < size );
 		//mUserFuncs[mCompFuncNumber[x]](result, source, time, x, 0, 0, parametrs, externalBorder);
 }
 
@@ -141,7 +141,7 @@ __global__ void computeCenterGPU_1d(func_ptr_t* mUserFuncs, unsigned short int* 
 		double time, double* parametrs, double** externalBorder, int zCount, int yCount, int xCount, int haloSize) {
 	int	idx = BLOCK_SIZE * blockIdx.x + threadIdx.x;
 	
-	if( idx < size )
+	if( idx < size );
 		//mUserFuncs[mCompFuncNumber[x]](result, source, time, x, 0, 0, parametrs, externalBorder);
 }
 
