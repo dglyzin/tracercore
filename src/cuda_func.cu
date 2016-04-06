@@ -105,7 +105,7 @@ __global__ void isNanCuda(double* array, bool* result, int size) {
         result[blockIdx.x] = data[0];
 }
 
-__global__ void prepareBorderDevice(double* result, double* source, int zStart, int zStop, int yStart, int yStop, int xStart,
+__global__ void prepareBorderDeviceCuda(double* result, double* source, int zStart, int zStop, int yStart, int yStop, int xStart,
 		int xStop, int yCount, int xCount, int cellSize) {	
 	int index = 0;
 	for (int z = zStart; z < zStop; ++z) {
@@ -129,6 +129,19 @@ __global__ void prepareBorderDevice(double* result, double* source, int zStart, 
 	}
 }
 
+__global__ void computeBorderGPU_1d(double* result, double* arg1, double* arg2, int size) {
+	int	idx = BLOCK_SIZE * blockIdx.x + threadIdx.x;
+	
+	if( idx < size )
+		result[idx] = arg1[idx] * arg2[idx];
+}
+
+__global__ void computeCenterGPU_1d(double* result, double* arg1, double* arg2, int size) {
+	int	idx = BLOCK_SIZE * blockIdx.x + threadIdx.x;
+	
+	if( idx < size )
+		result[idx] = arg1[idx] * arg2[idx];
+}
 
 
 void copyArrayGPU(double* source, double* destination, int size) {
@@ -232,13 +245,13 @@ bool isNanGPU(double* array, int size) {
 
 void prepareBorderGPU(double* result, double* source, int zStart, int zStop, int yStart, int yStop, int xStart,
 		int xStop, int yCount, int xCount, int cellSize) {
-	prepareBorderDevice <<< 1, 1 >>> (result, source, zStart, zStop, yStart, yStop, xStart, xStop, yCount, xCount, cellSize);
-}
-
-void computeCenterGPU_1d() {
-	printf("\nCompute center GPU\n");
+	prepareBorderDeviceCuda <<< 1, 1 >>> (result, source, zStart, zStop, yStart, yStop, xStart, xStop, yCount, xCount, cellSize);
 }
 
 void computeBorderGPU_1d() {
 	printf("\nCompute border GPU\n");
+}
+
+void computeCenterGPU_1d() {
+	printf("\nCompute center GPU\n");
 }
