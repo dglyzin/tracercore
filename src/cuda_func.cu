@@ -125,47 +125,6 @@ __global__ void forGetStepErrorDP45(double* mTempStore1, double e1,
 
 __global__ void prepareBorderDevice(double* result, double* source, int zStart, int zStop, int yStart, int yStop, int xStart,
 		int xStop, int yCount, int xCount, int cellSize) {	
-	/*int zShift;
-	int yShift;
-	int xShift;
-	
-	int z;
-	int y;
-	int x;
-	
-	int index;
-	
-	switch (side) {
-		case LEFT:
-			for (int x = xStart; x < xStop; ++x) {
-				for (int c = 0; c < cellSize; ++c) {
-					int cellShift = c;
-
-					blockBorder[borderNumber][index] = source[ (zShift + yShift + xShift)*cellSize + cellShift ];
-					index++;
-				}
-	}*/
-	
-	/*int index = 0;
-	for (int z = zStart; z < zStop; ++z) {
-		int zShift = xCount * yCount * z;
-
-		for (int y = yStart; y < yStop; ++y) {
-			int yShift = xCount * y;
-
-			for (int x = xStart; x < xStop; ++x) {
-				int xShift = x;
-
-				for (int c = 0; c < cellSize; ++c) {
-					int cellShift = c;
-
-					blockBorder[borderNumber][index] = source[ (zShift + yShift + xShift)*cellSize + cellShift ];
-					index++;
-				}
-			}
-		}
-	}*/
-	
 	int index = 0;
 	for (int z = zStart; z < zStop; ++z) {
 		int zShift = xCount * yCount * z;
