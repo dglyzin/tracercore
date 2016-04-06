@@ -105,24 +105,6 @@ __global__ void isNanCuda(double* array, bool* result, int size) {
         result[blockIdx.x] = data[0];
 }
 
-__global__ void forGetStepErrorDP45(double* mTempStore1, double e1,
-		double* mTempStore3, double e3, double* mTempStore4, double e4,
-		double* mTempStore5, double e5, double* mTempStore6, double e6,
-		double* mTempStore7, double e7, double* mState, double* mArg,
-		double timeStep, double aTol, double rTol, double mCount, double* result) {
-	int	idx = BLOCK_SIZE * blockIdx.x + threadIdx.x;
-		
-	if( idx < mCount ) {
-		
-		mTempStore1[idx] = timeStep * (e1 * mTempStore1[idx] + e3 * mTempStore3[idx] + e4 * mTempStore4[idx] + e5 * mTempStore5[idx] + e6 * mTempStore6[idx]+ e7 * mTempStore7[idx]) /
-				(aTol + rTol * max(mArg[idx], mState[idx]));
-				
-		result[idx] = mTempStore1[idx] * mTempStore1[idx];		
-	}
-}
-
-
-
 __global__ void prepareBorderDevice(double* result, double* source, int zStart, int zStop, int yStart, int yStop, int xStart,
 		int xStop, int yCount, int xCount, int cellSize) {	
 	int index = 0;
