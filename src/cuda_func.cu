@@ -129,19 +129,19 @@ __global__ void prepareBorderDeviceCuda(double* result, double* source, int zSta
 	}
 }
 
-__global__ void computeBorderGPU_1d(func_ptr_t* mUserFuncs, unsigned short int* mCompFuncNumber, double* result, double** source,
-		double time, double* parametrs, double** externalBorder, int zCount, int yCount, int xCount, int haloSize) {
+__global__ void computeBorderCuda_1d(/*func_ptr_t* mUserFuncs, unsigned short int* mCompFuncNumber, double* result, double** source,
+		double time, double* parametrs, double** externalBorder, int zCount, int yCount, int xCount, int haloSize*/) {
 	int	idx = BLOCK_SIZE * blockIdx.x + threadIdx.x;
 	
-	if( idx < size );
+	//if( idx < size );
 		//mUserFuncs[mCompFuncNumber[x]](result, source, time, x, 0, 0, parametrs, externalBorder);
 }
 
-__global__ void computeCenterGPU_1d(func_ptr_t* mUserFuncs, unsigned short int* mCompFuncNumber, double* result, double** source,
-		double time, double* parametrs, double** externalBorder, int zCount, int yCount, int xCount, int haloSize) {
+__global__ void computeCenterCuda_1d(/*func_ptr_t* mUserFuncs, unsigned short int* mCompFuncNumber, double* result, double** source,
+		double time, double* parametrs, double** externalBorder, int zCount, int yCount, int xCount, int haloSize*/) {
 	int	idx = BLOCK_SIZE * blockIdx.x + threadIdx.x;
 	
-	if( idx < size );
+	//if( idx < size );
 		//mUserFuncs[mCompFuncNumber[x]](result, source, time, x, 0, 0, parametrs, externalBorder);
 }
 
