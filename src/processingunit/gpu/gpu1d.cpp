@@ -32,6 +32,8 @@ void GPU_1d::computeBorder(func_ptr_t* mUserFuncs, unsigned short int* mCompFunc
 	}*/
 
 	//scanf("%c", &c);
+
+	computeBorderGPU_1d();
 }
 
 void GPU_1d::computeCenter(func_ptr_t* mUserFuncs, unsigned short int* mCompFuncNumber, double* result, double** source,
@@ -44,6 +46,8 @@ void GPU_1d::computeCenter(func_ptr_t* mUserFuncs, unsigned short int* mCompFunc
 			mUserFuncs[mCompFuncNumber[x]](result, source, time, x, 0, 0, parametrs, externalBorder);
 		}
 	}*/
+
+	computeCenterGPU_1d();
 }
 
 void GPU_1d::printArray(double* array, int zCount, int yCount, int xCount, int cellSize) {
