@@ -216,7 +216,7 @@ void CPU::printArray2d(double* array, int yCount, int xCount, int cellSize) {
 	}
 }
 
-void ProCPUcessingUnit::printArray3d(double* array, int zCount, int yCount, int xCount, int cellSize) {
+void CPU::printArray3d(double* array, int zCount, int yCount, int xCount, int cellSize) {
 	int shift = 0;
 	for (int z = 0; z < zCount; ++z) {
 		printf("z = %d", z);
