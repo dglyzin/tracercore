@@ -51,6 +51,8 @@ void GPU_1d::computeCenter(func_ptr_t* mUserFuncs, unsigned short int* mCompFunc
 }
 
 void GPU_1d::printArray(double* array, int zCount, int yCount, int xCount, int cellSize) {
+	int size = zCount * yCount * xCount * cellSize;
+
 	double* tmpArray = new double [size];
 
 	cudaMemcpy(array, tmpArray, size * sizeof(double), cudaMemcpyDeviceToHost);
