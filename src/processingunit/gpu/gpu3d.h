@@ -12,7 +12,7 @@
 
 class GPU_3d: public GPU {
 public:
-	GPU_3d();
+	GPU_3d(int _deviceNumber);
 	virtual ~GPU_3d();
 };
 

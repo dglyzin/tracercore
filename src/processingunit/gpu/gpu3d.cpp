@@ -7,12 +7,10 @@
 
 #include "gpu3d.h"
 
-GPU_3d::GPU_3d() {
-	// TODO Auto-generated constructor stub
-
+GPU_3d::GPU_3d(int _deviceNumber) :
+		GPU(_deviceNumber) {
 }
 
 GPU_3d::~GPU_3d() {
-	// TODO Auto-generated destructor stub
 }
 
