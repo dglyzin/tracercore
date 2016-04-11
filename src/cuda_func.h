@@ -35,4 +35,7 @@ void computeCenterGPU_1d();
 void computeBorderGPU_2d();
 void computeCenterGPU_2d();
 
+void computeBorderGPU_3d();
+void computeCenterGPU_3d();
+
 #endif
