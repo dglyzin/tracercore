@@ -32,4 +32,7 @@ void prepareBorderGPU(double* result, double* source, int zStart, int zStop, int
 void computeBorderGPU_1d();
 void computeCenterGPU_1d();
 
+void computeBorderGPU_2d();
+void computeCenterGPU_2d();
+
 #endif

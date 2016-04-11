@@ -145,6 +145,22 @@ __global__ void computeCenterCuda_1d(/*func_ptr_t* mUserFuncs, unsigned short in
 		//mUserFuncs[mCompFuncNumber[x]](result, source, time, x, 0, 0, parametrs, externalBorder);
 }
 
+__global__ void computeBorderCuda_2d(/*func_ptr_t* mUserFuncs, unsigned short int* mCompFuncNumber, double* result, double** source,
+		double time, double* parametrs, double** externalBorder, int zCount, int yCount, int xCount, int haloSize*/) {
+	int	idx = BLOCK_SIZE * blockIdx.x + threadIdx.x;
+	
+	//if( idx < size );
+		//mUserFuncs[mCompFuncNumber[x]](result, source, time, x, 0, 0, parametrs, externalBorder);
+}
+
+__global__ void computeCenterCuda_2d(/*func_ptr_t* mUserFuncs, unsigned short int* mCompFuncNumber, double* result, double** source,
+		double time, double* parametrs, double** externalBorder, int zCount, int yCount, int xCount, int haloSize*/) {
+	int	idx = BLOCK_SIZE * blockIdx.x + threadIdx.x;
+	
+	//if( idx < size );
+		//mUserFuncs[mCompFuncNumber[x]](result, source, time, x, 0, 0, parametrs, externalBorder);
+}
+
 
 void copyArrayGPU(double* source, double* destination, int size) {
 	dim3 threads ( BLOCK_SIZE );
@@ -251,9 +267,17 @@ void prepareBorderGPU(double* result, double* source, int zStart, int zStop, int
 }
 
 void computeBorderGPU_1d() {
-	printf("\nCompute border GPU\n");
+	printf("\nCompute border GPU 1d\n");
 }
 
 void computeCenterGPU_1d() {
-	printf("\nCompute center GPU\n");
+	printf("\nCompute center GPU 1d\n");
+}
+
+void computeBorderGPU_2d() {
+	printf("\nCompute border GPU 2d\n");
+}
+
+void computeCenterGPU_2d() {
+	printf("\nCompute center GPU 2d\n");
 }
