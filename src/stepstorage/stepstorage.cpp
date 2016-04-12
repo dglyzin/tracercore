@@ -65,3 +65,16 @@ double* StepStorage::getStatePointer() {
 bool StepStorage::isNan(ProcessingUnit* pu) {
 	return pu->isNan(mState, mCount);
 }
+
+int StepStorage::size() {
+	int size = 0;
+
+	size += SIZE_INT; // mCount
+	size += mCount * SIZE_DOUBLE; // mState
+	size += SIZE_DOUBLE; // aTol
+	size += SIZE_DOUBLE; // rTol
+
+	size += sizeChild();
+
+	return size;
+}
