@@ -10,6 +10,8 @@
 
 #include <string.h>
 
+#include "enums.h"
+
 class Utils {
 public:
 	Utils();
@@ -18,6 +20,13 @@ public:
 	static int lastChar(const char* source, char ch, int num = 1);
 	static void copyToLastChar(char* result, const char* source, char ch, int num = 1);
 	static void copyFromLastToEnd(char* result, const char* source, char ch, int num = 1);
+
+	static int oppositeBorder(int side);
+	static int getSide(int number);
+	static char* getSideName(int side);
+
+	static bool isCPU(int type);
+	static bool isGPU(int type);
 };
 
 #endif /* SRC_UTILS_H_ */

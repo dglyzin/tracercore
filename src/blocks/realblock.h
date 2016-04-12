@@ -17,6 +17,8 @@
 
 #include "block.h"
 
+#include "../utils.h"
+
 class RealBlock: public Block {
 public:
 	RealBlock(int _nodeNumber, int _dimension, int _xCount, int _yCount, int _zCount, int _xOffset, int _yOffset,

@@ -63,13 +63,4 @@ enum USER_STATUS {
 	US_STOP, US_RUN
 };
 
-int oppositeBorder(int side);
-
-int getSide(int number);
-
-char* getSideName(int side);
-
-bool isCPU(int type);
-bool isGPU(int type);
-
 #endif /* SRC_ENUMS_H_ */

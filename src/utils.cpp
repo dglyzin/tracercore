@@ -51,3 +51,68 @@ void Utils::copyFromLastToEnd(char* result, const char* source, char ch, int num
 
 	strncpy(result, source + pos, length - pos);
 }
+
+int Utils::oppositeBorder(int side) {
+	switch (side) {
+		case LEFT:
+			return RIGHT;
+		case RIGHT:
+			return LEFT;
+		case FRONT:
+			return BACK;
+		case BACK:
+			return FRONT;
+		case TOP:
+			return BOTTOM;
+		case BOTTOM:
+			return TOP;
+		default:
+			return TOP;
+	}
+}
+
+int Utils::getSide(int number) {
+	switch (number) {
+		case 0:
+			return LEFT;
+		case 1:
+			return RIGHT;
+		case 2:
+			return FRONT;
+		case 3:
+			return BACK;
+		case 4:
+			return TOP;
+		case 5:
+			return BOTTOM;
+		default:
+			return LEFT;
+	}
+}
+
+char* Utils::getSideName(int side) {
+	switch (side) {
+		case LEFT:
+			return (char*) "LEFT";
+		case RIGHT:
+			return (char*) "RIGHT";
+		case FRONT:
+			return (char*) "FRONT";
+		case BACK:
+			return (char*) "BACK";
+		case TOP:
+			return (char*) "TOP";
+		case BOTTOM:
+			return (char*) "BOTTOM";
+		default:
+			return (char*) "ERROR SIDE";
+	}
+}
+
+bool Utils::isCPU(int type) {
+	return type == CPU_UNIT;
+}
+
+bool Utils::isGPU(int type) {
+	return type == GPU_UNIT;
+}

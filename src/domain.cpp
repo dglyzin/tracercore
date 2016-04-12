@@ -658,10 +658,11 @@ Interconnect* Domain::readConnection(ifstream& in) {
 		//cout << "	offsetDestnation" << j << ":        " << offsetDestination[j] << endl;
 	}
 
-	double* sourceData = mBlocks[sourceBlock]->addNewBlockBorder(mBlocks[destinationBlock], getSide(sourceSide),
+	double* sourceData = mBlocks[sourceBlock]->addNewBlockBorder(mBlocks[destinationBlock], Utils::getSide(sourceSide),
 			offsetSource[0], offsetSource[1], length[0], length[1]);
 	double* destinationData = mBlocks[destinationBlock]->addNewExternalBorder(mBlocks[sourceBlock],
-			getSide(destinationSide), offsetDestination[0], offsetDestination[1], length[0], length[1], sourceData);
+			Utils::getSide(destinationSide), offsetDestination[0], offsetDestination[1], length[0], length[1],
+			sourceData);
 
 	int sourceNode = mBlocks[sourceBlock]->getNodeNumber();
 	int destinationNode = mBlocks[destinationBlock]->getNodeNumber();
@@ -716,7 +717,7 @@ int Domain::getRepeatCount() {
 int Domain::getCpuBlockCount() {
 	int count = 0;
 	for (int i = 0; i < mBlockCount; ++i)
-		if (isCPU(mBlocks[i]->getBlockType()))
+		if (Utils::isCPU(mBlocks[i]->getBlockType()))
 			count++;
 
 	return count;
@@ -728,7 +729,7 @@ int Domain::getCpuBlockCount() {
 int Domain::getGpuBlockCount() {
 	int count = 0;
 	for (int i = 0; i < mBlockCount; ++i)
-		if (isGPU(mBlocks[i]->getBlockType()))
+		if (Utils::isGPU(mBlocks[i]->getBlockType()))
 			count++;
 
 	return count;

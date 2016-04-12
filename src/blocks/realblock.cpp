@@ -316,7 +316,7 @@ void RealBlock::printBorderInfo() {
 				"   M_Length: %d\n"
 				"   N_Length: %d\n"
 				"   Address : %p\n"
-				"\n", i, getSideName(sendBorderInfo[index + SIDE]), sendBorderInfo[index + M_OFFSET],
+				"\n", i, Utils::getSideName(sendBorderInfo[index + SIDE]), sendBorderInfo[index + M_OFFSET],
 				sendBorderInfo[index + N_OFFSET], sendBorderInfo[index + M_LENGTH], sendBorderInfo[index + N_LENGTH],
 				blockBorder[i]);
 	}
@@ -333,7 +333,7 @@ void RealBlock::printBorderInfo() {
 				"   M_Length: %d\n"
 				"   N_Length: %d\n"
 				"   Address : %p\n"
-				"\n", i, getSideName(sendBorderInfo[index + SIDE]), receiveBorderInfo[index + M_OFFSET],
+				"\n", i, Utils::getSideName(sendBorderInfo[index + SIDE]), receiveBorderInfo[index + M_OFFSET],
 				receiveBorderInfo[index + N_OFFSET], receiveBorderInfo[index + M_LENGTH],
 				receiveBorderInfo[index + N_LENGTH], externalBorder[i]);
 	}
