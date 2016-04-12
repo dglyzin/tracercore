@@ -53,13 +53,6 @@ enum PROBLEM_TYPE {
 };
 
 /*
- * Способ выделения памяти.
- */
-/*enum MEMORY_ALLOC_TYPE {
-	NOT_ALLOC, NEW, CUDA_MALLOC, CUDA_MALLOC_HOST
-};*/
-
-/*
  * Статус задачи в базе
  */
 
