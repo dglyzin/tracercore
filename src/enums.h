@@ -76,8 +76,6 @@ int getSide(int number);
 
 char* getSideName(int side);
 
-//char* getMemoryTypeName(int type);
-
 bool isCPU(int type);
 bool isGPU(int type);
 
