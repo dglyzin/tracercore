@@ -50,6 +50,18 @@ void RK4Storage::loadMTempStores(ProcessingUnit* pu, ifstream& in) {
 	pu->loadArray(mArg, mCount, in);
 }
 
+int RK4Storage::sizeChild() {
+	int size = 0;
+
+	size += mCount * SIZE_DOUBLE; // mTempStore1
+	size += mCount * SIZE_DOUBLE; // mTempStore2
+	size += mCount * SIZE_DOUBLE; // mTempStore3
+	size += mCount * SIZE_DOUBLE; // mTempStore4
+	size += mCount * SIZE_DOUBLE; // mArg
+
+	return size;
+}
+
 double* RK4Storage::getStageSource(int stage) {
 	switch (stage) {
 		case 0:
