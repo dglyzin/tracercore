@@ -8,8 +8,6 @@
 #ifndef SRC_ENUMS_H_
 #define SRC_ENUMS_H_
 
-#define BY_FUNCTION -1
-
 #define SAVE_FILE_CODE 253
 #define GEOM_FILE_CODE 254
 #define VERSION_MAJOR 1
