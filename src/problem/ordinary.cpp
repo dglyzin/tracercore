@@ -76,6 +76,10 @@ bool Ordinary::isNan(ProcessingUnit* pu) {
 	return mStepStorage->isNan(pu);
 }
 
+int Ordinary::size() {
+	return mStepStorage->size();
+}
+
 void Ordinary::print(ProcessingUnit* pu, int zCount, int yCount, int xCount, int cellSize) {
 	mStepStorage->print(pu, zCount, yCount, xCount, cellSize);
 }

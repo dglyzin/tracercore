@@ -41,6 +41,8 @@ public:
 
 	virtual bool isNan(ProcessingUnit* pu) = 0;
 
+	virtual int size() = 0;
+
 	virtual void print(ProcessingUnit* pu, int zCount, int yCount, int xCount, int cellSize) = 0;
 
 protected:
