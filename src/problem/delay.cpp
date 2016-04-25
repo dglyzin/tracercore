@@ -56,7 +56,7 @@ int Delay::getResultStorageNumber() {
 }
 
 double** Delay::getSource(int stage) {
-	int sourceStorageNumber = getSourceStorageNumber(time);
+	int sourceStorageNumber = getSourceStorageNumber(0.0);
 	mSourceStorage[0] = mStepStorage[sourceStorageNumber]->getStageSource(stage);
 
 	for (int i = 0; i < delayCount; ++i) {
