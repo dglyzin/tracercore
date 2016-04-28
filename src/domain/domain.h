@@ -199,9 +199,7 @@ private:
 	//Solver* mPreviousState;
 
 	void loadStateFromFile(char* dataFile);
-	void setStopTime(double _stopTime) {
-		stopTime = _stopTime;
-	}
+	void setStopTime(double _stopTime);
 
 	void readFileStat(std::ifstream& in);
 	void readTimeSetting(std::ifstream& in);

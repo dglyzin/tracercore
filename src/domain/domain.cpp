@@ -814,6 +814,10 @@ void Domain::loadStateFromFile(char* dataFile) {
 	in.close();
 }
 
+void Domain::setStopTime(double _stopTime) {
+	stopTime = _stopTime;
+}
+
 void Domain::printStatisticsInfo(char* inputFile, char* outputFile, double calcTime, char* statisticsFile) {
 	//cout << endl << "PRINT STATISTIC INFO DOESN'T WORK" << endl;
 
