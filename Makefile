@@ -63,6 +63,8 @@ cuda_func.o:
 clean:
 	rm -rf $(SRC)/*.o
 	
+	rm -rf $(SRCDOM)/*.o
+	
 	rm -rf $(SRCBLC)/*.o
 	
 	rm -rf $(SRCPROCUNIT)/*.o
