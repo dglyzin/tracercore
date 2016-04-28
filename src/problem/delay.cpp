@@ -59,12 +59,12 @@ double** Delay::getSource(int stage) {
 	int sourceStorageNumber = getSourceStorageNumber(0.0);
 	mSourceStorage[0] = mStepStorage[sourceStorageNumber]->getStageSource(stage);
 
-	for (int i = 0; i < delayCount; ++i) {
+	/*for (int i = 0; i < delayCount; ++i) {
 		int sourceStorageNumberDelay = getSourceStorageNumberDelay(current, i);
 		int sourceStorageNumberDelayForDenseOutput = getSourceStorageNumberDelayForDenseOutput(time, i);
 		mStepStorage[sourceStorageNumberDelay]->getDenseOutput(mStepStorage[sourceStorageNumberDelayForDenseOutput],
 				mSourceStorage[i + 1]);
-	}
+	}*/
 
 	return mSourceStorage;
 	return NULL;
