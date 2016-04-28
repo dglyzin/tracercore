@@ -8,18 +8,18 @@
 #ifndef SRC_DOMAIN_H_
 #define SRC_DOMAIN_H_
 
-#include "blocks/realblock.h"
-#include "blocks/nullblock.h"
+#include "../blocks/realblock.h"
+#include "../blocks/nullblock.h"
 
-#include "interconnect/transferinterconnect/transferinterconnectsend.h"
-#include "interconnect/transferinterconnect/transferinterconnectrecv.h"
-#include "interconnect/nontransferinterconnect.h"
+#include "../interconnect/transferinterconnect/transferinterconnectsend.h"
+#include "../interconnect/transferinterconnect/transferinterconnectrecv.h"
+#include "../interconnect/nontransferinterconnect.h"
 
-#include "processingunit/cpu/cpu1d.h"
-#include "processingunit/cpu/cpu2d.h"
-#include "processingunit/cpu/cpu3d.h"
+#include "../processingunit/cpu/cpu1d.h"
+#include "../processingunit/cpu/cpu2d.h"
+#include "../processingunit/cpu/cpu3d.h"
 
-#include "utils.h"
+#include "../utils.h"
 
 /*
  * Основной управляющий класс приложения.
