@@ -35,8 +35,6 @@ public:
 
 	bool isNan(ProcessingUnit* pu);
 
-	int size();
-
 	virtual double* getStageSource(int stage) = 0;
 	virtual double* getStageResult(int stage) = 0;
 
