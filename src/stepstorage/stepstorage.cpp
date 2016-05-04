@@ -65,3 +65,12 @@ double* StepStorage::getStatePointer() {
 bool StepStorage::isNan(ProcessingUnit* pu) {
 	return pu->isNan(mState, mCount);
 }
+
+int StepStorage::getSize(int elementCount) {
+	int size = 0;
+
+	size += elementCount * SIZE_DOUBLE;
+	size += getSizeChild(elementCount);
+
+	return size;
+}

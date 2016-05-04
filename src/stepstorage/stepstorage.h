@@ -56,7 +56,7 @@ public:
 
 	virtual void getDenseOutput(StepStorage* secondState, double* result) = 0;
 
-	virtual int getSize(int elementCount) = 0;
+	int getSize(int elementCount);
 
 	virtual void print(ProcessingUnit* pu, int zCount, int yCount, int xCount, int cellSize) = 0;
 
@@ -72,6 +72,8 @@ protected:
 
 	virtual void saveMTempStores(ProcessingUnit* pu, char* path) = 0;
 	virtual void loadMTempStores(ProcessingUnit* pu, std::ifstream& in) = 0;
+
+	virtual int getSizeChild(int elementCount) = 0;
 };
 
 #endif /* SRC_STEPSTORAGE_STEPSTORAGE_H_ */
