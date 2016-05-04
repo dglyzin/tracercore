@@ -978,5 +978,32 @@ Interconnect* Domain::getInterconnect(int sourceNode, int destinationNode, int b
 }
 
 int Domain::getMaxStepStorageCount() {
+	int cpuElementCount = 0;
+	for (int i = 0; i < mBlockCount; ++i) {
+		if (mBlocks[i]->isProcessingUnitCPU()) {
+			cpuElementCount += mBlocks[i]->getGridElementCount();
+		}
+	}
+
+	int gpu0ElementCount = 0;
+	for (int i = 0; i < mBlockCount; ++i) {
+		if (mBlocks[i]->isProcessingUnitGPU() && mBlocks[i]->getDeviceNumber() == 0) {
+			gpu0ElementCount += mBlocks[i]->getGridElementCount();
+		}
+	}
+
+	int gpu1ElementCount = 0;
+	for (int i = 0; i < mBlockCount; ++i) {
+		if (mBlocks[i]->isProcessingUnitGPU() && mBlocks[i]->getDeviceNumber() == 1) {
+			gpu1ElementCount += mBlocks[i]->getGridElementCount();
+		}
+	}
+
+	int gpu2ElementCount = 0;
+	for (int i = 0; i < mBlockCount; ++i) {
+		if (mBlocks[i]->isProcessingUnitGPU() && mBlocks[i]->getDeviceNumber() == 2) {
+			gpu2ElementCount += mBlocks[i]->getGridElementCount();
+		}
+	}
 }
 
