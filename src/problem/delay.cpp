@@ -120,10 +120,6 @@ bool Delay::isNan(ProcessingUnit* pu) {
 	return false;
 }
 
-int Delay::size() {
-	return maxStorageCount * mStepStorage[0]->size();
-}
-
 void Delay::print(ProcessingUnit* pu, int zCount, int yCount, int xCount, int cellSize) {
 	return;
 }
