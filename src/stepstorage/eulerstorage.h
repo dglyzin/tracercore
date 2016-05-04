@@ -16,6 +16,8 @@ public:
 	EulerStorage(ProcessingUnit* pu, int count, double _aTol, double _rTol);
 	virtual ~EulerStorage();
 
+	int getSize(int elementCount);
+
 	double* getStageSource(int stage);
 	double* getStageResult(int stage);
 
