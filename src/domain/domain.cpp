@@ -1005,5 +1005,21 @@ int Domain::getMaxStepStorageCount() {
 			gpu2ElementCount += mBlocks[i]->getGridElementCount();
 		}
 	}
+
+	int solverSizeCpu = mSolverInfo->getSize(cpuElementCount);
+	int solverSizeGpu0 = mSolverInfo->getSize(gpu0ElementCount);
+	int solverSizeGpu1 = mSolverInfo->getSize(gpu1ElementCount);
+	int solverSizeGpu2 = mSolverInfo->getSize(gpu2ElementCount);
+
+	int maxCountCpu = CPU_RAM / solverSizeCpu;
+	int maxCountGpu0 = GPU_RAM / solverSizeGpu0;
+	int maxCountGpu1 = GPU_RAM / solverSizeGpu1;
+	int maxCountGpu2 = GPU_RAM / solverSizeGpu2;
+
+	int maxCount = min(maxCountCpu, min(maxCountGpu0, min(maxCountGpu1, maxCountGpu2)));
+
+	//TODO ПЕРЕСЫЛКА ДЛЯ ВЫЯСНЕНИЯ МИНИМУМА ПО ВСЕМ ПОТОКАМ
+
+	return maxCount;
 }
 
