@@ -23,8 +23,6 @@ public:
 	StepStorage(ProcessingUnit* pu, int count, double _aTol, double _rTol);
 	virtual ~StepStorage();
 
-	virtual int getSize(int elementCount) = 0;
-
 	void copyState(ProcessingUnit* pu, double* result);
 
 	void saveState(ProcessingUnit* pu, char* path);
@@ -59,6 +57,8 @@ public:
 	virtual bool isErrorPermissible(double error, int totalDomainElements) = 0;
 
 	virtual void getDenseOutput(StepStorage* secondState, double* result) = 0;
+
+	virtual int getSize(int elementCount) = 0;
 
 	virtual void print(ProcessingUnit* pu, int zCount, int yCount, int xCount, int cellSize) = 0;
 
