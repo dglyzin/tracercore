@@ -189,6 +189,18 @@ void RK4Storage::getDenseOutput(StepStorage* secondState, double* result) {
 	printf("\nRK4 dense output DON'T WORK!\n");
 }
 
+int RK4Storage::getSize(int elementCount) {
+	int size = 0;
+
+	size += elementCount * SIZE_DOUBLE; // mTempStore1
+	size += elementCount * SIZE_DOUBLE; // mTempStore2
+	size += elementCount * SIZE_DOUBLE; // mTempStore3
+	size += elementCount * SIZE_DOUBLE; // mTempStore4
+	size += elementCount * SIZE_DOUBLE; // mArg
+
+	return size;
+}
+
 void RK4Storage::print(ProcessingUnit* pu, int zCount, int yCount, int xCount, int cellSize) {
 	printf("mState:\n");
 	pu->printArray(mState, zCount, yCount, xCount, cellSize);
