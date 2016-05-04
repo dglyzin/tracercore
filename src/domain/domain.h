@@ -248,6 +248,8 @@ private:
 
 	Interconnect* getInterconnect(int sourceNode, int destinationNode, int borderLength, double* sourceData,
 			double* destinationData);
+
+	int getMaxStepStorageCount();
 };
 
 #endif /* SRC_DOMAIN_H_ */

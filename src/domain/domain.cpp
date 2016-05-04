@@ -977,5 +977,6 @@ Interconnect* Domain::getInterconnect(int sourceNode, int destinationNode, int b
 	return new NonTransferInterconnect(sourceNode, destinationNode);
 }
 
-
+int Domain::getMaxStepStorageCount() {
+}
 
