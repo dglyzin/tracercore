@@ -977,18 +977,5 @@ Interconnect* Domain::getInterconnect(int sourceNode, int destinationNode, int b
 	return new NonTransferInterconnect(sourceNode, destinationNode);
 }
 
-/*
- void Domain::storeDbFileName(char* inputFile){
- char saveFile[100];
 
- int length = lastChar(inputFile, '/');
-
- strncpy(saveFile, inputFile, length);
- saveFile[ length ] = 0;
-
- sprintf(saveFile, "%s%s%f%s", saveFile, "/project-", currentTime, ".bin");
-
-
- dbConnStoreFileName(mJobId, saveFile);
- }*/
 
