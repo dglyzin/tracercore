@@ -16,8 +16,6 @@ public:
 	EulerStorage(ProcessingUnit* pu, int count, double _aTol, double _rTol);
 	virtual ~EulerStorage();
 
-	int getSize(int elementCount);
-
 	double* getStageSource(int stage);
 	double* getStageResult(int stage);
 
@@ -38,6 +36,7 @@ public:
 	bool isErrorPermissible(double error, int totalDomainElements);
 
 	void getDenseOutput(StepStorage* secondState, double* result);
+	int getSize(int elementCount);
 
 	void print(ProcessingUnit* pu, int zCount, int yCount, int xCount, int cellSize);
 

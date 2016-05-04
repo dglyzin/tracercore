@@ -22,14 +22,6 @@ EulerStorage::EulerStorage(ProcessingUnit* pu, int count, double _aTol, double _
 EulerStorage::~EulerStorage() {
 }
 
-int EulerStorage::getSize(int elementCount) {
-	int size = 0;
-
-	size += elementCount * SIZE_DOUBLE; // mTempStore1
-
-	return size;
-}
-
 void EulerStorage::saveMTempStores(ProcessingUnit* pu, char* path) {
 	pu->saveArray(mTempStore1, mCount, path);
 }
@@ -99,6 +91,14 @@ bool EulerStorage::isErrorPermissible(double error, int totalDomainElements) {
 
 void EulerStorage::getDenseOutput(StepStorage* secondState, double* result) {
 	printf("\nEuler dense output DON'T WORK!\n");
+}
+
+int EulerStorage::getSize(int elementCount) {
+	int size = 0;
+
+	size += elementCount * SIZE_DOUBLE; // mTempStore1
+
+	return size;
 }
 
 void EulerStorage::print(ProcessingUnit* pu, int zCount, int yCount, int xCount, int cellSize) {
