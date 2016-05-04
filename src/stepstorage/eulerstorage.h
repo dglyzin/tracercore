@@ -36,6 +36,7 @@ public:
 	bool isErrorPermissible(double error, int totalDomainElements);
 
 	void getDenseOutput(StepStorage* secondState, double* result);
+
 	int getSize(int elementCount);
 
 	void print(ProcessingUnit* pu, int zCount, int yCount, int xCount, int cellSize);
