@@ -340,6 +340,23 @@ void DP45Storage::getDenseOutput(StepStorage* secondState, double* result) {
 	printf("\nDP45 dense output DON'T WORK!\n");
 }
 
+int DP45Storage::getSize(int elementCount) {
+	int size = 0;
+
+	size += elementCount * SIZE_DOUBLE; // mTempStore1
+	size += elementCount * SIZE_DOUBLE; // mTempStore2
+	size += elementCount * SIZE_DOUBLE; // mTempStore3
+	size += elementCount * SIZE_DOUBLE; // mTempStore4
+	size += elementCount * SIZE_DOUBLE; // mTempStore5
+	size += elementCount * SIZE_DOUBLE; // mTempStore6
+	size += elementCount * SIZE_DOUBLE; // mTempStore7
+	size += elementCount * SIZE_DOUBLE; // mArg
+
+	size += elementCount * SIZE_DOUBLE; // temp
+
+	return size;
+}
+
 void DP45Storage::print(ProcessingUnit* pu, int zCount, int yCount, int xCount, int cellSize) {
 	printf("mState:\n");
 	pu->printArray(mState, zCount, yCount, xCount, cellSize);
