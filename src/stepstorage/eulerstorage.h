@@ -37,8 +37,6 @@ public:
 
 	void getDenseOutput(StepStorage* secondState, double* result);
 
-	int getSize(int elementCount);
-
 	void print(ProcessingUnit* pu, int zCount, int yCount, int xCount, int cellSize);
 
 private:
@@ -46,6 +44,8 @@ private:
 
 	void saveMTempStores(ProcessingUnit* pu, char* path);
 	void loadMTempStores(ProcessingUnit* pu, std::ifstream& in);
+
+	int getSizeChild(int elementCount);
 };
 
 #endif /* SRC_STEPSTORAGE_EULERSTORAGE_H_ */
