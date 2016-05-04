@@ -50,6 +50,18 @@ void RK4Storage::loadMTempStores(ProcessingUnit* pu, ifstream& in) {
 	pu->loadArray(mArg, mCount, in);
 }
 
+int RK4Storage::getSizeChild(int elementCount) {
+	int size = 0;
+
+	size += elementCount * SIZE_DOUBLE; // mTempStore1
+	size += elementCount * SIZE_DOUBLE; // mTempStore2
+	size += elementCount * SIZE_DOUBLE; // mTempStore3
+	size += elementCount * SIZE_DOUBLE; // mTempStore4
+	size += elementCount * SIZE_DOUBLE; // mArg
+
+	return size;
+}
+
 double* RK4Storage::getStageSource(int stage) {
 	switch (stage) {
 		case 0:
@@ -175,18 +187,6 @@ bool RK4Storage::isErrorPermissible(double error, int totalDomainElements) {
 
 void RK4Storage::getDenseOutput(StepStorage* secondState, double* result) {
 	printf("\nRK4 dense output DON'T WORK!\n");
-}
-
-int RK4Storage::getSize(int elementCount) {
-	int size = 0;
-
-	size += elementCount * SIZE_DOUBLE; // mTempStore1
-	size += elementCount * SIZE_DOUBLE; // mTempStore2
-	size += elementCount * SIZE_DOUBLE; // mTempStore3
-	size += elementCount * SIZE_DOUBLE; // mTempStore4
-	size += elementCount * SIZE_DOUBLE; // mArg
-
-	return size;
 }
 
 void RK4Storage::print(ProcessingUnit* pu, int zCount, int yCount, int xCount, int cellSize) {
