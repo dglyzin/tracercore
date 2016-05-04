@@ -30,14 +30,6 @@ void EulerStorage::loadMTempStores(ProcessingUnit* pu, ifstream& in) {
 	pu->loadArray(mTempStore1, mCount, in);
 }
 
-int EulerStorage::sizeChild() {
-	int size = 0;
-
-	size += mCount * SIZE_DOUBLE; // mTempStore1
-
-	return size;
-}
-
 double* EulerStorage::getStageSource(int stahe) {
 	return mState;
 }

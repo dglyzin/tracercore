@@ -46,8 +46,6 @@ private:
 
 	void saveMTempStores(ProcessingUnit* pu, char* path);
 	void loadMTempStores(ProcessingUnit* pu, std::ifstream& in);
-
-	int sizeChild();
 };
 
 #endif /* SRC_STEPSTORAGE_EULERSTORAGE_H_ */

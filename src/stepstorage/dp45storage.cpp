@@ -73,23 +73,6 @@ void DP45Storage::loadMTempStores(ProcessingUnit* pu, ifstream& in) {
 	pu->loadArray(mArg, mCount, in);
 }
 
-int DP45Storage::sizeChild() {
-	int size = 0;
-
-	size += mCount * SIZE_DOUBLE; // mTempStore1
-	size += mCount * SIZE_DOUBLE; // mTempStore2
-	size += mCount * SIZE_DOUBLE; // mTempStore3
-	size += mCount * SIZE_DOUBLE; // mTempStore4
-	size += mCount * SIZE_DOUBLE; // mTempStore5
-	size += mCount * SIZE_DOUBLE; // mTempStore6
-	size += mCount * SIZE_DOUBLE; // mTempStore7
-	size += mCount * SIZE_DOUBLE; // mArg
-
-	size += mCount * SIZE_DOUBLE; // temp
-
-	return size;
-}
-
 double* DP45Storage::getStageSource(int stage) {
 	/*if      (stage == 0) return mArg;
 	 else if (stage == 1) return mArg;

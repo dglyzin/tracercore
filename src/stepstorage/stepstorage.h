@@ -74,8 +74,6 @@ protected:
 
 	virtual void saveMTempStores(ProcessingUnit* pu, char* path) = 0;
 	virtual void loadMTempStores(ProcessingUnit* pu, std::ifstream& in) = 0;
-
-	virtual int sizeChild() = 0;
 };
 
 #endif /* SRC_STEPSTORAGE_STEPSTORAGE_H_ */
