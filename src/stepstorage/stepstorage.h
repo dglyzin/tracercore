@@ -23,6 +23,8 @@ public:
 	StepStorage(ProcessingUnit* pu, int count, double _aTol, double _rTol);
 	virtual ~StepStorage();
 
+	virtual int getSize(int elementCount) = 0;
+
 	void copyState(ProcessingUnit* pu, double* result);
 
 	void saveState(ProcessingUnit* pu, char* path);
