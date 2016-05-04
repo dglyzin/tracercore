@@ -23,7 +23,6 @@
 
 /*
  * Основной управляющий класс приложения.
- * Создает блоки (BlockCpu, BlockGpu, BlockNull) и их соединения (Interconnect).
  */
 
 class Domain {
@@ -249,20 +248,6 @@ private:
 
 	Interconnect* getInterconnect(int sourceNode, int destinationNode, int borderLength, double* sourceData,
 			double* destinationData);
-
-	/*
-	 * Database status manipulations
-	 */
-	//void setDbJobState(int state){
-	//    dbConnSetJobState(mJobId, state);
-	//}
-	//void setDbJobPercentage(int percentage){
-	//    dbConnSetJobPercentage(mJobId, percentage);
-	//}
-	//void storeDbFileName(char* fname);
-	//int getDbUserStatus(){
-	//	return dbConnGetUserStatus(mJobId);
-	//}
 };
 
 #endif /* SRC_DOMAIN_H_ */
