@@ -18,6 +18,8 @@
 #define CPU_RAM (58*1024*1024*1024)
 #define GPU_RAM (4*1024*1024*1024)
 
+#define GPU_COUNT 3
+
 enum FLAGS {
 	TIME_EXECUTION = 0x01, LOAD_FILE = 0x02
 };
