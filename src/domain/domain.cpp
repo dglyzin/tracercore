@@ -220,7 +220,8 @@ void Domain::nextStep() {
 
 void Domain::prepareDeviceData(int deviceType, int deviceNumber, int stage) {
 	for (int i = 0; i < mBlockCount; ++i)
-		if (mBlocks[i]->getBlockType() == deviceType && mBlocks[i]->getDeviceNumber() == deviceNumber) {
+		/*mBlocks[i]->getBlockType() == deviceType && mBlocks[i]->getDeviceNumber() == deviceNumber*/
+		if (mBlocks[i]->isBlockType(deviceType) && mBlocks[i]->isDeviceNumber(deviceNumber)) {
 			//printf("\nSuccses\n");
 			mBlocks[i]->prepareStageData(stage);
 		}
@@ -228,7 +229,7 @@ void Domain::prepareDeviceData(int deviceType, int deviceNumber, int stage) {
 
 void Domain::processDeviceBlocksBorder(int deviceType, int deviceNumber, int stage) {
 	for (int i = 0; i < mBlockCount; ++i)
-		if (mBlocks[i]->getBlockType() == deviceType && mBlocks[i]->getDeviceNumber() == deviceNumber) {
+		if (mBlocks[i]->isBlockType(deviceType) && mBlocks[i]->isDeviceNumber(deviceNumber)) {
 			//cout << endl << "ERROR! PROCESS DEVICE!" << endl;
 			mBlocks[i]->computeStageBorder(stage, currentTime);
 		}
@@ -236,14 +237,14 @@ void Domain::processDeviceBlocksBorder(int deviceType, int deviceNumber, int sta
 
 void Domain::processDeviceBlocksCenter(int deviceType, int deviceNumber, int stage) {
 	for (int i = 0; i < mBlockCount; ++i)
-		if (mBlocks[i]->getBlockType() == deviceType && mBlocks[i]->getDeviceNumber() == deviceNumber) {
+		if (mBlocks[i]->isBlockType(deviceType) && mBlocks[i]->isDeviceNumber(deviceNumber)) {
 			//cout << endl << "ERROR! PROCESS DEVICE!" << endl;
 			mBlocks[i]->computeStageCenter(stage, currentTime);
 		}
 }
 void Domain::prepareDeviceArgument(int deviceType, int deviceNumber, int stage) {
 	for (int i = 0; i < mBlockCount; ++i)
-		if (mBlocks[i]->getBlockType() == deviceType && mBlocks[i]->getDeviceNumber() == deviceNumber) {
+		if (mBlocks[i]->isBlockType(deviceType) && mBlocks[i]->isDeviceNumber(deviceNumber)) {
 			//cout << endl << "ERROR! PROCESS DEVICE!" << endl;
 			mBlocks[i]->prepareArgument(stage, timeStep);
 		}
@@ -252,7 +253,7 @@ void Domain::prepareDeviceArgument(int deviceType, int deviceNumber, int stage) 
 double Domain::getDeviceError(int deviceType, int deviceNumber) {
 	double error = 0;
 	for (int i = 0; i < mBlockCount; ++i)
-		if (mBlocks[i]->getBlockType() == deviceType && mBlocks[i]->getDeviceNumber() == deviceNumber) {
+		if (mBlocks[i]->isBlockType(deviceType) && mBlocks[i]->isDeviceNumber(deviceNumber)) {
 			//cout << endl << "ERROR! PROCESS DEVICE!" << endl;
 			error += mBlocks[i]->getStepError(timeStep);
 		}
@@ -260,15 +261,15 @@ double Domain::getDeviceError(int deviceType, int deviceNumber) {
 }
 
 void Domain::prepareData(int stage) {
-/*#pragma omp task
-	prepareDeviceData(GPU_UNIT, 0, stage);
-#pragma omp task
-	prepareDeviceData(GPU_UNIT, 1, stage);
-#pragma omp task
-	prepareDeviceData(GPU_UNIT, 2, stage);*/
+	/*#pragma omp task
+	 prepareDeviceData(GPU_UNIT, 0, stage);
+	 #pragma omp task
+	 prepareDeviceData(GPU_UNIT, 1, stage);
+	 #pragma omp task
+	 prepareDeviceData(GPU_UNIT, 2, stage);*/
 
 	for (int i = 0; i < GPU_COUNT; ++i) {
-	#pragma omp task
+#pragma omp task
 		prepareDeviceData(GPU_UNIT, i, stage);
 	}
 
@@ -278,15 +279,15 @@ void Domain::prepareData(int stage) {
 }
 
 void Domain::computeOneStepBorder(int stage) {
-/*#pragma omp task
-	processDeviceBlocksBorder(GPU_UNIT, 0, stage);
-#pragma omp task
-	processDeviceBlocksBorder(GPU_UNIT, 1, stage);
-#pragma omp task
-	processDeviceBlocksBorder(GPU_UNIT, 2, stage);*/
+	/*#pragma omp task
+	 processDeviceBlocksBorder(GPU_UNIT, 0, stage);
+	 #pragma omp task
+	 processDeviceBlocksBorder(GPU_UNIT, 1, stage);
+	 #pragma omp task
+	 processDeviceBlocksBorder(GPU_UNIT, 2, stage);*/
 
 	for (int i = 0; i < GPU_COUNT; ++i) {
-	#pragma omp task
+#pragma omp task
 		processDeviceBlocksBorder(GPU_UNIT, i, stage);
 	}
 
@@ -294,15 +295,15 @@ void Domain::computeOneStepBorder(int stage) {
 }
 
 void Domain::prepareNextStageArgument(int stage) {
-/*#pragma omp task
-	prepareDeviceArgument(GPU_UNIT, 0, stage);
-#pragma omp task
-	prepareDeviceArgument(GPU_UNIT, 1, stage);
-#pragma omp task
-	prepareDeviceArgument(GPU_UNIT, 2, stage);*/
+	/*#pragma omp task
+	 prepareDeviceArgument(GPU_UNIT, 0, stage);
+	 #pragma omp task
+	 prepareDeviceArgument(GPU_UNIT, 1, stage);
+	 #pragma omp task
+	 prepareDeviceArgument(GPU_UNIT, 2, stage);*/
 
 	for (int i = 0; i < GPU_COUNT; ++i) {
-	#pragma omp task
+#pragma omp task
 		prepareDeviceArgument(GPU_UNIT, i, stage);
 	}
 
@@ -310,15 +311,15 @@ void Domain::prepareNextStageArgument(int stage) {
 }
 
 void Domain::computeOneStepCenter(int stage) {
-/*#pragma omp task
-	processDeviceBlocksCenter(GPU_UNIT, 0, stage);
-#pragma omp task
-	processDeviceBlocksCenter(GPU_UNIT, 1, stage);
-#pragma omp task
-	processDeviceBlocksCenter(GPU_UNIT, 2, stage);*/
+	/*#pragma omp task
+	 processDeviceBlocksCenter(GPU_UNIT, 0, stage);
+	 #pragma omp task
+	 processDeviceBlocksCenter(GPU_UNIT, 1, stage);
+	 #pragma omp task
+	 processDeviceBlocksCenter(GPU_UNIT, 2, stage);*/
 
 	for (int i = 0; i < GPU_COUNT; ++i) {
-	#pragma omp task
+#pragma omp task
 		processDeviceBlocksCenter(GPU_UNIT, i, stage);
 	}
 
@@ -344,6 +345,7 @@ double Domain::collectError() {
 	double err1, err2, err3;
 	err1 = err2 = err3 = 0;
 	//1. Get total error for current node
+	//TODO сделать циклом. как в функциях расчета
 #pragma omp task
 	err1 = getDeviceError(GPU_UNIT, 0);
 #pragma omp task
