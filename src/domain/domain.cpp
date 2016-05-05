@@ -302,7 +302,7 @@ void Domain::computeOneStepCenter(int stage) {
 #pragma omp task
 	processDeviceBlocksCenter(GPU_UNIT, 2, stage);*/
 
-	for (int i = 0; i < 3; ++i) {
+	for (int i = 0; i < GPU_COUNT; ++i) {
 	#pragma omp task
 		processDeviceBlocksCenter(GPU_UNIT, i, stage);
 	}
