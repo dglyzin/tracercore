@@ -260,12 +260,17 @@ double Domain::getDeviceError(int deviceType, int deviceNumber) {
 }
 
 void Domain::prepareData(int stage) {
-#pragma omp task
+/*#pragma omp task
 	prepareDeviceData(GPU_UNIT, 0, stage);
 #pragma omp task
 	prepareDeviceData(GPU_UNIT, 1, stage);
 #pragma omp task
-	prepareDeviceData(GPU_UNIT, 2, stage);
+	prepareDeviceData(GPU_UNIT, 2, stage);*/
+
+	for (int i = 0; i < GPU_COUNT; ++i) {
+	#pragma omp task
+		prepareDeviceData(GPU_UNIT, i, stage);
+	}
 
 	prepareDeviceData(CPU_UNIT, 0, stage);
 
@@ -273,23 +278,33 @@ void Domain::prepareData(int stage) {
 }
 
 void Domain::computeOneStepBorder(int stage) {
-#pragma omp task
+/*#pragma omp task
 	processDeviceBlocksBorder(GPU_UNIT, 0, stage);
 #pragma omp task
 	processDeviceBlocksBorder(GPU_UNIT, 1, stage);
 #pragma omp task
-	processDeviceBlocksBorder(GPU_UNIT, 2, stage);
+	processDeviceBlocksBorder(GPU_UNIT, 2, stage);*/
+
+	for (int i = 0; i < GPU_COUNT; ++i) {
+	#pragma omp task
+		processDeviceBlocksBorder(GPU_UNIT, i, stage);
+	}
 
 	processDeviceBlocksBorder(CPU_UNIT, 0, stage);
 }
 
 void Domain::prepareNextStageArgument(int stage) {
-#pragma omp task
+/*#pragma omp task
 	prepareDeviceArgument(GPU_UNIT, 0, stage);
 #pragma omp task
 	prepareDeviceArgument(GPU_UNIT, 1, stage);
 #pragma omp task
-	prepareDeviceArgument(GPU_UNIT, 2, stage);
+	prepareDeviceArgument(GPU_UNIT, 2, stage);*/
+
+	for (int i = 0; i < GPU_COUNT; ++i) {
+	#pragma omp task
+		prepareDeviceArgument(GPU_UNIT, i, stage);
+	}
 
 	prepareDeviceArgument(CPU_UNIT, 0, stage);
 }
