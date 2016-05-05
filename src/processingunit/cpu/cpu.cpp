@@ -58,6 +58,22 @@ bool CPU::isGPU() {
 	return false;
 }
 
+bool CPU::isType(int type) {
+	if (type == CPU_UNIT) {
+		return true;
+	}
+
+	return false;
+}
+
+bool CPU::isDeviceNumber(int number) {
+	if (number == deviceNumber) {
+		return true;
+	}
+
+	return false;
+}
+
 double* CPU::getDoubleArray(int size) {
 	return new double[size];
 }
