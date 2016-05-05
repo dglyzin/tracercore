@@ -295,12 +295,17 @@ void Domain::prepareNextStageArgument(int stage) {
 }
 
 void Domain::computeOneStepCenter(int stage) {
-#pragma omp task
+/*#pragma omp task
 	processDeviceBlocksCenter(GPU_UNIT, 0, stage);
 #pragma omp task
 	processDeviceBlocksCenter(GPU_UNIT, 1, stage);
 #pragma omp task
-	processDeviceBlocksCenter(GPU_UNIT, 2, stage);
+	processDeviceBlocksCenter(GPU_UNIT, 2, stage);*/
+
+	for (int i = 0; i < 3; ++i) {
+	#pragma omp task
+		processDeviceBlocksCenter(GPU_UNIT, i, stage);
+	}
 
 	processDeviceBlocksCenter(CPU_UNIT, 0, stage);
 }
