@@ -45,6 +45,9 @@ public:
 	virtual bool isCPU() = 0;
 	virtual bool isGPU() = 0;
 
+	virtual bool isType(int type) = 0;
+	virtual bool isDeviceNumber(int number) = 0;
+
 	int getDeviceNumber();
 
 	double* newDoubleArray(int size);
