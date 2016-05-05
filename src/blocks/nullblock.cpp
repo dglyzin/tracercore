@@ -45,6 +45,14 @@ int NullBlock::getDeviceNumber() {
 	return -1;
 }
 
+bool NullBlock::isBlockType(int type) {
+	return false;
+}
+
+bool NullBlock::isDeviceNumber(int number) {
+	return false;
+}
+
 bool NullBlock::isProcessingUnitCPU() {
 	return false;
 }

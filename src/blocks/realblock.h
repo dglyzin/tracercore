@@ -39,6 +39,9 @@ public:
 	int getBlockType();
 	int getDeviceNumber();
 
+	bool isBlockType(int type);
+	bool isDeviceNumber(int number);
+
 	bool isProcessingUnitCPU();
 	bool isProcessingUnitGPU();
 

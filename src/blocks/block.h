@@ -29,6 +29,9 @@ public:
 	virtual int getBlockType() = 0;
 	virtual int getDeviceNumber() = 0;
 
+	virtual bool isBlockType(int type) = 0;
+	virtual bool isDeviceNumber(int number) = 0;
+
 	virtual bool isProcessingUnitCPU() = 0;
 	virtual bool isProcessingUnitGPU() = 0;
 

@@ -159,6 +159,14 @@ int RealBlock::getDeviceNumber() {
 	return pu->getDeviceNumber();
 }
 
+bool RealBlock::isBlockType(int type) {
+	return pu->isDeviceType(type);
+}
+
+bool RealBlock::isDeviceNumber(int number) {
+	return pu->isDeviceNumber(number);
+}
+
 bool RealBlock::isProcessingUnitCPU() {
 	return pu->isCPU();
 }
