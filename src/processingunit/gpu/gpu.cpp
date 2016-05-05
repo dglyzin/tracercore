@@ -40,7 +40,7 @@ bool GPU::isGPU() {
 	return true;
 }
 
-bool GPU::isType(int type) {
+bool GPU::isDeviceType(int type) {
 	if (type == GPU_UNIT) {
 		return true;
 	}

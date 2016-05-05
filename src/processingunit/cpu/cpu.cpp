@@ -58,7 +58,7 @@ bool CPU::isGPU() {
 	return false;
 }
 
-bool CPU::isType(int type) {
+bool CPU::isDeviceType(int type) {
 	if (type == CPU_UNIT) {
 		return true;
 	}
