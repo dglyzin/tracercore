@@ -48,14 +48,6 @@ bool GPU::isType(int type) {
 	return false;
 }
 
-bool GPU::isDeviceNumber(int number) {
-	if (number == deviceNumber) {
-		return true;
-	}
-
-	return false;
-}
-
 void GPU::copyArray(double* source, double* destination, int size) {
 	copyArrayGPU(source, destination, size);
 }

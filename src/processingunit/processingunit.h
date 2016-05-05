@@ -46,7 +46,7 @@ public:
 	virtual bool isGPU() = 0;
 
 	virtual bool isType(int type) = 0;
-	virtual bool isDeviceNumber(int number) = 0;
+	bool isDeviceNumber(int number);
 
 	int getDeviceNumber();
 

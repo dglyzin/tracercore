@@ -30,7 +30,6 @@ public:
 	bool isGPU();
 
 	bool isType(int type);
-	bool isDeviceNumber(int number);
 
 	void copyArray(double* source, double* destination, int size);
 	void copyArray(unsigned short int* source, unsigned short int* destination, int size);

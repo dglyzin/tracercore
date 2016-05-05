@@ -66,14 +66,6 @@ bool CPU::isType(int type) {
 	return false;
 }
 
-bool CPU::isDeviceNumber(int number) {
-	if (number == deviceNumber) {
-		return true;
-	}
-
-	return false;
-}
-
 double* CPU::getDoubleArray(int size) {
 	return new double[size];
 }

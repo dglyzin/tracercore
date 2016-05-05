@@ -36,6 +36,14 @@ void ProcessingUnit::deleteAllArrays() {
 	deleteAllDoublePinnedArrays();
 }
 
+bool ProcessingUnit::isDeviceNumber(int number) {
+	if (number == deviceNumber) {
+		return true;
+	}
+
+	return false;
+}
+
 int ProcessingUnit::getDeviceNumber() {
 	return deviceNumber;
 }
