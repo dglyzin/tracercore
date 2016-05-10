@@ -1078,6 +1078,30 @@ int Domain::getMaxStepStorageCount() {
 	for (int i = 0; i < GPU_COUNT; ++i) {
 		gpuElementCount[i] = getElementCountOnProcessingUnit(GPU_UNIT, i);
 	}
+
+	int cpuSolverSize = mSolverInfo->getSize(cpuElementCount);
+	int* gpuSolverSize = new int [GPU_COUNT];
+	for (int i = 0; i < GPU_COUNT; ++i) {
+		gpuSolverSize[i] = mSolverInfo->getSize(gpuElementCount[i]);
+	}
+
+	int cpuMaxCount = CPU_RAM / cpuSolverSize;
+	int* gpuMaxCount = new int [GPU_COUNT];
+	for (int i = 0; i < GPU_COUNT; ++i) {
+		gpuMaxCount[i] = GPU_RAM / gpuSolverSize[i];
+	}
+
+	int minForAll = cpuMaxCount;
+	for (int i = 0; i < GPU_COUNT; ++i) {
+		if(gpuMaxCount[i] < minForAll)
+			minForAll = gpuMaxCount[i];
+	}
+
+	int absMin;
+
+	MPI_Allreduce(&minForAll, &absMin, 1, MPI_INT, MPI_MIN, mWorkerComm);
+
+	return absMin;
 }
 
 int Domain::getElementCountOnProcessingUnit(int deviceType, int deviceNumber) {
