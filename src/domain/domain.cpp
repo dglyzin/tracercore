@@ -43,9 +43,7 @@ Domain::Domain(int _world_rank, int _world_size, char* inputFile) {
 	dimension = 0;
 
 	cpu = NULL;
-	gpu0 = NULL;
-	gpu1 = NULL;
-	gpu2 = NULL;
+	gpu = NULL;
 
 	readFromFile(inputFile);
 
@@ -66,12 +64,14 @@ Domain::~Domain() {
 
 	if (cpu)
 		delete cpu;
-	/*if(gpu0)
-	 delete gpu0;
-	 if(gpu1)
-	 delete gpu1;
-	 if(gpu2)
-	 delete gpu2;*/
+
+	if (gpu) {
+		for (int i = 0; i < GPU_COUNT; ++i) {
+			delete gpu[i];
+		}
+
+		delete gpu;
+	}
 }
 
 void Domain::compute(char* inputFile) {
@@ -968,15 +968,32 @@ void Domain::checkOptions(int flags, double _stopTime, char* saveFile) {
 }
 
 void Domain::createProcessigUnit() {
+	gpu = new ProcessingUnit*[GPU_COUNT];
+
 	switch (dimension) {
 		case 1:
 			cpu = new CPU_1d(0);
+
+			for (int i = 0; i < GPU_COUNT; ++i) {
+				gpu[i] = new GPU_1d(i);
+			}
+
 			break;
 		case 2:
 			cpu = new CPU_2d(0);
+
+			for (int i = 0; i < GPU_COUNT; ++i) {
+				gpu[i] = new GPU_2d(i);
+			}
+
 			break;
 		case 3:
 			cpu = new CPU_3d(0);
+
+			for (int i = 0; i < GPU_COUNT; ++i) {
+				gpu[i] = new GPU_3d(i);
+			}
+
 			break;
 		default:
 			break;
