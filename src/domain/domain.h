@@ -97,6 +97,8 @@ public:
 private:
 	ProcessingUnit* cpu;
 	ProcessingUnit** gpu;
+
+	int gpu_count = GPU_COUNT;
 	/*
 	 * Массив блоков.
 	 * Массив указателей на блоки.
