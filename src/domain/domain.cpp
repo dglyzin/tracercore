@@ -974,7 +974,7 @@ void Domain::checkOptions(int flags, double _stopTime, char* saveFile) {
 }
 
 void Domain::createProcessigUnit() {
-	gpu = new ProcessingUnit* [GPU_COUNT];
+	gpu = new ProcessingUnit*[GPU_COUNT];
 
 	switch (dimension) {
 		case 1:
@@ -1023,48 +1023,69 @@ Interconnect* Domain::getInterconnect(int sourceNode, int destinationNode, int b
 }
 
 int Domain::getMaxStepStorageCount() {
+	/*int cpuElementCount = 0;
+	 for (int i = 0; i < mBlockCount; ++i) {
+	 if (mBlocks[i]->isProcessingUnitCPU()) {
+	 cpuElementCount += mBlocks[i]->getGridElementCount();
+	 }
+	 }
+
+	 int gpu0ElementCount = 0;
+	 for (int i = 0; i < mBlockCount; ++i) {
+	 if (mBlocks[i]->isProcessingUnitGPU() && mBlocks[i]->getDeviceNumber() == 0) {
+	 gpu0ElementCount += mBlocks[i]->getGridElementCount();
+	 }
+	 }
+
+	 int gpu1ElementCount = 0;
+	 for (int i = 0; i < mBlockCount; ++i) {
+	 if (mBlocks[i]->isProcessingUnitGPU() && mBlocks[i]->getDeviceNumber() == 1) {
+	 gpu1ElementCount += mBlocks[i]->getGridElementCount();
+	 }
+	 }
+
+	 int gpu2ElementCount = 0;
+	 for (int i = 0; i < mBlockCount; ++i) {
+	 if (mBlocks[i]->isProcessingUnitGPU() && mBlocks[i]->getDeviceNumber() == 2) {
+	 gpu2ElementCount += mBlocks[i]->getGridElementCount();
+	 }
+	 }
+
+	 int solverSizeCpu = mSolverInfo->getSize(cpuElementCount);
+	 int solverSizeGpu0 = mSolverInfo->getSize(gpu0ElementCount);
+	 int solverSizeGpu1 = mSolverInfo->getSize(gpu1ElementCount);
+	 int solverSizeGpu2 = mSolverInfo->getSize(gpu2ElementCount);
+
+	 int maxCountCpu = CPU_RAM / solverSizeCpu;
+	 int maxCountGpu0 = GPU_RAM / solverSizeGpu0;
+	 int maxCountGpu1 = GPU_RAM / solverSizeGpu1;
+	 int maxCountGpu2 = GPU_RAM / solverSizeGpu2;
+
+	 int maxCount = min(maxCountCpu, min(maxCountGpu0, min(maxCountGpu1, maxCountGpu2)));
+
+	 //TODO ПЕРЕСЫЛКА ДЛЯ ВЫЯСНЕНИЯ МИНИМУМА ПО ВСЕМ ПОТОКАМ
+
+	 return maxCount;*/
+
 	int cpuElementCount = 0;
+	int* gpuElementCount = new int[GPU_COUNT];
+	for (int i = 0; i < GPU_COUNT; ++i) {
+		gpuElementCount[i] = 0;
+	}
+
 	for (int i = 0; i < mBlockCount; ++i) {
-		if (mBlocks[i]->isProcessingUnitCPU()) {
+		if (mBlocks[i]->isBlockType(CPU_UNIT)) {
 			cpuElementCount += mBlocks[i]->getGridElementCount();
 		}
 	}
+}
 
-	int gpu0ElementCount = 0;
+int Domain::getElementOnProcessingUnit(int deviceType, int deviceNumber) {
+	int count = 0;
 	for (int i = 0; i < mBlockCount; ++i) {
-		if (mBlocks[i]->isProcessingUnitGPU() && mBlocks[i]->getDeviceNumber() == 0) {
-			gpu0ElementCount += mBlocks[i]->getGridElementCount();
+		if (mBlocks[i]->isBlockType(CPU_UNIT)) {
+			count += mBlocks[i]->getGridElementCount();
 		}
 	}
-
-	int gpu1ElementCount = 0;
-	for (int i = 0; i < mBlockCount; ++i) {
-		if (mBlocks[i]->isProcessingUnitGPU() && mBlocks[i]->getDeviceNumber() == 1) {
-			gpu1ElementCount += mBlocks[i]->getGridElementCount();
-		}
-	}
-
-	int gpu2ElementCount = 0;
-	for (int i = 0; i < mBlockCount; ++i) {
-		if (mBlocks[i]->isProcessingUnitGPU() && mBlocks[i]->getDeviceNumber() == 2) {
-			gpu2ElementCount += mBlocks[i]->getGridElementCount();
-		}
-	}
-
-	int solverSizeCpu = mSolverInfo->getSize(cpuElementCount);
-	int solverSizeGpu0 = mSolverInfo->getSize(gpu0ElementCount);
-	int solverSizeGpu1 = mSolverInfo->getSize(gpu1ElementCount);
-	int solverSizeGpu2 = mSolverInfo->getSize(gpu2ElementCount);
-
-	int maxCountCpu = CPU_RAM / solverSizeCpu;
-	int maxCountGpu0 = GPU_RAM / solverSizeGpu0;
-	int maxCountGpu1 = GPU_RAM / solverSizeGpu1;
-	int maxCountGpu2 = GPU_RAM / solverSizeGpu2;
-
-	int maxCount = min(maxCountCpu, min(maxCountGpu0, min(maxCountGpu1, maxCountGpu2)));
-
-	//TODO ПЕРЕСЫЛКА ДЛЯ ВЫЯСНЕНИЯ МИНИМУМА ПО ВСЕМ ПОТОКАМ
-
-	return maxCount;
 }
 

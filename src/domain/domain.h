@@ -252,6 +252,7 @@ private:
 			double* destinationData);
 
 	int getMaxStepStorageCount();
+	int getElementOnProcessingUnit(int deviceType, int deviceNumber);
 };
 
 #endif /* SRC_DOMAIN_H_ */
