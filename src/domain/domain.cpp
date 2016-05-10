@@ -45,7 +45,7 @@ Domain::Domain(int _world_rank, int _world_size, char* inputFile) {
 	cpu = NULL;
 	gpu = NULL;
 
-	gpu_count = GPU_COUNT;
+	mGpuCount = GPU_COUNT;
 
 	readFromFile(inputFile);
 
@@ -68,7 +68,7 @@ Domain::~Domain() {
 		delete cpu;
 
 	if (gpu) {
-		for (int i = 0; i < gpu_count; ++i) {
+		for (int i = 0; i < mGpuCount; ++i) {
 			delete gpu[i];
 		}
 
@@ -270,7 +270,7 @@ void Domain::prepareData(int stage) {
 	 #pragma omp task
 	 prepareDeviceData(GPU_UNIT, 2, stage);*/
 
-	for (int i = 0; i < gpu_count; ++i) {
+	for (int i = 0; i < mGpuCount; ++i) {
 #pragma omp task
 		prepareDeviceData(GPU_UNIT, i, stage);
 	}
@@ -288,7 +288,7 @@ void Domain::computeOneStepBorder(int stage) {
 	 #pragma omp task
 	 processDeviceBlocksBorder(GPU_UNIT, 2, stage);*/
 
-	for (int i = 0; i < gpu_count; ++i) {
+	for (int i = 0; i < mGpuCount; ++i) {
 #pragma omp task
 		processDeviceBlocksBorder(GPU_UNIT, i, stage);
 	}
@@ -304,7 +304,7 @@ void Domain::prepareNextStageArgument(int stage) {
 	 #pragma omp task
 	 prepareDeviceArgument(GPU_UNIT, 2, stage);*/
 
-	for (int i = 0; i < gpu_count; ++i) {
+	for (int i = 0; i < mGpuCount; ++i) {
 #pragma omp task
 		prepareDeviceArgument(GPU_UNIT, i, stage);
 	}
@@ -320,7 +320,7 @@ void Domain::computeOneStepCenter(int stage) {
 	 #pragma omp task
 	 processDeviceBlocksCenter(GPU_UNIT, 2, stage);*/
 
-	for (int i = 0; i < gpu_count; ++i) {
+	for (int i = 0; i < mGpuCount; ++i) {
 #pragma omp task
 		processDeviceBlocksCenter(GPU_UNIT, i, stage);
 	}
@@ -610,7 +610,7 @@ Block* Domain::readBlock(ifstream& in, int idx, int dimension) {
 			 assert(false);
 			 break;
 			 }*/
-			if (deviceNumber >= gpu_count) {
+			if (deviceNumber >= mGpuCount) {
 				printf("Invalid block device number for GPU!\n");
 				assert(false);
 			}
@@ -976,13 +976,13 @@ void Domain::checkOptions(int flags, double _stopTime, char* saveFile) {
 }
 
 void Domain::createProcessigUnit() {
-	gpu = new ProcessingUnit*[gpu_count];
+	gpu = new ProcessingUnit*[mGpuCount];
 
 	switch (dimension) {
 		case 1:
 			cpu = new CPU_1d(0);
 
-			for (int i = 0; i < gpu_count; ++i) {
+			for (int i = 0; i < mGpuCount; ++i) {
 				gpu[i] = new GPU_1d(i);
 			}
 
@@ -990,7 +990,7 @@ void Domain::createProcessigUnit() {
 		case 2:
 			cpu = new CPU_2d(0);
 
-			for (int i = 0; i < gpu_count; ++i) {
+			for (int i = 0; i < mGpuCount; ++i) {
 				gpu[i] = new GPU_2d(i);
 			}
 
@@ -998,7 +998,7 @@ void Domain::createProcessigUnit() {
 		case 3:
 			cpu = new CPU_3d(0);
 
-			for (int i = 0; i < gpu_count; ++i) {
+			for (int i = 0; i < mGpuCount; ++i) {
 				gpu[i] = new GPU_3d(i);
 			}
 
@@ -1070,31 +1070,31 @@ int Domain::getMaxStepStorageCount() {
 	 return maxCount;*/
 
 	int cpuElementCount = 0;
-	int* gpuElementCount = new int[gpu_count];
-	for (int i = 0; i < gpu_count; ++i) {
+	int* gpuElementCount = new int[mGpuCount];
+	for (int i = 0; i < mGpuCount; ++i) {
 		gpuElementCount[i] = 0;
 	}
 
 	cpuElementCount = getElementCountOnProcessingUnit(CPU_UNIT, 0);
 
-	for (int i = 0; i < gpu_count; ++i) {
+	for (int i = 0; i < mGpuCount; ++i) {
 		gpuElementCount[i] = getElementCountOnProcessingUnit(GPU_UNIT, i);
 	}
 
 	int cpuSolverSize = mSolverInfo->getSize(cpuElementCount);
-	int* gpuSolverSize = new int[gpu_count];
-	for (int i = 0; i < gpu_count; ++i) {
+	int* gpuSolverSize = new int[mGpuCount];
+	for (int i = 0; i < mGpuCount; ++i) {
 		gpuSolverSize[i] = mSolverInfo->getSize(gpuElementCount[i]);
 	}
 
 	int cpuMaxCount = CPU_RAM / cpuSolverSize;
-	int* gpuMaxCount = new int[gpu_count];
-	for (int i = 0; i < gpu_count; ++i) {
+	int* gpuMaxCount = new int[mGpuCount];
+	for (int i = 0; i < mGpuCount; ++i) {
 		gpuMaxCount[i] = GPU_RAM / gpuSolverSize[i];
 	}
 
 	int minForAll = cpuMaxCount;
-	for (int i = 0; i < gpu_count; ++i) {
+	for (int i = 0; i < mGpuCount; ++i) {
 		if (gpuMaxCount[i] < minForAll)
 			minForAll = gpuMaxCount[i];
 	}
