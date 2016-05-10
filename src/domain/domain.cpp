@@ -1072,20 +1072,16 @@ int Domain::getMaxStepStorageCount() {
 	for (int i = 0; i < GPU_COUNT; ++i) {
 		gpuElementCount[i] = 0;
 	}
-
-	for (int i = 0; i < mBlockCount; ++i) {
-		if (mBlocks[i]->isBlockType(CPU_UNIT)) {
-			cpuElementCount += mBlocks[i]->getGridElementCount();
-		}
-	}
 }
 
 int Domain::getElementOnProcessingUnit(int deviceType, int deviceNumber) {
 	int count = 0;
 	for (int i = 0; i < mBlockCount; ++i) {
-		if (mBlocks[i]->isBlockType(CPU_UNIT)) {
+		if (mBlocks[i]->isBlockType(deviceType) && mBlocks[i]->isDeviceNumber(deviceNumber)) {
 			count += mBlocks[i]->getGridElementCount();
 		}
 	}
+
+	return count;
 }
 
