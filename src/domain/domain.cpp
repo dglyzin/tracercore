@@ -1074,7 +1074,7 @@ int Domain::getMaxStepStorageCount() {
 	}
 }
 
-int Domain::getElementOnProcessingUnit(int deviceType, int deviceNumber) {
+int Domain::getElementCountOnProcessingUnit(int deviceType, int deviceNumber) {
 	int count = 0;
 	for (int i = 0; i < mBlockCount; ++i) {
 		if (mBlocks[i]->isBlockType(deviceType) && mBlocks[i]->isDeviceNumber(deviceNumber)) {
