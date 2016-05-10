@@ -98,7 +98,7 @@ private:
 	ProcessingUnit* cpu;
 	ProcessingUnit** gpu;
 
-	int gpu_count = GPU_COUNT;
+	int gpu_count;
 	/*
 	 * Массив блоков.
 	 * Массив указателей на блоки.

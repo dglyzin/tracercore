@@ -45,6 +45,8 @@ Domain::Domain(int _world_rank, int _world_size, char* inputFile) {
 	cpu = NULL;
 	gpu = NULL;
 
+	gpu_count = GPU_COUNT;
+
 	readFromFile(inputFile);
 
 	mAcceptedStepCount = 0;
