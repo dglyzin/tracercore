@@ -589,26 +589,32 @@ Block* Domain::readBlock(ifstream& in, int idx, int dimension) {
 					assert(false);
 					break;
 			}
-		else if (deviceType == 1) //GPU BLOCK
-			switch (deviceNumber) {
-				case 0:
-					pu = gpu0;
-					break;
+		else if (deviceType == 1) {  //GPU BLOCK
+			/*switch (deviceNumber) {
+			 case 0:
+			 pu = gpu0;
+			 break;
 
-				case 1:
-					pu = gpu1;
-					break;
+			 case 1:
+			 pu = gpu1;
+			 break;
 
-				case 2:
-					pu = gpu2;
-					break;
+			 case 2:
+			 pu = gpu2;
+			 break;
 
-				default:
-					printf("Invalid block device number for GPU!\n");
-					assert(false);
-					break;
+			 default:
+			 printf("Invalid block device number for GPU!\n");
+			 assert(false);
+			 break;
+			 }*/
+			if (deviceNumber >= GPU_COUNT) {
+				printf("Invalid block device number for GPU!\n");
+				assert(false);
 			}
-		else {
+
+			pu = gpu[deviceNumber];
+		} else {
 			printf("Invalid block type!\n");
 			assert(false);
 		}
