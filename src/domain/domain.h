@@ -19,6 +19,10 @@
 #include "../processingunit/cpu/cpu2d.h"
 #include "../processingunit/cpu/cpu3d.h"
 
+#include "../processingunit/gpu/gpu1d.h"
+#include "../processingunit/gpu/gpu2d.h"
+#include "../processingunit/gpu/gpu3d.h"
+
 #include "../utils.h"
 
 /*
