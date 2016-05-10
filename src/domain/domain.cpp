@@ -1072,6 +1072,12 @@ int Domain::getMaxStepStorageCount() {
 	for (int i = 0; i < GPU_COUNT; ++i) {
 		gpuElementCount[i] = 0;
 	}
+
+	cpuElementCount = getElementCountOnProcessingUnit(CPU_UNIT, 0);
+
+	for (int i = 0; i < GPU_COUNT; ++i) {
+		gpuElementCount[i] = getElementCountOnProcessingUnit(GPU_UNIT, i);
+	}
 }
 
 int Domain::getElementCountOnProcessingUnit(int deviceType, int deviceNumber) {
