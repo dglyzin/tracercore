@@ -974,7 +974,7 @@ void Domain::checkOptions(int flags, double _stopTime, char* saveFile) {
 }
 
 void Domain::createProcessigUnit() {
-	gpu = new ProcessingUnit*[GPU_COUNT];
+	gpu = new ProcessingUnit* [GPU_COUNT];
 
 	switch (dimension) {
 		case 1:
