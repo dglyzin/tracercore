@@ -344,27 +344,27 @@ void Domain::rejectStep() {
 }
 
 double Domain::collectError() {
-	double err1, err2, err3;
-	err1 = err2 = err3 = 0;
-	//1. Get total error for current node
-	//TODO сделать циклом. как в функциях расчета
-#pragma omp task
-	err1 = getDeviceError(GPU_UNIT, 0);
-#pragma omp task
-	err2 = getDeviceError(GPU_UNIT, 1);
-#pragma omp task
-	err3 = getDeviceError(GPU_UNIT, 2);
+	/*double err1, err2, err3;
+	 err1 = err2 = err3 = 0;
+	 //1. Get total error for current node
+	 //TODO сделать циклом. как в функциях расчета
+	 #pragma omp task
+	 err1 = getDeviceError(GPU_UNIT, 0);
+	 #pragma omp task
+	 err2 = getDeviceError(GPU_UNIT, 1);
+	 #pragma omp task
+	 err3 = getDeviceError(GPU_UNIT, 2);
 
-	double nodeError = getDeviceError(CPU_UNIT, 0);
+	 double nodeError = getDeviceError(CPU_UNIT, 0);
 
-#pragma omp taskwait
-	nodeError += err1 + err2 + err3;
+	 #pragma omp taskwait
+	 nodeError += err1 + err2 + err3;
 
-	//2. Collect errors from all nodes
-	double totalError = nodeError;
+	 //2. Collect errors from all nodes
+	 double totalError = nodeError;
 
-	//TODO MPI_ALLREDUCE
-	return totalError;
+	 //TODO MPI_ALLREDUCE
+	 return totalError;*/
 }
 
 void Domain::printBlocksToConsole() {
