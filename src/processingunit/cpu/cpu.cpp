@@ -47,7 +47,7 @@ void CPU::initState(double* state, initfunc_fill_ptr_t* userInitFuncs, unsigned 
 }
 
 int CPU::getType() {
-	return CPU_UNIT;
+	return CPUNIT;
 }
 
 bool CPU::isCPU() {
@@ -59,7 +59,7 @@ bool CPU::isGPU() {
 }
 
 bool CPU::isDeviceType(int type) {
-	if (type == CPU_UNIT) {
+	if (type == CPUNIT) {
 		return true;
 	}
 

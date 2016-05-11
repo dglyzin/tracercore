@@ -29,7 +29,7 @@ void GPU::initState(double* state, initfunc_fill_ptr_t* userInitFuncs, unsigned 
 }
 
 int GPU::getType() {
-	return GPU_UNIT;
+	return GPUNIT;
 }
 
 bool GPU::isCPU() {
@@ -41,7 +41,7 @@ bool GPU::isGPU() {
 }
 
 bool GPU::isDeviceType(int type) {
-	if (type == GPU_UNIT) {
+	if (type == GPUNIT) {
 		return true;
 	}
 

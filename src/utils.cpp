@@ -110,9 +110,9 @@ char* Utils::getSideName(int side) {
 }
 
 bool Utils::isCPU(int type) {
-	return type == CPU_UNIT;
+	return type == CPUNIT;
 }
 
 bool Utils::isGPU(int type) {
-	return type == GPU_UNIT;
+	return type == GPUNIT;
 }

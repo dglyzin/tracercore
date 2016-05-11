@@ -272,10 +272,10 @@ void Domain::prepareData(int stage) {
 
 	for (int i = 0; i < mGpuCount; ++i) {
 #pragma omp task
-		prepareDeviceData(GPU_UNIT, i, stage);
+		prepareDeviceData(GPUNIT, i, stage);
 	}
 
-	prepareDeviceData(CPU_UNIT, 0, stage);
+	prepareDeviceData(CPUNIT, 0, stage);
 
 #pragma omp taskwait
 }
@@ -290,10 +290,10 @@ void Domain::computeOneStepBorder(int stage) {
 
 	for (int i = 0; i < mGpuCount; ++i) {
 #pragma omp task
-		processDeviceBlocksBorder(GPU_UNIT, i, stage);
+		processDeviceBlocksBorder(GPUNIT, i, stage);
 	}
 
-	processDeviceBlocksBorder(CPU_UNIT, 0, stage);
+	processDeviceBlocksBorder(CPUNIT, 0, stage);
 }
 
 void Domain::prepareNextStageArgument(int stage) {
@@ -306,10 +306,10 @@ void Domain::prepareNextStageArgument(int stage) {
 
 	for (int i = 0; i < mGpuCount; ++i) {
 #pragma omp task
-		prepareDeviceArgument(GPU_UNIT, i, stage);
+		prepareDeviceArgument(GPUNIT, i, stage);
 	}
 
-	prepareDeviceArgument(CPU_UNIT, 0, stage);
+	prepareDeviceArgument(CPUNIT, 0, stage);
 }
 
 void Domain::computeOneStepCenter(int stage) {
@@ -322,10 +322,10 @@ void Domain::computeOneStepCenter(int stage) {
 
 	for (int i = 0; i < mGpuCount; ++i) {
 #pragma omp task
-		processDeviceBlocksCenter(GPU_UNIT, i, stage);
+		processDeviceBlocksCenter(GPUNIT, i, stage);
 	}
 
-	processDeviceBlocksCenter(CPU_UNIT, 0, stage);
+	processDeviceBlocksCenter(CPUNIT, 0, stage);
 }
 
 //TODO next two methods are not parallel!
@@ -371,10 +371,10 @@ double Domain::collectError() {
 
 	for (int i = 0; i < mGpuCount; ++i) {
 #pragma omp task
-		gpuError[i] = getDeviceError(GPU_UNIT, i);
+		gpuError[i] = getDeviceError(GPUNIT, i);
 	}
 
-	cpuError = getDeviceError(CPU_UNIT, 0);
+	cpuError = getDeviceError(CPUNIT, 0);
 
 	double nodeError = cpuError;
 	for (int i = 0; i < mGpuCount; ++i) {
@@ -1098,10 +1098,10 @@ int Domain::getMaxStepStorageCount() {
 		gpuElementCount[i] = 0;
 	}
 
-	cpuElementCount = getElementCountOnProcessingUnit(CPU_UNIT, 0);
+	cpuElementCount = getElementCountOnProcessingUnit(CPUNIT, 0);
 
 	for (int i = 0; i < mGpuCount; ++i) {
-		gpuElementCount[i] = getElementCountOnProcessingUnit(GPU_UNIT, i);
+		gpuElementCount[i] = getElementCountOnProcessingUnit(GPUNIT, i);
 	}
 
 	int cpuSolverSize = mSolverInfo->getSize(cpuElementCount);
