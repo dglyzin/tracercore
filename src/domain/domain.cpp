@@ -1126,6 +1126,10 @@ int Domain::getMaxStepStorageCount() {
 
 	MPI_Allreduce(&minForAll, &absMin, 1, MPI_INT, MPI_MIN, mWorkerComm);
 
+	delete gpuElementCount;
+	delete gpuSolverSize;
+	delete gpuMaxCount;
+
 	return absMin;
 }
 
