@@ -365,6 +365,27 @@ double Domain::collectError() {
 
 	 //TODO MPI_ALLREDUCE
 	 return totalError;*/
+
+	double cpuError = 0;
+	double* gpuError = new double [mGpuCount];
+
+	for (int i = 0; i < mGpuCount; ++i) {
+#pragma omp task
+		gpuError[i] = getDeviceError(GPU_UNIT, i);
+	}
+
+	cpuError = getDeviceError(CPU_UNIT, 0);
+
+	double nodeError = cpuError;
+	for (int i = 0; i < mGpuCount; ++i) {
+		nodeError += gpuError[i];
+	}
+
+	int absError;
+
+	MPI_Allreduce(&nodeError, &absError, 1, MPI_DOUBLE, MPI_MAX, mWorkerComm);
+
+	return absError;
 }
 
 void Domain::printBlocksToConsole() {
