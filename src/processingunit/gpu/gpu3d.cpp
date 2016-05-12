@@ -16,15 +16,19 @@ GPU_3d::~GPU_3d() {
 
 void GPU_3d::computeBorder(func_ptr_t* mUserFuncs, unsigned short int* mCompFuncNumber, double* result, double** source,
 		double time, double* parametrs, double** externalBorder, int zCount, int yCount, int xCount, int haloSize) {
+	cudaSetDevice(deviceNumber);
 	computeBorderGPU_3d();
 }
 
 void GPU_3d::computeCenter(func_ptr_t* mUserFuncs, unsigned short int* mCompFuncNumber, double* result, double** source,
 		double time, double* parametrs, double** externalBorder, int zCount, int yCount, int xCount, int haloSize) {
+	cudaSetDevice(deviceNumber);
 	computeCenterGPU_3d();
 }
 
 void GPU_3d::printArray(double* array, int zCount, int yCount, int xCount, int cellSize) {
+	cudaSetDevice(deviceNumber);
+
 	int size = zCount * yCount * xCount * cellSize;
 
 	double* tmpArray = new double[size];

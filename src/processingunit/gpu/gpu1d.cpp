@@ -16,6 +16,7 @@ GPU_1d::~GPU_1d() {
 
 void GPU_1d::computeBorder(func_ptr_t* mUserFuncs, unsigned short int* mCompFuncNumber, double* result, double** source,
 		double time, double* parametrs, double** externalBorder, int zCount, int yCount, int xCount, int haloSize) {
+	cudaSetDevice(deviceNumber);
 /*# pragma omp parallel
 	{
 # pragma omp for
@@ -38,6 +39,7 @@ void GPU_1d::computeBorder(func_ptr_t* mUserFuncs, unsigned short int* mCompFunc
 
 void GPU_1d::computeCenter(func_ptr_t* mUserFuncs, unsigned short int* mCompFuncNumber, double* result, double** source,
 		double time, double* parametrs, double** externalBorder, int zCount, int yCount, int xCount, int haloSize) {
+	cudaSetDevice(deviceNumber);
 /*# pragma omp parallel
 	{
 # pragma omp for
@@ -51,6 +53,8 @@ void GPU_1d::computeCenter(func_ptr_t* mUserFuncs, unsigned short int* mCompFunc
 }
 
 void GPU_1d::printArray(double* array, int zCount, int yCount, int xCount, int cellSize) {
+	cudaSetDevice(deviceNumber);
+
 	int size = zCount * yCount * xCount * cellSize;
 
 	double* tmpArray = new double [size];
