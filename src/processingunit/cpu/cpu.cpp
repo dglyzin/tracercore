@@ -178,12 +178,20 @@ void CPU::multiplyArraysElementwise(double* result, double* arg1, double* arg2, 
 }
 
 bool CPU::isNan(double* array, int size) {
+	/*for (int i = 0; i < size; ++i) {
+	 if (isnan(array[i]))
+	 return true;
+	 }
+
+	 return false;*/
+	//TODO какой вариант реализации более правильный?
+	bool isN = false;
+#pragma parallel for reduction (|:isN)
 	for (int i = 0; i < size; ++i) {
-		if (isnan(array[i]))
-			return true;
+		isN |= isnan(array[i]);
 	}
 
-	return false;
+	return isN;
 }
 
 void CPU::writeArray(double* array, int size, ofstream& out) {
