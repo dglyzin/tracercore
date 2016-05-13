@@ -186,7 +186,7 @@ bool CPU::isNan(double* array, int size) {
 	 return false;*/
 	//TODO какой вариант реализации более правильный?
 	bool isN = false;
-#pragma parallel for reduction (|:isN)
+#pragma omp parallel for reduction (|: isN)
 	for (int i = 0; i < size; ++i) {
 		isN |= isnan(array[i]);
 	}
