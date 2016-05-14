@@ -180,6 +180,7 @@ void GPU::deallocDeviceSpecificArray(unsigned short int* toDelete) {
 
 void GPU::writeArray(double* array, int size, ofstream& out) {
 	cudaSetDevice(deviceNumber);
+	// TODO ПРОВЕРИТЬ КОПИРОВАНИЕ!!!!
 
 	double* tmpArray = new double [size];
 
