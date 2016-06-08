@@ -906,8 +906,16 @@ void Domain::printStatisticsInfo(char* inputFile, char* outputFile, double calcT
 
 		sprintf(statFile, "%s%s", statFile, "statistic");
 
+		char tempFile[250];
+		Utils::copyToLastChar(tempFile, inputFile, '/', 2);
+
+		sprintf(tempFile, "%s%s", tempFile, "tempFile");
+
 		FILE* out;
 		out = fopen(statFile, "a");
+
+		FILE* tmp;
+		tmp = fopen(tempFile, "a");
 
 		int side = (int) sqrt(((double) count) / mCellSize);
 
@@ -923,6 +931,9 @@ void Domain::printStatisticsInfo(char* inputFile, char* outputFile, double calcT
 				"Speed:         %.2f\n\n\n\n", count, side, mWorkerCommSize, mCellSize, stepCount, calcTime, speed);
 
 		fclose(out);
+
+		fprintf(tmp, "%d %6d %10.2f %10.2f\n",mWorkerCommSize, side, speed, calcTime);
+		fclose(tmp);
 	}
 
 	return;
