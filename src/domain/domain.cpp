@@ -108,6 +108,7 @@ void Domain::compute(char* inputFile) {
 
 	cout << "Initial user status received: " << userStatus << endl;
 
+	// TODO если пользователь остановил расчеты, то необходимо выполнить сохранение для загузки состояния (saveStateForLoad)
 	while ((userStatus != US_STOP) && (jobState == JS_RUNNING)) {
 		nextStep();
 		if (mPythonMaster && (mWorkerRank == 0)) {
