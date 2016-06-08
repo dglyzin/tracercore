@@ -32,7 +32,7 @@ public:
 
 	double* getCurrentStatePointer();
 
-	void saveState(ProcessingUnit* pu, char* path);
+	void saveStateToDraw(ProcessingUnit* pu, char* path);
 	void loadState(ProcessingUnit* pu, std::ifstream& in);
 
 	bool isNan(ProcessingUnit* pu);

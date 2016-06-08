@@ -108,7 +108,7 @@ double* Delay::getCurrentStatePointer() {
 	return mStepStorage[currentStorageNumber]->getStatePointer();
 }
 
-void Delay::saveState(ProcessingUnit* pu, char* path) {
+void Delay::saveStateToDraw(ProcessingUnit* pu, char* path) {
 	//mStepStorage->saveState(pu, path);
 }
 

@@ -36,7 +36,7 @@ public:
 
 	virtual double* getCurrentStatePointer() = 0;
 
-	virtual void saveState(ProcessingUnit* pu, char* path) = 0;
+	virtual void saveStateToDraw(ProcessingUnit* pu, char* path) = 0;
 	virtual void loadState(ProcessingUnit* pu, std::ifstream& in) = 0;
 
 	virtual bool isNan(ProcessingUnit* pu) = 0;
