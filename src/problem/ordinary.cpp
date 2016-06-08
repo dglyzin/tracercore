@@ -68,6 +68,10 @@ void Ordinary::saveStateForDraw(ProcessingUnit* pu, char* path) {
 	mStepStorage->saveState(pu, path);
 }
 
+void Ordinary::saveStateForLoad(ProcessingUnit* pu, char* path) {
+	mStepStorage->saveState(pu, path);
+}
+
 void Ordinary::loadState(ProcessingUnit* pu, ifstream& in) {
 	mStepStorage->loadState(pu, in);
 }
