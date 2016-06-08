@@ -64,7 +64,7 @@ double* Ordinary::getCurrentStatePointer() {
 	return mStepStorage->getStatePointer();
 }
 
-void Ordinary::saveStateToDraw(ProcessingUnit* pu, char* path) {
+void Ordinary::saveStateForDraw(ProcessingUnit* pu, char* path) {
 	mStepStorage->saveState(pu, path);
 }
 
