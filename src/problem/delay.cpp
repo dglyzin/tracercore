@@ -114,6 +114,10 @@ void Delay::saveStateForDraw(ProcessingUnit* pu, char* path) {
 	mStepStorage[currentStorageNumber]->saveState(pu, path);
 }
 
+void Delay::saveStateForDraw(ProcessingUnit* pu, char* path) {
+	//mStepStorage->saveState(pu, path);
+}
+
 void Delay::loadState(ProcessingUnit* pu, std::ifstream& in) {
 	//mStepStorage->loadState(pu, path);
 }
