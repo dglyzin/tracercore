@@ -18,6 +18,8 @@ public:
 			int _zOffset, int _cellSize, int _haloSize);
 	virtual ~Block();
 
+	virtual void afterCreate(int problemType, int solverType, double aTol, double rTol) = 0;
+
 	virtual void computeStageBorder(int stage, double time) = 0;
 	virtual void computeStageCenter(int stage, double time) = 0;
 

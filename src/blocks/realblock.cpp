@@ -18,8 +18,6 @@ RealBlock::RealBlock(int _nodeNumber, int _dimension, int _xCount, int _yCount, 
 
 	blockNumber = _blockNumber;
 
-	problem = createProblem(problemType, solverType, aTol, rTol);
-
 	sendBorderInfo = NULL;
 	tempSendBorderInfo.clear();
 
@@ -47,12 +45,16 @@ RealBlock::RealBlock(int _nodeNumber, int _dimension, int _xCount, int _yCount, 
 	getFuncArray(&mUserFuncs, blockNumber);
 	getInitFuncArray(&mUserInitFuncs);
 	initDefaultParams(&mParams, &mParamsCount);
-
-	double* state = problem->getCurrentStatePointer();
-	pu->initState(state, mUserInitFuncs, mInitFuncNumber, blockNumber, 0.0);
 }
 
 RealBlock::~RealBlock() {
+}
+
+void RealBlock::afterCreate(int problemType, int solverType, double aTol, double rTol) {
+	problem = createProblem(problemType, solverType, aTol, rTol);
+
+	double* state = problem->getCurrentStatePointer();
+	pu->initState(state, mUserInitFuncs, mInitFuncNumber, blockNumber, 0.0);
 }
 
 double* RealBlock::getNewBlockBorder(Block* neighbor, int borderLength) {

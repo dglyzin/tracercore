@@ -17,6 +17,10 @@ NullBlock::NullBlock(int _nodeNumber, int _dimension, int _xCount, int _yCount, 
 NullBlock::~NullBlock() {
 }
 
+void NullBlock::afterCreate(int problemType, int solverType, double aTol, double rTol) {
+	return;
+}
+
 void NullBlock::computeStageBorder(int stage, double time) {
 	return;
 }
