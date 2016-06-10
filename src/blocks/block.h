@@ -51,6 +51,7 @@ public:
 	virtual void getCurrentState(double* result) = 0;
 
 	virtual void saveStateForDraw(char* path) = 0;
+	virtual void saveStateForLoad(char* path) = 0;
 	virtual void loadState(std::ifstream& in) = 0;
 
 	virtual bool isNan() = 0;

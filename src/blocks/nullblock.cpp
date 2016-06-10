@@ -98,6 +98,10 @@ void NullBlock::saveStateForDraw(char* path) {
 	return;
 }
 
+void NullBlock::saveStateForLoad(char* path) {
+	return;
+}
+
 void NullBlock::loadState(ifstream& in) {
 	in.seekg(getGridElementCount() * SIZE_DOUBLE, ios::cur);
 }
