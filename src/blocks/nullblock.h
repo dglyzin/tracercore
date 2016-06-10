@@ -52,7 +52,7 @@ public:
 	void loadData(double* data);
 	void getCurrentState(double* result);
 
-	void saveState(char* path);
+	void saveStateForLoad(char* path);
 	void loadState(std::ifstream& in);
 
 	bool isNan();

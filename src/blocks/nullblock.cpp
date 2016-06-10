@@ -94,7 +94,7 @@ void NullBlock::getCurrentState(double* result) {
 	return;
 }
 
-void NullBlock::saveState(char* path) {
+void NullBlock::saveStateForLoad(char* path) {
 	return;
 }
 
