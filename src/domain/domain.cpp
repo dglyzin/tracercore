@@ -434,7 +434,7 @@ void Domain::readFromFile(char* path) {
 	totalGridNodeCount = getGridNodeCount();
 	totalGridElementCount = getGridElementCount();
 
-
+	blockAfterCreate();
 
 	//printBlocksToConsole();
 }
