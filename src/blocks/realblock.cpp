@@ -272,7 +272,7 @@ void RealBlock::getCurrentState(double* result) {
 	problem->getCurrentState(pu, result);
 }
 
-void RealBlock::saveStateForLoad(char* path) {
+void RealBlock::saveStateForDraw(char* path) {
 	problem->saveStateForDraw(pu, path);
 }
 

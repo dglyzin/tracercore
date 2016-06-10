@@ -838,7 +838,7 @@ void Domain::saveStateToFile(char* path) {
 	}
 
 	for (int i = 0; i < mBlockCount; ++i) {
-		mBlocks[i]->saveStateForLoad(path);
+		mBlocks[i]->saveStateForDraw(path);
 		MPI_Barrier(mWorkerComm);
 	}
 }
