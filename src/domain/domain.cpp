@@ -368,7 +368,7 @@ double Domain::collectError() {
 	 return totalError;*/
 
 	double cpuError = 0;
-	double* gpuError = new double [mGpuCount];
+	double* gpuError = new double[mGpuCount];
 
 	for (int i = 0; i < mGpuCount; ++i) {
 #pragma omp task
@@ -419,20 +419,7 @@ void Domain::readFromFile(char* path) {
 	readSolverIndex(in);
 	readSolverTolerance(in);
 
-	switch (mSolverIndex) {
-		case EULER:
-			mSolverInfo = new EulerStorage();
-			break;
-		case RK4:
-			mSolverInfo = new RK4Storage();
-			break;
-		case DP45:
-			mSolverInfo = new DP45Storage();
-			break;
-		default:
-			mSolverInfo = new EulerStorage();
-			break;
-	}
+	initSolverInfo();
 
 	createBlock(in);
 
@@ -923,7 +910,7 @@ void Domain::printStatisticsInfo(char* inputFile, char* outputFile, double calcT
 
 		fclose(out);
 
-		fprintf(tmp, "%d %6d %10.2f %10.2f\n",mWorkerCommSize, side, speed, calcTime);
+		fprintf(tmp, "%d %6d %10.2f %10.2f\n", mWorkerCommSize, side, speed, calcTime);
 		fclose(tmp);
 	}
 
@@ -1049,6 +1036,23 @@ void Domain::createInterconnect(ifstream& in) {
 
 	for (int i = 0; i < mConnectionCount; ++i)
 		mInterconnects[i] = readConnection(in);
+}
+
+void Domain::initSolverInfo() {
+	switch (mSolverIndex) {
+		case EULER:
+			mSolverInfo = new EulerStorage();
+			break;
+		case RK4:
+			mSolverInfo = new RK4Storage();
+			break;
+		case DP45:
+			mSolverInfo = new DP45Storage();
+			break;
+		default:
+			mSolverInfo = new EulerStorage();
+			break;
+	}
 }
 
 Interconnect* Domain::getInterconnect(int sourceNode, int destinationNode, int borderLength, double* sourceData,

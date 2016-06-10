@@ -252,6 +252,8 @@ private:
 	void createBlock(std::ifstream& in);
 	void createInterconnect(std::ifstream& in);
 
+	void initSolverInfo();
+
 	Interconnect* getInterconnect(int sourceNode, int destinationNode, int borderLength, double* sourceData,
 			double* destinationData);
 
