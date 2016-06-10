@@ -249,6 +249,7 @@ private:
 	int getMaximumNumberSavedStates();
 
 	void createProcessigUnit();
+	void createInterconnect(std::ifstream& in);
 
 	Interconnect* getInterconnect(int sourceNode, int destinationNode, int borderLength, double* sourceData,
 			double* destinationData);

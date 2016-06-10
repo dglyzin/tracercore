@@ -441,12 +441,7 @@ void Domain::readFromFile(char* path) {
 	for (int i = 0; i < mBlockCount; ++i)
 		mBlocks[i] = readBlock(in, i, dimension);
 
-	readConnectionCount(in);
-
-	mInterconnects = new Interconnect*[mConnectionCount];
-
-	for (int i = 0; i < mConnectionCount; ++i)
-		mInterconnects[i] = readConnection(in);
+	createInterconnect(in);
 
 	for (int i = 0; i < mBlockCount; ++i)
 		mBlocks[i]->moveTempBorderVectorToBorderArray();
@@ -1041,6 +1036,15 @@ void Domain::createProcessigUnit() {
 		default:
 			break;
 	}
+}
+
+void Domain::createInterconnect(ifstream& in) {
+	readConnectionCount(in);
+
+	mInterconnects = new Interconnect*[mConnectionCount];
+
+	for (int i = 0; i < mConnectionCount; ++i)
+		mInterconnects[i] = readConnection(in);
 }
 
 Interconnect* Domain::getInterconnect(int sourceNode, int destinationNode, int borderLength, double* sourceData,
