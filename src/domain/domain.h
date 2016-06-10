@@ -254,6 +254,8 @@ private:
 
 	void initSolverInfo();
 
+	void blockAfterCreate();
+
 	Interconnect* getInterconnect(int sourceNode, int destinationNode, int borderLength, double* sourceData,
 			double* destinationData);
 

@@ -431,6 +431,8 @@ void Domain::readFromFile(char* path) {
 	totalGridNodeCount = getGridNodeCount();
 	totalGridElementCount = getGridElementCount();
 
+
+
 	//printBlocksToConsole();
 }
 
@@ -1052,6 +1054,12 @@ void Domain::initSolverInfo() {
 		default:
 			mSolverInfo = new EulerStorage();
 			break;
+	}
+}
+
+void Domain::blockAfterCreate() {
+	for (int i = 0; i < mBlockCount; ++i) {
+		mBlocks[i]->afterCreate(ORDINARY, mSolverIndex, mAtol, mRtol);
 	}
 }
 
