@@ -434,12 +434,7 @@ void Domain::readFromFile(char* path) {
 			break;
 	}
 
-	readBlockCount(in);
-
-	mBlocks = new Block*[mBlockCount];
-
-	for (int i = 0; i < mBlockCount; ++i)
-		mBlocks[i] = readBlock(in, i, dimension);
+	createBlock(in);
 
 	createInterconnect(in);
 
@@ -1036,6 +1031,15 @@ void Domain::createProcessigUnit() {
 		default:
 			break;
 	}
+}
+
+void Domain::createBlock(ifstream& in) {
+	readBlockCount(in);
+
+	mBlocks = new Block*[mBlockCount];
+
+	for (int i = 0; i < mBlockCount; ++i)
+		mBlocks[i] = readBlock(in, i, dimension);
 }
 
 void Domain::createInterconnect(ifstream& in) {
