@@ -47,6 +47,9 @@ Domain::Domain(int _world_rank, int _world_size, char* inputFile) {
 
 	mGpuCount = GPU_COUNT;
 
+	printf("\nPROBLEM TYPE ALWAYS = ORDINARY!!!\n");
+	mProblenType = ORDINARY;
+
 	readFromFile(inputFile);
 
 	mAcceptedStepCount = 0;
@@ -624,10 +627,8 @@ Block* Domain::readBlock(ifstream& in, int idx, int dimension) {
 			assert(false);
 		}
 
-		printf("\nPROBLEM TYPE ALWAYS = ORDINARY!!!\n");
-
 		resBlock = new RealBlock(node, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2],
-				mCellSize, mHaloSize, idx, pu, initFuncNumber, compFuncNumber, ORDINARY, mSolverIndex, mAtol, mRtol);
+				mCellSize, mHaloSize, idx, pu, initFuncNumber, compFuncNumber, mProblenType, mSolverIndex, mAtol, mRtol);
 	} else {
 		//resBlock =  new BlockNull(idx, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize);
 		resBlock = new NullBlock(node, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2],
@@ -1059,7 +1060,7 @@ void Domain::initSolverInfo() {
 
 void Domain::blockAfterCreate() {
 	for (int i = 0; i < mBlockCount; ++i) {
-		mBlocks[i]->afterCreate(ORDINARY, mSolverIndex, mAtol, mRtol);
+		mBlocks[i]->afterCreate(mProblenType, mSolverIndex, mAtol, mRtol);
 	}
 }
 

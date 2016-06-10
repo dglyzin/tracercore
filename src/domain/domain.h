@@ -98,6 +98,8 @@ private:
 	ProcessingUnit* cpu;
 	ProcessingUnit** gpu;
 
+	int mProblenType;
+
 	int mGpuCount;
 	/*
 	 * Массив блоков.
