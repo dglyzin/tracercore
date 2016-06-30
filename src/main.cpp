@@ -36,14 +36,14 @@ int main(int argc, char * argv[]) {
 	/*
 	 * Вычисления.
 	 */
-	domain->saveState(inputFile);
+	domain->saveStateForDraw(inputFile);
 
 	printf("Running computations %d \n", world_rank);
 	time1 = MPI_Wtime();
 	domain->compute(inputFile);
 	time2 = MPI_Wtime();
 
-	domain->saveState(inputFile);
+	domain->saveStateForDraw(inputFile);
 
 	/*
 	 * Вывод информации о времени работы осуществляет только поток с номером 0.

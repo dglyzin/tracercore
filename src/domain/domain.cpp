@@ -150,7 +150,7 @@ void Domain::compute(char* inputFile) {
 
 		if (readyToSave) {
 			counterSaveTime = 0;
-			saveState(inputFile);
+			saveStateForDraw(inputFile);
 		}
 
 		//check for termination request
@@ -628,7 +628,8 @@ Block* Domain::readBlock(ifstream& in, int idx, int dimension) {
 		}
 
 		resBlock = new RealBlock(node, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2],
-				mCellSize, mHaloSize, idx, pu, initFuncNumber, compFuncNumber, mProblenType, mSolverIndex, mAtol, mRtol);
+				mCellSize, mHaloSize, idx, pu, initFuncNumber, compFuncNumber, mProblenType, mSolverIndex, mAtol,
+				mRtol);
 	} else {
 		//resBlock =  new BlockNull(idx, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize);
 		resBlock = new NullBlock(node, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2],
@@ -781,24 +782,27 @@ int Domain::realBlockCount() {
 	return count;
 }
 
-void Domain::saveState(char* inputFile) {
-	//printf("\nsaveState %f %f %f\n", counterSaveTime, saveInterval, currentTime);
+void Domain::saveStateForDraw(char* inputFile) {
+	char* saveFile = new char[250];
+	Utils::getFilePathForDraw(inputFile, saveFile, currentTime);
 
-	char saveFile[250];
+	saveGeneralInfo(saveFile);
+	saveStateForDrawByBlocks(saveFile);
 
-	/*int length = Utils::lastChar(inputFile, '/');
-
-	 strncpy(saveFile, inputFile, length);
-
-	 saveFile[length] = 0;*/
-	Utils::copyToLastChar(saveFile, inputFile, '/');
-
-	sprintf(saveFile, "%s%s%.8f%s", saveFile, "project-", currentTime, ".bin");
-
-	saveStateToFile(saveFile);
+	delete saveFile;
 }
 
-void Domain::saveGeneralInfoToFile(char* path) {
+void Domain::saveStateForLoad(char* inputFile) {
+	char* saveFile = new char[250];
+	Utils::getFilePathForLoad(inputFile, saveFile, currentTime);
+
+	saveGeneralInfo(saveFile);
+	saveStateForLoadByBlocks(saveFile);
+
+	delete saveFile;
+}
+
+void Domain::saveGeneralInfo(char* path) {
 	if (mGlobalRank == 0) {
 		ofstream out;
 		out.open(path, ios::binary);
@@ -818,17 +822,18 @@ void Domain::saveGeneralInfoToFile(char* path) {
 	}
 }
 
-void Domain::saveStateForDraw(char* path) {
+void Domain::saveStateForDrawByBlocks(char* path) {
 	for (int i = 0; i < mBlockCount; ++i) {
 		mBlocks[i]->saveStateForDraw(path);
 		MPI_Barrier(mWorkerComm);
 	}
 }
 
-void Domain::saveStateToFile(char* path) {
-	saveGeneralInfoToFile(path);
-
-	saveStateForDraw(path);
+void Domain::saveStateForLoadByBlocks(char* path) {
+	for (int i = 0; i < mBlockCount; ++i) {
+		mBlocks[i]->saveStateForLoad(path);
+		MPI_Barrier(mWorkerComm);
+	}
 }
 
 void Domain::loadStateFromFile(char* dataFile) {

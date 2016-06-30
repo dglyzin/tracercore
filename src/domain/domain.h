@@ -85,8 +85,8 @@ public:
 	 */
 	int realBlockCount();
 
-	void saveState(char* inputFile);
-	void saveStateToFile(char* path);
+	void saveStateForDraw(char* inputFile);
+	void saveStateForLoad(char* inputFile);
 
 	void printStatisticsInfo(char* inputFile, char* outputFile, double calcTime, char* statisticsFile);
 
@@ -263,8 +263,9 @@ private:
 
 	int getMaxStepStorageCount();
 	int getElementCountOnProcessingUnit(int deviceType, int deviceNumber);
-	void saveGeneralInfoToFile(char* path);
-	void saveStateForDraw(char* path);
+	void saveGeneralInfo(char* path);
+	void saveStateForDrawByBlocks(char* path);
+	void saveStateForLoadByBlocks(char* path);
 };
 
 #endif /* SRC_DOMAIN_H_ */
