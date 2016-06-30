@@ -798,7 +798,7 @@ void Domain::saveState(char* inputFile) {
 	saveStateToFile(saveFile);
 }
 
-void Domain::saveStateToFile(char* path) {
+void Domain::saveGeneralInfoToFile(char* path) {
 	if (mGlobalRank == 0) {
 		ofstream out;
 		out.open(path, ios::binary);
@@ -816,11 +816,19 @@ void Domain::saveStateToFile(char* path) {
 
 		out.close();
 	}
+}
 
+void Domain::saveStateForDraw(char* path) {
 	for (int i = 0; i < mBlockCount; ++i) {
 		mBlocks[i]->saveStateForDraw(path);
 		MPI_Barrier(mWorkerComm);
 	}
+}
+
+void Domain::saveStateToFile(char* path) {
+	saveGeneralInfoToFile(path);
+
+	saveStateForDraw(path);
 }
 
 void Domain::loadStateFromFile(char* dataFile) {

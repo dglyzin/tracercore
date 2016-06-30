@@ -263,6 +263,8 @@ private:
 
 	int getMaxStepStorageCount();
 	int getElementCountOnProcessingUnit(int deviceType, int deviceNumber);
+	void saveGeneralInfoToFile(char* path);
+	void saveStateForDraw(char* path);
 };
 
 #endif /* SRC_DOMAIN_H_ */
