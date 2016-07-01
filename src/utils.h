@@ -13,8 +13,8 @@
 
 #include "enums.h"
 
-#define FILE_NAME_FOR_DRAW "project-"
-#define FILE_NAME_FOR_LOAD "draw-"
+#define FILE_NAME_FOR_DRAW "draw-"
+#define FILE_NAME_FOR_LOAD "load-"
 #define FILE_EXPANSION ".bin"
 
 class Utils {
