@@ -54,12 +54,12 @@ void Utils::copyFromLastToEnd(char* result, const char* source, char ch, int num
 
 void Utils::getFilePathForDraw(char* inputFile, char* saveFile, double currentTime) {
 	copyToLastChar(saveFile, inputFile, '/');
-	sprintf(saveFile, "%s%s%.8f%s", saveFile, FILE_NAME_FOR_DRAW, currentTime, FILE_EXPANSION);
+	sprintf(saveFile, "%s%s%.8f%s", saveFile, FILE_NAME, currentTime, FILE_EXPANSION_DRAW);
 }
 
 void Utils::getFilePathForLoad(char* inputFile, char* saveFile, double currentTime) {
 	copyToLastChar(saveFile, inputFile, '/');
-	sprintf(saveFile, "%s%s%.8f%s", saveFile, FILE_NAME_FOR_LOAD, currentTime, FILE_EXPANSION);
+	sprintf(saveFile, "%s%s%.8f%s", saveFile, FILE_NAME, currentTime, FILE_EXPANSION_LOAD);
 }
 
 int Utils::oppositeBorder(int side) {
