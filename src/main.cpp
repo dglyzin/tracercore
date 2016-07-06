@@ -44,6 +44,7 @@ int main(int argc, char * argv[]) {
 	time2 = MPI_Wtime();
 
 	domain->saveStateForDraw(inputFile);
+	domain->saveStateForLoad(inputFile);
 
 	/*
 	 * Вывод информации о времени работы осуществляет только поток с номером 0.
