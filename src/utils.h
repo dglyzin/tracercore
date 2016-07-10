@@ -13,7 +13,7 @@
 
 #include "enums.h"
 
-#define FILE_NAME "project-"
+//#define FILE_NAME "project-"
 #define FILE_EXPANSION_DRAW ".dbin"
 #define FILE_EXPANSION_LOAD ".lbin"
 
@@ -24,6 +24,7 @@ public:
 
 	static int lastChar(const char* source, char ch, int num = 1);
 	static void copyToLastChar(char* result, const char* source, char ch, int num = 1);
+	static void copyToLastCharNotInc(char* result, const char* source, char ch, int num = 1);
 	static void copyFromLastToEnd(char* result, const char* source, char ch, int num = 1);
 
 	static void getFilePathForDraw(char* inputFile, char* saveFile, double currentTime);

@@ -45,6 +45,15 @@ void Utils::copyToLastChar(char* result, const char* source, char ch, int num) {
 	result[length] = 0;
 }
 
+void Utils::copyToLastCharNotInc(char* result, const char* source, char ch, int num) {
+	int length = Utils::lastChar(source, ch, num);
+
+	strncpy(result, source, length);
+
+	result[length] = 0;
+}
+
+
 void Utils::copyFromLastToEnd(char* result, const char* source, char ch, int num) {
 	int pos = Utils::lastChar(source, ch, num) + 1;
 	int length = strlen(source);
@@ -53,13 +62,17 @@ void Utils::copyFromLastToEnd(char* result, const char* source, char ch, int num
 }
 
 void Utils::getFilePathForDraw(char* inputFile, char* saveFile, double currentTime) {
-	copyToLastChar(saveFile, inputFile, '/');
-	sprintf(saveFile, "%s%s%.8f%s", saveFile, FILE_NAME, currentTime, FILE_EXPANSION_DRAW);
+	//copyToLastChar(saveFile, inputFile, '/');
+	//sprintf(saveFile, "%s%s%.8f%s", saveFile, FILE_NAME, currentTime, FILE_EXPANSION_DRAW);          
+        copyToLastCharNotInc(saveFile, inputFile, '.');
+        sprintf(saveFile, "%s-%.8f%s", saveFile, currentTime, FILE_EXPANSION_DRAW);
 }
 
 void Utils::getFilePathForLoad(char* inputFile, char* saveFile, double currentTime) {
-	copyToLastChar(saveFile, inputFile, '/');
-	sprintf(saveFile, "%s%s%.8f%s", saveFile, FILE_NAME, currentTime, FILE_EXPANSION_LOAD);
+	//copyToLastChar(saveFile, inputFile, '/');
+	//sprintf(saveFile, "%s%s%.8f%s", saveFile, FILE_NAME, currentTime, FILE_EXPANSION_LOAD);
+        copyToLastCharNotInc(saveFile, inputFile, '.');
+        sprintf(saveFile, "%s-%.8f%s", saveFile, currentTime, FILE_EXPANSION_LOAD);
 }
 
 int Utils::oppositeBorder(int side) {
