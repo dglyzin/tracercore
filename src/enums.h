@@ -15,8 +15,8 @@
 
 #define SOLVER_INIT_STAGE -1
 
-#define CPU_RAM (58*1024*1024*1024)
-#define GPU_RAM (4*1024*1024*1024)
+#define CPU_RAM (58.0*1024*1024*1024)
+#define GPU_RAM (4.0*1024*1024*1024)
 
 #define GPU_COUNT 3
 
