@@ -1156,10 +1156,10 @@ int Domain::getMaxStepStorageCount() {
 		gpuSolverSize[i] = mSolverInfo->getSize(gpuElementCount[i]);
 	}
 
-	int cpuMaxCount = CPU_RAM / cpuSolverSize;
+	int cpuMaxCount = (int)(CPU_RAM / cpuSolverSize);
 	int* gpuMaxCount = new int[mGpuCount];
 	for (int i = 0; i < mGpuCount; ++i) {
-		gpuMaxCount[i] = GPU_RAM / gpuSolverSize[i];
+		gpuMaxCount[i] = (int)(GPU_RAM / gpuSolverSize[i]);
 	}
 
 	int minForAll = cpuMaxCount;
