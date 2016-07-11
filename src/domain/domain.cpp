@@ -1134,8 +1134,6 @@ int Domain::getMaxStepStorageCount() {
 
 	 int maxCount = min(maxCountCpu, min(maxCountGpu0, min(maxCountGpu1, maxCountGpu2)));
 
-	 //TODO ПЕРЕСЫЛКА ДЛЯ ВЫЯСНЕНИЯ МИНИМУМА ПО ВСЕМ ПОТОКАМ
-
 	 return maxCount;*/
 
 	int cpuElementCount = 0;
