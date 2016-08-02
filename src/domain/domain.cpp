@@ -991,10 +991,6 @@ bool Domain::isNan() {
 	return flag;
 }
 
-int Domain::getMaximumNumberSavedStates() {
-	return 0;
-}
-
 void Domain::checkOptions(int flags, double _stopTime, char* saveFile) {
 	if (flags & TIME_EXECUTION)
 		setStopTime(_stopTime);
