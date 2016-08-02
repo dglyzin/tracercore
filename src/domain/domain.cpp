@@ -385,7 +385,7 @@ double Domain::collectError() {
 		nodeError += gpuError[i];
 	}
 
-	int absError;
+	double absError;
 
 	MPI_Allreduce(&nodeError, &absError, 1, MPI_DOUBLE, MPI_MAX, mWorkerComm);
 
