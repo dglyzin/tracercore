@@ -45,6 +45,8 @@ RealBlock::RealBlock(int _nodeNumber, int _dimension, int _xCount, int _yCount, 
 	getFuncArray(&mUserFuncs, blockNumber);
 	getInitFuncArray(&mUserInitFuncs);
 	initDefaultParams(&mParams, &mParamsCount);
+
+	problem = NULL;
 }
 
 RealBlock::~RealBlock() {
