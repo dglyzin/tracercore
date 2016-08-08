@@ -248,8 +248,6 @@ private:
 	void confirmStep();
 	void rejectStep();
 
-	int getMaximumNumberSavedStates();
-
 	void createProcessigUnit();
 	void createBlock(std::ifstream& in);
 	void createInterconnect(std::ifstream& in);

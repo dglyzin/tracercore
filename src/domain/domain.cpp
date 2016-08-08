@@ -379,6 +379,7 @@ double Domain::collectError() {
 	}
 
 	cpuError = getDeviceError(CPUNIT, 0);
+#pragma omp taskwait
 
 	double nodeError = cpuError;
 	for (int i = 0; i < mGpuCount; ++i) {
@@ -387,7 +388,7 @@ double Domain::collectError() {
 
 	double absError;
 
-	MPI_Allreduce(&nodeError, &absError, 1, MPI_DOUBLE, MPI_MAX, mWorkerComm);
+	MPI_Allreduce(&nodeError, &absError, 1, MPI_DOUBLE, MPI_SUM, mWorkerComm);
 
 	delete gpuError;
 
@@ -1150,10 +1151,10 @@ int Domain::getMaxStepStorageCount() {
 		gpuSolverSize[i] = mSolverInfo->getSize(gpuElementCount[i]);
 	}
 
-	int cpuMaxCount = (int)(CPU_RAM / cpuSolverSize);
+	int cpuMaxCount = (int) (CPU_RAM / cpuSolverSize);
 	int* gpuMaxCount = new int[mGpuCount];
 	for (int i = 0; i < mGpuCount; ++i) {
-		gpuMaxCount[i] = (int)(GPU_RAM / gpuSolverSize[i]);
+		gpuMaxCount[i] = (int) (GPU_RAM / gpuSolverSize[i]);
 	}
 
 	int minForAll = cpuMaxCount;
