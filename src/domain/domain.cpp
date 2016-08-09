@@ -154,7 +154,9 @@ void Domain::compute(char* inputFile) {
 		}
 
 		//check for termination request
-		MPI_Bcast(&userStatus, 1, MPI_INT, 0, MPI_COMM_WORLD);
+		if (mPythonMaster && (mWorkerRank == 0)) {
+			MPI_Bcast(&userStatus, 1, MPI_INT, 0, MPI_COMM_WORLD);
+		}
 
 	}
 	cout << "Computation finished for worker #" << mWorkerRank << endl;
@@ -168,9 +170,6 @@ void Domain::initSolvers() {
 }
 
 void Domain::computeStage(int stage) {
-	/*printf("\nstage #%d\n", stage);
-	 printBlocksToConsole();*/
-
 	prepareData(stage);
 
 	for (int i = 0; i < mConnectionCount; ++i)
@@ -184,6 +183,9 @@ void Domain::computeStage(int stage) {
 	computeOneStepBorder(stage);
 
 	prepareNextStageArgument(stage);
+
+	printf("\nstage #%d\n", stage);
+	printBlocksToConsole();
 }
 
 void Domain::nextStep() {
