@@ -26,6 +26,7 @@ Domain::Domain(int _world_rank, int _world_size, char* inputFile) {
 	else {
 		mPythonMaster = 0;
 		printf("Communicator size error!");
+		assert(0);
 	}
 
 	//mJobId = _jobId;
