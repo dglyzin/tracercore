@@ -204,6 +204,10 @@ void Domain::nextStep() {
 		printf("step error = %f\n", error);
 
 		//!!! только 0, рассылать
+		timeStep = mSolverInfo->getNewStep(timeStep, error, totalGridElementCount);
+		printf("new time step = %f\n", timeStep);
+
+		//!!! только 0, рассылать
 		if (mSolverInfo->isErrorPermissible(error, totalGridElementCount)) {
 			confirmStep(); //uses new timestep
 			mAcceptedStepCount++;
@@ -214,11 +218,6 @@ void Domain::nextStep() {
 			mRejectedStepCount++;
 			cout << "Step rejected!\n" << endl;
 		}
-
-		//!!! только 0, рассылать
-		timeStep = mSolverInfo->getNewStep(timeStep, error, totalGridElementCount);
-
-		printf("new time step = %f\n", timeStep);
 	} else { //constant step
 		confirmStep();
 		mAcceptedStepCount++;
