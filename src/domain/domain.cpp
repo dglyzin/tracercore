@@ -34,7 +34,7 @@ Domain::Domain(int _world_rank, int _world_size, char* inputFile) {
 	currentTime = 0;
 	mStepCount = 0;
 
-	timeStep = 0;
+	mTimeStep = 0;
 	stopTime = 0;
 
 	mRepeatCount = 0;
@@ -82,7 +82,7 @@ Domain::~Domain() {
 
 void Domain::compute(char* inputFile) {
 	cout << endl << "Computation started..." << mWorkerRank << endl;
-	cout << "Current time: " << currentTime << ", finish time: " << stopTime << ", time step: " << timeStep << endl;
+	cout << "Current time: " << currentTime << ", finish time: " << stopTime << ", time step: " << mTimeStep << endl;
 	cout << "solver stage count: " << mSolverInfo->getStageCount() << endl;
 
 	if (mSolverInfo->isFSAL())
@@ -117,7 +117,7 @@ void Domain::compute(char* inputFile) {
 		nextStep();
 		if (mPythonMaster && (mWorkerRank == 0)) {
 			MPI_Send(&mLastStepAccepted, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
-			MPI_Send(&timeStep, 1, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD);
+			MPI_Send(&mTimeStep, 1, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD);
 			MPI_Send(&currentTime, 1, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD);
 		}
 
@@ -139,7 +139,7 @@ void Domain::compute(char* inputFile) {
 				MPI_Send(&percentage, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
 		}
 
-		counterSaveTime += timeStep;
+		counterSaveTime += mTimeStep;
 
 		int readyToSave = (saveInterval != 0) && (counterSaveTime > saveInterval);
 		if (mPythonMaster && (mWorkerRank == 0))
@@ -204,14 +204,14 @@ void Domain::nextStep() {
 		printf("step error = %f\n", error);
 
 		//!!! только 0, рассылать
-		timeStep = mSolverInfo->getNewStep(timeStep, error, totalGridElementCount);
-		printf("new time step = %f\n", timeStep);
+		mTimeStep = mSolverInfo->getNewStep(mTimeStep, error, totalGridElementCount);
+		printf("new time step = %f\n", mTimeStep);
 
 		//!!! только 0, рассылать
 		if (mSolverInfo->isErrorPermissible(error, totalGridElementCount)) {
 			confirmStep(); //uses new timestep
 			mAcceptedStepCount++;
-			currentTime += timeStep;
+			currentTime += mTimeStep;
 			//cout<<"Step accepted\n"<<endl;
 		} else {
 			rejectStep(); //uses new timestep
@@ -221,7 +221,7 @@ void Domain::nextStep() {
 	} else { //constant step
 		confirmStep();
 		mAcceptedStepCount++;
-		currentTime += timeStep;
+		currentTime += mTimeStep;
 
 	}
 }
@@ -254,7 +254,7 @@ void Domain::prepareDeviceArgument(int deviceType, int deviceNumber, int stage) 
 	for (int i = 0; i < mBlockCount; ++i)
 		if (mBlocks[i]->isBlockType(deviceType) && mBlocks[i]->isDeviceNumber(deviceNumber)) {
 			//cout << endl << "ERROR! PROCESS DEVICE!" << endl;
-			mBlocks[i]->prepareArgument(stage, timeStep);
+			mBlocks[i]->prepareArgument(stage, mTimeStep);
 		}
 }
 
@@ -263,7 +263,7 @@ double Domain::getDeviceError(int deviceType, int deviceNumber) {
 	for (int i = 0; i < mBlockCount; ++i)
 		if (mBlocks[i]->isBlockType(deviceType) && mBlocks[i]->isDeviceNumber(deviceNumber)) {
 			//cout << endl << "ERROR! PROCESS DEVICE!" << endl;
-			error += mBlocks[i]->getStepError(timeStep);
+			error += mBlocks[i]->getStepError(mTimeStep);
 		}
 	return error;
 }
@@ -338,14 +338,14 @@ void Domain::computeOneStepCenter(int stage) {
 void Domain::confirmStep() {
 	mLastStepAccepted = 1;
 	for (int i = 0; i < mBlockCount; ++i) {
-		mBlocks[i]->confirmStep(timeStep);
+		mBlocks[i]->confirmStep(mTimeStep);
 	}
 }
 
 void Domain::rejectStep() {
 	mLastStepAccepted = 0;
 	for (int i = 0; i < mBlockCount; ++i) {
-		mBlocks[i]->rejectStep(timeStep);
+		mBlocks[i]->rejectStep(mTimeStep);
 	}
 }
 
@@ -460,7 +460,7 @@ void Domain::readFileStat(ifstream& in) {
 void Domain::readTimeSetting(ifstream& in) {
 	in.read((char*) &startTime, SIZE_DOUBLE);
 	in.read((char*) &stopTime, SIZE_DOUBLE);
-	in.read((char*) &timeStep, SIZE_DOUBLE);
+	in.read((char*) &mTimeStep, SIZE_DOUBLE);
 
 	/*cout << "start time:    " << startTime << endl;
 	 cout << "stop time:     " << stopTime << endl;
@@ -819,7 +819,7 @@ void Domain::saveGeneralInfo(char* path) {
 		out.write((char*) &version_minor, SIZE_CHAR);
 
 		out.write((char*) &currentTime, SIZE_DOUBLE);
-		out.write((char*) &timeStep, SIZE_DOUBLE);
+		out.write((char*) &mTimeStep, SIZE_DOUBLE);
 
 		out.close();
 	}
@@ -853,7 +853,7 @@ void Domain::loadStateFromFile(char* dataFile) {
 	in.read((char*) &version_minor, SIZE_CHAR);
 
 	in.read((char*) &fileCurrentTime, SIZE_DOUBLE);
-	in.read((char*) &timeStep, SIZE_DOUBLE);
+	in.read((char*) &mTimeStep, SIZE_DOUBLE);
 
 	currentTime = fileCurrentTime;
 

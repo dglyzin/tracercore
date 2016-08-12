@@ -179,7 +179,7 @@ private:
 	double startTime;
 	double stopTime;
 
-	double timeStep;
+	double mTimeStep;
 	int mAcceptedStepCount;
 	int mRejectedStepCount;
 
