@@ -33,6 +33,8 @@ int main(int argc, char * argv[]) {
 	Domain* domain = new Domain(world_rank, world_size, inputFile);
 	domain->checkOptions(flags, stopTime, saveFile);
 
+	//domain->printBlocksToConsole();
+
 	/*
 	 * Вычисления.
 	 */

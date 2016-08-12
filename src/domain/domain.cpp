@@ -185,8 +185,8 @@ void Domain::computeStage(int stage) {
 
 	prepareNextStageArgument(stage);
 
-	printf("\nstage #%d\n", stage);
-	printBlocksToConsole();
+	/*printf("\nstage #%d\n", stage);
+	printBlocksToConsole();*/
 }
 
 void Domain::nextStep() {
