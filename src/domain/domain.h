@@ -244,6 +244,7 @@ private:
 	 * after every step (successful or not) we update timestep according to an error
 	 */
 	double collectError();
+	double getNewStep(double error);
 
 	void confirmStep();
 	void rejectStep();

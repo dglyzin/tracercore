@@ -204,7 +204,8 @@ void Domain::nextStep() {
 		printf("step error = %f\n", error);
 
 		//!!! только 0, рассылать
-		mTimeStep = mSolverInfo->getNewStep(mTimeStep, error, totalGridElementCount);
+		//mTimeStep = mSolverInfo->getNewStep(mTimeStep, error, totalGridElementCount);
+		mTimeStep = getNewStep(error);
 		printf("new time step = %f\n", mTimeStep);
 
 		//!!! только 0, рассылать
@@ -390,11 +391,22 @@ double Domain::collectError() {
 
 	double absError = 0;
 
-	MPI_Reduce(&nodeError, &absError, 1, MPI_DOUBLE, MPI_SUM, mWorkerComm);
+	MPI_Reduce(&nodeError, &absError, 1, MPI_DOUBLE, MPI_SUM, 0, mWorkerComm);
 
 	delete gpuError;
 
 	return absError;
+}
+
+double Domain::getNewStep(double error) {
+	double newStep = 0;
+
+	if (mWorkerRank == 0) {
+		newStep = mSolverInfo->getNewStep(mTimeStep, error, totalGridElementCount);
+	}
+
+	MPI_Bcast(&newStep, 1, MPI_DOUBLE, 0, mWorkerComm);
+	return mSolverInfo->getNewStep(mTimeStep, error, totalGridElementCount);
 }
 
 void Domain::printBlocksToConsole() {
