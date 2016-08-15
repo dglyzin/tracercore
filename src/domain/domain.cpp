@@ -203,13 +203,19 @@ void Domain::nextStep() {
 
 		printf("step error = %f\n", error);
 
+		bool isErrorPermissible = mSolverInfo->isErrorPermissible(error, totalGridElementCount);
+
+		if (isErrorPermissible) {
+			currentTime += mTimeStep;
+		}
+
 		//!!! только 0, рассылать
 		//mTimeStep = mSolverInfo->getNewStep(mTimeStep, error, totalGridElementCount);
 		mTimeStep = getNewStep(error);
 		printf("new time step = %f\n", mTimeStep);
 
 		//!!! только 0, рассылать
-		if (mSolverInfo->isErrorPermissible(error, totalGridElementCount)) {
+		if (isErrorPermissible) {
 			confirmStep(); //uses new timestep
 			mAcceptedStepCount++;
 			currentTime += mTimeStep;
