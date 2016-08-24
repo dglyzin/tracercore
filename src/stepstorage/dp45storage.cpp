@@ -255,7 +255,8 @@ void DP45Storage::prepareArgument(ProcessingUnit* pu, int stage, double timestep
 		case 5:
 			break;
 		case SOLVER_INIT_STAGE:
-			pu->multiplyArrayByNumberAndSum(mArg, mTempStore1, timestep * a21, mState, mCount);
+			///pu->multiplyArrayByNumberAndSum(mArg, mTempStore1, timestep * a21, mState, mCount);
+			prepareFSAL(pu, timestep);
 			break;
 		default:
 			assert(0);
