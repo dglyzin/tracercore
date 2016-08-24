@@ -21,7 +21,7 @@ DP45Storage::DP45Storage() :
 
 	mArg = NULL;
 
-	temp = NULL;
+	//temp = NULL;
 }
 
 DP45Storage::DP45Storage(ProcessingUnit* pu, int count, double _aTol, double _rTol) :
@@ -36,7 +36,7 @@ DP45Storage::DP45Storage(ProcessingUnit* pu, int count, double _aTol, double _rT
 
 	mArg = pu->newDoubleArray(mCount);
 
-	temp = pu->newDoubleArray(mCount);
+	//temp = pu->newDoubleArray(mCount);
 }
 
 DP45Storage::~DP45Storage() {
@@ -254,7 +254,7 @@ void DP45Storage::prepareArgument(ProcessingUnit* pu, int stage, double timestep
 			break;
 		case 5:
 			break;
-		case -1:
+		case SOLVER_INIT_STAGE:
 			pu->multiplyArrayByNumberAndSum(mArg, mTempStore1, timestep * a21, mState, mCount);
 			break;
 		default:
@@ -291,6 +291,9 @@ double DP45Storage::getStepError(ProcessingUnit* pu, double timestep) {
 
 	 return err;*/
 
+	double* temp = mTempStore2;
+	double* temp2 = mTempStore3;
+
 	pu->multiplyArrayByNumber(temp, mTempStore1, timestep * e1, mCount);
 	pu->multiplyArrayByNumberAndSum(temp, mTempStore3, timestep * e3, temp, mCount);
 	pu->multiplyArrayByNumberAndSum(temp, mTempStore4, timestep * e4, temp, mCount);
@@ -300,11 +303,11 @@ double DP45Storage::getStepError(ProcessingUnit* pu, double timestep) {
 
 	//pu->multiplyArrayByNumber(temp, temp, timestep, mCount);
 
-	pu->maxElementsElementwise(mArg, mArg, mState, mCount);
-	pu->multiplyArrayByNumber(mArg, mArg, rTol, mCount);
-	pu->addNumberToArray(mArg, mArg, aTol, mCount);
+	pu->maxElementsElementwise(temp2, temp2, mState, mCount);
+	pu->multiplyArrayByNumber(temp2, temp2, rTol, mCount);
+	pu->addNumberToArray(temp2, temp2, aTol, mCount);
 
-	pu->divisionArraysElementwise(temp, temp, mArg, mCount);
+	pu->divisionArraysElementwise(temp, temp, temp2, mCount);
 
 	pu->multiplyArraysElementwise(temp, temp, temp, mCount);
 

@@ -49,7 +49,7 @@ private:
 	double* mTempStore7;
 	double* mArg;
 
-	double* temp;
+	//double* temp;
 
 	static const double c2 = 0.2, c3 = 0.3, c4 = 0.8, c5 = 8.0 / 9.0;
 
