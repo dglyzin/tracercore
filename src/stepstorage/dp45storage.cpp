@@ -304,7 +304,7 @@ double DP45Storage::getStepError(ProcessingUnit* pu, double timestep) {
 
 	//pu->multiplyArrayByNumber(temp, temp, timestep, mCount);
 
-	pu->maxElementsElementwise(temp2, temp2, mState, mCount);
+	pu->maxElementsElementwise(temp2, mArg, mState, mCount);
 	pu->multiplyArrayByNumber(temp2, temp2, rTol, mCount);
 	pu->addNumberToArray(temp2, temp2, aTol, mCount);
 
