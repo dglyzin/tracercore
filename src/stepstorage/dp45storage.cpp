@@ -109,7 +109,7 @@ double* DP45Storage::getStageSource(int stage) {
 		case 4:
 		case 5:
 			return mArg;
-		case -1:
+		case SOLVER_INIT_STAGE:
 			return mState;
 		default:
 			assert(0);
@@ -141,7 +141,7 @@ double* DP45Storage::getStageResult(int stage) {
 			return mTempStore6;
 		case 5:
 			return mTempStore7;
-		case -1:
+		case SOLVER_INIT_STAGE:
 			return mTempStore1;
 		default:
 			assert(0);
