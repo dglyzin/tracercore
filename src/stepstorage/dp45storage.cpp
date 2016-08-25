@@ -173,7 +173,7 @@ double DP45Storage::getStageTimeStep(int stage) {
 			return 1.0;
 		case 5:
 			return 1.0;
-		case -1:
+		case SOLVER_INIT_STAGE:
 			return 0.0;
 		default:
 			assert(0);
