@@ -21,7 +21,8 @@ DP45Storage::DP45Storage() :
 
 	mArg = NULL;
 
-	//temp = NULL;
+	temp = NULL;
+	temp2 = NULL;
 }
 
 DP45Storage::DP45Storage(ProcessingUnit* pu, int count, double _aTol, double _rTol) :
@@ -36,7 +37,8 @@ DP45Storage::DP45Storage(ProcessingUnit* pu, int count, double _aTol, double _rT
 
 	mArg = pu->newDoubleArray(mCount);
 
-	//temp = pu->newDoubleArray(mCount);
+	temp = pu->newDoubleArray(mCount);
+	temp2 = pu->newDoubleArray(mCount);
 }
 
 DP45Storage::~DP45Storage() {
@@ -86,6 +88,7 @@ int DP45Storage::getSizeChild(int elementCount) {
 	size += elementCount * SIZE_DOUBLE; // mArg
 
 	size += elementCount * SIZE_DOUBLE; // temp
+	size += elementCount * SIZE_DOUBLE; // temp2
 
 	return size;
 }
@@ -292,8 +295,8 @@ double DP45Storage::getStepError(ProcessingUnit* pu, double timestep) {
 
 	 return err;*/
 
-	double* temp = mTempStore2;
-	double* temp2 = mTempStore3;
+	/*double* temp = mTempStore2;
+	double* temp2 = mTempStore3;*/
 
 	pu->multiplyArrayByNumber(temp, mTempStore1, timestep * e1, mCount);
 	pu->multiplyArrayByNumberAndSum(temp, mTempStore3, timestep * e3, temp, mCount);
