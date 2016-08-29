@@ -93,6 +93,35 @@ int DP45Storage::getSizeChild(int elementCount) {
 	return size;
 }
 
+double DP45Storage::getB1(double theta) {
+	return pow(theta, 2) * (3 - 2 * theta) * a71 + theta * pow(theta - 1, 2)
+			- pow(theta, 2) * pow(theta - 1, 2) * 5 * (2558722523 - 31403016 * theta) / 11282082432;
+}
+
+double DP45Storage::getB3(double theta) {
+	return pow(theta, 2) * (3 - 2 * theta) * a73 + pow(theta, 2) * pow(theta - 1, 2) * 100 * (882725551 - 15701508 * theta) / 32700410799;
+}
+
+double DP45Storage::getB4(double theta) {
+	return pow(theta, 2) * (3 - 2 * theta) * a74
+			- pow(theta, 2) * pow(theta - 1, 2) * 25 * (443332067 - 31403016 * theta) / 1880347072;
+}
+
+double DP45Storage::getB5(double theta) {
+	return pow(theta, 2) * (3 - 2 * theta) * a75
+			+ pow(theta, 2) * pow(theta - 1, 2) * 32805 * (23143187 - 3489224 * theta) / 199316789632;
+}
+
+double DP45Storage::getB6(double theta) {
+	return pow(theta, 2) * (3 - 2 * theta) * a76
+			- pow(theta, 2) * pow(theta - 1, 2) * 55 * (29972135 - 7076736 * theta) / 822651844;
+}
+
+double DP45Storage::getB7(double theta) {
+	/*return pow(theta, 2) * (theta - 1) * b7
+			+ pow(theta, 2) * pow(theta - 1, 2) * 10 * (7414447 - 829305 * theta) / 29380423;*/
+}
+
 double* DP45Storage::getStageSource(int stage) {
 	/*if      (stage == 0) return mArg;
 	 else if (stage == 1) return mArg;
@@ -296,7 +325,7 @@ double DP45Storage::getStepError(ProcessingUnit* pu, double timestep) {
 	 return err;*/
 
 	/*double* temp = mTempStore2;
-	double* temp2 = mTempStore3;*/
+	 double* temp2 = mTempStore3;*/
 
 	pu->multiplyArrayByNumber(temp, mTempStore1, timestep * e1, mCount);
 	pu->multiplyArrayByNumberAndSum(temp, mTempStore3, timestep * e3, temp, mCount);
@@ -305,7 +334,7 @@ double DP45Storage::getStepError(ProcessingUnit* pu, double timestep) {
 	pu->multiplyArrayByNumberAndSum(temp, mTempStore6, timestep * e6, temp, mCount);
 	pu->multiplyArrayByNumberAndSum(temp, mTempStore7, timestep * e7, temp, mCount);
 
-	//pu->multiplyArrayByNumber(temp, temp, timestep, mCount);
+//pu->multiplyArrayByNumber(temp, temp, timestep, mCount);
 
 	pu->maxElementsElementwise(temp2, mArg, mState, mCount);
 	pu->multiplyArrayByNumber(temp2, temp2, rTol, mCount);
@@ -343,8 +372,14 @@ bool DP45Storage::isErrorPermissible(double error, int totalDomainElements) {
 		return false;
 }
 
-void DP45Storage::getDenseOutput(StepStorage* secondState, double* result) {
-	printf("\nDP45 dense output DON'T WORK!\n");
+void DP45Storage::getDenseOutput(ProcessingUnit* pu, double timestep, double tetha, double* result) {
+	pu->multiplyArrayByNumber(result, mTempStore1, getB1(tetha), mCount);
+	pu->multiplyArrayByNumberAndSum(result, mTempStore3, getB3(tetha), mArg, mCount);
+	pu->multiplyArrayByNumberAndSum(result, mTempStore4, getB4(tetha), mArg, mCount);
+	pu->multiplyArrayByNumberAndSum(result, mTempStore5, getB5(tetha), mArg, mCount);
+	pu->multiplyArrayByNumberAndSum(result, mTempStore6, getB6(tetha), mArg, mCount);
+	pu->multiplyArrayByNumber(result, result, timestep, mCount);
+	pu->sumArrays(result, result, mState, mCount);
 }
 
 void DP45Storage::print(ProcessingUnit* pu, int zCount, int yCount, int xCount, int cellSize) {

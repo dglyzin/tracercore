@@ -35,7 +35,7 @@ public:
 	double getNewStep(double timestep, double error, int totalDomainElements);
 	bool isErrorPermissible(double error, int totalDomainElements);
 
-	void getDenseOutput(StepStorage* secondState, double* result);
+	void getDenseOutput(ProcessingUnit* pu, double timestep, double tetha, double* result);
 
 	void print(ProcessingUnit* pu, int zCount, int yCount, int xCount, int cellSize);
 
@@ -72,6 +72,13 @@ private:
 	void loadMTempStores(ProcessingUnit* pu, std::ifstream& in);
 
 	int getSizeChild(int elementCount);
+
+	double getB1(double theta);
+	double getB3(double theta);
+	double getB4(double theta);
+	double getB5(double theta);
+	double getB6(double theta);
+	double getB7(double theta);
 };
 
 #endif /* SRC_STEPSTORAGE_DP45STORAGE_H_ */
