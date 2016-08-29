@@ -265,6 +265,8 @@ private:
 	void saveGeneralInfo(char* path);
 	void saveStateForDrawByBlocks(char* path);
 	void saveStateForLoadByBlocks(char* path);
+
+	double getTethaForDenseOutput(double requiredTime);
 };
 
 #endif /* SRC_DOMAIN_H_ */

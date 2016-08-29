@@ -857,6 +857,10 @@ void Domain::saveStateForLoadByBlocks(char* path) {
 	}
 }
 
+double Domain::getTethaForDenseOutput(double requiredTime) {
+	return (requiredTime - currentTime) / mTimeStep;
+}
+
 void Domain::loadStateFromFile(char* dataFile) {
 	ifstream in;
 	in.open(dataFile, ios::binary);
