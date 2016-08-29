@@ -35,7 +35,7 @@ public:
 	double getNewStep(double timestep, double error, int totalDomainElements);
 	bool isErrorPermissible(double error, int totalDomainElements);
 
-	void getDenseOutput(StepStorage* secondState, double* result);
+	void getDenseOutput(ProcessingUnit* pu, double timestep, double tetha, double* result);
 
 	void print(ProcessingUnit* pu, int zCount, int yCount, int xCount, int cellSize);
 
