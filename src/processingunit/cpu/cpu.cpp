@@ -10,7 +10,7 @@
 using namespace std;
 
 CPU::CPU(int _deviceNumber) :
-		ProcessingUnit(_deviceNumber) {
+	ProcessingUnit(_deviceNumber) {
 }
 
 CPU::~CPU() {
