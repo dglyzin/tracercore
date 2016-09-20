@@ -32,7 +32,7 @@ double* Ordinary::getResult(int stage) {
 }
 
 void Ordinary::prepareArgument(ProcessingUnit* pu, int stage, double timestep) {
-	mStepStorage->prepareArgument(pu, stage, timestep);
+	mStepStorage->prepareArgument(stage, timestep);
 }
 
 double* Ordinary::getCurrentStateStageData(int stage) {
@@ -40,15 +40,15 @@ double* Ordinary::getCurrentStateStageData(int stage) {
 }
 
 double Ordinary::getStepError(ProcessingUnit* pu, double timestep) {
-	return mStepStorage->getStepError(pu, timestep);
+	return mStepStorage->getStepError(timestep);
 }
 
 void Ordinary::confirmStep(ProcessingUnit* pu, double timestep) {
-	mStepStorage->confirmStep(pu, timestep);
+	mStepStorage->confirmStep(timestep);
 }
 
 void Ordinary::rejectStep(ProcessingUnit* pu, double timestep) {
-	mStepStorage->rejectStep(pu, timestep);
+	mStepStorage->rejectStep(timestep);
 }
 
 void Ordinary::loadData(ProcessingUnit* pu, double* data) {
@@ -57,7 +57,7 @@ void Ordinary::loadData(ProcessingUnit* pu, double* data) {
 }
 
 void Ordinary::getCurrentState(ProcessingUnit* pu, double* result) {
-	mStepStorage->copyState(pu, result);
+	mStepStorage->copyState(result);
 }
 
 double* Ordinary::getCurrentStatePointer() {
@@ -65,21 +65,21 @@ double* Ordinary::getCurrentStatePointer() {
 }
 
 void Ordinary::saveStateForDraw(ProcessingUnit* pu, char* path) {
-	mStepStorage->saveState(pu, path);
+	mStepStorage->saveState(path);
 }
 
 void Ordinary::saveStateForLoad(ProcessingUnit* pu, char* path) {
-	mStepStorage->saveState(pu, path);
+	mStepStorage->saveState(path);
 }
 
 void Ordinary::loadState(ProcessingUnit* pu, ifstream& in) {
-	mStepStorage->loadState(pu, in);
+	mStepStorage->loadState(in);
 }
 
 bool Ordinary::isNan(ProcessingUnit* pu) {
-	return mStepStorage->isNan(pu);
+	return mStepStorage->isNan();
 }
 
 void Ordinary::print(ProcessingUnit* pu, int zCount, int yCount, int xCount, int cellSize) {
-	mStepStorage->print(pu, zCount, yCount, xCount, cellSize);
+	mStepStorage->print(zCount, yCount, xCount, cellSize);
 }

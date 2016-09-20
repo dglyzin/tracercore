@@ -25,8 +25,8 @@ DP45Storage::DP45Storage() :
 	temp2 = NULL;
 }
 
-DP45Storage::DP45Storage(ProcessingUnit* pu, int count, double _aTol, double _rTol) :
-		StepStorage(pu, count, _aTol, _rTol) {
+DP45Storage::DP45Storage(ProcessingUnit* _pu, int count, double _aTol, double _rTol) :
+		StepStorage(_pu, count, _aTol, _rTol) {
 	mTempStore1 = pu->newDoubleArray(mCount);
 	mTempStore2 = pu->newDoubleArray(mCount);
 	mTempStore3 = pu->newDoubleArray(mCount);
@@ -44,14 +44,14 @@ DP45Storage::DP45Storage(ProcessingUnit* pu, int count, double _aTol, double _rT
 DP45Storage::~DP45Storage() {
 }
 
-void DP45Storage::prepareFSAL(ProcessingUnit* pu, double timestep) {
+void DP45Storage::prepareFSAL(double timestep) {
 	/*#pragma omp parallel for
 	 for (int idx = 0; idx < mCount; idx++)
 	 mArg[idx] = mState[idx] + a21 * timeStep * mTempStore1[idx];*/
 	pu->multiplyArrayByNumberAndSum(mArg, mTempStore1, a21 * timestep, mState, mCount);
 }
 
-void DP45Storage::saveMTempStores(ProcessingUnit* pu, char* path) {
+void DP45Storage::saveMTempStores(char* path) {
 	pu->saveArray(mTempStore1, mCount, path);
 	pu->saveArray(mTempStore2, mCount, path);
 	pu->saveArray(mTempStore3, mCount, path);
@@ -63,7 +63,7 @@ void DP45Storage::saveMTempStores(ProcessingUnit* pu, char* path) {
 	pu->saveArray(mArg, mCount, path);
 }
 
-void DP45Storage::loadMTempStores(ProcessingUnit* pu, ifstream& in) {
+void DP45Storage::loadMTempStores(ifstream& in) {
 	pu->loadArray(mTempStore1, mCount, in);
 	pu->loadArray(mTempStore2, mCount, in);
 	pu->loadArray(mTempStore3, mCount, in);
@@ -213,7 +213,7 @@ double DP45Storage::getStageTimeStep(int stage) {
 	}
 }
 
-void DP45Storage::prepareArgument(ProcessingUnit* pu, int stage, double timestep) {
+void DP45Storage::prepareArgument(int stage, double timestep) {
 	/*if      (stage == 0)
 	 #pragma omp parallel for
 	 for (int idx=0; idx<mCount; idx++)
@@ -288,7 +288,7 @@ void DP45Storage::prepareArgument(ProcessingUnit* pu, int stage, double timestep
 			break;
 		case SOLVER_INIT_STAGE:
 			///pu->multiplyArrayByNumberAndSum(mArg, mTempStore1, timestep * a21, mState, mCount);
-			prepareFSAL(pu, timestep);
+			prepareFSAL(timestep);
 			break;
 		default:
 			assert(0);
@@ -296,7 +296,7 @@ void DP45Storage::prepareArgument(ProcessingUnit* pu, int stage, double timestep
 	}
 }
 
-void DP45Storage::confirmStep(ProcessingUnit* pu, double timestep) {
+void DP45Storage::confirmStep(double timestep) {
 	double* temp = mState;
 	mState = mArg;
 	mArg = temp;
@@ -305,14 +305,14 @@ void DP45Storage::confirmStep(ProcessingUnit* pu, double timestep) {
 	mTempStore7 = mTempStore1;
 	mTempStore1 = temp;
 
-	prepareFSAL(pu, timestep);
+	prepareFSAL(timestep);
 }
 
-void DP45Storage::rejectStep(ProcessingUnit* pu, double timestep) {
-	prepareFSAL(pu, timestep);
+void DP45Storage::rejectStep(double timestep) {
+	prepareFSAL(timestep);
 }
 
-double DP45Storage::getStepError(ProcessingUnit* pu, double timestep) {
+double DP45Storage::getStepError(double timestep) {
 	/*double err=0;
 	 #pragma omp parallel for reduction (+:err)
 	 for (int idx=0; idx<mCount; idx++){
@@ -372,7 +372,7 @@ bool DP45Storage::isErrorPermissible(double error, int totalDomainElements) {
 		return false;
 }
 
-void DP45Storage::getDenseOutput(ProcessingUnit* pu, double timestep, double tetha, double* result) {
+void DP45Storage::getDenseOutput(double timestep, double tetha, double* result) {
 	pu->multiplyArrayByNumber(result, mTempStore1, getB1(tetha), mCount);
 	pu->multiplyArrayByNumberAndSum(result, mTempStore3, getB3(tetha), mArg, mCount);
 	pu->multiplyArrayByNumberAndSum(result, mTempStore4, getB4(tetha), mArg, mCount);
@@ -382,7 +382,7 @@ void DP45Storage::getDenseOutput(ProcessingUnit* pu, double timestep, double tet
 	pu->sumArrays(result, result, mState, mCount);
 }
 
-void DP45Storage::print(ProcessingUnit* pu, int zCount, int yCount, int xCount, int cellSize) {
+void DP45Storage::print(int zCount, int yCount, int xCount, int cellSize) {
 	printf("mState:\n");
 	pu->printArray(mState, zCount, yCount, xCount, cellSize);
 

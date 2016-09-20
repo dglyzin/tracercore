@@ -13,7 +13,7 @@
 class RK4Storage: public StepStorage {
 public:
 	RK4Storage();
-	RK4Storage(ProcessingUnit* pu, int count, double _aTol, double _rTol);
+	RK4Storage(ProcessingUnit* _pu, int count, double _aTol, double _rTol);
 	virtual ~RK4Storage();
 
 	double* getStageSource(int stage);
@@ -21,12 +21,12 @@ public:
 
 	double getStageTimeStep(int stage);
 
-	void prepareArgument(ProcessingUnit* pu, int stage, double timestep);
+	void prepareArgument(int stage, double timestep);
 
-	void confirmStep(ProcessingUnit* pu, double timestep);
-	void rejectStep(ProcessingUnit* pu, double timestep);
+	void confirmStep(double timestep);
+	void rejectStep(double timestep);
 
-	double getStepError(ProcessingUnit* pu, double timestep);
+	double getStepError(double timestep);
 
 	bool isFSAL();
 	bool isVariableStep();
@@ -35,9 +35,9 @@ public:
 	double getNewStep(double timestep, double error, int totalDomainElements);
 	bool isErrorPermissible(double error, int totalDomainElements);
 
-	void getDenseOutput(ProcessingUnit* pu, double timestep, double tetha, double* result);
+	void getDenseOutput(double timestep, double tetha, double* result);
 
-	void print(ProcessingUnit* pu, int zCount, int yCount, int xCount, int cellSize);
+	void print(int zCount, int yCount, int xCount, int cellSize);
 
 private:
 	double* mTempStore1;
@@ -51,8 +51,8 @@ private:
 	static const double b3 = 1.0 / 3.0;
 	static const double b4 = 1.0 / 6.0;
 
-	void saveMTempStores(ProcessingUnit* pu, char* path);
-	void loadMTempStores(ProcessingUnit* pu, std::ifstream& in);
+	void saveMTempStores(char* path);
+	void loadMTempStores(std::ifstream& in);
 
 	int getSizeChild(int elementCount);
 };

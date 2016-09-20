@@ -14,19 +14,19 @@ EulerStorage::EulerStorage() :
 	mTempStore1 = NULL;
 }
 
-EulerStorage::EulerStorage(ProcessingUnit* pu, int count, double _aTol, double _rTol) :
-		StepStorage(pu, count, _aTol, _rTol) {
+EulerStorage::EulerStorage(ProcessingUnit* _pu, int count, double _aTol, double _rTol) :
+		StepStorage(_pu, count, _aTol, _rTol) {
 	mTempStore1 = pu->newDoubleArray(mCount);
 }
 
 EulerStorage::~EulerStorage() {
 }
 
-void EulerStorage::saveMTempStores(ProcessingUnit* pu, char* path) {
+void EulerStorage::saveMTempStores(char* path) {
 	pu->saveArray(mTempStore1, mCount, path);
 }
 
-void EulerStorage::loadMTempStores(ProcessingUnit* pu, ifstream& in) {
+void EulerStorage::loadMTempStores(ifstream& in) {
 	pu->loadArray(mTempStore1, mCount, in);
 }
 
@@ -50,22 +50,22 @@ double EulerStorage::getStageTimeStep(int stage) {
 	return 0.0;
 }
 
-void EulerStorage::prepareArgument(ProcessingUnit* pu, int stage, double timestep) {
+void EulerStorage::prepareArgument(int stage, double timestep) {
 	pu->multiplyArrayByNumber(mTempStore1, mTempStore1, timestep, mCount);
 	pu->sumArrays(mTempStore1, mState, mTempStore1, mCount);
 }
 
-void EulerStorage::confirmStep(ProcessingUnit* pu, double timestep) {
+void EulerStorage::confirmStep(double timestep) {
 	double* temp = mState;
 	mState = mTempStore1;
 	mTempStore1 = temp;
 }
 
-void EulerStorage::rejectStep(ProcessingUnit* pu, double timestep) {
+void EulerStorage::rejectStep(double timestep) {
 	return;
 }
 
-double EulerStorage::getStepError(ProcessingUnit* pu, double timestep) {
+double EulerStorage::getStepError(double timestep) {
 	return 0.0;
 }
 
@@ -89,11 +89,11 @@ bool EulerStorage::isErrorPermissible(double error, int totalDomainElements) {
 	return true;
 }
 
-void EulerStorage::getDenseOutput(ProcessingUnit* pu, double timestep, double tetha, double* result) {
+void EulerStorage::getDenseOutput(double timestep, double tetha, double* result) {
 	printf("\nEuler dense output DON'T WORK!\n");
 }
 
-void EulerStorage::print(ProcessingUnit* pu, int zCount, int yCount, int xCount, int cellSize) {
+void EulerStorage::print(int zCount, int yCount, int xCount, int cellSize) {
 	printf("mState:\n");
 	pu->printArray(mState, zCount, yCount, xCount, cellSize);
 

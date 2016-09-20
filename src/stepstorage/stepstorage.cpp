@@ -10,13 +10,16 @@
 using namespace std;
 
 StepStorage::StepStorage() {
+	pu = NULL;
 	mCount = 0;
 	mState = NULL;
 	aTol = 0;
 	rTol = 0;
 }
 
-StepStorage::StepStorage(ProcessingUnit* pu, int count, double _aTol, double _rTol) {
+StepStorage::StepStorage(ProcessingUnit* _pu, int count, double _aTol, double _rTol) {
+	pu = _pu;
+
 	mCount = count;
 
 	mState = pu->newDoubleArray(mCount);
@@ -28,41 +31,41 @@ StepStorage::StepStorage(ProcessingUnit* pu, int count, double _aTol, double _rT
 StepStorage::~StepStorage() {
 }
 
-void StepStorage::saveMState(ProcessingUnit* pu, char* path) {
+void StepStorage::saveMState(char* path) {
 	pu->saveArray(mState, mCount, path);
 }
 
-void StepStorage::loadMState(ProcessingUnit* pu, std::ifstream& in) {
+void StepStorage::loadMState(std::ifstream& in) {
 	pu->loadArray(mState, mCount, in);
 }
 
-void StepStorage::copyState(ProcessingUnit* pu, double* result) {
+void StepStorage::copyState(double* result) {
 	pu->copyArray(mState, result, mCount);
 }
 
-void StepStorage::saveState(ProcessingUnit* pu, char* path) {
-	saveMState(pu, path);
+void StepStorage::saveState(char* path) {
+	saveMState(path);
 }
 
-void StepStorage::loadState(ProcessingUnit* pu, ifstream& in) {
-	loadMState(pu, in);
+void StepStorage::loadState(ifstream& in) {
+	loadMState(in);
 }
 
-void StepStorage::saveStateWithTempStore(ProcessingUnit* pu, char* path) {
-	saveMState(pu, path);
-	saveMTempStores(pu, path);
+void StepStorage::saveStateWithTempStore(char* path) {
+	saveMState(path);
+	saveMTempStores(path);
 }
 
-void StepStorage::loadStateWithTempStore(ProcessingUnit* pu, ifstream& in) {
-	loadMState(pu, in);
-	loadMTempStores(pu, in);
+void StepStorage::loadStateWithTempStore(ifstream& in) {
+	loadMState(in);
+	loadMTempStores(in);
 }
 
 double* StepStorage::getStatePointer() {
 	return mState;
 }
 
-bool StepStorage::isNan(ProcessingUnit* pu) {
+bool StepStorage::isNan() {
 	return pu->isNan(mState, mCount);
 }
 

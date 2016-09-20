@@ -19,8 +19,8 @@ RK4Storage::RK4Storage() :
 	mArg = NULL;
 }
 
-RK4Storage::RK4Storage(ProcessingUnit* pu, int count, double _aTol, double _rTol) :
-		StepStorage(pu, count, _aTol, _rTol) {
+RK4Storage::RK4Storage(ProcessingUnit* _pu, int count, double _aTol, double _rTol) :
+		StepStorage(_pu, count, _aTol, _rTol) {
 	mTempStore1 = pu->newDoubleArray(mCount);
 	mTempStore2 = pu->newDoubleArray(mCount);
 	mTempStore3 = pu->newDoubleArray(mCount);
@@ -32,7 +32,7 @@ RK4Storage::RK4Storage(ProcessingUnit* pu, int count, double _aTol, double _rTol
 RK4Storage::~RK4Storage() {
 }
 
-void RK4Storage::saveMTempStores(ProcessingUnit* pu, char* path) {
+void RK4Storage::saveMTempStores(char* path) {
 	pu->saveArray(mTempStore1, mCount, path);
 	pu->saveArray(mTempStore2, mCount, path);
 	pu->saveArray(mTempStore3, mCount, path);
@@ -41,7 +41,7 @@ void RK4Storage::saveMTempStores(ProcessingUnit* pu, char* path) {
 	pu->saveArray(mArg, mCount, path);
 }
 
-void RK4Storage::loadMTempStores(ProcessingUnit* pu, ifstream& in) {
+void RK4Storage::loadMTempStores(ifstream& in) {
 	pu->loadArray(mTempStore1, mCount, in);
 	pu->loadArray(mTempStore2, mCount, in);
 	pu->loadArray(mTempStore3, mCount, in);
@@ -108,7 +108,7 @@ double RK4Storage::getStageTimeStep(int stage) {
 	}
 }
 
-void RK4Storage::prepareArgument(ProcessingUnit* pu, int stage, double timestep) {
+void RK4Storage::prepareArgument(int stage, double timestep) {
 	switch (stage) {
 		case 0:
 			pu->multiplyArrayByNumber(mArg, mTempStore1, 0.5 * timestep, mCount);
@@ -151,17 +151,17 @@ void RK4Storage::prepareArgument(ProcessingUnit* pu, int stage, double timestep)
 	}
 }
 
-void RK4Storage::confirmStep(ProcessingUnit* pu, double timestep) {
+void RK4Storage::confirmStep(double timestep) {
 	double* temp = mState;
 	mState = mArg;
 	mArg = temp;
 }
 
-void RK4Storage::rejectStep(ProcessingUnit* pu, double timestep) {
+void RK4Storage::rejectStep(double timestep) {
 	return;
 }
 
-double RK4Storage::getStepError(ProcessingUnit* pu, double timestep) {
+double RK4Storage::getStepError(double timestep) {
 	return 0.0;
 }
 
@@ -185,11 +185,11 @@ bool RK4Storage::isErrorPermissible(double error, int totalDomainElements) {
 	return true;
 }
 
-void RK4Storage::getDenseOutput(ProcessingUnit* pu, double timestep, double tetha, double* result) {
+void RK4Storage::getDenseOutput(double timestep, double tetha, double* result) {
 	printf("\nRK4 dense output DON'T WORK!\n");
 }
 
-void RK4Storage::print(ProcessingUnit* pu, int zCount, int yCount, int xCount, int cellSize) {
+void RK4Storage::print(int zCount, int yCount, int xCount, int cellSize) {
 	printf("mState:\n");
 	pu->printArray(mState, zCount, yCount, xCount, cellSize);
 
