@@ -203,9 +203,10 @@ void Domain::nextStep() {
 
 		printf("step error = %f\n", error);
 
-		bool isErrorPermissible = mSolverInfo->isErrorPermissible(error, totalGridElementCount);
+		//bool isErrorPermissible = mSolverInfo->isErrorPermissible(error, totalGridElementCount);
+		bool isErrorPer = isErrorPermissible(error);
 
-		if (isErrorPermissible) {
+		if (isErrorPer) {
 			currentTime += mTimeStep;
 		}
 
@@ -215,7 +216,7 @@ void Domain::nextStep() {
 		printf("new time step = %f\n", mTimeStep);
 
 		//!!! только 0, рассылать
-		if (isErrorPermissible) {
+		if (isErrorPer) {
 			confirmStep(); //uses new timestep
 			mAcceptedStepCount++;
 			currentTime += mTimeStep;
@@ -402,6 +403,17 @@ double Domain::collectError() {
 	delete gpuError;
 
 	return absError;
+}
+
+bool Domain::isErrorPermissible(double error) {
+	int isErrorPermissible = 0;
+
+	if (mWorkerRank == 0) {
+		isErrorPermissible = (int)(mSolverInfo->isErrorPermissible(error, totalGridElementCount));
+	}
+
+	MPI_Bcast(&isErrorPermissible, 1, MPI_INT, 0, mWorkerComm);
+	return (bool)(isErrorPermissible);
 }
 
 double Domain::getNewStep(double error) {
