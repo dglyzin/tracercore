@@ -9,14 +9,14 @@
 
 using namespace std;
 
-Delay::Delay(ProcessingUnit* pu, int solverType, int count, double aTol, double rTol, int _delayCount) {
+Delay::Delay(ProcessingUnit* _pu, int solverType, int count, double aTol, double rTol, int _delayCount) : ProblemType(_pu) {
 	//TODO fix!!! реализация функции для ProcessingUnit!!!
 	maxStorageCount = 1;
 
 	mStepStorage = new StepStorage*[maxStorageCount];
 
 	for (int i = 0; i < maxStorageCount; ++i) {
-		mStepStorage[i] = createStageStorage(pu, solverType, count, aTol, rTol);
+		mStepStorage[i] = createStageStorage(solverType, count, aTol, rTol);
 	}
 
 	delayCount = _delayCount;
@@ -75,7 +75,7 @@ double* Delay::getResult(int stage) {
 	return mStepStorage[resultStorageNumber]->getStageResult(stage);
 }
 
-void Delay::prepareArgument(ProcessingUnit* pu, int stage, double timestep) {
+void Delay::prepareArgument(int stage, double timestep) {
 	mStepStorage[currentStorageNumber]->prepareArgument(stage, timestep);
 }
 
@@ -83,24 +83,24 @@ double* Delay::getCurrentStateStageData(int stage) {
 	return mStepStorage[currentStorageNumber]->getStageSource(stage);
 }
 
-double Delay::getStepError(ProcessingUnit* pu, double timestep) {
+double Delay::getStepError(double timestep) {
 	return mStepStorage[currentStorageNumber]->getStepError(timestep);
 }
 
-void Delay::confirmStep(ProcessingUnit* pu, double timestep) {
+void Delay::confirmStep(double timestep) {
 	mStepStorage[currentStorageNumber]->confirmStep(timestep);
 	currentStorageNumber = (currentStorageNumber + 1) % maxStorageCount;
 }
 
-void Delay::rejectStep(ProcessingUnit* pu, double timestep) {
+void Delay::rejectStep(double timestep) {
 	mStepStorage[currentStorageNumber]->rejectStep(timestep);
 }
 
-void Delay::loadData(ProcessingUnit* pu, double* data) {
+void Delay::loadData(double* data) {
 	//mStepStorage[currentStorageNumber]->loadState(pu, data);
 }
 
-void Delay::getCurrentState(ProcessingUnit* pu, double* result) {
+void Delay::getCurrentState(double* result) {
 	mStepStorage[currentStorageNumber]->copyState(result);
 }
 
@@ -108,24 +108,24 @@ double* Delay::getCurrentStatePointer() {
 	return mStepStorage[currentStorageNumber]->getStatePointer();
 }
 
-void Delay::saveStateForDraw(ProcessingUnit* pu, char* path) {
+void Delay::saveStateForDraw(char* path) {
 	//mStepStorage->saveState(pu, path);
 
 	mStepStorage[currentStorageNumber]->saveState(path);
 }
 
-void Delay::saveStateForLoad(ProcessingUnit* pu, char* path) {
+void Delay::saveStateForLoad(char* path) {
 	//mStepStorage->saveState(pu, path);
 }
 
-void Delay::loadState(ProcessingUnit* pu, std::ifstream& in) {
+void Delay::loadState(std::ifstream& in) {
 	//mStepStorage->loadState(pu, path);
 }
 
-bool Delay::isNan(ProcessingUnit* pu) {
+bool Delay::isNan() {
 	return false;
 }
 
-void Delay::print(ProcessingUnit* pu, int zCount, int yCount, int xCount, int cellSize) {
+void Delay::print(int zCount, int yCount, int xCount, int cellSize) {
 	return;
 }

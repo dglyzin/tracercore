@@ -16,36 +16,38 @@
 
 class ProblemType {
 public:
-	ProblemType();
+	ProblemType(ProcessingUnit* _pu);
 	virtual ~ProblemType();
 
 	virtual double** getSource(int stage) = 0;
 	virtual double* getResult(int stage) = 0;
 
-	virtual void prepareArgument(ProcessingUnit* pu, int stage, double timestep) = 0;
+	virtual void prepareArgument(int stage, double timestep) = 0;
 
 	virtual double* getCurrentStateStageData(int stage) = 0;
 
-	virtual double getStepError(ProcessingUnit* pu, double timestep) = 0;
+	virtual double getStepError(double timestep) = 0;
 
-	virtual void confirmStep(ProcessingUnit* pu, double timestep) = 0;
-	virtual void rejectStep(ProcessingUnit* pu, double timestep) = 0;
+	virtual void confirmStep(double timestep) = 0;
+	virtual void rejectStep(double timestep) = 0;
 
-	virtual void loadData(ProcessingUnit* pu, double* data) = 0;
-	virtual void getCurrentState(ProcessingUnit* pu, double* result) = 0;
+	virtual void loadData(double* data) = 0;
+	virtual void getCurrentState(double* result) = 0;
 
 	virtual double* getCurrentStatePointer() = 0;
 
-	virtual void saveStateForDraw(ProcessingUnit* pu, char* path) = 0;
-	virtual void saveStateForLoad(ProcessingUnit* pu, char* path) = 0;
-	virtual void loadState(ProcessingUnit* pu, std::ifstream& in) = 0;
+	virtual void saveStateForDraw(char* path) = 0;
+	virtual void saveStateForLoad(char* path) = 0;
+	virtual void loadState(std::ifstream& in) = 0;
 
-	virtual bool isNan(ProcessingUnit* pu) = 0;
+	virtual bool isNan() = 0;
 
-	virtual void print(ProcessingUnit* pu, int zCount, int yCount, int xCount, int cellSize) = 0;
+	virtual void print(int zCount, int yCount, int xCount, int cellSize) = 0;
 
 protected:
-	StepStorage* createStageStorage(ProcessingUnit* pu, int solverType, int count, double aTol, double rTol);
+	ProcessingUnit* pu;
+
+	StepStorage* createStageStorage(int solverType, int count, double aTol, double rTol);
 
 	double** mSourceStorage;
 };

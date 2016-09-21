@@ -12,33 +12,33 @@
 
 class Ordinary: public ProblemType {
 public:
-	Ordinary(ProcessingUnit* pu, int solverType, int count, double aTol, double rTol);
+	Ordinary(ProcessingUnit* _pu, int solverType, int count, double aTol, double rTol);
 	virtual ~Ordinary();
 
 	double** getSource(int stage);
 	double* getResult(int stage);
 
-	void prepareArgument(ProcessingUnit* pu, int stage, double timestep);
+	void prepareArgument(int stage, double timestep);
 
 	double* getCurrentStateStageData(int stage);
 
-	double getStepError(ProcessingUnit* pu, double timestep);
+	double getStepError(double timestep);
 
-	void confirmStep(ProcessingUnit* pu, double timestep);
-	void rejectStep(ProcessingUnit* pu, double timestep);
+	void confirmStep(double timestep);
+	void rejectStep(double timestep);
 
-	void loadData(ProcessingUnit* pu, double* data);
-	void getCurrentState(ProcessingUnit* pu, double* result);
+	void loadData(double* data);
+	void getCurrentState(double* result);
 
 	double* getCurrentStatePointer();
 
-	void saveStateForDraw(ProcessingUnit* pu, char* path);
-	void saveStateForLoad(ProcessingUnit* pu, char* path);
-	void loadState(ProcessingUnit* pu, std::ifstream& in);
+	void saveStateForDraw(char* path);
+	void saveStateForLoad(char* path);
+	void loadState(std::ifstream& in);
 
-	bool isNan(ProcessingUnit* pu);
+	bool isNan();
 
-	void print(ProcessingUnit* pu, int zCount, int yCount, int xCount, int cellSize);
+	void print(int zCount, int yCount, int xCount, int cellSize);
 
 private:
 	StepStorage* mStepStorage;

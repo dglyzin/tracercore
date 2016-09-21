@@ -7,14 +7,15 @@
 
 #include "problemtype.h"
 
-ProblemType::ProblemType() {
+ProblemType::ProblemType(ProcessingUnit* _pu) {
+	pu = _pu;
 	mSourceStorage = NULL;
 }
 
 ProblemType::~ProblemType() {
 }
 
-StepStorage* ProblemType::createStageStorage(ProcessingUnit* pu, int solverType, int count, double aTol, double rTol) {
+StepStorage* ProblemType::createStageStorage(int solverType, int count, double aTol, double rTol) {
 	switch (solverType) {
 		case EULER:
 			return new EulerStorage(pu, count, aTol, rTol);
