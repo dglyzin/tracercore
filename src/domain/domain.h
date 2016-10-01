@@ -158,8 +158,8 @@ private:
 	 */
 	//int mJobId;
 
-	int mUserStatus = US_RUN;
-	int mJobState = JS_RUNNING;
+	int mUserStatus;
+	int mJobState;
 
 	/*
 	 * Количество блоков

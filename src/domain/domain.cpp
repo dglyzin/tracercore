@@ -31,6 +31,9 @@ Domain::Domain(int _world_rank, int _world_size, char* inputFile) {
 
 	//mJobId = _jobId;
 
+	mUserStatus = US_RUN;
+	mJobState = JS_RUNNING;
+
 	currentTime = 0;
 	mStepCount = 0;
 
@@ -145,7 +148,7 @@ void Domain::compute(char* inputFile) {
 		if (mPythonMaster && (mWorkerRank == 0))
 			MPI_Send(&readyToSave, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
 		if (!(currentTime < stopTime))
-			jobState = JS_FINISHED;
+			mJobState = JS_FINISHED;
 		if (mPythonMaster && (mWorkerRank == 0))
 			MPI_Send(&mJobState, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
 
