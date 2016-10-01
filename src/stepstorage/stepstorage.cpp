@@ -61,6 +61,15 @@ void StepStorage::loadStateWithTempStore(ifstream& in) {
 	loadMTempStores(in);
 }
 
+void StepStorage::saveDenseOutput(char* path, double timestep, double tetha) {
+	double* tmp = pu->newDoubleArray(mCount);
+	getDenseOutput(timestep, tetha, tmp);
+
+	pu->saveArray(tmp, mCount, path);
+
+	pu->deleteDeviceSpecificArray(tmp);
+}
+
 double* StepStorage::getStatePointer() {
 	return mState;
 }

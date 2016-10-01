@@ -207,6 +207,10 @@ void Domain::nextStep() {
 		bool isErrorPer = isErrorPermissible(error);
 
 		if (isErrorPer) {
+			if(currentTime + mTimeStep > stopTime) {
+				return;
+			}
+
 			currentTime += mTimeStep;
 		}
 
@@ -835,6 +839,16 @@ void Domain::saveStateForLoad(char* inputFile) {
 	delete saveFile;
 }
 
+void Domain::saveStateForDrawDenseOutput(char* inputFile) {
+	char* saveFile = new char[250];
+	Utils::getFilePathForDraw(inputFile, saveFile, stopTime);
+
+	saveGeneralInfo(saveFile);
+	saveStateForDrawDenseOutputByBlocks(saveFile, stopTime);
+
+	delete saveFile;
+}
+
 void Domain::saveGeneralInfo(char* path) {
 	if (mGlobalRank == 0) {
 		ofstream out;
@@ -865,6 +879,13 @@ void Domain::saveStateForDrawByBlocks(char* path) {
 void Domain::saveStateForLoadByBlocks(char* path) {
 	for (int i = 0; i < mBlockCount; ++i) {
 		mBlocks[i]->saveStateForLoad(path);
+		MPI_Barrier(mWorkerComm);
+	}
+}
+
+void Domain::saveStateForDrawDenseOutputByBlocks(char* path, double requiredTime) {
+	for (int i = 0; i < mBlockCount; ++i) {
+		mBlocks[i]->saveStateForDrawDenseOutput(path, mTimeStep, getTethaForDenseOutput(requiredTime));
 		MPI_Barrier(mWorkerComm);
 	}
 }

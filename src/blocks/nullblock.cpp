@@ -106,6 +106,10 @@ void NullBlock::saveStateForLoad(char* path) {
 	return;
 }
 
+void NullBlock::saveStateForDrawDenseOutput(char* path, double timestep, double tetha) {
+	return;
+}
+
 void NullBlock::loadState(ifstream& in) {
 	in.seekg(getGridElementCount() * SIZE_DOUBLE, ios::cur);
 }

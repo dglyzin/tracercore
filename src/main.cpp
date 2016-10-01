@@ -47,6 +47,7 @@ int main(int argc, char * argv[]) {
 
 	domain->saveStateForDraw(inputFile);
 	domain->saveStateForLoad(inputFile);
+	domain->saveStateForDrawDenseOutput(inputFile);
 
 	/*
 	 * Вывод информации о времени работы осуществляет только поток с номером 0.

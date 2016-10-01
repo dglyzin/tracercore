@@ -31,6 +31,8 @@ public:
 	void saveStateWithTempStore(char* path);
 	void loadStateWithTempStore(std::ifstream& in);
 
+	void saveDenseOutput(char* path, double timestep, double tetha);
+
 	double* getStatePointer();
 
 	bool isNan();

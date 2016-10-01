@@ -54,6 +54,7 @@ public:
 
 	virtual void saveStateForDraw(char* path) = 0;
 	virtual void saveStateForLoad(char* path) = 0;
+	virtual void saveStateForDrawDenseOutput(char* path, double timestep, double tetha) = 0;
 	virtual void loadState(std::ifstream& in) = 0;
 
 	virtual bool isNan() = 0;

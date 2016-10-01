@@ -118,6 +118,10 @@ void Delay::saveStateForLoad(char* path) {
 	//mStepStorage->saveState(pu, path);
 }
 
+void Delay::saveStateForDrawDenseOutput(char* path, double timestep, double tetha) {
+	//mStepStorage[?]->saveDenseOutput(path, timestep, tetha)
+}
+
 void Delay::loadState(std::ifstream& in) {
 	//mStepStorage->loadState(pu, path);
 }

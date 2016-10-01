@@ -108,7 +108,7 @@ void RealBlock::computeStageCenter(int stage, double time) {
 }
 
 void RealBlock::prepareArgument(int stage, double timestep) {
-	problem->prepareArgument(pu, stage, timestep);
+	problem->prepareArgument(stage, timestep);
 }
 
 void RealBlock::prepareStageData(int stage) {
@@ -180,15 +180,15 @@ bool RealBlock::isProcessingUnitGPU() {
 }
 
 double RealBlock::getStepError(double timestep) {
-	return problem->getStepError(pu, timestep);
+	return problem->getStepError(timestep);
 }
 
 void RealBlock::confirmStep(double timestep) {
-	problem->confirmStep(pu, timestep);
+	problem->confirmStep(timestep);
 }
 
 void RealBlock::rejectStep(double timestep) {
-	problem->rejectStep(pu, timestep);
+	problem->rejectStep(timestep);
 }
 
 double* RealBlock::addNewBlockBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength) {
@@ -269,27 +269,31 @@ void RealBlock::moveTempBorderVectorToBorderArray() {
 }
 
 void RealBlock::loadData(double* data) {
-	problem->loadData(pu, data);
+	problem->loadData(data);
 }
 
 void RealBlock::getCurrentState(double* result) {
-	problem->getCurrentState(pu, result);
+	problem->getCurrentState(result);
 }
 
 void RealBlock::saveStateForDraw(char* path) {
-	problem->saveStateForDraw(pu, path);
+	problem->saveStateForDraw(path);
 }
 
 void RealBlock::saveStateForLoad(char* path) {
-	problem->saveStateForLoad(pu, path);
+	problem->saveStateForLoad(path);
+}
+
+void RealBlock::saveStateForDrawDenseOutput(char* path, double timestep, double tetha) {
+	problem->saveStateForDrawDenseOutput(path, timestep, tetha);
 }
 
 void RealBlock::loadState(ifstream& in) {
-	problem->loadState(pu, in);
+	problem->loadState(in);
 }
 
 bool RealBlock::isNan() {
-	if (problem->isNan(pu)) {
+	if (problem->isNan()) {
 		printf("\nBlock #%d, Node number = %d: NAN VALUE!\n", blockNumber, nodeNumber);
 		return true;
 	}
@@ -358,5 +362,5 @@ void RealBlock::printBorderInfo() {
 }
 
 void RealBlock::printData() {
-	problem->print(pu, zCount, yCount, xCount, cellSize);
+	problem->print(zCount, yCount, xCount, cellSize);
 }

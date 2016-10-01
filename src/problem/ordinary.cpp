@@ -72,6 +72,10 @@ void Ordinary::saveStateForLoad(char* path) {
 	mStepStorage->saveState(path);
 }
 
+void Ordinary::saveStateForDrawDenseOutput(char* path, double timestep, double tetha) {
+	mStepStorage->saveDenseOutput(path, timestep, tetha);
+}
+
 void Ordinary::loadState(ifstream& in) {
 	mStepStorage->loadState(in);
 }

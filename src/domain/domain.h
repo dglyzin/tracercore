@@ -88,6 +88,8 @@ public:
 	void saveStateForDraw(char* inputFile);
 	void saveStateForLoad(char* inputFile);
 
+	void saveStateForDrawDenseOutput(char* inputFile);
+
 	void printStatisticsInfo(char* inputFile, char* outputFile, double calcTime, char* statisticsFile);
 
 	bool isNan();
@@ -266,6 +268,7 @@ private:
 	void saveGeneralInfo(char* path);
 	void saveStateForDrawByBlocks(char* path);
 	void saveStateForLoadByBlocks(char* path);
+	void saveStateForDrawDenseOutputByBlocks(char* path, double requiredTime);
 
 	double getTethaForDenseOutput(double requiredTime);
 };
