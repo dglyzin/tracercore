@@ -104,16 +104,16 @@ void Domain::compute(char* inputFile) {
 	int percentage = 0;
 
 	//1.
-	int userStatus = US_RUN;
-	int jobState = JS_RUNNING;
-	MPI_Bcast(&userStatus, 1, MPI_INT, 0, MPI_COMM_WORLD);
+	mUserStatus = US_RUN;
+	mJobState = JS_RUNNING;
+	MPI_Bcast(&mUserStatus, 1, MPI_INT, 0, MPI_COMM_WORLD);
 	if (mPythonMaster && (mWorkerRank == 0))
-		MPI_Send(&jobState, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
+		MPI_Send(&mJobState, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
 
-	cout << "Initial user status received: " << userStatus << endl;
+	cout << "Initial user status received: " << mUserStatus << endl;
 
 	// TODO если пользователь остановил расчеты, то необходимо выполнить сохранение для загузки состояния (saveStateForLoad)
-	while ((userStatus != US_STOP) && (jobState == JS_RUNNING)) {
+	while ((mUserStatus != US_STOP) && (mJobState == JS_RUNNING)) {
 		nextStep();
 		if (mPythonMaster && (mWorkerRank == 0)) {
 			MPI_Send(&mLastStepAccepted, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
@@ -147,7 +147,7 @@ void Domain::compute(char* inputFile) {
 		if (!(currentTime < stopTime))
 			jobState = JS_FINISHED;
 		if (mPythonMaster && (mWorkerRank == 0))
-			MPI_Send(&jobState, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
+			MPI_Send(&mJobState, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
 
 		if (readyToSave) {
 			counterSaveTime = 0;
@@ -156,7 +156,7 @@ void Domain::compute(char* inputFile) {
 
 		//check for termination request
 		if (mPythonMaster && (mWorkerRank == 0)) {
-			MPI_Bcast(&userStatus, 1, MPI_INT, 0, MPI_COMM_WORLD);
+			MPI_Bcast(&mUserStatus, 1, MPI_INT, 0, MPI_COMM_WORLD);
 		}
 
 	}
@@ -208,6 +208,7 @@ void Domain::nextStep() {
 
 		if (isErrorPer) {
 			if(currentTime + mTimeStep > stopTime) {
+				mUserStatus = US_STOP;
 				return;
 			}
 

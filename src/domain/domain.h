@@ -157,6 +157,10 @@ private:
 	 * Глобальный Id задачи для базы
 	 */
 	//int mJobId;
+
+	int mUserStatus = US_RUN;
+	int mJobState = JS_RUNNING;
+
 	/*
 	 * Количество блоков
 	 */
