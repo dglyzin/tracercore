@@ -139,6 +139,7 @@ void RealBlock::prepareStageData(int stage) {
 				pu->prepareBorder(result, source, mStart, mStop, yCount - haloSize, yCount, nStart, nStop, yCount,
 						xCount, cellSize);
 				break;
+			case TOP:
 				pu->prepareBorder(result, source, 0, haloSize, mStart, mStop, nStart, nStop, yCount, xCount, cellSize);
 				break;
 			case BOTTOM:
