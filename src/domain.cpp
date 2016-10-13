@@ -6,6 +6,7 @@
  */
 
 #include "domain.h"
+
 #include <cassert>
 
 using namespace std;

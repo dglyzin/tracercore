@@ -1,4 +1,4 @@
-#include "domain/domain.h"
+#include "domain.h"
 
 int main(int argc, char * argv[]) {
 	/*
