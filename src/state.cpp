@@ -7,12 +7,26 @@
 
 #include "state.h"
 
-State::State() {
-	// TODO Auto-generated constructor stub
+State::State(ProcessingUnit* _pu, int storeCount, int elementCount) {
+	pu = _pu;
 
+	mStoreCount = storeCount;
+	mElementCount = elementCount;
+
+	mStores = pu->newDoublePointerArray(mStoreCount);
+	for (int i = 0; i < storeCount; ++i) {
+		mStores[i] = pu->newDoubleArray(mElementCount);
+	}
 }
 
 State::~State() {
-	// TODO Auto-generated destructor stub
+	for (int i = 0; i < mStoreCount; ++i) {
+		pu->deleteDeviceSpecificArray(mStores[i]);
+	}
+
+	pu->deleteDeviceSpecificArray(mStores);
 }
 
+double* State::getStore(int storeNumber) {
+	return mStores[storeNumber];
+}

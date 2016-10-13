@@ -8,10 +8,25 @@
 #ifndef STATE_H_
 #define STATE_H_
 
+#include "processingunit/processingunit.h"
+
 class State {
 public:
-	State();
+	State(ProcessingUnit* _pu, int storeCount, int elementCount);
 	virtual ~State();
+
+	double* getStore(int storeNumber);
+
+	void saveGeneralStore();
+	void saveAllStores();
+
+private:
+	ProcessingUnit* pu;
+
+	double** mStores;
+
+	int mStoreCount;
+	int mElementCount;
 };
 
 #endif /* STATE_H_ */
