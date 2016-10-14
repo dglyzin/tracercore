@@ -17,8 +17,8 @@ public:
 
 	double* getStore(int storeNumber);
 
-	void saveGeneralStore();
-	void saveAllStores();
+	void saveGeneralStore(char* path);
+	void saveAllStores(char* path);
 
 private:
 	ProcessingUnit* pu;

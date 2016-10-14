@@ -30,3 +30,13 @@ State::~State() {
 double* State::getStore(int storeNumber) {
 	return mStores[storeNumber];
 }
+
+void State::saveGeneralStore(char* path) {
+	pu->saveArray(mStores[0], mElementCount, path);
+}
+
+void State::saveAllStores(char* path) {
+	for (int i = 0; i < mStoreCount; ++i) {
+		pu->saveArray(mStores[i], mElementCount, path);
+	}
+}
