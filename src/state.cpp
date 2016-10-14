@@ -42,3 +42,13 @@ void State::saveAllStores(char* path) {
 		pu->saveArray(mStores[i], mElementCount, path);
 	}
 }
+
+void State::loadGeneralStore(ifstream& in) {
+	pu->loadArray(mStores[0], mElementCount, in);
+}
+
+void State::loadAllStores(std::ifstream& in) {
+	for (int i = 0; i < mStoreCount; ++i) {
+		pu->loadArray(mStores[i], mElementCount, in);
+	}
+}

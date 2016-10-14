@@ -20,6 +20,9 @@ public:
 	void saveGeneralStore(char* path);
 	void saveAllStores(char* path);
 
+	void loadGeneralStore(std::ifstream& in);
+	void loadAllStores(std::ifstream& in);
+
 private:
 	ProcessingUnit* pu;
 
