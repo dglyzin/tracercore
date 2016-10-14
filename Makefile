@@ -8,8 +8,6 @@ CUDAARCH=-arch=sm_20
 
 SRC=src
 
-SRCDOM=$(SRC)/domain
-
 SRCBLC=$(SRC)/blocks
 
 SRCPROCUNIT=$(SRC)/processingunit
@@ -42,7 +40,7 @@ PROBLEM=$(SRCPROBLEM)/problemtype.cpp $(SRCPROBLEM)/ordinary.cpp $(SRCPROBLEM)/d
 INTERCONNECT=$(SRCINTERCONNECT)/interconnect.cpp $(SRCINTERONNECTTRANSFER)/transferinterconnect.cpp $(SRCINTERCONNECT)/nontransferinterconnect.cpp $(SRCINTERONNECTTRANSFER)/transferinterconnectsend.cpp $(SRCINTERONNECTTRANSFER)/transferinterconnectrecv.cpp
 
 
-SOURCE=$(SRC)/state.cpp $(SRC)/main.cpp $(SRCDOM)/domain.cpp $(SRC)/utils.cpp $(BLOCK) $(PROCUNIT) $(STEPSTORAGE) $(PROBLEM) $(INTERCONNECT)
+SOURCE=$(SRC)/state.cpp $(SRC)/main.cpp $(SRC)/domain.cpp $(SRC)/utils.cpp $(BLOCK) $(PROCUNIT) $(STEPSTORAGE) $(PROBLEM) $(INTERCONNECT)
 
 OBJECT=$(SOURCE:.cpp=.o)
 
@@ -62,8 +60,6 @@ cuda_func.o:
 	
 clean:
 	rm -rf $(SRC)/*.o
-	
-	rm -rf $(SRCDOM)/*.o
 	
 	rm -rf $(SRCBLC)/*.o
 	
