@@ -7,6 +7,8 @@
 
 #include "state.h"
 
+using namespace std;
+
 State::State(ProcessingUnit* _pu, int storeCount, int elementCount) {
 	pu = _pu;
 
