@@ -7,6 +7,7 @@
 
 #include "domain.h"
 #include <cassert>
+#include <iostream>
 
 using namespace std;
 
@@ -56,7 +57,7 @@ Domain::Domain(int _world_rank, int _world_size, char* inputFile) {
 	mAcceptedStepCount = 0;
 	mRejectedStepCount = 0;
     
-    lastPercent = 0;
+
 }
 
 Domain::~Domain() {
