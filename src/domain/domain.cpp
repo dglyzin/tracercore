@@ -55,6 +55,8 @@ Domain::Domain(int _world_rank, int _world_size, char* inputFile) {
 
 	mAcceptedStepCount = 0;
 	mRejectedStepCount = 0;
+    
+    lastPercent = 0;
 }
 
 Domain::~Domain() {
@@ -115,6 +117,9 @@ void Domain::compute(char* inputFile) {
 	// TODO если пользователь остановил расчеты, то необходимо выполнить сохранение для загузки состояния (saveStateForLoad)
 	while ((userStatus != US_STOP) && (jobState == JS_RUNNING)) {
 		nextStep();
+        
+        
+        
 		if (mPythonMaster && (mWorkerRank == 0)) {
 			MPI_Send(&mLastStepAccepted, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
 			MPI_Send(&mTimeStep, 1, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD);
@@ -137,6 +142,9 @@ void Domain::compute(char* inputFile) {
 			percentage = newPercentage;
 			if (mPythonMaster && (mWorkerRank == 0))
 				MPI_Send(&percentage, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
+            
+            if (!mPythonMaster && (mWorkerRank == 0))
+				printf("Complite %d%\n", percentage);
 		}
 
 		counterSaveTime += mTimeStep;
