@@ -145,7 +145,7 @@ void Domain::compute(char* inputFile) {
 				MPI_Send(&percentage, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
             
             if (!mPythonMaster && (mWorkerRank == 0))
-				printf("Complite %d%\n", percentage);
+				printf("Complete %d%%\n", percentage);
 		}
 
 		counterSaveTime += mTimeStep;
