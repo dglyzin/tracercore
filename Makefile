@@ -25,7 +25,7 @@ SRCINTERONNECTTRANSFER=$(SRCINTERCONNECT)/transferinterconnect
 
 
 BIN=bin
-MPILIB=-I/usr/mpi/gcc/openmpi-1.8.4/include -L /usr/mpi/gcc/openmpi-1.8.4/lib -lmpi -lmpi_cxx
+MPILIB=-I/usr/mpi/gcc/openmpi-2.0.2/include -L /usr/mpi/gcc/openmpi-2.0.2/lib -lmpi
 
 USERFUNCLIB=./bin -l userfuncs
 
