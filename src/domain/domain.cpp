@@ -8,8 +8,49 @@
 #include "domain.h"
 #include <cassert>
 #include <iostream>
+#include <sstream>
 
 using namespace std;
+#include <stdio.h>
+#include <iostream>
+#include <ctime>
+#include <string>
+
+/*logging with timestamp*/
+#define LL_INFO 0
+#define LL_DEBUG 1
+
+#define LOGLEVEL LL_INFO
+
+template <typename T>
+string ToString(T val)
+{
+    stringstream stream;
+    stream << val;
+    return stream.str();
+}
+
+void printwts(std::string message, time_t timestamp, int loglevel){
+    //char* dt = ctime(&timestamp);
+	if (loglevel>LOGLEVEL)
+		return;
+
+    tm *ltm = localtime(&timestamp);
+
+    // print various components of tm structure.
+    printf("%02d-%02d %02d:%02d:%02d ", 1 + ltm->tm_mon, ltm->tm_mday, ltm->tm_hour, ltm->tm_min, ltm->tm_sec );
+
+
+    std::cout << message;
+
+
+}
+
+void printwcts(std::string message, int loglevel){
+    printwts(message,time(0), loglevel);
+}
+
+/*--------------------*/
 
 Domain::Domain(int _world_rank, int _world_size, char* inputFile) {
 	//Get worker communicator and determine if there is python master
@@ -84,9 +125,12 @@ Domain::~Domain() {
 }
 
 void Domain::compute(char* inputFile) {
-	cout << endl << "Computation started..." << mWorkerRank << endl;
-	cout << "Current time: " << currentTime << ", finish time: " << stopTime << ", time step: " << mTimeStep << endl;
-	cout << "solver stage count: " << mSolverInfo->getStageCount() << endl;
+    time_t now = time(0);
+    printwts("\n Initital timestamp is " + ToString(now) +"\n" , now, LL_INFO );
+    printwcts("Computing from " + ToString(currentTime) + " to " + ToString(stopTime) +
+    		       "with step "+ ToString(mTimeStep)+"\n", LL_INFO);
+    printwcts("Computation started, worker #"+ ToString(mWorkerRank) +"\n", LL_INFO);
+    printwcts("solver stage count: " + ToString(mSolverInfo->getStageCount())+ "\n", LL_INFO);
 
 	if (mSolverInfo->isFSAL())
 		initSolvers();
@@ -144,8 +188,11 @@ void Domain::compute(char* inputFile) {
 			if (mPythonMaster && (mWorkerRank == 0))
 				MPI_Send(&percentage, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
             
-            if (!mPythonMaster && (mWorkerRank == 0))
-				printf("Complete %d%%\n", percentage);
+            if (!mPythonMaster && (mWorkerRank == 0)){
+            	time_t now2 = time(0);
+            	printf("Complete %d%% in %d seconds\n", percentage, (int) (now2-now) );
+            	now = now2;
+            }
 		}
 
 		counterSaveTime += mTimeStep;
