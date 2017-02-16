@@ -126,9 +126,12 @@ Domain::~Domain() {
 
 void Domain::compute(char* inputFile) {
     time_t now = time(0);
-    printwts("\n Initital timestamp is " + ToString(now) +"\n" , now, LL_INFO );
+    double wnow = MPI_Wtime();
+    double mnow = omp_get_wtime();
+
+    printwts("Initital timestamp is " + ToString(now) +"\n" , now, LL_INFO );
     printwcts("Computing from " + ToString(currentTime) + " to " + ToString(stopTime) +
-    		       "with step "+ ToString(mTimeStep)+"\n", LL_INFO);
+    		       " with step "+ ToString(mTimeStep)+"\n", LL_INFO);
     printwcts("Computation started, worker #"+ ToString(mWorkerRank) +"\n", LL_INFO);
     printwcts("solver stage count: " + ToString(mSolverInfo->getStageCount())+ "\n", LL_INFO);
 
@@ -157,14 +160,12 @@ void Domain::compute(char* inputFile) {
 	if (mPythonMaster && (mWorkerRank == 0))
 		MPI_Send(&jobState, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
 
-	cout << "Initial user status received: " << userStatus << endl;
+	printwcts( "Initial user status received: " + ToString(userStatus) + "\n", LL_INFO );
 
 	// TODO если пользователь остановил расчеты, то необходимо выполнить сохранение для загузки состояния (saveStateForLoad)
 	while ((userStatus != US_STOP) && (jobState == JS_RUNNING)) {
 		nextStep();
-        
-        
-        
+
 		if (mPythonMaster && (mWorkerRank == 0)) {
 			MPI_Send(&mLastStepAccepted, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
 			MPI_Send(&mTimeStep, 1, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD);
@@ -190,8 +191,12 @@ void Domain::compute(char* inputFile) {
             
             if (!mPythonMaster && (mWorkerRank == 0)){
             	time_t now2 = time(0);
-            	printf("Complete %d%% in %d seconds\n", percentage, (int) (now2-now) );
+            	double wnow2 = MPI_Wtime();
+            	double mnow2 = omp_get_wtime();
+            	printwcts("Done " + ToString(percentage) + "% in " + ToString((int) (now2-now))+ " seconds, and wtime gives " + ToString((wnow2-wnow))+ " seconds, and omp_wtime gives " + ToString((mnow2-mnow))+ " seconds, ratio is "  + ToString((wnow2-wnow)/(mnow2-mnow)) + " \n", LL_INFO);
             	now = now2;
+            	wnow = wnow2;
+            	mnow = mnow2;
             }
 		}
 
