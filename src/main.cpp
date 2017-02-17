@@ -1,5 +1,9 @@
 #include "domain/domain.h"
 
+#include <sys/types.h>
+#include <unistd.h>
+#include <sys/syscall.h>
+
 
 int main(int argc, char * argv[]) {
 	/*
@@ -41,15 +45,53 @@ int main(int argc, char * argv[]) {
 	 */
 	domain->saveStateForDraw(inputFile);
 
-	printf("Running computations %d \n", world_rank);
+	/* Test topology */
+	printf("MPI world size: %d\n", world_size);
+    pid_t pid = getpid();
+
+pid_t tid = syscall(SYS_gettid);
+
+printf("ProcessId=%d, main thread id=%d\n", pid, tid);
+#pragma omp parallel
+{
+#pragma omp single
+	{
+
+for (int i = 0; i < 3; ++i) {
+#pragma omp task
+	{
+	pid_t tid2 = syscall(SYS_gettid);
+	printf("OMP inside a task with tnum %d and  tid %d \n", omp_get_thread_num(), tid2 );
+	int arr[1000000];
+	for (int j=0; j<1000000; j++)
+		arr[j] = i+j;
+	printf("arr[2]=%d\n", arr[2]);
+	}
+}
+
+	}
+}
+#pragma omp parallel
+{
+#pragma omp single
+		printf("OMP number of threads %d \n", omp_get_num_threads());
+
+	pid_t tid = syscall(SYS_gettid);
+	printf("OMP thread %d with tid %d \n", omp_get_thread_num(), tid );
+
+}
+
+
+
+	printf("Running computations mpi rank %d \n", world_rank);
 
 	MPI_Barrier(MPI_COMM_WORLD);
-	time1 = MPI_Wtime();
+	time1 = omp_get_wtime();//MPI_Wtime();
 
 	domain->compute(inputFile);
 
 	MPI_Barrier(MPI_COMM_WORLD);
-	time2 = MPI_Wtime();
+	time2 = omp_get_wtime(); //MPI_Wtime();
 
 	domain->saveStateForDraw(inputFile);
 	domain->saveStateForLoad(inputFile);

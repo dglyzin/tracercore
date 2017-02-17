@@ -193,7 +193,8 @@ void Domain::compute(char* inputFile) {
             	time_t now2 = time(0);
             	double wnow2 = MPI_Wtime();
             	double mnow2 = omp_get_wtime();
-            	printwcts("Done " + ToString(percentage) + "% in " + ToString((int) (now2-now))+ " seconds, and wtime gives " + ToString((wnow2-wnow))+ " seconds, and omp_wtime gives " + ToString((mnow2-mnow))+ " seconds, ratio is "  + ToString((wnow2-wnow)/(mnow2-mnow)) + " \n", LL_INFO);
+            	//printwcts("Done " + ToString(percentage) + "% in " + ToString((int) (now2-now))+ " seconds, and wtime gives " + ToString((wnow2-wnow))+ " seconds, and omp_wtime gives " + ToString((mnow2-mnow))+ " seconds, ratio is "  + ToString((wnow2-wnow)/(mnow2-mnow)) + " \n", LL_INFO);
+            	printwcts("Done " + ToString(percentage) + "% in " + ToString((mnow2-mnow))+ " seconds, and wtime gives " + ToString((wnow2-wnow))+ " seconds, ETA = "+ ToString((100-percentage)*(mnow2-mnow)) + " seconds\n" , LL_INFO);
             	now = now2;
             	wnow = wnow2;
             	mnow = mnow2;
