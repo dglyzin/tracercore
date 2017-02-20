@@ -9,6 +9,7 @@ int main(int argc, char * argv[]) {
 	/*
 	 * Инициализация MPI
 	 */
+	printf("lolol");
 	MPI_Init(NULL, NULL);
 
 	/*
@@ -46,7 +47,7 @@ int main(int argc, char * argv[]) {
 	domain->saveStateForDraw(inputFile);
 
 	/* Test topology */
-	printf("MPI world size: %d\n", world_size);
+/*	printf("MPI world size: %d\n", world_size);
     pid_t pid = getpid();
 
 pid_t tid = syscall(SYS_gettid);
@@ -81,7 +82,7 @@ for (int i = 0; i < 3; ++i) {
 
 }
 
-
+*/
 
 	printf("Running computations mpi rank %d \n", world_rank);
 
