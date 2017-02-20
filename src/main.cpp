@@ -9,7 +9,6 @@ int main(int argc, char * argv[]) {
 	/*
 	 * Инициализация MPI
 	 */
-	printf("lolol");
 	MPI_Init(NULL, NULL);
 
 	/*
