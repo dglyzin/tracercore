@@ -75,6 +75,18 @@ void Utils::getFilePathForLoad(char* inputFile, char* saveFile, double currentTi
 	sprintf(saveFile, "%s-%.8f%s", saveFile, currentTime, FILE_EXPANSION_LOAD);
 }
 
+void Utils::getTracerFolder(char* binary, char* tracerFolder) {
+	char temp[250];
+	copyToLastCharNotInc(tracerFolder, binary, '/');
+	copyToLastCharNotInc(temp, tracerFolder, '/');
+	copyToLastCharNotInc(tracerFolder, temp, '/');
+}
+
+void Utils::getProjectFolder(char* projectFile, char* projectFolder) {
+	copyToLastCharNotInc(projectFolder, projectFile, '/');
+}
+
+
 int Utils::oppositeBorder(int side) {
 	switch (side) {
 		case LEFT:

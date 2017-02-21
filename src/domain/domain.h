@@ -31,7 +31,7 @@
 
 class Domain {
 public:
-	Domain(int _world_rank, int _world_size, char* inputFile);
+	Domain(int _world_rank, int _world_size, char* inputFile, char* binaryFileName);
 
 	virtual ~Domain();
 
@@ -93,6 +93,8 @@ public:
 	bool isNan();
 
 	void checkOptions(int flags, double _stopTime, char* saveFile);
+
+	MPI_Comm getWorkerComm(){ return mWorkerComm;};
 
 private:
 	ProcessingUnit* cpu;
@@ -200,6 +202,10 @@ private:
 	int totalGridElementCount;
 
 	MPI_Status status;
+
+	//system path to the folder containing hybriddomain and hybridsolver
+	char mTracerFolder[250];
+	char mProjectFolder[250];
 
 	//Solver* mPreviousState;
 

@@ -24,6 +24,7 @@ int main(int argc, char * argv[]) {
 	double time1, time2;
 
 	//int jobId = atoi(argv[1]);
+	char* binaryFileName = argv[0];
 	char* inputFile = argv[1];
 	int flags = atoi(argv[2]);
 	double stopTime = atof(argv[3]);
@@ -35,7 +36,7 @@ int main(int argc, char * argv[]) {
 	 */
 	printf("SLURM JOB %s STARTED\n ", getenv("SLURM_JOB_ID"));
 	printf("DEBUG creating domain...\n ");
-	Domain* domain = new Domain(world_rank, world_size, inputFile);
+	Domain* domain = new Domain(world_rank, world_size, inputFile, binaryFileName);
 	domain->checkOptions(flags, stopTime, saveFile);
 
 	//domain->printBlocksToConsole();
@@ -85,12 +86,12 @@ for (int i = 0; i < 3; ++i) {
 
 	printf("Running computations mpi rank %d \n", world_rank);
 
-	MPI_Barrier(MPI_COMM_WORLD);
+	MPI_Barrier(domain->getWorkerComm());
 	time1 = omp_get_wtime();//MPI_Wtime();
 
 	domain->compute(inputFile);
 
-	MPI_Barrier(MPI_COMM_WORLD);
+	MPI_Barrier(domain->getWorkerComm());
 	time2 = omp_get_wtime(); //MPI_Wtime();
 
 	domain->saveStateForDraw(inputFile);
