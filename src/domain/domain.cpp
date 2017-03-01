@@ -238,7 +238,8 @@ void Domain::compute(char* inputFile) {
 		}
 
 	}
-	cout << "Computation finished for worker #" << mWorkerRank << endl;
+	printwcts("Computation finished for worker #" + ToString(mWorkerRank) + "\n", LL_INFO);
+
 	//if ((mWorkerRank == 0)&&(!mPythonMaster))
 	//    setDbJobState(JS_FINISHED);
 
