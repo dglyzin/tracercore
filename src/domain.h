@@ -8,9 +8,8 @@
 #ifndef SRC_DOMAIN_H_
 #define SRC_DOMAIN_H_
 
-#include "blocks/realblock.h"
 #include "blocks/nullblock.h"
-
+#include "blocks/realblock.h"
 #include "interconnect/transferinterconnect/transferinterconnectsend.h"
 #include "interconnect/transferinterconnect/transferinterconnectrecv.h"
 #include "interconnect/nontransferinterconnect.h"
@@ -23,7 +22,14 @@
 #include "processingunit/gpu/gpu2d.h"
 #include "processingunit/gpu/gpu3d.h"
 
+#include "numericalmethod/euler.h"
+#include "numericalmethod/dormandprince45.h"
+
+#include "problem/ordinaryproblem.h"
+
 #include "utils.h"
+
+#include <iostream>
 
 /*
  * Основной управляющий класс приложения.
@@ -130,9 +136,11 @@ private:
 	/*
 	 * Структура данных, возвращающая основные параметры солвера
 	 */
-	StepStorage* mSolverInfo;
+	NumericalMethod* mNumericalMethod;
 	double mAtol; //solver absolute tolerance
 	double mRtol; //solver relative tolerance
+
+	Problem* mProblem;
 
 	/*
 	 * Коммуникатор работников
@@ -157,7 +165,6 @@ private:
 	 * Глобальный Id задачи для базы
 	 */
 	//int mJobId;
-
 	int mUserStatus;
 	int mJobState;
 
@@ -243,7 +250,10 @@ private:
 	void prepareData(int stage);
 	void computeOneStepBorder(int stage);
 	void computeOneStepCenter(int stage);
-	void prepareNextStageArgument(int stage);
+	void prepareStageArgument(int stage);
+
+	void prepareBlockStageData(int stage);
+
 
 	void computeStage(int stage);
 	/*
@@ -251,7 +261,7 @@ private:
 	 */
 	double collectError();
 	bool isErrorPermissible(double error);
-	double getNewStep(double error);
+	double computeNewStep(double error);
 
 	void confirmStep();
 	void rejectStep();
@@ -260,7 +270,8 @@ private:
 	void createBlock(std::ifstream& in);
 	void createInterconnect(std::ifstream& in);
 
-	void initSolverInfo();
+	void createNumericalMethod();
+	void createProblem();
 
 	void blockAfterCreate();
 
