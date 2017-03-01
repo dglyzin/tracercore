@@ -7,10 +7,54 @@
 
 #include "domain.h"
 #include <cassert>
+#include <iostream>
+#include <sstream>
+#include <stdlib.h>
+
 
 using namespace std;
+#include <stdio.h>
+#include <iostream>
+#include <ctime>
+#include <string>
 
-Domain::Domain(int _world_rank, int _world_size, char* inputFile) {
+/*logging with timestamp*/
+#define LL_INFO 0
+#define LL_DEBUG 1
+
+#define LOGLEVEL LL_INFO
+
+template <typename T>
+string ToString(T val)
+{
+    stringstream stream;
+    stream << val;
+    return stream.str();
+}
+
+void printwts(std::string message, time_t timestamp, int loglevel){
+    //char* dt = ctime(&timestamp);
+	if (loglevel>LOGLEVEL)
+		return;
+
+    tm *ltm = localtime(&timestamp);
+
+    // print various components of tm structure.
+    printf("%02d-%02d %02d:%02d:%02d ", 1 + ltm->tm_mon, ltm->tm_mday, ltm->tm_hour, ltm->tm_min, ltm->tm_sec );
+
+
+    std::cout << message;
+
+
+}
+
+void printwcts(std::string message, int loglevel){
+    printwts(message,time(0), loglevel);
+}
+
+/*--------------------*/
+
+Domain::Domain(int _world_rank, int _world_size, char* inputFile, char* binaryFileName) {
 	//Get worker communicator and determine if there is python master
 	mGlobalRank = _world_rank;
 
@@ -30,10 +74,9 @@ Domain::Domain(int _world_rank, int _world_size, char* inputFile) {
 	}
 
 	//mJobId = _jobId;
-
-	mUserStatus = US_RUN;
+    Utils::getTracerFolder(binaryFileName,	mTracerFolder);
+    Utils::getProjectFolder(inputFile,	mProjectFolder);
 	mJobState = JS_RUNNING;
-
 	currentTime = 0;
 	mStepCount = 0;
 
@@ -58,6 +101,8 @@ Domain::Domain(int _world_rank, int _world_size, char* inputFile) {
 
 	mAcceptedStepCount = 0;
 	mRejectedStepCount = 0;
+    
+
 }
 
 Domain::~Domain() {
@@ -81,12 +126,25 @@ Domain::~Domain() {
 
 		delete gpu;
 	}
+
 }
 
 void Domain::compute(char* inputFile) {
-	cout << endl << "Computation started..." << mWorkerRank << endl;
-	cout << "Current time: " << currentTime << ", finish time: " << stopTime << ", time step: " << mTimeStep << endl;
-	cout << "solver stage count: " << mSolverInfo->getStageCount() << endl;
+    time_t now = time(0);
+    double wnow = MPI_Wtime();
+    double mnow = omp_get_wtime();
+
+    printwts("Initital timestamp is " + ToString(now) +"\n" , now, LL_INFO );
+
+    printwcts("Tracer root folder: " + ToString(mTracerFolder)+ "\n", LL_INFO);
+    printwcts("Project folder: " + ToString(mProjectFolder)+ "\n", LL_INFO);
+    printwcts("Computing from " + ToString(currentTime) + " to " + ToString(stopTime) +
+    		       " with step "+ ToString(mTimeStep)+"\n", LL_INFO);
+    printwcts("Computation started, worker #"+ ToString(mWorkerRank) +"\n", LL_INFO);
+    printwcts("solver stage count: " + ToString(mSolverInfo->getStageCount())+ "\n", LL_INFO);
+
+
+
 
 	if (mSolverInfo->isFSAL())
 		initSolvers();
@@ -113,11 +171,12 @@ void Domain::compute(char* inputFile) {
 	if (mPythonMaster && (mWorkerRank == 0))
 		MPI_Send(&mJobState, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
 
-	cout << "Initial user status received: " << mUserStatus << endl;
+	printwcts( "Initial user status received: " + ToString(userStatus) + "\n", LL_INFO );
 
 	// TODO если пользователь остановил расчеты, то необходимо выполнить сохранение для загузки состояния (saveStateForLoad)
 	while ((mUserStatus != US_STOP) && (mJobState == JS_RUNNING)) {
 		nextStep();
+
 		if (mPythonMaster && (mWorkerRank == 0)) {
 			MPI_Send(&mLastStepAccepted, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
 			MPI_Send(&mTimeStep, 1, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD);
@@ -137,9 +196,26 @@ void Domain::compute(char* inputFile) {
 			MPI_Send(&percentChanged, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
 
 		if (percentChanged) {
+			time_t now2 = time(0);
+		    double wnow2 = MPI_Wtime();
+		    double mnow2 = omp_get_wtime();
+
 			percentage = newPercentage;
-			if (mPythonMaster && (mWorkerRank == 0))
+			if (mPythonMaster && (mWorkerRank == 0)){
 				MPI_Send(&percentage, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
+	            double percenttime = wnow2-wnow;
+			    MPI_Send(&percenttime, 1, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD);
+			    printwcts("Done " + ToString(percentage) + "% in " + ToString((mnow2-mnow))+ " seconds, and wtime gives " + ToString((wnow2-wnow))+ " seconds, ETA = "+ ToString((100-percentage)*(mnow2-mnow)) + " seconds\n" , LL_INFO);
+
+			}
+            if (!mPythonMaster && (mWorkerRank == 0)){
+            	//printwcts("Done " + ToString(percentage) + "% in " + ToString((int) (now2-now))+ " seconds, and wtime gives " + ToString((wnow2-wnow))+ " seconds, and omp_wtime gives " + ToString((mnow2-mnow))+ " seconds, ratio is "  + ToString((wnow2-wnow)/(mnow2-mnow)) + " \n", LL_INFO);
+            	printwcts("Done " + ToString(percentage) + "% in " + ToString((mnow2-mnow))+ " seconds, and wtime gives " + ToString((wnow2-wnow))+ " seconds, ETA = "+ ToString((100-percentage)*(mnow2-mnow)) + " seconds\n" , LL_INFO);
+            	//system("ls -la");
+            }
+            now = now2;
+            wnow = wnow2;
+            mnow = mnow2;
 		}
 
 		counterSaveTime += mTimeStep;
@@ -163,9 +239,22 @@ void Domain::compute(char* inputFile) {
 		}
 
 	}
-	cout << "Computation finished for worker #" << mWorkerRank << endl;
+	printwcts("Computation finished for worker #" + ToString(mWorkerRank) + "\n", LL_INFO);
+
 	//if ((mWorkerRank == 0)&&(!mPythonMaster))
 	//    setDbJobState(JS_FINISHED);
+
+
+	char comline [250];
+	sprintf(comline, "python %s/hybriddomain/fakejobrunner.py", mTracerFolder );
+	printwcts("comm line = "+ToString(comline) + "\n",LL_INFO);
+	system(comline);
+
+
+	char comline [250];
+	sprintf(comline, "python %s/hybriddomain/fakejobrunner.py", mTracerFolder );
+	printwcts("comm line = "+ToString(comline) + "\n",LL_INFO);
+	system(comline);
 
 }
 

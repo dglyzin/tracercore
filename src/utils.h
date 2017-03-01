@@ -30,6 +30,9 @@ public:
 	static void getFilePathForDraw(char* inputFile, char* saveFile, double currentTime);
 	static void getFilePathForLoad(char* inputFile, char* saveFile, double currentTime);
 
+	static void getTracerFolder(char* binary, char* tracerFolder);
+	static void getProjectFolder(char* project, char* projectFolder);
+
 	static int oppositeBorder(int side);
 	static int getSide(int number);
 	static char* getSideName(int side);
