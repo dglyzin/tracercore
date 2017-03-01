@@ -5,7 +5,7 @@
  *      Author: frolov
  */
 
-#include "problemtype.h"
+#include "../problem_old/problemtype.h"
 
 ProblemType::ProblemType(ProcessingUnit* _pu) {
 	pu = _pu;

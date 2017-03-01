@@ -5,8 +5,8 @@
  *      Author: frolov
  */
 
-#ifndef SRC_PROBLEM_PROBLEMTYPE_H_
-#define SRC_PROBLEM_PROBLEMTYPE_H_
+#ifndef SRC_PROBLEM_OLD_PROBLEMTYPE_H_
+#define SRC_PROBLEM_OLD_PROBLEMTYPE_H_
 
 #include "../processingunit/processingunit.h"
 
@@ -53,4 +53,4 @@ protected:
 	double** mSourceStorage;
 };
 
-#endif /* SRC_PROBLEM_PROBLEMTYPE_H_ */
+#endif /* SRC_PROBLEM_OLD_PROBLEMTYPE_H_ */

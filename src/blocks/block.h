@@ -18,7 +18,7 @@ public:
 			int _zOffset, int _cellSize, int _haloSize);
 	virtual ~Block();
 
-	virtual void afterCreate(int problemType, int solverType, double aTol, double rTol) = 0;
+	//virtual void afterCreate(int problemType, int solverType, double aTol, double rTol) = 0;
 
 	virtual void computeStageBorder(int stage, double time) = 0;
 	virtual void computeStageCenter(int stage, double time) = 0;
@@ -26,6 +26,7 @@ public:
 	virtual void prepareArgument(int stage, double timestep) = 0;
 
 	virtual void prepareStageData(int stage) = 0;
+	virtual void prepareStageSourceResult(int stage, double timeStep) = 0;
 
 	virtual bool isRealBlock() = 0;
 	virtual int getBlockType() = 0;
@@ -49,7 +50,6 @@ public:
 
 	virtual void moveTempBorderVectorToBorderArray() = 0;
 
-	virtual void loadData(double* data) = 0;
 	virtual void getCurrentState(double* result) = 0;
 
 	virtual void saveStateForDraw(char* path) = 0;

@@ -5,10 +5,10 @@
  *      Author: frolov
  */
 
-#ifndef SRC_PROBLEM_DELAY_H_
-#define SRC_PROBLEM_DELAY_H_
+#ifndef SRC_PROBLEM_OLD_DELAY_H_
+#define SRC_PROBLEM_OLD_DELAY_H_
 
-#include "problemtype.h"
+#include "../problem_old/problemtype.h"
 
 class Delay: public ProblemType {
 public:
@@ -56,4 +56,4 @@ private:
 	int getResultStorageNumber();
 };
 
-#endif /* SRC_PROBLEM_DELAY_H_ */
+#endif /* SRC_PROBLEM_OLD_DELAY_H_ */

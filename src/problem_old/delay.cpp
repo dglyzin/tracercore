@@ -5,7 +5,7 @@
  *      Author: frolov
  */
 
-#include "delay.h"
+#include "../problem_old/delay.h"
 
 using namespace std;
 

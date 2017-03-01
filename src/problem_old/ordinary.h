@@ -5,10 +5,10 @@
  *      Author: frolov
  */
 
-#ifndef SRC_PROBLEM_ORDINARY_H_
-#define SRC_PROBLEM_ORDINARY_H_
+#ifndef SRC_PROBLEM_OLD_ORDINARY_H_
+#define SRC_PROBLEM_OLD_ORDINARY_H_
 
-#include "problemtype.h"
+#include "../problem_old/problemtype.h"
 
 class Ordinary: public ProblemType {
 public:
@@ -45,4 +45,4 @@ private:
 	StepStorage* mStepStorage;
 };
 
-#endif /* SRC_PROBLEM_ORDINARY_H_ */
+#endif /* SRC_PROBLEM_OLD_ORDINARY_H_ */

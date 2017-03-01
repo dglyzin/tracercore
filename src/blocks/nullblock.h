@@ -12,8 +12,8 @@
 #include <stdio.h>
 
 #include "../enums.h"
-
 #include "block.h"
+
 
 class NullBlock: public Block {
 public:
@@ -29,6 +29,7 @@ public:
 	void prepareArgument(int stage, double timestep);
 
 	void prepareStageData(int stage);
+	void prepareStageSourceResult(int stage, double timeStep);
 
 	bool isRealBlock();
 	int getBlockType();
@@ -51,7 +52,6 @@ public:
 
 	void moveTempBorderVectorToBorderArray();
 
-	void loadData(double* data);
 	void getCurrentState(double* result);
 
 	void saveStateForDraw(char* path);

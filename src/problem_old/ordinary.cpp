@@ -5,7 +5,7 @@
  *      Author: frolov
  */
 
-#include "ordinary.h"
+#include "../problem_old/ordinary.h"
 
 using namespace std;
 

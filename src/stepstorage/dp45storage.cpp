@@ -25,7 +25,8 @@ DP45Storage::DP45Storage() :
 	temp2 = NULL;
 }
 
-DP45Storage::DP45Storage(ProcessingUnit* _pu, int count, double _aTol, double _rTol) :
+DP45Storage::DP45Storage(ProcessingUnit* _pu, int count, double _aTol,
+		double _rTol) :
 		StepStorage(_pu, count, _aTol, _rTol) {
 	mTempStore1 = pu->newDoubleArray(mCount);
 	mTempStore2 = pu->newDoubleArray(mCount);
@@ -48,7 +49,8 @@ void DP45Storage::prepareFSAL(double timestep) {
 	/*#pragma omp parallel for
 	 for (int idx = 0; idx < mCount; idx++)
 	 mArg[idx] = mState[idx] + a21 * timeStep * mTempStore1[idx];*/
-	pu->multiplyArrayByNumberAndSum(mArg, mTempStore1, a21 * timestep, mState, mCount);
+	pu->multiplyArrayByNumberAndSum(mArg, mTempStore1, a21 * timestep, mState,
+			mCount);
 }
 
 void DP45Storage::saveMTempStores(char* path) {
@@ -95,31 +97,38 @@ int DP45Storage::getSizeChild(int elementCount) {
 
 double DP45Storage::getB1(double theta) {
 	return pow(theta, 2) * (3 - 2 * theta) * a71 + theta * pow(theta - 1, 2)
-			- pow(theta, 2) * pow(theta - 1, 2) * 5 * (2558722523 - 31403016 * theta) / 11282082432;
+			- pow(theta, 2) * pow(theta - 1, 2) * 5
+					* (2558722523 - 31403016 * theta) / 11282082432;
 }
 
 double DP45Storage::getB3(double theta) {
-	return pow(theta, 2) * (3 - 2 * theta) * a73 + pow(theta, 2) * pow(theta - 1, 2) * 100 * (882725551 - 15701508 * theta) / 32700410799;
+	return pow(theta, 2) * (3 - 2 * theta) * a73
+			+ pow(theta, 2) * pow(theta - 1, 2) * 100
+					* (882725551 - 15701508 * theta) / 32700410799;
 }
 
 double DP45Storage::getB4(double theta) {
 	return pow(theta, 2) * (3 - 2 * theta) * a74
-			- pow(theta, 2) * pow(theta - 1, 2) * 25 * (443332067 - 31403016 * theta) / 1880347072;
+			- pow(theta, 2) * pow(theta - 1, 2) * 25
+					* (443332067 - 31403016 * theta) / 1880347072;
 }
 
 double DP45Storage::getB5(double theta) {
 	return pow(theta, 2) * (3 - 2 * theta) * a75
-			+ pow(theta, 2) * pow(theta - 1, 2) * 32805 * (23143187 - 3489224 * theta) / 199316789632;
+			+ pow(theta, 2) * pow(theta - 1, 2) * 32805
+					* (23143187 - 3489224 * theta) / 199316789632;
 }
 
 double DP45Storage::getB6(double theta) {
 	return pow(theta, 2) * (3 - 2 * theta) * a76
-			- pow(theta, 2) * pow(theta - 1, 2) * 55 * (29972135 - 7076736 * theta) / 822651844;
+			- pow(theta, 2) * pow(theta - 1, 2) * 55
+					* (29972135 - 7076736 * theta) / 822651844;
 }
 
 double DP45Storage::getB7(double theta) {
 	/*return pow(theta, 2) * (theta - 1) * b7
-			+ pow(theta, 2) * pow(theta - 1, 2) * 10 * (7414447 - 829305 * theta) / 29380423;*/
+	 + pow(theta, 2) * pow(theta - 1, 2) * 10 * (7414447 - 829305 * theta) / 29380423;*/
+	return 0.0;
 }
 
 double* DP45Storage::getStageSource(int stage) {
@@ -134,18 +143,18 @@ double* DP45Storage::getStageSource(int stage) {
 	 return NULL;*/
 
 	switch (stage) {
-		case 0:
-		case 1:
-		case 2:
-		case 3:
-		case 4:
-		case 5:
-			return mArg;
-		case SOLVER_INIT_STAGE:
-			return mState;
-		default:
-			assert(0);
-			return NULL;
+	case 0:
+	case 1:
+	case 2:
+	case 3:
+	case 4:
+	case 5:
+		return mArg;
+	case SOLVER_INIT_STAGE:
+		return mState;
+	default:
+		assert(0);
+		return NULL;
 	}
 }
 
@@ -161,23 +170,23 @@ double* DP45Storage::getStageResult(int stage) {
 	 return NULL;*/
 
 	switch (stage) {
-		case 0:
-			return mTempStore2;
-		case 1:
-			return mTempStore3;
-		case 2:
-			return mTempStore4;
-		case 3:
-			return mTempStore5;
-		case 4:
-			return mTempStore6;
-		case 5:
-			return mTempStore7;
-		case SOLVER_INIT_STAGE:
-			return mTempStore1;
-		default:
-			assert(0);
-			return NULL;
+	case 0:
+		return mTempStore2;
+	case 1:
+		return mTempStore3;
+	case 2:
+		return mTempStore4;
+	case 3:
+		return mTempStore5;
+	case 4:
+		return mTempStore6;
+	case 5:
+		return mTempStore7;
+	case SOLVER_INIT_STAGE:
+		return mTempStore1;
+	default:
+		assert(0);
+		return NULL;
 	}
 }
 
@@ -193,23 +202,23 @@ double DP45Storage::getStageTimeStep(int stage) {
 	 return 0.0;*/
 
 	switch (stage) {
-		case 0:
-			return c2;
-		case 1:
-			return c3;
-		case 2:
-			return c4;
-		case 3:
-			return c5;
-		case 4:
-			return 1.0;
-		case 5:
-			return 1.0;
-		case SOLVER_INIT_STAGE:
-			return 0.0;
-		default:
-			assert(0);
-			return 0.0;
+	case 0:
+		return c2;
+	case 1:
+		return c3;
+	case 2:
+		return c4;
+	case 3:
+		return c5;
+	case 4:
+		return 1.0;
+	case 5:
+		return 1.0;
+	case SOLVER_INIT_STAGE:
+		return 0.0;
+	default:
+		assert(0);
+		return 0.0;
 	}
 }
 
@@ -245,54 +254,54 @@ void DP45Storage::prepareArgument(int stage, double timestep) {
 	 else assert(0);*/
 
 	switch (stage) {
-		case 0:
-			pu->multiplyArrayByNumber(mArg, mTempStore1, a31, mCount);
-			pu->multiplyArrayByNumberAndSum(mArg, mTempStore2, a32, mArg, mCount);
-			pu->multiplyArrayByNumber(mArg, mArg, timestep, mCount);
-			pu->sumArrays(mArg, mArg, mState, mCount);
-			break;
-		case 1:
-			pu->multiplyArrayByNumber(mArg, mTempStore1, a41, mCount);
-			pu->multiplyArrayByNumberAndSum(mArg, mTempStore2, a42, mArg, mCount);
-			pu->multiplyArrayByNumberAndSum(mArg, mTempStore3, a43, mArg, mCount);
-			pu->multiplyArrayByNumber(mArg, mArg, timestep, mCount);
-			pu->sumArrays(mArg, mArg, mState, mCount);
-			break;
-		case 2:
-			pu->multiplyArrayByNumber(mArg, mTempStore1, a51, mCount);
-			pu->multiplyArrayByNumberAndSum(mArg, mTempStore2, a52, mArg, mCount);
-			pu->multiplyArrayByNumberAndSum(mArg, mTempStore3, a53, mArg, mCount);
-			pu->multiplyArrayByNumberAndSum(mArg, mTempStore4, a54, mArg, mCount);
-			pu->multiplyArrayByNumber(mArg, mArg, timestep, mCount);
-			pu->sumArrays(mArg, mArg, mState, mCount);
-			break;
-		case 3:
-			pu->multiplyArrayByNumber(mArg, mTempStore1, a61, mCount);
-			pu->multiplyArrayByNumberAndSum(mArg, mTempStore2, a62, mArg, mCount);
-			pu->multiplyArrayByNumberAndSum(mArg, mTempStore3, a63, mArg, mCount);
-			pu->multiplyArrayByNumberAndSum(mArg, mTempStore4, a64, mArg, mCount);
-			pu->multiplyArrayByNumberAndSum(mArg, mTempStore5, a65, mArg, mCount);
-			pu->multiplyArrayByNumber(mArg, mArg, timestep, mCount);
-			pu->sumArrays(mArg, mArg, mState, mCount);
-			break;
-		case 4:
-			pu->multiplyArrayByNumber(mArg, mTempStore1, a71, mCount);
-			pu->multiplyArrayByNumberAndSum(mArg, mTempStore3, a73, mArg, mCount);
-			pu->multiplyArrayByNumberAndSum(mArg, mTempStore4, a74, mArg, mCount);
-			pu->multiplyArrayByNumberAndSum(mArg, mTempStore5, a75, mArg, mCount);
-			pu->multiplyArrayByNumberAndSum(mArg, mTempStore6, a76, mArg, mCount);
-			pu->multiplyArrayByNumber(mArg, mArg, timestep, mCount);
-			pu->sumArrays(mArg, mArg, mState, mCount);
-			break;
-		case 5:
-			break;
-		case SOLVER_INIT_STAGE:
-			///pu->multiplyArrayByNumberAndSum(mArg, mTempStore1, timestep * a21, mState, mCount);
-			prepareFSAL(timestep);
-			break;
-		default:
-			assert(0);
-			break;
+	case 0:
+		pu->multiplyArrayByNumber(mArg, mTempStore1, a31, mCount);
+		pu->multiplyArrayByNumberAndSum(mArg, mTempStore2, a32, mArg, mCount);
+		pu->multiplyArrayByNumber(mArg, mArg, timestep, mCount);
+		pu->sumArrays(mArg, mArg, mState, mCount);
+		break;
+	case 1:
+		pu->multiplyArrayByNumber(mArg, mTempStore1, a41, mCount);
+		pu->multiplyArrayByNumberAndSum(mArg, mTempStore2, a42, mArg, mCount);
+		pu->multiplyArrayByNumberAndSum(mArg, mTempStore3, a43, mArg, mCount);
+		pu->multiplyArrayByNumber(mArg, mArg, timestep, mCount);
+		pu->sumArrays(mArg, mArg, mState, mCount);
+		break;
+	case 2:
+		pu->multiplyArrayByNumber(mArg, mTempStore1, a51, mCount);
+		pu->multiplyArrayByNumberAndSum(mArg, mTempStore2, a52, mArg, mCount);
+		pu->multiplyArrayByNumberAndSum(mArg, mTempStore3, a53, mArg, mCount);
+		pu->multiplyArrayByNumberAndSum(mArg, mTempStore4, a54, mArg, mCount);
+		pu->multiplyArrayByNumber(mArg, mArg, timestep, mCount);
+		pu->sumArrays(mArg, mArg, mState, mCount);
+		break;
+	case 3:
+		pu->multiplyArrayByNumber(mArg, mTempStore1, a61, mCount);
+		pu->multiplyArrayByNumberAndSum(mArg, mTempStore2, a62, mArg, mCount);
+		pu->multiplyArrayByNumberAndSum(mArg, mTempStore3, a63, mArg, mCount);
+		pu->multiplyArrayByNumberAndSum(mArg, mTempStore4, a64, mArg, mCount);
+		pu->multiplyArrayByNumberAndSum(mArg, mTempStore5, a65, mArg, mCount);
+		pu->multiplyArrayByNumber(mArg, mArg, timestep, mCount);
+		pu->sumArrays(mArg, mArg, mState, mCount);
+		break;
+	case 4:
+		pu->multiplyArrayByNumber(mArg, mTempStore1, a71, mCount);
+		pu->multiplyArrayByNumberAndSum(mArg, mTempStore3, a73, mArg, mCount);
+		pu->multiplyArrayByNumberAndSum(mArg, mTempStore4, a74, mArg, mCount);
+		pu->multiplyArrayByNumberAndSum(mArg, mTempStore5, a75, mArg, mCount);
+		pu->multiplyArrayByNumberAndSum(mArg, mTempStore6, a76, mArg, mCount);
+		pu->multiplyArrayByNumber(mArg, mArg, timestep, mCount);
+		pu->sumArrays(mArg, mArg, mState, mCount);
+		break;
+	case 5:
+		break;
+	case SOLVER_INIT_STAGE:
+		///pu->multiplyArrayByNumberAndSum(mArg, mTempStore1, timestep * a21, mState, mCount);
+		prepareFSAL(timestep);
+		break;
+	default:
+		assert(0);
+		break;
 	}
 }
 
@@ -328,11 +337,16 @@ double DP45Storage::getStepError(double timestep) {
 	 double* temp2 = mTempStore3;*/
 
 	pu->multiplyArrayByNumber(temp, mTempStore1, timestep * e1, mCount);
-	pu->multiplyArrayByNumberAndSum(temp, mTempStore3, timestep * e3, temp, mCount);
-	pu->multiplyArrayByNumberAndSum(temp, mTempStore4, timestep * e4, temp, mCount);
-	pu->multiplyArrayByNumberAndSum(temp, mTempStore5, timestep * e5, temp, mCount);
-	pu->multiplyArrayByNumberAndSum(temp, mTempStore6, timestep * e6, temp, mCount);
-	pu->multiplyArrayByNumberAndSum(temp, mTempStore7, timestep * e7, temp, mCount);
+	pu->multiplyArrayByNumberAndSum(temp, mTempStore3, timestep * e3, temp,
+			mCount);
+	pu->multiplyArrayByNumberAndSum(temp, mTempStore4, timestep * e4, temp,
+			mCount);
+	pu->multiplyArrayByNumberAndSum(temp, mTempStore5, timestep * e5, temp,
+			mCount);
+	pu->multiplyArrayByNumberAndSum(temp, mTempStore6, timestep * e6, temp,
+			mCount);
+	pu->multiplyArrayByNumberAndSum(temp, mTempStore7, timestep * e7, temp,
+			mCount);
 
 //pu->multiplyArrayByNumber(temp, temp, timestep, mCount);
 
@@ -359,7 +373,8 @@ int DP45Storage::getStageCount() {
 	return 6;
 }
 
-double DP45Storage::getNewStep(double timestep, double error, int totalDomainElements) {
+double DP45Storage::getNewStep(double timestep, double error,
+		int totalDomainElements) {
 	double err = sqrt(error / totalDomainElements);
 	return timestep * min(facmax, max(facmin, fac * pow(1.0 / err, 1.0 / 5.0)));
 }
@@ -372,12 +387,17 @@ bool DP45Storage::isErrorPermissible(double error, int totalDomainElements) {
 		return false;
 }
 
-void DP45Storage::getDenseOutput(double timestep, double tetha, double* result) {
+void DP45Storage::getDenseOutput(double timestep, double tetha,
+		double* result) {
 	pu->multiplyArrayByNumber(result, mTempStore1, getB1(tetha), mCount);
-	pu->multiplyArrayByNumberAndSum(result, mTempStore3, getB3(tetha), mArg, mCount);
-	pu->multiplyArrayByNumberAndSum(result, mTempStore4, getB4(tetha), mArg, mCount);
-	pu->multiplyArrayByNumberAndSum(result, mTempStore5, getB5(tetha), mArg, mCount);
-	pu->multiplyArrayByNumberAndSum(result, mTempStore6, getB6(tetha), mArg, mCount);
+	pu->multiplyArrayByNumberAndSum(result, mTempStore3, getB3(tetha), mArg,
+			mCount);
+	pu->multiplyArrayByNumberAndSum(result, mTempStore4, getB4(tetha), mArg,
+			mCount);
+	pu->multiplyArrayByNumberAndSum(result, mTempStore5, getB5(tetha), mArg,
+			mCount);
+	pu->multiplyArrayByNumberAndSum(result, mTempStore6, getB6(tetha), mArg,
+			mCount);
 	pu->multiplyArrayByNumber(result, result, timestep, mCount);
 	pu->sumArrays(result, result, mState, mCount);
 }

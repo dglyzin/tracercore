@@ -1,4 +1,4 @@
-#include "domain/domain.h"
+#include "domain.h"
 
 #include <sys/types.h>
 #include <unistd.h>
@@ -96,7 +96,7 @@ for (int i = 0; i < 3; ++i) {
 
 	domain->saveStateForDraw(inputFile);
 	domain->saveStateForLoad(inputFile);
-	domain->saveStateForDrawDenseOutput(inputFile);
+	//domain->saveStateForDrawDenseOutput(inputFile);
 
 	/*
 	 * Вывод информации о времени работы осуществляет только поток с номером 0.

@@ -144,6 +144,13 @@ void ProcessingUnit::deleteUnsignedShortInt(unsigned short int* toDelete) {
 	deallocDeviceSpecificArray(toDelete);
 }
 
+/*void ProcessingUnit::swapStorages(double** sourceStorages, double** destinationStorages, int sourceStorageIndex,
+		int destinationStorageIndex) {
+	double* tmp = sourceStorages[sourceStorageIndex];
+	sourceStorages[sourceStorageIndex] = destinationStorages[destinationStorageIndex];
+	destinationStorages[destinationStorageIndex] = tmp;
+}*/
+
 void ProcessingUnit::saveArray(double* array, int size, char* path) {
 	ofstream out;
 	out.open(path, ios::binary | ios::app);

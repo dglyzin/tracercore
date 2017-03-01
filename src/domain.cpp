@@ -6,6 +6,7 @@
  */
 
 #include "domain.h"
+
 #include <cassert>
 #include <iostream>
 #include <sstream>
@@ -146,7 +147,7 @@ void Domain::compute(char* inputFile) {
 
 
 
-	if (mSolverInfo->isFSAL())
+	if (mNumericalMethod->isFSAL())
 		initSolvers();
 
 //	Порядок работы
@@ -263,6 +264,13 @@ void Domain::initSolvers() {
 }
 
 void Domain::computeStage(int stage) {
+	// TODO: Проверить порядок следующих 4-х функций
+	mProblem->computeStageData(stage, mTimeStep);
+
+	prepareStageArgument(stage);
+
+	prepareBlockStageData(stage);
+
 	prepareData(stage);
 
 	for (int i = 0; i < mConnectionCount; ++i)
@@ -275,7 +283,7 @@ void Domain::computeStage(int stage) {
 
 	computeOneStepBorder(stage);
 
-	prepareNextStageArgument(stage);
+	//prepareNextStageArgument(stage);
 
 	/*printf("\nstage #%d\n", stage);
 	printBlocksToConsole();*/
@@ -284,12 +292,12 @@ void Domain::computeStage(int stage) {
 void Domain::nextStep() {
 	//int totalGridElements = getGridElementCount();
 	//последовательно выполняем все стадии метода
-	for (int stage = 0; stage < mSolverInfo->getStageCount(); stage++)
+	for (int stage = 0; stage < mNumericalMethod->getStageCount(); stage++)
 		computeStage(stage);
 
 	//!!! Собрать мастеру ошибки
 	//!!! если ошибки нет, продолжать
-	if (mSolverInfo->isVariableStep()) {
+	if (mNumericalMethod->isVariableStep()) {
 		// MPI inside!
 		double error = collectError();
 
@@ -309,7 +317,7 @@ void Domain::nextStep() {
 
 		//!!! только 0, рассылать
 		//mTimeStep = mSolverInfo->getNewStep(mTimeStep, error, totalGridElementCount);
-		mTimeStep = getNewStep(error);
+		mTimeStep = computeNewStep(error);
 		printf("new time step = %f\n", mTimeStep);
 
 		//!!! только 0, рассылать
@@ -407,7 +415,7 @@ void Domain::computeOneStepBorder(int stage) {
 	processDeviceBlocksBorder(CPUNIT, 0, stage);
 }
 
-void Domain::prepareNextStageArgument(int stage) {
+void Domain::prepareStageArgument(int stage) {
 	/*#pragma omp task
 	 prepareDeviceArgument(GPU_UNIT, 0, stage);
 	 #pragma omp task
@@ -421,6 +429,12 @@ void Domain::prepareNextStageArgument(int stage) {
 	}
 
 	prepareDeviceArgument(CPUNIT, 0, stage);
+}
+
+void Domain::prepareBlockStageData(int stage) {
+	for (int i = 0; i < mBlockCount; ++i) {
+		mBlocks[i]->prepareStageSourceResult(stage, mTimeStep);
+	}
 }
 
 void Domain::computeOneStepCenter(int stage) {
@@ -506,22 +520,22 @@ bool Domain::isErrorPermissible(double error) {
 	int isErrorPermissible = 0;
 
 	if (mWorkerRank == 0) {
-		isErrorPermissible = (int)(mSolverInfo->isErrorPermissible(error, totalGridElementCount));
+		isErrorPermissible = (int)(mNumericalMethod->isErrorPermissible(error, totalGridElementCount));
 	}
 
 	MPI_Bcast(&isErrorPermissible, 1, MPI_INT, 0, mWorkerComm);
 	return (bool)(isErrorPermissible);
 }
 
-double Domain::getNewStep(double error) {
+double Domain::computeNewStep(double error) {
 	double newStep = 0;
 
 	if (mWorkerRank == 0) {
-		newStep = mSolverInfo->getNewStep(mTimeStep, error, totalGridElementCount);
+		newStep = mNumericalMethod->computeNewStep(mTimeStep, error, totalGridElementCount);
 	}
 
 	MPI_Bcast(&newStep, 1, MPI_DOUBLE, 0, mWorkerComm);
-	return mSolverInfo->getNewStep(mTimeStep, error, totalGridElementCount);
+	return mNumericalMethod->computeNewStep(mTimeStep, error, totalGridElementCount);
 }
 
 void Domain::printBlocksToConsole() {
@@ -552,7 +566,8 @@ void Domain::readFromFile(char* path) {
 	readSolverIndex(in);
 	readSolverTolerance(in);
 
-	initSolverInfo();
+	createNumericalMethod();
+	createProblem();
 
 	createBlock(in);
 
@@ -564,7 +579,7 @@ void Domain::readFromFile(char* path) {
 	totalGridNodeCount = getGridNodeCount();
 	totalGridElementCount = getGridElementCount();
 
-	blockAfterCreate();
+	//blockAfterCreate();
 
 	//printBlocksToConsole();
 }
@@ -758,8 +773,7 @@ Block* Domain::readBlock(ifstream& in, int idx, int dimension) {
 		}
 
 		resBlock = new RealBlock(node, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2],
-				mCellSize, mHaloSize, idx, pu, initFuncNumber, compFuncNumber, mProblenType, mSolverIndex, mAtol,
-				mRtol);
+				mCellSize, mHaloSize, idx, pu, initFuncNumber, compFuncNumber, mProblem, mNumericalMethod);
 	} else {
 		//resBlock =  new BlockNull(idx, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize);
 		resBlock = new NullBlock(node, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2],
@@ -1201,27 +1215,31 @@ void Domain::createInterconnect(ifstream& in) {
 		mInterconnects[i] = readConnection(in);
 }
 
-void Domain::initSolverInfo() {
+void Domain::createNumericalMethod() {
 	switch (mSolverIndex) {
 		case EULER:
-			mSolverInfo = new EulerStorage();
+			mNumericalMethod = new Euler(mAtol, mRtol);
 			break;
 		case RK4:
-			mSolverInfo = new RK4Storage();
+			//mNumericalMethod = new RK4Storage();
 			break;
 		case DP45:
-			mSolverInfo = new DP45Storage();
+			mNumericalMethod = new DormandPrince45(mAtol, mRtol);
 			break;
 		default:
-			mSolverInfo = new EulerStorage();
+			mNumericalMethod = new Euler(mAtol, mRtol);
 			break;
 	}
 }
 
+void Domain::createProblem() {
+	mProblem = new OrdinaryProblem();
+}
+
 void Domain::blockAfterCreate() {
-	for (int i = 0; i < mBlockCount; ++i) {
+	/*for (int i = 0; i < mBlockCount; ++i) {
 		mBlocks[i]->afterCreate(mProblenType, mSolverIndex, mAtol, mRtol);
-	}
+	}*/
 }
 
 Interconnect* Domain::getInterconnect(int sourceNode, int destinationNode, int borderLength, double* sourceData,
@@ -1295,10 +1313,10 @@ int Domain::getMaxStepStorageCount() {
 		gpuElementCount[i] = getElementCountOnProcessingUnit(GPUNIT, i);
 	}
 
-	int cpuSolverSize = mSolverInfo->getSize(cpuElementCount);
+	int cpuSolverSize = mNumericalMethod->getMemorySizePerState(cpuElementCount);
 	int* gpuSolverSize = new int[mGpuCount];
 	for (int i = 0; i < mGpuCount; ++i) {
-		gpuSolverSize[i] = mSolverInfo->getSize(gpuElementCount[i]);
+		gpuSolverSize[i] = mNumericalMethod->getMemorySizePerState(gpuElementCount[i]);
 	}
 
 	int cpuMaxCount = (int) (CPU_RAM / cpuSolverSize);
