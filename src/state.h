@@ -8,27 +8,46 @@
 #ifndef STATE_H_
 #define STATE_H_
 
-#include "processingunit/processingunit.h"
+#include "numericalmethod/numericalmethod.h"
 
 class State {
 public:
-	State(ProcessingUnit* _pu, int storeCount, int elementCount);
+	State(ProcessingUnit* _pu, NumericalMethod* _method, double** _blockCommonTempStorages, int elementCount);
 	virtual ~State();
 
-	double* getStore(int storeNumber);
+	//double* getStorage(int storageNumber);
+	double* getResultStorage(int stageNumber);
+	double* getSourceStorage(int stageNumber);
 
-	void saveGeneralStore(char* path);
-	void saveAllStores(char* path);
+	double* getState();
 
-	void loadGeneralStore(std::ifstream& in);
-	void loadAllStores(std::ifstream& in);
+	void prepareArgument(double timeStep, int stageNumber);
+
+	void computeDenseOutput(double timeStep, double theta, double* result);
+
+	double computeStepError(double timeStep);
+
+	void confirmStep(double timeStep, State* nextStepState, ISmartCopy* sc);
+	void rejectStep(double timeStep);
+
+	void saveGeneralStorage(char* path);
+	void saveAllStorage(char* path);
+
+	void loadGeneralStorage(std::ifstream& in);
+	void loadAllStorage(std::ifstream& in);
+
+	bool isNan();
+
+	void print();
 
 private:
 	ProcessingUnit* pu;
+	NumericalMethod* method;
 
-	double** mStores;
+	double* mState;
+	double** mKStorages;
+	double** mBlockCommonTempStorages;
 
-	int mStoreCount;
 	int mElementCount;
 };
 
