@@ -10,32 +10,33 @@
 
 #include <vector>
 
-#include "../problem/ordinary.h"
-#include "../problem/delay.h"
-
 #include "../processingunit/processingunit.h"
 
+#include "../utils.h"
 #include "block.h"
 
-#include "../utils.h"
+#include "../numericalmethod/numericalmethod.h"
+#include "../problem/problem.h"
+#include "../state.h"
 
 class RealBlock: public Block {
 public:
 	RealBlock(int _nodeNumber, int _dimension, int _xCount, int _yCount, int _zCount, int _xOffset, int _yOffset,
 			int _zOffset, int _cellSize, int _haloSize, int _blockNumber, ProcessingUnit* _pu,
-			unsigned short int* _initFuncNumber, unsigned short int* _compFuncNumber, int problemType, int solverType,
-			double aTol, double rTol);
+			unsigned short int* _initFuncNumber, unsigned short int* _compFuncNumber, Problem* _problem,
+			NumericalMethod* _method);
 
 	virtual ~RealBlock();
 
-	void afterCreate(int problemType, int solverType, double aTol, double rTol);
+	//void afterCreate(int problemType, int solverType, double aTol, double rTol);
 
 	void computeStageBorder(int stage, double time);
 	void computeStageCenter(int stage, double time);
 
-	void prepareArgument(int stage, double timestep);
+	void prepareArgument(int stage, double timeStep);
 
 	void prepareStageData(int stage);
+	void prepareStageSourceResult(int stage, double timeStep);
 
 	bool isRealBlock();
 	int getBlockType();
@@ -47,10 +48,10 @@ public:
 	bool isProcessingUnitCPU();
 	bool isProcessingUnitGPU();
 
-	double getStepError(double timestep);
+	double getStepError(double timeStep);
 
-	void confirmStep(double timestep);
-	void rejectStep(double timestep);
+	void confirmStep(double timeStep);
+	void rejectStep(double timeStep);
 
 	double* addNewBlockBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength);
 	double* addNewExternalBorder(Block* neighbor, int side, int mOffset, int nOffset, int mLength, int nLength,
@@ -58,7 +59,6 @@ public:
 
 	void moveTempBorderVectorToBorderArray();
 
-	void loadData(double* data);
 	void getCurrentState(double* result);
 
 	void saveStateForDraw(char* path);
@@ -73,7 +73,14 @@ public:
 private:
 	ProcessingUnit* pu;
 
-	ProblemType* problem;
+	State** mStates;
+	Problem* mProblem;
+	NumericalMethod* mNumericalMethod;
+
+	double** mSource;
+	double* mResult;
+
+	double** mCommonTempStorages;
 
 	double* mParams;
 
@@ -101,8 +108,6 @@ private:
 
 	double* getNewBlockBorder(Block* neighbor, int borderLength);
 	double* getNewExternalBorder(Block* neighbor, int borderLength, double* border);
-
-	ProblemType* createProblem(int problemType, int solverType, double aTol, double rTol);
 
 	void printGeneralInformation();
 	void printBorderInfo();

@@ -5,7 +5,7 @@
  *      Author: frolov
  */
 
-#include "nullblock.h"
+#include "../blocks/nullblock.h"
 
 using namespace std;
 
@@ -34,6 +34,10 @@ void NullBlock::prepareArgument(int stage, double timestep) {
 }
 
 void NullBlock::prepareStageData(int stage) {
+	return;
+}
+
+void NullBlock::prepareStageSourceResult(int stage, double timeStep) {
 	return;
 }
 
@@ -87,10 +91,6 @@ double* NullBlock::addNewExternalBorder(Block* neighbor, int side, int mOffset, 
 }
 
 void NullBlock::moveTempBorderVectorToBorderArray() {
-	return;
-}
-
-void NullBlock::loadData(double* data) {
 	return;
 }
 
