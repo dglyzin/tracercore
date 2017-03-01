@@ -142,8 +142,7 @@ void Domain::compute(char* inputFile) {
     printwcts("Computing from " + ToString(currentTime) + " to " + ToString(stopTime) +
     		       " with step "+ ToString(mTimeStep)+"\n", LL_INFO);
     printwcts("Computation started, worker #"+ ToString(mWorkerRank) +"\n", LL_INFO);
-    printwcts("solver stage count: " + ToString(mSolverInfo->getStageCount())+ "\n", LL_INFO);
-
+    printwcts("solver stage count: " + ToString(mNumericalMethod->getStageCount())+ "\n", LL_INFO);
 
 
 
@@ -172,7 +171,7 @@ void Domain::compute(char* inputFile) {
 	if (mPythonMaster && (mWorkerRank == 0))
 		MPI_Send(&mJobState, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
 
-	printwcts( "Initial user status received: " + ToString(userStatus) + "\n", LL_INFO );
+	printwcts( "Initial user status received: " + ToString(mUserStatus) + "\n", LL_INFO );
 
 	// TODO если пользователь остановил расчеты, то необходимо выполнить сохранение для загузки состояния (saveStateForLoad)
 	while ((mUserStatus != US_STOP) && (mJobState == JS_RUNNING)) {
@@ -244,12 +243,6 @@ void Domain::compute(char* inputFile) {
 
 	//if ((mWorkerRank == 0)&&(!mPythonMaster))
 	//    setDbJobState(JS_FINISHED);
-
-
-	char comline [250];
-	sprintf(comline, "python %s/hybriddomain/fakejobrunner.py", mTracerFolder );
-	printwcts("comm line = "+ToString(comline) + "\n",LL_INFO);
-	system(comline);
 
 
 	char comline [250];
