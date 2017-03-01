@@ -3,7 +3,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <sys/syscall.h>
-
+#include "logger.h"
 
 int main(int argc, char * argv[]) {
 	/*
@@ -34,8 +34,12 @@ int main(int argc, char * argv[]) {
 	 * Создание основного управляющего класса.
 	 * Номер потока, количество потоков и путь к файлу с данными.
 	 */
-	printf("SLURM JOB %s STARTED\n ", getenv("SLURM_JOB_ID"));
-	printf("DEBUG creating domain...\n ");
+	time_t now = time(0);
+	printf("\n");
+	printwcts("Welcome to computing core!\n", LL_INFO);
+    printwts("Initital timestamp is " + ToString(now) +"\n" , now, LL_INFO );
+	printwcts("SLURM JOB " + ToString(getenv("SLURM_JOB_ID")) +" STARTED\n", LL_INFO);
+	printwcts("creating domain...\n", LL_DEBUG);
 	Domain* domain = new Domain(world_rank, world_size, inputFile, binaryFileName);
 	domain->checkOptions(flags, stopTime, saveFile);
 
@@ -84,7 +88,7 @@ for (int i = 0; i < 3; ++i) {
 
 */
 
-	printf("Running computations mpi rank %d \n", world_rank);
+
 
 	MPI_Barrier(domain->getWorkerComm());
 	time1 = omp_get_wtime();//MPI_Wtime();
@@ -103,7 +107,7 @@ for (int i = 0; i < 3; ++i) {
 	 * Время работы -  разница между двумя отсечками, котрые были сделаны ранее.
 	 */
 	if (domain->isNan())
-		printf("\n\n\n\nNAN!!!\n\n\n\n");
+		printwcts("\n\n\n\nNAN!!!\n\n\n\n",LL_INFO);
 
 	//domain->printBlocksToConsole();
 

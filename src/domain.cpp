@@ -8,52 +8,16 @@
 #include "domain.h"
 
 #include <cassert>
-#include <iostream>
-#include <sstream>
 #include <stdlib.h>
 
 
 using namespace std;
 #include <stdio.h>
 #include <iostream>
-#include <ctime>
-#include <string>
 
-/*logging with timestamp*/
-#define LL_INFO 0
-#define LL_DEBUG 1
-
-#define LOGLEVEL LL_INFO
-
-template <typename T>
-string ToString(T val)
-{
-    stringstream stream;
-    stream << val;
-    return stream.str();
-}
-
-void printwts(std::string message, time_t timestamp, int loglevel){
-    //char* dt = ctime(&timestamp);
-	if (loglevel>LOGLEVEL)
-		return;
-
-    tm *ltm = localtime(&timestamp);
-
-    // print various components of tm structure.
-    printf("%02d-%02d %02d:%02d:%02d ", 1 + ltm->tm_mon, ltm->tm_mday, ltm->tm_hour, ltm->tm_min, ltm->tm_sec );
+#include "logger.h"
 
 
-    std::cout << message;
-
-
-}
-
-void printwcts(std::string message, int loglevel){
-    printwts(message,time(0), loglevel);
-}
-
-/*--------------------*/
 
 Domain::Domain(int _world_rank, int _world_size, char* inputFile, char* binaryFileName) {
 	//Get worker communicator and determine if there is python master
@@ -70,7 +34,7 @@ Domain::Domain(int _world_rank, int _world_size, char* inputFile, char* binaryFi
 		mPythonMaster = 1;
 	else {
 		mPythonMaster = 0;
-		printf("Communicator size error!");
+		printwcts("Communicator size error!",LL_DEBUG);
 		assert(0);
 	}
 
@@ -95,7 +59,7 @@ Domain::Domain(int _world_rank, int _world_size, char* inputFile, char* binaryFi
 
 	mGpuCount = GPU_COUNT;
 
-	printf("\nPROBLEM TYPE ALWAYS = ORDINARY!!!\n");
+	printwcts("PROBLEM TYPE ALWAYS = ORDINARY!!!\n",LL_DEBUG);
 	mProblenType = ORDINARY;
 
 	readFromFile(inputFile);
@@ -128,14 +92,18 @@ Domain::~Domain() {
 		delete gpu;
 	}
 
+	if (mPlotPeriods)
+		delete mPlotPeriods;
+
 }
 
 void Domain::compute(char* inputFile) {
-    time_t now = time(0);
     double wnow = MPI_Wtime();
     double mnow = omp_get_wtime();
 
-    printwts("Initital timestamp is " + ToString(now) +"\n" , now, LL_INFO );
+
+
+    printwcts("Running computations mpi rank %d \n", LL_INFO);
 
     printwcts("Tracer root folder: " + ToString(mTracerFolder)+ "\n", LL_INFO);
     printwcts("Project folder: " + ToString(mProjectFolder)+ "\n", LL_INFO);
@@ -196,7 +164,6 @@ void Domain::compute(char* inputFile) {
 			MPI_Send(&percentChanged, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
 
 		if (percentChanged) {
-			time_t now2 = time(0);
 		    double wnow2 = MPI_Wtime();
 		    double mnow2 = omp_get_wtime();
 
@@ -205,15 +172,16 @@ void Domain::compute(char* inputFile) {
 				MPI_Send(&percentage, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
 	            double percenttime = wnow2-wnow;
 			    MPI_Send(&percenttime, 1, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD);
-			    printwcts("Done " + ToString(percentage) + "% in " + ToString((mnow2-mnow))+ " seconds, and wtime gives " + ToString((wnow2-wnow))+ " seconds, ETA = "+ ToString((100-percentage)*(mnow2-mnow)) + " seconds\n" , LL_INFO);
+			    //printwcts("Done " + ToString(percentage) + "% in " + ToString((mnow2-mnow))+ " seconds, and wtime gives " + ToString((wnow2-wnow))+ " seconds, ETA = "+ ToString((100-percentage)*(mnow2-mnow)) + " seconds\n" , LL_INFO);
+			    printwcts("Done " + ToString(percentage) + "% in " + ToString((mnow2-mnow))+ " seconds, ETA = "+ ToString((100-percentage)*(mnow2-mnow)) + " seconds\n" , LL_INFO);
 
 			}
             if (!mPythonMaster && (mWorkerRank == 0)){
             	//printwcts("Done " + ToString(percentage) + "% in " + ToString((int) (now2-now))+ " seconds, and wtime gives " + ToString((wnow2-wnow))+ " seconds, and omp_wtime gives " + ToString((mnow2-mnow))+ " seconds, ratio is "  + ToString((wnow2-wnow)/(mnow2-mnow)) + " \n", LL_INFO);
-            	printwcts("Done " + ToString(percentage) + "% in " + ToString((mnow2-mnow))+ " seconds, and wtime gives " + ToString((wnow2-wnow))+ " seconds, ETA = "+ ToString((100-percentage)*(mnow2-mnow)) + " seconds\n" , LL_INFO);
+            	printwcts("Done " + ToString(percentage) + "% in " + ToString((mnow2-mnow))+ " seconds, ETA = "+ ToString((100-percentage)*(mnow2-mnow)) + " seconds\n" , LL_INFO);
+            	//printwcts("Done " + ToString(percentage) + "% in " + ToString((mnow2-mnow))+ " seconds, and wtime gives " + ToString((wnow2-wnow))+ " seconds, ETA = "+ ToString((100-percentage)*(mnow2-mnow)) + " seconds\n" , LL_INFO);
             	//system("ls -la");
             }
-            now = now2;
             wnow = wnow2;
             mnow = mnow2;
 		}
@@ -245,10 +213,10 @@ void Domain::compute(char* inputFile) {
 	//    setDbJobState(JS_FINISHED);
 
 
-	char comline [250];
-	sprintf(comline, "python %s/hybriddomain/fakejobrunner.py", mTracerFolder );
-	printwcts("comm line = "+ToString(comline) + "\n",LL_INFO);
-	system(comline);
+	//char comline [250];
+	//sprintf(comline, "python %s/hybriddomain/fakejobrunner.py", mTracerFolder );
+	//printwcts("comm line = "+ToString(comline) + "\n",LL_INFO);
+	//system(comline);
 
 }
 
@@ -294,7 +262,7 @@ void Domain::nextStep() {
 		// MPI inside!
 		double error = collectError();
 
-		printf("step error = %f\n", error);
+		printwcts("step error = " +ToString(error) +"\n", LL_INFO);
 
 		//bool isErrorPermissible = mSolverInfo->isErrorPermissible(error, totalGridElementCount);
 		bool isErrorPer = isErrorPermissible(error);
@@ -311,7 +279,7 @@ void Domain::nextStep() {
 		//!!! только 0, рассылать
 		//mTimeStep = mSolverInfo->getNewStep(mTimeStep, error, totalGridElementCount);
 		mTimeStep = computeNewStep(error);
-		printf("new time step = %f\n", mTimeStep);
+		printwcts("new time step = " + ToString(mTimeStep) + "\n", LL_INFO);
 
 		//!!! только 0, рассылать
 		if (isErrorPer) {
@@ -566,6 +534,8 @@ void Domain::readFromFile(char* path) {
 
 	createInterconnect(in);
 
+	readPlots(in);
+
 	for (int i = 0; i < mBlockCount; ++i)
 		mBlocks[i]->moveTempBorderVectorToBorderArray();
 
@@ -643,6 +613,13 @@ void Domain::readBlockCount(ifstream& in) {
 
 	//cout << "block count:   " << mBlockCount << endl;
 }
+
+void Domain::readPlotCount(ifstream& in) {
+	in.read((char*) &mPlotCount, SIZE_INT);
+
+	//cout << "block count:   " << mBlockCount << endl;
+}
+
 
 void Domain::readConnectionCount(ifstream& in) {
 	in.read((char*) &mConnectionCount, SIZE_INT);
@@ -731,7 +708,7 @@ Block* Domain::readBlock(ifstream& in, int idx, int dimension) {
 					break;
 
 				default:
-					printf("Invalid block device number for CPU!\n");
+					printwcts("Invalid block device number for CPU!\n", LL_INFO);
 					assert(false);
 					break;
 			}
@@ -755,13 +732,13 @@ Block* Domain::readBlock(ifstream& in, int idx, int dimension) {
 			 break;
 			 }*/
 			if (deviceNumber >= mGpuCount) {
-				printf("Invalid block device number for GPU!\n");
+				printwcts("Invalid block device number for GPU!\n", LL_INFO);
 				assert(false);
 			}
 
 			pu = gpu[deviceNumber];
 		} else {
-			printf("Invalid block type!\n");
+			printwcts("Invalid block type!\n",LL_INFO);
 			assert(false);
 		}
 
@@ -1037,8 +1014,11 @@ void Domain::printStatisticsInfo(char* inputFile, char* outputFile, double calcT
 		int stepCount = mRejectedStepCount + mAcceptedStepCount;
 		double speed = (double) (count) * stepCount / calcTime / 1000000;
 
-		printf("\n\nSteps accepted: %d\nSteps rejected: %d\n", mAcceptedStepCount, mRejectedStepCount);
-		printf("Time: %.2f\nElement count: %d\nPerformance (10^6): %.2f\n\n", calcTime, count, speed);
+		printwcts("Steps accepted: "+ ToString(mAcceptedStepCount) + "\n", LL_INFO);
+		printwcts("Steps rejected: "+ ToString(mRejectedStepCount) +"\n", LL_INFO);
+		printwcts("Time: " + ToString(calcTime)+"\n", LL_INFO);
+		printwcts("Element count: " + ToString(count)+"\n", LL_INFO);
+		printwcts("Performance (10^6): " + ToString(speed)+ "\n\n", LL_INFO);
 
 		//ofstream out;
 		//out.open("/home/frolov2/Tracer_project/stat", ios::app);
@@ -1198,6 +1178,19 @@ void Domain::createBlock(ifstream& in) {
 	for (int i = 0; i < mBlockCount; ++i)
 		mBlocks[i] = readBlock(in, i, dimension);
 }
+
+void Domain::readPlots(ifstream& in) {
+	readPlotCount(in);
+
+	mPlotPeriods = new double[mPlotCount];
+	in.read((char*) mPlotPeriods, mPlotCount * SIZE_DOUBLE);
+
+	printwcts("read plots: "+ToString(mPlotCount)+ "\n",LL_INFO);
+	for(int i=0; i<mPlotCount; i++)
+		printwcts("plot: "+ToString(mPlotPeriods[i])+ "\n",LL_INFO);
+}
+
+
 
 void Domain::createInterconnect(ifstream& in) {
 	readConnectionCount(in);

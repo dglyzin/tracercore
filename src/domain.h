@@ -220,6 +220,10 @@ private:
 	char mTracerFolder[250];
 	char mProjectFolder[250];
 
+	int mPlotCount;
+
+	double* mPlotPeriods;
+
 	//Solver* mPreviousState;
 
 	void loadStateFromFile(char* dataFile);
@@ -233,6 +237,7 @@ private:
 	void readSolverIndex(std::ifstream& in);
 	void readSolverTolerance(std::ifstream& in);
 	void readBlockCount(std::ifstream& in);
+	void readPlotCount(std::ifstream& in);
 	void readConnectionCount(std::ifstream& in);
 
 	/*
@@ -275,6 +280,8 @@ private:
 	void createProcessigUnit();
 	void createBlock(std::ifstream& in);
 	void createInterconnect(std::ifstream& in);
+
+	void readPlots(std::ifstream& in);
 
 	void createNumericalMethod();
 	void createProblem();

@@ -50,7 +50,7 @@ PROBLEM=$(SRCPROBLEM)/ismartcopy.cpp $(SRCPROBLEM)/problem.cpp $(SRCPROBLEM)/ord
 INTERCONNECT=$(SRCINTERCONNECT)/interconnect.cpp $(SRCINTERONNECTTRANSFER)/transferinterconnect.cpp $(SRCINTERCONNECT)/nontransferinterconnect.cpp $(SRCINTERONNECTTRANSFER)/transferinterconnectsend.cpp $(SRCINTERONNECTTRANSFER)/transferinterconnectrecv.cpp
 
 
-SOURCE=$(SRC)/main.cpp $(SRC)/domain.cpp $(SRC)/state.cpp $(SRC)/utils.cpp $(BLOCK) $(PROCUNIT) $(NUMERICALMETHOD) $(PROBLEM) $(INTERCONNECT)
+SOURCE=$(SRC)/main.cpp $(SRC)/domain.cpp $(SRC)/state.cpp $(SRC)/utils.cpp $(SRC)/logger.cpp $(BLOCK) $(PROCUNIT) $(NUMERICALMETHOD) $(PROBLEM) $(INTERCONNECT)
 
 OBJECT=$(SOURCE:.cpp=.o)
 

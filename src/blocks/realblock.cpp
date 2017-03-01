@@ -15,7 +15,7 @@ RealBlock::RealBlock(int _nodeNumber, int _dimension, int _xCount, int _yCount, 
 		NumericalMethod* _numericalMethod) :
 		Block(_nodeNumber, _dimension, _xCount, _yCount, _zCount, _xOffset, _yOffset, _zOffset, _cellSize, _haloSize) {
 
-	printf("\nbefore create block\n");
+	//printf("\nbefore create block\n");
 	pu = _pu;
 
 	blockNumber = _blockNumber;
@@ -68,7 +68,7 @@ RealBlock::RealBlock(int _nodeNumber, int _dimension, int _xCount, int _yCount, 
 	//TODO: getSourceStorage(0) заменить 0, возможно, нужна специальная функция
 	//double* state = mStates[mProblem->getCurrentStateNumber()]->getSourceStorage(0);
 	double* state = mStates[mProblem->getCurrentStateNumber()]->getState();
-	printf("\n%p %d\n", state, nodeCount);
+	//printf("\n%p %d\n", state, nodeCount);
 	pu->initState(state, mUserInitFuncs, mInitFuncNumber, blockNumber, 0.0);
 
 	int sourceLength = 1 + mProblem->getDelayCount();
