@@ -37,6 +37,7 @@ string ToString(int val)
 }
 
 
+//print with specified timestamp
 void printwts(std::string message, time_t timestamp, int loglevel){
     //char* dt = ctime(&timestamp);
 	if (loglevel>LOGLEVEL)
@@ -53,6 +54,7 @@ void printwts(std::string message, time_t timestamp, int loglevel){
 
 }
 
+//print with current timestamp
 void printwcts(std::string message, int loglevel){
     printwts(message,time(0), loglevel);
 }

@@ -19,29 +19,21 @@ using namespace std;
 
 
 
-Domain::Domain(int _world_rank, int _world_size, char* inputFile, char* binaryFileName) {
-	//Get worker communicator and determine if there is python master
+Domain::Domain(int _world_rank, int _world_size, char* inputFile, char* binaryFileName, int _jobId) {
 	mGlobalRank = _world_rank;
-
 	MPI_Comm_split(MPI_COMM_WORLD, 1, _world_rank, &mWorkerComm);
 
 	MPI_Comm_size(mWorkerComm, &mWorkerCommSize);
 	MPI_Comm_rank(mWorkerComm, &mWorkerRank);
 
-	if (mWorkerCommSize == _world_size)
-		mPythonMaster = 0;
-	else if (mWorkerCommSize == _world_size - 1)
-		mPythonMaster = 1;
-	else {
-		mPythonMaster = 0;
+	if (mWorkerCommSize != _world_size)	{
 		printwcts("Communicator size error!",LL_DEBUG);
 		assert(0);
 	}
 
-	//mJobId = _jobId;
+	mJobId = _jobId;
     Utils::getTracerFolder(binaryFileName,	mTracerFolder);
     Utils::getProjectFolder(inputFile,	mProjectFolder);
-	mJobState = JS_RUNNING;
 	currentTime = 0;
 	mStepCount = 0;
 
@@ -97,11 +89,18 @@ Domain::~Domain() {
 
 }
 
+int Domain::getUserStatus(){
+    if(mJobId<0)
+    	return US_RUN;
+    else
+    	//TODO implement http response for current jobId
+    	printwcts("user status getter not implemented", LL_INFO);
+    	assert(0);
+}
+
+
 void Domain::compute(char* inputFile) {
     double wnow = MPI_Wtime();
-    double mnow = omp_get_wtime();
-
-
 
     printwcts("Running computations mpi rank %d \n", LL_INFO);
 
@@ -117,84 +116,43 @@ void Domain::compute(char* inputFile) {
 	if (mNumericalMethod->isFSAL())
 		initSolvers();
 
-//	Порядок работы
-//	                1. WORLD+COMP                          2. WORLD ONLY
-//+	1. WORLD Bcast user-status, источник - world-0    |    +
-//+	             xx.  идет расчет шага, используется только COMP
-//пока нет	2. WORLD Allreduce compute-status                 |    +
-//пока нет       xx.  идет расчет ошибки, используется только COMP
-//+	5. accept/reject, comp-0 -> world-0               |    -
-//+	6. new timestep, comp-0 -> world-0                |    -
-//+	7. ready to collect data, comp-0 -> world-0       |    -
-//+	8. WORLD collect data                             |    +
-//  9. stop/continue comp-0 -> world-0                |    -
-
 	double computeInterval = stopTime - currentTime;
 	int percentage = 0;
 
 	//1.
 	mUserStatus = US_RUN;
 	mJobState = JS_RUNNING;
+
+	if (mWorkerRank == 0){
+        mUserStatus = getUserStatus();
+        printwcts( "Initial user status received: " + ToString(mUserStatus) + "\n", LL_INFO );
+	}
 	MPI_Bcast(&mUserStatus, 1, MPI_INT, 0, MPI_COMM_WORLD);
-	if (mPythonMaster && (mWorkerRank == 0))
-		MPI_Send(&mJobState, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
-
-	printwcts( "Initial user status received: " + ToString(mUserStatus) + "\n", LL_INFO );
-
 	// TODO если пользователь остановил расчеты, то необходимо выполнить сохранение для загузки состояния (saveStateForLoad)
 	while ((mUserStatus != US_STOP) && (mJobState == JS_RUNNING)) {
 		nextStep();
 
-		if (mPythonMaster && (mWorkerRank == 0)) {
-			MPI_Send(&mLastStepAccepted, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
-			MPI_Send(&mTimeStep, 1, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD);
-			MPI_Send(&currentTime, 1, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD);
-		}
-
-		//printBlocksToConsole();
-
-		//here is the logic of collecting raw data to one node and saving it to disk
-		//worker 0 will do it if there is no python master
-		//if python master is present, it receives all the data for all blocks,
-		//creates and saves pictures, saves raw data and stores filenames to db
-
+	    //printBlocksToConsole();
 		int newPercentage = 100.0 * (1.0 - (stopTime - currentTime) / computeInterval);
 		int percentChanged = newPercentage > percentage;
-		if (mPythonMaster && (mWorkerRank == 0))
-			MPI_Send(&percentChanged, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
 
 		if (percentChanged) {
 		    double wnow2 = MPI_Wtime();
-		    double mnow2 = omp_get_wtime();
-
 			percentage = newPercentage;
-			if (mPythonMaster && (mWorkerRank == 0)){
-				MPI_Send(&percentage, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
-	            double percenttime = wnow2-wnow;
-			    MPI_Send(&percenttime, 1, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD);
-			    //printwcts("Done " + ToString(percentage) + "% in " + ToString((mnow2-mnow))+ " seconds, and wtime gives " + ToString((wnow2-wnow))+ " seconds, ETA = "+ ToString((100-percentage)*(mnow2-mnow)) + " seconds\n" , LL_INFO);
-			    printwcts("Done " + ToString(percentage) + "% in " + ToString((mnow2-mnow))+ " seconds, ETA = "+ ToString((100-percentage)*(mnow2-mnow)) + " seconds\n" , LL_INFO);
-
-			}
-            if (!mPythonMaster && (mWorkerRank == 0)){
+            if (mWorkerRank == 0){
             	//printwcts("Done " + ToString(percentage) + "% in " + ToString((int) (now2-now))+ " seconds, and wtime gives " + ToString((wnow2-wnow))+ " seconds, and omp_wtime gives " + ToString((mnow2-mnow))+ " seconds, ratio is "  + ToString((wnow2-wnow)/(mnow2-mnow)) + " \n", LL_INFO);
-            	printwcts("Done " + ToString(percentage) + "% in " + ToString((mnow2-mnow))+ " seconds, ETA = "+ ToString((100-percentage)*(mnow2-mnow)) + " seconds\n" , LL_INFO);
+            	printwcts("Done " + ToString(percentage) + "% in " + ToString((wnow2-wnow))+ " seconds, ETA = "+ ToString((100-percentage)*(wnow2-wnow)) + " seconds\n" , LL_INFO);
             	//printwcts("Done " + ToString(percentage) + "% in " + ToString((mnow2-mnow))+ " seconds, and wtime gives " + ToString((wnow2-wnow))+ " seconds, ETA = "+ ToString((100-percentage)*(mnow2-mnow)) + " seconds\n" , LL_INFO);
             	//system("ls -la");
             }
             wnow = wnow2;
-            mnow = mnow2;
 		}
 
 		counterSaveTime += mTimeStep;
 
 		int readyToSave = (saveInterval != 0) && (counterSaveTime > saveInterval);
-		if (mPythonMaster && (mWorkerRank == 0))
-			MPI_Send(&readyToSave, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
 		if (!(currentTime < stopTime))
 			mJobState = JS_FINISHED;
-		if (mPythonMaster && (mWorkerRank == 0))
-			MPI_Send(&mJobState, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
 
 		if (readyToSave) {
 			counterSaveTime = 0;
@@ -202,11 +160,13 @@ void Domain::compute(char* inputFile) {
 		}
 
 		//check for termination request
-		if (mPythonMaster && (mWorkerRank == 0)) {
-			MPI_Bcast(&mUserStatus, 1, MPI_INT, 0, MPI_COMM_WORLD);
+		if (mWorkerRank == 0){
+		        mUserStatus = getUserStatus();
 		}
+		MPI_Bcast(&mUserStatus, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
-	}
+
+	} //end while
 	printwcts("Computation finished for worker #" + ToString(mWorkerRank) + "\n", LL_INFO);
 
 	//if ((mWorkerRank == 0)&&(!mPythonMaster))

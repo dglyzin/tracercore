@@ -40,7 +40,9 @@ int main(int argc, char * argv[]) {
     printwts("Initital timestamp is " + ToString(now) +"\n" , now, LL_INFO );
 	printwcts("SLURM JOB " + ToString(getenv("SLURM_JOB_ID")) +" STARTED\n", LL_INFO);
 	printwcts("creating domain...\n", LL_DEBUG);
-	Domain* domain = new Domain(world_rank, world_size, inputFile, binaryFileName);
+	int jobId = -1;
+	//TODO get jobId from command line when core is launched by webUI
+	Domain* domain = new Domain(world_rank, world_size, inputFile, binaryFileName, jobId);
 	domain->checkOptions(flags, stopTime, saveFile);
 
 	//domain->printBlocksToConsole();

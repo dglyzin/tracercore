@@ -37,7 +37,7 @@
 
 class Domain {
 public:
-	Domain(int _world_rank, int _world_size, char* inputFile, char* binaryFileName);
+	Domain(int _world_rank, int _world_size, char* inputFile, char* binaryFileName, int _jobId);
 
 	virtual ~Domain();
 
@@ -104,6 +104,8 @@ public:
 
 	MPI_Comm getWorkerComm(){ return mWorkerComm;};
 
+	int getUserStatus();
+
 private:
 	ProcessingUnit* cpu;
 	ProcessingUnit** gpu;
@@ -146,11 +148,10 @@ private:
 
 	/*
 	 * Коммуникатор работников
-	 * Может совпадать с MPI_COMM_WORLD, если нет питон-мастера
-	 * либо это  MPI_COMM_WORLD без первого процесса
+	 * Всегда совпадает с MPI_COMM_WORLD
 	 */
 	MPI_Comm mWorkerComm;
-	int mPythonMaster;
+	//int mPythonMaster;
 
 	/*
 	 * Номер потока
@@ -164,9 +165,10 @@ private:
 	int mWorkerCommSize;
 
 	/*
-	 * Глобальный Id задачи для базы
+	 * уникальный Id задачи для запросов состояния юзера  на сайте
 	 */
-	//int mJobId;
+	int mJobId;
+
 	int mUserStatus;
 	int mJobState;
 
