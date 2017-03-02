@@ -42,7 +42,7 @@ Domain::Domain(int _world_rank, int _world_size, char* inputFile, char* binaryFi
 
 	mRepeatCount = 0;
 
-	counterSaveTime = 0;
+	mSaveTimer = mSavePeriod;
 
 	dimension = 0;
 
@@ -87,6 +87,9 @@ Domain::~Domain() {
 	if (mPlotPeriods)
 		delete mPlotPeriods;
 
+	if (mPlotTimers)
+		delete mPlotTimers;
+
 }
 
 int Domain::getUserStatus(){
@@ -96,6 +99,36 @@ int Domain::getUserStatus(){
     	//TODO implement http response for current jobId
     	printwcts("user status getter not implemented", LL_INFO);
     	assert(0);
+    return US_RUN;
+}
+
+int Domain::isReadyToFullSave(){
+	int result = 0;
+	if (mSavePeriod > 0){
+	    mSaveTimer -= mTimeStep;
+	    if (mSaveTimer<=0)
+	        result = 1;
+	    while (mSaveTimer<=0)
+	        mSaveTimer += mSavePeriod;
+	}
+	return result;
+}
+
+int Domain::isReadyToPlot(){
+	//here we subtract mTimeStep from every timer and
+	//return 1 if any of them is below or equal to 0
+	//then we add sufficient amount of periods to make it positive again
+	int result = 0;
+	for(int i=0; i<mPlotCount; i++){
+	    if (mPlotPeriods[i] > 0){
+	    	mPlotTimers[i] -= mTimeStep;
+	    	if (mPlotTimers[i]<=0)
+	    	    result = 1;
+	    	while (mPlotTimers[i]<=0)
+	    	    mPlotTimers[i] += mPlotPeriods[i];
+	    }
+	}
+	return result;
 }
 
 
@@ -129,6 +162,9 @@ void Domain::compute(char* inputFile) {
 	}
 	MPI_Bcast(&mUserStatus, 1, MPI_INT, 0, MPI_COMM_WORLD);
 	// TODO если пользователь остановил расчеты, то необходимо выполнить сохранение для загузки состояния (saveStateForLoad)
+
+
+
 	while ((mUserStatus != US_STOP) && (mJobState == JS_RUNNING)) {
 		nextStep();
 
@@ -143,21 +179,25 @@ void Domain::compute(char* inputFile) {
             	//printwcts("Done " + ToString(percentage) + "% in " + ToString((int) (now2-now))+ " seconds, and wtime gives " + ToString((wnow2-wnow))+ " seconds, and omp_wtime gives " + ToString((mnow2-mnow))+ " seconds, ratio is "  + ToString((wnow2-wnow)/(mnow2-mnow)) + " \n", LL_INFO);
             	printwcts("Done " + ToString(percentage) + "% in " + ToString((wnow2-wnow))+ " seconds, ETA = "+ ToString((100-percentage)*(wnow2-wnow)) + " seconds\n" , LL_INFO);
             	//printwcts("Done " + ToString(percentage) + "% in " + ToString((mnow2-mnow))+ " seconds, and wtime gives " + ToString((wnow2-wnow))+ " seconds, ETA = "+ ToString((100-percentage)*(mnow2-mnow)) + " seconds\n" , LL_INFO);
-            	//system("ls -la");
             }
             wnow = wnow2;
 		}
 
-		counterSaveTime += mTimeStep;
-
-		int readyToSave = (saveInterval != 0) && (counterSaveTime > saveInterval);
 		if (!(currentTime < stopTime))
-			mJobState = JS_FINISHED;
+					mJobState = JS_FINISHED;
 
-		if (readyToSave) {
-			counterSaveTime = 0;
-			saveStateForDraw(inputFile);
+		if (isReadyToFullSave()) {
+			saveStateForLoad(inputFile);
 		}
+
+		if (isReadyToPlot()) {
+			saveStateForDraw(inputFile);
+			//char comline [250];
+			//sprintf(comline, "python %s/hybriddomain/fakejobrunner.py", mTracerFolder );
+			//printwcts("comm line = "+ToString(comline) + "\n",LL_INFO);
+			//system(comline);
+		}
+
 
 		//check for termination request
 		if (mWorkerRank == 0){
@@ -167,16 +207,10 @@ void Domain::compute(char* inputFile) {
 
 
 	} //end while
+
 	printwcts("Computation finished for worker #" + ToString(mWorkerRank) + "\n", LL_INFO);
 
-	//if ((mWorkerRank == 0)&&(!mPythonMaster))
-	//    setDbJobState(JS_FINISHED);
 
-
-	//char comline [250];
-	//sprintf(comline, "python %s/hybriddomain/fakejobrunner.py", mTracerFolder );
-	//printwcts("comm line = "+ToString(comline) + "\n",LL_INFO);
-	//system(comline);
 
 }
 
@@ -477,7 +511,7 @@ void Domain::readFromFile(char* path) {
 
 	readFileStat(in);
 	readTimeSetting(in);
-	readSaveInterval(in);
+	readSavePeriod(in);
 	readGridSteps(in);
 
 	in.read((char*) &dimension, SIZE_INT);
@@ -532,10 +566,10 @@ void Domain::readTimeSetting(ifstream& in) {
 	 cout << "step time:     " << timeStep << endl;*/
 }
 
-void Domain::readSaveInterval(ifstream& in) {
-	in.read((char*) &saveInterval, SIZE_DOUBLE);
+void Domain::readSavePeriod(ifstream& in) {
+	in.read((char*) &mSavePeriod, SIZE_DOUBLE);
 
-	//cout << "save interval: " << saveInterval << endl;
+	//cout << "save interval: " << savePeriod << endl;
 }
 
 void Domain::readGridSteps(ifstream& in) {
@@ -862,7 +896,7 @@ void Domain::saveStateForDraw(char* inputFile) {
 
 	saveGeneralInfo(saveFile);
 	saveStateForDrawByBlocks(saveFile);
-
+	printwcts("produced results for t="+ ToString(currentTime) + ": "+ToString(saveFile) + "\n",LL_INFO);
 	delete saveFile;
 }
 
@@ -1143,7 +1177,10 @@ void Domain::readPlots(ifstream& in) {
 	readPlotCount(in);
 
 	mPlotPeriods = new double[mPlotCount];
+	mPlotTimers = new double[mPlotCount];
 	in.read((char*) mPlotPeriods, mPlotCount * SIZE_DOUBLE);
+	for(int i=0; i<mPlotCount; i++)
+		mPlotTimers[i]=mPlotPeriods[i];
 
 	printwcts("read plots: "+ToString(mPlotCount)+ "\n",LL_INFO);
 	for(int i=0; i<mPlotCount; i++)
