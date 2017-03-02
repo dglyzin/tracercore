@@ -1029,52 +1029,6 @@ void Domain::printStatisticsInfo(char* inputFile, char* outputFile, double calcT
 	}
 
 	return;
-	/*if ( flags & STATISTICS ) {
-	 if( world_rank == 0 ) {
-	 int countGridNodes = getCountGridNodes();
-	 int repeatCount = getRepeatCount();
-	 double speed = (double)(countGridNodes) * repeatCount / calcTime / 1000000;
-
-	 int* devices = new int[world_size * 2];
-	 devices[0] = getCpuBlocksCount();
-	 devices[1] = getGpuBlocksCount();
-
-	 for (int i = 1; i < world_size; ++i) {
-	 MPI_Recv(devices + 2 * i, 1, MPI_INT, i, 999, MPI_COMM_WORLD, &status);
-	 MPI_Recv(devices + 2 * i + 1, 1, MPI_INT, i, 999, MPI_COMM_WORLD, &status);
-	 }
-
-	 ofstream out;
-	 out.open(statisticsFile, ios::app);
-
-	 out << "############################################################" << endl;
-	 out.precision(5);
-	 out << endl <<
-	 "Input file:   " << inputFile << endl <<
-	 "Output file:  " << outputFile << endl <<
-	 "Node count:   " << countGridNodes << endl <<
-	 "Repeat count: " << repeatCount << endl <<
-	 "Time:         " << calcTime << endl <<
-	 "Speed (10^6): " << speed << endl <<
-	 endl;
-
-	 for (int i = 0; i < world_size; ++i)
-	 out << "Thread #" << i << " CPU blocks: " << devices[2 * i] << " GPU blocks: " << devices[2 * i + 1] << endl << endl;
-
-	 out << "############################################################" << endl;
-
-	 out.close();
-
-	 delete devices;
-	 }
-	 else {
-	 int cpuCount = getCpuBlocksCount();
-	 int gpuCount = getGpuBlocksCount();
-
-	 MPI_Send(&cpuCount, 1, MPI_INT, 0, 999, MPI_COMM_WORLD);
-	 MPI_Send(&gpuCount, 1, MPI_INT, 0, 999, MPI_COMM_WORLD);
-	 }
-	 }*/
 }
 
 bool Domain::isNan() {
