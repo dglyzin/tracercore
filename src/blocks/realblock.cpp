@@ -424,7 +424,7 @@ void RealBlock::printBorderInfo() {
 				"   M_Length: %d\n"
 				"   N_Length: %d\n"
 				"   Address : %p\n"
-				"\n", i, Utils::getSideName(sendBorderInfo[index + SIDE]), receiveBorderInfo[index + M_OFFSET],
+				"\n", i, Utils::getSideName(receiveBorderInfo[index + SIDE]), receiveBorderInfo[index + M_OFFSET],
 				receiveBorderInfo[index + N_OFFSET], receiveBorderInfo[index + M_LENGTH],
 				receiveBorderInfo[index + N_LENGTH], externalBorder[i]);
 	}
@@ -434,4 +434,6 @@ void RealBlock::printBorderInfo() {
 
 void RealBlock::printData() {
 	//mProblem->print(zCount, yCount, xCount, cellSize);
+	int currentStateNumber = mProblem->getCurrentStateNumber();
+	mStates[currentStateNumber]->print(zCount, yCount, xCount, cellSize);
 }

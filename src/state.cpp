@@ -117,15 +117,22 @@ bool State::isNan() {
 	return pu->isNan(mState, mElementCount);
 }
 
-void State::print() {
-	printf("################################################################################");
-	printf("State\n");
-	printf("State address: %p", mState);
+void State::print(int zCount, int yCount, int xCount, int cellSize) {
+	//printf("################################################################################");
+	printf("\nState\n");
+	printf("State address: %p\n", mState);
 
 	int kStorageCount = method->getKStorageCount();
 	for (int i = 0; i < kStorageCount; ++i) {
-		printf("kStorage #%d address: %p", i, mKStorages[i]);
+		printf("kStorage #%d address: %p\n", i, mKStorages[i]);
 	}
-	printf("################################################################################");
-	printf("\n\n\n");
+
+	printf("\nState\n");
+	pu->printArray(mState, zCount, yCount, xCount, cellSize);
+	for (int i = 0; i < kStorageCount; ++i) {
+		printf("\nkStorage #%d\n", i);
+		pu->printArray(mKStorages[i], zCount, yCount, xCount, cellSize);
+	}
+	//printf("################################################################################");
+	//printf("\n\n\n");
 }

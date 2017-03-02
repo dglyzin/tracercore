@@ -38,7 +38,7 @@ public:
 
 	bool isNan();
 
-	void print();
+	void print(int zCount, int yCount, int xCount, int cellSize);
 
 private:
 	ProcessingUnit* pu;

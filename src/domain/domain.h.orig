@@ -8,28 +8,22 @@
 #ifndef SRC_DOMAIN_H_
 #define SRC_DOMAIN_H_
 
-#include "blocks/nullblock.h"
-#include "blocks/realblock.h"
-#include "interconnect/transferinterconnect/transferinterconnectsend.h"
-#include "interconnect/transferinterconnect/transferinterconnectrecv.h"
-#include "interconnect/nontransferinterconnect.h"
+#include "../blocks/realblock.h"
+#include "../blocks/nullblock.h"
 
-#include "processingunit/cpu/cpu1d.h"
-#include "processingunit/cpu/cpu2d.h"
-#include "processingunit/cpu/cpu3d.h"
+#include "../interconnect/transferinterconnect/transferinterconnectsend.h"
+#include "../interconnect/transferinterconnect/transferinterconnectrecv.h"
+#include "../interconnect/nontransferinterconnect.h"
 
-#include "processingunit/gpu/gpu1d.h"
-#include "processingunit/gpu/gpu2d.h"
-#include "processingunit/gpu/gpu3d.h"
+#include "../processingunit/cpu/cpu1d.h"
+#include "../processingunit/cpu/cpu2d.h"
+#include "../processingunit/cpu/cpu3d.h"
 
-#include "numericalmethod/euler.h"
-#include "numericalmethod/dormandprince45.h"
+#include "../processingunit/gpu/gpu1d.h"
+#include "../processingunit/gpu/gpu2d.h"
+#include "../processingunit/gpu/gpu3d.h"
 
-#include "problem/ordinaryproblem.h"
-
-#include "utils.h"
-
-#include <iostream>
+#include "../utils.h"
 
 /*
  * Основной управляющий класс приложения.
@@ -37,7 +31,7 @@
 
 class Domain {
 public:
-	Domain(int _world_rank, int _world_size, char* inputFile, char* binaryFileName, int _jobId);
+	Domain(int _world_rank, int _world_size, char* inputFile, char* binaryFileName);
 
 	virtual ~Domain();
 
@@ -104,13 +98,11 @@ public:
 
 	MPI_Comm getWorkerComm(){ return mWorkerComm;};
 
-	int getUserStatus();
-
 private:
 	ProcessingUnit* cpu;
 	ProcessingUnit** gpu;
 
-	int mProblemType;
+	int mProblenType;
 
 	int mGpuCount;
 	/*
@@ -140,18 +132,17 @@ private:
 	/*
 	 * Структура данных, возвращающая основные параметры солвера
 	 */
-	NumericalMethod* mNumericalMethod;
+	StepStorage* mSolverInfo;
 	double mAtol; //solver absolute tolerance
 	double mRtol; //solver relative tolerance
 
-	Problem* mProblem;
-
 	/*
 	 * Коммуникатор работников
-	 * Всегда совпадает с MPI_COMM_WORLD
+	 * Может совпадать с MPI_COMM_WORLD, если нет питон-мастера
+	 * либо это  MPI_COMM_WORLD без первого процесса
 	 */
 	MPI_Comm mWorkerComm;
-	//int mPythonMaster;
+	int mPythonMaster;
 
 	/*
 	 * Номер потока
@@ -165,9 +156,9 @@ private:
 	int mWorkerCommSize;
 
 	/*
-	 * уникальный Id задачи для запросов состояния юзера  на сайте
+	 * Глобальный Id задачи для базы
 	 */
-	int mJobId;
+	//int mJobId;
 
 	int mUserStatus;
 	int mJobState;
@@ -202,8 +193,8 @@ private:
 
 	double currentTime;
 
-	double mSavePeriod;
-	double mSaveTimer;
+	double saveInterval;
+	double counterSaveTime;
 	int mLastStepAccepted;
 
 	double mDx, mDy, mDz;
@@ -222,11 +213,6 @@ private:
 	char mTracerFolder[250];
 	char mProjectFolder[250];
 
-	int mPlotCount;
-
-	double* mPlotPeriods;
-	double* mPlotTimers;
-
 	//Solver* mPreviousState;
 
 	void loadStateFromFile(char* dataFile);
@@ -234,13 +220,12 @@ private:
 
 	void readFileStat(std::ifstream& in);
 	void readTimeSetting(std::ifstream& in);
-	void readSavePeriod(std::ifstream& in);
+	void readSaveInterval(std::ifstream& in);
 	void readGridSteps(std::ifstream& in);
 	void readCellAndHaloSize(std::ifstream& in);
 	void readSolverIndex(std::ifstream& in);
 	void readSolverTolerance(std::ifstream& in);
 	void readBlockCount(std::ifstream& in);
-	void readPlotCount(std::ifstream& in);
 	void readConnectionCount(std::ifstream& in);
 
 	/*
@@ -264,10 +249,7 @@ private:
 	void prepareData(int stage);
 	void computeOneStepBorder(int stage);
 	void computeOneStepCenter(int stage);
-	void prepareStageArgument(int stage);
-
-	void prepareBlockStageData(int stage);
-
+	void prepareNextStageArgument(int stage);
 
 	void computeStage(int stage);
 	/*
@@ -275,7 +257,7 @@ private:
 	 */
 	double collectError();
 	bool isErrorPermissible(double error);
-	double computeNewStep(double error);
+	double getNewStep(double error);
 
 	void confirmStep();
 	void rejectStep();
@@ -284,10 +266,7 @@ private:
 	void createBlock(std::ifstream& in);
 	void createInterconnect(std::ifstream& in);
 
-	void readPlots(std::ifstream& in);
-
-	void createNumericalMethod();
-	void createProblem();
+	void initSolverInfo();
 
 	void blockAfterCreate();
 
@@ -302,9 +281,6 @@ private:
 	void saveStateForDrawDenseOutputByBlocks(char* path, double requiredTime);
 
 	double getTethaForDenseOutput(double requiredTime);
-	int isReadyToFullSave();
-	int isReadyToPlot();
-
 };
 
 #endif /* SRC_DOMAIN_H_ */
