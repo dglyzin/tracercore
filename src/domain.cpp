@@ -52,7 +52,7 @@ Domain::Domain(int _world_rank, int _world_size, char* inputFile, char* binaryFi
 	mGpuCount = GPU_COUNT;
 
 	printwcts("PROBLEM TYPE ALWAYS = ORDINARY!!!\n",LL_DEBUG);
-	mProblenType = ORDINARY;
+	mProblemType = ORDINARY;
 
 	readFromFile(inputFile);
 

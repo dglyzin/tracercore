@@ -110,7 +110,7 @@ private:
 	ProcessingUnit* cpu;
 	ProcessingUnit** gpu;
 
-	int mProblenType;
+	int mProblemType;
 
 	int mGpuCount;
 	/*
