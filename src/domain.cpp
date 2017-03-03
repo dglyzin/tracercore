@@ -910,9 +910,9 @@ void Domain::saveStateForDraw(char* inputFile, int plotVals) {
 	delete saveFile;
 
 	char comline [250];
-	sprintf(comline, "python %s/hybriddomain/stateplotter.py %s", mTracerFolder, saveFile);
+	sprintf(comline, "python %s/hybriddomain/plotter.py %s", mTracerFolder, saveFile);
 	printwcts("comm line = "+ToString(comline) + "\n",LL_INFO);
-	//system(comline);
+	system(comline);
 }
 
 void Domain::saveStateForLoad(char* inputFile) {
