@@ -114,23 +114,37 @@ int Domain::isReadyToFullSave(){
 	return result;
 }
 
+
+
+
 int Domain::isReadyToPlot(){
 	//here we subtract mTimeStep from every timer and
 	//return 1 if any of them is below or equal to 0
 	//then we add sufficient amount of periods to make it positive again
+	//result is sum_n 2^(n+1)*(1 if nth plot is needed else 0)
 	int result = 0;
-	for(int i=0; i<mPlotCount; i++){
+	for(int i=mPlotCount-1; i>=0; i--){
 	    if (mPlotPeriods[i] > 0){
 	    	mPlotTimers[i] -= mTimeStep;
 	    	if (mPlotTimers[i]<=0)
-	    	    result = 1;
+	    	    result += 1;
 	    	while (mPlotTimers[i]<=0)
 	    	    mPlotTimers[i] += mPlotPeriods[i];
 	    }
+	    result *=2;
 	}
 	return result;
 }
 
+int Domain::getEntirePlotValues(){
+	//returns code for every possible plot
+	int result=0;
+	for(int i=0; i<mPlotCount; i++){
+    	    result +=1;
+		    result *=2;
+		}
+	return result;
+}
 
 void Domain::compute(char* inputFile) {
     double wnow = MPI_Wtime();
@@ -190,12 +204,9 @@ void Domain::compute(char* inputFile) {
 			saveStateForLoad(inputFile);
 		}
 
-		if (isReadyToPlot()) {
-			saveStateForDraw(inputFile);
-			//char comline [250];
-			//sprintf(comline, "python %s/hybriddomain/fakejobrunner.py", mTracerFolder );
-			//printwcts("comm line = "+ToString(comline) + "\n",LL_INFO);
-			//system(comline);
+		int plotVals = isReadyToPlot();
+		if (plotVals) {
+			saveStateForDraw(inputFile,plotVals);
 		}
 
 
@@ -890,14 +901,18 @@ int Domain::realBlockCount() {
 	return count;
 }
 
-void Domain::saveStateForDraw(char* inputFile) {
+void Domain::saveStateForDraw(char* inputFile, int plotVals) {
 	char* saveFile = new char[250];
-	Utils::getFilePathForDraw(inputFile, saveFile, currentTime);
-
+	Utils::getFilePathForDraw(inputFile, saveFile, currentTime, plotVals);
+	printwcts("produced results for t="+ ToString(currentTime) + ": "+ToString(saveFile) + "\n",LL_INFO);
 	saveGeneralInfo(saveFile);
 	saveStateForDrawByBlocks(saveFile);
-	printwcts("produced results for t="+ ToString(currentTime) + ": "+ToString(saveFile) + "\n",LL_INFO);
 	delete saveFile;
+
+	char comline [250];
+	sprintf(comline, "python %s/hybriddomain/stateplotter.py %s", mTracerFolder, saveFile);
+	printwcts("comm line = "+ToString(comline) + "\n",LL_INFO);
+	//system(comline);
 }
 
 void Domain::saveStateForLoad(char* inputFile) {
@@ -910,9 +925,9 @@ void Domain::saveStateForLoad(char* inputFile) {
 	delete saveFile;
 }
 
-void Domain::saveStateForDrawDenseOutput(char* inputFile) {
+void Domain::saveStateForDrawDenseOutput(char* inputFile, int plotVals) {
 	char* saveFile = new char[250];
-	Utils::getFilePathForDraw(inputFile, saveFile, stopTime);
+	Utils::getFilePathForDraw(inputFile, saveFile, stopTime, 0);
 
 	saveGeneralInfo(saveFile);
 	saveStateForDrawDenseOutputByBlocks(saveFile, stopTime);

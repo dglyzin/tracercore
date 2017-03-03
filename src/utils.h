@@ -27,7 +27,7 @@ public:
 	static void copyToLastCharNotInc(char* result, const char* source, char ch, int num = 1);
 	static void copyFromLastToEnd(char* result, const char* source, char ch, int num = 1);
 
-	static void getFilePathForDraw(char* inputFile, char* saveFile, double currentTime);
+	static void getFilePathForDraw(char* inputFile, char* saveFile, double currentTime, int plotVals);
 	static void getFilePathForLoad(char* inputFile, char* saveFile, double currentTime);
 
 	static void getTracerFolder(char* binary, char* tracerFolder);

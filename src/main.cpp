@@ -50,7 +50,7 @@ int main(int argc, char * argv[]) {
 	/*
 	 * Вычисления.
 	 */
-	domain->saveStateForDraw(inputFile);
+	domain->saveStateForDraw(inputFile, domain->getEntirePlotValues() );
 
 	/* Test topology */
 /*	printf("MPI world size: %d\n", world_size);
@@ -100,7 +100,7 @@ for (int i = 0; i < 3; ++i) {
 	MPI_Barrier(domain->getWorkerComm());
 	time2 = omp_get_wtime(); //MPI_Wtime();
 
-	domain->saveStateForDraw(inputFile);
+	//domain->saveStateForDraw(inputFile,domain->getEntirePlotValues());
 	domain->saveStateForLoad(inputFile);
 	//domain->saveStateForDrawDenseOutput(inputFile);
 

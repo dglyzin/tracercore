@@ -91,10 +91,10 @@ public:
 	 */
 	int realBlockCount();
 
-	void saveStateForDraw(char* inputFile);
+	void saveStateForDraw(char* inputFile, int plotVals);
 	void saveStateForLoad(char* inputFile);
 
-	void saveStateForDrawDenseOutput(char* inputFile);
+	void saveStateForDrawDenseOutput(char* inputFile, int plotVals);
 
 	void printStatisticsInfo(char* inputFile, char* outputFile, double calcTime, char* statisticsFile);
 
@@ -105,6 +105,7 @@ public:
 	MPI_Comm getWorkerComm(){ return mWorkerComm;};
 
 	int getUserStatus();
+	int getEntirePlotValues();
 
 private:
 	ProcessingUnit* cpu;
