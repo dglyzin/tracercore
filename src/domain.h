@@ -202,8 +202,8 @@ private:
 
 	double currentTime;
 
-	double saveInterval;
-	double counterSaveTime;
+	double mSavePeriod;
+	double mSaveTimer;
 	int mLastStepAccepted;
 
 	double mDx, mDy, mDz;
@@ -225,6 +225,7 @@ private:
 	int mPlotCount;
 
 	double* mPlotPeriods;
+	double* mPlotTimers;
 
 	//Solver* mPreviousState;
 
@@ -233,7 +234,7 @@ private:
 
 	void readFileStat(std::ifstream& in);
 	void readTimeSetting(std::ifstream& in);
-	void readSaveInterval(std::ifstream& in);
+	void readSavePeriod(std::ifstream& in);
 	void readGridSteps(std::ifstream& in);
 	void readCellAndHaloSize(std::ifstream& in);
 	void readSolverIndex(std::ifstream& in);
@@ -301,6 +302,9 @@ private:
 	void saveStateForDrawDenseOutputByBlocks(char* path, double requiredTime);
 
 	double getTethaForDenseOutput(double requiredTime);
+	int isReadyToFullSave();
+	int isReadyToPlot();
+
 };
 
 #endif /* SRC_DOMAIN_H_ */
