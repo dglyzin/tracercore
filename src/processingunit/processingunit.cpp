@@ -236,10 +236,10 @@ void ProcessingUnit::deleteAllUnsignedShortInt() {
 
 void ProcessingUnit::printCell(double* array, int cellSize) {
 	printf("(");
-	printf("%5.2f", array[0]);
+	printf("%5.10f", array[0]);
 
 	for (int h = 1; h < cellSize; ++h) {
-		printf(", %5.2f", array[h]);
+		printf(", %5.10f", array[h]);
 	}
 	printf(")");
 }
@@ -250,7 +250,7 @@ void ProcessingUnit::printArray1d(double* array, int xCount, int cellSize) {
 	int shift = 0;
 	for (int x = 1; x < xCount; ++x) {
 		printf(" ");
-		shift = x;
+		shift = x * cellSize;
 		printCell(array + shift, cellSize);
 	}
 	printf("\n");
@@ -259,7 +259,7 @@ void ProcessingUnit::printArray1d(double* array, int xCount, int cellSize) {
 void ProcessingUnit::printArray2d(double* array, int yCount, int xCount, int cellSize) {
 	int shift = 0;
 	for (int y = 0; y < yCount; ++y) {
-		shift = xCount * y;
+		shift = xCount * y * cellSize;
 		printArray1d(array + shift, xCount, cellSize);
 	}
 }
@@ -268,7 +268,7 @@ void ProcessingUnit::printArray3d(double* array, int zCount, int yCount, int xCo
 	int shift = 0;
 	for (int z = 0; z < zCount; ++z) {
 		printf("z = %d", z);
-		shift = yCount * xCount * z;
+		shift = yCount * xCount * z * cellSize;
 		printArray2d(array + shift, yCount, xCount, cellSize);
 		printf("\n");
 	}
