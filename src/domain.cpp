@@ -212,7 +212,7 @@ void Domain::compute(char* inputFile) {
 
 		//check for termination request
 		if (mWorkerRank == 0){
-		        mUserStatus = getUserStatus();
+			mUserStatus = getUserStatus();
 		}
 		MPI_Bcast(&mUserStatus, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
