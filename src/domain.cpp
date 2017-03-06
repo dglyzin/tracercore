@@ -10,14 +10,11 @@
 #include <cassert>
 #include <stdlib.h>
 
-
 using namespace std;
 #include <stdio.h>
 #include <iostream>
 
 #include "logger.h"
-
-
 
 Domain::Domain(int _world_rank, int _world_size, char* inputFile, char* binaryFileName, int _jobId) {
 	mGlobalRank = _world_rank;
@@ -26,14 +23,14 @@ Domain::Domain(int _world_rank, int _world_size, char* inputFile, char* binaryFi
 	MPI_Comm_size(mWorkerComm, &mWorkerCommSize);
 	MPI_Comm_rank(mWorkerComm, &mWorkerRank);
 
-	if (mWorkerCommSize != _world_size)	{
-		printwcts("Communicator size error!",LL_DEBUG);
+	if (mWorkerCommSize != _world_size) {
+		printwcts("Communicator size error!", LL_DEBUG);
 		assert(0);
 	}
 
 	mJobId = _jobId;
-    Utils::getTracerFolder(binaryFileName,	mTracerFolder);
-    Utils::getProjectFolder(inputFile,	mProjectFolder);
+	Utils::getTracerFolder(binaryFileName, mTracerFolder);
+	Utils::getProjectFolder(inputFile, mProjectFolder);
 	currentTime = 0;
 	mStepCount = 0;
 
@@ -51,14 +48,13 @@ Domain::Domain(int _world_rank, int _world_size, char* inputFile, char* binaryFi
 
 	mGpuCount = GPU_COUNT;
 
-	printwcts("PROBLEM TYPE ALWAYS = ORDINARY!!!\n",LL_DEBUG);
+	printwcts("PROBLEM TYPE ALWAYS = ORDINARY!!!\n", LL_DEBUG);
 	mProblemType = ORDINARY;
 
 	readFromFile(inputFile);
 
 	mAcceptedStepCount = 0;
 	mRejectedStepCount = 0;
-    
 
 }
 
@@ -92,73 +88,69 @@ Domain::~Domain() {
 
 }
 
-int Domain::getUserStatus(){
-    if(mJobId<0)
-    	return US_RUN;
-    else
-    	//TODO implement http response for current jobId
-    	printwcts("user status getter not implemented", LL_INFO);
-    	assert(0);
-    return US_RUN;
+int Domain::getUserStatus() {
+	if (mJobId < 0)
+		return US_RUN;
+	else
+		//TODO implement http response for current jobId
+		printwcts("user status getter not implemented", LL_INFO);
+	assert(0);
+	return US_RUN;
 }
 
-int Domain::isReadyToFullSave(){
+int Domain::isReadyToFullSave() {
 	int result = 0;
-	if (mSavePeriod > 0){
-	    mSaveTimer -= mTimeStep;
-	    if (mSaveTimer<=0)
-	        result = 1;
-	    while (mSaveTimer<=0)
-	        mSaveTimer += mSavePeriod;
+	if (mSavePeriod > 0) {
+		mSaveTimer -= mTimeStep;
+		if (mSaveTimer <= 0)
+			result = 1;
+		while (mSaveTimer <= 0)
+			mSaveTimer += mSavePeriod;
 	}
 	return result;
 }
 
-
-
-
-int Domain::isReadyToPlot(){
+int Domain::isReadyToPlot() {
 	//here we subtract mTimeStep from every timer and
 	//return 1 if any of them is below or equal to 0
 	//then we add sufficient amount of periods to make it positive again
 	//result is sum_n 2^(n+1)*(1 if nth plot is needed else 0)
 	int result = 0;
-	for(int i=mPlotCount-1; i>=0; i--){
-	    if (mPlotPeriods[i] > 0){
-	    	mPlotTimers[i] -= mTimeStep;
-	    	if (mPlotTimers[i]<=0)
-	    	    result += 1;
-	    	while (mPlotTimers[i]<=0)
-	    	    mPlotTimers[i] += mPlotPeriods[i];
-	    }
-	    result *=2;
+	for (int i = mPlotCount - 1; i >= 0; i--) {
+		if (mPlotPeriods[i] > 0) {
+			mPlotTimers[i] -= mTimeStep;
+			if (mPlotTimers[i] <= 0)
+				result += 1;
+			while (mPlotTimers[i] <= 0)
+				mPlotTimers[i] += mPlotPeriods[i];
+		}
+		result *= 2;
 	}
 	return result;
 }
 
-int Domain::getEntirePlotValues(){
+int Domain::getEntirePlotValues() {
 	//returns code for every possible plot
-	int result=0;
-	for(int i=0; i<mPlotCount; i++){
-    	    result +=1;
-		    result *=2;
-		}
+	int result = 0;
+	for (int i = 0; i < mPlotCount; i++) {
+		result += 1;
+		result *= 2;
+	}
 	return result;
 }
 
 void Domain::compute(char* inputFile) {
-    double wnow = MPI_Wtime();
+	double wnow = MPI_Wtime();
 
-    printwcts("Running computations mpi rank %d \n", LL_INFO);
+	printwcts("Running computations mpi rank %d \n", LL_INFO);
 
-    printwcts("Tracer root folder: " + ToString(mTracerFolder)+ "\n", LL_INFO);
-    printwcts("Project folder: " + ToString(mProjectFolder)+ "\n", LL_INFO);
-    printwcts("Computing from " + ToString(currentTime) + " to " + ToString(stopTime) +
-    		       " with step "+ ToString(mTimeStep)+"\n", LL_INFO);
-    printwcts("Computation started, worker #"+ ToString(mWorkerRank) +"\n", LL_INFO);
-    printwcts("solver stage count: " + ToString(mNumericalMethod->getStageCount())+ "\n", LL_INFO);
-
-
+	printwcts("Tracer root folder: " + ToString(mTracerFolder) + "\n", LL_INFO);
+	printwcts("Project folder: " + ToString(mProjectFolder) + "\n", LL_INFO);
+	printwcts(
+			"Computing from " + ToString(currentTime) + " to " + ToString(stopTime) + " with step "
+					+ ToString(mTimeStep) + "\n", LL_INFO);
+	printwcts("Computation started, worker #" + ToString(mWorkerRank) + "\n", LL_INFO);
+	printwcts("solver stage count: " + ToString(mNumericalMethod->getStageCount()) + "\n", LL_INFO);
 
 	if (mNumericalMethod->isFSAL())
 		initSolvers();
@@ -170,35 +162,35 @@ void Domain::compute(char* inputFile) {
 	mUserStatus = US_RUN;
 	mJobState = JS_RUNNING;
 
-	if (mWorkerRank == 0){
-        mUserStatus = getUserStatus();
-        printwcts( "Initial user status received: " + ToString(mUserStatus) + "\n", LL_INFO );
+	if (mWorkerRank == 0) {
+		mUserStatus = getUserStatus();
+		printwcts("Initial user status received: " + ToString(mUserStatus) + "\n", LL_INFO);
 	}
 	MPI_Bcast(&mUserStatus, 1, MPI_INT, 0, MPI_COMM_WORLD);
 	// TODO если пользователь остановил расчеты, то необходимо выполнить сохранение для загузки состояния (saveStateForLoad)
 
-
-
 	while ((mUserStatus != US_STOP) && (mJobState == JS_RUNNING)) {
 		nextStep();
 
-	    //printBlocksToConsole();
+		//printBlocksToConsole();
 		int newPercentage = 100.0 * (1.0 - (stopTime - currentTime) / computeInterval);
 		int percentChanged = newPercentage > percentage;
 
 		if (percentChanged) {
-		    double wnow2 = MPI_Wtime();
+			double wnow2 = MPI_Wtime();
 			percentage = newPercentage;
-            if (mWorkerRank == 0){
-            	//printwcts("Done " + ToString(percentage) + "% in " + ToString((int) (now2-now))+ " seconds, and wtime gives " + ToString((wnow2-wnow))+ " seconds, and omp_wtime gives " + ToString((mnow2-mnow))+ " seconds, ratio is "  + ToString((wnow2-wnow)/(mnow2-mnow)) + " \n", LL_INFO);
-            	printwcts("Done " + ToString(percentage) + "% in " + ToString((wnow2-wnow))+ " seconds, ETA = "+ ToString((100-percentage)*(wnow2-wnow)) + " seconds\n" , LL_INFO);
-            	//printwcts("Done " + ToString(percentage) + "% in " + ToString((mnow2-mnow))+ " seconds, and wtime gives " + ToString((wnow2-wnow))+ " seconds, ETA = "+ ToString((100-percentage)*(mnow2-mnow)) + " seconds\n" , LL_INFO);
-            }
-            wnow = wnow2;
+			if (mWorkerRank == 0) {
+				//printwcts("Done " + ToString(percentage) + "% in " + ToString((int) (now2-now))+ " seconds, and wtime gives " + ToString((wnow2-wnow))+ " seconds, and omp_wtime gives " + ToString((mnow2-mnow))+ " seconds, ratio is "  + ToString((wnow2-wnow)/(mnow2-mnow)) + " \n", LL_INFO);
+				printwcts(
+						"Done " + ToString(percentage) + "% in " + ToString((wnow2 - wnow)) + " seconds, ETA = "
+								+ ToString((100 - percentage) * (wnow2 - wnow)) + " seconds\n", LL_INFO);
+				//printwcts("Done " + ToString(percentage) + "% in " + ToString((mnow2-mnow))+ " seconds, and wtime gives " + ToString((wnow2-wnow))+ " seconds, ETA = "+ ToString((100-percentage)*(mnow2-mnow)) + " seconds\n" , LL_INFO);
+			}
+			wnow = wnow2;
 		}
 
 		if (!(currentTime < stopTime))
-					mJobState = JS_FINISHED;
+			mJobState = JS_FINISHED;
 
 		if (isReadyToFullSave()) {
 			saveStateForLoad(inputFile);
@@ -206,22 +198,18 @@ void Domain::compute(char* inputFile) {
 
 		int plotVals = isReadyToPlot();
 		if (plotVals) {
-			saveStateForDraw(inputFile,plotVals);
+			saveStateForDraw(inputFile, plotVals);
 		}
 
-
 		//check for termination request
-		if (mWorkerRank == 0){
+		if (mWorkerRank == 0) {
 			mUserStatus = getUserStatus();
 		}
 		MPI_Bcast(&mUserStatus, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
-
 	} //end while
 
 	printwcts("Computation finished for worker #" + ToString(mWorkerRank) + "\n", LL_INFO);
-
-
 
 }
 
@@ -252,7 +240,7 @@ void Domain::computeStage(int stage) {
 	//prepareNextStageArgument(stage);
 
 	/*printf("\nstage #%d\n", stage);
-	printBlocksToConsole();*/
+	 printBlocksToConsole();*/
 }
 
 void Domain::nextStep() {
@@ -267,13 +255,13 @@ void Domain::nextStep() {
 		// MPI inside!
 		double error = collectError();
 
-		printwcts("step error = " +ToString(error) +"\n", LL_INFO);
+		printwcts("step error = " + ToString(error) + "\n", LL_INFO);
 
 		//bool isErrorPermissible = mSolverInfo->isErrorPermissible(error, totalGridElementCount);
 		bool isErrorPer = isErrorPermissible(error);
 
 		if (isErrorPer) {
-			if(currentTime + mTimeStep > stopTime) {
+			if (currentTime + mTimeStep > stopTime) {
 				mUserStatus = US_STOP;
 				return;
 			}
@@ -486,11 +474,11 @@ bool Domain::isErrorPermissible(double error) {
 	int isErrorPermissible = 0;
 
 	if (mWorkerRank == 0) {
-		isErrorPermissible = (int)(mNumericalMethod->isErrorPermissible(error, totalGridElementCount));
+		isErrorPermissible = (int) (mNumericalMethod->isErrorPermissible(error, totalGridElementCount));
 	}
 
 	MPI_Bcast(&isErrorPermissible, 1, MPI_INT, 0, mWorkerComm);
-	return (bool)(isErrorPermissible);
+	return (bool) (isErrorPermissible);
 }
 
 double Domain::computeNewStep(double error) {
@@ -625,7 +613,6 @@ void Domain::readPlotCount(ifstream& in) {
 	//cout << "block count:   " << mBlockCount << endl;
 }
 
-
 void Domain::readConnectionCount(ifstream& in) {
 	in.read((char*) &mConnectionCount, SIZE_INT);
 
@@ -743,7 +730,7 @@ Block* Domain::readBlock(ifstream& in, int idx, int dimension) {
 
 			pu = gpu[deviceNumber];
 		} else {
-			printwcts("Invalid block type!\n",LL_INFO);
+			printwcts("Invalid block type!\n", LL_INFO);
 			assert(false);
 		}
 
@@ -904,13 +891,13 @@ int Domain::realBlockCount() {
 void Domain::saveStateForDraw(char* inputFile, int plotVals) {
 	char* saveFile = new char[250];
 	Utils::getFilePathForDraw(inputFile, saveFile, currentTime, plotVals);
-	printwcts("produced results for t="+ ToString(currentTime) + ": "+ToString(saveFile) + "\n",LL_INFO);
+	printwcts("produced results for t=" + ToString(currentTime) + ": " + ToString(saveFile) + "\n", LL_INFO);
 	saveGeneralInfo(saveFile);
 	saveStateForDrawByBlocks(saveFile);
 
-	char comline [250];
+	char comline[250];
 	sprintf(comline, "python %s/hybriddomain/plotter.py %s", mTracerFolder, saveFile);
-	printwcts("comm line = "+ToString(comline) + "\n",LL_INFO);
+	printwcts("comm line = " + ToString(comline) + "\n", LL_INFO);
 	system(comline);
 
 	delete saveFile;
@@ -1024,11 +1011,11 @@ void Domain::printStatisticsInfo(char* inputFile, char* outputFile, double calcT
 		int stepCount = mRejectedStepCount + mAcceptedStepCount;
 		double speed = (double) (count) * stepCount / calcTime / 1000000;
 
-		printwcts("Steps accepted: "+ ToString(mAcceptedStepCount) + "\n", LL_INFO);
-		printwcts("Steps rejected: "+ ToString(mRejectedStepCount) +"\n", LL_INFO);
-		printwcts("Time: " + ToString(calcTime)+"\n", LL_INFO);
-		printwcts("Element count: " + ToString(count)+"\n", LL_INFO);
-		printwcts("Performance (10^6): " + ToString(speed)+ "\n\n", LL_INFO);
+		printwcts("Steps accepted: " + ToString(mAcceptedStepCount) + "\n", LL_INFO);
+		printwcts("Steps rejected: " + ToString(mRejectedStepCount) + "\n", LL_INFO);
+		printwcts("Time: " + ToString(calcTime) + "\n", LL_INFO);
+		printwcts("Element count: " + ToString(count) + "\n", LL_INFO);
+		printwcts("Performance (10^6): " + ToString(speed) + "\n\n", LL_INFO);
 
 		//ofstream out;
 		//out.open("/home/frolov2/Tracer_project/stat", ios::app);
@@ -1149,15 +1136,13 @@ void Domain::readPlots(ifstream& in) {
 	mPlotPeriods = new double[mPlotCount];
 	mPlotTimers = new double[mPlotCount];
 	in.read((char*) mPlotPeriods, mPlotCount * SIZE_DOUBLE);
-	for(int i=0; i<mPlotCount; i++)
-		mPlotTimers[i]=mPlotPeriods[i];
+	for (int i = 0; i < mPlotCount; i++)
+		mPlotTimers[i] = mPlotPeriods[i];
 
-	printwcts("read plots: "+ToString(mPlotCount)+ "\n",LL_INFO);
-	for(int i=0; i<mPlotCount; i++)
-		printwcts("plot: "+ToString(mPlotPeriods[i])+ "\n",LL_INFO);
+	printwcts("read plots: " + ToString(mPlotCount) + "\n", LL_INFO);
+	for (int i = 0; i < mPlotCount; i++)
+		printwcts("plot: " + ToString(mPlotPeriods[i]) + "\n", LL_INFO);
 }
-
-
 
 void Domain::createInterconnect(ifstream& in) {
 	readConnectionCount(in);
@@ -1191,8 +1176,8 @@ void Domain::createProblem() {
 
 void Domain::blockAfterCreate() {
 	/*for (int i = 0; i < mBlockCount; ++i) {
-		mBlocks[i]->afterCreate(mProblenType, mSolverIndex, mAtol, mRtol);
-	}*/
+	 mBlocks[i]->afterCreate(mProblenType, mSolverIndex, mAtol, mRtol);
+	 }*/
 }
 
 Interconnect* Domain::getInterconnect(int sourceNode, int destinationNode, int borderLength, double* sourceData,
