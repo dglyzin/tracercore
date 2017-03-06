@@ -907,12 +907,13 @@ void Domain::saveStateForDraw(char* inputFile, int plotVals) {
 	printwcts("produced results for t="+ ToString(currentTime) + ": "+ToString(saveFile) + "\n",LL_INFO);
 	saveGeneralInfo(saveFile);
 	saveStateForDrawByBlocks(saveFile);
-	delete saveFile;
 
 	char comline [250];
 	sprintf(comline, "python %s/hybriddomain/plotter.py %s", mTracerFolder, saveFile);
 	printwcts("comm line = "+ToString(comline) + "\n",LL_INFO);
 	system(comline);
+
+	delete saveFile;
 }
 
 void Domain::saveStateForLoad(char* inputFile) {
