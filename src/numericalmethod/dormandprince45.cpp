@@ -121,10 +121,11 @@ void DormandPrince45::prepareArgument(ProcessingUnit* pu, double* state, double*
 		double** commonTempStorages, double timeStep, int stageNumber, int size) {
 	switch (stageNumber) {
 		case SOLVER_INIT_STAGE:
-			pu->multiplyArrayByNumberAndSum(commonTempStorages[ARG], kStorages[K1], timeStep * a21, state, size);
+			//pu->multiplyArrayByNumberAndSum(commonTempStorages[ARG], kStorages[K1], timeStep * a21, state, size);
 			//prepareFSAL(timestep);
 			break;
 		case 0:
+			pu->multiplyArrayByNumberAndSum(commonTempStorages[ARG], kStorages[K1], timeStep * a21, state, size);
 			break;
 		case 1:
 			pu->multiplyArrayByNumber(commonTempStorages[ARG], kStorages[K1], a31, size);
@@ -188,6 +189,7 @@ void DormandPrince45::confirmStep(ProcessingUnit* pu, ISmartCopy* sc, double** s
 
 void DormandPrince45::rejectStep(ProcessingUnit* pu, double* state, double** kStorages, double** commonTempStorages,
 		double timeStep, int size) {
+	return;
 }
 
 double DormandPrince45::computeStepError(ProcessingUnit* pu, double** kStorages, double** commonTempStorages,
