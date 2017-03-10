@@ -43,8 +43,8 @@ public:
 			double timeStep, int stageNumber, int size) = 0;
 	//virtual void prepareFSAL(ProcessingUnit* pu, double** source, double timeStep) = 0;
 
-	virtual void confirmStep(ProcessingUnit* pu, ISmartCopy* sc, double* sourceState, double** sourceKStorages,
-			double* destinationState, double** destinationKStorages, double** commonTemp, double timeStep,
+	virtual void confirmStep(ProcessingUnit* pu, ISmartCopy* sc, double** sourceState, double** sourceKStorages,
+			double** destinationState, double** destinationKStorages, double** commonTemp, double timeStep,
 			int size) = 0;
 	virtual void rejectStep(ProcessingUnit* pu, double* state, double** kStorages, double** commonTempStorages,
 			double timeStep, int size) = 0;

@@ -34,8 +34,8 @@ public:
 	void prepareArgument(ProcessingUnit* pu, double* state, double** kStorages, double** commonTempStorages,
 			double timeStep, int stageNumber, int size);
 
-	void confirmStep(ProcessingUnit* pu, ISmartCopy* sc, double* sourceState, double** sourceKStorages,
-			double* destinationState, double** destinationKStorages, double** commonTemp, double timeStep, int size);
+	void confirmStep(ProcessingUnit* pu, ISmartCopy* sc, double** sourceState, double** sourceKStorages,
+			double** destinationState, double** destinationKStorages, double** commonTemp, double timeStep, int size);
 	void rejectStep(ProcessingUnit* pu, double* state, double** kStorages, double** commonTempStorages, double timeStep,
 			int size);
 

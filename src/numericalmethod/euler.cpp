@@ -65,15 +65,15 @@ void Euler::prepareArgument(ProcessingUnit* pu, double* state, double** kStorage
 	return;
 }
 
-void Euler::confirmStep(ProcessingUnit* pu, ISmartCopy* sc, double* sourceState, double** sourceKStorages,
-		double* destinationState, double** destinationKStorages, double** commonTemp, double timeStep, int size) {
+void Euler::confirmStep(ProcessingUnit* pu, ISmartCopy* sc, double** sourceState, double** sourceKStorages,
+		double** destinationState, double** destinationKStorages, double** commonTemp, double timeStep, int size) {
 	/*pu->multiplyArrayByNumber(mTempStore1, mTempStore1, timestep, mCount);
 	 pu->sumArrays(mTempStore1, mState, mTempStore1, mCount);
 
 	 double* temp = mState;
 	 mState = mTempStore1;
 	 mTempStore1 = temp;*/
-	pu->multiplyArrayByNumberAndSum(destinationState, sourceKStorages[K1], timeStep, sourceState, size);
+	pu->multiplyArrayByNumberAndSum(*destinationState, sourceKStorages[K1], timeStep, *sourceState, size);
 }
 
 void Euler::rejectStep(ProcessingUnit* pu, double* state, double** kStorages, double** commonTempStorages,

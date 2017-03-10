@@ -171,8 +171,8 @@ void DormandPrince45::prepareArgument(ProcessingUnit* pu, double* state, double*
 	}
 }
 
-void DormandPrince45::confirmStep(ProcessingUnit* pu, ISmartCopy* sc, double* sourceState, double** sourceKStorages,
-		double* destinationState, double** destinationKStorages, double** commonTempStorages, double timeStep,
+void DormandPrince45::confirmStep(ProcessingUnit* pu, ISmartCopy* sc, double** sourceState, double** sourceKStorages,
+		double** destinationState, double** destinationKStorages, double** commonTempStorages, double timeStep,
 		int size) {
 	/*double* temp = mState;
 	 mState = mArg;
@@ -181,6 +181,9 @@ void DormandPrince45::confirmStep(ProcessingUnit* pu, ISmartCopy* sc, double* so
 	 temp = mTempStore7;
 	 mTempStore7 = mTempStore1;
 	 mTempStore1 = temp;*/
+
+	pu->swapStorages(sourceState, commonTempStorages + ARG);
+	sc->swapCopy(pu, sourceKStorages + K7, destinationKStorages + K1, size);
 }
 
 void DormandPrince45::rejectStep(ProcessingUnit* pu, double* state, double** kStorages, double** commonTempStorages,

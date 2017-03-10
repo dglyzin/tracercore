@@ -75,7 +75,7 @@ double State::computeStepError(double timeStep) {
 }
 
 void State::confirmStep(double timeStep, State* nextStepState, ISmartCopy* sc) {
-	method->confirmStep(pu, sc, mState, mKStorages, nextStepState->mState, nextStepState->mKStorages,
+	method->confirmStep(pu, sc, &mState, mKStorages, &(nextStepState->mState), nextStepState->mKStorages,
 			mBlockCommonTempStorages, timeStep, mElementCount);
 }
 
