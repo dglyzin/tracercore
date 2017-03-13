@@ -49,7 +49,7 @@ public:
 	virtual void rejectStep(ProcessingUnit* pu, double* state, double** kStorages, double** commonTempStorages,
 			double timeStep, int size) = 0;
 
-	virtual double computeStepError(ProcessingUnit* pu, double** kStorages, double** commonTempStorages,
+	virtual double computeStepError(ProcessingUnit* pu, double* state, double** kStorages, double** commonTempStorages,
 			double timeStep, int size) = 0;
 
 	virtual void computeDenseOutput(ProcessingUnit* pu, double* state, double** kStorages, double timeStep,
