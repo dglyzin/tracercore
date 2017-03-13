@@ -81,7 +81,7 @@ void Euler::rejectStep(ProcessingUnit* pu, double* state, double** kStorages, do
 	return;
 }
 
-double Euler::computeStepError(ProcessingUnit* pu, double** kStorages, double** commonTempStorages, double timeStep,
+double Euler::computeStepError(ProcessingUnit* pu, double* state, double** kStorages, double** commonTempStorages, double timeStep,
 		int size) {
 	return 0.0;
 }
