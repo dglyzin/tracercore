@@ -71,7 +71,7 @@ void State::computeDenseOutput(double timeStep, double theta, double* result) {
 }
 
 double State::computeStepError(double timeStep) {
-	return method->computeStepError(pu, mKStorages, mBlockCommonTempStorages, timeStep, mElementCount);
+	return method->computeStepError(pu, mState, mKStorages, mBlockCommonTempStorages, timeStep, mElementCount);
 }
 
 void State::confirmStep(double timeStep, State* nextStepState, ISmartCopy* sc) {
