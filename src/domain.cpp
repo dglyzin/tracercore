@@ -255,30 +255,32 @@ void Domain::nextStep() {
 		// MPI inside!
 		double error = collectError();
 
-		printwcts("step error = " + ToString(error) + "\n", LL_INFO);
+		//printwcts("step error = " + ToString(error) + "\n", LL_INFO);
 
 		//bool isErrorPermissible = mSolverInfo->isErrorPermissible(error, totalGridElementCount);
 		bool isErrorPer = isErrorPermissible(error);
 
 		if (isErrorPer) {
-			if (currentTime + mTimeStep > stopTime) {
+			//printwcts(ToString(currentTime) +" " + ToString(mTimeStep) + " " + ToString(stopTime) + "\n", LL_INFO);
+			/*if (currentTime + mTimeStep > stopTime) {
 				mUserStatus = US_STOP;
 				return;
-			}
+			}*/
 
+			//printwcts("###\n", LL_INFO);
 			currentTime += mTimeStep;
 		}
 
 		//!!! только 0, рассылать
 		//mTimeStep = mSolverInfo->getNewStep(mTimeStep, error, totalGridElementCount);
 		mTimeStep = computeNewStep(error);
-		printwcts("new time step = " + ToString(mTimeStep) + "\n", LL_INFO);
+		//printwcts("new time step = " + ToString(mTimeStep) + "\n", LL_INFO);
 
 		//!!! только 0, рассылать
 		if (isErrorPer) {
 			confirmStep(); //uses new timestep
 			mAcceptedStepCount++;
-			currentTime += mTimeStep;
+			//currentTime += mTimeStep;
 			//cout<<"Step accepted\n"<<endl;
 		} else {
 			rejectStep(); //uses new timestep
