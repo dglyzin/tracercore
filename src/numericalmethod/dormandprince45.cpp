@@ -195,11 +195,16 @@ void DormandPrince45::rejectStep(ProcessingUnit* pu, double* state, double** kSt
 double DormandPrince45::computeStepError(ProcessingUnit* pu, double* state, double** kStorages,
 		double** commonTempStorages, double timeStep, int size) {
 	pu->multiplyArrayByNumber(commonTempStorages[TEMP1], kStorages[K1], timeStep * e1, size);
-	pu->multiplyArrayByNumberAndSum(commonTempStorages[TEMP1], kStorages[K3], timeStep * e3, commonTempStorages[TEMP1], size);
-	pu->multiplyArrayByNumberAndSum(commonTempStorages[TEMP1], kStorages[K4], timeStep * e4, commonTempStorages[TEMP1], size);
-	pu->multiplyArrayByNumberAndSum(commonTempStorages[TEMP1], kStorages[K5], timeStep * e5, commonTempStorages[TEMP1], size);
-	pu->multiplyArrayByNumberAndSum(commonTempStorages[TEMP1], kStorages[K6], timeStep * e6, commonTempStorages[TEMP1], size);
-	pu->multiplyArrayByNumberAndSum(commonTempStorages[TEMP1], kStorages[K7], timeStep * e7, commonTempStorages[TEMP1], size);
+	pu->multiplyArrayByNumberAndSum(commonTempStorages[TEMP1], kStorages[K3], timeStep * e3, commonTempStorages[TEMP1],
+			size);
+	pu->multiplyArrayByNumberAndSum(commonTempStorages[TEMP1], kStorages[K4], timeStep * e4, commonTempStorages[TEMP1],
+			size);
+	pu->multiplyArrayByNumberAndSum(commonTempStorages[TEMP1], kStorages[K5], timeStep * e5, commonTempStorages[TEMP1],
+			size);
+	pu->multiplyArrayByNumberAndSum(commonTempStorages[TEMP1], kStorages[K6], timeStep * e6, commonTempStorages[TEMP1],
+			size);
+	pu->multiplyArrayByNumberAndSum(commonTempStorages[TEMP1], kStorages[K7], timeStep * e7, commonTempStorages[TEMP1],
+			size);
 
 	pu->maxElementsElementwise(commonTempStorages[TEMP2], commonTempStorages[ARG], state, size);
 	pu->multiplyArrayByNumber(commonTempStorages[TEMP2], commonTempStorages[TEMP2], rTol, size);
