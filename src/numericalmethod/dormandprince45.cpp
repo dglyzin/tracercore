@@ -183,7 +183,7 @@ void DormandPrince45::confirmStep(ProcessingUnit* pu, ISmartCopy* sc, double** s
 	 mTempStore7 = mTempStore1;
 	 mTempStore1 = temp;*/
 
-	pu->swapStorages(sourceState, commonTempStorages + ARG);
+	pu->swapStorages(destinationState, commonTempStorages + ARG);
 	sc->swapCopy(pu, sourceKStorages + K7, destinationKStorages + K1, size);
 }
 
