@@ -19,6 +19,7 @@
 #include <fstream>
 
 #include "../enums.h"
+#include "../logger.h"
 
 #include "../userfuncs.h"
 

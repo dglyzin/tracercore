@@ -23,6 +23,7 @@
 #include "processingunit/gpu/gpu3d.h"
 
 #include "numericalmethod/euler.h"
+#include "numericalmethod/rungekutta4.h"
 #include "numericalmethod/dormandprince45.h"
 
 #include "problem/ordinaryproblem.h"
