@@ -42,7 +42,7 @@ PROCUNITGPU=$(SRCPROCUNITGPU)/gpu.cpp $(SRCPROCUNITGPU)/gpu1d.cpp $(SRCPROCUNITG
 PROCUNIT=$(SRCPROCUNIT)/processingunit.cpp $(PROCUNITCPU) $(PROCUNITGPU)
 
 #STEPSTORAGE=$(SRCSTEPSTORAGE)/stepstorage.cpp $(SRCSTEPSTORAGE)/eulerstorage.cpp $(SRCSTEPSTORAGE)/rk4storage.cpp $(SRCSTEPSTORAGE)/dp45storage.cpp
-NUMERICALMETHOD=$(SRCNUMERICALMETHOD)/numericalmethod.cpp $(SRCNUMERICALMETHOD)/euler.cpp $(SRCNUMERICALMETHOD)/dormandprince45.cpp
+NUMERICALMETHOD=$(SRCNUMERICALMETHOD)/numericalmethod.cpp $(SRCNUMERICALMETHOD)/euler.cpp $(SRCNUMERICALMETHOD)/rungekutta4.cpp $(SRCNUMERICALMETHOD)/dormandprince45.cpp
 
 #PROBLEM=$(SRCPROBLEM)/problemtype.cpp $(SRCPROBLEM)/ordinary.cpp $(SRCPROBLEM)/delay.cpp
 PROBLEM=$(SRCPROBLEM)/ismartcopy.cpp $(SRCPROBLEM)/problem.cpp $(SRCPROBLEM)/ordinaryproblem.cpp
