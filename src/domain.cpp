@@ -10,11 +10,10 @@
 #include <cassert>
 #include <stdlib.h>
 
-using namespace std;
 #include <stdio.h>
 #include <iostream>
 
-#include "logger.h"
+using namespace std;
 
 Domain::Domain(int _world_rank, int _world_size, char* inputFile, char* binaryFileName, int _jobId) {
 	mGlobalRank = _world_rank;
@@ -491,7 +490,7 @@ double Domain::computeNewStep(double error) {
 	}
 
 	MPI_Bcast(&newStep, 1, MPI_DOUBLE, 0, mWorkerComm);
-	return mNumericalMethod->computeNewStep(mTimeStep, error, totalGridElementCount);
+	return newStep;//mNumericalMethod->computeNewStep(mTimeStep, error, totalGridElementCount);
 }
 
 void Domain::printBlocksToConsole() {
@@ -1161,7 +1160,7 @@ void Domain::createNumericalMethod() {
 			mNumericalMethod = new Euler(mAtol, mRtol);
 			break;
 		case RK4:
-			//mNumericalMethod = new RK4Storage();
+			mNumericalMethod = new RungeKutta4(mAtol, mRtol);
 			break;
 		case DP45:
 			mNumericalMethod = new DormandPrince45(mAtol, mRtol);
