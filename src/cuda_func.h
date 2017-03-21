@@ -19,6 +19,7 @@ void multiplyArrayByNumberAndSumGPU(double* result, double* arg1, double factor,
 
 double sumArrayElementsGPU(double* arg, int size);
 void maxElementsElementwiseGPU(double* result, double* arg1, double* arg2, int size);
+void maxAbsElementsElementwiseGPU(double* result, double* arg1, double* arg2, int size);
 void divisionArraysElementwiseGPU(double* result, double* arg1, double* arg2, int size);
 
 void addNumberToArrayGPU(double* result, double* arg, double number, int size);

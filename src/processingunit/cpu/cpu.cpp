@@ -162,6 +162,13 @@ void CPU::maxElementsElementwise(double* result, double* arg1, double* arg2, int
 	}
 }
 
+void CPU::maxAbsElementsElementwise(double* result, double* arg1, double* arg2, int size) {
+#pragma omp parallel for
+	for (int i = 0; i < size; ++i) {
+		result[i] = max(abs(arg1[i]), abs(arg2[i]));
+	}
+}
+
 void CPU::divisionArraysElementwise(double* result, double* arg1, double* arg2, int size) {
 #pragma omp parallel for
 	for (int i = 0; i < size; ++i) {

@@ -88,6 +88,11 @@ void GPU::maxElementsElementwise(double* result, double* arg1, double* arg2, int
 	maxElementsElementwiseGPU(result, arg1, arg2, size);
 }
 
+void GPU::maxAbsElementsElementwise(double* result, double* arg1, double* arg2, int size) {
+	cudaSetDevice(deviceNumber);
+	maxAbsElementsElementwiseGPU(result, arg1, arg2, size);
+}
+
 void GPU::divisionArraysElementwise(double* result, double* arg1, double* arg2, int size) {
 	cudaSetDevice(deviceNumber);
 	divisionArraysElementwiseGPU(result, arg1, arg2, size);

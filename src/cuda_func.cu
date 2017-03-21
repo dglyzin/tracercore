@@ -63,6 +63,13 @@ __global__ void maxElementsElementwiseCuda(double* result, double* arg1, double*
 		result[idx] = max( arg1[idx], arg2[idx] );
 }
 
+__global__ void maxAbsElementsElementwiseCuda(double* result, double* arg1, double* arg2, int size) {
+	int	idx = BLOCK_SIZE * blockIdx.x + threadIdx.x;
+	
+	if( idx < size )
+		result[idx] = max( abs(arg1[idx]), abs(arg2[idx]) );
+}
+
 __global__ void divisionArraysElementwiseCuda(double* result, double* arg1, double* arg2, int size) {
 	int	idx = BLOCK_SIZE * blockIdx.x + threadIdx.x;
 	
@@ -236,6 +243,13 @@ void maxElementsElementwiseGPU(double* result, double* arg1, double* arg2, int s
 	dim3 blocks  ( (int)ceil((double)size / threads.x) );
 		
 	maxElementsElementwiseCuda <<< blocks, threads >>> ( result, arg1, arg2, size);
+}
+
+void maxAbsElementsElementwiseGPU(double* result, double* arg1, double* arg2, int size) {
+	dim3 threads ( BLOCK_SIZE );
+	dim3 blocks  ( (int)ceil((double)size / threads.x) );
+		
+	maxAbsElementsElementwiseCuda <<< blocks, threads >>> ( result, arg1, arg2, size);
 }
 
 void divisionArraysElementwiseGPU(double* result, double* arg1, double* arg2, int size) {

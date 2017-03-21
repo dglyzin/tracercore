@@ -82,6 +82,7 @@ public:
 
 	virtual double sumArrayElements(double* arg, int size) = 0;
 	virtual void maxElementsElementwise(double* result, double* arg1, double* arg2, int size) = 0;
+	virtual void maxAbsElementsElementwise(double* result, double* arg1, double* arg2, int size) = 0;
 	virtual void divisionArraysElementwise(double* result, double* arg1, double* arg2, int size) = 0;
 
 	virtual void addNumberToArray(double* result, double* arg, double number, int size) = 0;
