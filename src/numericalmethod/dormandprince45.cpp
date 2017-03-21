@@ -206,7 +206,7 @@ double DormandPrince45::computeStepError(ProcessingUnit* pu, double* state, doub
 	pu->multiplyArrayByNumberAndSum(commonTempStorages[TEMP1], kStorages[K7], timeStep * e7, commonTempStorages[TEMP1],
 			size);
 
-	pu->maxElementsElementwise(commonTempStorages[TEMP2], commonTempStorages[ARG], state, size);
+	pu->maxAbsElementsElementwise(commonTempStorages[TEMP2], commonTempStorages[ARG], state, size);
 	pu->multiplyArrayByNumber(commonTempStorages[TEMP2], commonTempStorages[TEMP2], rTol, size);
 	pu->addNumberToArray(commonTempStorages[TEMP2], commonTempStorages[TEMP2], aTol, size);
 
