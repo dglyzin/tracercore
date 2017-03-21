@@ -262,9 +262,9 @@ void Domain::nextStep() {
 		if (isErrorPer) {
 			//printwcts(ToString(currentTime) +" " + ToString(mTimeStep) + " " + ToString(stopTime) + "\n", LL_INFO);
 			/*if (currentTime + mTimeStep > stopTime) {
-				mUserStatus = US_STOP;
-				return;
-			}*/
+			 mUserStatus = US_STOP;
+			 return;
+			 }*/
 
 			//printwcts("###\n", LL_INFO);
 			currentTime += mTimeStep;
@@ -307,7 +307,8 @@ void Domain::processDeviceBlocksBorder(int deviceType, int deviceNumber, int sta
 	for (int i = 0; i < mBlockCount; ++i)
 		if (mBlocks[i]->isBlockType(deviceType) && mBlocks[i]->isDeviceNumber(deviceNumber)) {
 			//cout << endl << "ERROR! PROCESS DEVICE!" << endl;
-			mBlocks[i]->computeStageBorder(stage, currentTime);
+			mBlocks[i]->computeStageBorder(stage,
+					currentTime + mNumericalMethod->getStageTimeStepCoefficient(stage) * mTimeStep);
 		}
 }
 
@@ -315,7 +316,8 @@ void Domain::processDeviceBlocksCenter(int deviceType, int deviceNumber, int sta
 	for (int i = 0; i < mBlockCount; ++i)
 		if (mBlocks[i]->isBlockType(deviceType) && mBlocks[i]->isDeviceNumber(deviceNumber)) {
 			//cout << endl << "ERROR! PROCESS DEVICE!" << endl;
-			mBlocks[i]->computeStageCenter(stage, currentTime);
+			mBlocks[i]->computeStageCenter(stage,
+					currentTime + mNumericalMethod->getStageTimeStepCoefficient(stage) * mTimeStep);
 		}
 }
 void Domain::prepareDeviceArgument(int deviceType, int deviceNumber, int stage) {
@@ -490,7 +492,7 @@ double Domain::computeNewStep(double error) {
 	}
 
 	MPI_Bcast(&newStep, 1, MPI_DOUBLE, 0, mWorkerComm);
-	return newStep;//mNumericalMethod->computeNewStep(mTimeStep, error, totalGridElementCount);
+	return newStep; //mNumericalMethod->computeNewStep(mTimeStep, error, totalGridElementCount);
 }
 
 void Domain::printBlocksToConsole() {
