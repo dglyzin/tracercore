@@ -229,6 +229,8 @@ private:
 	double* mPlotPeriods;
 	double* mPlotTimers;
 
+	bool isRealTimePNG;
+
 	//Solver* mPreviousState;
 
 	void loadStateFromFile(char* dataFile);

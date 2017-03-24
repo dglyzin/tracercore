@@ -55,6 +55,7 @@ Domain::Domain(int _world_rank, int _world_size, char* inputFile, char* binaryFi
 	mAcceptedStepCount = 0;
 	mRejectedStepCount = 0;
 
+	isRealTimePNG = true;
 }
 
 Domain::~Domain() {
@@ -898,10 +899,12 @@ void Domain::saveStateForDraw(char* inputFile, int plotVals) {
 	saveGeneralInfo(saveFile);
 	saveStateForDrawByBlocks(saveFile);
 
-	char comline[250];
-	sprintf(comline, "python %s/hybriddomain/plotter.py %s", mTracerFolder, saveFile);
-	printwcts("comm line = " + ToString(comline) + "\n", LL_INFO);
-	system(comline);
+	if (isRealTimePNG) {
+		char comline[250];
+		sprintf(comline, "python %s/hybriddomain/plotter.py %s", mTracerFolder, saveFile);
+		printwcts("comm line = " + ToString(comline) + "\n", LL_INFO);
+		system(comline);
+	}
 
 	delete saveFile;
 }
@@ -1089,6 +1092,9 @@ void Domain::checkOptions(int flags, double _stopTime, char* saveFile) {
 
 	if (flags & LOAD_FILE)
 		loadStateFromFile(saveFile);
+
+	if (flags & NO_REALTIME_PNG)
+		isRealTimePNG = false;
 }
 
 void Domain::createProcessigUnit() {

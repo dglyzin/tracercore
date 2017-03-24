@@ -21,7 +21,7 @@
 #define GPU_COUNT 3
 
 enum FLAGS {
-	TIME_EXECUTION = 0x01, LOAD_FILE = 0x02
+	TIME_EXECUTION = 0x01, LOAD_FILE = 0x02, NO_REALTIME_PNG = 0x04
 };
 
 #define SIZE_CHAR sizeof(char)
