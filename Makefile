@@ -30,7 +30,7 @@ MPILIB2=-I/usr/mpi/gcc/openmpi-2.0.2/include -L /usr/mpi/gcc/openmpi-2.0.2/lib -
 MPILIB88=-I/usr/mpi/gcc/openmpi-1.8.8/include -L /usr/mpi/gcc/openmpi-1.8.8/lib -lmpi -lmpi_cxx
 
 
-MPILIB=-I/usr/mpi/gcc/openmpi-1.8.4-numa/include -L /usr/mpi/gcc/openmpi-1.8.4-numa/lib -lmpi -lmpi_cxx
+MPILIB=-I/usr/mpi/gcc/openmpi-1.8.4/include -L /usr/mpi/gcc/openmpi-1.8.4/lib -lmpi -lmpi_cxx
 
 
 USERFUNCLIB=./bin -l userfuncs
