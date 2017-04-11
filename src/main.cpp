@@ -28,7 +28,7 @@ int main(int argc, char * argv[]) {
 	char* inputFile = argv[1];
 	int flags = atoi(argv[2]);
 	double stopTime = atof(argv[3]);
-	char* saveFile = argv[4];
+	char* fileForLoad = argv[4];
 
 	/*
 	 * Создание основного управляющего класса.
@@ -43,7 +43,7 @@ int main(int argc, char * argv[]) {
 	int jobId = -1;
 	//TODO get jobId from command line when core is launched by webUI
 	Domain* domain = new Domain(world_rank, world_size, inputFile, binaryFileName, jobId);
-	domain->checkOptions(flags, stopTime, saveFile);
+	domain->checkOptions(flags, stopTime, fileForLoad);
 
 	//domain->printBlocksToConsole();
 
