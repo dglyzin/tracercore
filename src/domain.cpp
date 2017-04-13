@@ -291,7 +291,6 @@ void Domain::nextStep() {
 		confirmStep();
 		mAcceptedStepCount++;
 		currentTime += mTimeStep;
-
 	}
 }
 
