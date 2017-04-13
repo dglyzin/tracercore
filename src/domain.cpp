@@ -275,6 +275,10 @@ void Domain::nextStep() {
 		//mTimeStep = mSolverInfo->getNewStep(mTimeStep, error, totalGridElementCount);
 		mTimeStep = computeNewStep(error);
 		//printwcts("new time step = " + ToString(mTimeStep) + "\n", LL_INFO);
+		if(mTimeStep < MINIMALLY_ACCEPTABLE_TIMESTEP) {
+			printwcts("New time step (" + ToString(mTimeStep) + ") too small. Computation aborted.\n\n", LL_INFO);
+			mJobState = JS_FINISHED;
+		}
 
 		//!!! только 0, рассылать
 		if (isErrorPer) {
@@ -285,7 +289,7 @@ void Domain::nextStep() {
 		} else {
 			rejectStep(); //uses new timestep
 			mRejectedStepCount++;
-			cout << "Step rejected!\n" << endl;
+			//cout << "Step rejected!\n" << endl;
 		}
 	} else { //constant step
 		confirmStep();
