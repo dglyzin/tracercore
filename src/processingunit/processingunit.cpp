@@ -236,10 +236,10 @@ void ProcessingUnit::deleteAllUnsignedShortInt() {
 
 void ProcessingUnit::printCell(double* array, int cellSize) {
 	printf("(");
-	printf("%5.10f", array[0]);
+	printf("%5.2f", array[0]);
 
 	for (int h = 1; h < cellSize; ++h) {
-		printf(", %5.10f", array[h]);
+		printf(", %5.2f", array[h]);
 	}
 	printf(")");
 }
