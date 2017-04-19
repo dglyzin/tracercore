@@ -67,7 +67,7 @@ void State::prepareArgument(double timeStep, int stageNumber) {
 }
 
 void State::computeDenseOutput(double timeStep, double theta, double* result) {
-	method->computeDenseOutput(pu, mState, mKStorages, timeStep, theta, result, mElementCount);
+	method->computeDenseOutput(pu, mState, mKStorages, mBlockCommonTempStorages, timeStep, theta, result, mElementCount);
 }
 
 double State::computeStepError(double timeStep) {
