@@ -16,6 +16,37 @@ DormandPrince45::DormandPrince45(double _aTol, double _rTol) :
 DormandPrince45::~DormandPrince45() {
 }
 
+double DormandPrince45::getB1(double theta) {
+	return pow(theta, 2) * (3 - 2 * theta) * a71 + theta * pow(theta - 1, 2)
+			- pow(theta, 2) * pow(theta - 1, 2) * 5 * (2558722523 - 31403016 * theta) / 11282082432;
+}
+
+double DormandPrince45::getB3(double theta) {
+	return pow(theta, 2) * (3 - 2 * theta) * a73
+			+ pow(theta, 2) * pow(theta - 1, 2) * 100 * (882725551 - 15701508 * theta) / 32700410799;
+}
+
+double DormandPrince45::getB4(double theta) {
+	return pow(theta, 2) * (3 - 2 * theta) * a74
+			- pow(theta, 2) * pow(theta - 1, 2) * 25 * (443332067 - 31403016 * theta) / 1880347072;
+}
+
+double DormandPrince45::getB5(double theta) {
+	return pow(theta, 2) * (3 - 2 * theta) * a75
+			+ pow(theta, 2) * pow(theta - 1, 2) * 32805 * (23143187 - 3489224 * theta) / 199316789632;
+}
+
+double DormandPrince45::getB6(double theta) {
+	return pow(theta, 2) * (3 - 2 * theta) * a76
+			- pow(theta, 2) * pow(theta - 1, 2) * 55 * (29972135 - 7076736 * theta) / 822651844;
+}
+
+double DormandPrince45::getB7(double theta) {
+	/*return pow(theta, 2) * (theta - 1) * b7
+	 + pow(theta, 2) * pow(theta - 1, 2) * 10 * (7414447 - 829305 * theta) / 29380423;*/
+	return 0.0;
+}
+
 int DormandPrince45::getStageCount() {
 	return 6;
 }

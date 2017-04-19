@@ -67,6 +67,13 @@ private:
 	static const double e1 = 71.0 / 57600.0, e3 = -(71.0 / 16695.0), e4 = 71.0 / 1920.0;
 	static const double e5 = -(17253.0 / 339200.0), e6 = 22.0 / 525.0, e7 = -(1.0 / 40.0);
 	static const double facmin = 0.5, facmax = 2, fac = 0.9;
+
+	double getB1(double theta);
+	double getB3(double theta);
+	double getB4(double theta);
+	double getB5(double theta);
+	double getB6(double theta);
+	double getB7(double theta);
 };
 
 #endif /* SRC_NUMERICALMETHOD_DP45_H_ */
