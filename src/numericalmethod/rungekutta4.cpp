@@ -7,7 +7,8 @@
 
 #include "rungekutta4.h"
 
-RungeKutta4::RungeKutta4(double _aTol, double _rTol) : NumericalMethod(_aTol, _rTol) {
+RungeKutta4::RungeKutta4(double _aTol, double _rTol) :
+		NumericalMethod(_aTol, _rTol) {
 }
 
 RungeKutta4::~RungeKutta4() {
@@ -163,6 +164,6 @@ double RungeKutta4::computeStepError(ProcessingUnit* pu, double* state, double**
 	return 0.0;
 }
 
-void RungeKutta4::computeDenseOutput(ProcessingUnit* pu, double* state, double** kStorages, double timeStep,
-		double theta, double* result, int size) {
+void RungeKutta4::computeDenseOutput(ProcessingUnit* pu, double* state, double** kStorages, double** commonTempStorages,
+		double timeStep, double theta, double* result, int size) {
 }

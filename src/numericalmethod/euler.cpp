@@ -87,7 +87,7 @@ double Euler::computeStepError(ProcessingUnit* pu, double* state, double** kStor
 	return 0.0;
 }
 
-void Euler::computeDenseOutput(ProcessingUnit* pu, double* state, double** kStorages, double timeStep, double theta,
-		double* result, int size) {
+void Euler::computeDenseOutput(ProcessingUnit* pu, double* state, double** kStorages, double** commonTempStorages,
+		double timeStep, double theta, double* result, int size) {
 
 }

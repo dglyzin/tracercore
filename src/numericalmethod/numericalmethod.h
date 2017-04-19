@@ -52,8 +52,8 @@ public:
 	virtual double computeStepError(ProcessingUnit* pu, double* state, double** kStorages, double** commonTempStorages,
 			double timeStep, int size) = 0;
 
-	virtual void computeDenseOutput(ProcessingUnit* pu, double* state, double** kStorages, double timeStep,
-			double theta, double* result, int size) = 0;
+	virtual void computeDenseOutput(ProcessingUnit* pu, double* state, double** kStorages, double** commonTempStorages,
+			double timeStep, double theta, double* result, int size) = 0;
 
 	//virtual bool isStateNan(ProcessingUnit* pu, double** kStorages) = 0;
 

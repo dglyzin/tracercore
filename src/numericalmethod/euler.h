@@ -39,11 +39,11 @@ public:
 	void rejectStep(ProcessingUnit* pu, double* state, double** kStorages, double** commonTempStorages, double timeStep,
 			int size);
 
-	double computeStepError(ProcessingUnit* pu, double* state, double** kStorages, double** commonTempStorages, double timeStep,
-			int size);
+	double computeStepError(ProcessingUnit* pu, double* state, double** kStorages, double** commonTempStorages,
+			double timeStep, int size);
 
-	void computeDenseOutput(ProcessingUnit* pu, double* state, double** kStorages, double timeStep, double theta,
-			double* result, int size);
+	void computeDenseOutput(ProcessingUnit* pu, double* state, double** kStorages, double** commonTempStorages,
+			double timeStep, double theta, double* result, int size);
 
 private:
 	enum KSTORAGE {
