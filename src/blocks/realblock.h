@@ -63,7 +63,7 @@ public:
 
 	void saveStateForDraw(char* path);
 	void saveStateForLoad(char* path);
-	void saveStateForDrawDenseOutput(char* path, double timestep, double tetha);
+	void saveStateForDrawDenseOutput(char* path, double timeStep, double tetha);
 	void loadState(std::ifstream& in);
 
 	bool isNan();

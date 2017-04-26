@@ -348,8 +348,8 @@ void RealBlock::saveStateForLoad(char* path) {
 	mProblem->saveData(path, mStates);
 }
 
-void RealBlock::saveStateForDrawDenseOutput(char* path, double timestep, double tetha) {
-	//mProblem->saveStateForDrawDenseOutput(path, timestep, tetha);
+void RealBlock::saveStateForDrawDenseOutput(char* path, double timeStep, double tetha) {
+	mProblem->saveStateForDrawDenseOutput(path, mStates, timeStep, tetha);
 }
 
 void RealBlock::loadState(ifstream& in) {
