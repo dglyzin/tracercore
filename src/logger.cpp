@@ -6,6 +6,8 @@
  */
 #include "logger.h"
 
+using namespace std;
+
 string ToString(long val)
 {
     stringstream stream;
@@ -45,13 +47,15 @@ void printwts(std::string message, time_t timestamp, int loglevel){
 
     tm *ltm = localtime(&timestamp);
 
+    /*ofstream logFile;
+    logFile.open("log", ios::app);*/
+
     // print various components of tm structure.
     printf("%02d-%02d %02d:%02d:%02d ", 1 + ltm->tm_mon, ltm->tm_mday, ltm->tm_hour, ltm->tm_min, ltm->tm_sec );
 
-
     std::cout << message;
-
-
+    //logFile << message << endl;
+    //logFile.close();
 }
 
 //print with current timestamp
