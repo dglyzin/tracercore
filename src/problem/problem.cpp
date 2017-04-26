@@ -17,3 +17,7 @@ void Problem::computeStageData(double currentTime, double timeStep) {
 	computeStateNumberForDelay(currentTime, timeStep);
 	computeTethaForDelay(currentTime, timeStep);
 }
+
+void Problem:: saveStateForDrawDenseOutput(char* path, State** states, double timeStep, double theta) {
+	states[getCurrentStateNumber()]->saveStateForDrawDenseOutput(path, timeStep, theta);
+}
