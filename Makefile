@@ -57,7 +57,7 @@ OBJECT=$(SOURCE:.cpp=.o)
 EXECUTABLE=HS
 
 
-all: $(EXECUTABLE)
+all: $(EXECUTABLE) cleanObj
 
 $(EXECUTABLE): $(OBJECT) cuda_func.o
 	$(CUDACC) -O3 $(CUDAARCH) $(MPILIB) -L$(USERFUNCLIB) $(OBJECT) $(SRC)/cuda_func.o -o $(BIN)/$(EXECUTABLE) -Xcompiler -fopenmp
@@ -67,8 +67,11 @@ $(EXECUTABLE): $(OBJECT) cuda_func.o
 
 cuda_func.o:
 	$(CUDACC) $(CUFLAGS) $(CUDAARCH) $(SRC)/cuda_func.cu -o $(SRC)/cuda_func.o
+
+clean: cleanObj	
+	rm $(BIN)/$(EXECUTABLE)
 	
-clean:
+cleanObj:
 	rm -rf $(SRC)/*.o
 	
 	rm -rf $(SRCBLC)/*.o
@@ -83,5 +86,3 @@ clean:
 	
 	rm -rf $(SRCINTERCONNECT)/*.o
 	rm -rf $(SRCINTERONNECTTRANSFER)/*.o
-	
-	rm $(BIN)/$(EXECUTABLE)
