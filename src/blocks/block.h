@@ -26,7 +26,7 @@ public:
 	virtual void prepareArgument(int stage, double timestep) = 0;
 
 	virtual void prepareStageData(int stage) = 0;
-	virtual void prepareStageSourceResult(int stage, double timeStep) = 0;
+	virtual void prepareStageSourceResult(int stage, double timeStep, double currentTime) = 0;
 
 	virtual bool isRealBlock() = 0;
 	virtual int getBlockType() = 0;

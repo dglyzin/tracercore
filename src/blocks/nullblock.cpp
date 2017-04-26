@@ -37,7 +37,7 @@ void NullBlock::prepareStageData(int stage) {
 	return;
 }
 
-void NullBlock::prepareStageSourceResult(int stage, double timeStep) {
+void NullBlock::prepareStageSourceResult(int stage, double timeStep, double currentTime) {
 	return;
 }
 

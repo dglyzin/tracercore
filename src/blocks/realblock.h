@@ -36,7 +36,7 @@ public:
 	void prepareArgument(int stage, double timeStep);
 
 	void prepareStageData(int stage);
-	void prepareStageSourceResult(int stage, double timeStep);
+	void prepareStageSourceResult(int stage, double timeStep, double currentTime);
 
 	bool isRealBlock();
 	int getBlockType();

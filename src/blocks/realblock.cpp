@@ -187,7 +187,7 @@ void RealBlock::prepareStageData(int stage) {
 	}
 }
 
-void RealBlock::prepareStageSourceResult(int stage, double timeStep) {
+void RealBlock::prepareStageSourceResult(int stage, double timeStep, double currentTime) {
 	int currentStateNumber = mProblem->getCurrentStateNumber();
 	int delayCount = mProblem->getDelayCount();
 
@@ -198,13 +198,17 @@ void RealBlock::prepareStageSourceResult(int stage, double timeStep) {
 	mSource[0] = mStates[currentStateNumber]->getSourceStorage(stage);/*problem->getSource(stage);*/
 	//TODO: Унификация цикла с конструктором класса. sourseLength или иной вариант
 	for (int i = 0; i < delayCount; ++i) {
-		int delayStateNumber = mProblem->getStateNumberForDelay(i);
-		/* TODO: Расчет "плотного" вывода должен осуществляться с учетом стадии
-		 * но сами расчеты ведуться от mState
-		 */
-		// TODO: Вычислять в проблеме. Доставать из проблемы
-		double theta = 0.0;
-		mStates[delayStateNumber]->computeDenseOutput(timeStep, theta, mSource[1+i]);
+		/*TODO: Реализовать в классе Problem метод, который выясняет требуется ли "плотный" вывод или
+		 * необходимо воспользоваться готовыми функциями от пользователя, которые дают конкретные значения в прошлом*/
+		if (true) {
+			int delayStateNumber = mProblem->getStateNumberForDelay(i);
+			/* TODO: Расчет "плотного" вывода должен осуществляться с учетом стадии
+			 * но сами расчеты ведуться от mState
+			 */
+			// TODO: Вычислять в проблеме. Доставать из проблемы
+			double theta = 0.0;
+			mStates[delayStateNumber]->computeDenseOutput(timeStep, theta, mSource[1+i]);
+		}
 	}
 }
 
