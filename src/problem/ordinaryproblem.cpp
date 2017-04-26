@@ -36,6 +36,7 @@ int OrdinaryProblem::getStateNumberSource(double currentTime) {
 int OrdinaryProblem::getCurrentStateNumber() {
 	return 0;
 }
+
 int OrdinaryProblem::getNextStateNumber() {
 	return 0;
 }
