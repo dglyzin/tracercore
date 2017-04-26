@@ -129,6 +129,19 @@ int Domain::isReadyToPlot() {
 	return result;
 }
 
+void Domain::stopByUser(char* inputFile) {
+	mJobState = JS_CANCELLED;
+	saveStateForLoad(inputFile);
+}
+
+void Domain::stopByTime(char* inputFile) {
+	saveStateForLoad(inputFile);
+
+	double theta = getThetaForDenseOutput(stopTime);
+	currentTime = stopTime;
+	saveStateForDrawDenseOutput(inputFile, theta);
+}
+
 int Domain::getEntirePlotValues() {
 	//returns code for every possible plot
 	int result = 0;
@@ -189,8 +202,9 @@ void Domain::compute(char* inputFile) {
 			wnow = wnow2;
 		}
 
-		if (!(currentTime < stopTime))
+		/*if (!(currentTime < stopTime)) {
 			mJobState = JS_FINISHED;
+		}*/
 
 		if (isReadyToFullSave()) {
 			saveStateForLoad(inputFile);
@@ -207,6 +221,9 @@ void Domain::compute(char* inputFile) {
 		}
 		MPI_Bcast(&mUserStatus, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
+		if(mJobState == JS_FINISHED) {
+			stopByTime(inputFile);
+		}
 	} //end while
 
 	printwcts("Computation finished for worker #" + ToString(mWorkerRank) + "\n", LL_INFO);
@@ -251,50 +268,65 @@ void Domain::nextStep() {
 
 	//!!! Собрать мастеру ошибки
 	//!!! если ошибки нет, продолжать
+	double error = 0.0;
+	bool isErrorPer = true;
 	if (mNumericalMethod->isVariableStep()) {
 		// MPI inside!
-		double error = collectError();
+		error = collectError();
+		//printwcts("step error = " + ToString(error) + " " + ToString(currentTime) + "\n", LL_INFO);
+		isErrorPer = isErrorPermissible(error);
 
-		//printwcts("step error = " + ToString(error) + "\n", LL_INFO);
-
-		//bool isErrorPermissible = mSolverInfo->isErrorPermissible(error, totalGridElementCount);
-		bool isErrorPer = isErrorPermissible(error);
-
-		if (isErrorPer) {
+/*		if (!isErrorPer) {
 			//printwcts(ToString(currentTime) +" " + ToString(mTimeStep) + " " + ToString(stopTime) + "\n", LL_INFO);
-			/*if (currentTime + mTimeStep > stopTime) {
+			if (currentTime + mTimeStep > stopTime) {
 			 mUserStatus = US_STOP;
 			 return;
-			 }*/
+			 }
 
 			//printwcts("###\n", LL_INFO);
+
+			confirmStep();
+			mAcceptedStepCount++;
 			currentTime += mTimeStep;
+			//cout<<"Step accepted\n"<<endl;
+		} else {
+			rejectStep();
+			mRejectedStepCount++;
+			//cout << "Step rejected!\n" << endl;
+
+			mTimeStep = computeNewStep(error);
+			printwcts("new time step = " + ToString(mTimeStep) + "\n", LL_INFO);
+			if(mTimeStep < MINIMALLY_ACCEPTABLE_TIMESTEP) {
+				printwcts("New time step (" + ToString(mTimeStep) + ") too small. Computation aborted.\n\n", LL_INFO);
+				mJobState = JS_FINISHED;
+			}
+
+			return;
+		}*/
+	}
+
+	if(isErrorPer) {
+		if (currentTime + mTimeStep > stopTime) {
+			mJobState = JS_FINISHED;
+			return;
 		}
 
-		//!!! только 0, рассылать
-		//mTimeStep = mSolverInfo->getNewStep(mTimeStep, error, totalGridElementCount);
+		confirmStep();
+		mAcceptedStepCount++;
+		currentTime += mTimeStep;
+	}
+	else {
+		rejectStep();
+		mRejectedStepCount++;
+	}
+
+	if (mNumericalMethod->isVariableStep()) {
 		mTimeStep = computeNewStep(error);
 		//printwcts("new time step = " + ToString(mTimeStep) + "\n", LL_INFO);
 		if(mTimeStep < MINIMALLY_ACCEPTABLE_TIMESTEP) {
 			printwcts("New time step (" + ToString(mTimeStep) + ") too small. Computation aborted.\n\n", LL_INFO);
 			mJobState = JS_FINISHED;
 		}
-
-		//!!! только 0, рассылать
-		if (isErrorPer) {
-			confirmStep(); //uses new timestep
-			mAcceptedStepCount++;
-			//currentTime += mTimeStep;
-			//cout<<"Step accepted\n"<<endl;
-		} else {
-			rejectStep(); //uses new timestep
-			mRejectedStepCount++;
-			//cout << "Step rejected!\n" << endl;
-		}
-	} else { //constant step
-		confirmStep();
-		mAcceptedStepCount++;
-		currentTime += mTimeStep;
 	}
 }
 
@@ -922,12 +954,12 @@ void Domain::saveStateForLoad(char* inputFile) {
 	delete saveFile;
 }
 
-void Domain::saveStateForDrawDenseOutput(char* inputFile, int plotVals) {
+void Domain::saveStateForDrawDenseOutput(char* inputFile, double theta) {
 	char* saveFile = new char[250];
-	Utils::getFilePathForDraw(inputFile, saveFile, stopTime, 0);
+	Utils::getFilePathForDraw(inputFile, saveFile, stopTime, 2);
 
 	saveGeneralInfo(saveFile);
-	saveStateForDrawDenseOutputByBlocks(saveFile, stopTime);
+	saveStateForDrawDenseOutputByBlocks(saveFile, theta);
 
 	delete saveFile;
 }
@@ -966,14 +998,14 @@ void Domain::saveStateForLoadByBlocks(char* path) {
 	}
 }
 
-void Domain::saveStateForDrawDenseOutputByBlocks(char* path, double requiredTime) {
+void Domain::saveStateForDrawDenseOutputByBlocks(char* path, double theta) {
 	for (int i = 0; i < mBlockCount; ++i) {
-		mBlocks[i]->saveStateForDrawDenseOutput(path, mTimeStep, getTethaForDenseOutput(requiredTime));
+		mBlocks[i]->saveStateForDrawDenseOutput(path, mTimeStep, theta);
 		MPI_Barrier(mWorkerComm);
 	}
 }
 
-double Domain::getTethaForDenseOutput(double requiredTime) {
+double Domain::getThetaForDenseOutput(double requiredTime) {
 	return (requiredTime - currentTime) / mTimeStep;
 }
 

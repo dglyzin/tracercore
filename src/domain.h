@@ -95,7 +95,7 @@ public:
 	void saveStateForDraw(char* inputFile, int plotVals);
 	void saveStateForLoad(char* inputFile);
 
-	void saveStateForDrawDenseOutput(char* inputFile, int plotVals);
+	void saveStateForDrawDenseOutput(char* inputFile, double theta);
 
 	void printStatisticsInfo(char* inputFile, char* outputFile, double calcTime, char* statisticsFile);
 
@@ -303,12 +303,14 @@ private:
 	void saveGeneralInfo(char* path);
 	void saveStateForDrawByBlocks(char* path);
 	void saveStateForLoadByBlocks(char* path);
-	void saveStateForDrawDenseOutputByBlocks(char* path, double requiredTime);
+	void saveStateForDrawDenseOutputByBlocks(char* path, double theta);
 
-	double getTethaForDenseOutput(double requiredTime);
+	double getThetaForDenseOutput(double requiredTime);
 	int isReadyToFullSave();
 	int isReadyToPlot();
 
+	void stopByUser(char* inputFile);
+	void stopByTime(char* inputFile);
 };
 
 #endif /* SRC_DOMAIN_H_ */
