@@ -99,6 +99,15 @@ void State::saveAllStorage(char* path) {
 	//method->saveStateData(pu, mKStorages, path);
 }
 
+void State::saveStateForDrawDenseOutput(char* path, double timeStep, double theta) {
+	double* result = pu->newDoubleArray(mElementCount);
+
+	method->computeDenseOutput(pu, mState, mKStorages, mBlockCommonTempStorages, timeStep, theta, result, mElementCount);
+	pu->saveArray(result, mElementCount, path);
+
+	pu->deleteDeviceSpecificArray(result);
+}
+
 void State::loadGeneralStorage(ifstream& in) {
 	pu->loadArray(mState, mElementCount, in);
 	//method->loadStateGeneralData(pu, mKStorages, in);

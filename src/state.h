@@ -32,6 +32,7 @@ public:
 
 	void saveGeneralStorage(char* path);
 	void saveAllStorage(char* path);
+	void saveStateForDrawDenseOutput(char* path, double timeStep, double theta);
 
 	void loadGeneralStorage(std::ifstream& in);
 	void loadAllStorage(std::ifstream& in);
