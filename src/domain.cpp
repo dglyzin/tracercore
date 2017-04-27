@@ -956,7 +956,7 @@ void Domain::saveStateForLoad(char* inputFile) {
 
 void Domain::saveStateForDrawDenseOutput(char* inputFile, double theta) {
 	char* saveFile = new char[250];
-	Utils::getFilePathForDraw(inputFile, saveFile, stopTime, 2);
+	Utils::getFilePathForDraw(inputFile, saveFile, stopTime, getEntirePlotValues());
 
 	saveGeneralInfo(saveFile);
 	saveStateForDrawDenseOutputByBlocks(saveFile, theta);
