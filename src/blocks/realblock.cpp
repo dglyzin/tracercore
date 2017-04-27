@@ -206,8 +206,13 @@ void RealBlock::prepareStageSourceResult(int stage, double timeStep, double curr
 			 * но сами расчеты ведуться от mState
 			 */
 			// TODO: Вычислять в проблеме. Доставать из проблемы
-			double theta = 0.0;
+			double theta = mProblem->getTethaForDelay(i);
 			mStates[delayStateNumber]->computeDenseOutput(timeStep, theta, mSource[1+i]);
+		}
+		else {
+			/*TODO:
+			 * Функция ProcessingUnit, которая дает значения в прошлом, если еще не нужен плотный вывод
+			 */
 		}
 	}
 }
