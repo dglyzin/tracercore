@@ -426,7 +426,7 @@ void Domain::prepareStageArgument(int stage) {
 
 void Domain::prepareBlockStageData(int stage) {
 	for (int i = 0; i < mBlockCount; ++i) {
-		mBlocks[i]->prepareStageSourceResult(stage, mTimeStep);
+		mBlocks[i]->prepareStageSourceResult(stage, mTimeStep, currentTime);
 	}
 }
 
