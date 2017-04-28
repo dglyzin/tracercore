@@ -101,7 +101,7 @@ for (int i = 0; i < 3; ++i) {
 	time2 = omp_get_wtime(); //MPI_Wtime();
 
 	//domain->saveStateForDraw(inputFile,domain->getEntirePlotValues());
-	domain->saveStateForLoad(inputFile);
+	//domain->saveStateForLoad(inputFile);
 	//domain->saveStateForDrawDenseOutput(inputFile);
 
 	/*
