@@ -33,7 +33,7 @@ MPILIB88=-I/usr/mpi/gcc/openmpi-1.8.8/include -L /usr/mpi/gcc/openmpi-1.8.8/lib 
 MPILIB=-I/usr/mpi/gcc/openmpi-1.8.4/include -L /usr/mpi/gcc/openmpi-1.8.4/lib -lmpi -lmpi_cxx
 
 
-USERFUNCLIB=./bin -l userfuncs
+USERFUNCLIB=./$(BIN) -l userfuncs
 
 BLOCK=$(SRCBLC)/block.cpp $(SRCBLC)/realblock.cpp $(SRCBLC)/nullblock.cpp
 
@@ -50,39 +50,27 @@ PROBLEM=$(SRCPROBLEM)/ismartcopy.cpp $(SRCPROBLEM)/problem.cpp $(SRCPROBLEM)/ord
 INTERCONNECT=$(SRCINTERCONNECT)/interconnect.cpp $(SRCINTERONNECTTRANSFER)/transferinterconnect.cpp $(SRCINTERCONNECT)/nontransferinterconnect.cpp $(SRCINTERONNECTTRANSFER)/transferinterconnectsend.cpp $(SRCINTERONNECTTRANSFER)/transferinterconnectrecv.cpp
 
 
-SOURCE=$(SRC)/main.cpp $(SRC)/domain.cpp $(SRC)/state.cpp $(SRC)/utils.cpp $(SRC)/logger.cpp $(BLOCK) $(PROCUNIT) $(NUMERICALMETHOD) $(PROBLEM) $(INTERCONNECT)
+#SOURCE=$(SRC)/main.cpp $(SRC)/domain.cpp $(SRC)/state.cpp $(SRC)/utils.cpp $(SRC)/logger.cpp $(BLOCK) $(PROCUNIT) $(NUMERICALMETHOD) $(PROBLEM) $(INTERCONNECT)
+SOURCE = $(shell find . -path $(SRC)/stepstorage -prune -o -name "*.cpp")
 
 OBJECT=$(SOURCE:.cpp=.o)
 
 EXECUTABLE=HS
 
 
-all: $(EXECUTABLE) cleanObj
-
+all: $(EXECUTABLE)
+ 
 $(EXECUTABLE): $(OBJECT) cuda_func.o
-	$(CUDACC) -O3 $(CUDAARCH) $(MPILIB) -L$(USERFUNCLIB) $(OBJECT) $(SRC)/cuda_func.o -o $(BIN)/$(EXECUTABLE) -Xcompiler -fopenmp
+	$(CUDACC) -O3 $(CUDAARCH) $(MPILIB) -L$(USERFUNCLIB) $(addprefix $(BIN)/,$(notdir $(OBJECT))) $(BIN)/cuda_func.o -o $(BIN)/$(EXECUTABLE) -Xcompiler -fopenmp
 
 .cpp.o:
-	$(CC) $(CFLAGS) -I$(CUDAINC) -fopenmp $< -o $@
+	$(CC) $(CFLAGS) -I$(CUDAINC) -fopenmp $< -o $(addprefix $(BIN)/,$(notdir $@))
 
 cuda_func.o:
-	$(CUDACC) $(CUFLAGS) $(CUDAARCH) $(SRC)/cuda_func.cu -o $(SRC)/cuda_func.o
+	$(CUDACC) $(CUFLAGS) $(CUDAARCH) $(SRC)/cuda_func.cu -o $(BIN)/cuda_func.o
 
-clean: cleanObj	
+clean: 
+	rm $(BIN)/*.o
 	rm $(BIN)/$(EXECUTABLE)
 	
-cleanObj:
-	rm -rf $(SRC)/*.o
 	
-	rm -rf $(SRCBLC)/*.o
-	
-	rm -rf $(SRCPROCUNIT)/*.o
-	rm -rf $(SRCPROCUNITCPU)/*.o
-	rm -rf $(SRCPROCUNITGPU)/*.o
-	
-	rm -rf $(SRCNUMERICALMETHOD)/*.o
-	
-	rm -rf $(SRCPROBLEM)/*.o
-	
-	rm -rf $(SRCINTERCONNECT)/*.o
-	rm -rf $(SRCINTERONNECTTRANSFER)/*.o
