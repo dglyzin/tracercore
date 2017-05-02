@@ -15,8 +15,6 @@ public:
 	OrdinaryProblem();
 	virtual ~OrdinaryProblem();
 
-	int getStateCount();
-
 	int getStateNumberResult(double currentTime);
 	int getStateNumberSource(double currentTime);
 	int getCurrentStateNumber();
@@ -31,7 +29,8 @@ public:
 	void saveData(char* path, State** states);
 	void savaDataForDraw(char* path, State** states);
 
-	void swapCopy(ProcessingUnit* pu, double** source, double** destination, int size);
+	void swapCopy(ProcessingUnit* pu, double** source, double** destination,
+			int size);
 
 protected:
 	void computeStateNumberForDelay(double currentTime, double timeStep);
