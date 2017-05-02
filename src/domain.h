@@ -299,7 +299,7 @@ private:
 			double* destinationData);
 
 	int getMaxStepStorageCount();
-	int getElementCountOnProcessingUnit(int deviceType, int deviceNumber);
+	int getRequiredMemoryOnProcessingUnit(int deviceType, int deviceNumber);
 	void saveGeneralInfo(char* path);
 	void saveStateForDrawByBlocks(char* path);
 	void saveStateForLoadByBlocks(char* path);

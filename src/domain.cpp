@@ -1241,28 +1241,28 @@ Interconnect* Domain::getInterconnect(int sourceNode, int destinationNode, int b
 }
 
 int Domain::getMaxStepStorageCount() {
-	int cpuElementCount = 0;
-	int* gpuElementCount = new int[mGpuCount];
+	int cpuRequiredMemory = 0;
+	int* gpuRequiredMemory = new int[mGpuCount];
 	for (int i = 0; i < mGpuCount; ++i) {
-		gpuElementCount[i] = 0;
+		gpuRequiredMemory[i] = 0;
 	}
 
-	cpuElementCount = getElementCountOnProcessingUnit(CPUNIT, 0);
+	cpuRequiredMemory = getRequiredMemoryOnProcessingUnit(CPUNIT, 0);
 
 	for (int i = 0; i < mGpuCount; ++i) {
-		gpuElementCount[i] = getElementCountOnProcessingUnit(GPUNIT, i);
+		gpuRequiredMemory[i] = getRequiredMemoryOnProcessingUnit(GPUNIT, i);
 	}
 
-	int cpuSolverSize = mNumericalMethod->getMemorySizePerState(cpuElementCount);
+	/*int cpuSolverSize = mNumericalMethod->getMemorySizePerState(cpuRequiredMemory);
 	int* gpuSolverSize = new int[mGpuCount];
 	for (int i = 0; i < mGpuCount; ++i) {
-		gpuSolverSize[i] = mNumericalMethod->getMemorySizePerState(gpuElementCount[i]);
-	}
+		gpuSolverSize[i] = mNumericalMethod->getMemorySizePerState(gpuRequiredMemory[i]);
+	}*/
 
-	int cpuMaxCount = (int) (CPU_RAM / cpuSolverSize);
+	int cpuMaxCount = (int) (CPU_RAM / cpuRequiredMemory);
 	int* gpuMaxCount = new int[mGpuCount];
 	for (int i = 0; i < mGpuCount; ++i) {
-		gpuMaxCount[i] = (int) (GPU_RAM / gpuSolverSize[i]);
+		gpuMaxCount[i] = (int) (GPU_RAM / gpuRequiredMemory[i]);
 	}
 
 	int minForAll = cpuMaxCount;
@@ -1275,21 +1275,22 @@ int Domain::getMaxStepStorageCount() {
 
 	MPI_Allreduce(&minForAll, &absMin, 1, MPI_INT, MPI_MIN, mWorkerComm);
 
-	delete gpuElementCount;
-	delete gpuSolverSize;
+	delete gpuRequiredMemory;
+	//delete gpuSolverSize;
 	delete gpuMaxCount;
 
 	return absMin;
 }
 
-int Domain::getElementCountOnProcessingUnit(int deviceType, int deviceNumber) {
-	int count = 0;
+int Domain::getRequiredMemoryOnProcessingUnit(int deviceType, int deviceNumber) {
+	int requiredMemory = 0;
 	for (int i = 0; i < mBlockCount; ++i) {
 		if (mBlocks[i]->isBlockType(deviceType) && mBlocks[i]->isDeviceNumber(deviceNumber)) {
-			count += mBlocks[i]->getGridElementCount();
+			int elememtCount += mBlocks[i]->getGridElementCount();
+			requiredMemory += mNumericalMethod->getMemorySizePerState(elememtCount);
 		}
 	}
 
-	return count;
+	return requiredMemory;
 }
 
