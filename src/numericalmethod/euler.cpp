@@ -34,11 +34,6 @@ double Euler::computeNewStep(double timeStep, double error, int totalDomainEleme
 	return timeStep;
 }
 
-int Euler::getMemorySizePerState(int elementCount) {
-	// TODO: 2 заменить на что-то более вразумительное
-	return (elementCount * SIZE_DOUBLE) * (1 + KSTORAGE_COUNT);
-}
-
 int Euler::getKStorageCount() {
 	return KSTORAGE_COUNT;
 }

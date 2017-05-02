@@ -25,8 +25,6 @@ public:
 	virtual bool isVariableStep() = 0;
 	virtual double computeNewStep(double timeStep, double error, int totalDomainElements) = 0;
 
-	virtual int getMemorySizePerState(int elementCount) = 0;
-
 	virtual int getKStorageCount() = 0;
 	virtual int getCommonTempStorageCount() = 0;
 
@@ -54,6 +52,8 @@ public:
 
 	virtual void computeDenseOutput(ProcessingUnit* pu, double* state, double** kStorages, double** commonTempStorages,
 			double timeStep, double theta, double* result, int size) = 0;
+
+	int getMemorySizePerState(int elementCount);
 
 	//virtual bool isStateNan(ProcessingUnit* pu, double** kStorages) = 0;
 

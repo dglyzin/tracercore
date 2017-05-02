@@ -21,8 +21,6 @@ public:
 	bool isVariableStep();
 	double computeNewStep(double timeStep, double error, int totalDomainElements);
 
-	int getMemorySizePerState(int elementCount);
-
 	int getKStorageCount();
 	int getCommonTempStorageCount();
 

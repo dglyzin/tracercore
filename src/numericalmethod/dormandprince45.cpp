@@ -72,11 +72,6 @@ double DormandPrince45::computeNewStep(double timeStep, double error, int totalD
 	return timeStep * min(facmax, max(facmin, fac * pow(1.0 / err, 1.0 / 5.0)));
 }
 
-int DormandPrince45::getMemorySizePerState(int elementCount) {
-	// TODO: 2 заменить на что-то более вразумительное
-	return (elementCount * SIZE_DOUBLE) * (1 + KSTORAGE_COUNT);
-}
-
 int DormandPrince45::getKStorageCount() {
 	return KSTORAGE_COUNT;
 }

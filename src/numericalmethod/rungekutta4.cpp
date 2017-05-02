@@ -34,11 +34,6 @@ double RungeKutta4::computeNewStep(double timeStep, double error, int totalDomai
 	return timeStep;
 }
 
-int RungeKutta4::getMemorySizePerState(int elementCount) {
-	// TODO: 2 заменить на что-то более вразумительное
-	return (elementCount * SIZE_DOUBLE) * (1 + KSTORAGE_COUNT);
-}
-
 int RungeKutta4::getKStorageCount() {
 	return KSTORAGE_COUNT;
 }
