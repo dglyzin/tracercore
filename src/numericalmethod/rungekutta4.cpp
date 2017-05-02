@@ -146,7 +146,7 @@ void RungeKutta4::confirmStep(ProcessingUnit* pu, ISmartCopy* sc, double** sourc
 
 	pu->sumArrays(commonTempStorages[ARG], *sourceState, commonTempStorages[ARG], size);
 
-	pu->swapStorages(destinationState, commonTempStorages + ARG);
+	pu->swapArray(destinationState, commonTempStorages + ARG);
 }
 
 void RungeKutta4::rejectStep(ProcessingUnit* pu, double* state, double** kStorages, double** commonTempStorages,

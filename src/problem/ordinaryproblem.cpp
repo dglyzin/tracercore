@@ -65,5 +65,5 @@ void OrdinaryProblem::savaDataForDraw(char* path, State** states) {
 
 void OrdinaryProblem::swapCopy(ProcessingUnit* pu, double** source,
 		double** destination, int size) {
-	pu->swapStorages(source, destination);
+	pu->swapArray(source, destination);
 }

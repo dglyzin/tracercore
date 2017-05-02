@@ -106,7 +106,7 @@ void CPU::deallocDeviceSpecificArray(unsigned short int* toDelete) {
 	delete toDelete;
 }
 
-void CPU::swapStorages(double** firstArray, double** secondArray) {
+void CPU::swapArray(double** firstArray, double** secondArray) {
 	double* tmp = *firstArray;
 	*firstArray = *secondArray;
 	*secondArray = tmp;

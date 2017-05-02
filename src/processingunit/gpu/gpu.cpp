@@ -48,7 +48,7 @@ bool GPU::isDeviceType(int type) {
 	return false;
 }
 
-void GPU::swapStorages(double** firstArray, double** secondArray) {
+void GPU::swapArray(double** firstArray, double** secondArray) {
 	cudaSetDevice(deviceNumber);
 	// TODO: swap array for GPU
 }
