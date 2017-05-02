@@ -1284,9 +1284,10 @@ int Domain::getMaxStepStorageCount() {
 
 int Domain::getRequiredMemoryOnProcessingUnit(int deviceType, int deviceNumber) {
 	int requiredMemory = 0;
+	int elememtCount = 0;
 	for (int i = 0; i < mBlockCount; ++i) {
 		if (mBlocks[i]->isBlockType(deviceType) && mBlocks[i]->isDeviceNumber(deviceNumber)) {
-			int elememtCount += mBlocks[i]->getGridElementCount();
+			elememtCount += mBlocks[i]->getGridElementCount();
 			requiredMemory += mNumericalMethod->getMemorySizePerState(elememtCount);
 		}
 	}
