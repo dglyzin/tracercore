@@ -236,7 +236,7 @@ void Domain::initSolvers() {
 
 void Domain::computeStage(int stage) {
 	// TODO: Проверить порядок следующих 4-х функций
-	mProblem->computeStageData(stage, mTimeStep, mNumericalMethod->getStageTimeStepCoefficient(stage));
+	mProblem->computeStageData(currentTime, mTimeStep, mNumericalMethod->getStageTimeStepCoefficient(stage));
 
 	prepareStageArgument(stage);
 
