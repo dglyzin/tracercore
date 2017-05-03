@@ -26,6 +26,8 @@ public:
 
 	virtual int getDelayCount() = 0;
 
+	virtual void computeStageData(double currentTime, double timeStep, double numericalMethodStagecoefficient) = 0;
+
 	virtual int getStateNumberForDelay(int delayNumber) = 0;
 	virtual double getTethaForDelay(int delayNumber) = 0;
 
@@ -33,13 +35,6 @@ public:
 	virtual void saveData(char* path, State** states) = 0;
 	virtual void savaDataForDraw(char* path, State** states) = 0;
 	void saveStateForDrawDenseOutput(char* path, State** states, double timeStep, double theta);
-
-	void computeStageData(double currentTime, double timeStep, double numericalMethodStagecoefficient);
-
-protected:
-	virtual void computeStateNumberForDelay(double currentTime, double timeStep,
-			double numericalMethodStagecoefficient) = 0;
-	virtual void computeTethaForDelay(double currentTime, double timeStep, double numericalMethodStagecoefficient) = 0;
 };
 
 #endif /* SRC_PROBLEM_OLD_PROBLEM_H_ */

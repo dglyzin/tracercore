@@ -24,6 +24,8 @@ public:
 
 	int getDelayCount();
 
+	void computeStageData(double currentTime, double timeStep, double numericalMethodStagecoefficient);
+
 	int getStateNumberForDelay(int delayNumber);
 	double getTethaForDelay(int delayNumber);
 
@@ -32,10 +34,6 @@ public:
 	void savaDataForDraw(char* path, State** states);
 
 	void swapCopy(ProcessingUnit* pu, double** source, double** destination, int size);
-
-protected:
-	void computeStateNumberForDelay(double currentTime, double timeStep, double numericalMethodStagecoefficient);
-	void computeTethaForDelay(double currentTime, double timeStep, double numericalMethodStagecoefficient);
 };
 
 #endif /* SRC_PROBLEM_ORDINARYPROBLEM_H_ */

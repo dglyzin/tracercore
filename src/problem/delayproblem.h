@@ -12,7 +12,7 @@
 
 class DelayProblem: public Problem {
 public:
-	DelayProblem(int _delayCount, int _statesCount);
+	DelayProblem(int _statesCount, int _delayCount, double* _delayValue);
 	virtual ~DelayProblem();
 
 	int getStateNumberResult(double currentTime);
@@ -24,6 +24,8 @@ public:
 
 	int getDelayCount();
 
+	void computeStageData(double currentTime, double timeStep, double numericalMethodStagecoefficient);
+
 	int getStateNumberForDelay(int delayNumber);
 	double getTethaForDelay(int delayNumber);
 
@@ -34,12 +36,9 @@ public:
 	void swapCopy(ProcessingUnit* pu, double** source, double** destination,
 			int size);
 
-protected:
-	void computeStateNumberForDelay(double currentTime, double timeStep, double numericalMethodStagecoefficient);
-	void computeTethaForDelay(double currentTime, double timeStep, double numericalMethodStagecoefficient);
-
 private:
 	int delayCount;
+	double* delayValue;
 
 	int statesCount;
 
@@ -50,6 +49,11 @@ private:
 	double* delayTheta;
 
 	double* timeCountdown;
+
+	int currentStateNumber;
+
+	void computeStateNumberForDelay(double currentTime, double timeStep, double requiredTime, int index);
+	void computeTethaForDelay(double currentTime, double timeStep, double requiredTime, int index);
 };
 
 #endif /* SRC_PROBLEM_DELAYPROBLEM_H_ */

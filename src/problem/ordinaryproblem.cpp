@@ -13,16 +13,6 @@ OrdinaryProblem::OrdinaryProblem() {
 OrdinaryProblem::~OrdinaryProblem() {
 }
 
-void OrdinaryProblem::computeStateNumberForDelay(double currentTime, double timeStep,
-		double numericalMethodStagecoefficient) {
-	return;
-}
-
-void OrdinaryProblem::computeTethaForDelay(double currentTime, double timeStep,
-		double numericalMethodStagecoefficient) {
-	return;
-}
-
 int OrdinaryProblem::getStateNumberResult(double currentTime) {
 	return 0;
 }
@@ -45,6 +35,10 @@ int OrdinaryProblem::getStateCount() {
 
 int OrdinaryProblem::getDelayCount() {
 	return 0;
+}
+
+void OrdinaryProblem::computeStageData(double currentTime, double timeStep, double numericalMethodStagecoefficient) {
+	return;
 }
 
 int OrdinaryProblem::getStateNumberForDelay(int delayNumber) {
