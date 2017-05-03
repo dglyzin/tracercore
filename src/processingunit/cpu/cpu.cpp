@@ -48,6 +48,7 @@ void CPU::initState(double* state, initfunc_fill_ptr_t* userInitFuncs, unsigned 
 
 void CPU::delayFunction(double* state, initfunc_fill_ptr_t* userInitFuncs, unsigned short int* initFuncNumber,
 		int blockNumber, double time) {
+	// TODO: Реализовать функции для запаздывания. Реализовать параллельные расчеты
 	userInitFuncs[blockNumber](state, initFuncNumber);
 }
 
