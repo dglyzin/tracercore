@@ -25,6 +25,7 @@ public:
 	virtual int getStateCount() = 0;
 
 	virtual int getDelayCount() = 0;
+	virtual double getDelay(int delayNumber) = 0;
 
 	virtual void computeStageData(double currentTime, double timeStep, double numericalMethodStagecoefficient) = 0;
 

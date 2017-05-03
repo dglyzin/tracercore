@@ -37,6 +37,10 @@ int OrdinaryProblem::getDelayCount() {
 	return 0;
 }
 
+double OrdinaryProblem::getDelay(int delayNumber) {
+	return 0;
+}
+
 void OrdinaryProblem::computeStageData(double currentTime, double timeStep, double numericalMethodStagecoefficient) {
 	return;
 }

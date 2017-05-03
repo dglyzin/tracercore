@@ -75,6 +75,10 @@ int DelayProblem::getDelayCount() {
 	return delayCount;
 }
 
+double DelayProblem::getDelay(int delayNumber) {
+	return delayValue[delayNumber];
+}
+
 void DelayProblem::computeStageData(double currentTime, double timeStep, double numericalMethodStagecoefficient) {
 	for (int i = 0; i < delayCount; ++i) {
 		double requiredTime = currentTime + numericalMethodStagecoefficient * timeStep - delayValue[i];

@@ -23,6 +23,7 @@ public:
 	int getStateCount();
 
 	int getDelayCount();
+	double getDelay(int delayNumber);
 
 	void computeStageData(double currentTime, double timeStep, double numericalMethodStagecoefficient);
 
