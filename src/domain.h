@@ -27,6 +27,7 @@
 #include "numericalmethod/dormandprince45.h"
 
 #include "problem/ordinaryproblem.h"
+#include "problem/delayproblem.h"
 
 #include "utils.h"
 
