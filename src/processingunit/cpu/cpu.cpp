@@ -10,7 +10,7 @@
 using namespace std;
 
 CPU::CPU(int _deviceNumber) :
-	ProcessingUnit(_deviceNumber) {
+		ProcessingUnit(_deviceNumber) {
 }
 
 CPU::~CPU() {
@@ -42,6 +42,11 @@ void CPU::prepareBorder(double* result, double* source, int zStart, int zStop, i
 }
 
 void CPU::initState(double* state, initfunc_fill_ptr_t* userInitFuncs, unsigned short int* initFuncNumber,
+		int blockNumber, double time) {
+	userInitFuncs[blockNumber](state, initFuncNumber);
+}
+
+void CPU::delayFunction(double* state, initfunc_fill_ptr_t* userInitFuncs, unsigned short int* initFuncNumber,
 		int blockNumber, double time) {
 	userInitFuncs[blockNumber](state, initFuncNumber);
 }

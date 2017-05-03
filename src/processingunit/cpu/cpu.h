@@ -24,6 +24,9 @@ public:
 	void initState(double* state, initfunc_fill_ptr_t* userInitFuncs, unsigned short int* initFuncNumber,
 			int blockNumber, double time);
 
+	void delayFunction(double* state, initfunc_fill_ptr_t* userInitFuncs, unsigned short int* initFuncNumber,
+			int blockNumber, double time);
+
 	int getType();
 
 	bool isCPU();

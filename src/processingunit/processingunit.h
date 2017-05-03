@@ -41,6 +41,9 @@ public:
 	virtual void initState(double* state, initfunc_fill_ptr_t* userInitFuncs, unsigned short int* initFuncNumber,
 			int blockNumber, double time) = 0;
 
+	virtual void delayFunction(double* state, initfunc_fill_ptr_t* userInitFuncs, unsigned short int* initFuncNumber,
+					int blockNumber, double time) = 0;
+
 	virtual int getType() = 0;
 
 	virtual bool isCPU() = 0;

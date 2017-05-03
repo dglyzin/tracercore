@@ -28,6 +28,11 @@ void GPU::initState(double* state, initfunc_fill_ptr_t* userInitFuncs, unsigned 
 	printf("\nGPU init state DON'T WORK! Не понятен механизм работы\n");
 }
 
+void GPU::delayFunction(double* state, initfunc_fill_ptr_t* userInitFuncs, unsigned short int* initFuncNumber,
+		int blockNumber, double time) {
+
+}
+
 int GPU::getType() {
 	return GPUNIT;
 }
@@ -192,7 +197,7 @@ void GPU::writeArray(double* array, int size, ofstream& out) {
 	cudaSetDevice(deviceNumber);
 	// TODO ПРОВЕРИТЬ КОПИРОВАНИЕ!!!!
 
-	double* tmpArray = new double [size];
+	double* tmpArray = new double[size];
 
 	cudaMemcpy(array, tmpArray, size * sizeof(double), cudaMemcpyDeviceToHost);
 
@@ -204,7 +209,7 @@ void GPU::writeArray(double* array, int size, ofstream& out) {
 void GPU::readArray(double* array, int size, ifstream& in) {
 	cudaSetDevice(deviceNumber);
 
-	double* tmpArray = new double [size];
+	double* tmpArray = new double[size];
 
 	in.read((char*) tmpArray, SIZE_DOUBLE * size);
 

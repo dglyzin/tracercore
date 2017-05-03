@@ -22,6 +22,9 @@ public:
 	void initState(double* state, initfunc_fill_ptr_t* userInitFuncs, unsigned short int* initFuncNumber,
 			int blockNumber, double time);
 
+	void delayFunction(double* state, initfunc_fill_ptr_t* userInitFuncs, unsigned short int* initFuncNumber,
+			int blockNumber, double time);
+
 	int getType();
 
 	bool isCPU();
@@ -47,7 +50,7 @@ public:
 	void multiplyArraysElementwise(double* result, double* arg1, double* arg2, int size);
 
 	/*void saveArray(double* array, int size, char* path);
-	void loadArray(double* array, int size, std::ifstream& in);*/
+	 void loadArray(double* array, int size, std::ifstream& in);*/
 
 	bool isNan(double* array, int size);
 
@@ -72,9 +75,9 @@ protected:
 	void readArray(double* array, int size, std::ifstream& in);
 
 	/*void printCell(double* array, int cellSize);
-	void printArray1d(double* array, int xCount, int cellSize);
-	void printArray2d(double* array, int yCount, int xCount, int cellSize);
-	void printArray3d(double* array, int zCount, int yCount, int xCount, int cellSize);*/
+	 void printArray1d(double* array, int xCount, int cellSize);
+	 void printArray2d(double* array, int yCount, int xCount, int cellSize);
+	 void printArray3d(double* array, int zCount, int yCount, int xCount, int cellSize);*/
 };
 
 #endif /* SRC_PROCESSINGUNIT_GPU_GPU_H_ */
