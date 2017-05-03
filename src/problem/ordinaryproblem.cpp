@@ -39,6 +39,10 @@ int OrdinaryProblem::getNextStateNumber() {
 	return 0;
 }
 
+int OrdinaryProblem::getStateCount() {
+	return 1;
+}
+
 int OrdinaryProblem::getDelayCount() {
 	return 0;
 }

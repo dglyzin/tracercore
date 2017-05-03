@@ -20,6 +20,8 @@ public:
 	int getCurrentStateNumber();
 	int getNextStateNumber();
 
+	int getStateCount();
+
 	int getDelayCount();
 
 	int getStateNumberForDelay(int delayNumber);

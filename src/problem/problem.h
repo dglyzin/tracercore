@@ -22,6 +22,8 @@ public:
 	virtual int getCurrentStateNumber() = 0;
 	virtual int getNextStateNumber() = 0;
 
+	virtual int getStateCount() = 0;
+
 	virtual int getDelayCount() = 0;
 
 	virtual int getStateNumberForDelay(int delayNumber) = 0;
