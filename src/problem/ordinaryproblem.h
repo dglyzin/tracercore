@@ -31,12 +31,11 @@ public:
 	void saveData(char* path, State** states);
 	void savaDataForDraw(char* path, State** states);
 
-	void swapCopy(ProcessingUnit* pu, double** source, double** destination,
-			int size);
+	void swapCopy(ProcessingUnit* pu, double** source, double** destination, int size);
 
 protected:
-	void computeStateNumberForDelay(double currentTime, double timeStep);
-	void computeTethaForDelay(double currentTime, double timeStep);
+	void computeStateNumberForDelay(double currentTime, double timeStep, double numericalMethodStagecoefficient);
+	void computeTethaForDelay(double currentTime, double timeStep, double numericalMethodStagecoefficient);
 };
 
 #endif /* SRC_PROBLEM_ORDINARYPROBLEM_H_ */

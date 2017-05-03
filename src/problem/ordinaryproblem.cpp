@@ -13,13 +13,13 @@ OrdinaryProblem::OrdinaryProblem() {
 OrdinaryProblem::~OrdinaryProblem() {
 }
 
-void OrdinaryProblem::computeStateNumberForDelay(double currentTime,
-		double timeStep) {
+void OrdinaryProblem::computeStateNumberForDelay(double currentTime, double timeStep,
+		double numericalMethodStagecoefficient) {
 	return;
 }
 
-void OrdinaryProblem::computeTethaForDelay(double currentTime,
-		double timeStep) {
+void OrdinaryProblem::computeTethaForDelay(double currentTime, double timeStep,
+		double numericalMethodStagecoefficient) {
 	return;
 }
 
@@ -67,7 +67,6 @@ void OrdinaryProblem::savaDataForDraw(char* path, State** states) {
 	states[getCurrentStateNumber()]->saveGeneralStorage(path);
 }
 
-void OrdinaryProblem::swapCopy(ProcessingUnit* pu, double** source,
-		double** destination, int size) {
+void OrdinaryProblem::swapCopy(ProcessingUnit* pu, double** source, double** destination, int size) {
 	pu->swapArray(source, destination);
 }
