@@ -82,7 +82,19 @@ RealBlock::RealBlock(int _nodeNumber, int _dimension, int _xCount, int _yCount, 
 }
 
 RealBlock::~RealBlock() {
-	//TODO: Нормальный деструктор. Необходимо удаление State'ов
+	int sourceLength = 1 + mProblem->getDelayCount();
+	for (int i = 1; i < sourceLength; ++i) {
+		pu->deleteDeviceSpecificArray(mSource[i]);
+	}
+
+	pu->deleteDeviceSpecificArray(mSource);
+
+	int stateCount = mProblem->getStateCount();
+	for (int i = 0; i < stateCount; ++i) {
+		delete mStates[i];
+	}
+
+	delete mStates;
 }
 
 /*void RealBlock::afterCreate(int problemType, int solverType, double aTol, double rTol) {
