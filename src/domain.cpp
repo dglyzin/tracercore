@@ -1215,8 +1215,12 @@ void Domain::createNumericalMethod() {
 }
 
 void Domain::createProblem() {
-	//mProblem = new OrdinaryProblem();
-	mProblem = new DelayProblem(2, 10);
+	mProblem = new OrdinaryProblem();
+	/*double* delayValue = new double[2];
+	delayValue[0] = 0.005;
+	delayValue[1] = 1.007;
+	mProblem = new DelayProblem(200, 2, delayValue);
+	delete delayValue;*/
 }
 
 void Domain::blockAfterCreate() {
