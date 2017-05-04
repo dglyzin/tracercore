@@ -84,5 +84,5 @@ double Euler::computeStepError(ProcessingUnit* pu, double* state, double** kStor
 
 void Euler::computeDenseOutput(ProcessingUnit* pu, double* state, double** kStorages, double** commonTempStorages,
 		double timeStep, double theta, double* result, int size) {
-	pu->multiplyArrayByNumberAndSum(result, state, theta * timeStep, kStorages[K1], size);
+	pu->multiplyArrayByNumberAndSum(result, kStorages[K1], theta * timeStep, state, size);
 }
