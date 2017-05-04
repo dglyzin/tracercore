@@ -52,7 +52,7 @@ double* Euler::getStorageSource(double* state, double** kStorages, double** comm
 
 double Euler::getStageTimeStepCoefficient(int stageNumber) {
 	// TODO: точно?
-	return 0.0;
+	return 1.0;
 }
 
 void Euler::prepareArgument(ProcessingUnit* pu, double* state, double** kStorages, double** commonTempStorages,
