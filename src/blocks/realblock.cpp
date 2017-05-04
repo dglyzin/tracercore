@@ -60,7 +60,7 @@ RealBlock::RealBlock(int _nodeNumber, int _dimension, int _xCount, int _yCount, 
 	}
 
 	int stateCount = mProblem->getStateCount();
-	mStates = new State* [stateCount];
+	mStates = new State*[stateCount];
 	for (int i = 0; i < stateCount; ++i) {
 		mStates[i] = new State(pu, mNumericalMethod, mCommonTempStorages, elementCount);
 	}
@@ -98,11 +98,11 @@ RealBlock::~RealBlock() {
 }
 
 /*void RealBlock::afterCreate(int problemType, int solverType, double aTol, double rTol) {
-	problem = createProblem(problemType, solverType, aTol, rTol);
+ problem = createProblem(problemType, solverType, aTol, rTol);
 
-	double* state = problem->getCurrentStatePointer();
-	pu->initState(state, mUserInitFuncs, mInitFuncNumber, blockNumber, 0.0);
-}*/
+ double* state = problem->getCurrentStatePointer();
+ pu->initState(state, mUserInitFuncs, mInitFuncNumber, blockNumber, 0.0);
+ }*/
 
 double* RealBlock::getNewBlockBorder(Block* neighbor, int borderLength) {
 	if ((nodeNumber == neighbor->getNodeNumber()) && neighbor->isProcessingUnitGPU()) {
@@ -121,20 +121,20 @@ double* RealBlock::getNewExternalBorder(Block* neighbor, int borderLength, doubl
 }
 
 /*ProblemType* RealBlock::createProblem(int problemType, int solverType, double aTol, double rTol) {
-	int elementCount = getGridElementCount();
+ int elementCount = getGridElementCount();
 
-	switch (problemType) {
-		case ORDINARY:
-			return new Ordinary(pu, solverType, elementCount, aTol, rTol);
+ switch (problemType) {
+ case ORDINARY:
+ return new Ordinary(pu, solverType, elementCount, aTol, rTol);
 
-		case DELAY:
-			printf("\nDELAY PROBLEM TYPE NOT READY!!!\n");
-			return NULL;
+ case DELAY:
+ printf("\nDELAY PROBLEM TYPE NOT READY!!!\n");
+ return NULL;
 
-		default:
-			return new Ordinary(pu, solverType, elementCount, aTol, rTol);
-	}
-}*/
+ default:
+ return new Ordinary(pu, solverType, elementCount, aTol, rTol);
+ }
+ }*/
 
 void RealBlock::computeStageBorder(int stage, double time) {
 	pu->computeBorder(mUserFuncs, mCompFuncNumber, mResult, mSource, time, mParams, externalBorder, zCount, yCount,
@@ -143,7 +143,7 @@ void RealBlock::computeStageBorder(int stage, double time) {
 
 void RealBlock::computeStageCenter(int stage, double time) {
 	/*double* result = problem->getResult(stage);
-	double** source = problem->getSource(stage);*/
+	 double** source = problem->getSource(stage);*/
 	//printf("\n\n###\n\n");
 	//printf("\nresult %p\nsource 0 %p\n", mResult, mSource[0]);
 	pu->computeCenter(mUserFuncs, mCompFuncNumber, mResult, mSource, time, mParams, externalBorder, zCount, yCount,
@@ -205,9 +205,9 @@ void RealBlock::prepareStageSourceResult(int stage, double timeStep, double curr
 
 	mResult = mStates[currentStateNumber]->getResultStorage(stage);/*problem->getResult(stage);*/
 	/*TODO: Возможные проблемы при работе с видеокартой.
-	Нельзя вносить изменение в mSource[i] через CPU, необходима специальная функция в ProcessingUnit*/
-
+	 Нельзя вносить изменение в mSource[i] через CPU, необходима специальная функция в ProcessingUnit*/
 	mSource[0] = mStates[currentStateNumber]->getSourceStorage(stage);/*problem->getSource(stage);*/
+
 	//TODO: Унификация цикла с конструктором класса. sourseLength или иной вариант
 	for (int i = 0; i < delayCount; ++i) {
 		/*TODO: Реализовать в классе Problem метод, который выясняет требуется ли "плотный" вывод или
@@ -219,12 +219,11 @@ void RealBlock::prepareStageSourceResult(int stage, double timeStep, double curr
 			 */
 			// TODO: Вычислять в проблеме. Доставать из проблемы
 			double theta = mProblem->getTethaForDelay(i);
-			mStates[delayStateNumber]->computeDenseOutput(timeStep, theta, mSource[1+i]);
-		}
-		else {
-			/*TODO:
-			 * Функция ProcessingUnit, которая дает значения в прошлом, если еще не нужен плотный вывод
-			 */
+			mStates[delayStateNumber]->computeDenseOutput(timeStep, theta, mSource[1 + i]);
+		} else {
+			// TODO: Создать ПРАВИЛЬНЫЕ функции для работы с состояниями в прошлом
+			pu->delayFunction(mSource[1 + i], mUserInitFuncs, mInitFuncNumber, blockNumber,
+					currentTime - mProblem->getDelay(i));
 		}
 	}
 }
@@ -268,7 +267,7 @@ void RealBlock::confirmStep(double timeStep) {
 	int currentStateNumber = mProblem->getCurrentStateNumber();
 	int nextStateNumber = mProblem->getNextStateNumber();
 
-	mStates[currentStateNumber]->confirmStep(timeStep, mStates[nextStateNumber], (ISmartCopy*)mProblem);
+	mStates[currentStateNumber]->confirmStep(timeStep, mStates[nextStateNumber], (ISmartCopy*) mProblem);
 }
 
 void RealBlock::rejectStep(double timeStep) {
@@ -361,7 +360,7 @@ void RealBlock::getCurrentState(double* result) {
 void RealBlock::saveStateForDraw(char* path) {
 	//mProblem->saveStateForDraw(path);
 	/*int currentStateNumber = mProblem->getCurrentStateNumber();
-	mStates[currentStateNumber]->saveGeneralStorage(path);*/
+	 mStates[currentStateNumber]->saveGeneralStorage(path);*/
 	mProblem->savaDataForDraw(path, mStates);
 }
 
@@ -380,10 +379,10 @@ void RealBlock::loadState(ifstream& in) {
 
 bool RealBlock::isNan() {
 	/*if (problem->isNan()) {
-		printf("\nBlock #%d, Node number = %d: NAN VALUE!\n", blockNumber, nodeNumber);
-		return true;
-	}
-	return false;*/
+	 printf("\nBlock #%d, Node number = %d: NAN VALUE!\n", blockNumber, nodeNumber);
+	 return true;
+	 }
+	 return false;*/
 	int currentStateNumber = mProblem->getCurrentStateNumber();
 	if (mStates[currentStateNumber]->isNan()) {
 		printf("\nBlock #%d, Node number = %d: NAN VALUE!\n", blockNumber, nodeNumber);
