@@ -173,24 +173,24 @@ void RealBlock::prepareStageData(int stage) {
 
 		switch (sendBorderInfo[index + SIDE]) {
 			case LEFT:
-				pu->prepareBorder(result, source, mStart, mStop, nStart, nStop, 0, haloSize, yCount, xCount, cellSize);
+				pu->prepareBorder(result, source, mStart, mStop, nStart, nStop, 0 + 1, haloSize + 1, yCount, xCount, cellSize);
 				break;
 			case RIGHT:
-				pu->prepareBorder(result, source, mStart, mStop, nStart, nStop, xCount - haloSize, xCount, yCount,
+				pu->prepareBorder(result, source, mStart, mStop, nStart, nStop, xCount - haloSize - 1, xCount - 1, yCount,
 						xCount, cellSize);
 				break;
 			case FRONT:
-				pu->prepareBorder(result, source, mStart, mStop, 0, haloSize, nStart, nStop, yCount, xCount, cellSize);
+				pu->prepareBorder(result, source, mStart, mStop, 0 + 1, haloSize + 1, nStart, nStop, yCount, xCount, cellSize);
 				break;
 			case BACK:
-				pu->prepareBorder(result, source, mStart, mStop, yCount - haloSize, yCount, nStart, nStop, yCount,
+				pu->prepareBorder(result, source, mStart, mStop, yCount - haloSize - 1, yCount - 1, nStart, nStop, yCount,
 						xCount, cellSize);
 				break;
 			case TOP:
-				pu->prepareBorder(result, source, 0, haloSize, mStart, mStop, nStart, nStop, yCount, xCount, cellSize);
+				pu->prepareBorder(result, source, 0 + 1, haloSize + 1, mStart, mStop, nStart, nStop, yCount, xCount, cellSize);
 				break;
 			case BOTTOM:
-				pu->prepareBorder(result, source, zCount - haloSize, zCount, mStart, mStop, nStart, nStop, yCount,
+				pu->prepareBorder(result, source, zCount - haloSize - 1, zCount - 1, mStart, mStop, nStart, nStop, yCount,
 						xCount, cellSize);
 				break;
 			default:
