@@ -15,8 +15,6 @@ public:
 	OrdinaryProblem();
 	virtual ~OrdinaryProblem();
 
-	int getStateNumberResult(double currentTime);
-	int getStateNumberSource(double currentTime);
 	int getCurrentStateNumber();
 	int getNextStateNumber();
 
