@@ -26,14 +26,14 @@ State::State(ProcessingUnit* _pu, NumericalMethod* _method, double** _blockCommo
 }
 
 State::~State() {
-	pu->deleteDeviceSpecificArray(mState);
+	/*pu->deleteDeviceSpecificArray(mState);
 
 	int kStorageCount = method->getKStorageCount();
 	for (int i = 0; i < kStorageCount; ++i) {
 		pu->deleteDeviceSpecificArray(mKStorages[i]);
 	}
 
-	pu->deleteDeviceSpecificArray(mKStorages);
+	pu->deleteDeviceSpecificArray(mKStorages);*/
 }
 
 /*double** State::getKStorages() {
