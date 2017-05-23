@@ -15,8 +15,6 @@ public:
 	DelayProblem(int _statesCount, int _delayCount, double* _delayValue);
 	virtual ~DelayProblem();
 
-	int getStateNumberResult(double currentTime);
-	int getStateNumberSource(double currentTime);
 	int getCurrentStateNumber();
 	int getNextStateNumber();
 
@@ -44,9 +42,6 @@ private:
 	double* delayValue;
 
 	int statesCount;
-
-	int stateNumberResult;
-	int stateNumberSource;
 
 	int* delayStatesNumber;
 	double* delayTheta;

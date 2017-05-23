@@ -17,8 +17,6 @@ public:
 	Problem();
 	virtual ~Problem();
 
-	virtual int getStateNumberResult(double currentTime) = 0;
-	virtual int getStateNumberSource(double currentTime) = 0;
 	virtual int getCurrentStateNumber() = 0;
 	virtual int getNextStateNumber() = 0;
 

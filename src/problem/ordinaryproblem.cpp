@@ -13,14 +13,6 @@ OrdinaryProblem::OrdinaryProblem() {
 OrdinaryProblem::~OrdinaryProblem() {
 }
 
-int OrdinaryProblem::getStateNumberResult(double currentTime) {
-	return 0;
-}
-
-int OrdinaryProblem::getStateNumberSource(double currentTime) {
-	return 0;
-}
-
 int OrdinaryProblem::getCurrentStateNumber() {
 	return 0;
 }

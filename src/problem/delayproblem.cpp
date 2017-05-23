@@ -8,9 +8,6 @@
 #include "delayproblem.h"
 
 DelayProblem::DelayProblem(int _statesCount, int _delayCount, double* _delayValue) {
-	stateNumberResult = 1;
-	stateNumberSource = 0;
-
 	statesCount = _statesCount;
 	delayCount = _delayCount;
 
@@ -71,14 +68,6 @@ void DelayProblem::computeTethaForDelay(double currentTime, double timeStep, dou
 	delayTheta[index] = timeShift / denseTimeStep;
 }
 
-int DelayProblem::getStateNumberResult(double currentTime) {
-	return stateNumberResult;
-}
-
-int DelayProblem::getStateNumberSource(double currentTime) {
-	return stateNumberSource;
-}
-
 int DelayProblem::getCurrentStateNumber() {
 	return currentStateNumber;
 }
@@ -109,8 +98,6 @@ void DelayProblem::computeStageData(double currentTime, double timeStep, double 
 
 void DelayProblem::confirmStep(double currentTime) {
 	timeCountdown[stateNumberResult] = currentTime;
-	stateNumberResult = (stateNumberResult + 1) % statesCount;
-	stateNumberSource = (stateNumberSource + 1) % statesCount;
 	currentStateNumber = (currentStateNumber + 1) % statesCount;
 }
 
