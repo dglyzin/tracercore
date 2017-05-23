@@ -27,7 +27,9 @@ public:
 	virtual int getDelayCount() = 0;
 	virtual double getDelay(int delayNumber) = 0;
 
-	virtual void computeStageData(double currentTime, double timeStep, double numericalMethodStagecoefficient) = 0;
+	virtual void computeStageData(double currentTime, double timeStep, double numericalMethodStageCoefficient) = 0;
+
+	virtual void confirmStep(double currentTime) = 0;
 
 	virtual int getStateNumberForDelay(int delayNumber) = 0;
 	virtual double getTethaForDelay(int delayNumber) = 0;

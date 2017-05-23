@@ -22,7 +22,16 @@ DelayProblem::DelayProblem(int _statesCount, int _delayCount, double* _delayValu
 	delayStatesNumber = new int[delayCount];
 	delayTheta = new double[delayCount];
 
+	for (int i = 0; i < delayCount; ++i) {
+		delayStatesNumber[i] = 0;
+		delayTheta[i] = 0.0;
+	}
+
 	timeCountdown = new double[statesCount];
+
+	for (int i = 0; i < statesCount; ++i) {
+		timeCountdown[i] = 0.0;
+	}
 
 	currentStateNumber = 0;
 }
@@ -35,12 +44,23 @@ DelayProblem::~DelayProblem() {
 }
 
 void DelayProblem::computeStateNumberForDelay(double currentTime, double timeStep, double requiredTime, int index) {
+	/*printf("\n\n************\n");
+	for (int i = 0; i < statesCount; ++i) {
+		printf("%.5f ", timeCountdown[i]);
+		if ((i + 1) % 10 == 0)
+			printf("\n");
+	}
+	printf("\n************\n");*/
+
 	int stateNumber = delayStatesNumber[index];
 	while (!(timeCountdown[(stateNumber + 1) % statesCount] > requiredTime)) {
 		stateNumber = (stateNumber + 1) % statesCount;
 	}
 
 	delayStatesNumber[index] = stateNumber;
+
+	/*printf("delay value: %f\ntime countdown: %f\nnew state index: %d\ncurrent time: %f\n", delayValue[index],
+			timeCountdown[stateNumber], delayStatesNumber[index], currentTime);*/
 }
 
 void DelayProblem::computeTethaForDelay(double currentTime, double timeStep, double requiredTime, int index) {
@@ -79,13 +99,19 @@ double DelayProblem::getDelay(int delayNumber) {
 	return delayValue[delayNumber];
 }
 
-void DelayProblem::computeStageData(double currentTime, double timeStep, double numericalMethodStagecoefficient) {
+void DelayProblem::computeStageData(double currentTime, double timeStep, double numericalMethodStageCoefficient) {
 	for (int i = 0; i < delayCount; ++i) {
-		double requiredTime = currentTime + numericalMethodStagecoefficient * timeStep - delayValue[i];
-
+		double requiredTime = currentTime + numericalMethodStageCoefficient * timeStep - delayValue[i];
 		computeStateNumberForDelay(currentTime, timeStep, requiredTime, i);
 		computeTethaForDelay(currentTime, timeStep, requiredTime, i);
 	}
+}
+
+void DelayProblem::confirmStep(double currentTime) {
+	timeCountdown[stateNumberResult] = currentTime;
+	stateNumberResult = (stateNumberResult + 1) % statesCount;
+	stateNumberSource = (stateNumberSource + 1) % statesCount;
+	currentStateNumber = (currentStateNumber + 1) % statesCount;
 }
 
 int DelayProblem::getStateNumberForDelay(int delayNumber) {

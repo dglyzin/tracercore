@@ -212,7 +212,7 @@ void RealBlock::prepareStageSourceResult(int stage, double timeStep, double curr
 	for (int i = 0; i < delayCount; ++i) {
 		/*TODO: Реализовать в классе Problem метод, который выясняет требуется ли "плотный" вывод или
 		 * необходимо воспользоваться готовыми функциями от пользователя, которые дают конкретные значения в прошлом*/
-		if (true) {
+		if (mProblem->getDelay(i) < currentTime) {
 			int delayStateNumber = mProblem->getStateNumberForDelay(i);
 			/* TODO: Расчет "плотного" вывода должен осуществляться с учетом стадии
 			 * но сами расчеты ведуться от mState
@@ -220,11 +220,15 @@ void RealBlock::prepareStageSourceResult(int stage, double timeStep, double curr
 			// TODO: Вычислять в проблеме. Доставать из проблемы
 			double theta = mProblem->getTethaForDelay(i);
 			mStates[delayStateNumber]->computeDenseOutput(timeStep, theta, mSource[1 + i]);
+			//pu->printArray(mSource[1 + i], 1, 1, 11, 1);
 		} else {
 			// TODO: Создать ПРАВИЛЬНЫЕ функции для работы с состояниями в прошлом
 			pu->delayFunction(mSource[1 + i], mUserInitFuncs, mInitFuncNumber, blockNumber,
 					currentTime - mProblem->getDelay(i));
 		}
+
+		/*pu->printArray(mSource[0], 1, 1, 11, 1);
+		pu->printArray(mSource[1 + i], 1, 1, 11, 1);*/
 	}
 }
 

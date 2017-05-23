@@ -25,7 +25,9 @@ public:
 	int getDelayCount();
 	double getDelay(int delayNumber);
 
-	void computeStageData(double currentTime, double timeStep, double numericalMethodStagecoefficient);
+	void computeStageData(double currentTime, double timeStep, double numericalMethodStageCoefficient);
+
+	void confirmStep(double currentTime);
 
 	int getStateNumberForDelay(int delayNumber);
 	double getTethaForDelay(int delayNumber);

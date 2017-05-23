@@ -311,9 +311,9 @@ void Domain::nextStep() {
 			return;
 		}
 
+		currentTime += mTimeStep;
 		confirmStep();
 		mAcceptedStepCount++;
-		currentTime += mTimeStep;
 	}
 	else {
 		rejectStep();
@@ -452,6 +452,7 @@ void Domain::confirmStep() {
 	for (int i = 0; i < mBlockCount; ++i) {
 		mBlocks[i]->confirmStep(mTimeStep);
 	}
+	mProblem->confirmStep(currentTime);
 }
 
 void Domain::rejectStep() {
@@ -1216,10 +1217,9 @@ void Domain::createNumericalMethod() {
 
 void Domain::createProblem() {
 	mProblem = new OrdinaryProblem();
-	/*double* delayValue = new double[2];
-	delayValue[0] = 0.005;
-	delayValue[1] = 1.007;
-	mProblem = new DelayProblem(200, 2, delayValue);
+	/*double* delayValue = new double[1];
+	delayValue[0] = 1.0;
+	mProblem = new DelayProblem(101000, 1, delayValue);
 	delete delayValue;*/
 }
 
