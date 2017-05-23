@@ -73,9 +73,11 @@ RealBlock::RealBlock(int _nodeNumber, int _dimension, int _xCount, int _yCount, 
 
 	int sourceLength = 1 + mProblem->getDelayCount();
 	mSource = pu->newDoublePointerArray(sourceLength);
-	mSource[0] = NULL;
+	//mSource[0] = NULL;
+	pu->insertValueIntoPonterArray(mSource, NULL, 0);
 	for (int i = 1; i < sourceLength; ++i) {
-		mSource[i] = pu->newDoubleArray(elementCount);
+		//mSource[i] = pu->newDoubleArray(elementCount);
+		pu->insertValueIntoPonterArray(mSource, pu->newDoubleArray(elementCount), i);
 	}
 
 	mResult = NULL;
@@ -206,7 +208,8 @@ void RealBlock::prepareStageSourceResult(int stage, double timeStep, double curr
 	mResult = mStates[currentStateNumber]->getResultStorage(stage);/*problem->getResult(stage);*/
 	/*TODO: Возможные проблемы при работе с видеокартой.
 	 Нельзя вносить изменение в mSource[i] через CPU, необходима специальная функция в ProcessingUnit*/
-	mSource[0] = mStates[currentStateNumber]->getSourceStorage(stage);/*problem->getSource(stage);*/
+	//mSource[0] = mStates[currentStateNumber]->getSourceStorage(stage);/*problem->getSource(stage);*/
+	pu->insertValueIntoPonterArray(mSource, mStates[currentStateNumber]->getSourceStorage(stage), 0);
 
 	//TODO: Унификация цикла с конструктором класса. sourseLength или иной вариант
 	for (int i = 0; i < delayCount; ++i) {
