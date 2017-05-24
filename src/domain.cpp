@@ -311,8 +311,8 @@ void Domain::nextStep() {
 			return;
 		}
 
-		currentTime += mTimeStep;
 		confirmStep();
+		currentTime += mTimeStep;
 		mAcceptedStepCount++;
 	}
 	else {
@@ -1219,7 +1219,7 @@ void Domain::createProblem() {
 	//mProblem = new OrdinaryProblem();
 	double* delayValue = new double[1];
 	delayValue[0] = 1.0;
-	mProblem = new DelayProblem(101000, 1, delayValue);
+	mProblem = new DelayProblem(1100, 1, delayValue);
 	delete delayValue;
 }
 
