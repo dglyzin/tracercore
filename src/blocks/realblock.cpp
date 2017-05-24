@@ -223,6 +223,7 @@ void RealBlock::prepareStageSourceResult(int stage, double timeStep, double curr
 			// TODO: Вычислять в проблеме. Доставать из проблемы
 			double theta = mProblem->getTethaForDelay(i);
 			mStates[delayStateNumber]->computeDenseOutput(timeStep, theta, mSource[1 + i]);
+			//printf("delay #%d, delay state #%d, theta: %f, current time: %f\n", i, delayStateNumber, theta, currentTime);
 			//pu->printArray(mSource[1 + i], 1, 1, 11, 1);
 		} else {
 			// TODO: Создать ПРАВИЛЬНЫЕ функции для работы с состояниями в прошлом
