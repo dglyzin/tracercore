@@ -51,6 +51,8 @@ public:
 	void addNumberToArray(double* result, double* arg, double number, int size);
 	void multiplyArraysElementwise(double* result, double* arg1, double* arg2, int size);
 
+	void insertValueIntoPonterArray(double** array, double* value, int index);
+
 	bool isNan(double* array, int size);
 
 protected:

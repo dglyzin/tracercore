@@ -113,6 +113,11 @@ void GPU::multiplyArraysElementwise(double* result, double* arg1, double* arg2, 
 	multiplyArraysElementwiseGPU(result, arg1, arg2, size);
 }
 
+void GPU::insertValueIntoPonterArray(double** array, double* value, int index) {
+	cudaSetDevice(deviceNumber);
+	cudaMemcpy(array + index, value, 1 * sizeof(double*), cudaMemcpyHostToDevice);
+}
+
 bool GPU::isNan(double* array, int size) {
 	cudaSetDevice(deviceNumber);
 	return isNanGPU(array, size);

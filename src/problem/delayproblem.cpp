@@ -97,7 +97,7 @@ void DelayProblem::computeStageData(double currentTime, double timeStep, double 
 }
 
 void DelayProblem::confirmStep(double currentTime) {
-	timeCountdown[stateNumberResult] = currentTime;
+	timeCountdown[currentStateNumber] = currentTime;
 	currentStateNumber = (currentStateNumber + 1) % statesCount;
 }
 

@@ -196,6 +196,10 @@ void CPU::multiplyArraysElementwise(double* result, double* arg1, double* arg2, 
 	}
 }
 
+void CPU::insertValueIntoPonterArray(double** array, double* value, int index) {
+	array[index] = value;
+}
+
 bool CPU::isNan(double* array, int size) {
 	/*for (int i = 0; i < size; ++i) {
 	 if (isnan(array[i]))
