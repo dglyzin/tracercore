@@ -42,12 +42,12 @@ DelayProblem::~DelayProblem() {
 
 void DelayProblem::computeStateNumberForDelay(double currentTime, double timeStep, double requiredTime, int index) {
 	/*printf("\n\n************\n");
-	for (int i = 0; i < statesCount; ++i) {
-		printf("%.5f ", timeCountdown[i]);
-		if ((i + 1) % 10 == 0)
-			printf("\n");
-	}
-	printf("\n************\n");*/
+	 for (int i = 0; i < statesCount; ++i) {
+	 printf("%.5f ", timeCountdown[i]);
+	 if ((i + 1) % 10 == 0)
+	 printf("\n");
+	 }
+	 printf("\n************\n");*/
 
 	int stateNumber = delayStatesNumber[index];
 	while (!(timeCountdown[(stateNumber + 1) % statesCount] > requiredTime)) {
@@ -57,12 +57,12 @@ void DelayProblem::computeStateNumberForDelay(double currentTime, double timeSte
 	delayStatesNumber[index] = stateNumber;
 
 	/*printf("delay value: %f\ntime countdown: %f\nnew state index: %d\ncurrent time: %f\n", delayValue[index],
-			timeCountdown[stateNumber], delayStatesNumber[index], currentTime);*/
+	 timeCountdown[stateNumber], delayStatesNumber[index], currentTime);*/
 }
 
 void DelayProblem::computeTethaForDelay(double currentTime, double timeStep, double requiredTime, int index) {
-	double denseTimeStep = timeCountdown[delayStatesNumber[index]]
-			- timeCountdown[(delayStatesNumber[index] + 1) % statesCount];
+	double denseTimeStep = timeCountdown[(delayStatesNumber[index] + 1) % statesCount]
+			- timeCountdown[delayStatesNumber[index]];
 	double timeShift = requiredTime - timeCountdown[delayStatesNumber[index]];
 
 	delayTheta[index] = timeShift / denseTimeStep;
@@ -93,6 +93,11 @@ void DelayProblem::computeStageData(double currentTime, double timeStep, double 
 		double requiredTime = currentTime + numericalMethodStageCoefficient * timeStep - delayValue[i];
 		computeStateNumberForDelay(currentTime, timeStep, requiredTime, i);
 		computeTethaForDelay(currentTime, timeStep, requiredTime, i);
+		/*if (requiredTime > 0)
+			printf("rt: %f, theta: %f, ct: %f, tc: %f,  sn: %d\n", requiredTime, delayTheta[i], currentTime,
+					timeCountdown[delayStatesNumber[i]], delayStatesNumber[i]);*/
+		if(delayTheta[i] > 1 || delayTheta[i] < 0)
+			printf("***\n");
 	}
 }
 
