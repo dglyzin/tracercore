@@ -96,8 +96,8 @@ void DelayProblem::computeStageData(double currentTime, double timeStep, double 
 		/*if (requiredTime > 0)
 			printf("rt: %f, theta: %f, ct: %f, tc: %f,  sn: %d\n", requiredTime, delayTheta[i], currentTime,
 					timeCountdown[delayStatesNumber[i]], delayStatesNumber[i]);*/
-		if(delayTheta[i] > 1 || delayTheta[i] < 0)
-			printf("***\n");
+		/*if(delayTheta[i] > 1 || delayTheta[i] < 0)
+			printf("***\n");*/
 	}
 }
 
