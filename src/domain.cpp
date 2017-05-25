@@ -47,7 +47,6 @@ Domain::Domain(int _world_rank, int _world_size, char* inputFile, char* binaryFi
 
 	mGpuCount = GPU_COUNT;
 
-	printwcts("PROBLEM TYPE ALWAYS = ORDINARY!!!\n", LL_DEBUG);
 	mProblemType = ORDINARY;
 
 	readFromFile(inputFile);
@@ -561,7 +560,14 @@ void Domain::readFromFile(char* path) {
 	readSolverTolerance(in);
 
 	createNumericalMethod();
-	createProblem();
+
+	mProblemType = ORDINARY;
+	int stateCount = 11000;
+	int delayCount  = 1;
+	double* delayValue = new double[1];
+	delayValue[0] = 1.0;
+	createProblem(stateCount, delayCount, delayValue);
+	delete delayValue;
 
 	createBlock(in);
 
@@ -1215,12 +1221,18 @@ void Domain::createNumericalMethod() {
 	}
 }
 
-void Domain::createProblem() {
-	//mProblem = new OrdinaryProblem();
-	double* delayValue = new double[1];
-	delayValue[0] = 1.0;
-	mProblem = new DelayProblem(11000, 1, delayValue);
-	delete delayValue;
+void Domain::createProblem(int stateCount, int delayCount, double* delayValue) {
+	if(mProblemType == ORDINARY) {
+		mProblem = new OrdinaryProblem();
+		return;
+	}
+
+	if(mProblemType == DELAY) {
+		mProblem = new DelayProblem(stateCount, delayCount, delayValue);
+		return;
+	}
+
+	mProblem = new OrdinaryProblem();
 }
 
 void Domain::blockAfterCreate() {

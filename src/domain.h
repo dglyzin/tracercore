@@ -292,7 +292,7 @@ private:
 	void readPlots(std::ifstream& in);
 
 	void createNumericalMethod();
-	void createProblem();
+	void createProblem(int stateCount, int delayCount, double* delayValue);
 
 	void blockAfterCreate();
 
