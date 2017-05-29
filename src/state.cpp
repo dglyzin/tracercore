@@ -19,7 +19,8 @@ State::State(ProcessingUnit* _pu, NumericalMethod* _method, double** _blockCommo
 
 	int kStorageCount = method->getKStorageCount();
 
-	mKStorages = pu->newDoublePointerArray(kStorageCount);
+	//mKStorages = pu->newDoublePointerArray(kStorageCount);
+	mKStorages = new double* [kStorageCount];
 	for (int i = 0; i < kStorageCount; ++i) {
 		mKStorages[i] = pu->newDoubleArray(mElementCount);
 	}
@@ -34,6 +35,7 @@ State::~State() {
 	}
 
 	pu->deleteDeviceSpecificArray(mKStorages);*/
+	delete mKStorages;
 }
 
 /*double** State::getKStorages() {
