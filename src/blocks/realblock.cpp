@@ -68,9 +68,10 @@ RealBlock::RealBlock(int _nodeNumber, int _dimension, int _xCount, int _yCount, 
 
 	//TODO: getSourceStorage(0) заменить 0, возможно, нужна специальная функция
 	//double* state = mStates[mProblem->getCurrentStateNumber()]->getSourceStorage(0);
-	double* state = mStates[mProblem->getCurrentStateNumber()]->getState();
+	//double* state = mStates[mProblem->getCurrentStateNumber()]->getState();
 	//printf("\n%p %d\n", state, nodeCount);
-	pu->initState(state, mUserInitFuncs, mInitFuncNumber, blockNumber, 0.0);
+	//pu->initState(state, mUserInitFuncs, mInitFuncNumber, blockNumber, 0.0);
+	mStates[mProblem->getCurrentStateNumber()]->init(mUserInitFuncs, mInitFuncNumber, blockNumber, 0.0);
 
 	int delayCount = mProblem->getDelayCount();
 	int sourceLength = 1 + delayCount;
