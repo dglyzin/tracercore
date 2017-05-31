@@ -72,13 +72,17 @@ RealBlock::RealBlock(int _nodeNumber, int _dimension, int _xCount, int _yCount, 
 	//printf("\n%p %d\n", state, nodeCount);
 	pu->initState(state, mUserInitFuncs, mInitFuncNumber, blockNumber, 0.0);
 
-	int sourceLength = 1 + mProblem->getDelayCount();
+	int delayCount = mProblem->getDelayCount();
+	int sourceLength = 1 + delayCount;
 	mSource = pu->newDoublePointerArray(sourceLength);
+	mDelayArrays = new double* [delayCount];
 	//mSource[0] = NULL;
 	//pu->insertValueIntoPonterArray(mSource, NULL, 0);
-	for (int i = 1; i < sourceLength; ++i) {
+	for (int i = 0; i < delayCount; ++i) {
 		//mSource[i] = pu->newDoubleArray(elementCount);
-		pu->insertValueIntoPonterArray(mSource, pu->newDoubleArray(elementCount), i);
+		double* delayArray = pu->newDoubleArray(elementCount);
+		mDelayArrays[i] = delayArray;
+		pu->insertValueIntoPonterArray(mSource, delayArray, i+1);
 	}
 
 	mResult = NULL;
@@ -103,6 +107,8 @@ RealBlock::~RealBlock() {
 
 	if(blockBorder)
 		delete blockBorder;
+
+	delete mDelayArrays;
 }
 
 /*void RealBlock::afterCreate(int problemType, int solverType, double aTol, double rTol) {
@@ -228,12 +234,12 @@ void RealBlock::prepareStageSourceResult(int stage, double timeStep, double curr
 			 */
 			// TODO: Вычислять в проблеме. Доставать из проблемы
 			double theta = mProblem->getTethaForDelay(i);
-			mStates[delayStateNumber]->computeDenseOutput(timeStep, theta, mSource[1 + i]);
+			mStates[delayStateNumber]->computeDenseOutput(timeStep, theta, /*mSource[1 + i]*/mDelayArrays[i]);
 			//printf("delay #%d, delay state #%d, theta: %f, current time: %f\n", i, delayStateNumber, theta, currentTime);
 			//pu->printArray(mSource[1 + i], 1, 1, 11, 1);
 		} else {
 			// TODO: Создать ПРАВИЛЬНЫЕ функции для работы с состояниями в прошлом
-			pu->delayFunction(mSource[1 + i], mUserInitFuncs, mInitFuncNumber, blockNumber,
+			pu->delayFunction(/*mSource[1 + i]*/mDelayArrays[i], mUserInitFuncs, mInitFuncNumber, blockNumber,
 					currentTime - mProblem->getDelay(i));
 		}
 
