@@ -161,4 +161,5 @@ double RungeKutta4::computeStepError(ProcessingUnit* pu, double* state, double**
 
 void RungeKutta4::computeDenseOutput(ProcessingUnit* pu, double* state, double** kStorages, double** commonTempStorages,
 		double timeStep, double theta, double* result, int size) {
+	pu->copyArray(state, result, size);
 }
