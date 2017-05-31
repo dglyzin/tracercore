@@ -20,7 +20,7 @@ State::State(ProcessingUnit* _pu, NumericalMethod* _method, double** _blockCommo
 	int kStorageCount = method->getKStorageCount();
 
 	//mKStorages = pu->newDoublePointerArray(kStorageCount);
-	mKStorages = new double* [kStorageCount];
+	mKStorages = new double*[kStorageCount];
 	for (int i = 0; i < kStorageCount; ++i) {
 		mKStorages[i] = pu->newDoubleArray(mElementCount);
 	}
@@ -29,12 +29,12 @@ State::State(ProcessingUnit* _pu, NumericalMethod* _method, double** _blockCommo
 State::~State() {
 	/*pu->deleteDeviceSpecificArray(mState);
 
-	int kStorageCount = method->getKStorageCount();
-	for (int i = 0; i < kStorageCount; ++i) {
-		pu->deleteDeviceSpecificArray(mKStorages[i]);
-	}
+	 int kStorageCount = method->getKStorageCount();
+	 for (int i = 0; i < kStorageCount; ++i) {
+	 pu->deleteDeviceSpecificArray(mKStorages[i]);
+	 }
 
-	pu->deleteDeviceSpecificArray(mKStorages);*/
+	 pu->deleteDeviceSpecificArray(mKStorages);*/
 	delete mKStorages;
 }
 
@@ -48,6 +48,9 @@ State::~State() {
  else
  return NULL;
  }*/
+void State::init(initfunc_fill_ptr_t* userInitFuncs, unsigned short int* initFuncNumber, int blockNumber, double time) {
+	pu->initState(mState, userInitFuncs, initFuncNumber, blockNumber, 0.0);
+}
 
 double* State::getResultStorage(int stageNumber) {
 	//return mStorages[method->getStorageNumberResult(stageNumber)];
@@ -104,7 +107,8 @@ void State::saveAllStorage(char* path) {
 void State::saveStateForDrawDenseOutput(char* path, double timeStep, double theta) {
 	double* result = pu->newDoubleArray(mElementCount);
 
-	method->computeDenseOutput(pu, mState, mKStorages, mBlockCommonTempStorages, timeStep, theta, result, mElementCount);
+	method->computeDenseOutput(pu, mState, mKStorages, mBlockCommonTempStorages, timeStep, theta, result,
+			mElementCount);
 	pu->saveArray(result, mElementCount, path);
 
 	pu->deleteDeviceSpecificArray(result);
