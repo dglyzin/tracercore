@@ -89,9 +89,9 @@ RealBlock::RealBlock(int _nodeNumber, int _dimension, int _xCount, int _yCount, 
 }
 
 RealBlock::~RealBlock() {
-	int sourceLength = 1 + mProblem->getDelayCount();
-	for (int i = 1; i < sourceLength; ++i) {
-		pu->deleteDeviceSpecificArray(mSource[i]);
+	int delayCount = mProblem->getDelayCount();
+	for (int i = 0; i < delayCount; ++i) {
+		pu->deleteDeviceSpecificArray(mSource[i+1]);
 	}
 
 	pu->deleteDeviceSpecificArray(mSource);
