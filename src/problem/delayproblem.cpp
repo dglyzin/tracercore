@@ -68,6 +68,22 @@ void DelayProblem::computeTethaForDelay(double currentTime, double timeStep, dou
 	delayTheta[index] = timeShift / denseTimeStep;
 }
 
+int DelayProblem::getMaxDelayIndex() {
+	int maxDelayIndex = 0;
+
+	for (int i = 1; i < delayCount; ++i) {
+		if(delayValue[i] > delayValue[maxDelayIndex]) {
+			maxDelayIndex = i;
+		}
+	}
+
+	return maxDelayIndex;
+}
+
+int DelayProblem::getStateNumberMaxDelay() {
+	return delayStatesNumber[getMaxDelayIndex()];
+}
+
 int DelayProblem::getCurrentStateNumber() {
 	return currentStateNumber;
 }
@@ -114,12 +130,53 @@ double DelayProblem::getTethaForDelay(int delayNumber) {
 	return delayTheta[delayNumber];
 }
 
+void DelayProblem::load(std::ifstream& in) {
+	in.read((char*) &currentStateNumber, SIZE_DOUBLE);
+
+	for (int i = 0; i < delayCount; ++i) {
+		in.read((char*) &delayStatesNumber[i], SIZE_INT);
+	}
+
+	int statenumberMaxDelay = getStateNumberMaxDelay();
+
+	for (int i = statenumberMaxDelay; i != currentStateNumber; i = (i + 1) % statesCount) {
+		in.read((char*) &timeCountdown[i], SIZE_DOUBLE);
+	}
+}
+
+void DelayProblem::save(char* path) {
+	ofstream out;
+	out.open(path, ios::binary | ios::app);
+
+	out.write((char*) &currentStateNumber, SIZE_DOUBLE);
+
+	for (int i = 0; i < delayCount; ++i) {
+		out.write((char*) &delayStatesNumber[i], SIZE_INT);
+	}
+
+	int stateNumberMaxDelay = getStateNumberMaxDelay();
+
+	for (int i = stateNumberMaxDelay; i != currentStateNumber; i = (i + 1) % statesCount) {
+		out.write((char*) &timeCountdown[i], SIZE_DOUBLE);
+	}
+
+	out.close();
+}
+
 void DelayProblem::loadData(std::ifstream& in, State** states) {
-	states[getCurrentStateNumber()]->loadAllStorage(in);
+	//states[getCurrentStateNumber()]->loadAllStorage(in);
+	int statenumberMaxDelay = getStateNumberMaxDelay();
+	for (int i = statenumberMaxDelay; i != currentStateNumber; i = (i + 1) % statesCount) {
+		states[i]->loadAllStorage(in);
+	}
 }
 
 void DelayProblem::saveData(char* path, State** states) {
-	states[getCurrentStateNumber()]->saveAllStorage(path);
+	//states[getCurrentStateNumber()]->saveAllStorage(path);
+	int statenumberMaxDelay = getStateNumberMaxDelay();
+	for (int i = statenumberMaxDelay; i != currentStateNumber; i = (i + 1) % statesCount) {
+		states[i]->saveAllStorage(path);
+	}
 }
 
 void DelayProblem::savaDataForDraw(char* path, State** states) {

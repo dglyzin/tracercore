@@ -32,6 +32,9 @@ public:
 	virtual int getStateNumberForDelay(int delayNumber) = 0;
 	virtual double getTethaForDelay(int delayNumber) = 0;
 
+	virtual void load(std::ifstream& in) = 0;
+	virtual void save(char* path) = 0;
+
 	virtual void loadData(std::ifstream& in, State** states) = 0;
 	virtual void saveData(char* path, State** states) = 0;
 	virtual void savaDataForDraw(char* path, State** states) = 0;
