@@ -302,6 +302,7 @@ private:
 	int getMaxStepStorageCount();
 	int getRequiredMemoryOnProcessingUnit(int deviceType, int deviceNumber);
 	void saveGeneralInfo(char* path);
+	void saveProblem(char* path);
 	void saveStateForDrawByBlocks(char* path);
 	void saveStateForLoadByBlocks(char* path);
 	void saveStateForDrawDenseOutputByBlocks(char* path, double theta);

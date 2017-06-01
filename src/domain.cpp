@@ -561,8 +561,8 @@ void Domain::readFromFile(char* path) {
 
 	createNumericalMethod();
 
-	mProblemType = ORDINARY;
-	int stateCount = 11000;
+	mProblemType = DELAY;
+	int stateCount = 101000;
 	int delayCount  = 1;
 	double* delayValue = new double[1];
 	delayValue[0] = 1.0;
@@ -956,6 +956,7 @@ void Domain::saveStateForLoad(char* inputFile) {
 	Utils::getFilePathForLoad(inputFile, saveFile, currentTime);
 
 	saveGeneralInfo(saveFile);
+	saveProblem(saveFile);
 	saveStateForLoadByBlocks(saveFile);
 
 	delete saveFile;
@@ -988,6 +989,12 @@ void Domain::saveGeneralInfo(char* path) {
 		out.write((char*) &mTimeStep, SIZE_DOUBLE);
 
 		out.close();
+	}
+}
+
+void Domain::saveProblem(char* path) {
+	if (mGlobalRank == 0) {
+		mProblem->save(path);
 	}
 }
 
@@ -1033,6 +1040,8 @@ void Domain::loadStateFromFile(char* dataFile) {
 	in.read((char*) &mTimeStep, SIZE_DOUBLE);
 
 	currentTime = fileCurrentTime;
+
+	mProblem->load(in);
 
 	for (int i = 0; i < mBlockCount; ++i) {
 		mBlocks[i]->loadState(in);
@@ -1205,7 +1214,7 @@ void Domain::createInterconnect(ifstream& in) {
 }
 
 void Domain::createNumericalMethod() {
-	switch (mSolverIndex) {
+	/*switch (mSolverIndex) {
 		case EULER:
 			mNumericalMethod = new Euler(mAtol, mRtol);
 			break;
@@ -1218,7 +1227,8 @@ void Domain::createNumericalMethod() {
 		default:
 			mNumericalMethod = new Euler(mAtol, mRtol);
 			break;
-	}
+	}*/
+	mNumericalMethod = new Euler(mAtol, mRtol);
 }
 
 void Domain::createProblem(int stateCount, int delayCount, double* delayValue) {
