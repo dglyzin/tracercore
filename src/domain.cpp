@@ -561,7 +561,7 @@ void Domain::readFromFile(char* path) {
 
 	createNumericalMethod();
 
-	mProblemType = ORDINARY;
+	mProblemType = DELAY;
 	int stateCount = 101000;
 	int delayCount  = 1;
 	double* delayValue = new double[1];
