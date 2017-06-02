@@ -61,6 +61,8 @@ public:
 
 	bool isNan();
 
+	ProcessingUnit* getPU();
+
 	void print();
 };
 

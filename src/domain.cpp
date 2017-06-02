@@ -567,6 +567,9 @@ void Domain::readFromFile(char* path) {
 
 	createInterconnect(in);
 
+	//todo send every left side of interconnect to
+
+
 	readPlots(in);
 
 	for (int i = 0; i < mBlockCount; ++i)
@@ -791,6 +794,55 @@ Block* Domain::readBlock(ifstream& in, int idx, int dimension) {
 }
 
 /*
+ *  исправление границ, принадлежащих склейке
+ *  если мы на блоке-получателе со старшей стороны, нужно получить начальные условия из соседнего блока
+ */
+void Domain::fixInitialBorderValues(int sourceBlock, int destinationBlock, int* offsetSource, int* offsetDestination, int* length, int sourceSide, int destinationSide){
+	int sourceNode = mBlocks[sourceBlock]->getNodeNumber();
+	int destinationNode = mBlocks[destinationBlock]->getNodeNumber();
+
+	if ((destinationSide == RIGHT) or (destinationSide == BACK) or (destinationSide == BOTTOM))
+	if (mWorkerRank == destinationNode){
+		if (sourceNode == destinationNode){
+        //здесь копирование
+			ProcessingUnit* sourcePU = mBlocks[sourceBlock]->getPU();
+
+			//выдели result на pu
+			double* result;
+
+			switch (destinationSide) {
+				case RIGHT:
+					//mBlocks[sourceBlock]->getSubVolume(result, mStart, mStop, nStart, nStop, xCount - haloSize - 1, xCount - 1, yCount,
+					//		xCount, cellSize);
+					break;
+				case BACK:
+					//sourcePU->getSubVolume(result, source, mStart, mStop, yCount - haloSize - 1, yCount - 1, nStart, nStop, yCount,
+					//		xCount, cellSize);
+					break;
+				case BOTTOM:
+					//sourcePU->getSubVolume(result, source, zCount - haloSize - 1, zCount - 1, mStart, mStop, nStart, nStop, yCount,
+					//		xCount, cellSize);
+					break;
+			}
+		}
+		else{
+		//здесь получение от отправителя, т.к. это другой узел
+
+		}
+
+	}
+	else if (mWorkerRank == sourceNode){
+		//мы источник, но не являемся одновременно получаетем
+		//тогда отправка получателю
+
+	}
+
+
+
+
+}
+
+/*
  * Чтение соединения.
  */
 Interconnect* Domain::readConnection(ifstream& in) {
@@ -844,6 +896,8 @@ Interconnect* Domain::readConnection(ifstream& in) {
 	double* destinationData = mBlocks[destinationBlock]->addNewExternalBorder(mBlocks[sourceBlock],
 			Utils::getSide(destinationSide), offsetDestination[0], offsetDestination[1], length[0], length[1],
 			sourceData);
+
+	fixInitialBorderValues(sourceBlock, destinationBlock, offsetSource, offsetDestination, length, Utils::getSide(sourceSide), Utils::getSide(destinationSide));
 
 	int sourceNode = mBlocks[sourceBlock]->getNodeNumber();
 	int destinationNode = mBlocks[destinationBlock]->getNodeNumber();

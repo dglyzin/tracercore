@@ -118,6 +118,10 @@ bool NullBlock::isNan() {
 	return false;
 }
 
+ProcessingUnit* NullBlock::getPU() {
+	return NULL;
+}
+
 void NullBlock::print() {
 	return;
 }

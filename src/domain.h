@@ -312,6 +312,8 @@ private:
 
 	void stopByUser(char* inputFile);
 	void stopByTime(char* inputFile);
+
+	void fixInitialBorderValues(int sourceBlock, int destinationBlock, int* offsetSource, int* offsetDestination, int* length, int sourceSide, int destinationSide);
 };
 
 #endif /* SRC_DOMAIN_H_ */

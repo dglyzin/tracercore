@@ -41,6 +41,38 @@ void CPU::prepareBorder(double* result, double* source, int zStart, int zStop, i
 	}
 }
 
+void CPU::getSubVolume(double* result, double* source, int zStart, int zStop, int yStart, int yStop, int xStart,
+		int xStop, int yCount, int xCount, int cellSize) {
+	prepareBorder(result, source, zStart, zStop, yStart, yStop, xStart, xStop, yCount, xCount, cellSize);
+}
+
+void CPU::setSubVolume(double* result, double* source, int zStart, int zStop, int yStart, int yStop, int xStart,
+		int xStop, int yCount, int xCount, int cellSize) {
+	int index = 0;
+	for (int z = zStart; z < zStop; ++z) {
+		int zShift = xCount * yCount * z;
+
+		for (int y = yStart; y < yStop; ++y) {
+			int yShift = xCount * y;
+
+			for (int x = xStart; x < xStop; ++x) {
+				int xShift = x;
+
+				for (int c = 0; c < cellSize; ++c) {
+					int cellShift = c;
+					//printf("block %d is preparing border %d, x=%d, y=%d, z=%d, index=%d\n", blockNumber, borderNumber, x,y,z, index);
+
+					result[(zShift + yShift + xShift) * cellSize + cellShift] = source[index];
+					index++;
+				}
+			}
+		}
+	}
+}
+
+
+
+
 void CPU::initState(double* state, initfunc_fill_ptr_t* userInitFuncs, unsigned short int* initFuncNumber,
 		int blockNumber, double time) {
 	userInitFuncs[blockNumber](state, initFuncNumber);

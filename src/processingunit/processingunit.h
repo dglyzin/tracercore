@@ -38,6 +38,12 @@ public:
 	virtual void prepareBorder(double* result, double* source, int zStart, int zStop, int yStart, int yStop, int xStart,
 			int xStop, int yCount, int xCount, int cellSize) = 0;
 
+	virtual void getSubVolume(double* result, double* source, int zStart, int zStop, int yStart, int yStop, int xStart,
+				int xStop, int yCount, int xCount, int cellSize) = 0;
+
+    virtual void setSubVolume(double* result, double* source, int zStart, int zStop, int yStart, int yStop, int xStart,
+					int xStop, int yCount, int xCount, int cellSize) = 0;
+
 	virtual void initState(double* state, initfunc_fill_ptr_t* userInitFuncs, unsigned short int* initFuncNumber,
 			int blockNumber, double time) = 0;
 

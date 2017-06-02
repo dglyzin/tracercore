@@ -398,6 +398,10 @@ bool RealBlock::isNan() {
 	return false;
 }
 
+ProcessingUnit* RealBlock::getPU(){
+	return pu;
+}
+
 void RealBlock::print() {
 	printf("################################################################################");
 	printGeneralInformation();
@@ -458,6 +462,9 @@ void RealBlock::printBorderInfo() {
 
 	printf("\n");
 }
+
+
+
 
 void RealBlock::printData() {
 	//mProblem->print(zCount, yCount, xCount, cellSize);

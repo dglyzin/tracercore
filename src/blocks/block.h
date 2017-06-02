@@ -11,6 +11,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <fstream>
+#include "../processingunit/processingunit.h"
 
 class Block {
 public:
@@ -63,6 +64,8 @@ public:
 	int getGridElementCount();
 
 	int getNodeNumber();
+
+	virtual ProcessingUnit* getPU() = 0;
 
 	virtual void print() = 0;
 

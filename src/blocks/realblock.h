@@ -67,6 +67,7 @@ public:
 	void loadState(std::ifstream& in);
 
 	bool isNan();
+	ProcessingUnit* getPU();
 
 	void print();
 
