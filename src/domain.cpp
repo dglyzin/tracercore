@@ -561,7 +561,14 @@ void Domain::readFromFile(char* path) {
 	readSolverTolerance(in);
 
 	createNumericalMethod();
-	createProblem();
+
+	mProblemType = ORDINARY;
+	int stateCount = 101000;
+	int delayCount  = 1;
+	double* delayValue = new double[1];
+	delayValue[0] = 1.0;
+	createProblem(stateCount, delayCount, delayValue);
+	delete delayValue;
 
 	createBlock(in);
 
