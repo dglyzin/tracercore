@@ -49,6 +49,14 @@ double OrdinaryProblem::getTethaForDelay(int delayNumber) {
 	return 0.0;
 }
 
+void OrdinaryProblem::load(std::ifstream& in) {
+	return;
+}
+
+void OrdinaryProblem::save(char* path) {
+	return;
+}
+
 void OrdinaryProblem::loadData(std::ifstream& in, State** states) {
 	states[getCurrentStateNumber()]->loadGeneralStorage(in);
 }

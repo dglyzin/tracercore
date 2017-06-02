@@ -53,7 +53,8 @@ RealBlock::RealBlock(int _nodeNumber, int _dimension, int _xCount, int _yCount, 
 	mNumericalMethod = _numericalMethod;
 
 	int commonTempStoragesCount = mNumericalMethod->getCommonTempStorageCount();
-	mCommonTempStorages = pu->newDoublePointerArray(commonTempStoragesCount);
+	//mCommonTempStorages = pu->newDoublePointerArray(commonTempStoragesCount);
+	mCommonTempStorages = new double* [commonTempStoragesCount];
 
 	for (int i = 0; i < commonTempStoragesCount; ++i) {
 		mCommonTempStorages[i] = pu->newDoubleArray(elementCount);
@@ -67,26 +68,31 @@ RealBlock::RealBlock(int _nodeNumber, int _dimension, int _xCount, int _yCount, 
 
 	//TODO: getSourceStorage(0) заменить 0, возможно, нужна специальная функция
 	//double* state = mStates[mProblem->getCurrentStateNumber()]->getSourceStorage(0);
-	double* state = mStates[mProblem->getCurrentStateNumber()]->getState();
+	//double* state = mStates[mProblem->getCurrentStateNumber()]->getState();
 	//printf("\n%p %d\n", state, nodeCount);
-	pu->initState(state, mUserInitFuncs, mInitFuncNumber, blockNumber, 0.0);
+	//pu->initState(state, mUserInitFuncs, mInitFuncNumber, blockNumber, 0.0);
+	mStates[mProblem->getCurrentStateNumber()]->init(mUserInitFuncs, mInitFuncNumber, blockNumber, 0.0);
 
-	int sourceLength = 1 + mProblem->getDelayCount();
+	int delayCount = mProblem->getDelayCount();
+	int sourceLength = 1 + delayCount;
 	mSource = pu->newDoublePointerArray(sourceLength);
-	mSource[0] = NULL;
+	mDelayArrays = new double* [delayCount];
+	//mSource[0] = NULL;
 	//pu->insertValueIntoPonterArray(mSource, NULL, 0);
-	for (int i = 1; i < sourceLength; ++i) {
-		mSource[i] = pu->newDoubleArray(elementCount);
-		//pu->insertValueIntoPonterArray(mSource, pu->newDoubleArray(elementCount), i);
+	for (int i = 0; i < delayCount; ++i) {
+		//mSource[i] = pu->newDoubleArray(elementCount);
+		double* delayArray = pu->newDoubleArray(elementCount);
+		mDelayArrays[i] = delayArray;
+		pu->insertValueIntoPonterArray(mSource, delayArray, i+1);
 	}
 
 	mResult = NULL;
 }
 
 RealBlock::~RealBlock() {
-	int sourceLength = 1 + mProblem->getDelayCount();
-	for (int i = 1; i < sourceLength; ++i) {
-		pu->deleteDeviceSpecificArray(mSource[i]);
+	int delayCount = mProblem->getDelayCount();
+	for (int i = 0; i < delayCount; ++i) {
+		pu->deleteDeviceSpecificArray(mSource[i+1]);
 	}
 
 	pu->deleteDeviceSpecificArray(mSource);
@@ -97,6 +103,13 @@ RealBlock::~RealBlock() {
 	}
 
 	delete mStates;
+
+	delete mCommonTempStorages;
+
+	if(blockBorder)
+		delete blockBorder;
+
+	delete mDelayArrays;
 }
 
 /*void RealBlock::afterCreate(int problemType, int solverType, double aTol, double rTol) {
@@ -208,8 +221,8 @@ void RealBlock::prepareStageSourceResult(int stage, double timeStep, double curr
 	mResult = mStates[currentStateNumber]->getResultStorage(stage);/*problem->getResult(stage);*/
 	/*TODO: Возможные проблемы при работе с видеокартой.
 	 Нельзя вносить изменение в mSource[i] через CPU, необходима специальная функция в ProcessingUnit*/
-	mSource[0] = mStates[currentStateNumber]->getSourceStorage(stage);/*problem->getSource(stage);*/
-	//pu->insertValueIntoPonterArray(mSource, mStates[currentStateNumber]->getSourceStorage(stage), 0);
+	//mSource[0] = mStates[currentStateNumber]->getSourceStorage(stage);/*problem->getSource(stage);*/
+	pu->insertValueIntoPonterArray(mSource, mStates[currentStateNumber]->getSourceStorage(stage), 0);
 
 	//TODO: Унификация цикла с конструктором класса. sourseLength или иной вариант
 	for (int i = 0; i < delayCount; ++i) {
@@ -222,11 +235,12 @@ void RealBlock::prepareStageSourceResult(int stage, double timeStep, double curr
 			 */
 			// TODO: Вычислять в проблеме. Доставать из проблемы
 			double theta = mProblem->getTethaForDelay(i);
-			mStates[delayStateNumber]->computeDenseOutput(timeStep, theta, mSource[1 + i]);
+			mStates[delayStateNumber]->computeDenseOutput(timeStep, theta, /*mSource[1 + i]*/mDelayArrays[i]);
+			//printf("delay #%d, delay state #%d, theta: %f, current time: %f\n", i, delayStateNumber, theta, currentTime);
 			//pu->printArray(mSource[1 + i], 1, 1, 11, 1);
 		} else {
 			// TODO: Создать ПРАВИЛЬНЫЕ функции для работы с состояниями в прошлом
-			pu->delayFunction(mSource[1 + i], mUserInitFuncs, mInitFuncNumber, blockNumber,
+			pu->delayFunction(/*mSource[1 + i]*/mDelayArrays[i], mUserInitFuncs, mInitFuncNumber, blockNumber,
 					currentTime - mProblem->getDelay(i));
 		}
 
@@ -323,7 +337,8 @@ double* RealBlock::addNewExternalBorder(Block* neighbor, int side, int mOffset, 
 }
 
 void RealBlock::moveTempBorderVectorToBorderArray() {
-	blockBorder = pu->newDoublePointerArray(countSendSegmentBorder);
+	//blockBorder = pu->newDoublePointerArray(countSendSegmentBorder);
+	blockBorder = new double* [countSendSegmentBorder];
 
 	sendBorderInfo = pu->newIntArray(INTERCONNECT_COMPONENT_COUNT * countSendSegmentBorder);
 
@@ -333,6 +348,8 @@ void RealBlock::moveTempBorderVectorToBorderArray() {
 
 	for (int i = 0; i < countSendSegmentBorder; ++i) {
 		blockBorder[i] = tempBlockBorder.at(i);
+		//pu->insertValueIntoPonterArray(blockBorder, tempBlockBorder.at(i), i);
+
 
 		int index = INTERCONNECT_COMPONENT_COUNT * i;
 		sendBorderInfo[index + SIDE] = tempSendBorderInfo.at(index + 0);
@@ -343,7 +360,8 @@ void RealBlock::moveTempBorderVectorToBorderArray() {
 	}
 
 	for (int i = 0; i < countReceiveSegmentBorder; ++i) {
-		externalBorder[i] = tempExternalBorder.at(i);
+		//externalBorder[i] = tempExternalBorder.at(i);
+		pu->insertValueIntoPonterArray(externalBorder, tempExternalBorder.at(i), i);
 
 		int index = INTERCONNECT_COMPONENT_COUNT * i;
 		receiveBorderInfo[index + SIDE] = tempReceiveBorderInfo.at(index + 0);
