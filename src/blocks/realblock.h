@@ -81,6 +81,8 @@ private:
 	double** mSource;
 	double* mResult;
 
+	double** mDelayArrays;
+
 	double** mCommonTempStorages;
 
 	double* mParams;

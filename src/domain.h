@@ -292,7 +292,7 @@ private:
 	void readPlots(std::ifstream& in);
 
 	void createNumericalMethod();
-	void createProblem();
+	void createProblem(int stateCount, int delayCount, double* delayValue);
 
 	void blockAfterCreate();
 
@@ -302,6 +302,7 @@ private:
 	int getMaxStepStorageCount();
 	int getRequiredMemoryOnProcessingUnit(int deviceType, int deviceNumber);
 	void saveGeneralInfo(char* path);
+	void saveProblem(char* path);
 	void saveStateForDrawByBlocks(char* path);
 	void saveStateForLoadByBlocks(char* path);
 	void saveStateForDrawDenseOutputByBlocks(char* path, double theta);

@@ -16,6 +16,7 @@ public:
 	virtual ~State();
 
 	//double* getStorage(int storageNumber);
+	void init(initfunc_fill_ptr_t* userInitFuncs, unsigned short int* initFuncNumber, int blockNumber, double time);
 	double* getResultStorage(int stageNumber);
 	double* getSourceStorage(int stageNumber);
 

@@ -30,6 +30,9 @@ public:
 	int getStateNumberForDelay(int delayNumber);
 	double getTethaForDelay(int delayNumber);
 
+	void load(std::ifstream& in);
+	void save(char* path);
+
 	void loadData(std::ifstream& in, State** states);
 	void saveData(char* path, State** states);
 	void savaDataForDraw(char* path, State** states);
@@ -52,6 +55,9 @@ private:
 
 	void computeStateNumberForDelay(double currentTime, double timeStep, double requiredTime, int index);
 	void computeTethaForDelay(double currentTime, double timeStep, double requiredTime, int index);
+
+	int getMaxDelayIndex();
+	int getStateNumberMaxDelay();
 };
 
 #endif /* SRC_PROBLEM_DELAYPROBLEM_H_ */
