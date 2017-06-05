@@ -807,40 +807,50 @@ Block* Domain::readBlock(ifstream& in, int idx, int dimension) {
 void Domain::fixInitialBorderValues(int sourceBlock, int destinationBlock, int* offsetSource, int* offsetDestination, int* length, int sourceSide, int destinationSide){
 	int sourceNode = mBlocks[sourceBlock]->getNodeNumber();
 	int destinationNode = mBlocks[destinationBlock]->getNodeNumber();
-
+    //of the two halves of interconnect we use [--) <-- [--]  and ignore the other
 	if ((destinationSide == RIGHT) or (destinationSide == BACK) or (destinationSide == BOTTOM))
 	if (mWorkerRank == destinationNode){
-		if (sourceNode == destinationNode){
-        //здесь копирование
-			ProcessingUnit* sourcePU = mBlocks[sourceBlock]->getPU();
+		ProcessingUnit* destPU = mBlocks[destinationBlock]->getPU();
+		//выдели destbuffer на destPU
+		double* destBuffer;
 
-			//выдели result на pu
-			double* result;
+		if (sourceNode == destinationNode){
+            //оба блока лежат на одном узле, просто копирование
+			ProcessingUnit* sourcePU = mBlocks[sourceBlock]->getPU();
+			//выдели sourcebuffer на sourcePU
+			double* sourceBuffer;
+            int mStart = offsetSource[0];
+            int nStart = offsetSource[1];
+            int mStop = offsetSource[0] + length[0];
+            int nStop = offsetSource[1] + length[1];
+            int xCount = 0;
+            int yCount = 0;
+            int zCount = 0;
+            int cellSize = 1;
 
 			switch (destinationSide) {
 				case RIGHT:
-					//mBlocks[sourceBlock]->getSubVolume(result, mStart, mStop, nStart, nStop, xCount - haloSize - 1, xCount - 1, yCount,
-					//		xCount, cellSize);
+					mBlocks[sourceBlock]->getSubVolume(sourceBuffer, mStart, mStop, nStart, nStop, xCount - 1, xCount, yCount,
+							xCount, cellSize);
 					break;
 				case BACK:
-					//sourcePU->getSubVolume(result, source, mStart, mStop, yCount - haloSize - 1, yCount - 1, nStart, nStop, yCount,
-					//		xCount, cellSize);
+					mBlocks[sourceBlock]->getSubVolume(sourceBuffer, mStart, mStop, yCount - 1, yCount - 1, nStart, nStop, yCount,
+							xCount, cellSize);
 					break;
 				case BOTTOM:
-					//sourcePU->getSubVolume(result, source, zCount - haloSize - 1, zCount - 1, mStart, mStop, nStart, nStop, yCount,
-					//		xCount, cellSize);
+					mBlocks[sourceBlock]->getSubVolume(sourceBuffer, zCount -  1, zCount - 1, mStart, mStop, nStart, nStop, yCount,
+							xCount, cellSize);
 					break;
 			}
 		}
 		else{
-		//здесь получение от отправителя, т.к. это другой узел
+		//источник лежит на другом узле, получение от отправителя
 
 		}
 
 	}
 	else if (mWorkerRank == sourceNode){
-		//мы источник, но не являемся одновременно получаетем
-		//тогда отправка получателю
+		//мы источник, но получатель лежит на другом узле, отправка
 
 	}
 

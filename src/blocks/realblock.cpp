@@ -171,6 +171,23 @@ void RealBlock::prepareArgument(int stage, double timeStep) {
 	mStates[currentStateNumber]->prepareArgument(timeStep, stage);
 }
 
+void RealBlock::getSubVolume(double* result, int zStart, int zStop, int yStart, int yStop, int xStart,
+				         int xStop, int yCount, int xCount, int cellSize){
+	int currentStateNumber = mProblem->getCurrentStateNumber();
+    mStates[currentStateNumber]->getSubVolume(result, zStart, zStop, yStart, yStop, xStart,
+	         xStop, yCount, xCount, cellSize);
+}
+
+void RealBlock::setSubVolume(double* source, int zStart, int zStop, int yStart, int yStop, int xStart,
+				int xStop, int yCount, int xCount, int cellSize){
+	int currentStateNumber = mProblem->getCurrentStateNumber();
+	mStates[currentStateNumber]->setSubVolume(source, zStart, zStop, yStart, yStop, xStart,
+	         xStop, yCount, xCount, cellSize);
+}
+
+
+
+
 void RealBlock::prepareStageData(int stage) {
 	//double* source = problem->getCurrentStateStageData(stage);
 	// TODO: ПРОВЕРИТЬ!!!

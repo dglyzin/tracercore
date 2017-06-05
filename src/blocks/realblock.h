@@ -34,6 +34,10 @@ public:
 	void computeStageCenter(int stage, double time);
 
 	void prepareArgument(int stage, double timeStep);
+	void getSubVolume(double* result, int zStart, int zStop, int yStart, int yStop, int xStart,
+			         int xStop, int yCount, int xCount, int cellSize);
+	void setSubVolume(double* source, int zStart, int zStop, int yStart, int yStop, int xStart,
+			int xStop, int yCount, int xCount, int cellSize);
 
 	void prepareStageData(int stage);
 	void prepareStageSourceResult(int stage, double timeStep, double currentTime);
