@@ -1214,7 +1214,7 @@ void Domain::createInterconnect(ifstream& in) {
 }
 
 void Domain::createNumericalMethod() {
-	/*switch (mSolverIndex) {
+	switch (mSolverIndex) {
 		case EULER:
 			mNumericalMethod = new Euler(mAtol, mRtol);
 			break;
@@ -1227,8 +1227,7 @@ void Domain::createNumericalMethod() {
 		default:
 			mNumericalMethod = new Euler(mAtol, mRtol);
 			break;
-	}*/
-	mNumericalMethod = new Euler(mAtol, mRtol);
+	}
 }
 
 void Domain::createProblem(int stateCount, int delayCount, double* delayValue) {
