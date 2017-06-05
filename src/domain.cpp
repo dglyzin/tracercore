@@ -311,8 +311,8 @@ void Domain::nextStep() {
 			return;
 		}
 
-		currentTime += mTimeStep;
 		confirmStep();
+		currentTime += mTimeStep;
 		mAcceptedStepCount++;
 	}
 	else {
@@ -1011,6 +1011,7 @@ void Domain::saveStateForLoad(char* inputFile) {
 	Utils::getFilePathForLoad(inputFile, saveFile, currentTime);
 
 	saveGeneralInfo(saveFile);
+	saveProblem(saveFile);
 	saveStateForLoadByBlocks(saveFile);
 
 	delete saveFile;
@@ -1043,6 +1044,12 @@ void Domain::saveGeneralInfo(char* path) {
 		out.write((char*) &mTimeStep, SIZE_DOUBLE);
 
 		out.close();
+	}
+}
+
+void Domain::saveProblem(char* path) {
+	if (mGlobalRank == 0) {
+		mProblem->save(path);
 	}
 }
 
@@ -1088,6 +1095,8 @@ void Domain::loadStateFromFile(char* dataFile) {
 	in.read((char*) &mTimeStep, SIZE_DOUBLE);
 
 	currentTime = fileCurrentTime;
+
+	mProblem->load(in);
 
 	for (int i = 0; i < mBlockCount; ++i) {
 		mBlocks[i]->loadState(in);
