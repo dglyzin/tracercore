@@ -804,11 +804,15 @@ Block* Domain::readBlock(ifstream& in, int idx, int dimension) {
  *  исправление границ, принадлежащих склейке
  *  если мы на блоке-получателе со старшей стороны, нужно получить начальные условия из соседнего блока
  */
-void Domain::fixInitialBorderValues(int sourceBlock, int destinationBlock, int* offsetSource, int* offsetDestination, int* length, int sourceSide, int destinationSide){
+void Domain::fixInitialBorderValues(int sourceBlock, int destinationBlock,
+		int* offsetSource, int* offsetDestination, int* length, int sourceSide,
+		int destinationSide){
+	//printf("welcome to border fixer\n");
 	int sourceNode = mBlocks[sourceBlock]->getNodeNumber();
 	int destinationNode = mBlocks[destinationBlock]->getNodeNumber();
     //of the two halves of interconnect we use [--) <-- [--]  and ignore the other
 	if ((destinationSide == RIGHT) or (destinationSide == BACK) or (destinationSide == BOTTOM)){
+		//printf("fixing side %d \n", destinationSide);
 		double* destBuffer=NULL;
 		double* sourceBuffer=NULL;
 		int bufferSize = mCellSize*length[0]*length[1];
@@ -825,8 +829,15 @@ void Domain::fixInitialBorderValues(int sourceBlock, int destinationBlock, int* 
 			int snStart = offsetSource[1];
 			int smStop = offsetSource[0] + length[0];
 			int snStop = offsetSource[1] + length[1];
+			//printf("copying %d %d %d %d \n",smStart, smStop, snStart, snStop);
 			mBlocks[sourceBlock]->getSubVolume(sourceBuffer, smStart, smStop, snStart, snStop, sourceSide);
-			MPI_Isend(sourceBuffer, bufferSize, MPI_DOUBLE, destinationNode, 0, MPI_COMM_WORLD, &request );
+			//printf("got subvolume of size %d\n", bufferSize);
+			//for (int i =0; i< bufferSize; i++)
+			//printf("%f ", sourceBuffer[i]);
+			//printf("\n");
+			//printf("sending to %d...\n", destinationNode);
+			MPI_Isend(sourceBuffer, bufferSize, MPI_DOUBLE, destinationNode, 0, mWorkerComm, &request);
+			//printf("Isend ok\n");
 		}
 		if (mWorkerRank == destinationNode){
 			//готовь дестинэйшн
@@ -834,13 +845,14 @@ void Domain::fixInitialBorderValues(int sourceBlock, int destinationBlock, int* 
 	    	destBuffer = destPU->newDoubleArray(bufferSize);
 			//копируй дестинэйшн в блок
 	    	MPI_Status mpistatus;
-            MPI_Recv(destBuffer, bufferSize, MPI_DOUBLE, sourceNode, 0, MPI_COMM_WORLD, &mpistatus);
-
+	    	//printf("receiving buffer\n");
+            MPI_Recv(destBuffer, bufferSize, MPI_DOUBLE, sourceNode, 0, mWorkerComm, &mpistatus);
+            //printf("receive ok\n");
 	    	int dmStart = offsetDestination[0];
 			int dnStart = offsetDestination[1];
 			int dmStop = offsetDestination[0] + length[0];
 			int dnStop = offsetDestination[1] + length[1];
-		    mBlocks[destinationBlock]->setSubVolume(destBuffer, dmStart, dmStop, dnStart, dnStop, sourceSide);
+		    mBlocks[destinationBlock]->setSubVolume(destBuffer, dmStart, dmStop, dnStart, dnStop, destinationSide);
 		}
 
 		if (mWorkerRank == sourceNode){

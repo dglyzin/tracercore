@@ -43,6 +43,7 @@ void CPU::prepareBorder(double* result, double* source, int zStart, int zStop, i
 
 void CPU::getSubVolume(double* result, double* source, int zStart, int zStop, int yStart, int yStop, int xStart,
 		int xStop, int yCount, int xCount, int cellSize) {
+	//printf("we are in cpu::getsubvolume\n");
 	prepareBorder(result, source, zStart, zStop, yStart, yStop, xStart, xStop, yCount, xCount, cellSize);
 }
 

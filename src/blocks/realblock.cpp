@@ -173,23 +173,31 @@ void RealBlock::prepareArgument(int stage, double timeStep) {
 
 void RealBlock::getSubVolume(double* result, int mStart, int mStop, int nStart, int nStop, int side){
 	int currentStateNumber = mProblem->getCurrentStateNumber();
+
 	switch (side) {
 	case LEFT:
+		//printf("calling getsubvolume from left side of state #%d\n", currentStateNumber);
+		mStates[currentStateNumber]->getSubVolume(result, mStart, mStop, nStart, nStop, 0,
+					  1, yCount, xCount, cellSize);
 		break;
 	case RIGHT:
-		mStates[currentStateNumber]->getSubVolume(result, mStart, mStop, nStart, nStop, xCount-cellSize,
+		mStates[currentStateNumber]->getSubVolume(result, mStart, mStop, nStart, nStop, xCount-1,
 			         xCount, yCount, xCount, cellSize);
 		break;
 	case FRONT:
+		mStates[currentStateNumber]->getSubVolume(result, mStart, mStop, 0, 1, nStart,
+					         nStop, yCount, xCount, cellSize);
 		break;
 	case BACK:
-		mStates[currentStateNumber]->getSubVolume(result, mStart, mStop, yCount-cellSize, yCount, nStart,
+		mStates[currentStateNumber]->getSubVolume(result, mStart, mStop, yCount-1, yCount, nStart,
 			         nStop, yCount, xCount, cellSize);
 		break;
 	case TOP:
+		mStates[currentStateNumber]->getSubVolume(result, 0, 1, mStart, mStop, nStart,
+					         nStop, yCount, xCount, cellSize);
 		break;
 	case BOTTOM:
-		mStates[currentStateNumber]->getSubVolume(result, zCount-cellSize, zCount, mStart, mStop, nStart,
+		mStates[currentStateNumber]->getSubVolume(result, zCount-1, zCount, mStart, mStop, nStart,
 			         nStop, yCount, xCount, cellSize);
 		break;
 	default:
@@ -202,21 +210,27 @@ void RealBlock::setSubVolume(double* source, int mStart, int mStop, int nStart, 
 	int currentStateNumber = mProblem->getCurrentStateNumber();
 	switch (side) {
 		case LEFT:
+			mStates[currentStateNumber]->setSubVolume(source, mStart, mStop, nStart, nStop, 0, 1,
+							         yCount, xCount, cellSize);
 			break;
 		case RIGHT:
-			mStates[currentStateNumber]->setSubVolume(source, mStart, mStop, nStart, nStop, xCount-cellSize,
+			mStates[currentStateNumber]->setSubVolume(source, mStart, mStop, nStart, nStop, xCount-1,
 				         xCount, yCount, xCount, cellSize);
 			break;
 		case FRONT:
+			mStates[currentStateNumber]->setSubVolume(source, mStart, mStop, 0, 1, nStart,
+							         nStop, yCount, xCount, cellSize);
 			break;
 		case BACK:
-			mStates[currentStateNumber]->setSubVolume(source, mStart, mStop, yCount-cellSize, yCount, nStart,
+			mStates[currentStateNumber]->setSubVolume(source, mStart, mStop, yCount-1, yCount, nStart,
 				         nStop, yCount, xCount, cellSize);
 			break;
 		case TOP:
+			mStates[currentStateNumber]->setSubVolume(source, 0, 1, mStart, mStop, nStart,
+							         nStop, yCount, xCount, cellSize);
 			break;
 		case BOTTOM:
-			mStates[currentStateNumber]->setSubVolume(source, zCount-cellSize, zCount, mStart, mStop, nStart,
+			mStates[currentStateNumber]->setSubVolume(source, zCount-1, zCount, mStart, mStop, nStart,
 				         nStop, yCount, xCount, cellSize);
 			break;
 		default:
