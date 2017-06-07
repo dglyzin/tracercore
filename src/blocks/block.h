@@ -25,10 +25,8 @@ public:
 	virtual void computeStageCenter(int stage, double time) = 0;
 
 	virtual void prepareArgument(int stage, double timestep) = 0;
-	virtual void getSubVolume(double* result, int zStart, int zStop, int yStart, int yStop, int xStart,
-				         int xStop, int yCount, int xCount, int cellSize) = 0;
-	virtual void setSubVolume(double* source, int zStart, int zStop, int yStart, int yStop, int xStart,
-				int xStop, int yCount, int xCount, int cellSize) = 0;
+	virtual void getSubVolume(double* result, int mStart, int mStop, int nStart, int nStop, int side) = 0;
+	virtual void setSubVolume(double* source, int mStart, int mStop, int nStart, int nStop, int side) = 0;
 
 
 	virtual void prepareStageData(int stage) = 0;

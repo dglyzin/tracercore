@@ -33,14 +33,12 @@ void NullBlock::prepareArgument(int stage, double timestep) {
 	return;
 }
 
-void getSubVolume(double* result, int zStart, int zStop, int yStart, int yStop, int xStart,
-			         int xStop, int yCount, int xCount, int cellSize){
+void NullBlock::getSubVolume(double* result, int mStart, int mStop, int nStart, int nStop, int side){
 	return;
 }
 
 
-void setSubVolume(double* source, int zStart, int zStop, int yStart, int yStop, int xStart,
-			int xStop, int yCount, int xCount, int cellSize){
+void NullBlock::setSubVolume(double* source, int mStart, int mStop, int nStart, int nStop, int side){
 	return;
 }
 

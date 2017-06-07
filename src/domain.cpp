@@ -808,53 +808,50 @@ void Domain::fixInitialBorderValues(int sourceBlock, int destinationBlock, int* 
 	int sourceNode = mBlocks[sourceBlock]->getNodeNumber();
 	int destinationNode = mBlocks[destinationBlock]->getNodeNumber();
     //of the two halves of interconnect we use [--) <-- [--]  and ignore the other
-	if ((destinationSide == RIGHT) or (destinationSide == BACK) or (destinationSide == BOTTOM))
-	if (mWorkerRank == destinationNode){
-		ProcessingUnit* destPU = mBlocks[destinationBlock]->getPU();
-		//выдели destbuffer на destPU
-		double* destBuffer;
+	if ((destinationSide == RIGHT) or (destinationSide == BACK) or (destinationSide == BOTTOM)){
+		double* destBuffer=NULL;
+		double* sourceBuffer=NULL;
+		int bufferSize = mCellSize*length[0]*length[1];
+		ProcessingUnit* sourcePU=NULL;
+		ProcessingUnit* destPU=NULL;
+		MPI_Request request;
 
-		if (sourceNode == destinationNode){
-            //оба блока лежат на одном узле, просто копирование
-			ProcessingUnit* sourcePU = mBlocks[sourceBlock]->getPU();
-			//выдели sourcebuffer на sourcePU
-			double* sourceBuffer;
-            int mStart = offsetSource[0];
-            int nStart = offsetSource[1];
-            int mStop = offsetSource[0] + length[0];
-            int nStop = offsetSource[1] + length[1];
-            int xCount = 0;
-            int yCount = 0;
-            int zCount = 0;
-            int cellSize = 1;
-
-			switch (destinationSide) {
-				case RIGHT:
-					mBlocks[sourceBlock]->getSubVolume(sourceBuffer, mStart, mStop, nStart, nStop, xCount - 1, xCount, yCount,
-							xCount, cellSize);
-					break;
-				case BACK:
-					mBlocks[sourceBlock]->getSubVolume(sourceBuffer, mStart, mStop, yCount - 1, yCount - 1, nStart, nStop, yCount,
-							xCount, cellSize);
-					break;
-				case BOTTOM:
-					mBlocks[sourceBlock]->getSubVolume(sourceBuffer, zCount -  1, zCount - 1, mStart, mStop, nStart, nStop, yCount,
-							xCount, cellSize);
-					break;
-			}
+		if (mWorkerRank == sourceNode){
+			//готовь источник
+			sourcePU = mBlocks[sourceBlock]->getPU();
+			sourceBuffer = sourcePU->newDoubleArray(bufferSize);
+			//заполняй источник
+			int smStart = offsetSource[0];
+			int snStart = offsetSource[1];
+			int smStop = offsetSource[0] + length[0];
+			int snStop = offsetSource[1] + length[1];
+			mBlocks[sourceBlock]->getSubVolume(sourceBuffer, smStart, smStop, snStart, snStop, sourceSide);
+			MPI_Isend(sourceBuffer, bufferSize, MPI_DOUBLE, destinationNode, 0, MPI_COMM_WORLD, &request );
 		}
-		else{
-		//источник лежит на другом узле, получение от отправителя
+		if (mWorkerRank == destinationNode){
+			//готовь дестинэйшн
+			destPU = mBlocks[destinationBlock]->getPU();
+	    	destBuffer = destPU->newDoubleArray(bufferSize);
+			//копируй дестинэйшн в блок
+	    	MPI_Status mpistatus;
+            MPI_Recv(destBuffer, bufferSize, MPI_DOUBLE, sourceNode, 0, MPI_COMM_WORLD, &mpistatus);
 
+	    	int dmStart = offsetDestination[0];
+			int dnStart = offsetDestination[1];
+			int dmStop = offsetDestination[0] + length[0];
+			int dnStop = offsetDestination[1] + length[1];
+		    mBlocks[destinationBlock]->setSubVolume(destBuffer, dmStart, dmStop, dnStart, dnStop, sourceSide);
 		}
 
-	}
-	else if (mWorkerRank == sourceNode){
-		//мы источник, но получатель лежит на другом узле, отправка
-
-	}
-
-
+		if (mWorkerRank == sourceNode){
+			MPI_Status mpistatus;
+			MPI_Wait(&request, &mpistatus);
+	        sourcePU->deleteDeviceSpecificArray(sourceBuffer);
+		}
+		if (mWorkerRank == destinationNode){
+			destPU->deleteDeviceSpecificArray(destBuffer);
+		}
+    }
 
 
 }
