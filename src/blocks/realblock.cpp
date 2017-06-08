@@ -171,6 +171,77 @@ void RealBlock::prepareArgument(int stage, double timeStep) {
 	mStates[currentStateNumber]->prepareArgument(timeStep, stage);
 }
 
+void RealBlock::getSubVolume(double* result, int mStart, int mStop, int nStart, int nStop, int side){
+	int currentStateNumber = mProblem->getCurrentStateNumber();
+
+	switch (side) {
+	case LEFT:
+		//printf("calling getsubvolume from left side of state #%d\n", currentStateNumber);
+		mStates[currentStateNumber]->getSubVolume(result, mStart, mStop, nStart, nStop, 0,
+					  1, yCount, xCount, cellSize);
+		break;
+	case RIGHT:
+		mStates[currentStateNumber]->getSubVolume(result, mStart, mStop, nStart, nStop, xCount-1,
+			         xCount, yCount, xCount, cellSize);
+		break;
+	case FRONT:
+		mStates[currentStateNumber]->getSubVolume(result, mStart, mStop, 0, 1, nStart,
+					         nStop, yCount, xCount, cellSize);
+		break;
+	case BACK:
+		mStates[currentStateNumber]->getSubVolume(result, mStart, mStop, yCount-1, yCount, nStart,
+			         nStop, yCount, xCount, cellSize);
+		break;
+	case TOP:
+		mStates[currentStateNumber]->getSubVolume(result, 0, 1, mStart, mStop, nStart,
+					         nStop, yCount, xCount, cellSize);
+		break;
+	case BOTTOM:
+		mStates[currentStateNumber]->getSubVolume(result, zCount-1, zCount, mStart, mStop, nStart,
+			         nStop, yCount, xCount, cellSize);
+		break;
+	default:
+		break;
+    }
+
+}
+
+void RealBlock::setSubVolume(double* source, int mStart, int mStop, int nStart, int nStop, int side){
+	int currentStateNumber = mProblem->getCurrentStateNumber();
+	switch (side) {
+		case LEFT:
+			mStates[currentStateNumber]->setSubVolume(source, mStart, mStop, nStart, nStop, 0, 1,
+							         yCount, xCount, cellSize);
+			break;
+		case RIGHT:
+			mStates[currentStateNumber]->setSubVolume(source, mStart, mStop, nStart, nStop, xCount-1,
+				         xCount, yCount, xCount, cellSize);
+			break;
+		case FRONT:
+			mStates[currentStateNumber]->setSubVolume(source, mStart, mStop, 0, 1, nStart,
+							         nStop, yCount, xCount, cellSize);
+			break;
+		case BACK:
+			mStates[currentStateNumber]->setSubVolume(source, mStart, mStop, yCount-1, yCount, nStart,
+				         nStop, yCount, xCount, cellSize);
+			break;
+		case TOP:
+			mStates[currentStateNumber]->setSubVolume(source, 0, 1, mStart, mStop, nStart,
+							         nStop, yCount, xCount, cellSize);
+			break;
+		case BOTTOM:
+			mStates[currentStateNumber]->setSubVolume(source, zCount-1, zCount, mStart, mStop, nStart,
+				         nStop, yCount, xCount, cellSize);
+			break;
+		default:
+			break;
+	    }
+
+}
+
+
+
+
 void RealBlock::prepareStageData(int stage) {
 	//double* source = problem->getCurrentStateStageData(stage);
 	// TODO: ПРОВЕРИТЬ!!!
@@ -416,6 +487,10 @@ bool RealBlock::isNan() {
 	return false;
 }
 
+ProcessingUnit* RealBlock::getPU(){
+	return pu;
+}
+
 void RealBlock::print() {
 	printf("################################################################################");
 	printGeneralInformation();
@@ -476,6 +551,9 @@ void RealBlock::printBorderInfo() {
 
 	printf("\n");
 }
+
+
+
 
 void RealBlock::printData() {
 	//mProblem->print(zCount, yCount, xCount, cellSize);

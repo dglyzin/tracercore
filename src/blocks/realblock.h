@@ -34,6 +34,8 @@ public:
 	void computeStageCenter(int stage, double time);
 
 	void prepareArgument(int stage, double timeStep);
+	void getSubVolume(double* result, int mStart, int mStop, int nStart, int nStop, int side);
+	void setSubVolume(double* source, int mStart, int mStop, int nStart, int nStop, int side);
 
 	void prepareStageData(int stage);
 	void prepareStageSourceResult(int stage, double timeStep, double currentTime);
@@ -67,6 +69,7 @@ public:
 	void loadState(std::ifstream& in);
 
 	bool isNan();
+	ProcessingUnit* getPU();
 
 	void print();
 
