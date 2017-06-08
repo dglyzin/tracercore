@@ -11,6 +11,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <fstream>
+#include "../processingunit/processingunit.h"
 
 class Block {
 public:
@@ -24,6 +25,9 @@ public:
 	virtual void computeStageCenter(int stage, double time) = 0;
 
 	virtual void prepareArgument(int stage, double timestep) = 0;
+	virtual void getSubVolume(double* result, int mStart, int mStop, int nStart, int nStop, int side) = 0;
+	virtual void setSubVolume(double* source, int mStart, int mStop, int nStart, int nStop, int side) = 0;
+
 
 	virtual void prepareStageData(int stage) = 0;
 	virtual void prepareStageSourceResult(int stage, double timeStep, double currentTime) = 0;
@@ -63,6 +67,8 @@ public:
 	int getGridElementCount();
 
 	int getNodeNumber();
+
+	virtual ProcessingUnit* getPU() = 0;
 
 	virtual void print() = 0;
 

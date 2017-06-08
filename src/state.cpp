@@ -67,6 +67,22 @@ double* State::getState() {
 	return mState;
 }
 
+void State::getSubVolume(double* result, int zStart, int zStop, int yStart, int yStop, int xStart,
+        int xStop, int yCount, int xCount, int cellSize){
+	//printf("getting state subvolume z1 z2 y1 y2 x1 x2 yc xz cs: %d %d %d %d %d %d %d %d %d \n", zStart, zStop, yStart, yStop, xStart,
+	//         xStop, yCount, xCount, cellSize);
+	pu->getSubVolume(result, mState, zStart, zStop, yStart, yStop, xStart,
+		         xStop, yCount, xCount, cellSize);
+
+}
+
+void State::setSubVolume(double* source, int zStart, int zStop, int yStart, int yStop, int xStart,
+        int xStop, int yCount, int xCount, int cellSize){
+	pu->setSubVolume(mState, source, zStart, zStop, yStart, yStop, xStart,
+		         xStop, yCount, xCount, cellSize);
+
+}
+
 void State::prepareArgument(double timeStep, int stageNumber) {
 	method->prepareArgument(pu, mState, mKStorages, mBlockCommonTempStorages, timeStep, stageNumber, mElementCount);
 }

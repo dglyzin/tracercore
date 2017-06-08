@@ -33,6 +33,16 @@ void NullBlock::prepareArgument(int stage, double timestep) {
 	return;
 }
 
+void NullBlock::getSubVolume(double* result, int mStart, int mStop, int nStart, int nStop, int side){
+	return;
+}
+
+
+void NullBlock::setSubVolume(double* source, int mStart, int mStop, int nStart, int nStop, int side){
+	return;
+}
+
+
 void NullBlock::prepareStageData(int stage) {
 	return;
 }
@@ -116,6 +126,10 @@ void NullBlock::loadState(ifstream& in) {
 
 bool NullBlock::isNan() {
 	return false;
+}
+
+ProcessingUnit* NullBlock::getPU() {
+	return NULL;
 }
 
 void NullBlock::print() {

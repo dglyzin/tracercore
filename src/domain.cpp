@@ -47,6 +47,7 @@ Domain::Domain(int _world_rank, int _world_size, char* inputFile, char* binaryFi
 
 	mGpuCount = GPU_COUNT;
 
+	printwcts("PROBLEM TYPE ALWAYS = ORDINARY!!!\n", LL_DEBUG);
 	mProblemType = ORDINARY;
 
 	readFromFile(inputFile);
@@ -573,6 +574,9 @@ void Domain::readFromFile(char* path) {
 
 	createInterconnect(in);
 
+	//todo send every left side of interconnect to
+
+
 	readPlots(in);
 
 	for (int i = 0; i < mBlockCount; ++i)
@@ -797,6 +801,74 @@ Block* Domain::readBlock(ifstream& in, int idx, int dimension) {
 }
 
 /*
+ *  исправление границ, принадлежащих склейке
+ *  если мы на блоке-получателе со старшей стороны, нужно получить начальные условия из соседнего блока
+ */
+void Domain::fixInitialBorderValues(int sourceBlock, int destinationBlock,
+		int* offsetSource, int* offsetDestination, int* length, int sourceSide,
+		int destinationSide){
+	//printf("welcome to border fixer\n");
+	int sourceNode = mBlocks[sourceBlock]->getNodeNumber();
+	int destinationNode = mBlocks[destinationBlock]->getNodeNumber();
+    //of the two halves of interconnect we use [--) <-- [--]  and ignore the other
+	if ((destinationSide == RIGHT) or (destinationSide == BACK) or (destinationSide == BOTTOM)){
+		//printf("fixing side %d \n", destinationSide);
+		double* destBuffer=NULL;
+		double* sourceBuffer=NULL;
+		int bufferSize = mCellSize*length[0]*length[1];
+		ProcessingUnit* sourcePU=NULL;
+		ProcessingUnit* destPU=NULL;
+		MPI_Request request;
+
+		if (mWorkerRank == sourceNode){
+			//готовь источник
+			sourcePU = mBlocks[sourceBlock]->getPU();
+			sourceBuffer = sourcePU->newDoubleArray(bufferSize);
+			//заполняй источник
+			int smStart = offsetSource[0];
+			int snStart = offsetSource[1];
+			int smStop = offsetSource[0] + length[0];
+			int snStop = offsetSource[1] + length[1];
+			//printf("copying %d %d %d %d \n",smStart, smStop, snStart, snStop);
+			mBlocks[sourceBlock]->getSubVolume(sourceBuffer, smStart, smStop, snStart, snStop, sourceSide);
+			//printf("got subvolume of size %d\n", bufferSize);
+			//for (int i =0; i< bufferSize; i++)
+			//printf("%f ", sourceBuffer[i]);
+			//printf("\n");
+			//printf("sending to %d...\n", destinationNode);
+			MPI_Isend(sourceBuffer, bufferSize, MPI_DOUBLE, destinationNode, 0, mWorkerComm, &request);
+			//printf("Isend ok\n");
+		}
+		if (mWorkerRank == destinationNode){
+			//готовь дестинэйшн
+			destPU = mBlocks[destinationBlock]->getPU();
+	    	destBuffer = destPU->newDoubleArray(bufferSize);
+			//копируй дестинэйшн в блок
+	    	MPI_Status mpistatus;
+	    	//printf("receiving buffer\n");
+            MPI_Recv(destBuffer, bufferSize, MPI_DOUBLE, sourceNode, 0, mWorkerComm, &mpistatus);
+            //printf("receive ok\n");
+	    	int dmStart = offsetDestination[0];
+			int dnStart = offsetDestination[1];
+			int dmStop = offsetDestination[0] + length[0];
+			int dnStop = offsetDestination[1] + length[1];
+		    mBlocks[destinationBlock]->setSubVolume(destBuffer, dmStart, dmStop, dnStart, dnStop, destinationSide);
+		}
+
+		if (mWorkerRank == sourceNode){
+			MPI_Status mpistatus;
+			MPI_Wait(&request, &mpistatus);
+	        sourcePU->deleteDeviceSpecificArray(sourceBuffer);
+		}
+		if (mWorkerRank == destinationNode){
+			destPU->deleteDeviceSpecificArray(destBuffer);
+		}
+    }
+
+
+}
+
+/*
  * Чтение соединения.
  */
 Interconnect* Domain::readConnection(ifstream& in) {
@@ -850,6 +922,8 @@ Interconnect* Domain::readConnection(ifstream& in) {
 	double* destinationData = mBlocks[destinationBlock]->addNewExternalBorder(mBlocks[sourceBlock],
 			Utils::getSide(destinationSide), offsetDestination[0], offsetDestination[1], length[0], length[1],
 			sourceData);
+
+	fixInitialBorderValues(sourceBlock, destinationBlock, offsetSource, offsetDestination, length, Utils::getSide(sourceSide), Utils::getSide(destinationSide));
 
 	int sourceNode = mBlocks[sourceBlock]->getNodeNumber();
 	int destinationNode = mBlocks[destinationBlock]->getNodeNumber();
