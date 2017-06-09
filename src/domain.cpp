@@ -660,16 +660,29 @@ void Domain::readProblem(std::ifstream& in) {
 	delayValue[0] = 1.0;
 	createProblem(stateCount, delayCount, delayValue);
 	delete delayValue;*/
+
 	in.read((char*) &mProblemType, SIZE_INT);
-	int delayCount = 0;
-	in.read((char*) &delayCount, SIZE_INT);
-	double* delayValue = new double[delayCount];
-	for (int i = 0; i < delayCount; ++i) {
-		in.read((char*) &delayValue[i], SIZE_DOUBLE);
+
+	if (mProblemType == 0) {
+		mProblemType = ORDINARY;
+		mProblem = new OrdinaryProblem();
 	}
-	int stateCount = 101000;
-	createProblem(stateCount, delayCount, delayValue);
-	delete delayValue;
+
+	if(mProblemType == 1) {
+		mProblemType = DELAY;
+
+		int stateCount = 101000;
+		int delayCount = 0;
+		double* delayValue = NULL;
+
+		in.read((char*) &delayCount, SIZE_INT);
+		delayValue = new double[delayCount];
+		for (int i = 0; i < delayCount; ++i) {
+			in.read((char*) &delayValue[i], SIZE_DOUBLE);
+		}
+		mProblem = new DelayProblem(stateCount, delayCount, delayValue);
+		delete delayValue;
+	}
 }
 
 void Domain::readBlockCount(ifstream& in) {
