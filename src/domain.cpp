@@ -562,13 +562,14 @@ void Domain::readFromFile(char* path) {
 
 	createNumericalMethod();
 
-	mProblemType = DELAY;
+	/*mProblemType = DELAY;
 	int stateCount = 101000;
 	int delayCount  = 1;
 	double* delayValue = new double[1];
 	delayValue[0] = 1.0;
 	createProblem(stateCount, delayCount, delayValue);
-	delete delayValue;
+	delete delayValue;*/
+	readProblem(in);
 
 	createBlock(in);
 
@@ -649,6 +650,26 @@ void Domain::readSolverTolerance(std::ifstream& in) {
 	//cout << "Solver absolute tolerance:  " << mAtol << endl;
 	in.read((char*) &mRtol, SIZE_DOUBLE);
 	//cout << "Solver relative tolerance:  " << mRtol << endl;
+}
+
+void Domain::readProblem(std::ifstream& in) {
+	/*mProblemType = DELAY;
+	int stateCount = 101000;
+	int delayCount  = 1;
+	double* delayValue = new double[1];
+	delayValue[0] = 1.0;
+	createProblem(stateCount, delayCount, delayValue);
+	delete delayValue;*/
+	in.read((char*) &mProblemType, SIZE_INT);
+	int delayCount = 0;
+	in.read((char*) &delayCount, SIZE_INT);
+	double* delayValue = new double[delayCount];
+	for (int i = 0; i < delayCount; ++i) {
+		in.read((char*) &delayValue[i], SIZE_DOUBLE);
+	}
+	int stateCount = 101000;
+	createProblem(stateCount, delayCount, delayValue);
+	delete delayValue;
 }
 
 void Domain::readBlockCount(ifstream& in) {
