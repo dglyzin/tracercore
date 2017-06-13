@@ -131,7 +131,7 @@ double DelayProblem::getTethaForDelay(int delayNumber) {
 }
 
 void DelayProblem::load(std::ifstream& in) {
-	in.read((char*) &currentStateNumber, SIZE_DOUBLE);
+	in.read((char*) &currentStateNumber, SIZE_INT);
 
 	for (int i = 0; i < delayCount; ++i) {
 		in.read((char*) &delayStatesNumber[i], SIZE_INT);
@@ -148,7 +148,7 @@ void DelayProblem::save(char* path) {
 	ofstream out;
 	out.open(path, ios::binary | ios::app);
 
-	out.write((char*) &currentStateNumber, SIZE_DOUBLE);
+	out.write((char*) &currentStateNumber, SIZE_INT);
 
 	for (int i = 0; i < delayCount; ++i) {
 		out.write((char*) &delayStatesNumber[i], SIZE_INT);
