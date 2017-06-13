@@ -9,11 +9,10 @@
 
 using namespace std;
 
-RealBlock::RealBlock(int _nodeNumber, int _dimension, int _xCount, int _yCount, int _zCount, int _xOffset, int _yOffset,
-		int _zOffset, int _cellSize, int _haloSize, int _blockNumber, ProcessingUnit* _pu,
-		unsigned short int* _initFuncNumber, unsigned short int* _compFuncNumber, Problem* _problem,
-		NumericalMethod* _numericalMethod) :
-		Block(_nodeNumber, _dimension, _xCount, _yCount, _zCount, _xOffset, _yOffset, _zOffset, _cellSize, _haloSize) {
+RealBlock::RealBlock(int _nodeNumber, int _dimension, int _xCount, int _yCount, int _zCount, int _cellSize,
+		int _haloSize, int _blockNumber, ProcessingUnit* _pu, unsigned short int* _initFuncNumber,
+		unsigned short int* _compFuncNumber, Problem* _problem, NumericalMethod* _numericalMethod) :
+		Block(_nodeNumber, _dimension, _xCount, _yCount, _zCount, _cellSize, _haloSize) {
 
 	//printf("\nbefore create block\n");
 	pu = _pu;
@@ -54,7 +53,7 @@ RealBlock::RealBlock(int _nodeNumber, int _dimension, int _xCount, int _yCount, 
 
 	int commonTempStoragesCount = mNumericalMethod->getCommonTempStorageCount();
 	//mCommonTempStorages = pu->newDoublePointerArray(commonTempStoragesCount);
-	mCommonTempStorages = new double* [commonTempStoragesCount];
+	mCommonTempStorages = new double*[commonTempStoragesCount];
 
 	for (int i = 0; i < commonTempStoragesCount; ++i) {
 		mCommonTempStorages[i] = pu->newDoubleArray(elementCount);
@@ -76,14 +75,14 @@ RealBlock::RealBlock(int _nodeNumber, int _dimension, int _xCount, int _yCount, 
 	int delayCount = mProblem->getDelayCount();
 	int sourceLength = 1 + delayCount;
 	mSource = pu->newDoublePointerArray(sourceLength);
-	mDelayArrays = new double* [delayCount];
+	mDelayArrays = new double*[delayCount];
 	//mSource[0] = NULL;
 	//pu->insertValueIntoPonterArray(mSource, NULL, 0);
 	for (int i = 0; i < delayCount; ++i) {
 		//mSource[i] = pu->newDoubleArray(elementCount);
 		double* delayArray = pu->newDoubleArray(elementCount);
 		mDelayArrays[i] = delayArray;
-		pu->insertValueIntoPonterArray(mSource, delayArray, i+1);
+		pu->insertValueIntoPonterArray(mSource, delayArray, i + 1);
 	}
 
 	mResult = NULL;
@@ -92,7 +91,7 @@ RealBlock::RealBlock(int _nodeNumber, int _dimension, int _xCount, int _yCount, 
 RealBlock::~RealBlock() {
 	int delayCount = mProblem->getDelayCount();
 	for (int i = 0; i < delayCount; ++i) {
-		pu->deleteDeviceSpecificArray(mSource[i+1]);
+		pu->deleteDeviceSpecificArray(mSource[i + 1]);
 	}
 
 	pu->deleteDeviceSpecificArray(mSource);
@@ -106,7 +105,7 @@ RealBlock::~RealBlock() {
 
 	delete mCommonTempStorages;
 
-	if(blockBorder)
+	if (blockBorder)
 		delete blockBorder;
 
 	delete mDelayArrays;
@@ -171,76 +170,73 @@ void RealBlock::prepareArgument(int stage, double timeStep) {
 	mStates[currentStateNumber]->prepareArgument(timeStep, stage);
 }
 
-void RealBlock::getSubVolume(double* result, int mStart, int mStop, int nStart, int nStop, int side){
+void RealBlock::getSubVolume(double* result, int mStart, int mStop, int nStart, int nStop, int side) {
 	int currentStateNumber = mProblem->getCurrentStateNumber();
 
-	switch (side) {
-	case LEFT:
-		//printf("calling getsubvolume from left side of state #%d\n", currentStateNumber);
-		mStates[currentStateNumber]->getSubVolume(result, mStart, mStop, nStart, nStop, 0,
-					  1, yCount, xCount, cellSize);
-		break;
-	case RIGHT:
-		mStates[currentStateNumber]->getSubVolume(result, mStart, mStop, nStart, nStop, xCount-1,
-			         xCount, yCount, xCount, cellSize);
-		break;
-	case FRONT:
-		mStates[currentStateNumber]->getSubVolume(result, mStart, mStop, 0, 1, nStart,
-					         nStop, yCount, xCount, cellSize);
-		break;
-	case BACK:
-		mStates[currentStateNumber]->getSubVolume(result, mStart, mStop, yCount-1, yCount, nStart,
-			         nStop, yCount, xCount, cellSize);
-		break;
-	case TOP:
-		mStates[currentStateNumber]->getSubVolume(result, 0, 1, mStart, mStop, nStart,
-					         nStop, yCount, xCount, cellSize);
-		break;
-	case BOTTOM:
-		mStates[currentStateNumber]->getSubVolume(result, zCount-1, zCount, mStart, mStop, nStart,
-			         nStop, yCount, xCount, cellSize);
-		break;
-	default:
-		break;
-    }
-
-}
-
-void RealBlock::setSubVolume(double* source, int mStart, int mStop, int nStart, int nStop, int side){
-	int currentStateNumber = mProblem->getCurrentStateNumber();
 	switch (side) {
 		case LEFT:
-			mStates[currentStateNumber]->setSubVolume(source, mStart, mStop, nStart, nStop, 0, 1,
-							         yCount, xCount, cellSize);
+			//printf("calling getsubvolume from left side of state #%d\n", currentStateNumber);
+			mStates[currentStateNumber]->getSubVolume(result, mStart, mStop, nStart, nStop, 0, 1, yCount, xCount,
+					cellSize);
 			break;
 		case RIGHT:
-			mStates[currentStateNumber]->setSubVolume(source, mStart, mStop, nStart, nStop, xCount-1,
-				         xCount, yCount, xCount, cellSize);
+			mStates[currentStateNumber]->getSubVolume(result, mStart, mStop, nStart, nStop, xCount - 1, xCount, yCount,
+					xCount, cellSize);
 			break;
 		case FRONT:
-			mStates[currentStateNumber]->setSubVolume(source, mStart, mStop, 0, 1, nStart,
-							         nStop, yCount, xCount, cellSize);
+			mStates[currentStateNumber]->getSubVolume(result, mStart, mStop, 0, 1, nStart, nStop, yCount, xCount,
+					cellSize);
 			break;
 		case BACK:
-			mStates[currentStateNumber]->setSubVolume(source, mStart, mStop, yCount-1, yCount, nStart,
-				         nStop, yCount, xCount, cellSize);
+			mStates[currentStateNumber]->getSubVolume(result, mStart, mStop, yCount - 1, yCount, nStart, nStop, yCount,
+					xCount, cellSize);
 			break;
 		case TOP:
-			mStates[currentStateNumber]->setSubVolume(source, 0, 1, mStart, mStop, nStart,
-							         nStop, yCount, xCount, cellSize);
+			mStates[currentStateNumber]->getSubVolume(result, 0, 1, mStart, mStop, nStart, nStop, yCount, xCount,
+					cellSize);
 			break;
 		case BOTTOM:
-			mStates[currentStateNumber]->setSubVolume(source, zCount-1, zCount, mStart, mStop, nStart,
-				         nStop, yCount, xCount, cellSize);
+			mStates[currentStateNumber]->getSubVolume(result, zCount - 1, zCount, mStart, mStop, nStart, nStop, yCount,
+					xCount, cellSize);
 			break;
 		default:
 			break;
-	    }
+	}
 
 }
 
+void RealBlock::setSubVolume(double* source, int mStart, int mStop, int nStart, int nStop, int side) {
+	int currentStateNumber = mProblem->getCurrentStateNumber();
+	switch (side) {
+		case LEFT:
+			mStates[currentStateNumber]->setSubVolume(source, mStart, mStop, nStart, nStop, 0, 1, yCount, xCount,
+					cellSize);
+			break;
+		case RIGHT:
+			mStates[currentStateNumber]->setSubVolume(source, mStart, mStop, nStart, nStop, xCount - 1, xCount, yCount,
+					xCount, cellSize);
+			break;
+		case FRONT:
+			mStates[currentStateNumber]->setSubVolume(source, mStart, mStop, 0, 1, nStart, nStop, yCount, xCount,
+					cellSize);
+			break;
+		case BACK:
+			mStates[currentStateNumber]->setSubVolume(source, mStart, mStop, yCount - 1, yCount, nStart, nStop, yCount,
+					xCount, cellSize);
+			break;
+		case TOP:
+			mStates[currentStateNumber]->setSubVolume(source, 0, 1, mStart, mStop, nStart, nStop, yCount, xCount,
+					cellSize);
+			break;
+		case BOTTOM:
+			mStates[currentStateNumber]->setSubVolume(source, zCount - 1, zCount, mStart, mStop, nStart, nStop, yCount,
+					xCount, cellSize);
+			break;
+		default:
+			break;
+	}
 
-
+}
 
 void RealBlock::prepareStageData(int stage) {
 	//double* source = problem->getCurrentStateStageData(stage);
@@ -259,25 +255,28 @@ void RealBlock::prepareStageData(int stage) {
 
 		switch (sendBorderInfo[index + SIDE]) {
 			case LEFT:
-				pu->prepareBorder(result, source, mStart, mStop, nStart, nStop, 0 + 1, haloSize + 1, yCount, xCount, cellSize);
+				pu->prepareBorder(result, source, mStart, mStop, nStart, nStop, 0 + 1, haloSize + 1, yCount, xCount,
+						cellSize);
 				break;
 			case RIGHT:
-				pu->prepareBorder(result, source, mStart, mStop, nStart, nStop, xCount - haloSize - 1, xCount - 1, yCount,
-						xCount, cellSize);
+				pu->prepareBorder(result, source, mStart, mStop, nStart, nStop, xCount - haloSize - 1, xCount - 1,
+						yCount, xCount, cellSize);
 				break;
 			case FRONT:
-				pu->prepareBorder(result, source, mStart, mStop, 0 + 1, haloSize + 1, nStart, nStop, yCount, xCount, cellSize);
+				pu->prepareBorder(result, source, mStart, mStop, 0 + 1, haloSize + 1, nStart, nStop, yCount, xCount,
+						cellSize);
 				break;
 			case BACK:
-				pu->prepareBorder(result, source, mStart, mStop, yCount - haloSize - 1, yCount - 1, nStart, nStop, yCount,
-						xCount, cellSize);
+				pu->prepareBorder(result, source, mStart, mStop, yCount - haloSize - 1, yCount - 1, nStart, nStop,
+						yCount, xCount, cellSize);
 				break;
 			case TOP:
-				pu->prepareBorder(result, source, 0 + 1, haloSize + 1, mStart, mStop, nStart, nStop, yCount, xCount, cellSize);
+				pu->prepareBorder(result, source, 0 + 1, haloSize + 1, mStart, mStop, nStart, nStop, yCount, xCount,
+						cellSize);
 				break;
 			case BOTTOM:
-				pu->prepareBorder(result, source, zCount - haloSize - 1, zCount - 1, mStart, mStop, nStart, nStop, yCount,
-						xCount, cellSize);
+				pu->prepareBorder(result, source, zCount - haloSize - 1, zCount - 1, mStart, mStop, nStart, nStop,
+						yCount, xCount, cellSize);
 				break;
 			default:
 				break;
@@ -316,7 +315,7 @@ void RealBlock::prepareStageSourceResult(int stage, double timeStep, double curr
 		}
 
 		/*pu->printArray(mSource[0], 1, 1, 11, 1);
-		pu->printArray(mSource[1 + i], 1, 1, 11, 1);*/
+		 pu->printArray(mSource[1 + i], 1, 1, 11, 1);*/
 	}
 }
 
@@ -409,7 +408,7 @@ double* RealBlock::addNewExternalBorder(Block* neighbor, int side, int mOffset, 
 
 void RealBlock::moveTempBorderVectorToBorderArray() {
 	//blockBorder = pu->newDoublePointerArray(countSendSegmentBorder);
-	blockBorder = new double* [countSendSegmentBorder];
+	blockBorder = new double*[countSendSegmentBorder];
 
 	sendBorderInfo = pu->newIntArray(INTERCONNECT_COMPONENT_COUNT * countSendSegmentBorder);
 
@@ -420,7 +419,6 @@ void RealBlock::moveTempBorderVectorToBorderArray() {
 	for (int i = 0; i < countSendSegmentBorder; ++i) {
 		blockBorder[i] = tempBlockBorder.at(i);
 		//pu->insertValueIntoPonterArray(blockBorder, tempBlockBorder.at(i), i);
-
 
 		int index = INTERCONNECT_COMPONENT_COUNT * i;
 		sendBorderInfo[index + SIDE] = tempSendBorderInfo.at(index + 0);
@@ -487,7 +485,7 @@ bool RealBlock::isNan() {
 	return false;
 }
 
-ProcessingUnit* RealBlock::getPU(){
+ProcessingUnit* RealBlock::getPU() {
 	return pu;
 }
 
@@ -506,12 +504,9 @@ void RealBlock::printGeneralInformation() {
 			"   xCount:      %d\n"
 			"   yCount:      %d\n"
 			"   zCount:      %d\n"
-			"   xOffset:     %d\n"
-			"   yOffset:     %d\n"
-			"   zOffset:     %d\n"
 			"   Cell size:   %d\n"
 			"   Halo size:   %d\n"
-			"\n", blockNumber, nodeNumber, xCount, yCount, zCount, xOffset, yOffset, zOffset, cellSize, haloSize);
+			"\n", blockNumber, nodeNumber, xCount, yCount, zCount, cellSize, haloSize);
 }
 
 void RealBlock::printBorderInfo() {
@@ -551,9 +546,6 @@ void RealBlock::printBorderInfo() {
 
 	printf("\n");
 }
-
-
-
 
 void RealBlock::printData() {
 	//mProblem->print(zCount, yCount, xCount, cellSize);

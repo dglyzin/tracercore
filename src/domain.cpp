@@ -203,8 +203,8 @@ void Domain::compute(char* inputFile) {
 		}
 
 		/*if (!(currentTime < stopTime)) {
-			mJobState = JS_FINISHED;
-		}*/
+		 mJobState = JS_FINISHED;
+		 }*/
 
 		if (isReadyToFullSave()) {
 			saveStateForLoad(inputFile);
@@ -221,7 +221,7 @@ void Domain::compute(char* inputFile) {
 		}
 		MPI_Bcast(&mUserStatus, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
-		if(mJobState == JS_FINISHED) {
+		if (mJobState == JS_FINISHED) {
 			stopByTime(inputFile);
 		}
 	} //end while
@@ -276,36 +276,36 @@ void Domain::nextStep() {
 		//printwcts("step error = " + ToString(error) + " " + ToString(currentTime) + "\n", LL_INFO);
 		isErrorPer = isErrorPermissible(error);
 
-/*		if (!isErrorPer) {
-			//printwcts(ToString(currentTime) +" " + ToString(mTimeStep) + " " + ToString(stopTime) + "\n", LL_INFO);
-			if (currentTime + mTimeStep > stopTime) {
-			 mUserStatus = US_STOP;
-			 return;
-			 }
+		/*		if (!isErrorPer) {
+		 //printwcts(ToString(currentTime) +" " + ToString(mTimeStep) + " " + ToString(stopTime) + "\n", LL_INFO);
+		 if (currentTime + mTimeStep > stopTime) {
+		 mUserStatus = US_STOP;
+		 return;
+		 }
 
-			//printwcts("###\n", LL_INFO);
+		 //printwcts("###\n", LL_INFO);
 
-			confirmStep();
-			mAcceptedStepCount++;
-			currentTime += mTimeStep;
-			//cout<<"Step accepted\n"<<endl;
-		} else {
-			rejectStep();
-			mRejectedStepCount++;
-			//cout << "Step rejected!\n" << endl;
+		 confirmStep();
+		 mAcceptedStepCount++;
+		 currentTime += mTimeStep;
+		 //cout<<"Step accepted\n"<<endl;
+		 } else {
+		 rejectStep();
+		 mRejectedStepCount++;
+		 //cout << "Step rejected!\n" << endl;
 
-			mTimeStep = computeNewStep(error);
-			printwcts("new time step = " + ToString(mTimeStep) + "\n", LL_INFO);
-			if(mTimeStep < MINIMALLY_ACCEPTABLE_TIMESTEP) {
-				printwcts("New time step (" + ToString(mTimeStep) + ") too small. Computation aborted.\n\n", LL_INFO);
-				mJobState = JS_FINISHED;
-			}
+		 mTimeStep = computeNewStep(error);
+		 printwcts("new time step = " + ToString(mTimeStep) + "\n", LL_INFO);
+		 if(mTimeStep < MINIMALLY_ACCEPTABLE_TIMESTEP) {
+		 printwcts("New time step (" + ToString(mTimeStep) + ") too small. Computation aborted.\n\n", LL_INFO);
+		 mJobState = JS_FINISHED;
+		 }
 
-			return;
-		}*/
+		 return;
+		 }*/
 	}
 
-	if(isErrorPer) {
+	if (isErrorPer) {
 		if (currentTime + mTimeStep > stopTime) {
 			mJobState = JS_FINISHED;
 			return;
@@ -314,8 +314,7 @@ void Domain::nextStep() {
 		confirmStep();
 		currentTime += mTimeStep;
 		mAcceptedStepCount++;
-	}
-	else {
+	} else {
 		rejectStep();
 		mRejectedStepCount++;
 	}
@@ -323,7 +322,7 @@ void Domain::nextStep() {
 	if (mNumericalMethod->isVariableStep()) {
 		mTimeStep = computeNewStep(error);
 		//printwcts("new time step = " + ToString(mTimeStep) + "\n", LL_INFO);
-		if(mTimeStep < MINIMALLY_ACCEPTABLE_TIMESTEP) {
+		if (mTimeStep < MINIMALLY_ACCEPTABLE_TIMESTEP) {
 			printwcts("New time step (" + ToString(mTimeStep) + ") too small. Computation aborted.\n\n", LL_INFO);
 			mJobState = JS_FINISHED;
 		}
@@ -563,12 +562,12 @@ void Domain::readFromFile(char* path) {
 	createNumericalMethod();
 
 	/*mProblemType = DELAY;
-	int stateCount = 101000;
-	int delayCount  = 1;
-	double* delayValue = new double[1];
-	delayValue[0] = 1.0;
-	createProblem(stateCount, delayCount, delayValue);
-	delete delayValue;*/
+	 int stateCount = 101000;
+	 int delayCount  = 1;
+	 double* delayValue = new double[1];
+	 delayValue[0] = 1.0;
+	 createProblem(stateCount, delayCount, delayValue);
+	 delete delayValue;*/
 	readProblem(in);
 
 	createBlock(in);
@@ -576,7 +575,6 @@ void Domain::readFromFile(char* path) {
 	createInterconnect(in);
 
 	//todo send every left side of interconnect to
-
 
 	readPlots(in);
 
@@ -654,12 +652,12 @@ void Domain::readSolverTolerance(std::ifstream& in) {
 
 void Domain::readProblem(std::ifstream& in) {
 	/*mProblemType = DELAY;
-	int stateCount = 101000;
-	int delayCount  = 1;
-	double* delayValue = new double[1];
-	delayValue[0] = 1.0;
-	createProblem(stateCount, delayCount, delayValue);
-	delete delayValue;*/
+	 int stateCount = 101000;
+	 int delayCount  = 1;
+	 double* delayValue = new double[1];
+	 delayValue[0] = 1.0;
+	 createProblem(stateCount, delayCount, delayValue);
+	 delete delayValue;*/
 
 	in.read((char*) &mProblemType, SIZE_INT);
 
@@ -668,7 +666,7 @@ void Domain::readProblem(std::ifstream& in) {
 		mProblem = new OrdinaryProblem();
 	}
 
-	if(mProblemType == 1) {
+	if (mProblemType == 1) {
 		mProblemType = DELAY;
 
 		int stateCount = 101000;
@@ -818,12 +816,11 @@ Block* Domain::readBlock(ifstream& in, int idx, int dimension) {
 			assert(false);
 		}
 
-		resBlock = new RealBlock(node, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2],
-				mCellSize, mHaloSize, idx, pu, initFuncNumber, compFuncNumber, mProblem, mNumericalMethod);
+		resBlock = new RealBlock(node, dimension, count[0], count[1], count[2], mCellSize, mHaloSize, idx, pu,
+				initFuncNumber, compFuncNumber, mProblem, mNumericalMethod);
 	} else {
 		//resBlock =  new BlockNull(idx, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2], node, deviceNumber, mHaloSize, mCellSize);
-		resBlock = new NullBlock(node, dimension, count[0], count[1], count[2], offset[0], offset[1], offset[2],
-				mCellSize, mHaloSize);
+		resBlock = new NullBlock(node, dimension, count[0], count[1], count[2], mCellSize, mHaloSize);
 	}
 
 	delete initFuncNumber;
@@ -838,23 +835,22 @@ Block* Domain::readBlock(ifstream& in, int idx, int dimension) {
  *  исправление границ, принадлежащих склейке
  *  если мы на блоке-получателе со старшей стороны, нужно получить начальные условия из соседнего блока
  */
-void Domain::fixInitialBorderValues(int sourceBlock, int destinationBlock,
-		int* offsetSource, int* offsetDestination, int* length, int sourceSide,
-		int destinationSide){
+void Domain::fixInitialBorderValues(int sourceBlock, int destinationBlock, int* offsetSource, int* offsetDestination,
+		int* length, int sourceSide, int destinationSide) {
 	//printf("welcome to border fixer\n");
 	int sourceNode = mBlocks[sourceBlock]->getNodeNumber();
 	int destinationNode = mBlocks[destinationBlock]->getNodeNumber();
-    //of the two halves of interconnect we use [--) <-- [--]  and ignore the other
-	if ((destinationSide == RIGHT) or (destinationSide == BACK) or (destinationSide == BOTTOM)){
+	//of the two halves of interconnect we use [--) <-- [--]  and ignore the other
+	if ((destinationSide == RIGHT) or (destinationSide == BACK) or (destinationSide == BOTTOM)) {
 		//printf("fixing side %d \n", destinationSide);
-		double* destBuffer=NULL;
-		double* sourceBuffer=NULL;
-		int bufferSize = mCellSize*length[0]*length[1];
-		ProcessingUnit* sourcePU=NULL;
-		ProcessingUnit* destPU=NULL;
+		double* destBuffer = NULL;
+		double* sourceBuffer = NULL;
+		int bufferSize = mCellSize * length[0] * length[1];
+		ProcessingUnit* sourcePU = NULL;
+		ProcessingUnit* destPU = NULL;
 		MPI_Request request;
 
-		if (mWorkerRank == sourceNode){
+		if (mWorkerRank == sourceNode) {
 			//готовь источник
 			sourcePU = mBlocks[sourceBlock]->getPU();
 			sourceBuffer = sourcePU->newDoubleArray(bufferSize);
@@ -873,32 +869,31 @@ void Domain::fixInitialBorderValues(int sourceBlock, int destinationBlock,
 			MPI_Isend(sourceBuffer, bufferSize, MPI_DOUBLE, destinationNode, 0, mWorkerComm, &request);
 			//printf("Isend ok\n");
 		}
-		if (mWorkerRank == destinationNode){
+		if (mWorkerRank == destinationNode) {
 			//готовь дестинэйшн
 			destPU = mBlocks[destinationBlock]->getPU();
-	    	destBuffer = destPU->newDoubleArray(bufferSize);
+			destBuffer = destPU->newDoubleArray(bufferSize);
 			//копируй дестинэйшн в блок
-	    	MPI_Status mpistatus;
-	    	//printf("receiving buffer\n");
-            MPI_Recv(destBuffer, bufferSize, MPI_DOUBLE, sourceNode, 0, mWorkerComm, &mpistatus);
-            //printf("receive ok\n");
-	    	int dmStart = offsetDestination[0];
+			MPI_Status mpistatus;
+			//printf("receiving buffer\n");
+			MPI_Recv(destBuffer, bufferSize, MPI_DOUBLE, sourceNode, 0, mWorkerComm, &mpistatus);
+			//printf("receive ok\n");
+			int dmStart = offsetDestination[0];
 			int dnStart = offsetDestination[1];
 			int dmStop = offsetDestination[0] + length[0];
 			int dnStop = offsetDestination[1] + length[1];
-		    mBlocks[destinationBlock]->setSubVolume(destBuffer, dmStart, dmStop, dnStart, dnStop, destinationSide);
+			mBlocks[destinationBlock]->setSubVolume(destBuffer, dmStart, dmStop, dnStart, dnStop, destinationSide);
 		}
 
-		if (mWorkerRank == sourceNode){
+		if (mWorkerRank == sourceNode) {
 			MPI_Status mpistatus;
 			MPI_Wait(&request, &mpistatus);
-	        sourcePU->deleteDeviceSpecificArray(sourceBuffer);
+			sourcePU->deleteDeviceSpecificArray(sourceBuffer);
 		}
-		if (mWorkerRank == destinationNode){
+		if (mWorkerRank == destinationNode) {
 			destPU->deleteDeviceSpecificArray(destBuffer);
 		}
-    }
-
+	}
 
 }
 
@@ -957,7 +952,8 @@ Interconnect* Domain::readConnection(ifstream& in) {
 			Utils::getSide(destinationSide), offsetDestination[0], offsetDestination[1], length[0], length[1],
 			sourceData);
 
-	fixInitialBorderValues(sourceBlock, destinationBlock, offsetSource, offsetDestination, length, Utils::getSide(sourceSide), Utils::getSide(destinationSide));
+	fixInitialBorderValues(sourceBlock, destinationBlock, offsetSource, offsetDestination, length,
+			Utils::getSide(sourceSide), Utils::getSide(destinationSide));
 
 	int sourceNode = mBlocks[sourceBlock]->getNodeNumber();
 	int destinationNode = mBlocks[destinationBlock]->getNodeNumber();
@@ -1339,12 +1335,12 @@ void Domain::createNumericalMethod() {
 }
 
 void Domain::createProblem(int stateCount, int delayCount, double* delayValue) {
-	if(mProblemType == ORDINARY) {
+	if (mProblemType == ORDINARY) {
 		mProblem = new OrdinaryProblem();
 		return;
 	}
 
-	if(mProblemType == DELAY) {
+	if (mProblemType == DELAY) {
 		mProblem = new DelayProblem(stateCount, delayCount, delayValue);
 		return;
 	}
@@ -1388,10 +1384,10 @@ int Domain::getMaxStepStorageCount() {
 	}
 
 	/*int cpuSolverSize = mNumericalMethod->getMemorySizePerState(cpuRequiredMemory);
-	int* gpuSolverSize = new int[mGpuCount];
-	for (int i = 0; i < mGpuCount; ++i) {
-		gpuSolverSize[i] = mNumericalMethod->getMemorySizePerState(gpuRequiredMemory[i]);
-	}*/
+	 int* gpuSolverSize = new int[mGpuCount];
+	 for (int i = 0; i < mGpuCount; ++i) {
+	 gpuSolverSize[i] = mNumericalMethod->getMemorySizePerState(gpuRequiredMemory[i]);
+	 }*/
 
 	int cpuMaxCount = (int) (CPU_RAM / cpuRequiredMemory);
 	int* gpuMaxCount = new int[mGpuCount];

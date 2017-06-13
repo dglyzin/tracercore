@@ -21,10 +21,9 @@
 
 class RealBlock: public Block {
 public:
-	RealBlock(int _nodeNumber, int _dimension, int _xCount, int _yCount, int _zCount, int _xOffset, int _yOffset,
-			int _zOffset, int _cellSize, int _haloSize, int _blockNumber, ProcessingUnit* _pu,
-			unsigned short int* _initFuncNumber, unsigned short int* _compFuncNumber, Problem* _problem,
-			NumericalMethod* _method);
+	RealBlock(int _nodeNumber, int _dimension, int _xCount, int _yCount, int _zCount, int _cellSize, int _haloSize,
+			int _blockNumber, ProcessingUnit* _pu, unsigned short int* _initFuncNumber,
+			unsigned short int* _compFuncNumber, Problem* _problem, NumericalMethod* _method);
 
 	virtual ~RealBlock();
 
