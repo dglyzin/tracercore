@@ -22,7 +22,7 @@ bool Euler::isFSAL() {
 	return false;
 }
 
-bool Euler::isErrorPermissible(double error, int totalDomainElements) {
+bool Euler::isErrorPermissible(double error, unsigned long long totalDomainElements) {
 	return true;
 }
 
@@ -30,7 +30,7 @@ bool Euler::isVariableStep() {
 	return false;
 }
 
-double Euler::computeNewStep(double timeStep, double error, int totalDomainElements) {
+double Euler::computeNewStep(double timeStep, double error, unsigned long long totalDomainElements) {
 	return timeStep;
 }
 
@@ -56,13 +56,13 @@ double Euler::getStageTimeStepCoefficient(int stageNumber) {
 }
 
 void Euler::prepareArgument(ProcessingUnit* pu, double* state, double** kStorages, double** commonTempStorages,
-		double timeStep, int stageNumber, int size) {
+		double timeStep, int stageNumber, unsigned long long size) {
 	return;
 }
 
 void Euler::confirmStep(ProcessingUnit* pu, ISmartCopy* sc, double** sourceState, double** sourceKStorages,
 		double** destinationState, double** destinationKStorages, double** commonTempStorages, double timeStep,
-		int size) {
+		unsigned long long size) {
 	/*pu->multiplyArrayByNumber(mTempStore1, mTempStore1, timestep, mCount);
 	 pu->sumArrays(mTempStore1, mState, mTempStore1, mCount);
 
@@ -73,16 +73,16 @@ void Euler::confirmStep(ProcessingUnit* pu, ISmartCopy* sc, double** sourceState
 }
 
 void Euler::rejectStep(ProcessingUnit* pu, double* state, double** kStorages, double** commonTempStorages,
-		double timeStep, int size) {
+		double timeStep, unsigned long long size) {
 	return;
 }
 
 double Euler::computeStepError(ProcessingUnit* pu, double* state, double** kStorages, double** commonTempStorages,
-		double timeStep, int size) {
+		double timeStep, unsigned long long size) {
 	return 0.0;
 }
 
 void Euler::computeDenseOutput(ProcessingUnit* pu, double* state, double** kStorages, double** commonTempStorages,
-		double timeStep, double theta, double* result, int size) {
+		double timeStep, double theta, double* result, unsigned long long size) {
 	pu->multiplyArrayByNumberAndSum(result, kStorages[K1], theta * timeStep, state, size);
 }

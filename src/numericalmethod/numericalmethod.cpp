@@ -15,7 +15,7 @@ NumericalMethod::NumericalMethod(double _aTol, double _rTol) {
 NumericalMethod::~NumericalMethod() {
 }
 
-int NumericalMethod::getMemorySizePerState(int elementCount) {
+unsigned long long NumericalMethod::getMemorySizePerState(unsigned long long elementCount) {
 	// state + temp storage count
 	return (elementCount * SIZE_DOUBLE) * (1 + getKStorageCount());
 }

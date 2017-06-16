@@ -33,8 +33,8 @@ RealBlock::RealBlock(int _nodeNumber, int _dimension, int _xCount, int _yCount, 
 
 	countSendSegmentBorder = countReceiveSegmentBorder = 0;
 
-	int nodeCount = getGridNodeCount();
-	int elementCount = getGridElementCount();
+	unsigned long long nodeCount = getGridNodeCount();
+	unsigned long long elementCount = getGridElementCount();
 
 	mCompFuncNumber = pu->newUnsignedShortIntArray(nodeCount);
 	mInitFuncNumber = pu->newUnsignedShortIntArray(nodeCount);

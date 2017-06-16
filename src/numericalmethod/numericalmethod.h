@@ -21,9 +21,9 @@ public:
 
 	virtual int getStageCount() = 0;
 	virtual bool isFSAL() = 0;
-	virtual bool isErrorPermissible(double error, int totalDomainElements) = 0;
+	virtual bool isErrorPermissible(double error, unsigned long long totalDomainElements) = 0;
 	virtual bool isVariableStep() = 0;
-	virtual double computeNewStep(double timeStep, double error, int totalDomainElements) = 0;
+	virtual double computeNewStep(double timeStep, double error, unsigned long long totalDomainElements) = 0;
 
 	virtual int getKStorageCount() = 0;
 	virtual int getCommonTempStorageCount() = 0;
@@ -38,22 +38,22 @@ public:
 	virtual double getStageTimeStepCoefficient(int stageNumber) = 0;
 
 	virtual void prepareArgument(ProcessingUnit* pu, double* state, double** kStorages, double** commonTempStorages,
-			double timeStep, int stageNumber, int size) = 0;
+			double timeStep, int stageNumber, unsigned long long size) = 0;
 	//virtual void prepareFSAL(ProcessingUnit* pu, double** source, double timeStep) = 0;
 
 	virtual void confirmStep(ProcessingUnit* pu, ISmartCopy* sc, double** sourceState, double** sourceKStorages,
 			double** destinationState, double** destinationKStorages, double** commonTemp, double timeStep,
-			int size) = 0;
+			unsigned long long size) = 0;
 	virtual void rejectStep(ProcessingUnit* pu, double* state, double** kStorages, double** commonTempStorages,
-			double timeStep, int size) = 0;
+			double timeStep, unsigned long long size) = 0;
 
 	virtual double computeStepError(ProcessingUnit* pu, double* state, double** kStorages, double** commonTempStorages,
-			double timeStep, int size) = 0;
+			double timeStep, unsigned long long size) = 0;
 
 	virtual void computeDenseOutput(ProcessingUnit* pu, double* state, double** kStorages, double** commonTempStorages,
-			double timeStep, double theta, double* result, int size) = 0;
+			double timeStep, double theta, double* result, unsigned long long size) = 0;
 
-	int getMemorySizePerState(int elementCount);
+	unsigned long long getMemorySizePerState(unsigned long long elementCount);
 
 	//virtual bool isStateNan(ProcessingUnit* pu, double** kStorages) = 0;
 

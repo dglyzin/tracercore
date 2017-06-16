@@ -22,7 +22,7 @@ bool RungeKutta4::isFSAL() {
 	return false;
 }
 
-bool RungeKutta4::isErrorPermissible(double error, int totalDomainElements) {
+bool RungeKutta4::isErrorPermissible(double error, unsigned long long totalDomainElements) {
 	return true;
 }
 
@@ -30,7 +30,7 @@ bool RungeKutta4::isVariableStep() {
 	return false;
 }
 
-double RungeKutta4::computeNewStep(double timeStep, double error, int totalDomainElements) {
+double RungeKutta4::computeNewStep(double timeStep, double error, unsigned long long totalDomainElements) {
 	return timeStep;
 }
 
@@ -89,7 +89,7 @@ double RungeKutta4::getStageTimeStepCoefficient(int stageNumber) {
 }
 
 void RungeKutta4::prepareArgument(ProcessingUnit* pu, double* state, double** kStorages, double** commonTempStorages,
-		double timeStep, int stageNumber, int size) {
+		double timeStep, int stageNumber, unsigned long long size) {
 	switch (stageNumber) {
 		case 0:
 			break;
@@ -136,7 +136,7 @@ void RungeKutta4::prepareArgument(ProcessingUnit* pu, double* state, double** kS
 
 void RungeKutta4::confirmStep(ProcessingUnit* pu, ISmartCopy* sc, double** sourceState, double** sourceKStorages,
 		double** destinationState, double** destinationKStorages, double** commonTempStorages, double timeStep,
-		int size) {
+		unsigned long long size) {
 	pu->multiplyArrayByNumber(commonTempStorages[ARG], sourceKStorages[K1], b1, size);
 	pu->multiplyArrayByNumberAndSum(commonTempStorages[ARG], sourceKStorages[K2], b2, commonTempStorages[ARG], size);
 	pu->multiplyArrayByNumberAndSum(commonTempStorages[ARG], sourceKStorages[K3], b3, commonTempStorages[ARG], size);
@@ -150,16 +150,16 @@ void RungeKutta4::confirmStep(ProcessingUnit* pu, ISmartCopy* sc, double** sourc
 }
 
 void RungeKutta4::rejectStep(ProcessingUnit* pu, double* state, double** kStorages, double** commonTempStorages,
-		double timeStep, int size) {
+		double timeStep, unsigned long long size) {
 	return;
 }
 
 double RungeKutta4::computeStepError(ProcessingUnit* pu, double* state, double** kStorages, double** commonTempStorages,
-		double timeStep, int size) {
+		double timeStep, unsigned long long size) {
 	return 0.0;
 }
 
 void RungeKutta4::computeDenseOutput(ProcessingUnit* pu, double* state, double** kStorages, double** commonTempStorages,
-		double timeStep, double theta, double* result, int size) {
+		double timeStep, double theta, double* result, unsigned long long size) {
 	pu->copyArray(state, result, size);
 }
