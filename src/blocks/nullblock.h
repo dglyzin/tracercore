@@ -14,11 +14,9 @@
 #include "../enums.h"
 #include "block.h"
 
-
 class NullBlock: public Block {
 public:
-	NullBlock(int _nodeNumber, int _dimension, int _xCount, int _yCount, int _zCount, int _xOffset, int _yOffset,
-			int _zOffset, int _cellSize, int _haloSize);
+	NullBlock(int _nodeNumber, int _dimension, int _xCount, int _yCount, int _zCount, int _cellSize, int _haloSize);
 	virtual ~NullBlock();
 
 	void afterCreate(int problemType, int solverType, double aTol, double rTol);
@@ -29,8 +27,7 @@ public:
 	void prepareArgument(int stage, double timestep);
 	void getSubVolume(double* result, int mStart, int mStop, int nStart, int nStop, int side);
 
-    void setSubVolume(double* source, int mStart, int mStop, int nStart, int nStop, int side);
-
+	void setSubVolume(double* source, int mStart, int mStop, int nStart, int nStop, int side);
 
 	void prepareStageData(int stage);
 	void prepareStageSourceResult(int stage, double timeStep, double currentTime);

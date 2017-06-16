@@ -9,9 +9,9 @@
 
 using namespace std;
 
-NullBlock::NullBlock(int _nodeNumber, int _dimension, int _xCount, int _yCount, int _zCount, int _xOffset, int _yOffset,
-		int _zOffset, int _cellSize, int _haloSize) :
-		Block(_nodeNumber, _dimension, _xCount, _yCount, _zCount, _xOffset, _yOffset, _zOffset, _cellSize, _haloSize) {
+NullBlock::NullBlock(int _nodeNumber, int _dimension, int _xCount, int _yCount, int _zCount, int _cellSize,
+		int _haloSize) :
+		Block(_nodeNumber, _dimension, _xCount, _yCount, _zCount, _cellSize, _haloSize) {
 }
 
 NullBlock::~NullBlock() {
@@ -33,15 +33,13 @@ void NullBlock::prepareArgument(int stage, double timestep) {
 	return;
 }
 
-void NullBlock::getSubVolume(double* result, int mStart, int mStop, int nStart, int nStop, int side){
+void NullBlock::getSubVolume(double* result, int mStart, int mStop, int nStart, int nStop, int side) {
 	return;
 }
 
-
-void NullBlock::setSubVolume(double* source, int mStart, int mStop, int nStart, int nStop, int side){
+void NullBlock::setSubVolume(double* source, int mStart, int mStop, int nStart, int nStop, int side) {
 	return;
 }
-
 
 void NullBlock::prepareStageData(int stage) {
 	return;

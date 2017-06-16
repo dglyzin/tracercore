@@ -244,6 +244,7 @@ private:
 	void readCellAndHaloSize(std::ifstream& in);
 	void readSolverIndex(std::ifstream& in);
 	void readSolverTolerance(std::ifstream& in);
+	void readProblem(std::ifstream& in);
 	void readBlockCount(std::ifstream& in);
 	void readPlotCount(std::ifstream& in);
 	void readConnectionCount(std::ifstream& in);

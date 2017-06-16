@@ -15,8 +15,7 @@
 
 class Block {
 public:
-	Block(int _nodeNumber, int _dimension, int _xCount, int _yCount, int _zCount, int _xOffset, int _yOffset,
-			int _zOffset, int _cellSize, int _haloSize);
+	Block(int _nodeNumber, int _dimension, int _xCount, int _yCount, int _zCount, int _cellSize, int _haloSize);
 	virtual ~Block();
 
 	//virtual void afterCreate(int problemType, int solverType, double aTol, double rTol) = 0;
@@ -78,10 +77,6 @@ protected:
 	int xCount;
 	int yCount;
 	int zCount;
-
-	int xOffset;
-	int yOffset;
-	int zOffset;
 
 	int cellSize;
 	int haloSize;
