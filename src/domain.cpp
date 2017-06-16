@@ -1057,6 +1057,10 @@ void Domain::saveStateForDraw(char* inputFile, int plotVals) {
 }
 
 void Domain::saveStateForLoad(char* inputFile) {
+	if (mSavePeriod == 0.0) {
+		return;
+	}
+
 	char* saveFile = new char[250];
 	Utils::getFilePathForLoad(inputFile, saveFile, currentTime);
 
