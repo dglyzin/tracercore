@@ -135,6 +135,7 @@ void Domain::stopByUser(char* inputFile) {
 }
 
 void Domain::stopByTime(char* inputFile) {
+	printwcts("\nSave the final result to a file. The procedure may take time.\n", LL_INFO);
 	saveStateForLoad(inputFile);
 
 	double theta = getThetaForDenseOutput(stopTime);
