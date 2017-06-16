@@ -135,7 +135,6 @@ void Domain::stopByUser(char* inputFile) {
 }
 
 void Domain::stopByTime(char* inputFile) {
-	printwcts("Save the final result to a file. The procedure may take time.\n", LL_INFO);
 	saveStateForLoad(inputFile);
 
 	double theta = getThetaForDenseOutput(stopTime);
@@ -1060,6 +1059,7 @@ void Domain::saveStateForLoad(char* inputFile) {
 	if (mSavePeriod == 0.0) {
 		return;
 	}
+	printwcts("Save the final result to a file. The procedure may take time.\n", LL_INFO);
 
 	char* saveFile = new char[250];
 	Utils::getFilePathForLoad(inputFile, saveFile, currentTime);
