@@ -152,15 +152,11 @@ void CPU::swapArray(double** firstArray, double** secondArray) {
 }
 
 void CPU::copyArray(double* source, double* destination, int size) {
-	for (int i = 0; i < size; ++i) {
-		destination[i] = source[i];
-	}
+	memcpy(destination, source, size * SIZE_DOUBLE);
 }
 
 void CPU::copyArray(unsigned short int* source, unsigned short int* destination, int size) {
-	for (int i = 0; i < size; ++i) {
-		destination[i] = source[i];
-	}
+	memcpy(destination, source, size * SIZE_UN_SH_INT);
 }
 
 void CPU::sumArrays(double* result, double* arg1, double* arg2, int size) {
