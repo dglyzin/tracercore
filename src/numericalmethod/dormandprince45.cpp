@@ -248,10 +248,10 @@ double DormandPrince45::computeStepError(ProcessingUnit* pu, double* state, doub
 void DormandPrince45::computeDenseOutput(ProcessingUnit* pu, double* state, double** kStorages,
 		double** commonTempStorages, double timeStep, double theta, double* result, unsigned long long size) {
 	pu->multiplyArrayByNumber(result, kStorages[K1], getB1(theta), size);
-	pu->multiplyArrayByNumberAndSum(result, kStorages[K3], getB3(theta), commonTempStorages[ARG], size);
-	pu->multiplyArrayByNumberAndSum(result, kStorages[K4], getB4(theta), commonTempStorages[ARG], size);
-	pu->multiplyArrayByNumberAndSum(result, kStorages[K5], getB5(theta), commonTempStorages[ARG], size);
-	pu->multiplyArrayByNumberAndSum(result, kStorages[K6], getB6(theta), commonTempStorages[ARG], size);
+	pu->multiplyArrayByNumberAndSum(result, kStorages[K3], getB3(theta), result, size);
+	pu->multiplyArrayByNumberAndSum(result, kStorages[K4], getB4(theta), result, size);
+	pu->multiplyArrayByNumberAndSum(result, kStorages[K5], getB5(theta), result, size);
+	pu->multiplyArrayByNumberAndSum(result, kStorages[K6], getB6(theta), result, size);
 	pu->multiplyArrayByNumber(result, result, timeStep, size);
 	pu->sumArrays(result, result, state, size);
 }
