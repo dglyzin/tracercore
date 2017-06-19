@@ -70,12 +70,12 @@ void GPU::swapArray(double** firstArray, double** secondArray) {
 
 void GPU::copyArray(double* source, double* destination, int size) {
 	cudaSetDevice(deviceNumber);
-	copyArrayGPU(source, destination, size);
+	cudaMemcpy(destination, source, size * SIZE_DOUBLE, cudaMemcpyDeviceToDevice);
 }
 
 void GPU::copyArray(unsigned short int* source, unsigned short int* destination, int size) {
 	cudaSetDevice(deviceNumber);
-	copyArrayGPU(source, destination, size);
+	cudaMemcpy(destination, source, size * SIZE_UN_SH_INT, cudaMemcpyDeviceToDevice);
 }
 
 void GPU::sumArrays(double* result, double* arg1, double* arg2, int size) {
