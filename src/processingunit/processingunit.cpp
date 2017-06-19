@@ -154,12 +154,24 @@ void ProcessingUnit::deleteUnsignedShortInt(unsigned short int* toDelete) {
 void ProcessingUnit::saveArray(double* array, unsigned long long size, char* path) {
 	ofstream out;
 	out.open(path, ios::binary | ios::app);
-	writeArray(array, size, out);
+
+	int saveSize = size % INT_MAX;
+	while(saveSize > 0) {
+		writeArray(array, saveSize, out);
+		size -= saveSize;
+		saveSize = size % INT_MAX;
+	}
+
 	out.close();
 }
 
 void ProcessingUnit::loadArray(double* array, unsigned long long size, std::ifstream& in) {
-	readArray(array, size, in);
+	int readSize = size % INT_MAX;
+	while(readSize > 0) {
+		readArray(array, size, in);
+		size -= readSize;
+		readSize = size % INT_MAX;
+	}
 }
 
 double* ProcessingUnit::getDoublePinnedArray(int size) {
