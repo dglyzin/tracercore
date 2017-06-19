@@ -105,7 +105,7 @@ bool CPU::isDeviceType(int type) {
 	return false;
 }
 
-double* CPU::getDoubleArray(int size) {
+double* CPU::getDoubleArray(unsigned long long size) {
 	return new double[size];
 }
 
@@ -121,7 +121,7 @@ int** CPU::getIntPointerArray(int size) {
 	return new int*[size];
 }
 
-unsigned short int* CPU::getUnsignedShortIntArray(int size) {
+unsigned short int* CPU::getUnsignedShortIntArray(unsigned long long size) {
 	return new unsigned short int[size];
 }
 
@@ -151,76 +151,76 @@ void CPU::swapArray(double** firstArray, double** secondArray) {
 	*secondArray = tmp;
 }
 
-void CPU::copyArray(double* source, double* destination, int size) {
+void CPU::copyArray(double* source, double* destination, unsigned long long size) {
 	memcpy(destination, source, size * SIZE_DOUBLE);
 }
 
-void CPU::copyArray(unsigned short int* source, unsigned short int* destination, int size) {
+void CPU::copyArray(unsigned short int* source, unsigned short int* destination, unsigned long long size) {
 	memcpy(destination, source, size * SIZE_UN_SH_INT);
 }
 
-void CPU::sumArrays(double* result, double* arg1, double* arg2, int size) {
+void CPU::sumArrays(double* result, double* arg1, double* arg2, unsigned long long size) {
 #pragma omp parallel for
-	for (int i = 0; i < size; ++i) {
+	for (unsigned long long i = 0; i < size; ++i) {
 		result[i] = arg1[i] + arg2[i];
 	}
 }
 
-void CPU::multiplyArrayByNumber(double* result, double* arg, double factor, int size) {
+void CPU::multiplyArrayByNumber(double* result, double* arg, double factor, unsigned long long size) {
 #pragma omp parallel for
-	for (int i = 0; i < size; ++i) {
+	for (unsigned long long i = 0; i < size; ++i) {
 		result[i] = factor * arg[i];
 	}
 }
 
-void CPU::multiplyArrayByNumberAndSum(double* result, double* arg1, double factor, double* arg2, int size) {
+void CPU::multiplyArrayByNumberAndSum(double* result, double* arg1, double factor, double* arg2, unsigned long long size) {
 #pragma omp parallel for
-	for (int i = 0; i < size; ++i) {
+	for (unsigned long long i = 0; i < size; ++i) {
 		result[i] = factor * arg1[i] + arg2[i];
 	}
 }
 
-double CPU::sumArrayElements(double* arg, int size) {
+double CPU::sumArrayElements(double* arg, unsigned long long size) {
 	double sum = 0;
 #pragma omp parallel for reduction (+:sum)
-	for (int i = 0; i < size; ++i) {
+	for (unsigned long long i = 0; i < size; ++i) {
 		sum += arg[i];
 	}
 
 	return sum;
 }
 
-void CPU::maxElementsElementwise(double* result, double* arg1, double* arg2, int size) {
+void CPU::maxElementsElementwise(double* result, double* arg1, double* arg2, unsigned long long size) {
 #pragma omp parallel for
-	for (int i = 0; i < size; ++i) {
+	for (unsigned long long i = 0; i < size; ++i) {
 		result[i] = max(arg1[i], arg2[i]);
 	}
 }
 
-void CPU::maxAbsElementsElementwise(double* result, double* arg1, double* arg2, int size) {
+void CPU::maxAbsElementsElementwise(double* result, double* arg1, double* arg2, unsigned long long size) {
 #pragma omp parallel for
-	for (int i = 0; i < size; ++i) {
+	for (unsigned long long i = 0; i < size; ++i) {
 		result[i] = max(abs(arg1[i]), abs(arg2[i]));
 	}
 }
 
-void CPU::divisionArraysElementwise(double* result, double* arg1, double* arg2, int size) {
+void CPU::divisionArraysElementwise(double* result, double* arg1, double* arg2, unsigned long long size) {
 #pragma omp parallel for
-	for (int i = 0; i < size; ++i) {
+	for (unsigned long long i = 0; i < size; ++i) {
 		result[i] = arg1[i] / arg2[i];
 	}
 }
 
-void CPU::addNumberToArray(double* result, double* arg, double number, int size) {
+void CPU::addNumberToArray(double* result, double* arg, double number, unsigned long long size) {
 #pragma omp parallel for
-	for (int i = 0; i < size; ++i) {
+	for (unsigned long long i = 0; i < size; ++i) {
 		result[i] = arg[i] + number;
 	}
 }
 
-void CPU::multiplyArraysElementwise(double* result, double* arg1, double* arg2, int size) {
+void CPU::multiplyArraysElementwise(double* result, double* arg1, double* arg2, unsigned long long size) {
 #pragma omp parallel for
-	for (int i = 0; i < size; ++i) {
+	for (unsigned long long i = 0; i < size; ++i) {
 		result[i] = arg1[i] * arg2[i];
 	}
 }
@@ -229,7 +229,7 @@ void CPU::insertValueIntoPonterArray(double** array, double* value, int index) {
 	array[index] = value;
 }
 
-bool CPU::isNan(double* array, int size) {
+bool CPU::isNan(double* array, unsigned long long size) {
 	/*for (int i = 0; i < size; ++i) {
 	 if (isnan(array[i]))
 	 return true;
@@ -239,7 +239,7 @@ bool CPU::isNan(double* array, int size) {
 	//TODO какой вариант реализации более правильный?
 	bool isN = false;
 #pragma omp parallel for reduction (|: isN)
-	for (int i = 0; i < size; ++i) {
+	for (unsigned long long i = 0; i < size; ++i) {
 		isN |= isnan(array[i]);
 	}
 

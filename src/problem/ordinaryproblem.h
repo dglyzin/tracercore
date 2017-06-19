@@ -37,7 +37,7 @@ public:
 	void saveData(char* path, State** states);
 	void savaDataForDraw(char* path, State** states);
 
-	void swapCopy(ProcessingUnit* pu, double** source, double** destination, int size);
+	void swapCopy(ProcessingUnit* pu, double** source, double** destination, unsigned long long size);
 };
 
 #endif /* SRC_PROBLEM_ORDINARYPROBLEM_H_ */

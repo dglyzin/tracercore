@@ -48,7 +48,7 @@ int ProcessingUnit::getDeviceNumber() {
 	return deviceNumber;
 }
 
-double* ProcessingUnit::newDoubleArray(int size) {
+double* ProcessingUnit::newDoubleArray(unsigned long long size) {
 	double* array;
 
 	array = getDoubleArray(size);
@@ -98,7 +98,7 @@ double* ProcessingUnit::newDoublePinnedArray(int size) {
 	return array;
 }
 
-unsigned short int* ProcessingUnit::newUnsignedShortIntArray(int size) {
+unsigned short int* ProcessingUnit::newUnsignedShortIntArray(unsigned long long size) {
 	unsigned short int* array;
 
 	array = getUnsignedShortIntArray(size);
@@ -151,14 +151,14 @@ void ProcessingUnit::deleteUnsignedShortInt(unsigned short int* toDelete) {
 	destinationStorages[destinationStorageIndex] = tmp;
 }*/
 
-void ProcessingUnit::saveArray(double* array, int size, char* path) {
+void ProcessingUnit::saveArray(double* array, unsigned long long size, char* path) {
 	ofstream out;
 	out.open(path, ios::binary | ios::app);
 	writeArray(array, size, out);
 	out.close();
 }
 
-void ProcessingUnit::loadArray(double* array, int size, std::ifstream& in) {
+void ProcessingUnit::loadArray(double* array, unsigned long long size, std::ifstream& in) {
 	readArray(array, size, in);
 }
 
@@ -247,7 +247,7 @@ void ProcessingUnit::printCell(double* array, int cellSize) {
 void ProcessingUnit::printArray1d(double* array, int xCount, int cellSize) {
 	printCell(array, cellSize);
 
-	int shift = 0;
+	unsigned long long shift = 0;
 	for (int x = 1; x < xCount; ++x) {
 		printf(" ");
 		shift = x * cellSize;
@@ -257,7 +257,7 @@ void ProcessingUnit::printArray1d(double* array, int xCount, int cellSize) {
 }
 
 void ProcessingUnit::printArray2d(double* array, int yCount, int xCount, int cellSize) {
-	int shift = 0;
+	unsigned long long shift = 0;
 	for (int y = 0; y < yCount; ++y) {
 		shift = xCount * y * cellSize;
 		printArray1d(array + shift, xCount, cellSize);
@@ -265,7 +265,7 @@ void ProcessingUnit::printArray2d(double* array, int yCount, int xCount, int cel
 }
 
 void ProcessingUnit::printArray3d(double* array, int zCount, int yCount, int xCount, int cellSize) {
-	int shift = 0;
+	unsigned long long shift = 0;
 	for (int z = 0; z < zCount; ++z) {
 		printf("z = %d", z);
 		shift = yCount * xCount * z * cellSize;

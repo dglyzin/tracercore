@@ -15,7 +15,7 @@ public:
 	ISmartCopy();
 	virtual ~ISmartCopy();
 
-	virtual void swapCopy(ProcessingUnit* pu, double** source, double** destination, int size) = 0;
+	virtual void swapCopy(ProcessingUnit* pu, double** source, double** destination, unsigned long long size) = 0;
 };
 
 #endif /* SRC_PROBLEM_ISMARTCOPY_H_ */

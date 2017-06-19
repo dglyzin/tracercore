@@ -38,6 +38,13 @@ string ToString(int val)
     return stream.str();
 }
 
+string ToString(unsigned long long val)
+{
+    stringstream stream;
+    stream << val;
+    return stream.str();
+}
+
 
 //print with specified timestamp
 void printwts(std::string message, time_t timestamp, int loglevel){

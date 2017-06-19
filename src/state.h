@@ -12,7 +12,7 @@
 
 class State {
 public:
-	State(ProcessingUnit* _pu, NumericalMethod* _method, double** _blockCommonTempStorages, int elementCount);
+	State(ProcessingUnit* _pu, NumericalMethod* _method, double** _blockCommonTempStorages, unsigned long long elementCount);
 	virtual ~State();
 
 	//double* getStorage(int storageNumber);
@@ -54,7 +54,7 @@ private:
 	double** mKStorages;
 	double** mBlockCommonTempStorages;
 
-	int mElementCount;
+	unsigned long long mElementCount;
 };
 
 #endif /* STATE_H_ */
