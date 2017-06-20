@@ -54,7 +54,7 @@ public:
 			double timeStep, double theta, double* result, int size) = 0;
 
 	int getMemorySizePerState(int elementCount);
-
+	int getArraysCountPerState();
 	//virtual bool isStateNan(ProcessingUnit* pu, double** kStorages) = 0;
 
 	/*virtual void saveStateGeneralData(ProcessingUnit* pu, double** sourceStorages, char* path) = 0;

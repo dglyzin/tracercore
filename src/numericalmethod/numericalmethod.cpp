@@ -19,3 +19,9 @@ int NumericalMethod::getMemorySizePerState(int elementCount) {
 	// state + temp storage count
 	return (elementCount * SIZE_DOUBLE) * (1 + getKStorageCount());
 }
+
+
+int NumericalMethod::getArraysCountPerState() {
+	// state + temp storage count
+	return 2 + getKStorageCount();
+}

@@ -670,7 +670,6 @@ void Domain::readProblem(std::ifstream& in) {
 	if (mProblemType == 1) {
 		mProblemType = DELAY;
 
-		int stateCount = 101000;
 		int delayCount = 0;
 		double* delayValue = NULL;
 
@@ -679,13 +678,17 @@ void Domain::readProblem(std::ifstream& in) {
 		for (int i = 0; i < delayCount; ++i) {
 			in.read((char*) &delayValue[i], SIZE_DOUBLE);
 		}
-		mProblem = new DelayProblem(stateCount, delayCount, delayValue);
-		delete delayValue;
 
 		unsigned long long int maxStatesCount;
 		in.read((char*) &maxStatesCount, SIZE_ULLI);
 		printwcts("Problem type is Delay\n", LL_DEBUG);
-		printwcts("Maximum states count for this problem is " + ToString(maxStatesCount) +"\n", LL_DEBUG);
+		printwcts("Maximum array count for this problem is " + ToString(maxStatesCount) +"\n", LL_DEBUG);
+		int stateCount = (int) (maxStatesCount / mNumericalMethod->getArraysCountPerState());
+		printwcts("Method state count for this problem is " + ToString(stateCount) +"\n", LL_DEBUG);
+		mProblem = new DelayProblem(stateCount, delayCount, delayValue);
+		delete delayValue;
+
+
 
 	}
 }
@@ -1383,6 +1386,7 @@ Interconnect* Domain::getInterconnect(int sourceNode, int destinationNode, int b
 }
 
 int Domain::getMaxStepStorageCount() {
+	/*
 	int cpuRequiredMemory = 0;
 	int* gpuRequiredMemory = new int[mGpuCount];
 	for (int i = 0; i < mGpuCount; ++i) {
@@ -1393,7 +1397,7 @@ int Domain::getMaxStepStorageCount() {
 
 	for (int i = 0; i < mGpuCount; ++i) {
 		gpuRequiredMemory[i] = getRequiredMemoryOnProcessingUnit(GPUNIT, i);
-	}
+	}*/
 
 	/*int cpuSolverSize = mNumericalMethod->getMemorySizePerState(cpuRequiredMemory);
 	 int* gpuSolverSize = new int[mGpuCount];
@@ -1401,7 +1405,7 @@ int Domain::getMaxStepStorageCount() {
 	 gpuSolverSize[i] = mNumericalMethod->getMemorySizePerState(gpuRequiredMemory[i]);
 	 }*/
 
-	int cpuMaxCount = (int) (CPU_RAM / cpuRequiredMemory);
+	/*int cpuMaxCount = (int) (CPU_RAM / cpuRequiredMemory);
 	int* gpuMaxCount = new int[mGpuCount];
 	for (int i = 0; i < mGpuCount; ++i) {
 		gpuMaxCount[i] = (int) (GPU_RAM / gpuRequiredMemory[i]);
@@ -1412,16 +1416,18 @@ int Domain::getMaxStepStorageCount() {
 		if (gpuMaxCount[i] < minForAll)
 			minForAll = gpuMaxCount[i];
 	}
-
-	int absMin;
-
+    */
+	//int absMin;
+    /*
 	MPI_Allreduce(&minForAll, &absMin, 1, MPI_INT, MPI_MIN, mWorkerComm);
 
 	delete gpuRequiredMemory;
 	//delete gpuSolverSize;
 	delete gpuMaxCount;
-
-	return absMin;
+    */
+	//absMin = memoryCapacity / mNumericalMethod->getArraysCountPerState();
+	//return absMin;
+	return 0;
 }
 
 int Domain::getRequiredMemoryOnProcessingUnit(int deviceType, int deviceNumber) {
