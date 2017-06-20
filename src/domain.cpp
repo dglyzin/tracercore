@@ -680,6 +680,10 @@ void Domain::readProblem(std::ifstream& in) {
 		}
 		mProblem = new DelayProblem(stateCount, delayCount, delayValue);
 		delete delayValue;
+
+		long long int maxStatesCount;
+		in.read((char*) &maxStatesCount, SIZE_ULLI);
+
 	}
 }
 
