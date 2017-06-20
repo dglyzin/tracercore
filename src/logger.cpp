@@ -15,6 +15,12 @@ string ToString(long val)
     return stream.str();
 }
 
+string ToString(unsigned long long int val)
+{
+    stringstream stream;
+    stream << val;
+    return stream.str();
+}
 
 string ToString(double val)
 {

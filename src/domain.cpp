@@ -47,8 +47,8 @@ Domain::Domain(int _world_rank, int _world_size, char* inputFile, char* binaryFi
 
 	mGpuCount = GPU_COUNT;
 
-	printwcts("PROBLEM TYPE ALWAYS = ORDINARY!!!\n", LL_DEBUG);
-	mProblemType = ORDINARY;
+	//printwcts("PROBLEM TYPE ALWAYS = ORDINARY!!!\n", LL_DEBUG);
+	//mProblemType = ORDINARY;
 
 	readFromFile(inputFile);
 
@@ -664,6 +664,7 @@ void Domain::readProblem(std::ifstream& in) {
 	if (mProblemType == 0) {
 		mProblemType = ORDINARY;
 		mProblem = new OrdinaryProblem();
+		printwcts("Problem type is Ordinary\n", LL_DEBUG);
 	}
 
 	if (mProblemType == 1) {
@@ -681,8 +682,10 @@ void Domain::readProblem(std::ifstream& in) {
 		mProblem = new DelayProblem(stateCount, delayCount, delayValue);
 		delete delayValue;
 
-		long long int maxStatesCount;
+		unsigned long long int maxStatesCount;
 		in.read((char*) &maxStatesCount, SIZE_ULLI);
+		printwcts("Problem type is Delay\n", LL_DEBUG);
+		printwcts("Maximum states count for this problem is " + ToString(maxStatesCount) +"\n", LL_DEBUG);
 
 	}
 }

@@ -27,6 +27,7 @@ using namespace std;
 string ToString(long);
 string ToString(double);
 string ToString(int);
+string ToString(unsigned long long int);
 string ToString(char*);
 
 void printwts(std::string message, time_t timestamp, int loglevel);
