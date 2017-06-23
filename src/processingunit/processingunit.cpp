@@ -155,26 +155,24 @@ void ProcessingUnit::saveArray(double* array, unsigned long long size, char* pat
 	ofstream out;
 	out.open(path, ios::binary | ios::app);
 
-	size = size * SIZE_DOUBLE;
-	int saveSize = size % INT_MAX;
+	int saveSize = size % (INT_MAX / SIZE_DOUBLE);
 	while(saveSize > 0) {
 		writeArray(array, saveSize, out);
 		size -= saveSize;
 		array = array + saveSize;
-		saveSize = size % INT_MAX;
+		saveSize = size % (INT_MAX / SIZE_DOUBLE);
 	}
 
 	out.close();
 }
 
 void ProcessingUnit::loadArray(double* array, unsigned long long size, std::ifstream& in) {
-	size = size * SIZE_DOUBLE;
-	int readSize = size % INT_MAX;
+	int readSize = size % (INT_MAX / SIZE_DOUBLE);
 	while(readSize > 0) {
-		readArray(array, size, in);
+		readArray(array, readSize, in);
 		size -= readSize;
 		array = array + readSize;
-		readSize = size % INT_MAX;
+		readSize = size % (INT_MAX / SIZE_DOUBLE);
 	}
 }
 
