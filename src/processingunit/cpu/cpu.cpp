@@ -155,7 +155,7 @@ void CPU::copyArray(double* source, double* destination, unsigned long long size
 	memcpy(destination, source, size * SIZE_DOUBLE);
 }
 
-void CPU::copyArray(unsigned short int* source, unsigned short int* destination, unsigned long long size) {
+void CPU::copyArrayHostToDevice(unsigned short int* source, unsigned short int* destination, unsigned long long size) {
 	memcpy(destination, source, size * SIZE_UN_SH_INT);
 }
 

@@ -45,7 +45,7 @@ public:
 	void swapArray(double** firstArray, double** secondArray);
 
 	void copyArray(double* source, double* destination, unsigned long long size);
-	void copyArray(unsigned short int* source, unsigned short int* destination, unsigned long long size);
+	void copyArrayHostToDevice(unsigned short int* source, unsigned short int* destination, unsigned long long size);
 
 	void sumArrays(double* result, double* arg1, double* arg2, unsigned long long size);
 	void multiplyArrayByNumber(double* result, double* arg, double factor, unsigned long long size);

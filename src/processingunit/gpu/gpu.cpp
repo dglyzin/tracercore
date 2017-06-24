@@ -73,9 +73,9 @@ void GPU::copyArray(double* source, double* destination, unsigned long long size
 	cudaMemcpy(destination, source, size * SIZE_DOUBLE, cudaMemcpyDeviceToDevice);
 }
 
-void GPU::copyArray(unsigned short int* source, unsigned short int* destination, unsigned long long size) {
+void GPU::copyArrayHostToDevice(unsigned short int* source, unsigned short int* destination, unsigned long long size) {
 	cudaSetDevice(deviceNumber);
-	cudaMemcpy(destination, source, size * SIZE_UN_SH_INT, cudaMemcpyDeviceToDevice);
+	cudaMemcpy(destination, source, size * SIZE_UN_SH_INT, cudaMemcpyHostToDevice);
 }
 
 void GPU::sumArrays(double* result, double* arg1, double* arg2, unsigned long long size) {

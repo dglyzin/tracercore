@@ -39,8 +39,8 @@ RealBlock::RealBlock(int _nodeNumber, int _dimension, int _xCount, int _yCount, 
 	mCompFuncNumber = pu->newUnsignedShortIntArray(nodeCount);
 	mInitFuncNumber = pu->newUnsignedShortIntArray(nodeCount);
 
-	pu->copyArray(_compFuncNumber, mCompFuncNumber, nodeCount);
-	pu->copyArray(_initFuncNumber, mInitFuncNumber, nodeCount);
+	pu->copyArrayHostToDevice(_compFuncNumber, mCompFuncNumber, nodeCount);
+	pu->copyArrayHostToDevice(_initFuncNumber, mInitFuncNumber, nodeCount);
 
 	// TODO зачем mParamCount?
 	int mParamsCount = 0;

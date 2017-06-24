@@ -83,7 +83,7 @@ public:
 	virtual void swapArray(double** firstArray, double** secondArray) = 0;
 
 	virtual void copyArray(double* source, double* destination, unsigned long long size) = 0;
-	virtual void copyArray(unsigned short int* source, unsigned short int* destination, unsigned long long size) = 0;
+	virtual void copyArrayHostToDevice(unsigned short int* source, unsigned short int* destination, unsigned long long size) = 0;
 
 	virtual void sumArrays(double* result, double* arg1, double* arg2, unsigned long long size) = 0;
 	virtual void multiplyArrayByNumber(double* result, double* arg, double factor, unsigned long long size) = 0;
