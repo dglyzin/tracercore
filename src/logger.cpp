@@ -15,13 +15,6 @@ string ToString(long val)
     return stream.str();
 }
 
-string ToString(unsigned long long int val)
-{
-    stringstream stream;
-    stream << val;
-    return stream.str();
-}
-
 string ToString(double val)
 {
     stringstream stream;
@@ -38,6 +31,13 @@ string ToString(char* val)
 
 
 string ToString(int val)
+{
+    stringstream stream;
+    stream << val;
+    return stream.str();
+}
+
+string ToString(unsigned long long val)
 {
     stringstream stream;
     stream << val;

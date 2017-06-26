@@ -17,9 +17,9 @@ public:
 
 	int getStageCount();
 	bool isFSAL();
-	bool isErrorPermissible(double error, int totalDomainElements);
+	bool isErrorPermissible(double error, unsigned long long totalDomainElements);
 	bool isVariableStep();
-	double computeNewStep(double timeStep, double error, int totalDomainElements);
+	double computeNewStep(double timeStep, double error, unsigned long long totalDomainElements);
 
 	int getKStorageCount();
 	int getCommonTempStorageCount();
@@ -30,18 +30,18 @@ public:
 	double getStageTimeStepCoefficient(int stageNumber);
 
 	void prepareArgument(ProcessingUnit* pu, double* state, double** kStorages, double** commonTempStorages,
-			double timeStep, int stageNumber, int size);
+			double timeStep, int stageNumber, unsigned long long size);
 
 	void confirmStep(ProcessingUnit* pu, ISmartCopy* sc, double** sourceState, double** sourceKStorages,
-			double** destinationState, double** destinationKStorages, double** commonTemp, double timeStep, int size);
+			double** destinationState, double** destinationKStorages, double** commonTemp, double timeStep, unsigned long long size);
 	void rejectStep(ProcessingUnit* pu, double* state, double** kStorages, double** commonTempStorages, double timeStep,
-			int size);
+			unsigned long long size);
 
 	double computeStepError(ProcessingUnit* pu, double* state, double** kStorages, double** commonTempStorages,
-			double timeStep, int size);
+			double timeStep, unsigned long long size);
 
 	void computeDenseOutput(ProcessingUnit* pu, double* state, double** kStorages, double** commonTempStorages,
-			double timeStep, double theta, double* result, int size);
+			double timeStep, double theta, double* result, unsigned long long size);
 
 private:
 	enum KSTORAGE {

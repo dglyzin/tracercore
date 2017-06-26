@@ -10,6 +10,7 @@
 
 #include "../processingunit.h"
 #include "../../cuda_func.h"
+#include <cublas.h>
 
 class GPU: public ProcessingUnit {
 public:
@@ -40,33 +41,33 @@ public:
 
 	void swapArray(double** firstArray, double** secondArray);
 
-	void copyArray(double* source, double* destination, int size);
-	void copyArray(unsigned short int* source, unsigned short int* destination, int size);
+	void copyArray(double* source, double* destination, unsigned long long size);
+	void copyArrayHostToDevice(unsigned short int* source, unsigned short int* destination, unsigned long long size);
 
-	void sumArrays(double* result, double* arg1, double* arg2, int size);
-	void multiplyArrayByNumber(double* result, double* arg, double factor, int size);
-	void multiplyArrayByNumberAndSum(double* result, double* arg1, double factor, double* arg2, int size);
+	void sumArrays(double* result, double* arg1, double* arg2, unsigned long long size);
+	void multiplyArrayByNumber(double* result, double* arg, double factor, unsigned long long size);
+	void multiplyArrayByNumberAndSum(double* result, double* arg1, double factor, double* arg2, unsigned long long size);
 
-	double sumArrayElements(double* arg, int size);
-	void maxElementsElementwise(double* result, double* arg1, double* arg2, int size);
-	void maxAbsElementsElementwise(double* result, double* arg1, double* arg2, int size);
-	void divisionArraysElementwise(double* result, double* arg1, double* arg2, int size);
+	double sumArrayElements(double* arg, unsigned long long size);
+	void maxElementsElementwise(double* result, double* arg1, double* arg2, unsigned long long size);
+	void maxAbsElementsElementwise(double* result, double* arg1, double* arg2, unsigned long long size);
+	void divisionArraysElementwise(double* result, double* arg1, double* arg2, unsigned long long size);
 
-	void addNumberToArray(double* result, double* arg, double number, int size);
-	void multiplyArraysElementwise(double* result, double* arg1, double* arg2, int size);
+	void addNumberToArray(double* result, double* arg, double number, unsigned long long size);
+	void multiplyArraysElementwise(double* result, double* arg1, double* arg2, unsigned long long size);
 
 	void insertValueIntoPonterArray(double** array, double* value, int index);
 
-	bool isNan(double* array, int size);
+	bool isNan(double* array, unsigned long long size);
 
 protected:
-	double* getDoubleArray(int size);
+	double* getDoubleArray(unsigned long long size);
 	double** getDoublePointerArray(int size);
 
 	int* getIntArray(int size);
 	int** getIntPointerArray(int size);
 
-	unsigned short int* getUnsignedShortIntArray(int size);
+	unsigned short int* getUnsignedShortIntArray(unsigned long long size);
 
 	void deallocDeviceSpecificArray(double* toDelete);
 	void deallocDeviceSpecificArray(double** toDelete);
@@ -76,8 +77,8 @@ protected:
 
 	void deallocDeviceSpecificArray(unsigned short int* toDelete);
 
-	void writeArray(double* array, int size, std::ofstream& out);
-	void readArray(double* array, int size, std::ifstream& in);
+	void writeArray(double* array, int byteSize, std::ofstream& out);
+	void readArray(double* array, int byteSize, std::ifstream& in);
 
 	/*void printCell(double* array, int cellSize);
 	 void printArray1d(double* array, int xCount, int cellSize);

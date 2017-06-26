@@ -62,8 +62,8 @@ public:
 
 	virtual bool isNan() = 0;
 
-	int getGridNodeCount();
-	int getGridElementCount();
+	unsigned long long getGridNodeCount();
+	unsigned long long getGridElementCount();
 
 	int getNodeNumber();
 

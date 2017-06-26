@@ -29,6 +29,7 @@ string ToString(double);
 string ToString(int);
 string ToString(unsigned long long int);
 string ToString(char*);
+string ToString(unsigned long long);
 
 void printwts(std::string message, time_t timestamp, int loglevel);
 void printwcts(std::string message, int loglevel);

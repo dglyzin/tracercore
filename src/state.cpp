@@ -9,7 +9,7 @@
 
 using namespace std;
 
-State::State(ProcessingUnit* _pu, NumericalMethod* _method, double** _blockCommonTempStorages, int elementCount) {
+State::State(ProcessingUnit* _pu, NumericalMethod* _method, double** _blockCommonTempStorages, unsigned long long elementCount) {
 	pu = _pu;
 	method = _method;
 	mBlockCommonTempStorages = _blockCommonTempStorages;

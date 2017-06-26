@@ -60,7 +60,7 @@ public:
 
 	int getDeviceNumber();
 
-	double* newDoubleArray(int size);
+	double* newDoubleArray(unsigned long long size);
 	double** newDoublePointerArray(int size);
 
 	int* newIntArray(int size);
@@ -68,7 +68,7 @@ public:
 
 	double* newDoublePinnedArray(int size);
 
-	unsigned short int* newUnsignedShortIntArray(int size);
+	unsigned short int* newUnsignedShortIntArray(unsigned long long size);
 
 	void deleteDeviceSpecificArray(double* toDelete);
 	void deleteDeviceSpecificArray(double** toDelete);
@@ -82,27 +82,27 @@ public:
 
 	virtual void swapArray(double** firstArray, double** secondArray) = 0;
 
-	virtual void copyArray(double* source, double* destination, int size) = 0;
-	virtual void copyArray(unsigned short int* source, unsigned short int* destination, int size) = 0;
+	virtual void copyArray(double* source, double* destination, unsigned long long size) = 0;
+	virtual void copyArrayHostToDevice(unsigned short int* source, unsigned short int* destination, unsigned long long size) = 0;
 
-	virtual void sumArrays(double* result, double* arg1, double* arg2, int size) = 0;
-	virtual void multiplyArrayByNumber(double* result, double* arg, double factor, int size) = 0;
-	virtual void multiplyArrayByNumberAndSum(double* result, double* arg1, double factor, double* arg2, int size) = 0;
+	virtual void sumArrays(double* result, double* arg1, double* arg2, unsigned long long size) = 0;
+	virtual void multiplyArrayByNumber(double* result, double* arg, double factor, unsigned long long size) = 0;
+	virtual void multiplyArrayByNumberAndSum(double* result, double* arg1, double factor, double* arg2, unsigned long long size) = 0;
 
-	virtual double sumArrayElements(double* arg, int size) = 0;
-	virtual void maxElementsElementwise(double* result, double* arg1, double* arg2, int size) = 0;
-	virtual void maxAbsElementsElementwise(double* result, double* arg1, double* arg2, int size) = 0;
-	virtual void divisionArraysElementwise(double* result, double* arg1, double* arg2, int size) = 0;
+	virtual double sumArrayElements(double* arg, unsigned long long size) = 0;
+	virtual void maxElementsElementwise(double* result, double* arg1, double* arg2, unsigned long long size) = 0;
+	virtual void maxAbsElementsElementwise(double* result, double* arg1, double* arg2, unsigned long long size) = 0;
+	virtual void divisionArraysElementwise(double* result, double* arg1, double* arg2, unsigned long long size) = 0;
 
-	virtual void addNumberToArray(double* result, double* arg, double number, int size) = 0;
-	virtual void multiplyArraysElementwise(double* result, double* arg1, double* arg2, int size) = 0;
+	virtual void addNumberToArray(double* result, double* arg, double number, unsigned long long size) = 0;
+	virtual void multiplyArraysElementwise(double* result, double* arg1, double* arg2, unsigned long long size) = 0;
 
 	virtual void insertValueIntoPonterArray(double** array, double* value, int index) = 0;
 
-	void saveArray(double* array, int size, char* path);
-	void loadArray(double* array, int size, std::ifstream& in);
+	void saveArray(double* array, unsigned long long size, char* path);
+	void loadArray(double* array, unsigned long long size, std::ifstream& in);
 
-	virtual bool isNan(double* array, int size) = 0;
+	virtual bool isNan(double* array, unsigned long long size) = 0;
 
 	virtual void printArray(double* array, int zCount, int yCount, int xCount, int cellSize) = 0;
 
@@ -119,7 +119,7 @@ protected:
 
 	std::list<unsigned short int*> unsignedShortIntArrays;
 
-	virtual double* getDoubleArray(int size) = 0;
+	virtual double* getDoubleArray(unsigned long long size) = 0;
 	virtual double** getDoublePointerArray(int size) = 0;
 
 	virtual int* getIntArray(int size) = 0;
@@ -127,7 +127,7 @@ protected:
 
 	double* getDoublePinnedArray(int size);
 
-	virtual unsigned short int* getUnsignedShortIntArray(int size) = 0;
+	virtual unsigned short int* getUnsignedShortIntArray(unsigned long long size) = 0;
 
 	virtual void deallocDeviceSpecificArray(double* toDelete) = 0;
 	virtual void deallocDeviceSpecificArray(double** toDelete) = 0;

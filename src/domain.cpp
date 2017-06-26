@@ -984,8 +984,8 @@ Interconnect* Domain::readConnection(ifstream& in) {
  * Получение общего количества узлов сетки.
  * Сумма со всех блоков.
  */
-int Domain::getGridNodeCount() {
-	int count = 0;
+unsigned long long Domain::getGridNodeCount() {
+	unsigned long long count = 0;
 	for (int i = 0; i < mBlockCount; ++i)
 		count += mBlocks[i]->getGridNodeCount();
 
@@ -996,8 +996,8 @@ int Domain::getGridNodeCount() {
  * Получение общего количества элементов сетки.
  * Сумма со всех блоков.
  */
-int Domain::getGridElementCount() {
-	int count = 0;
+unsigned long long Domain::getGridElementCount() {
+	unsigned long long count = 0;
 	for (int i = 0; i < mBlockCount; ++i)
 		count += mBlocks[i]->getGridElementCount();
 
@@ -1177,7 +1177,7 @@ void Domain::printStatisticsInfo(char* inputFile, char* outputFile, double calcT
 	//cout << endl << "PRINT STATISTIC INFO DOESN'T WORK" << endl;
 
 	if (mWorkerRank == 0) {
-		int count = 0;
+		unsigned long long count = 0;
 		for (int i = 0; i < mBlockCount; ++i) {
 			count += mBlocks[i]->getGridElementCount();
 
@@ -1227,7 +1227,7 @@ void Domain::printStatisticsInfo(char* inputFile, char* outputFile, double calcT
 		char in[50];
 		Utils::copyFromLastToEnd(in, inputFile, '/', 2);
 
-		fprintf(out, "Element count: %d\n"
+		fprintf(out, "Element count: %llu\n"
 				"Side (square): %d\n"
 				"Thread count:  %d\n"
 				"Cell size:     %d\n"

@@ -55,7 +55,7 @@ bool DormandPrince45::isFSAL() {
 	return true;
 }
 
-bool DormandPrince45::isErrorPermissible(double error, int totalDomainElements) {
+bool DormandPrince45::isErrorPermissible(double error, unsigned long long totalDomainElements) {
 	double err = sqrt(error / totalDomainElements);
 	if (err < 1)
 		return true;
@@ -67,7 +67,7 @@ bool DormandPrince45::isVariableStep() {
 	return true;
 }
 
-double DormandPrince45::computeNewStep(double timeStep, double error, int totalDomainElements) {
+double DormandPrince45::computeNewStep(double timeStep, double error, unsigned long long totalDomainElements) {
 	double err = sqrt(error / totalDomainElements);
 	return timeStep * min(facmax, max(facmin, fac * pow(1.0 / err, 1.0 / 5.0)));
 }
@@ -144,7 +144,7 @@ double DormandPrince45::getStageTimeStepCoefficient(int stageNumber) {
 }
 
 void DormandPrince45::prepareArgument(ProcessingUnit* pu, double* state, double** kStorages,
-		double** commonTempStorages, double timeStep, int stageNumber, int size) {
+		double** commonTempStorages, double timeStep, int stageNumber, unsigned long long size) {
 	switch (stageNumber) {
 		case SOLVER_INIT_STAGE:
 			//pu->multiplyArrayByNumberAndSum(commonTempStorages[ARG], kStorages[K1], timeStep * a21, state, size);
@@ -200,7 +200,7 @@ void DormandPrince45::prepareArgument(ProcessingUnit* pu, double* state, double*
 
 void DormandPrince45::confirmStep(ProcessingUnit* pu, ISmartCopy* sc, double** sourceState, double** sourceKStorages,
 		double** destinationState, double** destinationKStorages, double** commonTempStorages, double timeStep,
-		int size) {
+		unsigned long long size) {
 	/*double* temp = mState;
 	 mState = mArg;
 	 mArg = temp;
@@ -214,12 +214,12 @@ void DormandPrince45::confirmStep(ProcessingUnit* pu, ISmartCopy* sc, double** s
 }
 
 void DormandPrince45::rejectStep(ProcessingUnit* pu, double* state, double** kStorages, double** commonTempStorages,
-		double timeStep, int size) {
+		double timeStep, unsigned long long size) {
 	return;
 }
 
 double DormandPrince45::computeStepError(ProcessingUnit* pu, double* state, double** kStorages,
-		double** commonTempStorages, double timeStep, int size) {
+		double** commonTempStorages, double timeStep, unsigned long long size) {
 	pu->multiplyArrayByNumber(commonTempStorages[TEMP1], kStorages[K1], timeStep * e1, size);
 	pu->multiplyArrayByNumberAndSum(commonTempStorages[TEMP1], kStorages[K3], timeStep * e3, commonTempStorages[TEMP1],
 			size);
@@ -246,12 +246,12 @@ double DormandPrince45::computeStepError(ProcessingUnit* pu, double* state, doub
 }
 
 void DormandPrince45::computeDenseOutput(ProcessingUnit* pu, double* state, double** kStorages,
-		double** commonTempStorages, double timeStep, double theta, double* result, int size) {
+		double** commonTempStorages, double timeStep, double theta, double* result, unsigned long long size) {
 	pu->multiplyArrayByNumber(result, kStorages[K1], getB1(theta), size);
-	pu->multiplyArrayByNumberAndSum(result, kStorages[K3], getB3(theta), commonTempStorages[ARG], size);
-	pu->multiplyArrayByNumberAndSum(result, kStorages[K4], getB4(theta), commonTempStorages[ARG], size);
-	pu->multiplyArrayByNumberAndSum(result, kStorages[K5], getB5(theta), commonTempStorages[ARG], size);
-	pu->multiplyArrayByNumberAndSum(result, kStorages[K6], getB6(theta), commonTempStorages[ARG], size);
+	pu->multiplyArrayByNumberAndSum(result, kStorages[K3], getB3(theta), result, size);
+	pu->multiplyArrayByNumberAndSum(result, kStorages[K4], getB4(theta), result, size);
+	pu->multiplyArrayByNumberAndSum(result, kStorages[K5], getB5(theta), result, size);
+	pu->multiplyArrayByNumberAndSum(result, kStorages[K6], getB6(theta), result, size);
 	pu->multiplyArrayByNumber(result, result, timeStep, size);
 	pu->sumArrays(result, result, state, size);
 }

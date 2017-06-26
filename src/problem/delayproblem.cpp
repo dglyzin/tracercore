@@ -183,6 +183,6 @@ void DelayProblem::savaDataForDraw(char* path, State** states) {
 	states[getCurrentStateNumber()]->saveGeneralStorage(path);
 }
 
-void DelayProblem::swapCopy(ProcessingUnit* pu, double** source, double** destination, int size) {
+void DelayProblem::swapCopy(ProcessingUnit* pu, double** source, double** destination, unsigned long long size) {
 	pu->copyArray(*source, *destination, size);
 }

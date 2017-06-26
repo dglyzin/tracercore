@@ -69,6 +69,6 @@ void OrdinaryProblem::savaDataForDraw(char* path, State** states) {
 	states[getCurrentStateNumber()]->saveGeneralStorage(path);
 }
 
-void OrdinaryProblem::swapCopy(ProcessingUnit* pu, double** source, double** destination, int size) {
+void OrdinaryProblem::swapCopy(ProcessingUnit* pu, double** source, double** destination, unsigned long long size) {
 	pu->swapArray(source, destination);
 }

@@ -1,19 +1,5 @@
 #include "cuda_func.h"
 
-__global__ void copyArrayCuda (double* source, double* destination, int size) {
-	int	idx = BLOCK_SIZE * blockIdx.x + threadIdx.x;
-	
-	if( idx < size )
-		destination[idx] = source[idx];
-}
-
-__global__ void copyArrayCuda (unsigned short int* source, unsigned short int* destination, int size) {
-	int	idx = BLOCK_SIZE * blockIdx.x + threadIdx.x;
-	
-	if( idx < size )
-		destination[idx] = source[idx];
-}
-
 __global__ void sumArrayCuda (double* result, double* arg1, double* arg2, int size) {
 	int	idx = BLOCK_SIZE * blockIdx.x + threadIdx.x;
 	
@@ -184,20 +170,6 @@ __global__ void computeCenterCuda_3d(/*func_ptr_t* mUserFuncs, unsigned short in
 		//mUserFuncs[mCompFuncNumber[x]](result, source, time, x, 0, 0, parametrs, externalBorder);
 }
 
-
-void copyArrayGPU(double* source, double* destination, int size) {
-	dim3 threads ( BLOCK_SIZE );
-	dim3 blocks  ( (int)ceil((double)size / threads.x) );
-	
-	copyArrayCuda <<< blocks, threads >>> ( source, destination, size);
-}
-
-void copyArrayGPU(unsigned short int* source, unsigned short int* destination, int size) {
-	dim3 threads ( BLOCK_SIZE );
-	dim3 blocks  ( (int)ceil((double)size / threads.x) );
-	
-	copyArrayCuda <<< blocks, threads >>> ( source, destination, size);
-}
 
 void sumArraysGPU(double* result, double* arg1, double* arg2, int size) {
 	dim3 threads ( BLOCK_SIZE );

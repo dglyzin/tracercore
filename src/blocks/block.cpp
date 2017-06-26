@@ -23,11 +23,11 @@ Block::Block(int _nodeNumber, int _dimension, int _xCount, int _yCount, int _zCo
 Block::~Block() {
 }
 
-int Block::getGridNodeCount() {
+unsigned long long Block::getGridNodeCount() {
 	return xCount * yCount * zCount;
 }
 
-int Block::getGridElementCount() {
+unsigned long long Block::getGridElementCount() {
 	return getGridNodeCount() * cellSize;
 }
 

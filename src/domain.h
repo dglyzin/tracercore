@@ -67,12 +67,12 @@ public:
 	 * Возвращает суммарное количество узлов области.
 	 * Сумма со всех блоков.
 	 */
-	int getGridNodeCount();
+	unsigned long long getGridNodeCount();
 	/*
 	 * Возвращает суммарное количество элементов области.
 	 * Сумма со всех блоков.
 	 */
-	int getGridElementCount();
+	unsigned long long getGridElementCount();
 	/*
 	 * Возвращает количество необходимых итераций.
 	 */
@@ -216,8 +216,8 @@ private:
 
 	int mRepeatCount;
 
-	int totalGridNodeCount;
-	int totalGridElementCount;
+	unsigned long long totalGridNodeCount;
+	unsigned long long totalGridElementCount;
 
 	MPI_Status status;
 

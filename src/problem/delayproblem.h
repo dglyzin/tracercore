@@ -38,7 +38,7 @@ public:
 	void savaDataForDraw(char* path, State** states);
 
 	void swapCopy(ProcessingUnit* pu, double** source, double** destination,
-			int size);
+			unsigned long long size);
 
 private:
 	int delayCount;

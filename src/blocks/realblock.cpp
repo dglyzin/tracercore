@@ -33,14 +33,14 @@ RealBlock::RealBlock(int _nodeNumber, int _dimension, int _xCount, int _yCount, 
 
 	countSendSegmentBorder = countReceiveSegmentBorder = 0;
 
-	int nodeCount = getGridNodeCount();
-	int elementCount = getGridElementCount();
+	unsigned long long nodeCount = getGridNodeCount();
+	unsigned long long elementCount = getGridElementCount();
 
 	mCompFuncNumber = pu->newUnsignedShortIntArray(nodeCount);
 	mInitFuncNumber = pu->newUnsignedShortIntArray(nodeCount);
 
-	pu->copyArray(_compFuncNumber, mCompFuncNumber, nodeCount);
-	pu->copyArray(_initFuncNumber, mInitFuncNumber, nodeCount);
+	pu->copyArrayHostToDevice(_compFuncNumber, mCompFuncNumber, nodeCount);
+	pu->copyArrayHostToDevice(_initFuncNumber, mInitFuncNumber, nodeCount);
 
 	// TODO зачем mParamCount?
 	int mParamsCount = 0;
