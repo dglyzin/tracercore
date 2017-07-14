@@ -154,9 +154,6 @@ int Domain::getEntirePlotValues() {
 
 void Domain::compute(char* inputFile) {
 	double wnow = MPI_Wtime();
-
-	printwcts("Running computations mpi rank %d \n", LL_INFO);
-
 	printwcts("Tracer root folder: " + ToString(mTracerFolder) + "\n", LL_INFO);
 	printwcts("Project folder: " + ToString(mProjectFolder) + "\n", LL_INFO);
 	printwcts(

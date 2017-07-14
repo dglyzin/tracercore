@@ -39,6 +39,14 @@ int main(int argc, char * argv[]) {
 	printwcts("Welcome to computing core!\n", LL_INFO);
     printwts("Initital timestamp is " + ToString(now) +"\n" , now, LL_INFO );
 	printwcts("SLURM JOB " + ToString(getenv("SLURM_JOB_ID")) +" STARTED\n", LL_INFO);
+
+	char processor_name[MPI_MAX_PROCESSOR_NAME];
+	int name_len;
+	MPI_Get_processor_name(processor_name, &name_len);
+
+	printwcts("Mpi rank " + ToString(world_rank) + " started on node " + ToString(processor_name) + " \n", LL_INFO);
+
+
 	printwcts("creating domain...\n", LL_DEBUG);
 	int jobId = -1;
 	//TODO get jobId from command line when core is launched by webUI
