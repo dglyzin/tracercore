@@ -90,7 +90,7 @@ void GPU::multiplyArrayByNumber(double* result, double* arg, double factor, unsi
 
 void GPU::multiplyArrayByNumberAndSum(double* result, double* arg1, double factor, double* arg2, unsigned long long size) {
 	cudaSetDevice(deviceNumber);
-	multiplyArrayByNumberAndSum(result, arg1, factor, arg2, size);
+	multiplyArrayByNumberAndSumGPU(result, arg1, factor, arg2, size);
 }
 
 double GPU::sumArrayElements(double* arg, unsigned long long size) {
