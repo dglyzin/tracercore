@@ -739,12 +739,12 @@ Block* Domain::readBlock(ifstream& in, int idx, int dimension) {
 	in.read((char*) &deviceType, SIZE_INT);
 	in.read((char*) &deviceNumber, SIZE_INT);
 
-	/*cout << endl;
-	 cout << "Block #" << idx << endl;
-	 cout << "	dimension:     " << dimension << endl;
-	 cout << "	node:          " << node << endl;
-	 cout << "	device type:   " << deviceType << endl;
-	 cout << "	device number: " << deviceNumber << endl;*/
+	cout << endl;
+	cout << "Block #" << idx << endl;
+	cout << "	dimension:     " << dimension << endl;
+	cout << "	node:          " << node << endl;
+	cout << "	device type:   " << deviceType << endl;
+	cout << "	device number: " << deviceNumber << endl;
 
 	for (int j = 0; j < dimension; ++j) {
 		in.read((char*) &offset[j], SIZE_INT);
