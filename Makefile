@@ -4,12 +4,12 @@ CFLAGS=-c -O3 -Wall
 CUDACC=nvcc
 CUFLAGS=-c -O3
 CUDAINC=/usr/local/cuda/include
-CUDAARCH=-arch=sm_20
+CUDAARCH=
 
 SRC=src
 BIN=bin
 
-MPILIB=-I /usr/mpi/gcc/openmpi-1.8.4/include -L /usr/mpi/gcc/openmpi-1.8.4/lib -lmpi -lmpi_cxx
+MPILIB=-I /usr/mpi/gcc/openmpi-4.0.1/include -L /usr/mpi/gcc/openmpi-4.0.1/lib -lmpi 
 
 USERFUNCLIB=$(BIN) -l userfuncs
 
