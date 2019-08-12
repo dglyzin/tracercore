@@ -822,7 +822,7 @@ Block* Domain::readBlock(ifstream& in, int idx, int dimension) {
 			printwcts("Invalid block type!\n", LL_INFO);
 			assert(false);
 		}
-
+		cout << "	started actual reading.. " << endl;
 		resBlock = new RealBlock(node, dimension, count[0], count[1], count[2], mCellSize, mHaloSize, idx, pu,
 				initFuncNumber, compFuncNumber, mProblem, mNumericalMethod);
 	} else {
@@ -1304,6 +1304,7 @@ void Domain::createBlock(ifstream& in) {
 
 	for (int i = 0; i < mBlockCount; ++i)
 		mBlocks[i] = readBlock(in, i, dimension);
+	printwcts("Blocks read: " + ToString(mBlockCount) + "\n", LL_INFO);
 }
 
 void Domain::readPlots(ifstream& in) {
