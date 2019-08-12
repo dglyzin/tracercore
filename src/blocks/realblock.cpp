@@ -287,7 +287,7 @@ void RealBlock::prepareStageData(int stage) {
 void RealBlock::prepareStageSourceResult(int stage, double timeStep, double currentTime) {
 	int currentStateNumber = mProblem->getCurrentStateNumber();
 	int delayCount = mProblem->getDelayCount();
-
+    double requiredTime = currentTime + mNumericalMethod->getStageTimeStepCoefficient(stage) * timeStep;
 	mResult = mStates[currentStateNumber]->getResultStorage(stage);/*problem->getResult(stage);*/
 	/*TODO: Возможные проблемы при работе с видеокартой.
 	 Нельзя вносить изменение в mSource[i] через CPU, необходима специальная функция в ProcessingUnit*/
@@ -298,20 +298,17 @@ void RealBlock::prepareStageSourceResult(int stage, double timeStep, double curr
 	for (int i = 0; i < delayCount; ++i) {
 		/*TODO: Реализовать в классе Problem метод, который выясняет требуется ли "плотный" вывод или
 		 * необходимо воспользоваться готовыми функциями от пользователя, которые дают конкретные значения в прошлом*/
-		if (mProblem->getDelay(i) < currentTime) {
-			int delayStateNumber = mProblem->getStateNumberForDelay(i);
-			/* TODO: Расчет "плотного" вывода должен осуществляться с учетом стадии
-			 * но сами расчеты ведуться от mState
-			 */
+		if (mProblem->getDelay(i) < requiredTime) {
+			int delayStateNumber = mProblem->getStateNumberForDelay(i); // эта штука на каждой стадии обновляется для делэй плюс доля текущего шага для текущей стадии
 			// TODO: Вычислять в проблеме. Доставать из проблемы
-			double theta = mProblem->getTethaForDelay(i);
-			mStates[delayStateNumber]->computeDenseOutput(timeStep, theta, /*mSource[1 + i]*/mDelayArrays[i]);
+			double theta = mProblem->getTethaForDelay(i); //тоже соответствует стадии
+			double delayTimeStep = mProblem->getTimeStepForDelay(i);
+			mStates[delayStateNumber]->computeDenseOutput(delayTimeStep, theta, /*mSource[1 + i]*/mDelayArrays[i]);
 			//printf("delay #%d, delay state #%d, theta: %f, current time: %f\n", i, delayStateNumber, theta, currentTime);
 			//pu->printArray(mSource[1 + i], 1, 1, 11, 1);
 		} else {
-			// TODO: Создать ПРАВИЛЬНЫЕ функции для работы с состояниями в прошлом
 			pu->delayFunction(/*mSource[1 + i]*/mDelayArrays[i], mUserInitFuncs, mInitFuncNumber, blockNumber,
-					currentTime - mProblem->getDelay(i));
+					requiredTime - mProblem->getDelay(i));
 		}
 
 		/*pu->printArray(mSource[0], 1, 1, 11, 1);

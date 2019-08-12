@@ -31,6 +31,7 @@ public:
 
 	virtual int getStateNumberForDelay(int delayNumber) = 0;
 	virtual double getTethaForDelay(int delayNumber) = 0;
+	virtual double getTimeStepForDelay(int delayNumber) = 0;
 
 	virtual void load(std::ifstream& in) = 0;
 	virtual void save(char* path) = 0;

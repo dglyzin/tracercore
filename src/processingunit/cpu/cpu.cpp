@@ -76,13 +76,13 @@ void CPU::setSubVolume(double* result, double* source, int zStart, int zStop, in
 
 void CPU::initState(double* state, initfunc_fill_ptr_t* userInitFuncs, unsigned short int* initFuncNumber,
 		int blockNumber, double time) {
-	userInitFuncs[blockNumber](state, initFuncNumber);
+	userInitFuncs[blockNumber](state, time, initFuncNumber);
 }
 
 void CPU::delayFunction(double* state, initfunc_fill_ptr_t* userInitFuncs, unsigned short int* initFuncNumber,
 		int blockNumber, double time) {
 	// TODO: Реализовать функции для запаздывания. Реализовать параллельные расчеты
-	userInitFuncs[blockNumber](state, initFuncNumber);
+	userInitFuncs[blockNumber](state, time, initFuncNumber);
 }
 
 int CPU::getType() {

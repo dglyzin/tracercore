@@ -18,6 +18,7 @@ DelayProblem::DelayProblem(int _statesCount, int _delayCount, double* _delayValu
 
 	delayStatesNumber = new int[delayCount];
 	delayTheta = new double[delayCount];
+	delayTimeStep = new double[delayCount];
 
 	for (int i = 0; i < delayCount; ++i) {
 		delayStatesNumber[i] = 0;
@@ -35,6 +36,7 @@ DelayProblem::DelayProblem(int _statesCount, int _delayCount, double* _delayValu
 
 DelayProblem::~DelayProblem() {
 	delete delayStatesNumber;
+	delete delayTimeStep;
 	delete delayTheta;
 	delete delayValue;
 	delete timeCountdown;
@@ -64,7 +66,7 @@ void DelayProblem::computeTethaForDelay(double currentTime, double timeStep, dou
 	double denseTimeStep = timeCountdown[(delayStatesNumber[index] + 1) % statesCount]
 			- timeCountdown[delayStatesNumber[index]];
 	double timeShift = requiredTime - timeCountdown[delayStatesNumber[index]];
-
+    delayTimeStep[index] = denseTimeStep;
 	delayTheta[index] = timeShift / denseTimeStep;
 }
 
@@ -129,6 +131,14 @@ int DelayProblem::getStateNumberForDelay(int delayNumber) {
 double DelayProblem::getTethaForDelay(int delayNumber) {
 	return delayTheta[delayNumber];
 }
+
+double DelayProblem::getTimeStepForDelay(int delayNumber) {
+	return delayTimeStep[delayNumber];
+}
+
+
+
+
 
 void DelayProblem::load(std::ifstream& in) {
 	in.read((char*) &currentStateNumber, SIZE_INT);

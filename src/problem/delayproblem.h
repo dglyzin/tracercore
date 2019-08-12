@@ -29,6 +29,7 @@ public:
 
 	int getStateNumberForDelay(int delayNumber);
 	double getTethaForDelay(int delayNumber);
+	double getTimeStepForDelay(int delayNumber);
 
 	void load(std::ifstream& in);
 	void save(char* path);
@@ -48,6 +49,7 @@ private:
 
 	int* delayStatesNumber;
 	double* delayTheta;
+	double* delayTimeStep;
 
 	double* timeCountdown;
 
