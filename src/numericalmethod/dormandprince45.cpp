@@ -252,6 +252,7 @@ void DormandPrince45::computeDenseOutput(ProcessingUnit* pu, double* state, doub
 	pu->multiplyArrayByNumberAndSum(result, kStorages[K4], getB4(theta), result, size);
 	pu->multiplyArrayByNumberAndSum(result, kStorages[K5], getB5(theta), result, size);
 	pu->multiplyArrayByNumberAndSum(result, kStorages[K6], getB6(theta), result, size);
+	//TODO WTF is timeStep doing here
 	pu->multiplyArrayByNumber(result, result, timeStep, size);
 	pu->sumArrays(result, result, state, size);
 }

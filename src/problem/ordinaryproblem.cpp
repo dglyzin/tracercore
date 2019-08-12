@@ -49,6 +49,10 @@ double OrdinaryProblem::getTethaForDelay(int delayNumber) {
 	return 0.0;
 }
 
+double OrdinaryProblem::getTimeStepForDelay(int delayNumber) {
+	return 0.0;
+}
+
 void OrdinaryProblem::load(std::ifstream& in) {
 	return;
 }
