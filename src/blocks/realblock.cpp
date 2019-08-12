@@ -306,7 +306,7 @@ void RealBlock::prepareStageSourceResult(int stage, double timeStep, double curr
 			double theta = mProblem->getTethaForDelay(i); //тоже соответствует стадии
 			double delayTimeStep = mProblem->getTimeStepForDelay(i);
 			mStates[delayStateNumber]->computeDenseOutput(delayTimeStep, theta, /*mSource[1 + i]*/mDelayArrays[i]);
-			printf("delay #%d, delay state #%d, delts: %f, theta: %f, current time: %f\n", i, delayStateNumber, delayTimeStep, theta, currentTime);
+			//printf("delay #%d, delay state #%d, delts: %f, theta: %f, current time: %f\n", i, delayStateNumber, delayTimeStep, theta, currentTime);
 			//pu->printArray(mSource[1 + i], 1, 1, 11, 1);
 		} else {
 			pu->delayFunction(/*mSource[1 + i]*/mDelayArrays[i], mUserInitFuncs, mInitFuncNumber, blockNumber,
